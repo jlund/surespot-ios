@@ -1,0 +1,476 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6681757C1762580900D81B45 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6681757B1762580900D81B45 /* UIKit.framework */; };
+		6681757E1762580900D81B45 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6681757D1762580900D81B45 /* Foundation.framework */; };
+		668175801762580900D81B45 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6681757F1762580900D81B45 /* CoreGraphics.framework */; };
+		668175821762580900D81B45 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 668175811762580900D81B45 /* CoreData.framework */; };
+		668175881762580900D81B45 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 668175861762580900D81B45 /* InfoPlist.strings */; };
+		6681758A1762580900D81B45 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 668175891762580900D81B45 /* main.m */; };
+		6681758E1762580900D81B45 /* TFAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6681758D1762580900D81B45 /* TFAppDelegate.m */; };
+		668175901762580900D81B45 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 6681758F1762580900D81B45 /* Default.png */; };
+		668175921762580900D81B45 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 668175911762580900D81B45 /* Default@2x.png */; };
+		668175941762580900D81B45 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 668175931762580900D81B45 /* Default-568h@2x.png */; };
+		668175971762580900D81B45 /* surespot.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 668175951762580900D81B45 /* surespot.xcdatamodeld */; };
+		6681759F1762580900D81B45 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6681759E1762580900D81B45 /* SenTestingKit.framework */; };
+		668175A01762580900D81B45 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6681757B1762580900D81B45 /* UIKit.framework */; };
+		668175A11762580900D81B45 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6681757D1762580900D81B45 /* Foundation.framework */; };
+		668175A21762580900D81B45 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 668175811762580900D81B45 /* CoreData.framework */; };
+		668175AA1762580900D81B45 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 668175A81762580900D81B45 /* InfoPlist.strings */; };
+		668175AD1762580900D81B45 /* surespotTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 668175AC1762580900D81B45 /* surespotTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		668175A31762580900D81B45 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 668175701762580900D81B45 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 668175771762580900D81B45;
+			remoteInfo = surespot;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		668175781762580900D81B45 /* surespot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = surespot.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6681757B1762580900D81B45 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		6681757D1762580900D81B45 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		6681757F1762580900D81B45 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		668175811762580900D81B45 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		668175851762580900D81B45 /* surespot-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "surespot-Info.plist"; sourceTree = "<group>"; };
+		668175871762580900D81B45 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		668175891762580900D81B45 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		6681758B1762580900D81B45 /* surespot-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "surespot-Prefix.pch"; sourceTree = "<group>"; };
+		6681758C1762580900D81B45 /* TFAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TFAppDelegate.h; sourceTree = "<group>"; };
+		6681758D1762580900D81B45 /* TFAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TFAppDelegate.m; sourceTree = "<group>"; };
+		6681758F1762580900D81B45 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		668175911762580900D81B45 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		668175931762580900D81B45 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		668175961762580900D81B45 /* surespot.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = surespot.xcdatamodel; sourceTree = "<group>"; };
+		6681759D1762580900D81B45 /* surespotTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = surespotTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6681759E1762580900D81B45 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		668175A71762580900D81B45 /* surespotTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "surespotTests-Info.plist"; sourceTree = "<group>"; };
+		668175A91762580900D81B45 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		668175AB1762580900D81B45 /* surespotTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = surespotTests.h; sourceTree = "<group>"; };
+		668175AC1762580900D81B45 /* surespotTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = surespotTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		668175751762580900D81B45 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6681757C1762580900D81B45 /* UIKit.framework in Frameworks */,
+				6681757E1762580900D81B45 /* Foundation.framework in Frameworks */,
+				668175801762580900D81B45 /* CoreGraphics.framework in Frameworks */,
+				668175821762580900D81B45 /* CoreData.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		668175991762580900D81B45 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6681759F1762580900D81B45 /* SenTestingKit.framework in Frameworks */,
+				668175A01762580900D81B45 /* UIKit.framework in Frameworks */,
+				668175A11762580900D81B45 /* Foundation.framework in Frameworks */,
+				668175A21762580900D81B45 /* CoreData.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6681756F1762580900D81B45 = {
+			isa = PBXGroup;
+			children = (
+				668175831762580900D81B45 /* surespot */,
+				668175A51762580900D81B45 /* surespotTests */,
+				6681757A1762580900D81B45 /* Frameworks */,
+				668175791762580900D81B45 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		668175791762580900D81B45 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				668175781762580900D81B45 /* surespot.app */,
+				6681759D1762580900D81B45 /* surespotTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6681757A1762580900D81B45 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6681757B1762580900D81B45 /* UIKit.framework */,
+				6681757D1762580900D81B45 /* Foundation.framework */,
+				6681757F1762580900D81B45 /* CoreGraphics.framework */,
+				668175811762580900D81B45 /* CoreData.framework */,
+				6681759E1762580900D81B45 /* SenTestingKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		668175831762580900D81B45 /* surespot */ = {
+			isa = PBXGroup;
+			children = (
+				6681758C1762580900D81B45 /* TFAppDelegate.h */,
+				6681758D1762580900D81B45 /* TFAppDelegate.m */,
+				668175951762580900D81B45 /* surespot.xcdatamodeld */,
+				668175841762580900D81B45 /* Supporting Files */,
+			);
+			path = surespot;
+			sourceTree = "<group>";
+		};
+		668175841762580900D81B45 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				668175851762580900D81B45 /* surespot-Info.plist */,
+				668175861762580900D81B45 /* InfoPlist.strings */,
+				668175891762580900D81B45 /* main.m */,
+				6681758B1762580900D81B45 /* surespot-Prefix.pch */,
+				6681758F1762580900D81B45 /* Default.png */,
+				668175911762580900D81B45 /* Default@2x.png */,
+				668175931762580900D81B45 /* Default-568h@2x.png */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		668175A51762580900D81B45 /* surespotTests */ = {
+			isa = PBXGroup;
+			children = (
+				668175AB1762580900D81B45 /* surespotTests.h */,
+				668175AC1762580900D81B45 /* surespotTests.m */,
+				668175A61762580900D81B45 /* Supporting Files */,
+			);
+			path = surespotTests;
+			sourceTree = "<group>";
+		};
+		668175A61762580900D81B45 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				668175A71762580900D81B45 /* surespotTests-Info.plist */,
+				668175A81762580900D81B45 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		668175771762580900D81B45 /* surespot */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 668175B01762580900D81B45 /* Build configuration list for PBXNativeTarget "surespot" */;
+			buildPhases = (
+				668175741762580900D81B45 /* Sources */,
+				668175751762580900D81B45 /* Frameworks */,
+				668175761762580900D81B45 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = surespot;
+			productName = surespot;
+			productReference = 668175781762580900D81B45 /* surespot.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6681759C1762580900D81B45 /* surespotTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 668175B31762580900D81B45 /* Build configuration list for PBXNativeTarget "surespotTests" */;
+			buildPhases = (
+				668175981762580900D81B45 /* Sources */,
+				668175991762580900D81B45 /* Frameworks */,
+				6681759A1762580900D81B45 /* Resources */,
+				6681759B1762580900D81B45 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				668175A41762580900D81B45 /* PBXTargetDependency */,
+			);
+			name = surespotTests;
+			productName = surespotTests;
+			productReference = 6681759D1762580900D81B45 /* surespotTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		668175701762580900D81B45 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = TF;
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = 2fours;
+			};
+			buildConfigurationList = 668175731762580900D81B45 /* Build configuration list for PBXProject "surespot" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 6681756F1762580900D81B45;
+			productRefGroup = 668175791762580900D81B45 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				668175771762580900D81B45 /* surespot */,
+				6681759C1762580900D81B45 /* surespotTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		668175761762580900D81B45 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				668175881762580900D81B45 /* InfoPlist.strings in Resources */,
+				668175901762580900D81B45 /* Default.png in Resources */,
+				668175921762580900D81B45 /* Default@2x.png in Resources */,
+				668175941762580900D81B45 /* Default-568h@2x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6681759A1762580900D81B45 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				668175AA1762580900D81B45 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		6681759B1762580900D81B45 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		668175741762580900D81B45 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6681758A1762580900D81B45 /* main.m in Sources */,
+				6681758E1762580900D81B45 /* TFAppDelegate.m in Sources */,
+				668175971762580900D81B45 /* surespot.xcdatamodeld in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		668175981762580900D81B45 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				668175AD1762580900D81B45 /* surespotTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		668175A41762580900D81B45 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 668175771762580900D81B45 /* surespot */;
+			targetProxy = 668175A31762580900D81B45 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		668175861762580900D81B45 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				668175871762580900D81B45 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		668175A81762580900D81B45 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				668175A91762580900D81B45 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		668175AE1762580900D81B45 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		668175AF1762580900D81B45 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		668175B11762580900D81B45 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "surespot/surespot-Prefix.pch";
+				INFOPLIST_FILE = "surespot/surespot-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		668175B21762580900D81B45 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "surespot/surespot-Prefix.pch";
+				INFOPLIST_FILE = "surespot/surespot-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		668175B41762580900D81B45 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/surespot.app/surespot";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "surespot/surespot-Prefix.pch";
+				INFOPLIST_FILE = "surespotTests/surespotTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		668175B51762580900D81B45 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/surespot.app/surespot";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "surespot/surespot-Prefix.pch";
+				INFOPLIST_FILE = "surespotTests/surespotTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		668175731762580900D81B45 /* Build configuration list for PBXProject "surespot" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				668175AE1762580900D81B45 /* Debug */,
+				668175AF1762580900D81B45 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		668175B01762580900D81B45 /* Build configuration list for PBXNativeTarget "surespot" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				668175B11762580900D81B45 /* Debug */,
+				668175B21762580900D81B45 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		668175B31762580900D81B45 /* Build configuration list for PBXNativeTarget "surespotTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				668175B41762580900D81B45 /* Debug */,
+				668175B51762580900D81B45 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		668175951762580900D81B45 /* surespot.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				668175961762580900D81B45 /* surespot.xcdatamodel */,
+			);
+			currentVersion = 668175961762580900D81B45 /* surespot.xcdatamodel */;
+			path = surespot.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 668175701762580900D81B45 /* Project object */;
+}
