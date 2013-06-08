@@ -29,13 +29,22 @@ using CryptoPP::SHA256;
 #include "pwdbased.h"
 using CryptoPP::PKCS5_PBKDF2_HMAC;
 
+#include "eccrypto.h"
+using CryptoPP::ECP;
+using CryptoPP::ECDH;
 
 
-@implementation CryptoPPWrapper
+
+@implementation SurespotCrypto : NSObject
 
 -(void) doImport:(NSData *) data {
     CryptoPP::PKCS5_PBKDF2_HMAC<SHA256> kdf;
     CryptoPP::SecByteBlock dBytes(32);
+    
+    
+    
+    CryptoPP::DL_PrivateKey_EC<ECP>::DL_PrivateKey_EC privateKey;
+
     
     byte bytes[32];
     

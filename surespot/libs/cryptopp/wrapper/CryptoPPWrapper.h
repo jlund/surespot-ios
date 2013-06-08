@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol CryptoPPWrapper
+@protocol CryptoPPWrapper 
 - (void) doImport:(NSData *) data;
 
 @end
