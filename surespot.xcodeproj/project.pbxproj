@@ -1,0 +1,917 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6604A2BF17626B9E0072216A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A2BE17626B9E0072216A /* UIKit.framework */; };
+		6604A2C117626B9E0072216A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A2C017626B9E0072216A /* Foundation.framework */; };
+		6604A2C317626B9E0072216A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A2C217626B9E0072216A /* CoreGraphics.framework */; };
+		6604A2C917626B9E0072216A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6604A2C717626B9E0072216A /* InfoPlist.strings */; };
+		6604A2CB17626B9E0072216A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6604A2CA17626B9E0072216A /* main.m */; };
+		6604A2CF17626B9E0072216A /* SurespotAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6604A2CE17626B9E0072216A /* SurespotAppDelegate.m */; };
+		6604A2D117626B9E0072216A /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 6604A2D017626B9E0072216A /* Default.png */; };
+		6604A2D317626B9E0072216A /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6604A2D217626B9E0072216A /* Default@2x.png */; };
+		6604A2D517626B9E0072216A /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6604A2D417626B9E0072216A /* Default-568h@2x.png */; };
+		6604A2D817626B9E0072216A /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6604A2D617626B9E0072216A /* MainStoryboard_iPhone.storyboard */; };
+		6604A2DB17626B9E0072216A /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6604A2D917626B9E0072216A /* MainStoryboard_iPad.storyboard */; };
+		6604A2DE17626B9E0072216A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6604A2DD17626B9E0072216A /* LoginViewController.m */; };
+		6604A2E617626B9E0072216A /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A2E517626B9E0072216A /* SenTestingKit.framework */; };
+		6604A2E717626B9E0072216A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A2BE17626B9E0072216A /* UIKit.framework */; };
+		6604A2E817626B9E0072216A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A2C017626B9E0072216A /* Foundation.framework */; };
+		6604A2F017626B9E0072216A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6604A2EE17626B9E0072216A /* InfoPlist.strings */; };
+		6604A2F317626B9E0072216A /* surespotTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6604A2F217626B9E0072216A /* surespotTests.m */; };
+		661C2EC01762A345000649E7 /* CryptoPPWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 661C2EBF1762A345000649E7 /* CryptoPPWrapper.mm */; };
+		6621BB841762704D00BC2850 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6621BB861762704D00BC2850 /* Localizable.strings */; };
+		6621BB891762767600BC2850 /* EncryptionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6621BB881762767600BC2850 /* EncryptionController.m */; };
+		66E4F5B6176298CB00596E6B /* libcryptopp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E4F5A1176298CB00596E6B /* libcryptopp.a */; };
+		66E4F5B7176298CB00596E6B /* SocketIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5A4176298CB00596E6B /* SocketIO.m */; };
+		66E4F5B8176298CB00596E6B /* SocketIOJSONSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5A6176298CB00596E6B /* SocketIOJSONSerialization.m */; };
+		66E4F5B9176298CB00596E6B /* SocketIOPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5A8176298CB00596E6B /* SocketIOPacket.m */; };
+		66E4F5BA176298CB00596E6B /* SocketIOTransportWebsocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5AB176298CB00596E6B /* SocketIOTransportWebsocket.m */; };
+		66E4F5BB176298CB00596E6B /* SocketIOTransportXHR.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5AD176298CB00596E6B /* SocketIOTransportXHR.m */; };
+		66E4F5BC176298CB00596E6B /* base64.c in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5AF176298CB00596E6B /* base64.c */; };
+		66E4F5BD176298CB00596E6B /* NSData+SRB64Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5B2176298CB00596E6B /* NSData+SRB64Additions.m */; };
+		66E4F5BE176298CB00596E6B /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5B5176298CB00596E6B /* SRWebSocket.m */; };
+		66E4F5C017629B4500596E6B /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E4F5BF17629B4500596E6B /* CFNetwork.framework */; };
+		66E4F5C217629B5C00596E6B /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E4F5C117629B5C00596E6B /* libicucore.dylib */; };
+		66E4F5C417629B6400596E6B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E4F5C317629B6400596E6B /* Security.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6604A2E917626B9E0072216A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6604A2B317626B9E0072216A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6604A2BA17626B9E0072216A;
+			remoteInfo = surespot;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		6604A2BB17626B9E0072216A /* surespot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = surespot.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6604A2BE17626B9E0072216A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		6604A2C017626B9E0072216A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		6604A2C217626B9E0072216A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		6604A2C617626B9E0072216A /* surespot-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "surespot-Info.plist"; sourceTree = "<group>"; };
+		6604A2C817626B9E0072216A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		6604A2CA17626B9E0072216A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		6604A2CC17626B9E0072216A /* surespot-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "surespot-Prefix.pch"; sourceTree = "<group>"; };
+		6604A2CD17626B9E0072216A /* SurespotAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SurespotAppDelegate.h; sourceTree = "<group>"; };
+		6604A2CE17626B9E0072216A /* SurespotAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SurespotAppDelegate.m; sourceTree = "<group>"; };
+		6604A2D017626B9E0072216A /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		6604A2D217626B9E0072216A /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		6604A2D417626B9E0072216A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		6604A2DC17626B9E0072216A /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		6604A2DD17626B9E0072216A /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		6604A2E417626B9E0072216A /* surespotTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = surespotTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6604A2E517626B9E0072216A /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		6604A2ED17626B9E0072216A /* surespotTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "surespotTests-Info.plist"; sourceTree = "<group>"; };
+		6604A2EF17626B9E0072216A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		6604A2F117626B9E0072216A /* surespotTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = surespotTests.h; sourceTree = "<group>"; };
+		6604A2F217626B9E0072216A /* surespotTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = surespotTests.m; sourceTree = "<group>"; };
+		661C2EBE1762A345000649E7 /* CryptoPPWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CryptoPPWrapper.h; path = wrapper/CryptoPPWrapper.h; sourceTree = "<group>"; };
+		661C2EBF1762A345000649E7 /* CryptoPPWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CryptoPPWrapper.mm; path = wrapper/CryptoPPWrapper.mm; sourceTree = "<group>"; };
+		6621BB7D17626EE800BC2850 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
+		6621BB7E17626EE800BC2850 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
+		6621BB851762704D00BC2850 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6621BB871762767600BC2850 /* EncryptionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncryptionController.h; sourceTree = "<group>"; };
+		6621BB881762767600BC2850 /* EncryptionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncryptionController.m; sourceTree = "<group>"; };
+		66E4F51A176298CB00596E6B /* 3way.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 3way.h; sourceTree = "<group>"; };
+		66E4F51B176298CB00596E6B /* adler32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adler32.h; sourceTree = "<group>"; };
+		66E4F51C176298CB00596E6B /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
+		66E4F51D176298CB00596E6B /* algebra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = algebra.h; sourceTree = "<group>"; };
+		66E4F51E176298CB00596E6B /* algparam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = algparam.h; sourceTree = "<group>"; };
+		66E4F51F176298CB00596E6B /* arc4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arc4.h; sourceTree = "<group>"; };
+		66E4F520176298CB00596E6B /* argnames.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = argnames.h; sourceTree = "<group>"; };
+		66E4F521176298CB00596E6B /* asn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asn.h; sourceTree = "<group>"; };
+		66E4F522176298CB00596E6B /* authenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = authenc.h; sourceTree = "<group>"; };
+		66E4F523176298CB00596E6B /* base32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base32.h; sourceTree = "<group>"; };
+		66E4F524176298CB00596E6B /* base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
+		66E4F525176298CB00596E6B /* basecode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = basecode.h; sourceTree = "<group>"; };
+		66E4F526176298CB00596E6B /* bench.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bench.h; sourceTree = "<group>"; };
+		66E4F527176298CB00596E6B /* blowfish.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blowfish.h; sourceTree = "<group>"; };
+		66E4F528176298CB00596E6B /* blumshub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blumshub.h; sourceTree = "<group>"; };
+		66E4F529176298CB00596E6B /* camellia.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = camellia.h; sourceTree = "<group>"; };
+		66E4F52A176298CB00596E6B /* cast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cast.h; sourceTree = "<group>"; };
+		66E4F52B176298CB00596E6B /* cbcmac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cbcmac.h; sourceTree = "<group>"; };
+		66E4F52C176298CB00596E6B /* ccm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ccm.h; sourceTree = "<group>"; };
+		66E4F52D176298CB00596E6B /* channels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = channels.h; sourceTree = "<group>"; };
+		66E4F52E176298CB00596E6B /* cmac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cmac.h; sourceTree = "<group>"; };
+		66E4F52F176298CB00596E6B /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		66E4F530176298CB00596E6B /* cpu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cpu.h; sourceTree = "<group>"; };
+		66E4F531176298CB00596E6B /* crc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crc.h; sourceTree = "<group>"; };
+		66E4F532176298CB00596E6B /* cryptlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cryptlib.h; sourceTree = "<group>"; };
+		66E4F533176298CB00596E6B /* default.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = default.h; sourceTree = "<group>"; };
+		66E4F534176298CB00596E6B /* des.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = des.h; sourceTree = "<group>"; };
+		66E4F535176298CB00596E6B /* dh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dh.h; sourceTree = "<group>"; };
+		66E4F536176298CB00596E6B /* dh2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dh2.h; sourceTree = "<group>"; };
+		66E4F537176298CB00596E6B /* dll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dll.h; sourceTree = "<group>"; };
+		66E4F538176298CB00596E6B /* dmac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dmac.h; sourceTree = "<group>"; };
+		66E4F539176298CB00596E6B /* dsa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dsa.h; sourceTree = "<group>"; };
+		66E4F53A176298CB00596E6B /* eax.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = eax.h; sourceTree = "<group>"; };
+		66E4F53B176298CB00596E6B /* ec2n.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ec2n.h; sourceTree = "<group>"; };
+		66E4F53C176298CB00596E6B /* eccrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = eccrypto.h; sourceTree = "<group>"; };
+		66E4F53D176298CB00596E6B /* ecp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecp.h; sourceTree = "<group>"; };
+		66E4F53E176298CB00596E6B /* elgamal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = elgamal.h; sourceTree = "<group>"; };
+		66E4F53F176298CB00596E6B /* emsa2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = emsa2.h; sourceTree = "<group>"; };
+		66E4F540176298CB00596E6B /* eprecomp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = eprecomp.h; sourceTree = "<group>"; };
+		66E4F541176298CB00596E6B /* esign.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = esign.h; sourceTree = "<group>"; };
+		66E4F542176298CB00596E6B /* factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = factory.h; sourceTree = "<group>"; };
+		66E4F543176298CB00596E6B /* files.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = files.h; sourceTree = "<group>"; };
+		66E4F544176298CB00596E6B /* filters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = filters.h; sourceTree = "<group>"; };
+		66E4F545176298CB00596E6B /* fips140.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fips140.h; sourceTree = "<group>"; };
+		66E4F546176298CB00596E6B /* fltrimpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fltrimpl.h; sourceTree = "<group>"; };
+		66E4F547176298CB00596E6B /* gcm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gcm.h; sourceTree = "<group>"; };
+		66E4F548176298CB00596E6B /* gf256.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gf256.h; sourceTree = "<group>"; };
+		66E4F549176298CB00596E6B /* gf2_32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gf2_32.h; sourceTree = "<group>"; };
+		66E4F54A176298CB00596E6B /* gf2n.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gf2n.h; sourceTree = "<group>"; };
+		66E4F54B176298CB00596E6B /* gfpcrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gfpcrypt.h; sourceTree = "<group>"; };
+		66E4F54C176298CB00596E6B /* gost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gost.h; sourceTree = "<group>"; };
+		66E4F54D176298CB00596E6B /* gzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gzip.h; sourceTree = "<group>"; };
+		66E4F54E176298CB00596E6B /* hex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hex.h; sourceTree = "<group>"; };
+		66E4F54F176298CB00596E6B /* hmac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hmac.h; sourceTree = "<group>"; };
+		66E4F550176298CB00596E6B /* hrtimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hrtimer.h; sourceTree = "<group>"; };
+		66E4F551176298CB00596E6B /* ida.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ida.h; sourceTree = "<group>"; };
+		66E4F552176298CB00596E6B /* idea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = idea.h; sourceTree = "<group>"; };
+		66E4F553176298CB00596E6B /* integer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = integer.h; sourceTree = "<group>"; };
+		66E4F554176298CB00596E6B /* iterhash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iterhash.h; sourceTree = "<group>"; };
+		66E4F555176298CB00596E6B /* lubyrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lubyrack.h; sourceTree = "<group>"; };
+		66E4F556176298CB00596E6B /* luc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = luc.h; sourceTree = "<group>"; };
+		66E4F557176298CB00596E6B /* mars.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mars.h; sourceTree = "<group>"; };
+		66E4F558176298CB00596E6B /* md2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = md2.h; sourceTree = "<group>"; };
+		66E4F559176298CB00596E6B /* md4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = md4.h; sourceTree = "<group>"; };
+		66E4F55A176298CB00596E6B /* md5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = md5.h; sourceTree = "<group>"; };
+		66E4F55B176298CB00596E6B /* mdc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mdc.h; sourceTree = "<group>"; };
+		66E4F55C176298CB00596E6B /* misc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = misc.h; sourceTree = "<group>"; };
+		66E4F55D176298CB00596E6B /* modarith.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = modarith.h; sourceTree = "<group>"; };
+		66E4F55E176298CB00596E6B /* modes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = modes.h; sourceTree = "<group>"; };
+		66E4F55F176298CB00596E6B /* modexppc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = modexppc.h; sourceTree = "<group>"; };
+		66E4F560176298CB00596E6B /* mqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mqueue.h; sourceTree = "<group>"; };
+		66E4F561176298CB00596E6B /* mqv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mqv.h; sourceTree = "<group>"; };
+		66E4F562176298CB00596E6B /* nbtheory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nbtheory.h; sourceTree = "<group>"; };
+		66E4F563176298CB00596E6B /* network.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = network.h; sourceTree = "<group>"; };
+		66E4F564176298CB00596E6B /* nr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nr.h; sourceTree = "<group>"; };
+		66E4F565176298CB00596E6B /* oaep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oaep.h; sourceTree = "<group>"; };
+		66E4F566176298CB00596E6B /* oids.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oids.h; sourceTree = "<group>"; };
+		66E4F567176298CB00596E6B /* osrng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = osrng.h; sourceTree = "<group>"; };
+		66E4F568176298CB00596E6B /* panama.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = panama.h; sourceTree = "<group>"; };
+		66E4F569176298CB00596E6B /* pch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pch.h; sourceTree = "<group>"; };
+		66E4F56A176298CB00596E6B /* pkcspad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pkcspad.h; sourceTree = "<group>"; };
+		66E4F56B176298CB00596E6B /* polynomi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = polynomi.h; sourceTree = "<group>"; };
+		66E4F56C176298CB00596E6B /* pssr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pssr.h; sourceTree = "<group>"; };
+		66E4F56D176298CB00596E6B /* pubkey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pubkey.h; sourceTree = "<group>"; };
+		66E4F56E176298CB00596E6B /* pwdbased.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pwdbased.h; sourceTree = "<group>"; };
+		66E4F56F176298CB00596E6B /* queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = queue.h; sourceTree = "<group>"; };
+		66E4F570176298CB00596E6B /* rabin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rabin.h; sourceTree = "<group>"; };
+		66E4F571176298CB00596E6B /* randpool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = randpool.h; sourceTree = "<group>"; };
+		66E4F572176298CB00596E6B /* rc2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rc2.h; sourceTree = "<group>"; };
+		66E4F573176298CB00596E6B /* rc5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rc5.h; sourceTree = "<group>"; };
+		66E4F574176298CB00596E6B /* rc6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rc6.h; sourceTree = "<group>"; };
+		66E4F575176298CB00596E6B /* resource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = resource.h; sourceTree = "<group>"; };
+		66E4F576176298CB00596E6B /* rijndael.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rijndael.h; sourceTree = "<group>"; };
+		66E4F577176298CB00596E6B /* ripemd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ripemd.h; sourceTree = "<group>"; };
+		66E4F578176298CB00596E6B /* rng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rng.h; sourceTree = "<group>"; };
+		66E4F579176298CB00596E6B /* rsa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rsa.h; sourceTree = "<group>"; };
+		66E4F57A176298CB00596E6B /* rw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rw.h; sourceTree = "<group>"; };
+		66E4F57B176298CB00596E6B /* safer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = safer.h; sourceTree = "<group>"; };
+		66E4F57C176298CB00596E6B /* salsa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = salsa.h; sourceTree = "<group>"; };
+		66E4F57D176298CB00596E6B /* seal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = seal.h; sourceTree = "<group>"; };
+		66E4F57E176298CB00596E6B /* secblock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = secblock.h; sourceTree = "<group>"; };
+		66E4F57F176298CB00596E6B /* seckey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = seckey.h; sourceTree = "<group>"; };
+		66E4F580176298CB00596E6B /* seed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = seed.h; sourceTree = "<group>"; };
+		66E4F581176298CB00596E6B /* serpent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = serpent.h; sourceTree = "<group>"; };
+		66E4F582176298CB00596E6B /* serpentp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = serpentp.h; sourceTree = "<group>"; };
+		66E4F583176298CB00596E6B /* sha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha.h; sourceTree = "<group>"; };
+		66E4F584176298CB00596E6B /* shacal2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = shacal2.h; sourceTree = "<group>"; };
+		66E4F585176298CB00596E6B /* shark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = shark.h; sourceTree = "<group>"; };
+		66E4F586176298CB00596E6B /* simple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simple.h; sourceTree = "<group>"; };
+		66E4F587176298CB00596E6B /* skipjack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = skipjack.h; sourceTree = "<group>"; };
+		66E4F588176298CB00596E6B /* smartptr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smartptr.h; sourceTree = "<group>"; };
+		66E4F589176298CB00596E6B /* socketft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = socketft.h; sourceTree = "<group>"; };
+		66E4F58A176298CB00596E6B /* sosemanuk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sosemanuk.h; sourceTree = "<group>"; };
+		66E4F58B176298CB00596E6B /* square.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = square.h; sourceTree = "<group>"; };
+		66E4F58C176298CB00596E6B /* stdcpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stdcpp.h; sourceTree = "<group>"; };
+		66E4F58D176298CB00596E6B /* strciphr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = strciphr.h; sourceTree = "<group>"; };
+		66E4F58E176298CB00596E6B /* tea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tea.h; sourceTree = "<group>"; };
+		66E4F58F176298CB00596E6B /* tiger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tiger.h; sourceTree = "<group>"; };
+		66E4F590176298CB00596E6B /* trdlocal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trdlocal.h; sourceTree = "<group>"; };
+		66E4F591176298CB00596E6B /* trunhash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trunhash.h; sourceTree = "<group>"; };
+		66E4F592176298CB00596E6B /* ttmac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ttmac.h; sourceTree = "<group>"; };
+		66E4F593176298CB00596E6B /* twofish.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = twofish.h; sourceTree = "<group>"; };
+		66E4F594176298CB00596E6B /* validate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = validate.h; sourceTree = "<group>"; };
+		66E4F595176298CB00596E6B /* vmac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vmac.h; sourceTree = "<group>"; };
+		66E4F596176298CB00596E6B /* wait.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wait.h; sourceTree = "<group>"; };
+		66E4F597176298CB00596E6B /* wake.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wake.h; sourceTree = "<group>"; };
+		66E4F598176298CB00596E6B /* whrlpool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = whrlpool.h; sourceTree = "<group>"; };
+		66E4F599176298CB00596E6B /* winpipes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = winpipes.h; sourceTree = "<group>"; };
+		66E4F59A176298CB00596E6B /* words.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = words.h; sourceTree = "<group>"; };
+		66E4F59B176298CB00596E6B /* xtr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xtr.h; sourceTree = "<group>"; };
+		66E4F59C176298CB00596E6B /* xtrcrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xtrcrypt.h; sourceTree = "<group>"; };
+		66E4F59D176298CB00596E6B /* zdeflate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zdeflate.h; sourceTree = "<group>"; };
+		66E4F59E176298CB00596E6B /* zinflate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zinflate.h; sourceTree = "<group>"; };
+		66E4F59F176298CB00596E6B /* zlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zlib.h; sourceTree = "<group>"; };
+		66E4F5A1176298CB00596E6B /* libcryptopp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcryptopp.a; sourceTree = "<group>"; };
+		66E4F5A3176298CB00596E6B /* SocketIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketIO.h; sourceTree = "<group>"; };
+		66E4F5A4176298CB00596E6B /* SocketIO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketIO.m; sourceTree = "<group>"; };
+		66E4F5A5176298CB00596E6B /* SocketIOJSONSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketIOJSONSerialization.h; sourceTree = "<group>"; };
+		66E4F5A6176298CB00596E6B /* SocketIOJSONSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketIOJSONSerialization.m; sourceTree = "<group>"; };
+		66E4F5A7176298CB00596E6B /* SocketIOPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketIOPacket.h; sourceTree = "<group>"; };
+		66E4F5A8176298CB00596E6B /* SocketIOPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketIOPacket.m; sourceTree = "<group>"; };
+		66E4F5A9176298CB00596E6B /* SocketIOTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketIOTransport.h; sourceTree = "<group>"; };
+		66E4F5AA176298CB00596E6B /* SocketIOTransportWebsocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketIOTransportWebsocket.h; sourceTree = "<group>"; };
+		66E4F5AB176298CB00596E6B /* SocketIOTransportWebsocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketIOTransportWebsocket.m; sourceTree = "<group>"; };
+		66E4F5AC176298CB00596E6B /* SocketIOTransportXHR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketIOTransportXHR.h; sourceTree = "<group>"; };
+		66E4F5AD176298CB00596E6B /* SocketIOTransportXHR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketIOTransportXHR.m; sourceTree = "<group>"; };
+		66E4F5AF176298CB00596E6B /* base64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = base64.c; sourceTree = "<group>"; };
+		66E4F5B0176298CB00596E6B /* base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
+		66E4F5B1176298CB00596E6B /* NSData+SRB64Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+SRB64Additions.h"; sourceTree = "<group>"; };
+		66E4F5B2176298CB00596E6B /* NSData+SRB64Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+SRB64Additions.m"; sourceTree = "<group>"; };
+		66E4F5B3176298CB00596E6B /* SocketRocket-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SocketRocket-Prefix.pch"; sourceTree = "<group>"; };
+		66E4F5B4176298CB00596E6B /* SRWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRWebSocket.h; sourceTree = "<group>"; };
+		66E4F5B5176298CB00596E6B /* SRWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRWebSocket.m; sourceTree = "<group>"; };
+		66E4F5BF17629B4500596E6B /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		66E4F5C117629B5C00596E6B /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		66E4F5C317629B6400596E6B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6604A2B817626B9E0072216A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66E4F5C417629B6400596E6B /* Security.framework in Frameworks */,
+				66E4F5C217629B5C00596E6B /* libicucore.dylib in Frameworks */,
+				66E4F5C017629B4500596E6B /* CFNetwork.framework in Frameworks */,
+				6604A2BF17626B9E0072216A /* UIKit.framework in Frameworks */,
+				6604A2C117626B9E0072216A /* Foundation.framework in Frameworks */,
+				6604A2C317626B9E0072216A /* CoreGraphics.framework in Frameworks */,
+				66E4F5B6176298CB00596E6B /* libcryptopp.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6604A2E017626B9E0072216A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6604A2E617626B9E0072216A /* SenTestingKit.framework in Frameworks */,
+				6604A2E717626B9E0072216A /* UIKit.framework in Frameworks */,
+				6604A2E817626B9E0072216A /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6604A2B217626B9E0072216A = {
+			isa = PBXGroup;
+			children = (
+				6604A2C417626B9E0072216A /* surespot */,
+				6604A2EB17626B9E0072216A /* surespotTests */,
+				6604A2BD17626B9E0072216A /* Frameworks */,
+				6604A2BC17626B9E0072216A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6604A2BC17626B9E0072216A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6604A2BB17626B9E0072216A /* surespot.app */,
+				6604A2E417626B9E0072216A /* surespotTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6604A2BD17626B9E0072216A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				66E4F5BF17629B4500596E6B /* CFNetwork.framework */,
+				66E4F5C117629B5C00596E6B /* libicucore.dylib */,
+				66E4F5C317629B6400596E6B /* Security.framework */,
+				6604A2BE17626B9E0072216A /* UIKit.framework */,
+				6604A2C017626B9E0072216A /* Foundation.framework */,
+				6604A2C217626B9E0072216A /* CoreGraphics.framework */,
+				6604A2E517626B9E0072216A /* SenTestingKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6604A2C417626B9E0072216A /* surespot */ = {
+			isa = PBXGroup;
+			children = (
+				66E4F517176298CB00596E6B /* libs */,
+				6604A2CD17626B9E0072216A /* SurespotAppDelegate.h */,
+				6604A2CE17626B9E0072216A /* SurespotAppDelegate.m */,
+				6604A2D617626B9E0072216A /* MainStoryboard_iPhone.storyboard */,
+				6604A2D917626B9E0072216A /* MainStoryboard_iPad.storyboard */,
+				6604A2DC17626B9E0072216A /* LoginViewController.h */,
+				6604A2DD17626B9E0072216A /* LoginViewController.m */,
+				6621BB871762767600BC2850 /* EncryptionController.h */,
+				6621BB881762767600BC2850 /* EncryptionController.m */,
+				6604A2C517626B9E0072216A /* Supporting Files */,
+			);
+			path = surespot;
+			sourceTree = "<group>";
+		};
+		6604A2C517626B9E0072216A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				6621BB861762704D00BC2850 /* Localizable.strings */,
+				6604A2C617626B9E0072216A /* surespot-Info.plist */,
+				6604A2C717626B9E0072216A /* InfoPlist.strings */,
+				6604A2CA17626B9E0072216A /* main.m */,
+				6604A2CC17626B9E0072216A /* surespot-Prefix.pch */,
+				6604A2D017626B9E0072216A /* Default.png */,
+				6604A2D217626B9E0072216A /* Default@2x.png */,
+				6604A2D417626B9E0072216A /* Default-568h@2x.png */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		6604A2EB17626B9E0072216A /* surespotTests */ = {
+			isa = PBXGroup;
+			children = (
+				6604A2F117626B9E0072216A /* surespotTests.h */,
+				6604A2F217626B9E0072216A /* surespotTests.m */,
+				6604A2EC17626B9E0072216A /* Supporting Files */,
+			);
+			path = surespotTests;
+			sourceTree = "<group>";
+		};
+		6604A2EC17626B9E0072216A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				6604A2ED17626B9E0072216A /* surespotTests-Info.plist */,
+				6604A2EE17626B9E0072216A /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		661C2EBD1762A313000649E7 /* wrapper */ = {
+			isa = PBXGroup;
+			children = (
+				661C2EBE1762A345000649E7 /* CryptoPPWrapper.h */,
+				661C2EBF1762A345000649E7 /* CryptoPPWrapper.mm */,
+			);
+			name = wrapper;
+			sourceTree = "<group>";
+		};
+		66E4F517176298CB00596E6B /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				66E4F518176298CB00596E6B /* cryptopp */,
+				66E4F5A2176298CB00596E6B /* socketio */,
+				66E4F5AE176298CB00596E6B /* socketrocket */,
+			);
+			path = libs;
+			sourceTree = "<group>";
+		};
+		66E4F518176298CB00596E6B /* cryptopp */ = {
+			isa = PBXGroup;
+			children = (
+				661C2EBD1762A313000649E7 /* wrapper */,
+				66E4F519176298CB00596E6B /* include */,
+				66E4F5A0176298CB00596E6B /* lib */,
+			);
+			path = cryptopp;
+			sourceTree = "<group>";
+		};
+		66E4F519176298CB00596E6B /* include */ = {
+			isa = PBXGroup;
+			children = (
+				66E4F51A176298CB00596E6B /* 3way.h */,
+				66E4F51B176298CB00596E6B /* adler32.h */,
+				66E4F51C176298CB00596E6B /* aes.h */,
+				66E4F51D176298CB00596E6B /* algebra.h */,
+				66E4F51E176298CB00596E6B /* algparam.h */,
+				66E4F51F176298CB00596E6B /* arc4.h */,
+				66E4F520176298CB00596E6B /* argnames.h */,
+				66E4F521176298CB00596E6B /* asn.h */,
+				66E4F522176298CB00596E6B /* authenc.h */,
+				66E4F523176298CB00596E6B /* base32.h */,
+				66E4F524176298CB00596E6B /* base64.h */,
+				66E4F525176298CB00596E6B /* basecode.h */,
+				66E4F526176298CB00596E6B /* bench.h */,
+				66E4F527176298CB00596E6B /* blowfish.h */,
+				66E4F528176298CB00596E6B /* blumshub.h */,
+				66E4F529176298CB00596E6B /* camellia.h */,
+				66E4F52A176298CB00596E6B /* cast.h */,
+				66E4F52B176298CB00596E6B /* cbcmac.h */,
+				66E4F52C176298CB00596E6B /* ccm.h */,
+				66E4F52D176298CB00596E6B /* channels.h */,
+				66E4F52E176298CB00596E6B /* cmac.h */,
+				66E4F52F176298CB00596E6B /* config.h */,
+				66E4F530176298CB00596E6B /* cpu.h */,
+				66E4F531176298CB00596E6B /* crc.h */,
+				66E4F532176298CB00596E6B /* cryptlib.h */,
+				66E4F533176298CB00596E6B /* default.h */,
+				66E4F534176298CB00596E6B /* des.h */,
+				66E4F535176298CB00596E6B /* dh.h */,
+				66E4F536176298CB00596E6B /* dh2.h */,
+				66E4F537176298CB00596E6B /* dll.h */,
+				66E4F538176298CB00596E6B /* dmac.h */,
+				66E4F539176298CB00596E6B /* dsa.h */,
+				66E4F53A176298CB00596E6B /* eax.h */,
+				66E4F53B176298CB00596E6B /* ec2n.h */,
+				66E4F53C176298CB00596E6B /* eccrypto.h */,
+				66E4F53D176298CB00596E6B /* ecp.h */,
+				66E4F53E176298CB00596E6B /* elgamal.h */,
+				66E4F53F176298CB00596E6B /* emsa2.h */,
+				66E4F540176298CB00596E6B /* eprecomp.h */,
+				66E4F541176298CB00596E6B /* esign.h */,
+				66E4F542176298CB00596E6B /* factory.h */,
+				66E4F543176298CB00596E6B /* files.h */,
+				66E4F544176298CB00596E6B /* filters.h */,
+				66E4F545176298CB00596E6B /* fips140.h */,
+				66E4F546176298CB00596E6B /* fltrimpl.h */,
+				66E4F547176298CB00596E6B /* gcm.h */,
+				66E4F548176298CB00596E6B /* gf256.h */,
+				66E4F549176298CB00596E6B /* gf2_32.h */,
+				66E4F54A176298CB00596E6B /* gf2n.h */,
+				66E4F54B176298CB00596E6B /* gfpcrypt.h */,
+				66E4F54C176298CB00596E6B /* gost.h */,
+				66E4F54D176298CB00596E6B /* gzip.h */,
+				66E4F54E176298CB00596E6B /* hex.h */,
+				66E4F54F176298CB00596E6B /* hmac.h */,
+				66E4F550176298CB00596E6B /* hrtimer.h */,
+				66E4F551176298CB00596E6B /* ida.h */,
+				66E4F552176298CB00596E6B /* idea.h */,
+				66E4F553176298CB00596E6B /* integer.h */,
+				66E4F554176298CB00596E6B /* iterhash.h */,
+				66E4F555176298CB00596E6B /* lubyrack.h */,
+				66E4F556176298CB00596E6B /* luc.h */,
+				66E4F557176298CB00596E6B /* mars.h */,
+				66E4F558176298CB00596E6B /* md2.h */,
+				66E4F559176298CB00596E6B /* md4.h */,
+				66E4F55A176298CB00596E6B /* md5.h */,
+				66E4F55B176298CB00596E6B /* mdc.h */,
+				66E4F55C176298CB00596E6B /* misc.h */,
+				66E4F55D176298CB00596E6B /* modarith.h */,
+				66E4F55E176298CB00596E6B /* modes.h */,
+				66E4F55F176298CB00596E6B /* modexppc.h */,
+				66E4F560176298CB00596E6B /* mqueue.h */,
+				66E4F561176298CB00596E6B /* mqv.h */,
+				66E4F562176298CB00596E6B /* nbtheory.h */,
+				66E4F563176298CB00596E6B /* network.h */,
+				66E4F564176298CB00596E6B /* nr.h */,
+				66E4F565176298CB00596E6B /* oaep.h */,
+				66E4F566176298CB00596E6B /* oids.h */,
+				66E4F567176298CB00596E6B /* osrng.h */,
+				66E4F568176298CB00596E6B /* panama.h */,
+				66E4F569176298CB00596E6B /* pch.h */,
+				66E4F56A176298CB00596E6B /* pkcspad.h */,
+				66E4F56B176298CB00596E6B /* polynomi.h */,
+				66E4F56C176298CB00596E6B /* pssr.h */,
+				66E4F56D176298CB00596E6B /* pubkey.h */,
+				66E4F56E176298CB00596E6B /* pwdbased.h */,
+				66E4F56F176298CB00596E6B /* queue.h */,
+				66E4F570176298CB00596E6B /* rabin.h */,
+				66E4F571176298CB00596E6B /* randpool.h */,
+				66E4F572176298CB00596E6B /* rc2.h */,
+				66E4F573176298CB00596E6B /* rc5.h */,
+				66E4F574176298CB00596E6B /* rc6.h */,
+				66E4F575176298CB00596E6B /* resource.h */,
+				66E4F576176298CB00596E6B /* rijndael.h */,
+				66E4F577176298CB00596E6B /* ripemd.h */,
+				66E4F578176298CB00596E6B /* rng.h */,
+				66E4F579176298CB00596E6B /* rsa.h */,
+				66E4F57A176298CB00596E6B /* rw.h */,
+				66E4F57B176298CB00596E6B /* safer.h */,
+				66E4F57C176298CB00596E6B /* salsa.h */,
+				66E4F57D176298CB00596E6B /* seal.h */,
+				66E4F57E176298CB00596E6B /* secblock.h */,
+				66E4F57F176298CB00596E6B /* seckey.h */,
+				66E4F580176298CB00596E6B /* seed.h */,
+				66E4F581176298CB00596E6B /* serpent.h */,
+				66E4F582176298CB00596E6B /* serpentp.h */,
+				66E4F583176298CB00596E6B /* sha.h */,
+				66E4F584176298CB00596E6B /* shacal2.h */,
+				66E4F585176298CB00596E6B /* shark.h */,
+				66E4F586176298CB00596E6B /* simple.h */,
+				66E4F587176298CB00596E6B /* skipjack.h */,
+				66E4F588176298CB00596E6B /* smartptr.h */,
+				66E4F589176298CB00596E6B /* socketft.h */,
+				66E4F58A176298CB00596E6B /* sosemanuk.h */,
+				66E4F58B176298CB00596E6B /* square.h */,
+				66E4F58C176298CB00596E6B /* stdcpp.h */,
+				66E4F58D176298CB00596E6B /* strciphr.h */,
+				66E4F58E176298CB00596E6B /* tea.h */,
+				66E4F58F176298CB00596E6B /* tiger.h */,
+				66E4F590176298CB00596E6B /* trdlocal.h */,
+				66E4F591176298CB00596E6B /* trunhash.h */,
+				66E4F592176298CB00596E6B /* ttmac.h */,
+				66E4F593176298CB00596E6B /* twofish.h */,
+				66E4F594176298CB00596E6B /* validate.h */,
+				66E4F595176298CB00596E6B /* vmac.h */,
+				66E4F596176298CB00596E6B /* wait.h */,
+				66E4F597176298CB00596E6B /* wake.h */,
+				66E4F598176298CB00596E6B /* whrlpool.h */,
+				66E4F599176298CB00596E6B /* winpipes.h */,
+				66E4F59A176298CB00596E6B /* words.h */,
+				66E4F59B176298CB00596E6B /* xtr.h */,
+				66E4F59C176298CB00596E6B /* xtrcrypt.h */,
+				66E4F59D176298CB00596E6B /* zdeflate.h */,
+				66E4F59E176298CB00596E6B /* zinflate.h */,
+				66E4F59F176298CB00596E6B /* zlib.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		66E4F5A0176298CB00596E6B /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				66E4F5A1176298CB00596E6B /* libcryptopp.a */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		66E4F5A2176298CB00596E6B /* socketio */ = {
+			isa = PBXGroup;
+			children = (
+				66E4F5A3176298CB00596E6B /* SocketIO.h */,
+				66E4F5A4176298CB00596E6B /* SocketIO.m */,
+				66E4F5A5176298CB00596E6B /* SocketIOJSONSerialization.h */,
+				66E4F5A6176298CB00596E6B /* SocketIOJSONSerialization.m */,
+				66E4F5A7176298CB00596E6B /* SocketIOPacket.h */,
+				66E4F5A8176298CB00596E6B /* SocketIOPacket.m */,
+				66E4F5A9176298CB00596E6B /* SocketIOTransport.h */,
+				66E4F5AA176298CB00596E6B /* SocketIOTransportWebsocket.h */,
+				66E4F5AB176298CB00596E6B /* SocketIOTransportWebsocket.m */,
+				66E4F5AC176298CB00596E6B /* SocketIOTransportXHR.h */,
+				66E4F5AD176298CB00596E6B /* SocketIOTransportXHR.m */,
+			);
+			path = socketio;
+			sourceTree = "<group>";
+		};
+		66E4F5AE176298CB00596E6B /* socketrocket */ = {
+			isa = PBXGroup;
+			children = (
+				66E4F5AF176298CB00596E6B /* base64.c */,
+				66E4F5B0176298CB00596E6B /* base64.h */,
+				66E4F5B1176298CB00596E6B /* NSData+SRB64Additions.h */,
+				66E4F5B2176298CB00596E6B /* NSData+SRB64Additions.m */,
+				66E4F5B3176298CB00596E6B /* SocketRocket-Prefix.pch */,
+				66E4F5B4176298CB00596E6B /* SRWebSocket.h */,
+				66E4F5B5176298CB00596E6B /* SRWebSocket.m */,
+			);
+			path = socketrocket;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6604A2BA17626B9E0072216A /* surespot */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6604A2F617626B9E0072216A /* Build configuration list for PBXNativeTarget "surespot" */;
+			buildPhases = (
+				6604A2B717626B9E0072216A /* Sources */,
+				6604A2B817626B9E0072216A /* Frameworks */,
+				6604A2B917626B9E0072216A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = surespot;
+			productName = surespot;
+			productReference = 6604A2BB17626B9E0072216A /* surespot.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6604A2E317626B9E0072216A /* surespotTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6604A2F917626B9E0072216A /* Build configuration list for PBXNativeTarget "surespotTests" */;
+			buildPhases = (
+				6604A2DF17626B9E0072216A /* Sources */,
+				6604A2E017626B9E0072216A /* Frameworks */,
+				6604A2E117626B9E0072216A /* Resources */,
+				6604A2E217626B9E0072216A /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6604A2EA17626B9E0072216A /* PBXTargetDependency */,
+			);
+			name = surespotTests;
+			productName = surespotTests;
+			productReference = 6604A2E417626B9E0072216A /* surespotTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6604A2B317626B9E0072216A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = Surespot;
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = 2fours;
+			};
+			buildConfigurationList = 6604A2B617626B9E0072216A /* Build configuration list for PBXProject "surespot" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6604A2B217626B9E0072216A;
+			productRefGroup = 6604A2BC17626B9E0072216A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6604A2BA17626B9E0072216A /* surespot */,
+				6604A2E317626B9E0072216A /* surespotTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6604A2B917626B9E0072216A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6604A2C917626B9E0072216A /* InfoPlist.strings in Resources */,
+				6604A2D117626B9E0072216A /* Default.png in Resources */,
+				6604A2D317626B9E0072216A /* Default@2x.png in Resources */,
+				6604A2D517626B9E0072216A /* Default-568h@2x.png in Resources */,
+				6604A2D817626B9E0072216A /* MainStoryboard_iPhone.storyboard in Resources */,
+				6604A2DB17626B9E0072216A /* MainStoryboard_iPad.storyboard in Resources */,
+				6621BB841762704D00BC2850 /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6604A2E117626B9E0072216A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6604A2F017626B9E0072216A /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		6604A2E217626B9E0072216A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6604A2B717626B9E0072216A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6604A2CB17626B9E0072216A /* main.m in Sources */,
+				6604A2CF17626B9E0072216A /* SurespotAppDelegate.m in Sources */,
+				6604A2DE17626B9E0072216A /* LoginViewController.m in Sources */,
+				6621BB891762767600BC2850 /* EncryptionController.m in Sources */,
+				66E4F5B7176298CB00596E6B /* SocketIO.m in Sources */,
+				66E4F5B8176298CB00596E6B /* SocketIOJSONSerialization.m in Sources */,
+				66E4F5B9176298CB00596E6B /* SocketIOPacket.m in Sources */,
+				66E4F5BA176298CB00596E6B /* SocketIOTransportWebsocket.m in Sources */,
+				66E4F5BB176298CB00596E6B /* SocketIOTransportXHR.m in Sources */,
+				66E4F5BC176298CB00596E6B /* base64.c in Sources */,
+				66E4F5BD176298CB00596E6B /* NSData+SRB64Additions.m in Sources */,
+				66E4F5BE176298CB00596E6B /* SRWebSocket.m in Sources */,
+				661C2EC01762A345000649E7 /* CryptoPPWrapper.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6604A2DF17626B9E0072216A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6604A2F317626B9E0072216A /* surespotTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6604A2EA17626B9E0072216A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6604A2BA17626B9E0072216A /* surespot */;
+			targetProxy = 6604A2E917626B9E0072216A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		6604A2C717626B9E0072216A /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6604A2C817626B9E0072216A /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		6604A2D617626B9E0072216A /* MainStoryboard_iPhone.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6621BB7D17626EE800BC2850 /* Base */,
+			);
+			name = MainStoryboard_iPhone.storyboard;
+			sourceTree = "<group>";
+		};
+		6604A2D917626B9E0072216A /* MainStoryboard_iPad.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6621BB7E17626EE800BC2850 /* Base */,
+			);
+			name = MainStoryboard_iPad.storyboard;
+			sourceTree = "<group>";
+		};
+		6604A2EE17626B9E0072216A /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6604A2EF17626B9E0072216A /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		6621BB861762704D00BC2850 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6621BB851762704D00BC2850 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		6604A2F417626B9E0072216A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6604A2F517626B9E0072216A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6604A2F717626B9E0072216A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LIBRARY = "libstdc++";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "surespot/surespot-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INFOPLIST_FILE = "surespot/surespot-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/surespot\"",
+					"\"$(SRCROOT)/surespot/libs/cryptopp/lib\"",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		6604A2F817626B9E0072216A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LIBRARY = "libstdc++";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "surespot/surespot-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INFOPLIST_FILE = "surespot/surespot-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/surespot\"",
+					"\"$(SRCROOT)/surespot/libs/cryptopp/lib\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		6604A2FA17626B9E0072216A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/surespot.app/surespot";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "surespot/surespot-Prefix.pch";
+				INFOPLIST_FILE = "surespotTests/surespotTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		6604A2FB17626B9E0072216A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/surespot.app/surespot";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "surespot/surespot-Prefix.pch";
+				INFOPLIST_FILE = "surespotTests/surespotTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6604A2B617626B9E0072216A /* Build configuration list for PBXProject "surespot" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6604A2F417626B9E0072216A /* Debug */,
+				6604A2F517626B9E0072216A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6604A2F617626B9E0072216A /* Build configuration list for PBXNativeTarget "surespot" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6604A2F717626B9E0072216A /* Debug */,
+				6604A2F817626B9E0072216A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6604A2F917626B9E0072216A /* Build configuration list for PBXNativeTarget "surespotTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6604A2FA17626B9E0072216A /* Debug */,
+				6604A2FB17626B9E0072216A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6604A2B317626B9E0072216A /* Project object */;
+}
