@@ -152,8 +152,9 @@ using CryptoPP::ByteQueue;
             byteQueue.Put((byte *) [decodedKey bytes], [decodedKey length]);
             privateKey.Load(byteQueue);
             
+            CryptoPP::Integer exp =privateKey.GetPrivateExponent();
             std::ostrstream oss;
-            oss << std::ios::hex << privateKey.GetPrivateExponent();
+            oss << std::ios::hex << exp;
             
             string s(oss.str());
             NSLog(@"pk: %s", s.c_str());
