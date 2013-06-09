@@ -10,7 +10,19 @@
 #import "PrivateKeyPairs.h"
 
 
-@implementation SurespotIdentity 
+@implementation SurespotIdentity
+
+-(id) initWithUsername:(NSString *)username andSalt:(NSString *)salt {
+    if (self = [super init]) {
+        self.username = username;
+        self.salt = salt;
+        self.keyPairs = [[NSMutableDictionary alloc] init];
+        return self;
+    }
+    else {
+        return nil;
+    }
+}
 
 - (void) addKeyPairs:(NSString*)version keyPairDH:(DL_Keys_EC<ECP>)keyPairDH keyPairDSA:(DL_Keys_EC<ECP>)keyPairDSA {
     if ([self.latestVersion compare:version] == NSOrderedAscending) {

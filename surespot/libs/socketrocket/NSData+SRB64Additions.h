@@ -20,5 +20,7 @@
 @interface NSData (SRB64Additions)
 
 - (NSString *)SR_stringByBase64Encoding;
+- (NSData *)SR_dataByBase64Encoding;
+- (NSData *) base64decode;
 
 @end

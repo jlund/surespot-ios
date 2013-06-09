@@ -12,7 +12,9 @@ using CryptoPP::ECP;
 using CryptoPP::ECDH;
 using CryptoPP::DL_Keys_EC;
 
-@interface SurespotIdentity : NSObject 
+@interface SurespotIdentity : NSObject
+
+-(id) initWithUsername:(NSString *)username andSalt:(NSString *)salt;
 
 - (void) addKeyPairs:(NSString*)version keyPairDH:(DL_Keys_EC<ECP>)keyPairDH keyPairDSA:(DL_Keys_EC<ECP>)keyPairDSA;
 
