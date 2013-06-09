@@ -7,6 +7,8 @@
 //
 
 #import "LoginViewController.h"
+#import "EncryptionController.h"
+#import "IdentityController.h"
 
 @interface LoginViewController ()
 
@@ -29,6 +31,8 @@
 - (IBAction)login:(id)sender {
     NSString * username = self.textUsername.text;
     NSString * password = self.textPassword.text;
+    
+    SurespotIdentity * identity = [IdentityController getIdentityWithUsername:username andPassword:@"a_cache_identity"];
     
     
     
