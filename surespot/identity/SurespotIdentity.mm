@@ -7,7 +7,7 @@
 //
 
 #import "SurespotIdentity.h"
-#import "PrivateKeyPairs.h"
+#import "IdentityKeys.h"
 
 
 @implementation SurespotIdentity
@@ -24,18 +24,39 @@
     }
 }
 
-- (void) addKeyPairs:(NSString*)version keyPairDH:(DL_Keys_EC<ECP>)keyPairDH keyPairDSA:(DL_Keys_EC<ECP>)keyPairDSA {
-    if ([self.latestVersion compare:version] == NSOrderedAscending) {
+- (void)
+addKeysWithVersion:(NSString*)version
+withDhPrivKey: (CryptoPP::DL_PrivateKey_EC<ECP>::DL_PrivateKey_EC) dhPrivKey
+withDhPubKey: (CryptoPP::DL_PublicKey_EC<ECP>) dhPubKey
+withDsaPrivKey: (CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey) dsaPrivKey
+withDsaPubKey: (CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey) dsaPubKey {
+    
+    if (self.latestVersion == nil) {
         self.latestVersion = version;
+    }
+    else {
+        if ([self.latestVersion compare:version] == NSOrderedAscending) {
+            self.latestVersion = version;
+        }
     }
     //self.version = version;
     
-    PrivateKeyPairs* pkp = [[PrivateKeyPairs alloc] init];
-    pkp.version = version;
-    pkp.keyPairDH = keyPairDH;
-    pkp.keyPairDSA = keyPairDSA;
+    IdentityKeys * ik = [[IdentityKeys alloc] init];
+    ik.version = version;
+    ik.dhPrivKey = dhPrivKey;
+    ik.dhPubKey = dhPubKey;
+    ik.dsaPrivKey = dsaPrivKey;
+    ik.dsaPubKey = dsaPubKey;
     
-    [self.keyPairs setValue: pkp forKey: version];
+    [self.keyPairs setValue: ik forKey: version];
+}
+
+- (ECDHPrivateKey) getDhPrivateKey {
+}
+
+- (ECDSAPrivateKey) getDsaPrivateKey {
+    IdentityKeys * keys = [self.keyPairs objectForKey:self.latestVersion];
+    return keys.dsaPrivKey;
 }
 
 

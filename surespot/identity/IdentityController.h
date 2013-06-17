@@ -11,6 +11,8 @@
 
 @interface IdentityController : NSObject
 + (SurespotIdentity *) getIdentityWithUsername:(NSString *) username andPassword:(NSString *) password;
++( SurespotIdentity *) decryptIdentityData: (NSData *) identityData withUsername: (NSString *) username andPassword: (NSString *) password;
+
 + (NSData *)gzipDeflate:(NSData *) data;
 + (NSData *)gzipInflate:(NSData *) data;
 @end

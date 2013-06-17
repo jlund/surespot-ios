@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 2fours. All rights reserved.
 //
 
-#import "PrivateKeyPairs.h"
+#import "IdentityKeys.h"
 
-@implementation PrivateKeyPairs
+@implementation IdentityKeys
 
 @end

@@ -13,73 +13,11 @@ int const SALT_LENGTH = 16;
 int const AES_KEY_LENGTH = 32;
 
 
-
-#include <strstream>
-#include <iostream>
-using std::cout;
-using std::cerr;
-using std::endl;
-
-
-
-#include "cryptlib.h"
-using CryptoPP::Exception;
-
-#include <string>
-using std::string;
-
-#include <stdexcept>
-using std::runtime_error;
-
-#include <cstdlib>
-using std::exit;
-
-#include "hex.h"
-
-#include "sha.h"
-using CryptoPP::SHA256;
-
-#include "pwdbased.h"
-using CryptoPP::PKCS5_PBKDF2_HMAC;
-
-#include "eccrypto.h"
-using CryptoPP::ECP;
-using CryptoPP::ECDH;
-
-#include "secblock.h"
-using CryptoPP::SecByteBlock;
-
-#include "oids.h"
-using CryptoPP::OID;
-
-// ASN1 is a namespace, not an object
-#include "asn.h"
-using namespace CryptoPP::ASN1;
-
-#include "osrng.h"
-using CryptoPP::AutoSeededRandomPool;
-using CryptoPP::AutoSeededX917RNG;
-
-
-#include "integer.h"
-using CryptoPP::Integer;
-
-#include "aes.h"
-using CryptoPP::AES;
-#include "gcm.h"
-using CryptoPP::GCM;
-
-#include "filters.h"
-using CryptoPP::StringSink;
-using CryptoPP::StringSource;
-using CryptoPP::AuthenticatedEncryptionFilter;
-using CryptoPP::AuthenticatedDecryptionFilter;
-using CryptoPP::Redirector;
-using CryptoPP::ByteQueue;
-
-#include "NSData+SRB64Additions.h"
+static CryptoPP::AutoSeededRandomPool rng;
 
 @implementation EncryptionController
+
+
 
 + (NSData *) decryptIdentity:(NSData *) identityData withPassword:(NSString *) password
 {
@@ -91,7 +29,7 @@ using CryptoPP::ByteQueue;
     byte cipherByte[cipherLength];
     byte ivBytes[IV_LENGTH];
     byte saltBytes[SALT_LENGTH];
-    byte * passwordBytes = (byte *) [[password dataUsingEncoding:NSUTF8StringEncoding] bytes];
+   // byte * passwordBytes = (byte *) [[password dataUsingEncoding:NSUTF8StringEncoding] bytes];
     memcpy(ivBytes, identityBytes, IV_LENGTH);
     memcpy(saltBytes, identityBytes + IV_LENGTH, SALT_LENGTH);
     memcpy(cipherByte, identityBytes + IV_LENGTH + SALT_LENGTH, cipherLength);
@@ -99,73 +37,91 @@ using CryptoPP::ByteQueue;
     CryptoPP::DL_PrivateKey_EC<ECP>::DL_PrivateKey_EC privateKey;
     //
     //
-    byte bytes[AES_KEY_LENGTH];
-      
-    kdf.DeriveKey(bytes, AES_KEY_LENGTH, 0, passwordBytes, [password length], saltBytes, 16, 1000, 0);
+    byte * bytes = [self deriveKeyUsingPassword: password andSalt:saltBytes];
     
-    try {
-        
-        GCM<AES>::Decryption d;
-        d.SetKeyWithIV(bytes, 32, ivBytes,16);
-        
-        string jsonIdentity;
-        
-        CryptoPP::AuthenticatedDecryptionFilter df (d, new StringSink(jsonIdentity));
-        df.Put(cipherByte, cipherLength);
-        df.MessageEnd();
-        
-        
-        //StringSource s(cipherByte, false, new CryptoPP::Redirector(df));
-        
-        bool b =  df.GetLastResult();
-        
-        cout << "Recovered " << jsonIdentity << endl;
-        
-        //convert json to NSDictionary
-        NSError* error;
-        NSString * jsonNSString =[[NSString alloc] initWithUTF8String:jsonIdentity.data()];
-        NSData * jsonData = [jsonNSString dataUsingEncoding:NSUTF8StringEncoding];
-        NSDictionary* dic = [NSJSONSerialization JSONObjectWithData:jsonData options:kNilOptions error:&error];
-        
-        //convert keys from json
-        NSString * username = [dic objectForKey:@"username"];
-        NSString * salt = [dic objectForKey:@"salt"];
-        NSArray * keys = [dic objectForKey:@"keys"];
-        
-        SurespotIdentity * si = [[SurespotIdentity alloc] initWithUsername:username andSalt:salt];
-        
-        //
-        for (NSDictionary * key in keys) {
-            
-            NSString * version = [key objectForKey:@"version"];            
-            NSString * dpubDH = [key objectForKey:@"dhPub"];
-            NSString * dprivDH = [key objectForKey:@"dhPriv"];
-            NSString * dsaPub = [key objectForKey:@"dsaPub"];
-            NSString * dsaPriv = [key objectForKey:@"dsaPriv"];
-            
-            
-            NSData * dhPrivData = [dprivDH dataUsingEncoding:NSUTF8StringEncoding];
-            
-            CryptoPP::DL_PrivateKey_EC<ECP>::DL_PrivateKey_EC privateKey;
-            NSData * decodedKey = [dhPrivData base64decode];
-            ByteQueue byteQueue;
-            byteQueue.Put((byte *) [decodedKey bytes], [decodedKey length]);
-            privateKey.Load(byteQueue);
-            
-            CryptoPP::Integer exp =privateKey.GetPrivateExponent();
-            std::ostrstream oss;
-            oss << std::ios::hex << exp;
-            
-            string s(oss.str());
-            NSLog(@"pk: %s", s.c_str());
-           // [si addKeyPairs:<#(NSString *)#> keyPairDH:<#(DL_Keys_EC<CryptoPP::ECP>)#> keyPairDSA:<#(DL_Keys_EC<CryptoPP::ECP>)#>]
-        }
-        
-    } catch (const CryptoPP::Exception& e) {
-        cerr << e.what() << endl;
-    }
+    
+    GCM<AES>::Decryption d;
+    d.SetKeyWithIV(bytes, 32, ivBytes,16);
+    
+    string jsonIdentity;
+    
+    CryptoPP::AuthenticatedDecryptionFilter df (d, new StringSink(jsonIdentity));
+    df.Put(cipherByte, cipherLength);
+    df.MessageEnd();
+    
+    
+    //StringSource s(cipherByte, false, new CryptoPP::Redirector(df));
+    
+   // bool b =  df.GetLastResult();
+    
+    cout << "Recovered " << jsonIdentity << endl;
+    
+    //convert json to NSDictionary
+    
+    NSString * jsonNSString =[[NSString alloc] initWithUTF8String:jsonIdentity.data()];
+    NSData * jsonData = [jsonNSString dataUsingEncoding:NSUTF8StringEncoding];
+
+    return jsonData;
 }
 
++(byte *) deriveKeyUsingPassword:(NSString *)password andSalt:(byte *)salt {
+    CryptoPP::PKCS5_PBKDF2_HMAC<SHA256> kdf;    
+    byte * bytes = new byte[AES_KEY_LENGTH];
+    byte * passwordBytes = (byte *) [[password dataUsingEncoding:NSUTF8StringEncoding] bytes];
+
+    kdf.DeriveKey(bytes, AES_KEY_LENGTH, 0, passwordBytes, [password length], salt, 16, 1000, 0);
+    return bytes;
+}
+
+
++ (ECDHPrivateKey) recreateDhPrivateKey:(NSString *) encodedKey {
+    
+    NSData * dhPrivData = [encodedKey dataUsingEncoding:NSUTF8StringEncoding];
+    
+    ECDHPrivateKey privateKey;
+    NSData * decodedKey = [dhPrivData base64decode];
+    ByteQueue byteQueue;
+    byteQueue.Put((byte *) [decodedKey bytes], [decodedKey length]);
+    privateKey.Load(byteQueue);
+    
+    return privateKey;
+}
+
++ (CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey) recreateDsaPrivateKey:(NSString *) encodedKey {
+    
+    NSData * dsaPrivData = [encodedKey dataUsingEncoding:NSUTF8StringEncoding];
+    
+    CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey privateKey;
+    NSData * decodedKey = [dsaPrivData base64decode];
+    ByteQueue byteQueue;
+    byteQueue.Put((byte *) [decodedKey bytes], [decodedKey length]);
+    privateKey.Load(byteQueue);
+    
+    return privateKey;
+ 
+}
+
++ (byte *) signUsername: (NSString *) username andPassword: (byte *) password withPrivateKey: (ECDSAPrivateKey) privateKey {
+    CryptoPP::ECDSA<ECP, SHA256>::Signer signer(privateKey);
+    byte * usernameBytes = (byte *)[username UTF8String];
+    byte random[16];
+    rng.GenerateBlock(random,16);
+    int messageSize = sizeof(usernameBytes) + sizeof(password) + 16;
+    int sigLength = signer.MaxSignatureLength();
+    byte message[messageSize];
+    memcpy(message, &usernameBytes, sizeof(usernameBytes));
+    memcpy(message + sizeof(usernameBytes), &password, sizeof(password));
+    memcpy(message + sizeof(usernameBytes) + sizeof(password), &random, 16);
+    byte signature[sigLength];
+    signer.SignMessage(rng, message, messageSize, signature);
+    
+    byte * returnSig = new byte[16 + sigLength];
+    memcpy (returnSig, random, 16);
+    memcpy (returnSig+16, signature, sigLength);
+    
+    
+    return returnSig;
+}
 
 -(void) doECDH {
     
@@ -179,8 +135,7 @@ using CryptoPP::ByteQueue;
     //generate key pair
     SecByteBlock privA(dhA.PrivateKeyLength()), pubA(dhA.PublicKeyLength());
     
-    //output keys
-    //output key
+//output keys
     unsigned int ppkLength = dhA.PrivateKeyLength();
     unsigned int pkLength = dhA.PublicKeyLength();
     
