@@ -27,10 +27,10 @@ typedef CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey ECDSAPrivateKey;
     withDsaPrivKey: (CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey) dsaPrivKey
     withDsaPubKey: (CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey) dsaPubKey;
 
-@property (nonatomic, retain) NSString* username;
-@property (nonatomic, retain) NSString* latestVersion;
-@property (nonatomic, retain) NSString* salt;
-@property (nonatomic, retain) NSMutableDictionary* keyPairs;
+@property (atomic, copy) NSString* username;
+@property (atomic, copy) NSString* latestVersion;
+@property (atomic, copy) NSString* salt;
+@property (atomic, strong) NSMutableDictionary* keyPairs;
 
 - (ECDHPrivateKey) getDhPrivateKey;
 - (ECDSAPrivateKey) getDsaPrivateKey;

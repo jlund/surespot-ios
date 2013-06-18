@@ -24,6 +24,7 @@
 		6604A2E817626B9E0072216A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A2C017626B9E0072216A /* Foundation.framework */; };
 		6604A2F017626B9E0072216A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6604A2EE17626B9E0072216A /* InfoPlist.strings */; };
 		6604A2F317626B9E0072216A /* surespotTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6604A2F217626B9E0072216A /* surespotTests.m */; };
+		66159703176F6732001B32C1 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 66159702176F6732001B32C1 /* NSData+Base64.m */; };
 		661C2EC31762B125000649E7 /* SurespotIdentity.mm in Sources */ = {isa = PBXBuildFile; fileRef = 661C2EC21762B125000649E7 /* SurespotIdentity.mm */; };
 		661C2EC81762C3C0000649E7 /* IdentityKeys.mm in Sources */ = {isa = PBXBuildFile; fileRef = 661C2EC71762C3C0000649E7 /* IdentityKeys.mm */; };
 		661C2ECB17638C2A000649E7 /* testlocal1.ssi in Resources */ = {isa = PBXBuildFile; fileRef = 661C2ECA17638C2A000649E7 /* testlocal1.ssi */; };
@@ -88,6 +89,8 @@
 		6604A2EF17626B9E0072216A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6604A2F117626B9E0072216A /* surespotTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = surespotTests.h; sourceTree = "<group>"; };
 		6604A2F217626B9E0072216A /* surespotTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = surespotTests.m; sourceTree = "<group>"; };
+		66159701176F66F1001B32C1 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "utils/NSData+Base64.h"; sourceTree = "<group>"; };
+		66159702176F6732001B32C1 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Base64.m"; path = "utils/NSData+Base64.m"; sourceTree = "<group>"; };
 		661C2EC11762B125000649E7 /* SurespotIdentity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SurespotIdentity.h; path = identity/SurespotIdentity.h; sourceTree = "<group>"; };
 		661C2EC21762B125000649E7 /* SurespotIdentity.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SurespotIdentity.mm; path = identity/SurespotIdentity.mm; sourceTree = "<group>"; };
 		661C2EC71762C3C0000649E7 /* IdentityKeys.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = IdentityKeys.mm; path = encryption/IdentityKeys.mm; sourceTree = "<group>"; };
@@ -348,6 +351,7 @@
 		6604A2C417626B9E0072216A /* surespot */ = {
 			isa = PBXGroup;
 			children = (
+				66159700176F669A001B32C1 /* utils */,
 				66EC6114176E49C900937467 /* network */,
 				661C2EC51762C399000649E7 /* encryption */,
 				661C2EC41762B12D000649E7 /* identity */,
@@ -396,6 +400,15 @@
 				6604A2EE17626B9E0072216A /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		66159700176F669A001B32C1 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				66159701176F66F1001B32C1 /* NSData+Base64.h */,
+				66159702176F6732001B32C1 /* NSData+Base64.m */,
+			);
+			name = utils;
 			sourceTree = "<group>";
 		};
 		661C2EC41762B12D000649E7 /* identity */ = {
@@ -800,6 +813,7 @@
 				66EC6112176E494900937467 /* AFXMLRequestOperation.m in Sources */,
 				66EC6113176E494900937467 /* UIImageView+AFNetworking.m in Sources */,
 				66EC6117176E49F800937467 /* NetworkController.m in Sources */,
+				66159703176F6732001B32C1 /* NSData+Base64.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

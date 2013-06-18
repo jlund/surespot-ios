@@ -3,6 +3,31 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "+[EncryptionController deriveKeyUsingPassword:andSalt:]:EncryptionController.mm">
+         <PersistentStrings>
+            <PersistentString
+               value = "[password length]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[NSData(IDZGunzip) gunzippedData]:NSData+Gunzip.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[SurespotIdentity initWithUsername:andSalt:]:SurespotIdentity.mm">
+      </ContextState>
+      <ContextState
+         contextName = "-[NetworkController loginWithUsername:andPassword:andSignature:]:NetworkController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "signature.length">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "+[IdentityController getIdentityWithUsername:andPassword:]:IdentityController.mm">
+      </ContextState>
+      <ContextState
          contextName = "-[NSData(IDZGunzip) gunzip:]:NSData+Gunzip.m">
          <PersistentStrings>
             <PersistentString
@@ -11,25 +36,51 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "-[NSData(IDZGunzip) gunzippedData]:NSData+Gunzip.m">
-      </ContextState>
-      <ContextState
-         contextName = "-[SurespotCrypto doImport:]:CryptoPPWrapper.mm">
+         contextName = "main:main.m">
       </ContextState>
       <ContextState
          contextName = "-[LoginViewController login:]:LoginViewController.mm">
       </ContextState>
       <ContextState
-         contextName = "main:main.m">
+         contextName = "+[IdentityController gzipInflate:]:IdentityController.mm">
+      </ContextState>
+      <ContextState
+         contextName = "+[EncryptionController recreateDsaPrivateKey:]:EncryptionController.mm">
       </ContextState>
       <ContextState
          contextName = "-[SurespotCrypto import]:CryptoPPWrapper.mm">
       </ContextState>
       <ContextState
-         contextName = "+[IdentityController gzipInflate:]:IdentityController.mm">
+         contextName = "-[SurespotIdentity addKeysWithVersion:withDhPrivKey:withDhPubKey:withDsaPrivKey:withDsaPubKey:]:SurespotIdentity.mm">
       </ContextState>
       <ContextState
-         contextName = "+[IdentityController getIdentityWithUsername:andPassword:]:IdentityController.mm">
+         contextName = "+[EncryptionController signUsername:andPassword:withPrivateKey:]:EncryptionController.mm">
+         <PersistentStrings>
+            <PersistentString
+               value = "privateKey.getPrivateExponent()">
+            </PersistentString>
+            <PersistentString
+               value = "signature">
+            </PersistentString>
+            <PersistentString
+               value = "username.length">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[NSData(SRB64Additions) base64decode]:NSData+SRB64Additions.m">
+      </ContextState>
+      <ContextState
+         contextName = "b64_pton:base64.c">
+      </ContextState>
+      <ContextState
+         contextName = "CryptoPP::DL_SignerImpl&lt;CryptoPP::DL_SignatureSchemeOptions&lt;CryptoPP::DL_SS&lt;CryptoPP::DL_Keys_ECDSA&lt;CryptoPP::ECP&gt;, CryptoPP::DL_Algorithm_ECDSA&lt;CryptoPP::ECP&gt;, CryptoPP::DL_SignatureMessageEncodingMethod_DSA, CryptoPP::SHA256, int&gt;, CryptoPP::DL_Keys_ECDSA&lt;CryptoPP::ECP&gt;, CryptoPP::DL_Algorithm_ECDSA&lt;CryptoPP::ECP&gt;, CryptoPP::DL_SignatureMessageEncodingMethod_DSA, CryptoPP::SHA256&gt; &gt;::NewSignatureAccumulator(CryptoPP::RandomNumberGenerator&amp;) const:pubkey.h">
+      </ContextState>
+      <ContextState
+         contextName = "+[IdentityController decryptIdentityData:withUsername:andPassword:]:IdentityController.mm">
+      </ContextState>
+      <ContextState
+         contextName = "-[SurespotCrypto doImport:]:CryptoPPWrapper.mm">
       </ContextState>
    </ContextStates>
 </VariablesViewState>

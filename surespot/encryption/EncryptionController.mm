@@ -7,22 +7,21 @@
 //
 #import "EncryptionController.h"
 #import "SurespotIdentity.h"
+#import "NSData+Base64.h"
 
-int const IV_LENGTH = 16;
-int const SALT_LENGTH = 16;
-int const AES_KEY_LENGTH = 32;
 
 
 static CryptoPP::AutoSeededRandomPool rng;
 
 @implementation EncryptionController
 
-
+int const IV_LENGTH = 16;
+int const SALT_LENGTH = 16;
+int const AES_KEY_LENGTH = 32;
 
 + (NSData *) decryptIdentity:(NSData *) identityData withPassword:(NSString *) password
 {
     CryptoPP::PKCS5_PBKDF2_HMAC<SHA256> kdf;
-    CryptoPP::SecByteBlock dBytes(32);
     byte * identityBytes = (byte*)[identityData bytes];
     
     int cipherLength = [identityData length] - IV_LENGTH - SALT_LENGTH;
@@ -67,19 +66,19 @@ static CryptoPP::AutoSeededRandomPool rng;
 +(byte *) deriveKeyUsingPassword:(NSString *)password andSalt:(byte *)salt {
     CryptoPP::PKCS5_PBKDF2_HMAC<SHA256> kdf;    
     byte * bytes = new byte[AES_KEY_LENGTH];
-    byte * passwordBytes = (byte *) [[password dataUsingEncoding:NSUTF8StringEncoding] bytes];
+    NSData * passwordData = [password dataUsingEncoding:NSUTF8StringEncoding];
+    byte * passwordBytes = (byte *) [passwordData bytes];
 
-    kdf.DeriveKey(bytes, AES_KEY_LENGTH, 0, passwordBytes, [password length], salt, 16, 1000, 0);
+    kdf.DeriveKey(bytes, AES_KEY_LENGTH, 0, passwordBytes, [passwordData length], salt, 16, 1000, 0);
     return bytes;
 }
 
 
 + (ECDHPrivateKey) recreateDhPrivateKey:(NSString *) encodedKey {
     
-    NSData * dhPrivData = [encodedKey dataUsingEncoding:NSUTF8StringEncoding];
-    
+        
     ECDHPrivateKey privateKey;
-    NSData * decodedKey = [dhPrivData base64decode];
+    NSData * decodedKey = [NSData dataFromBase64String: encodedKey];
     ByteQueue byteQueue;
     byteQueue.Put((byte *) [decodedKey bytes], [decodedKey length]);
     privateKey.Load(byteQueue);
@@ -89,38 +88,40 @@ static CryptoPP::AutoSeededRandomPool rng;
 
 + (CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey) recreateDsaPrivateKey:(NSString *) encodedKey {
     
-    NSData * dsaPrivData = [encodedKey dataUsingEncoding:NSUTF8StringEncoding];
-    
     CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey privateKey;
-    NSData * decodedKey = [dsaPrivData base64decode];
+    NSData * decodedKey = [ NSData dataFromBase64String:encodedKey];
     ByteQueue byteQueue;
     byteQueue.Put((byte *) [decodedKey bytes], [decodedKey length]);
     privateKey.Load(byteQueue);
+    
+    privateKey.Validate(rng, 3);
     
     return privateKey;
  
 }
 
-+ (byte *) signUsername: (NSString *) username andPassword: (byte *) password withPrivateKey: (ECDSAPrivateKey) privateKey {
++ (NSData *) signUsername: (NSString *) username andPassword: (NSData *) password withPrivateKey: (ECDSAPrivateKey) privateKey {
     CryptoPP::ECDSA<ECP, SHA256>::Signer signer(privateKey);
-    byte * usernameBytes = (byte *)[username UTF8String];
-    byte random[16];
+    NSData * usernameData =[username dataUsingEncoding:NSUTF8StringEncoding];
+    
+    byte * random = new byte[16];
     rng.GenerateBlock(random,16);
-    int messageSize = sizeof(usernameBytes) + sizeof(password) + 16;
+        
+    NSMutableData *concatData = [NSMutableData dataWithData: usernameData];
+    [concatData appendData:password];
+    [concatData appendBytes:random length:16];
     int sigLength = signer.MaxSignatureLength();
-    byte message[messageSize];
-    memcpy(message, &usernameBytes, sizeof(usernameBytes));
-    memcpy(message + sizeof(usernameBytes), &password, sizeof(password));
-    memcpy(message + sizeof(usernameBytes) + sizeof(password), &random, 16);
-    byte signature[sigLength];
-    signer.SignMessage(rng, message, messageSize, signature);
     
-    byte * returnSig = new byte[16 + sigLength];
-    memcpy (returnSig, random, 16);
-    memcpy (returnSig+16, signature, sigLength);
+    byte * signature = new byte[sigLength];
+    int sigLen = signer.SignMessage(rng, (byte *)[concatData bytes], concatData.length, signature);
     
+    byte * buffer = new Byte[1000];
+    int put = CryptoPP::DSAConvertSignatureFormat(buffer, 1000, CryptoPP::DSASignatureFormat::DSA_DER, signature, sigLen, CryptoPP::DSASignatureFormat::DSA_P1363);
     
-    return returnSig;
+    NSMutableData * sig = [NSMutableData dataWithBytesNoCopy:random  length:16 freeWhenDone:true];
+    [sig appendBytes:buffer length:put];
+            
+    return sig;
 }
 
 -(void) doECDH {

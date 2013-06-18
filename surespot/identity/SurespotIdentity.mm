@@ -52,6 +52,7 @@ withDsaPubKey: (CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey) dsaPubKey {
 }
 
 - (ECDHPrivateKey) getDhPrivateKey {
+
 }
 
 - (ECDSAPrivateKey) getDsaPrivateKey {

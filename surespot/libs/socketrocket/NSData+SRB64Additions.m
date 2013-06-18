@@ -17,7 +17,6 @@
 #import "NSData+SRB64Additions.h"
 #import "base64.h"
 
-
 @implementation NSData (SRB64Additions)
 
 - (NSString *)SR_stringByBase64Encoding
@@ -51,23 +50,5 @@
         return [[NSData alloc] initWithBytesNoCopy:buffer length:len freeWhenDone:YES];
     }
 }
-
-
-- (NSData *) base64decode
-{
-    size_t buffer_size = ([self length] * 3 / 4 + 10);
-    
-    unsigned char *buffer = (unsigned char *)malloc(buffer_size);
-    
-    int len = b64_pton([self bytes], buffer, buffer_size);
-    
-    if (len == -1) {
-        free(buffer);
-        return nil;
-    } else{
-        return [[NSData alloc] initWithBytesNoCopy:buffer length:len freeWhenDone:YES];
-    }
-}
-
 
 @end

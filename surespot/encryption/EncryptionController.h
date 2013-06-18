@@ -74,6 +74,8 @@ using CryptoPP::ByteQueue;
 #include "eccrypto.h"
 using CryptoPP::ECP;
 
+#include "dsa.h"
+
 typedef CryptoPP::DL_PrivateKey_EC<ECP> ECDHPrivateKey;
 typedef CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey ECDSAPrivateKey;
 
@@ -89,6 +91,6 @@ extern int const AES_KEY_LENGTH;
 + (ECDHPrivateKey) recreateDhPrivateKey:(NSString *) encodedKey;
 + (ECDSAPrivateKey) recreateDsaPrivateKey:(NSString *) encodedKey;
 + (byte *) deriveKeyUsingPassword: (NSString *) password andSalt: (byte *) salt;
-+ (byte *) signUsername: (NSString *) username andPassword: (byte *) password withPrivateKey: (ECDSAPrivateKey) privateKey;
++ (NSData *) signUsername: (NSString *) username andPassword: (NSData *) password withPrivateKey: (ECDSAPrivateKey) privateKey;
 
 @end
