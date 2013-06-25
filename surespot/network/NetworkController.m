@@ -8,10 +8,9 @@
 
 #import "NetworkController.h"
 
-//#define _AFNETWORKING_ALLOW_INVALID_SSL_CERTIFICATES_
 #define kHost @"https://192.168.10.68"
-
 @implementation NetworkController
+
 +(NetworkController*)sharedInstance
 {
     static NetworkController *sharedInstance = nil;
@@ -59,6 +58,24 @@
         //completionBlock(JSON);
         NSLog(@"response failure: %@",  Error);
     } ];
+    
+    [operation start];
+    
+    
+}
+
+-(void) getFriendsSuccessBlock:(JSONSuccessBlock)successBlock failureBlock: (JSONFailureBlock) failureBlock
+{
+    
+    NSMutableString * sUrl  = [[NSMutableString alloc] initWithString:kHost];
+  //  [sUrl appendString:@"/friends"];
+       NSURLRequest *request = [self requestWithMethod:@"GET" path:@"friends" parameters:nil];
+    
+    
+    
+    
+    AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:successBlock
+                                                                                        failure: failureBlock];
     
     [operation start];
     

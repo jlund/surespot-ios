@@ -35,7 +35,7 @@
 //    NSString * password = self.textPassword.text;
   
     NSString * username = @"testlocal1";
-    NSString * password = @"a_cache_identity";
+    NSString * password = @"a_export_identity";
     SurespotIdentity * identity = [IdentityController getIdentityWithUsername:username andPassword:password];
     
     NSLog(@"loaded salt: %@", [identity salt]);
@@ -54,5 +54,7 @@
     NSString * signatureString = [signature SR_stringByBase64Encoding];
     
     [[NetworkController sharedInstance] loginWithUsername:username andPassword:passwordString andSignature: signatureString];
+    
+    [self performSegueWithIdentifier: @"loginSegue" sender: nil];
 }
 @end
