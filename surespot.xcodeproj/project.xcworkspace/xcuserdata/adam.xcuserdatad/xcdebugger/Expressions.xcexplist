@@ -42,10 +42,10 @@
          contextName = "-[LoginViewController login:]:LoginViewController.mm">
       </ContextState>
       <ContextState
-         contextName = "+[IdentityController gzipInflate:]:IdentityController.mm">
+         contextName = "+[EncryptionController recreateDsaPrivateKey:]:EncryptionController.mm">
       </ContextState>
       <ContextState
-         contextName = "+[EncryptionController recreateDsaPrivateKey:]:EncryptionController.mm">
+         contextName = "+[IdentityController gzipInflate:]:IdentityController.mm">
       </ContextState>
       <ContextState
          contextName = "-[SurespotCrypto import]:CryptoPPWrapper.mm">
@@ -75,6 +75,14 @@
       </ContextState>
       <ContextState
          contextName = "CryptoPP::DL_SignerImpl&lt;CryptoPP::DL_SignatureSchemeOptions&lt;CryptoPP::DL_SS&lt;CryptoPP::DL_Keys_ECDSA&lt;CryptoPP::ECP&gt;, CryptoPP::DL_Algorithm_ECDSA&lt;CryptoPP::ECP&gt;, CryptoPP::DL_SignatureMessageEncodingMethod_DSA, CryptoPP::SHA256, int&gt;, CryptoPP::DL_Keys_ECDSA&lt;CryptoPP::ECP&gt;, CryptoPP::DL_Algorithm_ECDSA&lt;CryptoPP::ECP&gt;, CryptoPP::DL_SignatureMessageEncodingMethod_DSA, CryptoPP::SHA256&gt; &gt;::NewSignatureAccumulator(CryptoPP::RandomNumberGenerator&amp;) const:pubkey.h">
+      </ContextState>
+      <ContextState
+         contextName = "+[EncryptionController generateSharedSecret:publicKey:]:EncryptionController.mm">
+         <PersistentStrings>
+            <PersistentString
+               value = "qp.MaxRetrievable()">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "+[IdentityController decryptIdentityData:withUsername:andPassword:]:IdentityController.mm">

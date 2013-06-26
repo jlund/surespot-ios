@@ -12,7 +12,9 @@ using CryptoPP::ECP;
 using CryptoPP::ECDH;
 using CryptoPP::DL_Keys_EC;
 
+typedef CryptoPP::DL_PublicKey_EC<ECP> ECDHPublicKey;
 typedef CryptoPP::DL_PrivateKey_EC<ECP> ECDHPrivateKey;
+typedef CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey ECDSAPPublicKey;
 typedef CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey ECDSAPrivateKey;
 
 
@@ -32,7 +34,10 @@ typedef CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey ECDSAPrivateKey;
 @property (atomic, copy) NSString* salt;
 @property (atomic, strong) NSMutableDictionary* keyPairs;
 
+- (ECDHPublicKey) getDhPublicKey;
 - (ECDHPrivateKey) getDhPrivateKey;
+- (ECDSAPPublicKey) getDsaPublicKey;
 - (ECDSAPrivateKey) getDsaPrivateKey;
+
 
 @end

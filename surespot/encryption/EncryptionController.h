@@ -76,6 +76,7 @@ using CryptoPP::ECP;
 
 #include "dsa.h"
 
+typedef CryptoPP::DL_PublicKey_EC<ECP> ECDHPublicKey;
 typedef CryptoPP::DL_PrivateKey_EC<ECP> ECDHPrivateKey;
 typedef CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey ECDSAPrivateKey;
 
@@ -92,5 +93,7 @@ extern int const AES_KEY_LENGTH;
 + (ECDSAPrivateKey) recreateDsaPrivateKey:(NSString *) encodedKey;
 + (byte *) deriveKeyUsingPassword: (NSString *) password andSalt: (byte *) salt;
 + (NSData *) signUsername: (NSString *) username andPassword: (NSData *) password withPrivateKey: (ECDSAPrivateKey) privateKey;
-
++(NSData *) getIv;
++(NSData *) encryptPlain: (NSString *) plain usingKey: (byte *) key usingIv: (NSData *) iv;
++(NSData *) generateSharedSecret: (ECDHPrivateKey) privateKey publicKey:(ECDHPublicKey) publicKey;
 @end

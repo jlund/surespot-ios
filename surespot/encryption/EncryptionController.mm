@@ -63,6 +63,79 @@ int const AES_KEY_LENGTH = 32;
     return jsonData;
 }
 
++(NSData *) getIv {
+    byte* iv = new byte[IV_LENGTH];
+    rng.GenerateBlock(iv, IV_LENGTH);
+    return [NSData dataWithBytes:iv length:IV_LENGTH];
+}
+
++(NSData *) encryptPlain: (NSString *) plain usingKey: (byte *) key usingIv: (NSData *) iv {
+    GCM<AES>::Encryption e;
+    e.SetKeyWithIV(key, AES_KEY_LENGTH, (byte *)[iv bytes],IV_LENGTH);
+    
+
+    string encrypted;
+    CryptoPP::AuthenticatedEncryptionFilter ef (e, new StringSink(encrypted));
+
+    ef.Put(*[plain cStringUsingEncoding:NSUTF8StringEncoding]);
+    ef.MessageEnd();
+
+    return [NSData dataWithBytes:encrypted.data() length:encrypted.length()];
+}
+
++(NSData *) generateSharedSecret: (ECDHPrivateKey) privateKey publicKey:(ECDHPublicKey) publicKey {
+    OID CURVE = secp521r1();    
+    ECDH < ECP >::Domain dhA( CURVE );//, dhB( CURVE );
+    
+    
+//    privateKey.GetPrivateExponent().Encode(<#byte *output#>, <#size_t outputLen#>)
+    
+    
+    
+    CryptoPP::SecByteBlock secA(dhA.AgreedValueLength());
+    ByteQueue q;
+    CryptoPP::Integer exp =    privateKey.GetPrivateExponent();
+      cout << "(priv key): " << std::hex << exp << endl;
+    
+    
+    
+    byte * privb = new byte[exp.MinEncodedSize()];
+    exp.Encode(privb, exp.MinEncodedSize());
+    //    q.Get(*privb);
+    
+      cout << "(priv key): " << std::hex << privb << endl;
+  //        cout << "(priv key): " << std::hex << &q << endl;
+    
+    ByteQueue qp    ;
+
+    
+    int encSize =publicKey.GetGroupParameters().GetEncodedElementSize(true);
+    byte * pubb = new byte[encSize];
+                           publicKey.GetGroupParameters().EncodeElement(true, publicKey.GetPublicElement(), pubb);
+    
+//    publicKey.DEREncodePublicKey(qp);
+//    int ret = qp.MaxRetrievable();
+   // byte * pubb = new byte[ret];
+//    qp.Ref().Get(*pubb);
+    CryptoPP::Integer pi;
+    pi.Decode(pubb, encSize);
+    cout << "(pub key): " << std::hex << pi << endl;
+    
+    
+    
+    
+    dhA.Agree(secA, privb,  pubb);
+    
+    Integer ssa;
+    
+    //make sure the secrets all match
+    ssa.Decode(secA.BytePtr(), secA.SizeInBytes());
+    
+      cout << "(shared key): " << std::hex << ssa << endl;
+    
+    return [NSData dataWithBytes:secA.data() length:secA.SizeInBytes()];
+}
+
 +(byte *) deriveKeyUsingPassword:(NSString *)password andSalt:(byte *)salt {
     CryptoPP::PKCS5_PBKDF2_HMAC<SHA256> kdf;    
     byte * bytes = new byte[AES_KEY_LENGTH];
@@ -82,6 +155,7 @@ int const AES_KEY_LENGTH = 32;
     ByteQueue byteQueue;
     byteQueue.Put((byte *) [decodedKey bytes], [decodedKey length]);
     privateKey.Load(byteQueue);
+    privateKey.Validate(rng, 3);
     
     return privateKey;
 }

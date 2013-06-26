@@ -51,14 +51,27 @@ withDsaPubKey: (CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey) dsaPubKey {
     [self.keyPairs setValue: ik forKey: version];
 }
 
-- (ECDHPrivateKey) getDhPrivateKey {
+- (ECDHPublicKey) getDhPublicKey {
+    IdentityKeys * keys = [self.keyPairs objectForKey:self.latestVersion];
+    return keys.dhPubKey;
+}
 
+- (ECDHPrivateKey) getDhPrivateKey {
+    IdentityKeys * keys = [self.keyPairs objectForKey:self.latestVersion];
+    return keys.dhPrivKey;
+}
+
+-(ECDSAPPublicKey)getDsaPublicKey {
+    IdentityKeys * keys = [self.keyPairs objectForKey:self.latestVersion];
+    return keys.dsaPubKey;
 }
 
 - (ECDSAPrivateKey) getDsaPrivateKey {
     IdentityKeys * keys = [self.keyPairs objectForKey:self.latestVersion];
     return keys.dsaPrivKey;
 }
+
+
 
 
 

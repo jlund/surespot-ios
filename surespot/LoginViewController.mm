@@ -38,6 +38,8 @@
     NSString * password = @"a_export_identity";
     SurespotIdentity * identity = [IdentityController getIdentityWithUsername:username andPassword:password];
     
+   
+    
     NSLog(@"loaded salt: %@", [identity salt]);
 
   //  NSData * saltData = [[identity salt] dataUsingEncoding:NSUTF8StringEncoding];

@@ -34,7 +34,8 @@
 		661C2ED61763D4B9000649E7 /* NSData+Gunzip.m in Sources */ = {isa = PBXBuildFile; fileRef = 661C2ED51763D4B9000649E7 /* NSData+Gunzip.m */; };
 		6621BB841762704D00BC2850 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6621BB861762704D00BC2850 /* Localizable.strings */; };
 		668E0EE7177A430E00115B19 /* FriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 668E0EE6177A430E00115B19 /* FriendViewController.m */; };
-		668E0EEA177A5F1400115B19 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 668E0EE9177A5F1400115B19 /* ChatViewController.m */; };
+		668E0EEA177A5F1400115B19 /* ChatViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 668E0EE9177A5F1400115B19 /* ChatViewController.mm */; };
+		668E0EEC177B2E3500115B19 /* testlocal10.ssi in Resources */ = {isa = PBXBuildFile; fileRef = 668E0EEB177B2E3500115B19 /* testlocal10.ssi */; };
 		66E4F5B6176298CB00596E6B /* libcryptopp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E4F5A1176298CB00596E6B /* libcryptopp.a */; };
 		66E4F5B7176298CB00596E6B /* SocketIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5A4176298CB00596E6B /* SocketIO.m */; };
 		66E4F5B8176298CB00596E6B /* SocketIOJSONSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5A6176298CB00596E6B /* SocketIOJSONSerialization.m */; };
@@ -111,7 +112,8 @@
 		668E0EE5177A430E00115B19 /* FriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendViewController.h; sourceTree = "<group>"; };
 		668E0EE6177A430E00115B19 /* FriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendViewController.m; sourceTree = "<group>"; };
 		668E0EE8177A5F1400115B19 /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
-		668E0EE9177A5F1400115B19 /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
+		668E0EE9177A5F1400115B19 /* ChatViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ChatViewController.mm; sourceTree = "<group>"; };
+		668E0EEB177B2E3500115B19 /* testlocal10.ssi */ = {isa = PBXFileReference; lastKnownFileType = file; name = testlocal10.ssi; path = resources/testlocal10.ssi; sourceTree = "<group>"; };
 		66E4F51A176298CB00596E6B /* 3way.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 3way.h; sourceTree = "<group>"; };
 		66E4F51B176298CB00596E6B /* adler32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adler32.h; sourceTree = "<group>"; };
 		66E4F51C176298CB00596E6B /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
@@ -369,7 +371,7 @@
 				6604A2DC17626B9E0072216A /* LoginViewController.h */,
 				6604A2DD17626B9E0072216A /* LoginViewController.mm */,
 				668E0EE8177A5F1400115B19 /* ChatViewController.h */,
-				668E0EE9177A5F1400115B19 /* ChatViewController.m */,
+				668E0EE9177A5F1400115B19 /* ChatViewController.mm */,
 				668E0EE5177A430E00115B19 /* FriendViewController.h */,
 				668E0EE6177A430E00115B19 /* FriendViewController.m */,
 				6604A2C517626B9E0072216A /* Supporting Files */,
@@ -380,6 +382,7 @@
 		6604A2C517626B9E0072216A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				668E0EEB177B2E3500115B19 /* testlocal10.ssi */,
 				661C2ECA17638C2A000649E7 /* testlocal1.ssi */,
 				6621BB861762704D00BC2850 /* Localizable.strings */,
 				6604A2C617626B9E0072216A /* surespot-Info.plist */,
@@ -763,6 +766,7 @@
 				6604A2DB17626B9E0072216A /* MainStoryboard_iPad.storyboard in Resources */,
 				6621BB841762704D00BC2850 /* Localizable.strings in Resources */,
 				661C2ECB17638C2A000649E7 /* testlocal1.ssi in Resources */,
+				668E0EEC177B2E3500115B19 /* testlocal10.ssi in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -825,7 +829,7 @@
 				66EC6117176E49F800937467 /* NetworkController.m in Sources */,
 				66159703176F6732001B32C1 /* NSData+Base64.m in Sources */,
 				668E0EE7177A430E00115B19 /* FriendViewController.m in Sources */,
-				668E0EEA177A5F1400115B19 /* ChatViewController.m in Sources */,
+				668E0EEA177A5F1400115B19 /* ChatViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

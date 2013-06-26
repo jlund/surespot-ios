@@ -10,5 +10,6 @@
 #import "SocketIO.h"
 
 @interface ChatViewController : UIViewController <SocketIODelegate>
+@property (strong, nonatomic) IBOutlet UITextField *tfMessage;
 @property (strong) SocketIO * socketIO;
 @end

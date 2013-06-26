@@ -157,6 +157,9 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="kHa-2L-O9b"/>
+                    <connections>
+                        <outlet property="tfMessage" destination="tKA-gU-H7W" id="tfn-JT-PYA"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0xg-FC-qCF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -181,25 +184,6 @@
             <point key="canvasLocation" x="-78" y="-240"/>
         </scene>
     </scenes>
-    <classes>
-        <class className="ChatViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/ChatViewController.h"/>
-        </class>
-        <class className="FriendViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/FriendViewController.h"/>
-        </class>
-        <class className="LoginViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/LoginViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="login:"/>
-                <relationship kind="outlet" name="textPassword" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="textUsername" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-        <class className="NSLayoutConstraint" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
