@@ -77,7 +77,9 @@ int const AES_KEY_LENGTH = 32;
     string encrypted;
     CryptoPP::AuthenticatedEncryptionFilter ef (e, new StringSink(encrypted));
 
-    ef.Put(*[plain cStringUsingEncoding:NSUTF8StringEncoding]);
+
+    
+    ef.Put(reinterpret_cast<const unsigned char *>([plain cStringUsingEncoding:NSUTF8StringEncoding]), [plain lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
     ef.MessageEnd();
 
     return [NSData dataWithBytes:encrypted.data() length:encrypted.length()];
@@ -85,53 +87,35 @@ int const AES_KEY_LENGTH = 32;
 
 +(NSData *) generateSharedSecret: (ECDHPrivateKey) privateKey publicKey:(ECDHPublicKey) publicKey {
     OID CURVE = secp521r1();    
-    ECDH < ECP >::Domain dhA( CURVE );//, dhB( CURVE );
+    ECDH < ECP >::Domain dhA( CURVE );
     
+    //thank christ for source code...nowhere in cryptoPP documentation could I find how the fuck to build the byte arrays for
+    //the agree method. Why the fuck do they give you public and private key structures but then the agree method takes a pair of byte arrays
+    //how bout some documentation around this so we don't have to reverse engineer the source code to figure out WTF it is expecting
     
-//    privateKey.GetPrivateExponent().Encode(<#byte *output#>, <#size_t outputLen#>)
-    
-    
-    
+    //get private key bytes for agree
     CryptoPP::SecByteBlock secA(dhA.AgreedValueLength());
-    ByteQueue q;
     CryptoPP::Integer exp =    privateKey.GetPrivateExponent();
-      cout << "(priv key): " << std::hex << exp << endl;
-    
-    
-    
+    cout << "(priv key): " << std::hex << exp << endl;
     byte * privb = new byte[exp.MinEncodedSize()];
     exp.Encode(privb, exp.MinEncodedSize());
-    //    q.Get(*privb);
     
-      cout << "(priv key): " << std::hex << privb << endl;
-  //        cout << "(priv key): " << std::hex << &q << endl;
     
-    ByteQueue qp    ;
-
-    
+    //get public key bytes for agree
     int encSize =publicKey.GetGroupParameters().GetEncodedElementSize(true);
     byte * pubb = new byte[encSize];
-                           publicKey.GetGroupParameters().EncodeElement(true, publicKey.GetPublicElement(), pubb);
+    publicKey.GetGroupParameters().EncodeElement(true, publicKey.GetPublicElement(), pubb);
+
     
-//    publicKey.DEREncodePublicKey(qp);
-//    int ret = qp.MaxRetrievable();
-   // byte * pubb = new byte[ret];
-//    qp.Ref().Get(*pubb);
-    CryptoPP::Integer pi;
-    pi.Decode(pubb, encSize);
-    cout << "(pub key): " << std::hex << pi << endl;
-    
-    
-    
-    
+    //perform agreement
     dhA.Agree(secA, privb,  pubb);
     
-    Integer ssa;
-    
-    //make sure the secrets all match
-    ssa.Decode(secA.BytePtr(), secA.SizeInBytes());
-    
-      cout << "(shared key): " << std::hex << ssa << endl;
+//    Integer ssa;
+//    
+//    //make sure the secrets all match
+//    ssa.Decode(secA.BytePtr(), secA.SizeInBytes());
+//    
+//      cout << "(shared key): " << std::hex << ssa << endl;
     
     return [NSData dataWithBytes:secA.data() length:secA.SizeInBytes()];
 }

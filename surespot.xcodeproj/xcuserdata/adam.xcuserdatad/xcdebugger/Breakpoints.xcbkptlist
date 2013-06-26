@@ -385,11 +385,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/encryption/EncryptionController.mm"
-         timestampString = "393954173.413327"
+         timestampString = "393957581.339633"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "145"
-         endingLineNumber = "145"
+         startingLineNumber = "129"
+         endingLineNumber = "129"
          landmarkName = "+deriveKeyUsingPassword:andSalt:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -398,11 +398,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/encryption/EncryptionController.mm"
-         timestampString = "393954173.413327"
+         timestampString = "393957581.339633"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "142"
-         endingLineNumber = "142"
+         startingLineNumber = "126"
+         endingLineNumber = "126"
          landmarkName = "+deriveKeyUsingPassword:andSalt:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -527,26 +527,13 @@
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "surespot/encryption/EncryptionController.mm"
-         timestampString = "393952852.29064"
+         filePath = "surespot/ChatViewController.mm"
+         timestampString = "393956598.168621"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "109"
-         endingLineNumber = "109"
-         landmarkName = "+generateSharedSecret:publicKey:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "surespot/encryption/EncryptionController.mm"
-         timestampString = "393954173.413327"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "118"
-         endingLineNumber = "118"
-         landmarkName = "+generateSharedSecret:publicKey:"
+         startingLineNumber = "53"
+         endingLineNumber = "53"
+         landmarkName = "-send:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

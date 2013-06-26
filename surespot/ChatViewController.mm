@@ -11,6 +11,7 @@
 #import "EncryptionController.h"
 #import "SocketIOPacket.h"
 #import "SurespotIdentity.h"
+#import "NSData+Base64.h";
 
 @interface ChatViewController ()
 
@@ -51,14 +52,17 @@
     NSData * sharedSec = [EncryptionController generateSharedSecret:[identity1 getDhPrivateKey] publicKey:[identity2 getDhPublicKey]];
     NSData * encData = [EncryptionController encryptPlain:message usingKey:(byte*)[sharedSec bytes] usingIv:iv];
     
+    NSString * b64iv = [iv base64EncodedStringWithSeparateLines:NO];
+    NSString * b64data = [encData base64EncodedStringWithSeparateLines:NO];
+    
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     
-    [dict setObject:@"tl4" forKey:@"to"];
+    [dict setObject:@"testlocal10" forKey:@"to"];
     [dict setObject:@"testlocal1" forKey:@"from"];
     [dict setObject:@"1" forKey:@"toVersion"];
     [dict setObject:@"2" forKey:@"fromVersion"];
-    [dict setObject:@"tl4" forKey:@"iv"];
-    [dict setObject:@"tl4" forKey:@"data"];
+    [dict setObject:b64iv forKey:@"iv"];
+    [dict setObject:b64data forKey:@"data"];
     [dict setObject:@"text/plain" forKey:@"mimeType"];
     [dict setObject:[NSNumber  numberWithBool:TRUE] forKey:@"shareable"];
 
