@@ -92,6 +92,7 @@ extern int const AES_KEY_LENGTH;
 + (ECDHPrivateKey) recreateDhPrivateKey:(NSString *) encodedKey;
 + (ECDSAPrivateKey) recreateDsaPrivateKey:(NSString *) encodedKey;
 + (byte *) deriveKeyUsingPassword: (NSString *) password andSalt: (byte *) salt;
++ (NSDictionary *) deriveKeyFromPassword: (NSString *) password;
 + (NSData *) signUsername: (NSString *) username andPassword: (NSData *) password withPrivateKey: (ECDSAPrivateKey) privateKey;
 +(NSData *) getIv;
 +(NSData *) encryptPlain: (NSString *) plain usingKey: (byte *) key usingIv: (NSData *) iv;

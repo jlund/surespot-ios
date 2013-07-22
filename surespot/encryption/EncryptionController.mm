@@ -18,10 +18,11 @@ static CryptoPP::AutoSeededRandomPool rng;
 int const IV_LENGTH = 16;
 int const SALT_LENGTH = 16;
 int const AES_KEY_LENGTH = 32;
+int const PBKDF_ROUNDS = 1000;
 
 + (NSData *) decryptIdentity:(NSData *) identityData withPassword:(NSString *) password
 {
-    CryptoPP::PKCS5_PBKDF2_HMAC<SHA256> kdf;
+   // CryptoPP::PKCS5_PBKDF2_HMAC<SHA256> kdf;
     byte * identityBytes = (byte*)[identityData bytes];
     
     int cipherLength = [identityData length] - IV_LENGTH - SALT_LENGTH;
@@ -121,13 +122,34 @@ int const AES_KEY_LENGTH = 32;
 }
 
 +(byte *) deriveKeyUsingPassword:(NSString *)password andSalt:(byte *)salt {
-    CryptoPP::PKCS5_PBKDF2_HMAC<SHA256> kdf;    
+  
     byte * bytes = new byte[AES_KEY_LENGTH];
     NSData * passwordData = [password dataUsingEncoding:NSUTF8StringEncoding];
     byte * passwordBytes = (byte *) [passwordData bytes];
-
-    kdf.DeriveKey(bytes, AES_KEY_LENGTH, 0, passwordBytes, [passwordData length], salt, 16, 1000, 0);
+    
+    CryptoPP::PKCS5_PBKDF2_HMAC<SHA256> kdf;
+    kdf.DeriveKey(bytes, AES_KEY_LENGTH, 0, passwordBytes, [passwordData length], salt,  SALT_LENGTH, PBKDF_ROUNDS, 0);
     return bytes;
+}
+
++ (NSDictionary *) deriveKeyFromPassword: (NSString *) password {
+    int iterationCount = PBKDF_ROUNDS;
+    NSMutableDictionary * derived = [[NSMutableDictionary alloc] initWithCapacity:2];
+    CryptoPP::SecByteBlock keyBytes(AES_KEY_LENGTH);
+    CryptoPP::SecByteBlock saltBytes(SALT_LENGTH);
+    
+    [derived setObject:[NSData dataWithBytes:saltBytes length:SALT_LENGTH] forKey:@"salt"];
+     
+    
+    rng.GenerateBlock(saltBytes, SALT_LENGTH);
+    
+    CryptoPP::PKCS5_PBKDF2_HMAC<SHA256> kdf;
+    NSData * passwordData = [password dataUsingEncoding:NSUTF8StringEncoding];
+
+    kdf.DeriveKey(keyBytes, AES_KEY_LENGTH, 0, (byte *)[passwordData bytes], [passwordData length], saltBytes,  SALT_LENGTH, PBKDF_ROUNDS, 0);
+    
+    [derived setObject:[NSData dataWithBytes:keyBytes length:AES_KEY_LENGTH] forKey:@"key"];
+    return derived;
 }
 
 

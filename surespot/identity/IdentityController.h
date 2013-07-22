@@ -8,11 +8,17 @@
 
 #import <Foundation/Foundation.h>
 #import "SurespotIdentity.h"
+#import "IdentityKeys.h"
 
 @interface IdentityController : NSObject
+
+
+
 + (SurespotIdentity *) getIdentityWithUsername:(NSString *) username andPassword:(NSString *) password;
 +( SurespotIdentity *) decryptIdentityData: (NSData *) identityData withUsername: (NSString *) username andPassword: (NSString *) password;
 
-+ (NSData *)gzipDeflate:(NSData *) data;
-+ (NSData *)gzipInflate:(NSData *) data;
++ (void) createIdentityWithUsername: (NSString *) username andPassword: (NSString *) password andSalt: (NSString *) salt andKeys: (IdentityKeys *) keys;
+
+
+
 @end
