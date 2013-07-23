@@ -39,13 +39,13 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="JPD-8G-y9p" firstAttribute="top" secondItem="3" secondAttribute="top" constant="131" id="M7j-Sn-yyQ"/>
+                            <constraint firstAttribute="trailing" secondItem="JPD-8G-y9p" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="1gm-F1-RzG"/>
+                            <constraint firstItem="DdZ-B0-Zxf" firstAttribute="top" secondItem="3" secondAttribute="top" constant="10" id="86f-Np-d7Q"/>
+                            <constraint firstItem="SW9-JJ-OEP" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="114" id="BLY-Jf-d6p"/>
+                            <constraint firstItem="JPD-8G-y9p" firstAttribute="top" secondItem="DdZ-B0-Zxf" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="KS6-Ir-dcD"/>
                             <constraint firstAttribute="trailing" secondItem="DdZ-B0-Zxf" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="Qwf-KR-51O"/>
-                            <constraint firstItem="SW9-JJ-OEP" firstAttribute="top" secondItem="3" secondAttribute="top" constant="230" id="TOc-Xu-Iqv"/>
-                            <constraint firstItem="JPD-8G-y9p" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="Ucg-D7-HiE"/>
-                            <constraint firstAttribute="trailing" secondItem="JPD-8G-y9p" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="Zyl-3S-L3h"/>
-                            <constraint firstItem="SW9-JJ-OEP" firstAttribute="centerX" secondItem="JPD-8G-y9p" secondAttribute="centerX" type="default" id="kSb-sF-jgP"/>
-                            <constraint firstItem="DdZ-B0-Zxf" firstAttribute="top" secondItem="3" secondAttribute="top" constant="74" id="lv3-tc-PyR"/>
+                            <constraint firstItem="JPD-8G-y9p" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="fa1-gz-Czt"/>
+                            <constraint firstItem="SW9-JJ-OEP" firstAttribute="top" secondItem="3" secondAttribute="top" constant="100" id="h8A-d3-CL8"/>
                             <constraint firstItem="DdZ-B0-Zxf" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="saV-La-Glh"/>
                         </constraints>
                     </view>
@@ -53,7 +53,7 @@
                     <connections>
                         <outlet property="textPassword" destination="JPD-8G-y9p" id="OMQ-Mc-YUx"/>
                         <outlet property="textUsername" destination="DdZ-B0-Zxf" id="ID3-BG-osx"/>
-                        <segue destination="o8F-uP-nSX" kind="push" identifier="loginSegue" id="8Xd-3r-EfF"/>
+                        <segue destination="o8F-uP-nSX" kind="push" identifier="loginToMainSegue" id="8Xd-3r-EfF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4" sceneMemberID="firstResponder"/>
@@ -65,7 +65,7 @@
             <objects>
                 <viewController id="VAm-bF-dbx" customClass="SignupViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WjX-SG-dIZ">
-                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oBQ-en-mfr">
@@ -97,18 +97,20 @@
                         <constraints>
                             <constraint firstItem="oBQ-en-mfr" firstAttribute="top" secondItem="WjX-SG-dIZ" secondAttribute="top" constant="20" symbolic="YES" type="default" id="3UH-pt-1ja"/>
                             <constraint firstItem="4qE-be-iiM" firstAttribute="top" secondItem="oBQ-en-mfr" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="3pQ-RJ-uV5"/>
+                            <constraint firstItem="gmo-KK-DEU" firstAttribute="top" secondItem="WjX-SG-dIZ" secondAttribute="top" constant="104" id="4Qz-3D-D3r"/>
                             <constraint firstAttribute="trailing" secondItem="4qE-be-iiM" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="DMr-YF-IYx"/>
                             <constraint firstAttribute="trailing" secondItem="oBQ-en-mfr" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="Kck-Wd-YZF"/>
                             <constraint firstItem="4qE-be-iiM" firstAttribute="leading" secondItem="WjX-SG-dIZ" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="fna-u1-Tcv"/>
-                            <constraint firstItem="gmo-KK-DEU" firstAttribute="top" secondItem="WjX-SG-dIZ" secondAttribute="top" constant="134" id="rND-Bf-OUN"/>
                             <constraint firstItem="oBQ-en-mfr" firstAttribute="leading" secondItem="WjX-SG-dIZ" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="ssN-SM-MoL"/>
                             <constraint firstItem="gmo-KK-DEU" firstAttribute="centerX" secondItem="4qE-be-iiM" secondAttribute="centerX" type="default" id="yfm-hA-adg"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="qUe-0a-kTs"/>
                     <connections>
                         <outlet property="bCreateIdentity" destination="gmo-KK-DEU" id="yO9-Oj-PUr"/>
                         <outlet property="tbPassword" destination="4qE-be-iiM" id="XO1-5U-3XE"/>
                         <outlet property="tbUsername" destination="oBQ-en-mfr" id="AOE-Pe-kUR"/>
+                        <segue destination="o8F-uP-nSX" kind="push" identifier="signupToMain" id="LKP-fY-IbS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OfU-df-7i9" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -231,7 +233,8 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="2" kind="relationship" relationship="rootViewController" id="cdK-ca-WxE"/>
+                        <segue destination="VAm-bF-dbx" kind="relationship" relationship="rootViewController" id="by7-p3-lIo"/>
+                        <segue destination="2" kind="push" identifier="loginSegue" id="gCK-Rt-ShY"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4B1-3Q-qpU" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -239,40 +242,12 @@
             <point key="canvasLocation" x="-78" y="-240"/>
         </scene>
     </scenes>
-    <classes>
-        <class className="ChatViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/ChatViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="tfMessage" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-        <class className="FriendViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/FriendViewController.h"/>
-        </class>
-        <class className="LoginViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/LoginViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="login:"/>
-                <relationship kind="outlet" name="textPassword" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="textUsername" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-        <class className="NSLayoutConstraint" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
-        </class>
-        <class className="SignupViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SignupViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="createIdentity:"/>
-                <relationship kind="outlet" name="bCreateIdentity" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="tbPassword" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="tbUsername" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="LKP-fY-IbS"/>
+    </inferredMetricsTieBreakers>
 </document>

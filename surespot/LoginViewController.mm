@@ -57,6 +57,6 @@
     
     [[NetworkController sharedInstance] loginWithUsername:username andPassword:passwordString andSignature: signatureString];
     
-    [self performSegueWithIdentifier: @"loginSegue" sender: nil];
+    [self performSegueWithIdentifier: @"loginToMainSegue" sender: nil];
 }
 @end

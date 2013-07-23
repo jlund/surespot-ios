@@ -75,14 +75,18 @@ using CryptoPP::ByteQueue;
 using CryptoPP::ECP;
 
 #include "dsa.h"
+#include "IdentityKeys.h"
 
 typedef CryptoPP::DL_PublicKey_EC<ECP> ECDHPublicKey;
 typedef CryptoPP::DL_PrivateKey_EC<ECP> ECDHPrivateKey;
 typedef CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey ECDSAPrivateKey;
+typedef CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey ECDSAPublicKey;
 
 extern int const IV_LENGTH;
 extern int const SALT_LENGTH;
 extern int const AES_KEY_LENGTH;
+
+
 
 
 
@@ -97,4 +101,7 @@ extern int const AES_KEY_LENGTH;
 +(NSData *) getIv;
 +(NSData *) encryptPlain: (NSString *) plain usingKey: (byte *) key usingIv: (NSData *) iv;
 +(NSData *) generateSharedSecret: (ECDHPrivateKey) privateKey publicKey:(ECDHPublicKey) publicKey;
++(IdentityKeys *) generateKeyPairs;
++(NSString *) encodeDHPublicKey: (ECDHPublicKey) dhPubKey;
++(NSString *) encodeDSAPublicKey: (ECDSAPublicKey) dsaPubKey;
 @end

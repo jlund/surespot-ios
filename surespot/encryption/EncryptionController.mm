@@ -9,8 +9,6 @@
 #import "SurespotIdentity.h"
 #import "NSData+Base64.h"
 
-
-
 static CryptoPP::AutoSeededRandomPool rng;
 
 @implementation EncryptionController
@@ -204,6 +202,93 @@ int const PBKDF_ROUNDS = 1000;
     return sig;
 }
 
++(IdentityKeys *) generateKeyPairs {
+    CryptoPP::DL_PrivateKey_EC<ECP>::DL_PrivateKey_EC dhKey;
+
+    dhKey.Initialize(rng, secp521r1());
+    bool dhvalid = dhKey.Validate(rng, 3);
+    
+    if (dhvalid) {
+        CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey dsaKey;
+        
+        dsaKey.Initialize( rng, secp521r1());
+        bool dsaValid = dsaKey.Validate( rng, 3 );
+        
+        if (dsaValid) {
+            IdentityKeys * ik = [[IdentityKeys alloc] init];
+          
+            ik.dhPrivKey = dhKey;
+            CryptoPP::DL_PublicKey_EC<ECP> dhPubKey;
+            dhKey.MakePublicKey(dhPubKey);
+            ik.dhPubKey = dhPubKey;
+            
+            CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey dsaPubKey;
+            dsaKey.MakePublicKey(dsaPubKey);
+            ik.dsaPubKey = dsaPubKey;
+            ik.dsaPrivKey = dsaKey;
+            return ik;
+        }
+    }
+    return nil;
+}
+
++(NSString *) encodeDHPublicKey: (ECDHPublicKey) dhPubKey {
+    
+               
+    ByteQueue byteQueue;
+    
+    //hard code the asn.1 oids for the curve we're using to the encoded output...don't know why crypto++ doesn't do this
+    //will have to revisit if we ever use any other curves
+   byte oidBytes[] = {0x30, 0x81, 0x9B, 0x30, 0x10, 0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01, 0x06, 0x05, 0x2B, 0x81, 0x04, 0x00, 0x23, 0x03, 0x81, 0x86, 0x00};
+    byteQueue.Put(oidBytes, 25);
+    
+    dhPubKey.DEREncodePublicKey(byteQueue);
+    
+    size_t size = byteQueue.TotalBytesRetrievable();
+    
+    byte encoded[byteQueue.TotalBytesRetrievable()];
+    
+    //size_t size =
+    byteQueue.Get(encoded, size);
+    
+    NSData * keyData = [NSData dataWithBytes:encoded length:size];
+  
+    return [self pemKey:keyData];
+}
+
++(NSString *) encodeDSAPublicKey: (ECDSAPublicKey) dsaPubKey {
+    ByteQueue byteQueue;
+    
+    //hard code the asn.1 oids for the curve we're using to the encoded output...don't know why crypto++ doesn't do this
+    //will have to revisit if we ever use any other curves
+    byte oidBytes[] = {0x30, 0x81, 0x9B, 0x30, 0x10, 0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01, 0x06, 0x05, 0x2B, 0x81, 0x04, 0x00, 0x23, 0x03, 0x81, 0x86, 0x00};
+    byteQueue.Put(oidBytes, 25);
+    
+    dsaPubKey.DEREncodePublicKey(byteQueue);
+    
+    size_t size = byteQueue.TotalBytesRetrievable();
+    
+    byte encoded[byteQueue.TotalBytesRetrievable()];
+    
+    //size_t size =
+    byteQueue.Get(encoded, size);
+    
+    NSData * keyData = [NSData dataWithBytes:encoded length:size];
+    
+    return [self pemKey:keyData];
+
+}
+
++(NSString *) pemKey: (NSData *) keyBytes {
+    NSMutableString * keyString = [[NSMutableString alloc] initWithString:@"-----BEGIN PUBLIC KEY-----\n" ];
+    [keyString appendString:[keyBytes base64EncodedStringWithSeparateLines:TRUE]];
+    [keyString appendString: @"\n-----END PUBLIC KEY-----"];
+    
+    return keyString;
+
+}
+
+
 -(void) doECDH {
     
     OID CURVE = secp521r1();
@@ -212,6 +297,8 @@ int const PBKDF_ROUNDS = 1000;
     ECDH < ECP >::Domain dhA( CURVE );//, dhB( CURVE );
     
     CryptoPP::DL_PrivateKey_EC<ECP>::DL_PrivateKey_EC privateKey;
+    
+    
     
     //generate key pair
     SecByteBlock privA(dhA.PrivateKeyLength()), pubA(dhA.PublicKeyLength());
