@@ -77,6 +77,11 @@ NSArray * identityNames;
     return [identityNames objectAtIndex:row];
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return NO;
+}
+
 - (void)viewDidUnload {
     [self setUserPicker:nil];
     [super viewDidUnload];

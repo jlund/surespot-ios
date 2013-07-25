@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface FriendViewController : UITableViewController
+@property (strong, nonatomic) IBOutlet UITextField *inviteText;
 @property (strong) NSDictionary *friends;
 @end
