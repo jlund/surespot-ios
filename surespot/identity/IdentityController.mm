@@ -21,7 +21,7 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
 NSString *const IDENTITY_EXTENSION = @".ssi";
 
 + (SurespotIdentity *) getIdentityWithUsername:(NSString *) username andPassword:(NSString *) password {
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:username ofType:@"ssi"];
+    NSString *filePath = [[FileController getAppSupportDir] stringByAppendingPathComponent: username ];
     NSData *myData = [NSData dataWithContentsOfFile:filePath];
     
     if (myData) {
@@ -32,7 +32,7 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
         
         
         
-        NSData * identity = [EncryptionController decryptIdentity: unzipped withPassword:password];
+        NSData * identity = [EncryptionController decryptIdentity: unzipped withPassword:[password stringByAppendingString:CACHE_IDENTITY_ID]];
         return [self decodeIdentityData:identity withUsername:username andPassword:password];
     }
     
@@ -67,7 +67,7 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
     [dic setObject:encodedKeys forKey:@"keys"];
     NSError * error;
     NSData * jsonIdentity = [NSJSONSerialization dataWithJSONObject:dic options:kNilOptions error:&error];
-    NSString * jsonString = [[NSString alloc] initWithData:jsonIdentity encoding:NSUTF8StringEncoding];
+  //  NSString * jsonString = [[NSString alloc] initWithData:jsonIdentity encoding:NSUTF8StringEncoding];
     return [EncryptionController encryptIdentity:jsonIdentity withPassword:password];
 
 }
@@ -139,6 +139,19 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
     
     [encryptedCompressedIdentityData writeToFile:filePath atomically:TRUE];
     return filePath;
+}
+
++ (NSArray *) getIdentityNames {
+     NSString * identityDir = [FileController getAppSupportDir];
+        NSArray * dirfiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:identityDir error:NULL];
+    NSMutableArray * identityNames = [[NSMutableArray alloc] init];
+    NSString * file;
+    for (file in dirfiles) {
+        if ([[file substringFromIndex:[file length] - [IDENTITY_EXTENSION length]] isEqualToString:IDENTITY_EXTENSION]) {
+            [identityNames addObject: file ];
+        }
+    }
+    return identityNames;
 }
 
 @end

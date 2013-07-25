@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="sXp-Qz-uFd">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="mXI-aR-0Jk">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
     <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="26D-wz-Bwm">
+            <objects>
+                <navigationController definesPresentationContext="YES" id="mXI-aR-0Jk" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="0oc-Eq-hkf">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="2" kind="relationship" relationship="rootViewController" id="h21-Fh-ssp"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Hhc-mu-Ve8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-505" y="-244"/>
+        </scene>
         <!--Login View Controller-->
         <scene sceneID="5">
             <objects>
@@ -12,47 +27,64 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DdZ-B0-Zxf">
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JPD-8G-y9p">
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SW9-JJ-OEP">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VPu-Pj-hn4">
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SW9-JJ-OEP">
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="73" id="RyB-f0-Jdj"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" title="login">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="login:" destination="2" eventType="touchUpInside" id="5nQ-Mi-N0d"/>
+                                        </connections>
+                                    </button>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JPD-8G-y9p">
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WV1-5E-HKR">
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="216" id="UpS-p6-uB5"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="dataSource" destination="2" id="Myq-Bc-wXw"/>
+                                            <outlet property="delegate" destination="2" id="yaU-74-A3F"/>
+                                        </connections>
+                                    </pickerView>
+                                </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="73" id="RyB-f0-Jdj"/>
+                                    <constraint firstItem="JPD-8G-y9p" firstAttribute="leading" secondItem="VPu-Pj-hn4" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="2ge-59-XmB"/>
+                                    <constraint firstItem="JPD-8G-y9p" firstAttribute="centerX" secondItem="SW9-JJ-OEP" secondAttribute="centerX" type="default" id="FRx-eq-TqW"/>
+                                    <constraint firstItem="JPD-8G-y9p" firstAttribute="top" secondItem="VPu-Pj-hn4" secondAttribute="top" constant="251" id="ReE-c5-KFF"/>
+                                    <constraint firstItem="WV1-5E-HKR" firstAttribute="trailing" secondItem="VPu-Pj-hn4" secondAttribute="trailing" type="default" id="Rym-RC-FCc"/>
+                                    <constraint firstAttribute="bottom" secondItem="SW9-JJ-OEP" secondAttribute="bottom" constant="423" id="ThM-4g-LnC"/>
+                                    <constraint firstItem="SW9-JJ-OEP" firstAttribute="top" secondItem="JPD-8G-y9p" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="VeU-YV-HxZ"/>
+                                    <constraint firstItem="WV1-5E-HKR" firstAttribute="leading" secondItem="VPu-Pj-hn4" secondAttribute="leading" type="default" id="bGq-K6-ozp"/>
+                                    <constraint firstItem="SW9-JJ-OEP" firstAttribute="centerX" secondItem="VPu-Pj-hn4" secondAttribute="centerX" type="default" id="dTM-9b-iyH"/>
+                                    <constraint firstItem="WV1-5E-HKR" firstAttribute="top" secondItem="VPu-Pj-hn4" secondAttribute="top" constant="20" symbolic="YES" type="default" id="usn-Ts-n0V"/>
+                                    <constraint firstAttribute="trailing" secondItem="JPD-8G-y9p" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="zBS-dw-lyo"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="login">
-                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="highlighted">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="login:" destination="2" eventType="touchUpInside" id="5nQ-Mi-N0d"/>
-                                </connections>
-                            </button>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="JPD-8G-y9p" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="1gm-F1-RzG"/>
-                            <constraint firstItem="DdZ-B0-Zxf" firstAttribute="top" secondItem="3" secondAttribute="top" constant="10" id="86f-Np-d7Q"/>
-                            <constraint firstItem="SW9-JJ-OEP" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="114" id="BLY-Jf-d6p"/>
-                            <constraint firstItem="JPD-8G-y9p" firstAttribute="top" secondItem="DdZ-B0-Zxf" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="KS6-Ir-dcD"/>
-                            <constraint firstAttribute="trailing" secondItem="DdZ-B0-Zxf" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="Qwf-KR-51O"/>
-                            <constraint firstItem="JPD-8G-y9p" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="fa1-gz-Czt"/>
-                            <constraint firstItem="SW9-JJ-OEP" firstAttribute="top" secondItem="3" secondAttribute="top" constant="100" id="h8A-d3-CL8"/>
-                            <constraint firstItem="DdZ-B0-Zxf" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="saV-La-Glh"/>
+                            <constraint firstItem="VPu-Pj-hn4" firstAttribute="top" secondItem="3" secondAttribute="top" constant="-6" id="GXM-N3-tGe"/>
+                            <constraint firstAttribute="bottom" secondItem="VPu-Pj-hn4" secondAttribute="bottom" constant="-201" id="TGE-0O-mbH"/>
+                            <constraint firstItem="VPu-Pj-hn4" firstAttribute="trailing" secondItem="3" secondAttribute="trailing" type="default" id="XMZ-a1-D5m"/>
+                            <constraint firstItem="VPu-Pj-hn4" firstAttribute="leading" secondItem="3" secondAttribute="leading" type="default" id="yYX-pt-flp"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="jSB-cH-bSD"/>
                     <connections>
                         <outlet property="textPassword" destination="JPD-8G-y9p" id="OMQ-Mc-YUx"/>
-                        <outlet property="textUsername" destination="DdZ-B0-Zxf" id="ID3-BG-osx"/>
+                        <outlet property="userPicker" destination="WV1-5E-HKR" id="RnN-f6-NzK"/>
                         <segue destination="o8F-uP-nSX" kind="push" identifier="loginToMainSegue" id="8Xd-3r-EfF"/>
                     </connections>
                 </viewController>
@@ -65,7 +97,7 @@
             <objects>
                 <viewController id="VAm-bF-dbx" customClass="SignupViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WjX-SG-dIZ">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oBQ-en-mfr">
@@ -222,25 +254,6 @@
             </objects>
             <point key="canvasLocation" x="1675" y="-294"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="MPP-JS-Fqh">
-            <objects>
-                <navigationController id="sXp-Qz-uFd" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="rEU-VO-Cj3">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="VAm-bF-dbx" kind="relationship" relationship="rootViewController" id="by7-p3-lIo"/>
-                        <segue destination="2" kind="push" identifier="loginSegue" id="gCK-Rt-ShY"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4B1-3Q-qpU" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-78" y="-240"/>
-        </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
@@ -248,6 +261,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="LKP-fY-IbS"/>
+        <segue reference="8Xd-3r-EfF"/>
     </inferredMetricsTieBreakers>
 </document>

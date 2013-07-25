@@ -99,11 +99,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/LoginViewController.mm"
-         timestampString = "393948647.638298"
+         timestampString = "396466625.794541"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "52"
-         endingLineNumber = "52"
+         startingLineNumber = "53"
+         endingLineNumber = "53"
          landmarkName = "-login:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -125,20 +125,7 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/LoginViewController.mm"
-         timestampString = "393948647.638298"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "48"
-         endingLineNumber = "48"
-         landmarkName = "-login:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "surespot/LoginViewController.mm"
-         timestampString = "393948647.638298"
+         timestampString = "396466625.794541"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "49"
@@ -151,11 +138,24 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/LoginViewController.mm"
-         timestampString = "393948647.638298"
+         timestampString = "396466625.794541"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "45"
-         endingLineNumber = "45"
+         startingLineNumber = "50"
+         endingLineNumber = "50"
+         landmarkName = "-login:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "surespot/LoginViewController.mm"
+         timestampString = "396466625.794541"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "46"
+         endingLineNumber = "46"
          landmarkName = "-login:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -170,19 +170,6 @@
          startingLineNumber = "47"
          endingLineNumber = "47"
          landmarkName = "-loginWithUsername:andPassword:andSignature:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "surespot/LoginViewController.mm"
-         timestampString = "393128362.941189"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "37"
-         endingLineNumber = "37"
-         landmarkName = "-login:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -411,11 +398,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/LoginViewController.mm"
-         timestampString = "393948647.638298"
+         timestampString = "396466625.794541"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "53"
-         endingLineNumber = "53"
+         startingLineNumber = "54"
+         endingLineNumber = "54"
          landmarkName = "-login:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -450,11 +437,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/LoginViewController.h"
-         timestampString = "393882468.253441"
+         timestampString = "396464919.725062"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "19"
-         endingLineNumber = "19"
+         startingLineNumber = "22"
+         endingLineNumber = "22"
          landmarkName = "@interface LoginViewController"
          landmarkType = "2">
       </FileBreakpoint>
@@ -690,6 +677,32 @@
          startingLineNumber = "71"
          endingLineNumber = "71"
          landmarkName = "+encryptIdentity:withPassword:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "surespot/identity/IdentityController.mm"
+         timestampString = "396465671.73872"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "145"
+         endingLineNumber = "145"
+         landmarkName = "+getIdentityNames"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "surespot/LoginViewController.mm"
+         timestampString = "396466436.474054"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "36"
+         endingLineNumber = "36"
+         landmarkName = "-login:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

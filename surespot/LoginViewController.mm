@@ -18,10 +18,12 @@
 
 @implementation LoginViewController
 
+NSArray * identityNames;
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+    identityNames = [IdentityController getIdentityNames];
 }
 
 - (void)didReceiveMemoryWarning
@@ -31,11 +33,10 @@
 }
 
 - (IBAction)login:(id)sender {
-//    NSString * username = self.textUsername.text;
-//    NSString * password = self.textPassword.text;
+    NSString * username = [identityNames objectAtIndex:[_userPicker selectedRowInComponent:0]];
+    NSString * password = self.textPassword.text;
   
-    NSString * username = @"testlocal1";
-    NSString * password = @"a_export_identity";
+
     SurespotIdentity * identity = [IdentityController getIdentityWithUsername:username andPassword:password];
     
    
@@ -45,7 +46,7 @@
   //  NSData * saltData = [[identity salt] dataUsingEncoding:NSUTF8StringEncoding];
 
     NSData * decodedSalt =     [NSData dataFromBase64String: [identity salt]];
-    byte * derivedPassword = [EncryptionController deriveKeyUsingPassword:@"a" andSalt: (byte *)[decodedSalt bytes]];
+    byte * derivedPassword = [EncryptionController deriveKeyUsingPassword:password andSalt: (byte *)[decodedSalt bytes]];
     NSData * passwordData = [NSData dataWithBytes:derivedPassword length:AES_KEY_LENGTH];
     NSData * encodedPassword = [passwordData SR_dataByBase64Encoding];
     
@@ -58,5 +59,26 @@
     [[NetworkController sharedInstance] loginWithUsername:username andPassword:passwordString andSignature: signatureString];
     
     [self performSegueWithIdentifier: @"loginToMainSegue" sender: nil];
+}
+
+// returns the number of 'columns' to display.
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+    return 1;
+}
+
+// returns the # of rows in each component..
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+    return [identityNames count];
+}
+
+-(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    //set item per row
+    return [identityNames objectAtIndex:row];
+}
+
+- (void)viewDidUnload {
+    [self setUserPicker:nil];
+    [super viewDidUnload];
 }
 @end

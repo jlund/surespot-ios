@@ -18,7 +18,7 @@
 +( SurespotIdentity *) decodeIdentityData: (NSData *) identityData withUsername: (NSString *) username andPassword: (NSString *) password;
 
 + (void) createIdentityWithUsername: (NSString *) username andPassword: (NSString *) password andSalt: (NSString *) salt andKeys: (IdentityKeys *) keys;
-
++ (NSArray *) getIdentityNames;
 
 
 @end
