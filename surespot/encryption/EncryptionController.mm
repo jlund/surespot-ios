@@ -9,6 +9,8 @@
 #import "SurespotIdentity.h"
 #import "NSData+Base64.h"
 
+using CryptoPP::BitBucket;
+
 static CryptoPP::AutoSeededRandomPool rng;
 
 @implementation EncryptionController
@@ -17,6 +19,42 @@ int const IV_LENGTH = 16;
 int const SALT_LENGTH = 16;
 int const AES_KEY_LENGTH = 32;
 int const PBKDF_ROUNDS = 1000;
+
++ (NSData *) encryptIdentity:(NSData *) identityData withPassword:(NSString *) password
+{
+    int length = [identityData length];
+    byte * identityBytes = (byte*)[identityData bytes];
+    
+    //generate iv
+    byte ivBytes[IV_LENGTH];
+    rng.GenerateBlock(ivBytes, IV_LENGTH);
+    
+    //derive password and salt
+    NSDictionary * derived =[self deriveKeyFromPassword:password];
+    
+    //encrypt the identity data
+    byte * keyBytes = (byte *)[[derived objectForKey:@"key"] bytes];
+    GCM<AES>::Encryption e;
+    e.SetKeyWithIV(keyBytes, AES_KEY_LENGTH, ivBytes,IV_LENGTH);
+    
+    string cipherString;
+    
+    CryptoPP::AuthenticatedEncryptionFilter ef (e, new StringSink(cipherString));
+    ef.Put(identityBytes, length);
+    ef.MessageEnd();
+    
+    
+
+    //return the iv salt and encrypted identity data in one buffer
+    int returnLength = IV_LENGTH + SALT_LENGTH + cipherString.length();
+    NSMutableData * returnData = [[NSMutableData alloc] initWithCapacity: returnLength];
+    [returnData appendBytes:ivBytes length:IV_LENGTH];
+    [returnData appendData:[derived objectForKey:@"salt"]];
+    [returnData appendBytes:cipherString.data() length:cipherString.length()];
+    
+           
+    return returnData;
+}
 
 + (NSData *) decryptIdentity:(NSData *) identityData withPassword:(NSString *) password
 {
@@ -32,14 +70,11 @@ int const PBKDF_ROUNDS = 1000;
     memcpy(saltBytes, identityBytes + IV_LENGTH, SALT_LENGTH);
     memcpy(cipherByte, identityBytes + IV_LENGTH + SALT_LENGTH, cipherLength);
     
-    CryptoPP::DL_PrivateKey_EC<ECP>::DL_PrivateKey_EC privateKey;
-    //
-    //
     byte * bytes = [self deriveKeyUsingPassword: password andSalt:saltBytes];
     
     
     GCM<AES>::Decryption d;
-    d.SetKeyWithIV(bytes, 32, ivBytes,16);
+    d.SetKeyWithIV(bytes, AES_KEY_LENGTH, ivBytes,IV_LENGTH);
     
     string jsonIdentity;
     
@@ -131,15 +166,16 @@ int const PBKDF_ROUNDS = 1000;
 }
 
 + (NSDictionary *) deriveKeyFromPassword: (NSString *) password {
-    int iterationCount = PBKDF_ROUNDS;
     NSMutableDictionary * derived = [[NSMutableDictionary alloc] initWithCapacity:2];
     CryptoPP::SecByteBlock keyBytes(AES_KEY_LENGTH);
     CryptoPP::SecByteBlock saltBytes(SALT_LENGTH);
     
-    [derived setObject:[NSData dataWithBytes:saltBytes length:SALT_LENGTH] forKey:@"salt"];
-     
+    
+    
     
     rng.GenerateBlock(saltBytes, SALT_LENGTH);
+    
+    [derived setObject:[NSData dataWithBytes:saltBytes length:SALT_LENGTH] forKey:@"salt"];
     
     CryptoPP::PKCS5_PBKDF2_HMAC<SHA256> kdf;
     NSData * passwordData = [password dataUsingEncoding:NSUTF8StringEncoding];
@@ -232,6 +268,18 @@ int const PBKDF_ROUNDS = 1000;
     return nil;
 }
 
+
++(NSString *) encodeDHPrivateKey: (ECDHPrivateKey) dhPrivKey {
+    ByteQueue dhPrivByteQueue;
+    dhPrivKey.Save(dhPrivByteQueue);
+    size_t size = dhPrivByteQueue.TotalBytesRetrievable();
+    byte encoded[dhPrivByteQueue.TotalBytesRetrievable()];    
+    dhPrivByteQueue.Get(encoded, size);
+    
+    NSData * keyData = [NSData dataWithBytes:encoded length:size];
+    return [keyData SR_stringByBase64Encoding];
+}
+
 +(NSString *) encodeDHPublicKey: (ECDHPublicKey) dhPubKey {
     
                
@@ -254,6 +302,17 @@ int const PBKDF_ROUNDS = 1000;
     NSData * keyData = [NSData dataWithBytes:encoded length:size];
   
     return [self pemKey:keyData];
+}
+
++(NSString *) encodeDSAPrivateKey: (ECDSAPrivateKey) dsaPrivKey {
+    ByteQueue dsaPrivByteQueue;
+    dsaPrivKey.Save(dsaPrivByteQueue);
+    size_t size = dsaPrivByteQueue.TotalBytesRetrievable();
+    byte encoded[dsaPrivByteQueue.TotalBytesRetrievable()];
+    dsaPrivByteQueue.Get(encoded, size);
+    
+    NSData * keyData = [NSData dataWithBytes:encoded length:size];
+    return [keyData SR_stringByBase64Encoding];
 }
 
 +(NSString *) encodeDSAPublicKey: (ECDSAPublicKey) dsaPubKey {

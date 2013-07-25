@@ -92,6 +92,7 @@ extern int const AES_KEY_LENGTH;
 
 @interface EncryptionController : NSObject
 + (CryptoPP::AutoSeededRandomPool *) rng;
++ (NSData *) encryptIdentity:(NSData *) identityData withPassword:(NSString *) password;
 + (NSData *) decryptIdentity:(NSData *) identityData withPassword:(NSString *) password;
 + (ECDHPrivateKey) recreateDhPrivateKey:(NSString *) encodedKey;
 + (ECDSAPrivateKey) recreateDsaPrivateKey:(NSString *) encodedKey;
@@ -102,6 +103,8 @@ extern int const AES_KEY_LENGTH;
 +(NSData *) encryptPlain: (NSString *) plain usingKey: (byte *) key usingIv: (NSData *) iv;
 +(NSData *) generateSharedSecret: (ECDHPrivateKey) privateKey publicKey:(ECDHPublicKey) publicKey;
 +(IdentityKeys *) generateKeyPairs;
++(NSString *) encodeDHPrivateKey: (ECDHPrivateKey) dhPrivKey;
 +(NSString *) encodeDHPublicKey: (ECDHPublicKey) dhPubKey;
++(NSString *) encodeDSAPrivateKey: (ECDSAPrivateKey) dsaPrivKey;
 +(NSString *) encodeDSAPublicKey: (ECDSAPublicKey) dsaPubKey;
 @end

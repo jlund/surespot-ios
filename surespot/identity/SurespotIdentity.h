@@ -39,5 +39,5 @@ typedef CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey ECDSAPrivateKey;
 - (ECDSAPPublicKey) getDsaPublicKey;
 - (ECDSAPrivateKey) getDsaPrivateKey;
 
-
+- (NSDictionary *) getKeys;
 @end

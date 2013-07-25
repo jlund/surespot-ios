@@ -68,13 +68,13 @@
      dsaKey: encodedDSAKey
      signature: signature
      version: @"ios is my bitch"
-     successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-         NSLog(@"response: %d",  [response statusCode]);
-         [IdentityController createIdentityWithUsername:username andPassword:encPassword andSalt:salt andKeys:keys];
-         [self performSegueWithIdentifier: @"loginToMainSegue" sender: nil];
+     successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
+         NSLog(@"response: %d",  [operation.response statusCode]);
+         [IdentityController createIdentityWithUsername:username andPassword:password andSalt:salt andKeys:keys];
+         [self performSegueWithIdentifier: @"signupToMain" sender: nil];
          
      }
-     failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
+     failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
          
          //success!1
          //completionBlock(JSON);

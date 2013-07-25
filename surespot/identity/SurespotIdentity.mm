@@ -24,6 +24,10 @@
     }
 }
 
+- (NSDictionary *) getKeys {
+    return self.keyPairs;
+}
+
 - (void)
 addKeysWithVersion:(NSString*)version
 withDhPrivKey: (CryptoPP::DL_PrivateKey_EC<ECP>::DL_PrivateKey_EC) dhPrivKey

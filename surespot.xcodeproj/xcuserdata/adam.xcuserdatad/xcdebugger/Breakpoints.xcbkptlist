@@ -8,12 +8,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/identity/IdentityController.mm"
-         timestampString = "396216619.366242"
+         timestampString = "396460208.154914"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "68"
-         endingLineNumber = "68"
-         landmarkName = "+decryptIdentityData:withUsername:andPassword:"
+         startingLineNumber = "101"
+         endingLineNumber = "101"
+         landmarkName = "+decodeIdentityData:withUsername:andPassword:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -21,12 +21,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/identity/IdentityController.mm"
-         timestampString = "396216619.366242"
+         timestampString = "396460208.154914"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "67"
-         endingLineNumber = "67"
-         landmarkName = "+decryptIdentityData:withUsername:andPassword:"
+         startingLineNumber = "100"
+         endingLineNumber = "100"
+         landmarkName = "+decodeIdentityData:withUsername:andPassword:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -60,11 +60,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/encryption/EncryptionController.mm"
-         timestampString = "396234734.568418"
+         timestampString = "396458034.332686"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "14"
-         endingLineNumber = "14"
+         startingLineNumber = "16"
+         endingLineNumber = "16"
          landmarkName = "@implementation EncryptionController"
          landmarkType = "3">
       </FileBreakpoint>
@@ -73,11 +73,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/network/NetworkController.m"
-         timestampString = "393888856.609927"
+         timestampString = "396284476.489539"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "54"
-         endingLineNumber = "54"
+         startingLineNumber = "58"
+         endingLineNumber = "58"
          landmarkName = "-loginWithUsername:andPassword:andSignature:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -86,11 +86,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/identity/IdentityController.mm"
-         timestampString = "396216619.366242"
+         timestampString = "396458034.332686"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "23"
-         endingLineNumber = "23"
+         startingLineNumber = "24"
+         endingLineNumber = "24"
          landmarkName = "+getIdentityWithUsername:andPassword:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -112,11 +112,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/identity/SurespotIdentity.mm"
-         timestampString = "393948647.638298"
+         timestampString = "396458034.332686"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "71"
-         endingLineNumber = "71"
+         startingLineNumber = "75"
+         endingLineNumber = "75"
          landmarkName = "-getDsaPrivateKey"
          landmarkType = "5">
       </FileBreakpoint>
@@ -164,11 +164,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/network/NetworkController.m"
-         timestampString = "393888856.609927"
+         timestampString = "396284476.489539"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "44"
-         endingLineNumber = "44"
+         startingLineNumber = "47"
+         endingLineNumber = "47"
          landmarkName = "-loginWithUsername:andPassword:andSignature:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -190,12 +190,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/identity/IdentityController.mm"
-         timestampString = "396216619.366242"
+         timestampString = "396460208.154914"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "46"
-         endingLineNumber = "46"
-         landmarkName = "+decryptIdentityData:withUsername:andPassword:"
+         startingLineNumber = "79"
+         endingLineNumber = "79"
+         landmarkName = "+decodeIdentityData:withUsername:andPassword:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -203,11 +203,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/encryption/EncryptionController.mm"
-         timestampString = "396234734.568418"
+         timestampString = "396458774.148937"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "38"
-         endingLineNumber = "38"
+         startingLineNumber = "73"
+         endingLineNumber = "73"
          landmarkName = "+decryptIdentity:withPassword:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -216,11 +216,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/encryption/EncryptionController.mm"
-         timestampString = "396234734.568418"
+         timestampString = "396458774.148937"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "23"
-         endingLineNumber = "23"
+         startingLineNumber = "61"
+         endingLineNumber = "61"
          landmarkName = "+decryptIdentity:withPassword:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -359,12 +359,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/identity/IdentityController.mm"
-         timestampString = "396216619.366242"
+         timestampString = "396460208.154914"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "50"
-         endingLineNumber = "50"
-         landmarkName = "+decryptIdentityData:withUsername:andPassword:"
+         startingLineNumber = "83"
+         endingLineNumber = "83"
+         landmarkName = "+decodeIdentityData:withUsername:andPassword:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -385,11 +385,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/encryption/EncryptionController.mm"
-         timestampString = "396234734.568418"
+         timestampString = "396458774.148937"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "129"
-         endingLineNumber = "129"
+         startingLineNumber = "164"
+         endingLineNumber = "164"
          landmarkName = "+deriveKeyUsingPassword:andSalt:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -398,11 +398,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/encryption/EncryptionController.mm"
-         timestampString = "396234734.568418"
+         timestampString = "396458774.148937"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "125"
-         endingLineNumber = "125"
+         startingLineNumber = "160"
+         endingLineNumber = "160"
          landmarkName = "+deriveKeyUsingPassword:andSalt:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -424,11 +424,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/identity/SurespotIdentity.mm"
-         timestampString = "393880886.74764"
+         timestampString = "396458034.332686"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "34"
-         endingLineNumber = "34"
+         startingLineNumber = "38"
+         endingLineNumber = "38"
          landmarkName = "-addKeysWithVersion:withDhPrivKey:withDhPubKey:withDsaPrivKey:withDsaPubKey:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -437,11 +437,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/identity/IdentityController.mm"
-         timestampString = "396216619.366242"
+         timestampString = "396458034.332686"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "34"
-         endingLineNumber = "34"
+         startingLineNumber = "35"
+         endingLineNumber = "35"
          landmarkName = "+getIdentityWithUsername:andPassword:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -528,11 +528,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/encryption/EncryptionController.mm"
-         timestampString = "396234734.568418"
+         timestampString = "396458774.148937"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "133"
-         endingLineNumber = "133"
+         startingLineNumber = "168"
+         endingLineNumber = "168"
          landmarkName = "+deriveKeyFromPassword:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -541,11 +541,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/encryption/EncryptionController.mm"
-         timestampString = "396234734.568418"
+         timestampString = "396458774.148937"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "135"
-         endingLineNumber = "135"
+         startingLineNumber = "169"
+         endingLineNumber = "169"
          landmarkName = "+deriveKeyFromPassword:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -554,11 +554,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/encryption/EncryptionController.mm"
-         timestampString = "396221388.269393"
+         timestampString = "396461804.713643"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "205"
-         endingLineNumber = "205"
+         startingLineNumber = "241"
+         endingLineNumber = "241"
          landmarkName = "+generateKeyPairs"
          landmarkType = "5">
       </FileBreakpoint>
@@ -580,11 +580,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/encryption/EncryptionController.mm"
-         timestampString = "396245276.039859"
+         timestampString = "396461804.713643"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "256"
-         endingLineNumber = "256"
+         startingLineNumber = "304"
+         endingLineNumber = "304"
          landmarkName = "+encodeDHPublicKey:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -593,11 +593,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/encryption/EncryptionController.mm"
-         timestampString = "396241722.635858"
+         timestampString = "396461804.713643"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "238"
-         endingLineNumber = "238"
+         startingLineNumber = "286"
+         endingLineNumber = "286"
          landmarkName = "+encodeDHPublicKey:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -619,11 +619,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "surespot/encryption/EncryptionController.mm"
-         timestampString = "396245276.039859"
+         timestampString = "396461804.713643"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "245"
-         endingLineNumber = "245"
+         startingLineNumber = "293"
+         endingLineNumber = "293"
          landmarkName = "+encodeDHPublicKey:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -638,6 +638,58 @@
          startingLineNumber = "62"
          endingLineNumber = "62"
          landmarkName = "-createIdentity:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "surespot/network/NetworkController.m"
+         timestampString = "396284476.489539"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "105"
+         endingLineNumber = "105"
+         landmarkName = "@implementation NetworkController"
+         landmarkType = "3">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "surespot/encryption/EncryptionController.mm"
+         timestampString = "396458774.148937"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "52"
+         endingLineNumber = "52"
+         landmarkName = "+encryptIdentity:withPassword:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "surespot/encryption/EncryptionController.mm"
+         timestampString = "396458399.915725"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "25"
+         endingLineNumber = "25"
+         landmarkName = "+encryptIdentity:withPassword:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "surespot/identity/IdentityController.mm"
+         timestampString = "396460202.988486"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "71"
+         endingLineNumber = "71"
+         landmarkName = "+encryptIdentity:withPassword:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

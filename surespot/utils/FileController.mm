@@ -41,6 +41,7 @@ using CryptoPP::SecByteBlock;
     return appSupportDir;
 }
 
+
 // http://cocoadev.com/wiki/NSDataCategory
 + (NSData *)gzipInflate:(NSData *) data
 {

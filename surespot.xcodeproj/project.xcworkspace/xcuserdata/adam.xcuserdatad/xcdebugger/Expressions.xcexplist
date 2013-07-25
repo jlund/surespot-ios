@@ -12,6 +12,14 @@
          contextName = "-[NSData(SRB64Additions) base64decode]:NSData+SRB64Additions.m">
       </ContextState>
       <ContextState
+         contextName = "+[IdentityController encryptIdentity:withPassword:]:IdentityController.mm">
+         <PersistentStrings>
+            <PersistentString
+               value = "[jsonString  length]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "+[EncryptionController encryptPlain:usingKey:usingIv:]:EncryptionController.mm">
          <PersistentStrings>
             <PersistentString
@@ -26,10 +34,7 @@
          contextName = "-[SurespotCrypto import]:CryptoPPWrapper.mm">
       </ContextState>
       <ContextState
-         contextName = "-[LoginViewController login:]:LoginViewController.mm">
-      </ContextState>
-      <ContextState
-         contextName = "b64_pton:base64.c">
+         contextName = "+[EncryptionController encryptIdentity:withPassword:]:EncryptionController.mm">
       </ContextState>
       <ContextState
          contextName = "+[EncryptionController generateSharedSecret:publicKey:]:EncryptionController.mm">
@@ -38,6 +43,12 @@
                value = "">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[LoginViewController login:]:LoginViewController.mm">
+      </ContextState>
+      <ContextState
+         contextName = "b64_pton:base64.c">
       </ContextState>
       <ContextState
          contextName = "+[EncryptionController deriveKeyUsingPassword:andSalt:]:EncryptionController.mm">
