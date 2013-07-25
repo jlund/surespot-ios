@@ -26,6 +26,9 @@
 extern NSString* const IDZGunzipErrorDomain;
 
 @interface NSData (IDZGunzip)
+- (NSData *) gzipInflate;
+- (NSData *) gzipDeflate;
+
 - (NSData *)gunzippedData;
 - (NSData*)gunzip:(NSError**)error;
 

@@ -27,7 +27,7 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
     if (myData) {
         //gunzip the identity data
         //NSError* error = nil;
-        NSData* unzipped = [myData gunzippedData];
+        NSData* unzipped = [myData gzipInflate];
         
         
         
@@ -135,9 +135,9 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
     NSString * filePath = [identityDir stringByAppendingPathComponent:filename];
     
     
-    NSData * encryptedIdentityData = [self encryptIdentity:identity withPassword:password];
+    NSData * encryptedCompressedIdentityData = [[self encryptIdentity:identity withPassword:password] gzipDeflate];
     
-    [encryptedIdentityData writeToFile:filePath atomically:TRUE];
+    [encryptedCompressedIdentityData writeToFile:filePath atomically:TRUE];
     return filePath;
 }
 
