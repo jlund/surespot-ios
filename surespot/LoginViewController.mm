@@ -36,7 +36,6 @@ NSArray * identityNames;
     NSString * username = [identityNames objectAtIndex:[_userPicker selectedRowInComponent:0]];
     NSString * password = self.textPassword.text;
   
-
     SurespotIdentity * identity = [IdentityController getIdentityWithUsername:username andPassword:password];
     
    
@@ -45,6 +44,7 @@ NSArray * identityNames;
 
   //  NSData * saltData = [[identity salt] dataUsingEncoding:NSUTF8StringEncoding];
 
+    
     NSData * decodedSalt =     [NSData dataFromBase64String: [identity salt]];
     byte * derivedPassword = [EncryptionController deriveKeyUsingPassword:password andSalt: (byte *)[decodedSalt bytes]];
     NSData * passwordData = [NSData dataWithBytes:derivedPassword length:AES_KEY_LENGTH];

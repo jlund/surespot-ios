@@ -21,7 +21,7 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
 NSString *const IDENTITY_EXTENSION = @".ssi";
 
 + (SurespotIdentity *) getIdentityWithUsername:(NSString *) username andPassword:(NSString *) password {
-    NSString *filePath = [[FileController getAppSupportDir] stringByAppendingPathComponent: username ];
+    NSString *filePath = [[[FileController getAppSupportDir] stringByAppendingPathComponent: username ] stringByAppendingString:IDENTITY_EXTENSION];
     NSData *myData = [NSData dataWithContentsOfFile:filePath];
     
     if (myData) {
@@ -147,8 +147,10 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
     NSMutableArray * identityNames = [[NSMutableArray alloc] init];
     NSString * file;
     for (file in dirfiles) {
-        if ([[file substringFromIndex:[file length] - [IDENTITY_EXTENSION length]] isEqualToString:IDENTITY_EXTENSION]) {
-            [identityNames addObject: file ];
+        NSString * extension = [file substringFromIndex:[file length] - [IDENTITY_EXTENSION length]];
+        if ([extension isEqualToString:IDENTITY_EXTENSION]) {
+            NSString * identityName = [file substringToIndex: [file length] - [IDENTITY_EXTENSION length]];
+            [identityNames addObject: identityName ];
         }
     }
     return identityNames;
