@@ -35,7 +35,7 @@
 		661C2ED31763CB57000649E7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 661C2ED21763CB56000649E7 /* libz.dylib */; };
 		661C2ED61763D4B9000649E7 /* NSData+Gunzip.m in Sources */ = {isa = PBXBuildFile; fileRef = 661C2ED51763D4B9000649E7 /* NSData+Gunzip.m */; };
 		6621BB841762704D00BC2850 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6621BB861762704D00BC2850 /* Localizable.strings */; };
-		668E0EE7177A430E00115B19 /* FriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 668E0EE6177A430E00115B19 /* FriendViewController.m */; };
+		668E0EE7177A430E00115B19 /* FriendViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 668E0EE6177A430E00115B19 /* FriendViewController.mm */; };
 		668E0EEA177A5F1400115B19 /* ChatViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 668E0EE9177A5F1400115B19 /* ChatViewController.mm */; };
 		668E0EEC177B2E3500115B19 /* testlocal10.ssi in Resources */ = {isa = PBXBuildFile; fileRef = 668E0EEB177B2E3500115B19 /* testlocal10.ssi */; };
 		66E4F5B6176298CB00596E6B /* libcryptopp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E4F5A1176298CB00596E6B /* libcryptopp.a */; };
@@ -116,7 +116,7 @@
 		6621BB7E17626EE800BC2850 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		6621BB851762704D00BC2850 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		668E0EE5177A430E00115B19 /* FriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendViewController.h; sourceTree = "<group>"; };
-		668E0EE6177A430E00115B19 /* FriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendViewController.m; sourceTree = "<group>"; };
+		668E0EE6177A430E00115B19 /* FriendViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FriendViewController.mm; sourceTree = "<group>"; };
 		668E0EE8177A5F1400115B19 /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
 		668E0EE9177A5F1400115B19 /* ChatViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ChatViewController.mm; sourceTree = "<group>"; };
 		668E0EEB177B2E3500115B19 /* testlocal10.ssi */ = {isa = PBXFileReference; lastKnownFileType = file; name = testlocal10.ssi; path = resources/testlocal10.ssi; sourceTree = "<group>"; };
@@ -379,7 +379,7 @@
 				668E0EE8177A5F1400115B19 /* ChatViewController.h */,
 				668E0EE9177A5F1400115B19 /* ChatViewController.mm */,
 				668E0EE5177A430E00115B19 /* FriendViewController.h */,
-				668E0EE6177A430E00115B19 /* FriendViewController.m */,
+				668E0EE6177A430E00115B19 /* FriendViewController.mm */,
 				6604A2C517626B9E0072216A /* Supporting Files */,
 				6606E4EB179D9C3A004199BC /* SignupViewController.h */,
 				6606E4EC179D9C3A004199BC /* SignupViewController.mm */,
@@ -838,7 +838,7 @@
 				66EC6113176E494900937467 /* UIImageView+AFNetworking.m in Sources */,
 				66EC6117176E49F800937467 /* NetworkController.m in Sources */,
 				66159703176F6732001B32C1 /* NSData+Base64.m in Sources */,
-				668E0EE7177A430E00115B19 /* FriendViewController.m in Sources */,
+				668E0EE7177A430E00115B19 /* FriendViewController.mm in Sources */,
 				668E0EEA177A5F1400115B19 /* ChatViewController.mm in Sources */,
 				6606E4ED179D9C3A004199BC /* SignupViewController.mm in Sources */,
 				6606E4F0179DB134004199BC /* FileController.mm in Sources */,

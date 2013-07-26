@@ -76,8 +76,6 @@
      }
      failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
          
-         //success!1
-         //completionBlock(JSON);
          NSLog(@"response failure: %@",  Error);
          
      }

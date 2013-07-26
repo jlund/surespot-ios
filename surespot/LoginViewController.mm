@@ -35,15 +35,15 @@ NSArray * identityNames;
 - (IBAction)login:(id)sender {
     NSString * username = [identityNames objectAtIndex:[_userPicker selectedRowInComponent:0]];
     NSString * password = self.textPassword.text;
-  
+    
     SurespotIdentity * identity = [IdentityController getIdentityWithUsername:username andPassword:password];
     
-   
+    
     
     NSLog(@"loaded salt: %@", [identity salt]);
-
-  //  NSData * saltData = [[identity salt] dataUsingEncoding:NSUTF8StringEncoding];
-
+    
+    //  NSData * saltData = [[identity salt] dataUsingEncoding:NSUTF8StringEncoding];
+    
     
     NSData * decodedSalt =     [NSData dataFromBase64String: [identity salt]];
     byte * derivedPassword = [EncryptionController deriveKeyUsingPassword:password andSalt: (byte *)[decodedSalt bytes]];
@@ -51,14 +51,29 @@ NSArray * identityNames;
     NSData * encodedPassword = [passwordData SR_dataByBase64Encoding];
     
     NSData * signature = [EncryptionController signUsername:username andPassword: encodedPassword withPrivateKey:[identity getDsaPrivateKey]];
-   // NSData * signatureData = [NSData dataWithBytes:signature length:sizeof(signature)];
+    // NSData * signatureData = [NSData dataWithBytes:signature length:sizeof(signature)];
     
     NSString * passwordString = [passwordData SR_stringByBase64Encoding];
     NSString * signatureString = [signature SR_stringByBase64Encoding];
     
-    [[NetworkController sharedInstance] loginWithUsername:username andPassword:passwordString andSignature: signatureString];
+    [[NetworkController sharedInstance]
+     loginWithUsername:username
+     andPassword:passwordString
+     andSignature: signatureString
+     successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+         NSLog(@"response: %d",  [response statusCode]);
+         
+         [IdentityController userLoggedInWithIdentity:identity];         
+         [self performSegueWithIdentifier: @"loginToMainSegue" sender: nil];
+     }
+     failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
+         
+         //todo tell user
+         NSLog(@"response failure: %@",  Error);
+         
+     }];
     
-    [self performSegueWithIdentifier: @"loginToMainSegue" sender: nil];
+    
 }
 
 // returns the number of 'columns' to display.

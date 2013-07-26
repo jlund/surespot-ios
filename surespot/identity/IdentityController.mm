@@ -19,6 +19,7 @@
 NSString *const CACHE_IDENTITY_ID = @"_cache_identity";
 NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
 NSString *const IDENTITY_EXTENSION = @".ssi";
+static NSString * loggedInUser;
 
 + (SurespotIdentity *) getIdentityWithUsername:(NSString *) username andPassword:(NSString *) password {
     NSString *filePath = [[[FileController getAppSupportDir] stringByAppendingPathComponent: username ] stringByAppendingString:IDENTITY_EXTENSION];
@@ -154,6 +155,20 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
         }
     }
     return identityNames;
+}
+
++ (void) userLoggedInWithIdentity: (SurespotIdentity *) identity {
+    [self setLoggedInUserIdentity:identity];
+}
+
++ (void) setLoggedInUserIdentity: (SurespotIdentity *) identity {
+    @synchronized (self) {
+        loggedInUser = [identity username];
+    }
+}
+
++ (NSString *) getLoggedInUser {
+    @synchronized (self) { return loggedInUser; }
 }
 
 @end

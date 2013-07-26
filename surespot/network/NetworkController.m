@@ -42,26 +42,16 @@
 }
 
 -(void) loginWithUsername:(NSString*) username andPassword:(NSString *)password andSignature: (NSString *) signature
+             successBlock:(JSONSuccessBlock)successBlock failureBlock: (JSONFailureBlock) failureBlock
 {
     
     //  NSMutableString * sUrl  = [[NSMutableString alloc] initWithString:kHost];
     //  [sUrl appendString:@"/login"];
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:username,@"username",password,@"password",signature, @"authSig", nil];
     NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"login" parameters: params];
-   
 
     
-    
-    
-    AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, id JSON) {
-        //success!1
-        //completionBlock(JSON);
-        NSLog(@"response: %d",  [responseObject statusCode]);
-    } failure: ^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
-        //success!1
-        //completionBlock(JSON);
-        NSLog(@"response failure: %@",  Error);
-    } ];
+    AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:successBlock failure:failureBlock];
         
     [operation start];
     
@@ -69,9 +59,6 @@
 }
 
 -(void) addUser: (NSString *) username derivedPassword:  (NSString *)derivedPassword dhKey: (NSString *)encodedDHKey dsaKey: (NSString *)encodedDSAKey signature: (NSString *)signature version: (NSString *) version successBlock:(HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock {
-    
-    ////  NSMutableString * sUrl  = [[NSMutableString alloc] initWithString:kHost];
-    // [sUrl appendString:@"/users"];
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:username,@"username",derivedPassword,@"password",signature, @"authSig", encodedDHKey, @"dhPub", encodedDSAKey, @"dsaPub", version, @"version", nil];
     NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"users" parameters: params];
  
@@ -79,27 +66,23 @@
     AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
     [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
     
-    [operation start];
-    
-    
+    [operation start];        
 }
 
--(void) getFriendsSuccessBlock:(JSONSuccessBlock)successBlock failureBlock: (JSONFailureBlock) failureBlock
-{
-    
-    NSMutableString * sUrl  = [[NSMutableString alloc] initWithString:kHost];
-    //  [sUrl appendString:@"/friends"];
+-(void) getFriendsSuccessBlock:(JSONSuccessBlock)successBlock failureBlock: (JSONFailureBlock) failureBlock {  
     NSURLRequest *request = [self requestWithMethod:@"GET" path:@"friends" parameters:nil];
-    //[request ad]
-    
-    
-    
-    
-    AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:successBlock
+       AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:successBlock
                                                                                         failure: failureBlock];
-    
+    operation.JSONReadingOptions = NSJSONReadingMutableContainers;
     [operation start];
-    
-    
 }
+
+-(void) inviteFriend: (NSString *) friendname successBlock: (HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock {
+    NSURLRequest *request = [self requestWithMethod:@"POST" path:[@"invite/" stringByAppendingString:friendname]  parameters:nil];        
+    AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
+    [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
+    [operation start];
+}
+
+
 @end
