@@ -13,4 +13,5 @@
 @property (strong, nonatomic) IBOutlet UITextField *tfMessage;
 @property (strong) SocketIO * socketIO;
 @property (strong) NSMutableArray * messages;
+@property (strong) NSString * friendname;
 @end

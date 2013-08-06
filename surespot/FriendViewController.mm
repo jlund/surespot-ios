@@ -9,6 +9,7 @@
 #import "IdentityController.h"
 #import "FriendViewController.h"
 #import "NetworkController.h"
+#import "ChatViewController.h"
 
 @interface FriendViewController ()
 
@@ -102,7 +103,7 @@
          NSLog(@"response: %d",  [operation.response statusCode]);
          NSMutableArray * friends = [self.friends objectForKey:@"friends"];
          NSDictionary * f = [NSDictionary dictionaryWithObjectsAndKeys:username,@"name",[NSNumber numberWithInt:2],@"flags", nil];
-         [friends addObject:f];         
+         [friends addObject:f];
          [self.tableView reloadData];
      }
      failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
@@ -155,13 +156,29 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSArray * friends =[self.friends objectForKey:@"friends"];
+    
+    // Configure the cell...
+    NSString * friendname =[(NSDictionary *)[friends objectAtIndex:indexPath.row] objectForKey:@"name"];
+    
+    [self performSegueWithIdentifier:@"chatSegue" sender: friendname];
     // Navigation logic may go here. Create and push another view controller.
     /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
+     *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
      // ...
      // Pass the selected object to the new view controller.
      [self.navigationController pushViewController:detailViewController animated:YES];
      */
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+	if ([segue.identifier isEqualToString:@"chatSegue"])
+	{
+		
+		ChatViewController *chatViewController = segue.destinationViewController;
+		chatViewController.friendname = sender;
+	}
 }
 
 - (void)viewDidUnload {

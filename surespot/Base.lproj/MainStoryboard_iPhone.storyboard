@@ -188,9 +188,6 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
-                                <connections>
-                                    <segue destination="gNs-vj-g3C" kind="push" id="0as-jT-xcw"/>
-                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -201,6 +198,7 @@
                     <navigationItem key="navigationItem" id="Hdg-dq-yws"/>
                     <connections>
                         <outlet property="inviteText" destination="mBu-oq-A2O" id="k0r-Ni-FbS"/>
+                        <segue destination="gNs-vj-g3C" kind="push" identifier="chatSegue" id="Lnq-FY-dCM"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nqa-aX-DFq" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -261,41 +259,6 @@
             </objects>
         </scene>
     </scenes>
-    <classes>
-        <class className="ChatViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/ChatViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="tfMessage" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-        <class className="FriendViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/FriendViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="inviteText" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-        <class className="LoginViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/LoginViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="login:"/>
-                <relationship kind="outlet" name="textPassword" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="textUsername" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="userPicker" candidateClass="UIPickerView"/>
-            </relationships>
-        </class>
-        <class className="NSLayoutConstraint" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
-        </class>
-        <class className="SignupViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SignupViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="createIdentity:"/>
-                <relationship kind="outlet" name="bCreateIdentity" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="tbPassword" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="tbUsername" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

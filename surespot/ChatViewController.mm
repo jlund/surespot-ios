@@ -40,12 +40,12 @@
     NSData * iv = [EncryptionController getIv];
     
     [IdentityController getTheirLatestVersionForUsername:loggedInUser callback:^(NSString * version) {
-        [EncryptionController symmetricEncryptString: message ourVersion:ourLatestVersion theirUsername:@"wank27" theirVersion:version iv:iv callback:^(NSString * cipherText) {
+        [EncryptionController symmetricEncryptString: message ourVersion:ourLatestVersion theirUsername:[self friendname] theirVersion:version iv:iv callback:^(NSString * cipherText) {
             
             NSString * b64iv = [iv base64EncodedStringWithSeparateLines:NO];
             NSMutableDictionary *dict = [NSMutableDictionary dictionary];
             
-            [dict setObject:@"wank27" forKey:@"to"];
+            [dict setObject:[self friendname] forKey:@"to"];
             [dict setObject:loggedInUser forKey:@"from"];
             [dict setObject:version forKey:@"toVersion"];
             [dict setObject:ourLatestVersion forKey:@"fromVersion"];
