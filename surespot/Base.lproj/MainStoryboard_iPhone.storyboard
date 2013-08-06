@@ -231,12 +231,10 @@
                                 </view>
                             </tableViewCell>
                         </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="gNs-vj-g3C" id="H7M-kH-ke1"/>
-                        </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="kHa-2L-O9b"/>
                     <connections>
+                        <outlet property="tableView" destination="fi8-Hb-55e" id="zLi-Fk-zhd"/>
                         <outlet property="tfMessage" destination="tKA-gU-H7W" id="Rmt-uD-wNK"/>
                     </connections>
                 </viewController>
