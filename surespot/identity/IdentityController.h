@@ -25,7 +25,6 @@ typedef void (^CallbackDictionaryBlock) (NSDictionary * result);
 + (void) createIdentityWithUsername: (NSString *) username andPassword: (NSString *) password andSalt: (NSString *) salt andKeys: (IdentityKeys *) keys;
 + (NSArray *) getIdentityNames;
 + (void) userLoggedInWithIdentity: (SurespotIdentity *) identity;
-+ (NSString *) loggedInUser;
 + (NSString *) getLoggedInUser;
 + (SurespotIdentity *) loggedInIdentity;
 + (NSString *) getOurLatestVersion;

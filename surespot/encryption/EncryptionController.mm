@@ -120,6 +120,27 @@ int const PBKDF_ROUNDS = 1000;
     return [NSData dataWithBytes:encrypted.data() length:encrypted.length()];
 }
 
++(NSString *) decryptCipher: (NSString *) cipher usingKey: (byte *) key usingIv: (NSData *) iv {
+    GCM<AES>::Decryption d;
+    d.SetKeyWithIV(key, AES_KEY_LENGTH, (byte *)[iv bytes],IV_LENGTH);
+    
+    
+    string decrypted;
+    CryptoPP::AuthenticatedDecryptionFilter df (d, new StringSink(decrypted));
+    
+    NSData * cipherData = [NSData dataFromBase64String:cipher];
+    byte * cipherByte = (byte *)[cipherData bytes];
+    df.Put(cipherByte, cipherData.length);
+    df.MessageEnd();
+    
+    
+    NSString * plainString =[[NSString alloc] initWithUTF8String:decrypted.data()];
+    
+
+    
+    return plainString;
+}
+
 +(NSData *) generateSharedSecret: (ECDHPrivateKey) privateKey publicKey:(ECDHPublicKey) publicKey {
     OID CURVE = secp521r1();    
     ECDH < ECP >::Domain dhA( CURVE );
@@ -392,6 +413,18 @@ int const PBKDF_ROUNDS = 1000;
     }];
     
 }
+
++(void) symmetricDecryptString: (NSString *) cipherData ourVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion: (NSString *) theirVersion iv: (NSString *) iv callback: (CallbackBlock) callback {
+    
+    [[CredentialCachingController sharedInstance] getSharedSecretForOurVersion:ourVersion theirUsername:theirUsername theirVersion:theirVersion callback: ^(NSData * secret) {
+        NSData * ivData = [NSData dataFromBase64String:iv];
+        
+        NSString * plainText = [EncryptionController decryptCipher:cipherData usingKey:(byte *)[secret bytes] usingIv:ivData];
+        callback(plainText);
+    }];
+    
+}
+
 
 
 

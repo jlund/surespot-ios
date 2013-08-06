@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "SocketIO.h"
 
-@interface ChatViewController : UIViewController <SocketIODelegate>
+@interface ChatViewController : UITableViewController <SocketIODelegate>
 @property (strong, nonatomic) IBOutlet UITextField *tfMessage;
 @property (strong) SocketIO * socketIO;
+@property (strong) NSMutableArray * messages;
 @end

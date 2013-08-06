@@ -11,7 +11,7 @@
 #import "EncryptionController.h"
 #import "SocketIOPacket.h"
 #import "SurespotIdentity.h"
-#import "NSData+Base64.h";
+#import "NSData+Base64.h"
 
 @interface ChatViewController ()
 
@@ -21,20 +21,11 @@
 
 @synthesize socketIO;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    
+    [self setMessages:[[NSMutableArray alloc] init]];
     self.socketIO = [[SocketIO alloc] initWithDelegate:self];
     self.socketIO.useSecure = YES;
     [self.socketIO connectToHost:@"192.168.10.68" onPort:443];
@@ -42,7 +33,7 @@
 }
 
 
-- (IBAction)send:(UIButton *)sender {
+- (void) send {
     NSString* message = self.tfMessage.text;
     NSString * ourLatestVersion = [IdentityController getOurLatestVersion];
     NSString * loggedInUser = [IdentityController getLoggedInUser];
@@ -50,7 +41,7 @@
     
     [IdentityController getTheirLatestVersionForUsername:loggedInUser callback:^(NSString * version) {
         [EncryptionController symmetricEncryptString: message ourVersion:ourLatestVersion theirUsername:@"wank27" theirVersion:version iv:iv callback:^(NSString * cipherText) {
-                        
+            
             NSString * b64iv = [iv base64EncodedStringWithSeparateLines:NO];
             NSMutableDictionary *dict = [NSMutableDictionary dictionary];
             
@@ -67,7 +58,12 @@
             NSError *error;
             NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
             NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+            
+            [dict setObject:message forKey:@"plaindata"];
+            [[self messages] addObject:dict];
+            [[self tableView] reloadData];
             [socketIO sendMessage: jsonString];
+            
         }];
     }];
 }
@@ -86,12 +82,34 @@
 - (void) socketIO:(SocketIO *)socket didReceiveEvent:(SocketIOPacket *)packet
 {
     NSLog(@"didReceiveEvent() >>> data: %@", packet.data);
+    NSDictionary * jsonData = [NSJSONSerialization JSONObjectWithData:[packet.data dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
     
-    SocketIOCallback cb = ^(id argsData) {
-        NSDictionary *response = argsData;
-        // do something with response
-        NSLog(@"ack arrived: %@", response);
-    };
+    
+    NSString * name = [jsonData objectForKey:@"name"];
+    if (![name isEqual:@"message"]) {
+        return;
+    }
+    
+    NSMutableDictionary * jsonMessage = [NSJSONSerialization JSONObjectWithData:[[jsonData objectForKey:@"args"][0]dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
+    NSString * from = [jsonMessage objectForKey:@"from"];
+    if (![from isEqual:[IdentityController getLoggedInUser]]) {
+        //decrypt
+        [EncryptionController symmetricDecryptString:[jsonMessage objectForKey:@"data"] ourVersion:[jsonMessage objectForKey:@"toVersion"] theirUsername:from theirVersion:[jsonMessage objectForKey:@"fromVersion"] iv:[jsonMessage objectForKey:@"iv"] callback:^(NSString * plaintext){
+            
+            [jsonMessage setObject:plaintext forKey:@"plaindata"];
+            [[self messages] addObject:jsonMessage];
+            [[self tableView] reloadData];
+        }];
+        
+        
+     
+    }
+    
+    //    SocketIOCallback cb = ^(id argsData) {
+    //        NSDictionary *response = argsData;
+    //        // do something with response
+    //        NSLog(@"ack arrived: %@", response);
+    //    };
     //[socketIO sendMessage:@"hello back!" withAcknowledge:cb];
 }
 
@@ -99,13 +117,55 @@
 {
     NSLog(@"didReceiveMessage() >>> data: %@", packet.data);
     
-    SocketIOCallback cb = ^(id argsData) {
-        NSDictionary *response = argsData;
-        // do something with response
-        NSLog(@"ack arrived: %@", response);
-    };
-    
+    //    SocketIOCallback cb = ^(id argsData) {
+    //        NSDictionary *response = argsData;
+    //        // do something with response
+    //        NSLog(@"ack arrived: %@", response);
+    //    };
+    //
     //[socketIO sendMessage:@"hello back!" withAcknowledge:cb];
+}
+
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    // Return the number of sections.
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    // Return the number of rows in the section
+    if (![self messages])
+        return 0;
+    
+    
+    return [[self messages] count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"Cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    
+    
+    // Configure the cell...
+    //todo change bar black/grey
+    NSDictionary * message = [[self messages] objectAtIndex:indexPath.row];
+    
+    
+    
+    cell.textLabel.text = [message objectForKey:@"plaindata"];
+    
+    
+    return cell;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    [self send];
+    [textField setText:nil];
+    return NO;
 }
 
 - (void)viewDidUnload {
