@@ -80,6 +80,7 @@
                 if ([key isEqual: from]) {
                     
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadMessages" object:key ];
+                    break;
                     
                 }
             }
