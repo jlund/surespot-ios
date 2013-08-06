@@ -38,40 +38,38 @@
     self.socketIO = [[SocketIO alloc] initWithDelegate:self];
     self.socketIO.useSecure = YES;
     [self.socketIO connectToHost:@"192.168.10.68" onPort:443];
-
+    
 }
 
 
 - (IBAction)send:(UIButton *)sender {
     NSString* message = self.tfMessage.text;
-
-        SurespotIdentity * identity1 = [IdentityController getIdentityWithUsername:@"testlocal1" andPassword:@"a_export_identity"];
-    SurespotIdentity * identity2 = [IdentityController getIdentityWithUsername:@"testlocal10" andPassword:@"a_export_identity"];
-    
+    NSString * ourLatestVersion = [IdentityController getOurLatestVersion];
+    NSString * loggedInUser = [IdentityController getLoggedInUser];
     NSData * iv = [EncryptionController getIv];
-    NSData * sharedSec = [EncryptionController generateSharedSecret:[identity1 getDhPrivateKey] publicKey:[identity2 getDhPublicKey]];
-    NSData * encData = [EncryptionController encryptPlain:message usingKey:(byte*)[sharedSec bytes] usingIv:iv];
     
-    NSString * b64iv = [iv base64EncodedStringWithSeparateLines:NO];
-    NSString * b64data = [encData base64EncodedStringWithSeparateLines:NO];
-    
-    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    
-    [dict setObject:@"testlocal10" forKey:@"to"];
-    [dict setObject:@"testlocal1" forKey:@"from"];
-    [dict setObject:@"1" forKey:@"toVersion"];
-    [dict setObject:@"2" forKey:@"fromVersion"];
-    [dict setObject:b64iv forKey:@"iv"];
-    [dict setObject:b64data forKey:@"data"];
-    [dict setObject:@"text/plain" forKey:@"mimeType"];
-    [dict setObject:[NSNumber  numberWithBool:TRUE] forKey:@"shareable"];
-
-    
-    NSError *error;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
-    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    [socketIO sendMessage: jsonString];
-    
+    [IdentityController getTheirLatestVersionForUsername:loggedInUser callback:^(NSString * version) {
+        [EncryptionController symmetricEncryptString: message ourVersion:ourLatestVersion theirUsername:@"wank27" theirVersion:version iv:iv callback:^(NSString * cipherText) {
+                        
+            NSString * b64iv = [iv base64EncodedStringWithSeparateLines:NO];
+            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+            
+            [dict setObject:@"wank27" forKey:@"to"];
+            [dict setObject:loggedInUser forKey:@"from"];
+            [dict setObject:version forKey:@"toVersion"];
+            [dict setObject:ourLatestVersion forKey:@"fromVersion"];
+            [dict setObject:b64iv forKey:@"iv"];
+            [dict setObject:cipherText forKey:@"data"];
+            [dict setObject:@"text/plain" forKey:@"mimeType"];
+            [dict setObject:[NSNumber  numberWithBool:FALSE] forKey:@"shareable"];
+            
+            
+            NSError *error;
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
+            NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+            [socketIO sendMessage: jsonString];
+        }];
+    }];
 }
 
 - (void)didReceiveMemoryWarning

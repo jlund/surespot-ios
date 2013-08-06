@@ -15,6 +15,7 @@ typedef void (^JSONFailureBlock) (NSURLRequest *operation, NSHTTPURLResponse *re
 typedef void (^HTTPSuccessBlock) (AFHTTPRequestOperation *operation , id responseObject);
 typedef void (^HTTPFailureBlock) (AFHTTPRequestOperation *operation , NSError *error );
 
+
 @interface NetworkController : AFHTTPClient
 
 +(NetworkController*)sharedInstance;
@@ -24,4 +25,8 @@ typedef void (^HTTPFailureBlock) (AFHTTPRequestOperation *operation , NSError *e
 
 -(void) getFriendsSuccessBlock:(JSONSuccessBlock)successBlock failureBlock: (JSONFailureBlock) failureBlock;
 -(void) inviteFriend: (NSString *) friendname successBlock: (HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock ;
+-(void) getKeyVersionForUsername:(NSString *)username successBlock:(HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock;
+-(void) getPublicKeysForUsername:(NSString *)username andVersion:(NSString *)version successBlock:(JSONSuccessBlock)successBlock failureBlock: (JSONFailureBlock) failureBlock;
+
+
 @end

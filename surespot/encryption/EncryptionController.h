@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "IdentityController.h"
 
 
 
@@ -99,12 +100,15 @@ extern int const AES_KEY_LENGTH;
 + (byte *) deriveKeyUsingPassword: (NSString *) password andSalt: (byte *) salt;
 + (NSDictionary *) deriveKeyFromPassword: (NSString *) password;
 + (NSData *) signUsername: (NSString *) username andPassword: (NSData *) password withPrivateKey: (ECDSAPrivateKey) privateKey;
-+(NSData *) getIv;
-+(NSData *) encryptPlain: (NSString *) plain usingKey: (byte *) key usingIv: (NSData *) iv;
-+(NSData *) generateSharedSecret: (ECDHPrivateKey) privateKey publicKey:(ECDHPublicKey) publicKey;
-+(IdentityKeys *) generateKeyPairs;
-+(NSString *) encodeDHPrivateKey: (ECDHPrivateKey) dhPrivKey;
-+(NSString *) encodeDHPublicKey: (ECDHPublicKey) dhPubKey;
-+(NSString *) encodeDSAPrivateKey: (ECDSAPrivateKey) dsaPrivKey;
-+(NSString *) encodeDSAPublicKey: (ECDSAPublicKey) dsaPubKey;
++ (NSData *) getIv;
++ (NSData *) encryptPlain: (NSString *) plain usingKey: (byte *) key usingIv: (NSData *) iv;
++ (NSData *) generateSharedSecret: (ECDHPrivateKey) privateKey publicKey:(ECDHPublicKey) publicKey;
++ (IdentityKeys *) generateKeyPairs;
++ (NSString *) encodeDHPrivateKey: (ECDHPrivateKey) dhPrivKey;
++ (NSString *) encodeDHPublicKey: (ECDHPublicKey) dhPubKey;
++ (NSString *) encodeDSAPrivateKey: (ECDSAPrivateKey) dsaPrivKey;
++ (NSString *) encodeDSAPublicKey: (ECDSAPublicKey) dsaPubKey;
++ (ECDHPublicKey) recreateDhPublicKey: (NSString *) encodedKey;
++  (ECDSAPublicKey) recreateDsaPublicKey: (NSString *) encodedKey;
++(void) symmetricEncryptString: (NSString *) plaintext ourVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion: (NSString *)  theirVersion iv: (NSData *) iv callback: (CallbackBlock) callback;
 @end

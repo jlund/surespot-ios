@@ -31,10 +31,11 @@
         
         [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
         [self registerHTTPOperationClass:[AFHTTPRequestOperation class]];
-       
         
-              
+        
+        
         // Accept HTTP Header; see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
+        [self setDefaultHeader:@"Accept-Charset" value:@"utf-8"];
         //[self setDefaultHeader:@"Accept" value:@"application/json"];
     }
     
@@ -44,15 +45,12 @@
 -(void) loginWithUsername:(NSString*) username andPassword:(NSString *)password andSignature: (NSString *) signature
              successBlock:(JSONSuccessBlock)successBlock failureBlock: (JSONFailureBlock) failureBlock
 {
-    
-    //  NSMutableString * sUrl  = [[NSMutableString alloc] initWithString:kHost];
-    //  [sUrl appendString:@"/login"];
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:username,@"username",password,@"password",signature, @"authSig", nil];
     NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"login" parameters: params];
-
+    
     
     AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:successBlock failure:failureBlock];
-        
+    
     [operation start];
     
     
@@ -61,26 +59,43 @@
 -(void) addUser: (NSString *) username derivedPassword:  (NSString *)derivedPassword dhKey: (NSString *)encodedDHKey dsaKey: (NSString *)encodedDSAKey signature: (NSString *)signature version: (NSString *) version successBlock:(HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock {
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:username,@"username",derivedPassword,@"password",signature, @"authSig", encodedDHKey, @"dhPub", encodedDSAKey, @"dsaPub", version, @"version", nil];
     NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"users" parameters: params];
- 
-
+    
+    
     AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
     [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
     
-    [operation start];        
+    [operation start];
 }
 
--(void) getFriendsSuccessBlock:(JSONSuccessBlock)successBlock failureBlock: (JSONFailureBlock) failureBlock {  
+-(void) getFriendsSuccessBlock:(JSONSuccessBlock)successBlock failureBlock: (JSONFailureBlock) failureBlock {
     NSURLRequest *request = [self requestWithMethod:@"GET" path:@"friends" parameters:nil];
-       AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:successBlock
+    AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:successBlock
                                                                                         failure: failureBlock];
     operation.JSONReadingOptions = NSJSONReadingMutableContainers;
     [operation start];
 }
 
 -(void) inviteFriend: (NSString *) friendname successBlock: (HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock {
-    NSURLRequest *request = [self requestWithMethod:@"POST" path:[@"invite/" stringByAppendingString:friendname]  parameters:nil];        
+    NSURLRequest *request = [self requestWithMethod:@"POST" path:[@"invite/" stringByAppendingString:friendname]  parameters:nil];
     AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
     [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
+    [operation start];
+}
+
+- (void) getKeyVersionForUsername:(NSString *)username successBlock:(HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock
+{
+    NSURLRequest *request = [self requestWithMethod:@"GET" path:[@"keyversion/"  stringByAppendingString:username] parameters: nil];
+    AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
+    [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
+    [operation start];
+}
+
+- (void) getPublicKeysForUsername:(NSString *)username andVersion:(NSString *)version successBlock:(JSONSuccessBlock)successBlock failureBlock:(JSONFailureBlock) failureBlock{
+    
+    //todo use formatter
+    NSURLRequest *request = [self requestWithMethod:@"GET" path:[[[@"publickeys/"  stringByAppendingString:username] stringByAppendingString:@"/"] stringByAppendingString:version] parameters: nil];
+    AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:successBlock
+                                                                                        failure: failureBlock];
     [operation start];
 }
 

@@ -50,6 +50,8 @@
 		66E4F5C017629B4500596E6B /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E4F5BF17629B4500596E6B /* CFNetwork.framework */; };
 		66E4F5C217629B5C00596E6B /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E4F5C117629B5C00596E6B /* libicucore.dylib */; };
 		66E4F5C417629B6400596E6B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E4F5C317629B6400596E6B /* Security.framework */; };
+		66E6536A17B043D2000F81BD /* CredentialCachingController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66E6536917B043D2000F81BD /* CredentialCachingController.mm */; };
+		66E6537017B0583F000F81BD /* PublicKeys.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66E6536F17B0583F000F81BD /* PublicKeys.mm */; };
 		66EC610B176E494900937467 /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EC60F9176E494900937467 /* AFHTTPClient.m */; };
 		66EC610C176E494900937467 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EC60FB176E494900937467 /* AFHTTPRequestOperation.m */; };
 		66EC610D176E494900937467 /* AFImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EC60FD176E494900937467 /* AFImageRequestOperation.m */; };
@@ -276,6 +278,10 @@
 		66E4F5BF17629B4500596E6B /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		66E4F5C117629B5C00596E6B /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		66E4F5C317629B6400596E6B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		66E6536817B043D2000F81BD /* CredentialCachingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CredentialCachingController.h; path = identity/CredentialCachingController.h; sourceTree = "<group>"; };
+		66E6536917B043D2000F81BD /* CredentialCachingController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CredentialCachingController.mm; path = identity/CredentialCachingController.mm; sourceTree = "<group>"; };
+		66E6536E17B0583F000F81BD /* PublicKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PublicKeys.h; path = identity/PublicKeys.h; sourceTree = "<group>"; };
+		66E6536F17B0583F000F81BD /* PublicKeys.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PublicKeys.mm; path = identity/PublicKeys.mm; sourceTree = "<group>"; };
 		66EC60F8176E494900937467 /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
 		66EC60F9176E494900937467 /* AFHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPClient.m; sourceTree = "<group>"; };
 		66EC60FA176E494900937467 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
@@ -380,9 +386,9 @@
 				668E0EE9177A5F1400115B19 /* ChatViewController.mm */,
 				668E0EE5177A430E00115B19 /* FriendViewController.h */,
 				668E0EE6177A430E00115B19 /* FriendViewController.mm */,
-				6604A2C517626B9E0072216A /* Supporting Files */,
 				6606E4EB179D9C3A004199BC /* SignupViewController.h */,
 				6606E4EC179D9C3A004199BC /* SignupViewController.mm */,
+				6604A2C517626B9E0072216A /* Supporting Files */,
 			);
 			path = surespot;
 			sourceTree = "<group>";
@@ -441,6 +447,10 @@
 				661C2EC21762B125000649E7 /* SurespotIdentity.mm */,
 				661C2ECC1763A214000649E7 /* IdentityController.h */,
 				661C2ECD1763A214000649E7 /* IdentityController.mm */,
+				66E6536817B043D2000F81BD /* CredentialCachingController.h */,
+				66E6536917B043D2000F81BD /* CredentialCachingController.mm */,
+				66E6536E17B0583F000F81BD /* PublicKeys.h */,
+				66E6536F17B0583F000F81BD /* PublicKeys.mm */,
 			);
 			name = identity;
 			sourceTree = "<group>";
@@ -842,6 +852,8 @@
 				668E0EEA177A5F1400115B19 /* ChatViewController.mm in Sources */,
 				6606E4ED179D9C3A004199BC /* SignupViewController.mm in Sources */,
 				6606E4F0179DB134004199BC /* FileController.mm in Sources */,
+				66E6536A17B043D2000F81BD /* CredentialCachingController.mm in Sources */,
+				66E6537017B0583F000F81BD /* PublicKeys.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

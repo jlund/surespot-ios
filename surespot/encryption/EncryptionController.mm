@@ -7,6 +7,7 @@
 //
 #import "EncryptionController.h"
 #import "SurespotIdentity.h"
+#import "CredentialCachingController.h"
 #import "NSData+Base64.h"
 
 using CryptoPP::BitBucket;
@@ -187,6 +188,28 @@ int const PBKDF_ROUNDS = 1000;
 }
 
 
++ (NSData *) decodePublicKey: (NSString *) encodedKey {
+    
+    //unpem the key
+    NSString * afterHeader = [encodedKey substringFromIndex:[encodedKey rangeOfString:@"\n"].location + 1];
+    NSString * beforeHeader = [afterHeader substringToIndex: [afterHeader rangeOfString:@"\n" options: NSBackwardsSearch].location ];
+    
+    return [NSData dataFromBase64String: beforeHeader];
+}
+
+
++ (ECDHPublicKey) recreateDhPublicKey: (NSString *) encodedKey {
+    ECDHPublicKey publicKey;
+    NSData * decodedKey = [self decodePublicKey:encodedKey];
+    ByteQueue byteQueue;
+    byteQueue.Put((byte *) [decodedKey bytes], [decodedKey length]);
+    publicKey.Load(byteQueue);
+    publicKey.Validate(rng, 3);
+    
+    return publicKey;
+}
+
+
 + (ECDHPrivateKey) recreateDhPrivateKey:(NSString *) encodedKey {
     
         
@@ -199,6 +222,18 @@ int const PBKDF_ROUNDS = 1000;
     
     return privateKey;
 }
+
++ (ECDSAPublicKey) recreateDsaPublicKey: (NSString *) encodedKey {
+    ECDSAPublicKey publicKey;
+    NSData * decodedKey = [self decodePublicKey:encodedKey];
+    ByteQueue byteQueue;
+    byteQueue.Put((byte *) [decodedKey bytes], [decodedKey length]);
+    publicKey.Load(byteQueue);
+    publicKey.Validate(rng, 3);
+    
+    return publicKey;
+}
+
 
 + (CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey) recreateDsaPrivateKey:(NSString *) encodedKey {
     
@@ -338,6 +373,8 @@ int const PBKDF_ROUNDS = 1000;
 
 }
 
+
+//convert key to pem format
 +(NSString *) pemKey: (NSData *) keyBytes {
     NSMutableString * keyString = [[NSMutableString alloc] initWithString:@"-----BEGIN PUBLIC KEY-----\n" ];
     [keyString appendString:[keyBytes base64EncodedStringWithSeparateLines:TRUE]];
@@ -346,6 +383,16 @@ int const PBKDF_ROUNDS = 1000;
     return keyString;
 
 }
+
++(void) symmetricEncryptString: (NSString *) plaintext ourVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion: (NSString *) theirVersion iv: (NSData *) iv callback: (CallbackBlock) callback {
+    
+   [[CredentialCachingController sharedInstance] getSharedSecretForOurVersion:ourVersion theirUsername:theirUsername theirVersion:theirVersion callback: ^(NSData * secret) {
+       NSData * cipherText = [EncryptionController encryptPlain:plaintext usingKey:(byte *)[secret bytes] usingIv:iv];
+       callback([cipherText SR_stringByBase64Encoding]);
+    }];
+    
+}
+
 
 
 -(void) doECDH {

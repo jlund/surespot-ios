@@ -9,17 +9,21 @@
 
 #import "IdentityController.h"
 #import "EncryptionController.h"
+#import "NetworkController.h"
 #import "FileController.h"
 #import "SurespotIdentity.h"
 #import "NSData+Gunzip.h"
+#import "PublicKeys.h"
 #include <zlib.h>
+#import "CredentialCachingController.h"
 
 @implementation IdentityController
 
 NSString *const CACHE_IDENTITY_ID = @"_cache_identity";
 NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
 NSString *const IDENTITY_EXTENSION = @".ssi";
-static NSString * loggedInUser;
+
+static SurespotIdentity * loggedInIdentity;
 
 + (SurespotIdentity *) getIdentityWithUsername:(NSString *) username andPassword:(NSString *) password {
     NSString *filePath = [[[FileController getAppSupportDir] stringByAppendingPathComponent: username ] stringByAppendingString:IDENTITY_EXTENSION];
@@ -29,10 +33,6 @@ static NSString * loggedInUser;
         //gunzip the identity data
         //NSError* error = nil;
         NSData* unzipped = [myData gzipInflate];
-        
-        
-        
-        
         NSData * identity = [EncryptionController decryptIdentity: unzipped withPassword:[password stringByAppendingString:CACHE_IDENTITY_ID]];
         return [self decodeIdentityData:identity withUsername:username andPassword:password];
     }
@@ -51,9 +51,6 @@ static NSString * loggedInUser;
     id key;
     while ((key = [enumerator nextObject])) {
         IdentityKeys *versionedKeys = [identityKeys objectForKey:key];
-        
-        
-        
         NSDictionary *jsonKeys = [NSDictionary dictionaryWithObjectsAndKeys:
                                   [versionedKeys version] ,@"version",
                                   [EncryptionController encodeDHPrivateKey: [versionedKeys dhPrivKey]], @"dhPriv" ,
@@ -68,9 +65,9 @@ static NSString * loggedInUser;
     [dic setObject:encodedKeys forKey:@"keys"];
     NSError * error;
     NSData * jsonIdentity = [NSJSONSerialization dataWithJSONObject:dic options:kNilOptions error:&error];
-  //  NSString * jsonString = [[NSString alloc] initWithData:jsonIdentity encoding:NSUTF8StringEncoding];
+    //  NSString * jsonString = [[NSString alloc] initWithData:jsonIdentity encoding:NSUTF8StringEncoding];
     return [EncryptionController encryptIdentity:jsonIdentity withPassword:password];
-
+    
 }
 
 +( SurespotIdentity *) decodeIdentityData: (NSData *) identityData withUsername: (NSString *) username andPassword: (NSString *) password {
@@ -90,9 +87,9 @@ static NSString * loggedInUser;
         for (NSDictionary * key in keys) {
             
             NSString * version = [key objectForKey:@"version"];
-        //    NSString * dpubDH = [key objectForKey:@"dhPub"];
+            //    NSString * dpubDH = [key objectForKey:@"dhPub"];
             NSString * dprivDH = [key objectForKey:@"dhPriv"];
-         //   NSString * dsaPub = [key objectForKey:@"dsaPub"];
+            //   NSString * dsaPub = [key objectForKey:@"dsaPub"];
             NSString * dsaPriv = [key objectForKey:@"dsaPriv"];
             
             
@@ -123,7 +120,7 @@ static NSString * loggedInUser;
                             andSalt: (NSString *) salt
                             andKeys: (IdentityKeys *) keys {
     
-   
+    
     SurespotIdentity * identity = [[SurespotIdentity alloc] initWithUsername:username andSalt:salt];
     [identity addKeysWithVersion:@"1" withDhPrivKey:[keys dhPrivKey] withDhPubKey:[keys dhPubKey] withDsaPrivKey:[keys dsaPrivKey] withDsaPubKey:[keys dsaPubKey] ];
     
@@ -143,8 +140,8 @@ static NSString * loggedInUser;
 }
 
 + (NSArray *) getIdentityNames {
-     NSString * identityDir = [FileController getAppSupportDir];
-        NSArray * dirfiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:identityDir error:NULL];
+    NSString * identityDir = [FileController getAppSupportDir];
+    NSArray * dirfiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:identityDir error:NULL];
     NSMutableArray * identityNames = [[NSMutableArray alloc] init];
     NSString * file;
     for (file in dirfiles) {
@@ -163,12 +160,82 @@ static NSString * loggedInUser;
 
 + (void) setLoggedInUserIdentity: (SurespotIdentity *) identity {
     @synchronized (self) {
-        loggedInUser = [identity username];
+        loggedInIdentity = identity;
+        [[CredentialCachingController sharedInstance] loginIdentity:identity];
     }
 }
 
 + (NSString *) getLoggedInUser {
-    @synchronized (self) { return loggedInUser; }
+    return [[self getLoggedInIdentity] username];
 }
+
+
++ (SurespotIdentity *) getLoggedInIdentity {
+    @synchronized (self) { return loggedInIdentity; }
+}
+
++ (NSString *) getOurLatestVersion {
+    return [[self getLoggedInIdentity] latestVersion];
+}
+
++ (void) getTheirLatestVersionForUsername: (NSString *) username callback:(CallbackStringBlock) callback {
+    [[NetworkController sharedInstance]
+     getKeyVersionForUsername: username
+     successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
+         NSString * responseObjectS =   [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+         NSLog(@"response: %d, object: %@",  [operation.response statusCode], responseObjectS);
+         callback(responseObjectS);
+         
+     }
+     failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
+         
+         NSLog(@"response failure: %@",  Error);
+         callback(nil);
+         
+     }];
+    
+    
+    
+    
+}
+
++(void) getSharedSecretForOurVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion:( NSString *) theirVersion callback:(CallbackBlock) callback {
+    [[CredentialCachingController sharedInstance] getSharedSecretForOurVersion:ourVersion theirUsername:theirUsername theirVersion:theirVersion callback:callback];    
+}
+
++(void) getPublicKeysForUsername: (NSString *) username andVersion: (NSString *) version callback: (CallbackBlock) callback {
+    
+    
+    
+    //todo cache
+    [[NetworkController sharedInstance] getPublicKeysForUsername: username
+                                                      andVersion:version
+                                                    successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                                                        NSLog(@"response: %d",  [response statusCode]);
+                                                        //recreate public keys
+                                                        //todo verify
+                                                        NSDictionary * jsonKeys = JSON;
+                                                        
+                                                        NSString * spubDH = [jsonKeys objectForKey:@"dhPub"];
+                                                        NSString * spubDSA = [jsonKeys objectForKey:@"dsaPub"];
+                                                        
+                                                        
+                                                        ECDHPublicKey dhPub = [EncryptionController recreateDhPublicKey:spubDH];
+                                                        ECDHPublicKey dsaPub = [EncryptionController recreateDsaPublicKey:spubDSA];
+                                                        
+                                                        PublicKeys* pk = [[PublicKeys alloc] init];
+                                                        pk.dhPubKey = dhPub;
+                                                        pk.dsaPubKey = dsaPub;
+                                                        
+                                                        callback(pk);
+                                                        
+                                                    } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
+                                                        
+                                                        NSLog(@"response failure: %@",  Error);
+                                                        callback(nil);
+                                                        
+                                                    }];
+}
+
 
 @end

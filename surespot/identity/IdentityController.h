@@ -10,6 +10,11 @@
 #import "SurespotIdentity.h"
 #import "IdentityKeys.h"
 
+typedef void (^CallbackBlock) (id  result);
+typedef void (^CallbackStringBlock) (NSString * result);
+typedef void (^CallbackDictionaryBlock) (NSDictionary * result);
+
+
 @interface IdentityController : NSObject
 
 
@@ -22,6 +27,11 @@
 + (void) userLoggedInWithIdentity: (SurespotIdentity *) identity;
 + (NSString *) loggedInUser;
 + (NSString *) getLoggedInUser;
++ (SurespotIdentity *) loggedInIdentity;
++ (NSString *) getOurLatestVersion;
++ (void) getTheirLatestVersionForUsername: (NSString *) username callback:(CallbackStringBlock) callback;
++(void) getPublicKeysForUsername: (NSString *) username andVersion: (NSString *) version callback: (CallbackBlock) callback ;
+
 
 
 @end
