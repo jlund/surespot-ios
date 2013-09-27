@@ -16,6 +16,6 @@
 @property (strong) NSMutableDictionary * dataSources;
 @property (strong) NSMutableDictionary * tableViews;
 
-- (id) getDataSourceForFriendname: (NSString *) friendname;
+- (ChatDataSource *) getDataSourceForFriendname: (NSString *) friendname;
 - (void) sendMessage: (NSString *) message toFriendname: (NSString *) friendname;
 @end

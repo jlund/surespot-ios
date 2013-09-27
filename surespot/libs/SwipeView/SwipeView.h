@@ -91,6 +91,7 @@ SwipeViewAlignment;
 - (UIView *)itemViewAtIndex:(NSInteger)index;
 - (NSInteger)indexOfItemView:(UIView *)view;
 - (NSInteger)indexOfItemViewOrSubview:(UIView *)view;
+- (void)updateLayout;
 
 @end
 

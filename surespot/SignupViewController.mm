@@ -84,12 +84,18 @@
     
     
 }
-
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [textField resignFirstResponder];
-    return NO;
-}
-
+//
+//
+//- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+//    [textField resignFirstResponder];
+//    return NO;
+//}
+//
+//- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+//    [textField resignFirstResponder];
+//    [self send];
+//    [textField setText:nil];
+//    return NO;
+//}
 
 @end

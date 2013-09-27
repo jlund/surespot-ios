@@ -15,5 +15,7 @@
 @property (nonatomic, strong) UITableView *friendView;
 @property (strong, atomic) NSDictionary *friends;
 - (IBAction)pageControlTapped;
+@property (strong, atomic) NSMutableDictionary *chats;
+@property (strong, nonatomic) IBOutlet UITextField *textField;
 
 @end

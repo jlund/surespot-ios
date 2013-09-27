@@ -100,7 +100,7 @@
     NSLog(@"didReceiveMessage() >>> data: %@", packet.data);
 }
 
-- (id) getDataSourceForFriendname: (NSString *) friendname {
+- (ChatDataSource *) getDataSourceForFriendname: (NSString *) friendname {
     ChatDataSource * dataSource = [self.dataSources objectForKey:friendname];
     if (dataSource == nil) {
         dataSource = [[ChatDataSource alloc] init];
