@@ -8,7 +8,7 @@
 
 #import "NetworkController.h"
 
-#define kHost @"https://192.168.10.68"
+#define kHost @"http://127.0.0.1:8080"
 @implementation NetworkController
 
 +(NetworkController*)sharedInstance

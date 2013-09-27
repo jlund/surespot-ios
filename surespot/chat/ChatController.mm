@@ -34,8 +34,8 @@
     
     if (self != nil) {
         self.socketIO = [[SocketIO alloc] initWithDelegate:self];
-        self.socketIO.useSecure = YES;
-        [self.socketIO connectToHost:@"192.168.10.68" onPort:443];
+        self.socketIO.useSecure = NO;
+        [self.socketIO connectToHost:@"127.0.0.1" onPort:8080];
         self.dataSources = [[NSMutableDictionary alloc] init];
         self.tableViews = [[NSMutableDictionary alloc] init];
     }

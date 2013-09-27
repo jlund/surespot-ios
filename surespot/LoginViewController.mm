@@ -64,7 +64,7 @@ NSArray * identityNames;
          NSLog(@"response: %d",  [response statusCode]);
          
          [IdentityController userLoggedInWithIdentity:identity];         
-         [self performSegueWithIdentifier: @"loginToMainSegue" sender: nil];
+         [self performSegueWithIdentifier: @"loginToMainSegue" sender: nil ];
      }
      failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
          

@@ -17,34 +17,42 @@
 
 @implementation FriendViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    NSLog(@"viewDidLoad");
+   
     [[NetworkController sharedInstance] getFriendsSuccessBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        NSLog(@"response: %d",  [response statusCode]);
-        self.friends = (NSDictionary *) JSON;
-        [self.tableView reloadData];
+        NSLog(@"get friends response: %d",  [response statusCode]);
+      //  [self.tableView beginUpdates];
+        self.friends = (NSDictionary *) JSON ;
+        //[self.tableView endUpdates];
+        
+     //   [self.friendTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+        [self.friendTableView reloadData];
+        
     } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
         NSLog(@"response failure: %@",  Error);
         
     }];
+
     
-    
+}
+
+
+
+//- (void)viewWillAppear:(BOOL)animated{
+//    NSLog(@"viewWillAppear");
+//    [super viewWillAppear:animated];
+//    
+//    [self.friendTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+//    //   [self.friendTableView reloadData];
+//
+//}
+
+-(void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self.friendTableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -57,22 +65,29 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+        NSLog(@"number of sections");
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    NSLog(@"tableview pointer: %@", tableView);
     // Return the number of rows in the section
-    if (!self.friends)
+    if (!self.friends) {
+        NSLog(@"returning 0 rows");
         return 0;
-    
+    }
     NSArray * friends = [self.friends objectForKey:@"friends"];
-    return [friends count];
+    NSUInteger count =  [friends count];
+    NSLog(@"returning %d rows",count);
+    return count;
+
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"cell for row");
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
@@ -156,6 +171,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"selected");
     NSArray * friends =[self.friends objectForKey:@"friends"];
     
     // Configure the cell...
@@ -184,5 +200,10 @@
 - (void)viewDidUnload {
     [self setInviteText:nil];
     [super viewDidUnload];
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 30.0f;
 }
 @end

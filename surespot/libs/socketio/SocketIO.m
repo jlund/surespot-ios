@@ -137,6 +137,7 @@ NSString* const SocketIOException = @"SocketIOException";
         
         // make a request
         NSURLRequest *request = [NSURLRequest requestWithURL:url
+                                 
                                                  cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData 
                                              timeoutInterval:10.0];
         
