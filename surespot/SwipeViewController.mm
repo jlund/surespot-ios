@@ -9,6 +9,7 @@
 #import "SwipeViewController.h"
 #import "NetworkController.h"
 #import "ChatController.h"
+#import "IdentityController.h"
 #import <UIKit/UIKit.h>
 
 @interface SwipeViewController ()
@@ -229,7 +230,7 @@
         NSInteger index = _chats.count;
         NSLog(@"creating and scrolling to index: %d", index);
         
-        [_swipeView reloadData];
+      //  [_swipeView reloadData];
       //  [_swipeView loadItemAtIndex:index];
         [_swipeView updateLayout];
         [_swipeView scrollToPage:index duration:0.500];
@@ -248,7 +249,7 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     if ([_swipeView currentPage] == 0) {
-        
+        [self inviteUser:[textField text]];
     }
     else {
         [self send];
@@ -273,6 +274,30 @@
 {
     [[_chats objectForKey:notification.object] reloadData];
 }
+
+- (void) inviteUser: (NSString *) username {
+    NSString * loggedInUser = [IdentityController getLoggedInUser];
+    if ([username isEqualToString:loggedInUser]) {
+        //todo tell user they can't invite themselves
+        return;
+    }
+    
+    [[NetworkController sharedInstance]
+     inviteFriend:username
+     successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
+         NSLog(@"response: %d",  [operation.response statusCode]);
+         NSMutableArray * friends = [self.friends objectForKey:@"friends"];
+         NSDictionary * f = [NSDictionary dictionaryWithObjectsAndKeys:username,@"name",[NSNumber numberWithInt:2],@"flags", nil];
+         [friends addObject:f];
+         [_friendView reloadData];
+     }
+     failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
+         
+         NSLog(@"response failure: %@",  Error);
+         
+     }];
+}
+
 
 
 

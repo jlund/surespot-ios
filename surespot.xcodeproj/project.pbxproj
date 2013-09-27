@@ -36,9 +36,7 @@
 		661C2ED61763D4B9000649E7 /* NSData+Gunzip.m in Sources */ = {isa = PBXBuildFile; fileRef = 661C2ED51763D4B9000649E7 /* NSData+Gunzip.m */; };
 		6621BB841762704D00BC2850 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6621BB861762704D00BC2850 /* Localizable.strings */; };
 		6654441317F37A3F00F62F7F /* SwipeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6654441217F37A3F00F62F7F /* SwipeView.m */; };
-		6654441617F37BCF00F62F7F /* SwipeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6654441517F37BCF00F62F7F /* SwipeViewController.m */; };
-		668E0EE7177A430E00115B19 /* FriendViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 668E0EE6177A430E00115B19 /* FriendViewController.mm */; };
-		668E0EEA177A5F1400115B19 /* ChatViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 668E0EE9177A5F1400115B19 /* ChatViewController.mm */; };
+		6654441617F37BCF00F62F7F /* SwipeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6654441517F37BCF00F62F7F /* SwipeViewController.mm */; };
 		668E0EEC177B2E3500115B19 /* testlocal10.ssi in Resources */ = {isa = PBXBuildFile; fileRef = 668E0EEB177B2E3500115B19 /* testlocal10.ssi */; };
 		66B3C8ED17B15F2300CC96EE /* ChatController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66B3C8EC17B15F2300CC96EE /* ChatController.mm */; };
 		66B3C8F017B17AC800CC96EE /* ChatDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B3C8EF17B17AC800CC96EE /* ChatDataSource.m */; };
@@ -124,11 +122,7 @@
 		6654441117F37A3F00F62F7F /* SwipeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeView.h; sourceTree = "<group>"; };
 		6654441217F37A3F00F62F7F /* SwipeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwipeView.m; sourceTree = "<group>"; };
 		6654441417F37BCE00F62F7F /* SwipeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeViewController.h; sourceTree = "<group>"; };
-		6654441517F37BCF00F62F7F /* SwipeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwipeViewController.m; sourceTree = "<group>"; };
-		668E0EE5177A430E00115B19 /* FriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendViewController.h; sourceTree = "<group>"; };
-		668E0EE6177A430E00115B19 /* FriendViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FriendViewController.mm; sourceTree = "<group>"; };
-		668E0EE8177A5F1400115B19 /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
-		668E0EE9177A5F1400115B19 /* ChatViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ChatViewController.mm; sourceTree = "<group>"; };
+		6654441517F37BCF00F62F7F /* SwipeViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SwipeViewController.mm; sourceTree = "<group>"; };
 		668E0EEB177B2E3500115B19 /* testlocal10.ssi */ = {isa = PBXFileReference; lastKnownFileType = file; name = testlocal10.ssi; path = resources/testlocal10.ssi; sourceTree = "<group>"; };
 		66B3C8EB17B15F2300CC96EE /* ChatController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatController.h; path = chat/ChatController.h; sourceTree = "<group>"; };
 		66B3C8EC17B15F2300CC96EE /* ChatController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ChatController.mm; path = chat/ChatController.mm; sourceTree = "<group>"; };
@@ -395,12 +389,8 @@
 				6604A2D917626B9E0072216A /* MainStoryboard_iPad.storyboard */,
 				6604A2DC17626B9E0072216A /* LoginViewController.h */,
 				6604A2DD17626B9E0072216A /* LoginViewController.mm */,
-				668E0EE8177A5F1400115B19 /* ChatViewController.h */,
-				668E0EE9177A5F1400115B19 /* ChatViewController.mm */,
-				668E0EE5177A430E00115B19 /* FriendViewController.h */,
-				668E0EE6177A430E00115B19 /* FriendViewController.mm */,
 				6654441417F37BCE00F62F7F /* SwipeViewController.h */,
-				6654441517F37BCF00F62F7F /* SwipeViewController.m */,
+				6654441517F37BCF00F62F7F /* SwipeViewController.mm */,
 				6606E4EB179D9C3A004199BC /* SignupViewController.h */,
 				6606E4EC179D9C3A004199BC /* SignupViewController.mm */,
 				6604A2C517626B9E0072216A /* Supporting Files */,
@@ -868,7 +858,7 @@
 				66E4F5BC176298CB00596E6B /* base64.c in Sources */,
 				66E4F5BD176298CB00596E6B /* NSData+SRB64Additions.m in Sources */,
 				66E4F5BE176298CB00596E6B /* SRWebSocket.m in Sources */,
-				6654441617F37BCF00F62F7F /* SwipeViewController.m in Sources */,
+				6654441617F37BCF00F62F7F /* SwipeViewController.mm in Sources */,
 				661C2EC31762B125000649E7 /* SurespotIdentity.mm in Sources */,
 				661C2EC81762C3C0000649E7 /* IdentityKeys.mm in Sources */,
 				661C2ECE1763A214000649E7 /* IdentityController.mm in Sources */,
@@ -885,8 +875,6 @@
 				66EC6113176E494900937467 /* UIImageView+AFNetworking.m in Sources */,
 				66EC6117176E49F800937467 /* NetworkController.m in Sources */,
 				66159703176F6732001B32C1 /* NSData+Base64.m in Sources */,
-				668E0EE7177A430E00115B19 /* FriendViewController.mm in Sources */,
-				668E0EEA177A5F1400115B19 /* ChatViewController.mm in Sources */,
 				6606E4ED179D9C3A004199BC /* SignupViewController.mm in Sources */,
 				6606E4F0179DB134004199BC /* FileController.mm in Sources */,
 				66E6536A17B043D2000F81BD /* CredentialCachingController.mm in Sources */,
