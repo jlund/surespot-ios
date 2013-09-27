@@ -21,39 +21,6 @@
     return self;
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    // Return the number of sections.
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    // Return the number of rows in the section
-    if (![self messages])
-        return 0;
-    
-    
-    return [[self messages] count];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"ChatCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    
-    
-    // Configure the cell...
-    //todo change bar black/grey
-    NSDictionary * message = [[self messages] objectAtIndex:indexPath.row];
-    
-    
-    
-    cell.textLabel.text = [message objectForKey:@"plaindata"];
-    
-    
-    return cell;
-}
 
 - (void) addMessage:(NSDictionary *) message {
      [[self messages] addObject:message];

@@ -220,13 +220,16 @@
         [chatView setDelegate:self];
         [chatView setDataSource: self];
         [_chats setObject:chatView forKey:username];
+        //listen for rolead notifications
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadMessages:) name:@"reloadMessages" object:username];
+
         
         [chatView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"ChatCell"];
         
         NSInteger index = _chats.count;
         NSLog(@"creating and scrolling to index: %d", index);
         
-     //   [_swipeView reloadData];
+        [_swipeView reloadData];
       //  [_swipeView loadItemAtIndex:index];
         [_swipeView updateLayout];
         [_swipeView scrollToPage:index duration:0.500];
@@ -235,7 +238,7 @@
     //
     ////              }
     else {
-        NSInteger index =[_swipeView indexOfItemView:chatView];
+        NSInteger index =[_swipeView indexOfItemViewOrSubview:chatView];
         NSLog(@"scrolling to index: %d", index);
         [_swipeView scrollToPage:index duration:0.500];
         
@@ -265,5 +268,12 @@
     UITableView * chatView = [_chats objectForKey:friendname];
     [chatView reloadData];
 }
+
+- (void)reloadMessages:(NSNotification *)notification
+{
+    [[_chats objectForKey:notification.object] reloadData];
+}
+
+
 
 @end

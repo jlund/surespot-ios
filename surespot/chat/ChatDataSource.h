@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ChatDataSource : NSObject <UITableViewDataSource>
+@interface ChatDataSource : NSObject
 @property (strong) NSMutableArray * messages;
 - (void) addMessage:(NSDictionary *) message;
 @end
