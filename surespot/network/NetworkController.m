@@ -99,5 +99,15 @@
     [operation start];
 }
 
+-(void) getMessageDataForUsername:(NSString *)username andMessageId:(NSInteger)messageId andControlId:(NSInteger) controlId successBlock:(JSONSuccessBlock)successBlock failureBlock: (JSONFailureBlock) failureBlock {
+    
+    NSString * path = [NSString stringWithFormat:@"messageData/%@/%u/%u", username, messageId, 0];
+    NSURLRequest *request = [self requestWithMethod:@"GET" path:path parameters: nil];
+    AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:successBlock
+                                                                                        failure: failureBlock];
+    [operation start];
+    
+}
+
 
 @end

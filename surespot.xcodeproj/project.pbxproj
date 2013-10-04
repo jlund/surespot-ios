@@ -27,6 +27,8 @@
 		6606E4ED179D9C3A004199BC /* SignupViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6606E4EC179D9C3A004199BC /* SignupViewController.mm */; };
 		6606E4F0179DB134004199BC /* FileController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6606E4EF179DB134004199BC /* FileController.mm */; };
 		660EB27A17FE3D7800DBC53C /* KeyboardState.m in Sources */ = {isa = PBXBuildFile; fileRef = 660EB27917FE3D7800DBC53C /* KeyboardState.m */; };
+		660EB27D17FE64D800DBC53C /* ChatUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 660EB27C17FE64D800DBC53C /* ChatUtils.mm */; };
+		660EB28017FE666D00DBC53C /* SurespotMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 660EB27F17FE666D00DBC53C /* SurespotMessage.m */; };
 		66159703176F6732001B32C1 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 66159702176F6732001B32C1 /* NSData+Base64.m */; };
 		661C2EC31762B125000649E7 /* SurespotIdentity.mm in Sources */ = {isa = PBXBuildFile; fileRef = 661C2EC21762B125000649E7 /* SurespotIdentity.mm */; };
 		661C2EC81762C3C0000649E7 /* IdentityKeys.mm in Sources */ = {isa = PBXBuildFile; fileRef = 661C2EC71762C3C0000649E7 /* IdentityKeys.mm */; };
@@ -105,6 +107,10 @@
 		6606E4EF179DB134004199BC /* FileController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = FileController.mm; path = utils/FileController.mm; sourceTree = "<group>"; };
 		660EB27817FE3D7800DBC53C /* KeyboardState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardState.h; sourceTree = "<group>"; };
 		660EB27917FE3D7800DBC53C /* KeyboardState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyboardState.m; sourceTree = "<group>"; };
+		660EB27B17FE64D800DBC53C /* ChatUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatUtils.h; path = chat/ChatUtils.h; sourceTree = "<group>"; };
+		660EB27C17FE64D800DBC53C /* ChatUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ChatUtils.mm; path = chat/ChatUtils.mm; sourceTree = "<group>"; };
+		660EB27E17FE666D00DBC53C /* SurespotMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SurespotMessage.h; path = chat/SurespotMessage.h; sourceTree = "<group>"; };
+		660EB27F17FE666D00DBC53C /* SurespotMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SurespotMessage.m; path = chat/SurespotMessage.m; sourceTree = "<group>"; };
 		66159701176F66F1001B32C1 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "utils/NSData+Base64.h"; sourceTree = "<group>"; };
 		66159702176F6732001B32C1 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Base64.m"; path = "utils/NSData+Base64.m"; sourceTree = "<group>"; };
 		661C2EC11762B125000649E7 /* SurespotIdentity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SurespotIdentity.h; path = identity/SurespotIdentity.h; sourceTree = "<group>"; };
@@ -492,6 +498,10 @@
 				66B3C8EB17B15F2300CC96EE /* ChatController.h */,
 				66B3C8EE17B17AC800CC96EE /* ChatDataSource.h */,
 				66B3C8EF17B17AC800CC96EE /* ChatDataSource.m */,
+				660EB27B17FE64D800DBC53C /* ChatUtils.h */,
+				660EB27C17FE64D800DBC53C /* ChatUtils.mm */,
+				660EB27E17FE666D00DBC53C /* SurespotMessage.h */,
+				660EB27F17FE666D00DBC53C /* SurespotMessage.m */,
 			);
 			name = chat;
 			sourceTree = "<group>";
@@ -861,6 +871,7 @@
 				66E4F5BA176298CB00596E6B /* SocketIOTransportWebsocket.m in Sources */,
 				66E4F5BB176298CB00596E6B /* SocketIOTransportXHR.m in Sources */,
 				66E4F5BC176298CB00596E6B /* base64.c in Sources */,
+				660EB27D17FE64D800DBC53C /* ChatUtils.mm in Sources */,
 				66E4F5BD176298CB00596E6B /* NSData+SRB64Additions.m in Sources */,
 				66E4F5BE176298CB00596E6B /* SRWebSocket.m in Sources */,
 				6654441617F37BCF00F62F7F /* SwipeViewController.mm in Sources */,
@@ -883,6 +894,7 @@
 				66159703176F6732001B32C1 /* NSData+Base64.m in Sources */,
 				6606E4ED179D9C3A004199BC /* SignupViewController.mm in Sources */,
 				6606E4F0179DB134004199BC /* FileController.mm in Sources */,
+				660EB28017FE666D00DBC53C /* SurespotMessage.m in Sources */,
 				66E6536A17B043D2000F81BD /* CredentialCachingController.mm in Sources */,
 				66E6537017B0583F000F81BD /* PublicKeys.mm in Sources */,
 				6654441317F37A3F00F62F7F /* SwipeView.m in Sources */,

@@ -7,8 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SurespotMessage.h"
 
 @interface ChatDataSource : NSObject
+
+-(ChatDataSource*)initWithUsername:(NSString *) username;
 @property (strong) NSMutableArray * messages;
-- (void) addMessage:(NSDictionary *) message;
+- (void) addMessage:(SurespotMessage *) message;
+@property (strong, nonatomic) NSString * username;
 @end

@@ -10,6 +10,7 @@
 #import "NetworkController.h"
 #import "ChatController.h"
 #import "IdentityController.h"
+#import "EncryptionController.h"
 #import <UIKit/UIKit.h>
 //#import <QuartzCore/CATransaction.h>
 
@@ -312,11 +313,35 @@
         NSString * username = aKey;
         NSArray * messages =[[ChatController sharedInstance] getDataSourceForFriendname: username].messages;
         if (messages.count > 0) {
-            cell.textLabel.text = [[messages objectAtIndex:indexPath.row] objectForKey:@"plaindata"];
+            
+            
+            SurespotMessage * message =[messages objectAtIndex:indexPath.row];
+            NSMutableDictionary * jsonMessage = message.messageData;
+            NSString * plainData = [jsonMessage  objectForKey:@"plaindata"];
+            
+            if (!plainData){
+                
+               
+                //todo decrypt on thread
+                [EncryptionController symmetricDecryptString:[jsonMessage objectForKey:@"data"] ourVersion:[message getOurVersion]  theirUsername:[message getOtherUser] theirVersion:[message getTheirVersion] iv:[jsonMessage objectForKey:@"iv"] callback:^(NSString * plaintext){
+                    
+                    [jsonMessage setObject:plaintext forKey:@"plaindata"];
+                    
+                    cell.textLabel.text = plaintext;
+                }];
+                
+                
+            }
+            else {
+                
+                cell.textLabel.text = plainData;
+            }
+            
         }
+        
         return cell;
-    }
-}
+        
+    }}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -364,6 +389,7 @@
         [_swipeView updateLayout];
         [_swipeView scrollToPage:index duration:0.500];
         //   chatView.frame = _swipeView.frame;
+        
     }
     //
     ////              }

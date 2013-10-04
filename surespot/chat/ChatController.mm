@@ -11,6 +11,7 @@
 #import "EncryptionController.h"
 #import "SocketIOPacket.h"
 #import "NSData+Base64.h"
+#import "SurespotMessage.h"
 
 
 @implementation ChatController
@@ -61,38 +62,41 @@
         return;
     }
     
-    NSMutableDictionary * jsonMessage = [NSJSONSerialization JSONObjectWithData:[[jsonData objectForKey:@"args"][0]dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
-    NSString * from = [jsonMessage objectForKey:@"from"];
-    if (![from isEqual:[IdentityController getLoggedInUser]]) {
-        //decrypt
-        [EncryptionController symmetricDecryptString:[jsonMessage objectForKey:@"data"] ourVersion:[jsonMessage objectForKey:@"toVersion"] theirUsername:from theirVersion:[jsonMessage objectForKey:@"fromVersion"] iv:[jsonMessage objectForKey:@"iv"] callback:^(NSString * plaintext){
+    SurespotMessage * message = [[SurespotMessage alloc] initWithJSONString:[jsonData objectForKey:@"args"][0]];
+    
+    NSMutableDictionary * jsonMessage = message.messageData;
+    
+    NSString * otherUser = [message getOtherUser];
+    
+    //decrypt
+    [EncryptionController symmetricDecryptString:[jsonMessage objectForKey:@"data"] ourVersion:[message getOurVersion] theirUsername:otherUser theirVersion:[message getTheirVersion]  iv:[jsonMessage objectForKey:@"iv"] callback:^(NSString * plaintext){
+        
+        [jsonMessage setObject:plaintext forKey:@"plaindata"];
+        
+        //get the datasource for this message and add the message
+        ChatDataSource * dataSource = [self getDataSourceForFriendname: otherUser];
+        [dataSource addMessage: message];
+        
+        //get the key out so it is the same object so event is received
+        NSArray * keys = [self.dataSources allKeys];
+        for (NSString * key in keys) {
             
-            [jsonMessage setObject:plaintext forKey:@"plaindata"];
-            
-            //get the datasource for this message and add the message
-            ChatDataSource * dataSource = [self getDataSourceForFriendname: from];
-            [dataSource addMessage: jsonMessage];
-            
-            //get the key out so it is the same object so event is received
-            NSArray * keys = [self.dataSources allKeys];
-            for (NSString * key in keys) {
+            if ([key isEqual: otherUser]) {
                 
-                if ([key isEqual: from]) {
-                    
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadMessages" object:key ];
-                    break;
-                    
-                }
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadMessages" object:key ];
+                break;
+                
             }
-            //use if we have issues http://www.cocoanetics.com/2010/05/nsnotifications-and-background-threads/
-            
-            //            NSNotification *note = [NSNotification notificationWithName:@"reloadMessages"  object:from];
-            //            [[NSNotificationCenter defaultCenter] performSelectorOnMainThread:@selector(postNotification:) withObject: note waitUntilDone:NO];
-            //             }];
-            
-            
-        }];
-    }
+        }
+        //use if we have issues http://www.cocoanetics.com/2010/05/nsnotifications-and-background-threads/
+        
+        //            NSNotification *note = [NSNotification notificationWithName:@"reloadMessages"  object:from];
+        //            [[NSNotificationCenter defaultCenter] performSelectorOnMainThread:@selector(postNotification:) withObject: note waitUntilDone:NO];
+        //             }];
+        
+        
+    }];
+    
 }
 
 - (void) socketIO:(SocketIO *)socket didReceiveMessage:(SocketIOPacket *)packet
@@ -103,8 +107,9 @@
 - (ChatDataSource *) getDataSourceForFriendname: (NSString *) friendname {
     ChatDataSource * dataSource = [self.dataSources objectForKey:friendname];
     if (dataSource == nil) {
-        dataSource = [[ChatDataSource alloc] init];
-        [self.dataSources setObject: dataSource forKey: friendname];           }
+        dataSource = [[ChatDataSource alloc] initWithUsername:friendname];
+        [self.dataSources setObject: dataSource forKey: friendname];
+    }
     return dataSource;
 }
 
@@ -114,7 +119,7 @@
     NSString * loggedInUser = [IdentityController getLoggedInUser];
     NSData * iv = [EncryptionController getIv];
     
-    [IdentityController getTheirLatestVersionForUsername:loggedInUser callback:^(NSString * version) {
+    [IdentityController getTheirLatestVersionForUsername:friendname callback:^(NSString * version) {
         [EncryptionController symmetricEncryptString: message ourVersion:ourLatestVersion theirUsername:friendname theirVersion:version iv:iv callback:^(NSString * cipherText) {
             
             NSString * b64iv = [iv base64EncodedStringWithSeparateLines:NO];
@@ -141,7 +146,7 @@
             [dict setObject:message forKey:@"plaindata"];
             
             ChatDataSource * dataSource = [self getDataSourceForFriendname: friendname];
-            [dataSource addMessage: dict];
+            [dataSource addMessage: [[SurespotMessage alloc] initWithMutableDictionary: dict]];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadMessages" object:friendname ];
             
         }];
