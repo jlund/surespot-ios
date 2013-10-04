@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "SwipeView.h"
+#import "KeyboardState.h"
 
 @interface SwipeViewController : UIViewController <SwipeViewDelegate, SwipeViewDataSource, UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) IBOutlet SwipeView *swipeView;
@@ -17,9 +18,7 @@
 - (IBAction)pageControlTapped;
 @property (strong, atomic) NSMutableDictionary *chats;
 @property (strong, nonatomic) IBOutlet UITextField *textField;
-@property (nonatomic) UIEdgeInsets oldContentInset;
-@property (nonatomic) UIEdgeInsets oldIndicatorInset;
-@property (nonatomic) CGPoint oldOffset;
+@property (strong, nonatomic) KeyboardState * keyboardState;
 
 
 @end

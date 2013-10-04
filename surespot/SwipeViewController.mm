@@ -59,87 +59,115 @@
 // Called when the UIKeyboardDidShowNotification is sent.
 - (void)keyboardWasShown:(NSNotification*)aNotification
 {
+    
     NSLog(@"keyboardWasShown");
-    NSDictionary* info = [aNotification userInfo];
-    CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
     
-    UITableView * tableView =(UITableView *)_swipeView.currentItemView;
-    
-    CGSize kbSize = keyboardRect.size;
-    
-    keyboardRect = [tableView convertRect:keyboardRect fromView:nil];
-    
-    
-    
-    UIEdgeInsets contentInsets =  tableView.contentInset;
-    self->_oldContentInset = contentInsets;
-    contentInsets.bottom = keyboardRect.size.height;
-    tableView.contentInset = contentInsets;
-    
-    contentInsets = tableView.scrollIndicatorInsets;
-    self->_oldIndicatorInset = contentInsets;
-    contentInsets.bottom = keyboardRect.size.height;
-    tableView.contentInset = contentInsets;
-    
-    self->_oldOffset = tableView.contentOffset;
-    
-   // [self view].frame
- //   scrollView.contentInset = contentInsets;
-   // scrollView.scrollIndicatorInsets = contentInsets;
-    
-   
-   
-    // If active text field is hidden by keyboard, scroll it so it's visible
-    // Your app might not need or want this behavior.
-//    CGRect aRect = _swipeView.frame;
-//    aRect.size.height -= kbSize.height;
-//    _swipeView.frame = aRect;
-    
-//    CGRect aRect = self.view.frame;
-//     aRect.size.height -= kbSize.height;
-//    self.view.frame = aRect;
-
-    CGRect aRect = _textField.frame;
-    aRect.origin.y -= kbSize.height;
-    _textField.frame = aRect;
-//    if (!CGRectContainsPoint(aRect, activeField.frame.origin) ) {
-//        [self.scrollView scrollRectToVisible:activeField.frame animated:YES];
-//    }
+    if (_swipeView.currentPage > 0 ) {
+        NSDictionary* info = [aNotification userInfo];
+        CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+        
+        UITableView * tableView =(UITableView *)_swipeView.currentItemView;
+        
+        
+        
+        
+        KeyboardState * keyboardState = [[KeyboardState alloc] init];
+        keyboardState.keyboardRect = [tableView convertRect:keyboardRect fromView:nil];
+        CGSize kbSize = keyboardState.keyboardRect.size;
+        
+        for (UITableView *tableView in [_chats allValues]) {
+            
+            UIEdgeInsets contentInsets =  tableView.contentInset;
+            
+            keyboardState.contentInset = contentInsets;
+            contentInsets.bottom = keyboardRect.size.height;
+            tableView.contentInset = contentInsets;
+            
+            keyboardState.indicatorInset = tableView.scrollIndicatorInsets;
+            
+            contentInsets.bottom = keyboardRect.size.height;
+            tableView.contentInset = contentInsets;
+            
+            keyboardState.offset = tableView.contentOffset;
+        }
+        
+        self.keyboardState = keyboardState;
+        
+        // [self view].frame
+        //   scrollView.contentInset = contentInsets;
+        // scrollView.scrollIndicatorInsets = contentInsets;
+        
+        
+        
+        // If active text field is hidden by keyboard, scroll it so it's visible
+        // Your app might not need or want this behavior.
+        //    CGRect aRect = _swipeView.frame;
+        //    aRect.size.height -= kbSize.height;
+        //    _swipeView.frame = aRect;
+        
+        //    CGRect aRect = self.view.frame;
+        //     aRect.size.height -= kbSize.height;
+        //    self.view.frame = aRect;
+        
+        CGRect aRect = _textField.frame;
+        aRect.origin.y -= kbSize.height;
+        _textField.frame = aRect;
+        //    if (!CGRectContainsPoint(aRect, activeField.frame.origin) ) {
+        //        [self.scrollView scrollRectToVisible:activeField.frame animated:YES];
+        //    }
+    }
 }
 
 // Called when the UIKeyboardWillHideNotification is sent
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification
 {
-     NSLog(@"keyboardWillBeHidden");
+    NSLog(@"keyboardWillBeHidden");
+    [self handleKeyboardHide];
     
-    NSDictionary* info = [aNotification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-//    
-//    CGRect aRect = _swipeView.frame;
-//    aRect.size.height += kbSize.height;
-//    _swipeView.frame = aRect;
-//
-    CGRect aRect = _textField.frame;
-    aRect.origin.y += kbSize.height;
-    _textField.frame = aRect;
-    
-    
-    UITableView * tableView =(UITableView *)_swipeView.currentItemView;
-    [tableView setContentOffset:self->_oldOffset animated:YES];
-   // [CATransaction setCompletionBlock:^{
-       tableView.scrollIndicatorInsets = self->_oldIndicatorInset;
-        tableView.contentInset = self->_oldContentInset;
-//    }];
-    
-//    CGRect aRect = self.view.frame;
-//    aRect.size.height += kbSize.height;
-//    self.view.frame = aRect;
+}
 
-
+- (void) handleKeyboardHide {
     
-//    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
- //   scrollView.contentInset = contentInsets;
-  //  scrollView.scrollIndicatorInsets = contentInsets;
+    //  NSDictionary* info = [aNotification userInfo];
+    // CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    if (self.keyboardState) {
+        CGSize kbSize = self.keyboardState.keyboardRect.size;
+        //
+        //    CGRect aRect = _swipeView.frame;
+        //    aRect.size.height += kbSize.height;
+        //    _swipeView.frame = aRect;
+        //
+        CGRect aRect = _textField.frame;
+        aRect.origin.y += kbSize.height;
+        _textField.frame = aRect;
+        
+        //reset all table view states
+        
+        
+        // UITableView * tableView =(UITableView *)_swipeView.currentItemView;
+        for (UITableView *tableView in [_chats allValues]) {
+            
+            
+            
+            
+            [tableView setContentOffset:self.keyboardState.offset animated:YES];
+            // [CATransaction setCompletionBlock:^{
+            tableView.scrollIndicatorInsets = self.keyboardState.indicatorInset;
+            tableView.contentInset = self.keyboardState.contentInset;
+        }
+        //    }];
+        
+        //    CGRect aRect = self.view.frame;
+        //    aRect.size.height += kbSize.height;
+        //    self.view.frame = aRect;
+        self.keyboardState = nil;
+    }
+    
+    
+    //    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+    //   scrollView.contentInset = contentInsets;
+    //  scrollView.scrollIndicatorInsets = contentInsets;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -202,6 +230,7 @@
 - (void)swipeViewCurrentItemIndexDidChange:(SwipeView *)swipeView
 {
     //update page control page
+    NSLog(@"swipeview index changed to %d", swipeView.currentPage);
     _pageControl.currentPage = swipeView.currentPage;
 }
 
@@ -234,9 +263,9 @@
             NSLog(@"returning 0 rows");
             return 0;
         }
-//        NSArray * friends = [self.friends objectForKey:@"friends"];
-//        NSUInteger count =  [friends count];
-//        NSLog(@"returning %d rows",count);
+        //        NSArray * friends = [self.friends objectForKey:@"friends"];
+        //        NSUInteger count =  [friends count];
+        //        NSLog(@"returning %d rows",count);
         return [_friends count];
     }
     else {
@@ -263,7 +292,7 @@
         
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
         
-      //  NSArray * friends =[self.friends objectForKey:@"friends"];
+        //  NSArray * friends =[self.friends objectForKey:@"friends"];
         
         // Configure the cell...
         cell.textLabel.text = [(NSDictionary *)[_friends objectAtIndex:indexPath.row] objectForKey:@"name"];
@@ -295,7 +324,7 @@
     NSLog(@"selected, on page: %d", page);
     
     if (page == 0) {
-       // NSArray * friends =[_friends ob:@"friends"];
+        // NSArray * friends =[_friends ob:@"friends"];
         
         // Configure the cell...
         NSString * friendname =[(NSDictionary *)[_friends objectAtIndex:indexPath.row] objectForKey:@"name"];
@@ -323,15 +352,15 @@
         [_chats setObject:chatView forKey:username];
         //listen for rolead notifications
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadMessages:) name:@"reloadMessages" object:username];
-
+        
         
         [chatView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"ChatCell"];
         
         NSInteger index = _chats.count;
         NSLog(@"creating and scrolling to index: %d", index);
         
-      //  [_swipeView reloadData];
-      //  [_swipeView loadItemAtIndex:index];
+        //  [_swipeView reloadData];
+        //  [_swipeView loadItemAtIndex:index];
         [_swipeView updateLayout];
         [_swipeView scrollToPage:index duration:0.500];
         //   chatView.frame = _swipeView.frame;
@@ -339,15 +368,18 @@
     //
     ////              }
     else {
-      //  NSArray * visibleViews = [_swipeView visibleItemViews];
+        //  NSArray * visibleViews = [_swipeView visibleItemViews];
         
-       // NSArray * indexes = [_swipeView indexesForVisibleItems];
-
+        // NSArray * indexes = [_swipeView indexesForVisibleItems];
+        
         NSInteger index = [[_chats allKeys] indexOfObject:username] + 1;
         NSLog(@"scrolling to index: %d", index);
         [_swipeView scrollToPage:index duration:0.500];
         
+        
     }
+    
+    [_textField resignFirstResponder];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -390,7 +422,7 @@
      inviteFriend:username
      successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
          NSLog(@"response: %d",  [operation.response statusCode]);
-      //   NSMutableArray * friends = [self.friends objectForKey:@"friends"];
+         //   NSMutableArray * friends = [self.friends objectForKey:@"friends"];
          NSDictionary * f = [NSDictionary dictionaryWithObjectsAndKeys:username,@"name",[NSNumber numberWithInt:2],@"flags", nil];
          [_friends addObject:f];
          [_friendView reloadData];
