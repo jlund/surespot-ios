@@ -36,7 +36,7 @@
     if (self != nil) {
         self.socketIO = [[SocketIO alloc] initWithDelegate:self];
         self.socketIO.useSecure = NO;
-        [self.socketIO connectToHost:@"127.0.0.1" onPort:8080];
+        [self.socketIO connectToHost:@"192.168.10.68" onPort:8080];
         self.dataSources = [[NSMutableDictionary alloc] init];
         self.tableViews = [[NSMutableDictionary alloc] init];
     }
@@ -115,6 +115,8 @@
 
 - (void) sendMessage: (NSString *) message toFriendname: (NSString *) friendname
 {
+    if (message.length == 0) return;
+    
     NSString * ourLatestVersion = [IdentityController getOurLatestVersion];
     NSString * loggedInUser = [IdentityController getLoggedInUser];
     NSData * iv = [EncryptionController getIv];

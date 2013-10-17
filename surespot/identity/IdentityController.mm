@@ -114,6 +114,12 @@ static SurespotIdentity * loggedInIdentity;
     
 }
 
++ (void) setLoggedInUserIdentity: (SurespotIdentity *) identity {
+    @synchronized (self) {
+        loggedInIdentity = identity;
+        [[CredentialCachingController sharedInstance] loginIdentity:identity];
+    }
+}
 
 + (void) createIdentityWithUsername: (NSString *) username
                         andPassword: (NSString *) password
@@ -126,7 +132,10 @@ static SurespotIdentity * loggedInIdentity;
     
     NSString * identityDir = [FileController getAppSupportDir];
     [self saveIdentity:identity toDir:identityDir withPassword:[password stringByAppendingString:CACHE_IDENTITY_ID]];
+    [self setLoggedInUserIdentity:identity];
 }
+
+
 
 + (NSString *) saveIdentity: (SurespotIdentity *) identity toDir: (NSString *) identityDir withPassword: (NSString *) password {
     NSString * filename = [[identity username] stringByAppendingString:IDENTITY_EXTENSION];
@@ -158,12 +167,7 @@ static SurespotIdentity * loggedInIdentity;
     [self setLoggedInUserIdentity:identity];
 }
 
-+ (void) setLoggedInUserIdentity: (SurespotIdentity *) identity {
-    @synchronized (self) {
-        loggedInIdentity = identity;
-        [[CredentialCachingController sharedInstance] loginIdentity:identity];
-    }
-}
+
 
 + (NSString *) getLoggedInUser {
     return [[self getLoggedInIdentity] username];

@@ -40,8 +40,14 @@
     //_pageControl.numberOfPages = _swipeView.numberOfPages;
     //_pageControl.defersCurrentPageDisplay = YES;
     
-    
+    _textField.enablesReturnKeyAutomatically = NO;
     [self registerForKeyboardNotifications];
+    
+    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"menu" style:UIBarButtonItemStylePlain target:self action:@selector(refreshPropertyList:)];
+    self.navigationItem.rightBarButtonItem = anotherButton;
+    
+    self.navigationItem.title = [@"surespot/" stringByAppendingString:[IdentityController getLoggedInUser]];
+    
 }
 
 - (void)registerForKeyboardNotifications
@@ -63,7 +69,7 @@
     
     NSLog(@"keyboardWasShown");
     
-    if (_swipeView.currentPage > 0 ) {
+    //if (_swipeView.currentPage > 0 ) {
         NSDictionary* info = [aNotification userInfo];
         CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
         
@@ -116,7 +122,7 @@
         //    if (!CGRectContainsPoint(aRect, activeField.frame.origin) ) {
         //        [self.scrollView scrollRectToVisible:activeField.frame animated:YES];
         //    }
-    }
+   // }
 }
 
 // Called when the UIKeyboardWillHideNotification is sent
@@ -424,6 +430,9 @@
 
 - (void) send {
     NSString* message = self.textField.text;
+    
+    if (message.length == 0) return;
+    
     NSArray *keys = [_chats allKeys];
     id friendname = [keys objectAtIndex:[_swipeView currentItemIndex] -1];
     //id anObject = [_chats objectForKey:aKey];
