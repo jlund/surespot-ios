@@ -51,7 +51,20 @@
 
 
 - (void) addMessage:(SurespotMessage *) message {
-    [[self messages] addObject:message];
+    NSUInteger index = [self.messages indexOfObject:message];
+    
+    
+    if (index == NSNotFound) {
+        NSLog(@"adding message iv: %@", message.iv);
+        [self.messages addObject:message];
+    }
+    else {
+        NSLog(@"updating message iv: %@", message.iv);
+        SurespotMessage * existingMessage = [self.messages objectAtIndex:index];
+        if (message.serverid) {
+            existingMessage.serverid = message.serverid;
+        }        
+    }
 }
 
 @end

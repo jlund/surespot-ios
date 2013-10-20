@@ -36,6 +36,7 @@
 }
 
 -(void) parseDictionary:(NSDictionary *) dictionary {
+    _serverid = [dictionary objectForKey:@"id"];
     _to = [dictionary objectForKey:@"to"];
     _from = [dictionary objectForKey:@"from"];
     _fromVersion = [dictionary objectForKey:@"fromVersion"];
@@ -66,4 +67,14 @@
         return _fromVersion;
     }
 }
+
+-(BOOL) isEqual:(id)other {
+    if (other == self)
+        return YES;
+    if (!other || ![other isKindOfClass:[SurespotMessage class]])
+        return NO;
+    
+    return [self.iv isEqual:[other iv]];
+}
+
 @end

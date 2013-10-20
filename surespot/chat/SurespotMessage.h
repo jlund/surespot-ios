@@ -12,7 +12,7 @@
 - (id) initWithJSONString: (NSString *) jsonString;
 - (id) initWithMutableDictionary: (NSMutableDictionary *) dictionary;
 
-
+@property (nonatomic, strong) NSString * serverid;
 @property (nonatomic, strong) NSString * from;
 @property (nonatomic, strong) NSString * to;
 @property (nonatomic, strong) NSString * iv;

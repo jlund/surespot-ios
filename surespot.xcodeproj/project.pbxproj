@@ -409,7 +409,6 @@
 				66EC6114176E49C900937467 /* network */,
 				661C2EC51762C399000649E7 /* encryption */,
 				661C2EC41762B12D000649E7 /* identity */,
-				66E4F517176298CB00596E6B /* libs */,
 				6604A2CD17626B9E0072216A /* SurespotAppDelegate.h */,
 				6604A2CE17626B9E0072216A /* SurespotAppDelegate.m */,
 				6604A2D617626B9E0072216A /* MainStoryboard_iPhone.storyboard */,
@@ -422,6 +421,7 @@
 				660EB27917FE3D7800DBC53C /* KeyboardState.m */,
 				6606E4EB179D9C3A004199BC /* SignupViewController.h */,
 				6606E4EC179D9C3A004199BC /* SignupViewController.mm */,
+				66E4F517176298CB00596E6B /* libs */,
 				6604A2C517626B9E0072216A /* Supporting Files */,
 			);
 			path = surespot;
