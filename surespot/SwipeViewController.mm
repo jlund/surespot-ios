@@ -47,7 +47,7 @@
     UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"menu" style:UIBarButtonItemStylePlain target:self action:@selector(refreshPropertyList:)];
     self.navigationItem.rightBarButtonItem = anotherButton;
     
-    self.navigationItem.title = [@"surespot/" stringByAppendingString:[IdentityController getLoggedInUser]];
+    self.navigationItem.title = [@"surespot/" stringByAppendingString:[[IdentityController sharedInstance] getLoggedInUser]];
     
     //    UIView * tlg = (id) self.topLayoutGuide;
     //  UIScrollView * scrollView = _swipeView.scrollView;
@@ -62,6 +62,8 @@
     //  [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[scrollView]|" options:0 metrics: 0 views:viewsDictionary]];
     // [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[tlg][scrollView]" options:0 metrics: 0 views:viewsDictionary]];
     
+    //make sure chat controller loaded
+    [ChatController sharedInstance];
     
 }
 
@@ -518,7 +520,7 @@
 }
 
 - (void) inviteUser: (NSString *) username {
-    NSString * loggedInUser = [IdentityController getLoggedInUser];
+    NSString * loggedInUser = [[IdentityController sharedInstance] getLoggedInUser];
     if ([username isEqualToString:loggedInUser]) {
         //todo tell user they can't invite themselves
         return;
@@ -527,7 +529,7 @@
     [[NetworkController sharedInstance]
      inviteFriend:username
      successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
-         NSLog(@"response: %d",  [operation.response statusCode]);
+         NSLog(@"invite friend response: %d",  [operation.response statusCode]);
          //   NSMutableArray * friends = [self.friends objectForKey:@"friends"];
          NSDictionary * f = [NSDictionary dictionaryWithObjectsAndKeys:username,@"name",[NSNumber numberWithInt:2],@"flags", nil];
          [_friends addObject:f];

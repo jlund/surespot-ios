@@ -114,11 +114,11 @@
 {
     if (message.length == 0) return;
     
-    NSString * ourLatestVersion = [IdentityController getOurLatestVersion];
-    NSString * loggedInUser = [IdentityController getLoggedInUser];
+    NSString * ourLatestVersion = [[IdentityController sharedInstance] getOurLatestVersion];
+    NSString * loggedInUser = [[IdentityController sharedInstance] getLoggedInUser];
     NSData * iv = [EncryptionController getIv];
     
-    [IdentityController getTheirLatestVersionForUsername:friendname callback:^(NSString * version) {
+    [[IdentityController sharedInstance] getTheirLatestVersionForUsername:friendname callback:^(NSString * version) {
         [EncryptionController symmetricEncryptString: message ourVersion:ourLatestVersion theirUsername:friendname theirVersion:version iv:iv callback:^(NSString * cipherText) {
             
             NSString * b64iv = [iv base64EncodedStringWithSeparateLines:NO];

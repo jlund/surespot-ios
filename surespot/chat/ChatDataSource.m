@@ -18,6 +18,7 @@
     if (self != nil) {
         [self setMessages:[[NSMutableArray alloc] init]];
         _username = username;
+        NSLog(@"getting messageData");
         //load message data
         [[NetworkController sharedInstance] getMessageDataForUsername:username andMessageId:0 andControlId:0 successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
             NSLog(@"get messageData response: %d",  [response statusCode]);

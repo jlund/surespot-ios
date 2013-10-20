@@ -17,15 +17,28 @@
 #include <zlib.h>
 #import "CredentialCachingController.h"
 
+@interface IdentityController()
+@property  (nonatomic, strong) SurespotIdentity * loggedInIdentity;
+@end
+
 @implementation IdentityController
++(IdentityController*)sharedInstance
+{
+    static IdentityController *sharedInstance = nil;
+    static dispatch_once_t oncePredicate;
+    dispatch_once(&oncePredicate, ^{
+        sharedInstance = [[self alloc] init];
+         });
+    
+    return sharedInstance;
+}
 
 NSString *const CACHE_IDENTITY_ID = @"_cache_identity";
 NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
 NSString *const IDENTITY_EXTENSION = @".ssi";
 
-static SurespotIdentity * loggedInIdentity;
 
-+ (SurespotIdentity *) getIdentityWithUsername:(NSString *) username andPassword:(NSString *) password {
+- (SurespotIdentity *) getIdentityWithUsername:(NSString *) username andPassword:(NSString *) password {
     NSString *filePath = [[[FileController getAppSupportDir] stringByAppendingPathComponent: username ] stringByAppendingString:IDENTITY_EXTENSION];
     NSData *myData = [NSData dataWithContentsOfFile:filePath];
     
@@ -40,7 +53,7 @@ static SurespotIdentity * loggedInIdentity;
     return nil;
 }
 
-+(NSData *) encryptIdentity: (SurespotIdentity *) identity withPassword:(NSString *)password {
+-(NSData *) encryptIdentity: (SurespotIdentity *) identity withPassword:(NSString *)password {
     NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithObjectsAndKeys: [identity username] ,@"username", [identity salt], @"salt" ,nil];
     
     
@@ -70,7 +83,7 @@ static SurespotIdentity * loggedInIdentity;
     
 }
 
-+( SurespotIdentity *) decodeIdentityData: (NSData *) identityData withUsername: (NSString *) username andPassword: (NSString *) password {
+-( SurespotIdentity *) decodeIdentityData: (NSData *) identityData withUsername: (NSString *) username andPassword: (NSString *) password {
     try {
         NSError* error;
         
@@ -114,14 +127,14 @@ static SurespotIdentity * loggedInIdentity;
     
 }
 
-+ (void) setLoggedInUserIdentity: (SurespotIdentity *) identity {
+-(void) setLoggedInUserIdentity: (SurespotIdentity *) identity {
     @synchronized (self) {
-        loggedInIdentity = identity;
+        self.loggedInIdentity = identity;
         [[CredentialCachingController sharedInstance] loginIdentity:identity];
     }
 }
 
-+ (void) createIdentityWithUsername: (NSString *) username
+- (void) createIdentityWithUsername: (NSString *) username
                         andPassword: (NSString *) password
                             andSalt: (NSString *) salt
                             andKeys: (IdentityKeys *) keys {
@@ -137,7 +150,7 @@ static SurespotIdentity * loggedInIdentity;
 
 
 
-+ (NSString *) saveIdentity: (SurespotIdentity *) identity toDir: (NSString *) identityDir withPassword: (NSString *) password {
+- (NSString *) saveIdentity: (SurespotIdentity *) identity toDir: (NSString *) identityDir withPassword: (NSString *) password {
     NSString * filename = [[identity username] stringByAppendingString:IDENTITY_EXTENSION];
     NSString * filePath = [identityDir stringByAppendingPathComponent:filename];
     
@@ -148,7 +161,7 @@ static SurespotIdentity * loggedInIdentity;
     return filePath;
 }
 
-+ (NSArray *) getIdentityNames {
+- (NSArray *) getIdentityNames {
     NSString * identityDir = [FileController getAppSupportDir];
     NSArray * dirfiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:identityDir error:NULL];
     NSMutableArray * identityNames = [[NSMutableArray alloc] init];
@@ -163,31 +176,33 @@ static SurespotIdentity * loggedInIdentity;
     return identityNames;
 }
 
-+ (void) userLoggedInWithIdentity: (SurespotIdentity *) identity {
+- (void) userLoggedInWithIdentity: (SurespotIdentity *) identity {
     [self setLoggedInUserIdentity:identity];
 }
 
 
 
-+ (NSString *) getLoggedInUser {
+- (NSString *) getLoggedInUser {
     return [[self getLoggedInIdentity] username];
 }
 
 
-+ (SurespotIdentity *) getLoggedInIdentity {
-    @synchronized (self) { return loggedInIdentity; }
+- (SurespotIdentity *) getLoggedInIdentity {
+    @synchronized (self) { return self.loggedInIdentity; }
 }
 
-+ (NSString *) getOurLatestVersion {
+- (NSString *) getOurLatestVersion {
     return [[self getLoggedInIdentity] latestVersion];
 }
 
-+ (void) getTheirLatestVersionForUsername: (NSString *) username callback:(CallbackStringBlock) callback {
+- (void) getTheirLatestVersionForUsername: (NSString *) username callback:(CallbackStringBlock) callback {
+    NSLog(@"getTheirLatestVersionForUsername");
+    
     [[NetworkController sharedInstance]
      getKeyVersionForUsername: username
      successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
          NSString * responseObjectS =   [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-         NSLog(@"response: %d, object: %@",  [operation.response statusCode], responseObjectS);
+         NSLog(@"getTheirLatestVersionForUsername response: %d, object: %@",  [operation.response statusCode], responseObjectS);
          callback(responseObjectS);
          
      }
@@ -203,11 +218,11 @@ static SurespotIdentity * loggedInIdentity;
     
 }
 
-+(void) getSharedSecretForOurVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion:( NSString *) theirVersion callback:(CallbackBlock) callback {
-    [[CredentialCachingController sharedInstance] getSharedSecretForOurVersion:ourVersion theirUsername:theirUsername theirVersion:theirVersion callback:callback];    
+-(void) getSharedSecretForOurVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion:( NSString *) theirVersion callback:(CallbackBlock) callback {
+    [[CredentialCachingController sharedInstance] getSharedSecretForOurVersion:ourVersion theirUsername:theirUsername theirVersion:theirVersion callback:callback];
 }
 
-+(void) getPublicKeysForUsername: (NSString *) username andVersion: (NSString *) version callback: (CallbackBlock) callback {
+-(void) getPublicKeysForUsername: (NSString *) username andVersion: (NSString *) version callback: (CallbackBlock) callback {
     
     
     
@@ -215,7 +230,7 @@ static SurespotIdentity * loggedInIdentity;
     [[NetworkController sharedInstance] getPublicKeysForUsername: username
                                                       andVersion:version
                                                     successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                                                        NSLog(@"response: %d",  [response statusCode]);
+                                                        NSLog(@"get public keys response: %d",  [response statusCode]);
                                                         //recreate public keys
                                                         //todo verify
                                                         NSDictionary * jsonKeys = JSON;
@@ -231,6 +246,7 @@ static SurespotIdentity * loggedInIdentity;
                                                         pk.dhPubKey = dhPub;
                                                         pk.dsaPubKey = dsaPub;
                                                         
+                                                        NSLog(@"get public keys calling callback");
                                                         callback(pk);
                                                         
                                                     } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {

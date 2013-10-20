@@ -16,20 +16,20 @@ typedef void (^CallbackDictionaryBlock) (NSDictionary * result);
 
 
 @interface IdentityController : NSObject
++(IdentityController*)sharedInstance;
 
 
+- ( SurespotIdentity *) getIdentityWithUsername:(NSString *) username andPassword:(NSString *) password;
+-( SurespotIdentity *) decodeIdentityData: (NSData *) identityData withUsername: (NSString *) username andPassword: (NSString *) password;
 
-+ (SurespotIdentity *) getIdentityWithUsername:(NSString *) username andPassword:(NSString *) password;
-+( SurespotIdentity *) decodeIdentityData: (NSData *) identityData withUsername: (NSString *) username andPassword: (NSString *) password;
-
-+ (void) createIdentityWithUsername: (NSString *) username andPassword: (NSString *) password andSalt: (NSString *) salt andKeys: (IdentityKeys *) keys;
-+ (NSArray *) getIdentityNames;
-+ (void) userLoggedInWithIdentity: (SurespotIdentity *) identity;
-+ (NSString *) getLoggedInUser;
-+ (SurespotIdentity *) loggedInIdentity;
-+ (NSString *) getOurLatestVersion;
-+ (void) getTheirLatestVersionForUsername: (NSString *) username callback:(CallbackStringBlock) callback;
-+(void) getPublicKeysForUsername: (NSString *) username andVersion: (NSString *) version callback: (CallbackBlock) callback ;
+- (void) createIdentityWithUsername: (NSString *) username andPassword: (NSString *) password andSalt: (NSString *) salt andKeys: (IdentityKeys *) keys;
+-(NSArray *) getIdentityNames;
+- (void) userLoggedInWithIdentity: (SurespotIdentity *) identity;
+- (NSString *) getLoggedInUser;
+- (SurespotIdentity *) loggedInIdentity;
+- (NSString *) getOurLatestVersion;
+- (void) getTheirLatestVersionForUsername: (NSString *) username callback:(CallbackStringBlock) callback;
+-(void) getPublicKeysForUsername: (NSString *) username andVersion: (NSString *) version callback: (CallbackBlock) callback ;
 
 
 

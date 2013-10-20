@@ -11,6 +11,6 @@
 
 @implementation ChatUtils
 + (NSString *)  getOtherUserWithFrom: (NSString *) from andTo: (NSString *) to {
-    return [to isEqualToString:[IdentityController getLoggedInUser] ] ? from : to;
+    return [to isEqualToString:[[IdentityController sharedInstance] getLoggedInUser] ] ? from : to;
 }
 @end

@@ -49,7 +49,7 @@
     
 
         //need to download the public key
-        [IdentityController getPublicKeysForUsername:self.username andVersion:self.version callback: ^(PublicKeys * publicKeys) {
+        [[IdentityController sharedInstance] getPublicKeysForUsername:self.username andVersion:self.version callback: ^(PublicKeys * publicKeys) {
             [self finish:publicKeys];
         }];
     

@@ -23,7 +23,7 @@ NSArray * identityNames;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    identityNames = [IdentityController getIdentityNames];
+    identityNames = [[IdentityController sharedInstance] getIdentityNames];
 }
 
 - (void)didReceiveMemoryWarning
@@ -36,7 +36,7 @@ NSArray * identityNames;
     NSString * username = [identityNames objectAtIndex:[_userPicker selectedRowInComponent:0]];
     NSString * password = self.textPassword.text;
     
-    SurespotIdentity * identity = [IdentityController getIdentityWithUsername:username andPassword:password];
+    SurespotIdentity * identity = [[IdentityController sharedInstance] getIdentityWithUsername:username andPassword:password];
     
     
     
@@ -61,9 +61,9 @@ NSArray * identityNames;
      andPassword:passwordString
      andSignature: signatureString
      successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-         NSLog(@"response: %d",  [response statusCode]);
+         NSLog(@"login response: %d",  [response statusCode]);
          
-         [IdentityController userLoggedInWithIdentity:identity];         
+         [[IdentityController sharedInstance] userLoggedInWithIdentity:identity];
          [self performSegueWithIdentifier: @"loginToMainSegue" sender: nil ];
      }
      failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {

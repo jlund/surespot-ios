@@ -69,14 +69,14 @@
      signature: signature
      version: @"ios is my bitch"
      successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
-         NSLog(@"response: %d",  [operation.response statusCode]);
-         [IdentityController createIdentityWithUsername:username andPassword:password andSalt:salt andKeys:keys];
+         NSLog(@"signup response: %d",  [operation.response statusCode]);
+         [[IdentityController sharedInstance] createIdentityWithUsername:username andPassword:password andSalt:salt andKeys:keys];
          [self performSegueWithIdentifier: @"signupToMain" sender: nil];
          
      }
      failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
          
-         NSLog(@"response failure: %@",  Error);
+         NSLog(@"signup response failure: %@",  Error);
          
      }
      ];
