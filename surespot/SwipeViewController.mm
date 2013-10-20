@@ -16,6 +16,7 @@
 //#import <QuartzCore/CATransaction.h>
 
 @interface SwipeViewController ()
+@property (nonatomic, strong) NSString * currentChat;
 @end
 
 
@@ -157,7 +158,7 @@
         
         //NSLog(@"new content insets top %f", contentInsets.top);
         
-        keyboardState.offset = tableView.contentOffset;
+        //   keyboardState.offset = tableView.contentOffset;
         
     }
     
@@ -221,6 +222,7 @@
         // [CATransaction setCompletionBlock:^{
         _friendView.scrollIndicatorInsets = self.keyboardState.indicatorInset;
         _friendView.contentInset = self.keyboardState.contentInset;
+        // _friendView.contentOffset = self.keyboardState.offset;
         
         
         
@@ -230,10 +232,11 @@
             
             
             
-            [tableView setContentOffset:self.keyboardState.offset animated:YES];
+            //  [tableView setContentOffset:self.keyboardState.offset animated:YES];
             // [CATransaction setCompletionBlock:^{
             tableView.scrollIndicatorInsets = self.keyboardState.indicatorInset;
             tableView.contentInset = self.keyboardState.contentInset;
+            
         }
         // }];
         
@@ -311,6 +314,7 @@
     //update page control page
     NSLog(@"swipeview index changed to %d", swipeView.currentPage);
     _pageControl.currentPage = swipeView.currentPage;
+    [_swipeView reloadData];
 }
 
 - (void)swipeView:(SwipeView *)swipeView didSelectItemAtIndex:(NSInteger)index
@@ -334,7 +338,14 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSInteger index = [_swipeView indexOfItemViewOrSubview:tableView];
+    NSUInteger index = [[_chats allValues] indexOfObject:tableView];
+    
+    if (index == NSNotFound) {
+        index = [_swipeView indexOfItemViewOrSubview:tableView];
+    }
+    else {
+        index++;
+    }
     NSLog(@"number of rows in section, index: %d", index);
     // Return the number of rows in the section
     if (index == 0) {
@@ -348,23 +359,28 @@
         return [_friends count];
     }
     else {
+        NSInteger chatIndex = index-1;
         
         NSArray *keys = [_chats allKeys];
-        id aKey = [keys objectAtIndex:index -1];
-        //id anObject = [_chats objectForKey:aKey];
-        
-        NSString * username = aKey;
-        return  [[ChatController sharedInstance] getDataSourceForFriendname: username].messages.count;
+        if(chatIndex >= 0 && chatIndex < keys.count ) {
+            id aKey = [keys objectAtIndex:chatIndex];
+            //id anObject = [_chats objectForKey:aKey];
+            
+            NSString * username = aKey;
+            return  [[ChatController sharedInstance] getDataSourceForFriendname: username].messages.count;
+        }
     }
+    
+    return 0;
     
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"cell for row");
+
     
     NSInteger index = [_swipeView indexOfItemViewOrSubview:tableView];
-    
+    NSLog(@"cell for row, index: %d", index);
     if (index == 0) {
         static NSString *CellIdentifier = @"Cell";
         
@@ -399,13 +415,18 @@
             if (!plainData){
                 NSLog(@"decrypting data for iv: %@", [message iv]);
                 
+                //     __block NSIndexPath * currIndexPath = indexPath;
+                //      __block UITableView * currTableView = tableView;
                 [[MessageProcessor sharedInstance] decryptMessage:message completionCallback:^(SurespotMessage  * message){
                     
                     NSLog(@"data decrypted, reloading row for iv %@", [message iv]);
                     
                     // cell.textLabel.text = [message plaindata];
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                        //    [tableView beginUpdates];
+                        //     [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                        //  [tableView endUpdates];
+                        [tableView reloadData];
                     });
                 }];
                 
@@ -447,9 +468,11 @@
 }
 
 -(void) showChat:(NSString *) username {
+    NSLog(@"showChat, %@", username);
     //get existing view if there is one
     UITableView * chatView = [_chats objectForKey:username];
     if (!chatView) {
+        
         chatView = [[UITableView alloc] initWithFrame:_swipeView.frame];
         [chatView setDelegate:self];
         [chatView setDataSource: self];
@@ -465,7 +488,7 @@
         
         //  [_swipeView reloadData];
         //  [_swipeView loadItemAtIndex:index];
-        [_swipeView updateLayout];
+   //     [_swipeView updateLayout];
         [_swipeView scrollToPage:index duration:0.500];
         //   chatView.frame = _swipeView.frame;
         
@@ -480,10 +503,11 @@
         NSInteger index = [[_chats allKeys] indexOfObject:username] + 1;
         NSLog(@"scrolling to index: %d", index);
         [_swipeView scrollToPage:index duration:0.500];
-        
+
         
     }
-    
+    _currentChat = username;
+            [_swipeView reloadData];
     [_textField resignFirstResponder];
 }
 
@@ -516,10 +540,19 @@
 
 - (void)reloadMessages:(NSNotification *)notification
 {
-    id tableView = [_chats objectForKey:notification.object];
-    [tableView reloadData];
-    NSIndexPath *scrollIndexPath = [NSIndexPath indexPathForRow:([tableView numberOfRowsInSection:([tableView numberOfSections] - 1)] - 1) inSection:([tableView numberOfSections] - 1)];
-    [tableView scrollToRowAtIndexPath:scrollIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    NSLog(@"reloadMessages");
+    NSString * username = notification.object;
+    
+ //   if ([username isEqualToString:self.currentChat]) {
+        id tableView = [_chats objectForKey:username];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [tableView reloadData];
+            NSIndexPath *scrollIndexPath = [NSIndexPath indexPathForRow:([tableView numberOfRowsInSection:([tableView numberOfSections] - 1)] - 1) inSection:([tableView numberOfSections] - 1)];
+            [tableView scrollToRowAtIndexPath:scrollIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        });
+  //  }
+    
 }
 
 - (void) inviteUser: (NSString *) username {

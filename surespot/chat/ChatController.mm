@@ -80,7 +80,11 @@
             
             if ([key isEqual: otherUser]) {
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadMessages" object:key ];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                                [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadMessages" object:key ];
+                });
+                
+
                 break;
                 
             }

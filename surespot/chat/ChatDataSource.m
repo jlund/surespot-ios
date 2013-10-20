@@ -34,8 +34,10 @@
             
             
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadMessages" object:username ];
-            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadMessages" object:username ];
+            });
+   
             
             
         } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {

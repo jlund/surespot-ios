@@ -527,8 +527,8 @@
 		66B3C8EA17B15F0C00CC96EE /* chat */ = {
 			isa = PBXGroup;
 			children = (
-				66B3C8EC17B15F2300CC96EE /* ChatController.mm */,
 				66B3C8EB17B15F2300CC96EE /* ChatController.h */,
+				66B3C8EC17B15F2300CC96EE /* ChatController.mm */,
 				66B3C8EE17B17AC800CC96EE /* ChatDataSource.h */,
 				66B3C8EF17B17AC800CC96EE /* ChatDataSource.m */,
 				660EB27B17FE64D800DBC53C /* ChatUtils.h */,
