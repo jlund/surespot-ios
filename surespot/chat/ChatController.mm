@@ -12,6 +12,7 @@
 #import "SocketIOPacket.h"
 #import "NSData+Base64.h"
 #import "SurespotMessage.h"
+#import "MessageProcessor.h"
 
 
 @implementation ChatController
@@ -64,14 +65,10 @@
     
     SurespotMessage * message = [[SurespotMessage alloc] initWithJSONString:[jsonData objectForKey:@"args"][0]];
     
-    NSMutableDictionary * jsonMessage = message.messageData;
     
     NSString * otherUser = [message getOtherUser];
     
-    //decrypt
-    [EncryptionController symmetricDecryptString:[jsonMessage objectForKey:@"data"] ourVersion:[message getOurVersion] theirUsername:otherUser theirVersion:[message getTheirVersion]  iv:[jsonMessage objectForKey:@"iv"] callback:^(NSString * plaintext){
-        
-        [jsonMessage setObject:plaintext forKey:@"plaindata"];
+    [[MessageProcessor sharedInstance] decryptMessage:message completionCallback:^(SurespotMessage * message){
         
         //get the datasource for this message and add the message
         ChatDataSource * dataSource = [self getDataSourceForFriendname: otherUser];

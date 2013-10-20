@@ -38,6 +38,11 @@
 		661C2ED31763CB57000649E7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 661C2ED21763CB56000649E7 /* libz.dylib */; };
 		661C2ED61763D4B9000649E7 /* NSData+Gunzip.m in Sources */ = {isa = PBXBuildFile; fileRef = 661C2ED51763D4B9000649E7 /* NSData+Gunzip.m */; };
 		6621BB841762704D00BC2850 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6621BB861762704D00BC2850 /* Localizable.strings */; };
+		6637107C1812EA1D009D5195 /* GenerateSharedSecretOperation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6637107B1812EA1D009D5195 /* GenerateSharedSecretOperation.mm */; };
+		663710801813172F009D5195 /* EGOCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 6637107F1813172F009D5195 /* EGOCache.m */; };
+		66371086181331E8009D5195 /* MessageProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66371085181331E8009D5195 /* MessageProcessor.mm */; };
+		6637108918134295009D5195 /* MessageDecryptionOperation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6637108818134295009D5195 /* MessageDecryptionOperation.mm */; };
+		6637108C18140FB2009D5195 /* GetPublicKeysOperation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6637108B18140FB2009D5195 /* GetPublicKeysOperation.mm */; };
 		6654441317F37A3F00F62F7F /* SwipeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6654441217F37A3F00F62F7F /* SwipeView.m */; };
 		6654441617F37BCF00F62F7F /* SwipeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6654441517F37BCF00F62F7F /* SwipeViewController.mm */; };
 		668E0EEC177B2E3500115B19 /* testlocal10.ssi in Resources */ = {isa = PBXBuildFile; fileRef = 668E0EEB177B2E3500115B19 /* testlocal10.ssi */; };
@@ -128,6 +133,16 @@
 		6621BB7D17626EE800BC2850 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
 		6621BB7E17626EE800BC2850 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		6621BB851762704D00BC2850 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6637107A1812EA1D009D5195 /* GenerateSharedSecretOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GenerateSharedSecretOperation.h; path = identity/GenerateSharedSecretOperation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		6637107B1812EA1D009D5195 /* GenerateSharedSecretOperation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = GenerateSharedSecretOperation.mm; path = identity/GenerateSharedSecretOperation.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		6637107E1813172F009D5195 /* EGOCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOCache.h; sourceTree = "<group>"; };
+		6637107F1813172F009D5195 /* EGOCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOCache.m; sourceTree = "<group>"; };
+		66371084181331E8009D5195 /* MessageProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageProcessor.h; path = chat/MessageProcessor.h; sourceTree = "<group>"; };
+		66371085181331E8009D5195 /* MessageProcessor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MessageProcessor.mm; path = chat/MessageProcessor.mm; sourceTree = "<group>"; };
+		6637108718134295009D5195 /* MessageDecryptionOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageDecryptionOperation.h; path = chat/MessageDecryptionOperation.h; sourceTree = "<group>"; };
+		6637108818134295009D5195 /* MessageDecryptionOperation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MessageDecryptionOperation.mm; path = chat/MessageDecryptionOperation.mm; sourceTree = "<group>"; };
+		6637108A18140FB2009D5195 /* GetPublicKeysOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GetPublicKeysOperation.h; path = identity/GetPublicKeysOperation.h; sourceTree = "<group>"; };
+		6637108B18140FB2009D5195 /* GetPublicKeysOperation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = GetPublicKeysOperation.mm; path = identity/GetPublicKeysOperation.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6654441117F37A3F00F62F7F /* SwipeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeView.h; sourceTree = "<group>"; };
 		6654441217F37A3F00F62F7F /* SwipeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwipeView.m; sourceTree = "<group>"; };
 		6654441417F37BCE00F62F7F /* SwipeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeViewController.h; sourceTree = "<group>"; };
@@ -294,7 +309,7 @@
 		66E4F5C117629B5C00596E6B /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		66E4F5C317629B6400596E6B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		66E6536817B043D2000F81BD /* CredentialCachingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CredentialCachingController.h; path = identity/CredentialCachingController.h; sourceTree = "<group>"; };
-		66E6536917B043D2000F81BD /* CredentialCachingController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CredentialCachingController.mm; path = identity/CredentialCachingController.mm; sourceTree = "<group>"; };
+		66E6536917B043D2000F81BD /* CredentialCachingController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = CredentialCachingController.mm; path = identity/CredentialCachingController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		66E6536E17B0583F000F81BD /* PublicKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PublicKeys.h; path = identity/PublicKeys.h; sourceTree = "<group>"; };
 		66E6536F17B0583F000F81BD /* PublicKeys.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PublicKeys.mm; path = identity/PublicKeys.mm; sourceTree = "<group>"; };
 		66EC60F8176E494900937467 /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
@@ -467,6 +482,10 @@
 				66E6536917B043D2000F81BD /* CredentialCachingController.mm */,
 				66E6536E17B0583F000F81BD /* PublicKeys.h */,
 				66E6536F17B0583F000F81BD /* PublicKeys.mm */,
+				6637107A1812EA1D009D5195 /* GenerateSharedSecretOperation.h */,
+				6637107B1812EA1D009D5195 /* GenerateSharedSecretOperation.mm */,
+				6637108A18140FB2009D5195 /* GetPublicKeysOperation.h */,
+				6637108B18140FB2009D5195 /* GetPublicKeysOperation.mm */,
 			);
 			name = identity;
 			sourceTree = "<group>";
@@ -480,6 +499,15 @@
 				661C2EC71762C3C0000649E7 /* IdentityKeys.mm */,
 			);
 			name = encryption;
+			sourceTree = "<group>";
+		};
+		6637107D1813172F009D5195 /* EGOCache */ = {
+			isa = PBXGroup;
+			children = (
+				6637107E1813172F009D5195 /* EGOCache.h */,
+				6637107F1813172F009D5195 /* EGOCache.m */,
+			);
+			path = EGOCache;
 			sourceTree = "<group>";
 		};
 		6654441017F37A3F00F62F7F /* SwipeView */ = {
@@ -502,6 +530,10 @@
 				660EB27C17FE64D800DBC53C /* ChatUtils.mm */,
 				660EB27E17FE666D00DBC53C /* SurespotMessage.h */,
 				660EB27F17FE666D00DBC53C /* SurespotMessage.m */,
+				66371084181331E8009D5195 /* MessageProcessor.h */,
+				66371085181331E8009D5195 /* MessageProcessor.mm */,
+				6637108718134295009D5195 /* MessageDecryptionOperation.h */,
+				6637108818134295009D5195 /* MessageDecryptionOperation.mm */,
 			);
 			name = chat;
 			sourceTree = "<group>";
@@ -509,6 +541,7 @@
 		66E4F517176298CB00596E6B /* libs */ = {
 			isa = PBXGroup;
 			children = (
+				6637107D1813172F009D5195 /* EGOCache */,
 				6654441017F37A3F00F62F7F /* SwipeView */,
 				66EC60F7176E494900937467 /* AFNetworking */,
 				66E4F518176298CB00596E6B /* cryptopp */,
@@ -866,10 +899,12 @@
 				6604A2CF17626B9E0072216A /* SurespotAppDelegate.m in Sources */,
 				6604A2DE17626B9E0072216A /* LoginViewController.mm in Sources */,
 				66E4F5B7176298CB00596E6B /* SocketIO.m in Sources */,
+				663710801813172F009D5195 /* EGOCache.m in Sources */,
 				66E4F5B8176298CB00596E6B /* SocketIOJSONSerialization.m in Sources */,
 				66E4F5B9176298CB00596E6B /* SocketIOPacket.m in Sources */,
 				66E4F5BA176298CB00596E6B /* SocketIOTransportWebsocket.m in Sources */,
 				66E4F5BB176298CB00596E6B /* SocketIOTransportXHR.m in Sources */,
+				6637107C1812EA1D009D5195 /* GenerateSharedSecretOperation.mm in Sources */,
 				66E4F5BC176298CB00596E6B /* base64.c in Sources */,
 				660EB27D17FE64D800DBC53C /* ChatUtils.mm in Sources */,
 				66E4F5BD176298CB00596E6B /* NSData+SRB64Additions.m in Sources */,
@@ -894,9 +929,12 @@
 				66159703176F6732001B32C1 /* NSData+Base64.m in Sources */,
 				6606E4ED179D9C3A004199BC /* SignupViewController.mm in Sources */,
 				6606E4F0179DB134004199BC /* FileController.mm in Sources */,
+				6637108918134295009D5195 /* MessageDecryptionOperation.mm in Sources */,
+				66371086181331E8009D5195 /* MessageProcessor.mm in Sources */,
 				660EB28017FE666D00DBC53C /* SurespotMessage.m in Sources */,
 				66E6536A17B043D2000F81BD /* CredentialCachingController.mm in Sources */,
 				66E6537017B0583F000F81BD /* PublicKeys.mm in Sources */,
+				6637108C18140FB2009D5195 /* GetPublicKeysOperation.mm in Sources */,
 				6654441317F37A3F00F62F7F /* SwipeView.m in Sources */,
 				66B3C8ED17B15F2300CC96EE /* ChatController.mm in Sources */,
 				66B3C8F017B17AC800CC96EE /* ChatDataSource.m in Sources */,

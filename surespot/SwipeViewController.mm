@@ -11,6 +11,7 @@
 #import "ChatController.h"
 #import "IdentityController.h"
 #import "EncryptionController.h"
+#import "MessageProcessor.h"
 #import <UIKit/UIKit.h>
 //#import <QuartzCore/CATransaction.h>
 
@@ -34,7 +35,7 @@
     _swipeView.wrapEnabled = NO;
     _swipeView.truncateFinalPage =YES ;
     // _swipeView.defersItemViewLoading = YES;
-    self.edgesForExtendedLayout = UIRectEdgeNone;
+    //  self.edgesForExtendedLayout = UIRectEdgeNone;
     
     //configure page control
     //_pageControl.numberOfPages = _swipeView.numberOfPages;
@@ -47,6 +48,20 @@
     self.navigationItem.rightBarButtonItem = anotherButton;
     
     self.navigationItem.title = [@"surespot/" stringByAppendingString:[IdentityController getLoggedInUser]];
+    
+//    UIView * tlg = (id) self.topLayoutGuide;
+  //  UIScrollView * scrollView = _swipeView.scrollView;
+//    NSDictionary * viewsDictionary = NSDictionaryOfVariableBindings(scrollView, tlg);
+    
+    
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    }
+    
+    // Set the constraints for the scroll view and the image view.
+    //  [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[scrollView]|" options:0 metrics: 0 views:viewsDictionary]];
+    // [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[tlg][scrollView]" options:0 metrics: 0 views:viewsDictionary]];
+    
     
 }
 
@@ -67,62 +82,108 @@
 - (void)keyboardWasShown:(NSNotification*)aNotification
 {
     
+    
+    
     NSLog(@"keyboardWasShown");
     
+    
+    UITableView * tableView =(UITableView *)_friendView;
+    
+    KeyboardState * keyboardState = [[KeyboardState alloc] init];
+    keyboardState.contentInset = tableView.contentInset;
+    keyboardState.indicatorInset = tableView.scrollIndicatorInsets;
+    
+    
+    UIEdgeInsets contentInsets =  tableView.contentInset;
+    NSLog(@"pre move content insets top %f, view height: %f", contentInsets.top, tableView.frame.size.height);
+    
+    
+    
     //if (_swipeView.currentPage > 0 ) {
-        NSDictionary* info = [aNotification userInfo];
-        CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    NSDictionary* info = [aNotification userInfo];
+    CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    
+    self.textBottomConstraint.constant  += keyboardRect.size.height;
+    
+
+    
+    
+    NSLog(@"keyboard height before: %f", keyboardRect.size.height);
+    
+    keyboardState.keyboardRect = keyboardRect;// [tableView convertRect:keyboardRect fromView:nil];
+//        NSLog(@"keyboard height after: %f", keyboardState.keyboardRect.size.height);
+    //   CGSize kbSize = keyboardState.keyboardRect.size;
+  //  contentInsets =  tableView.contentInset;
+    NSLog(@"after move content insets top %f, view height: %f", contentInsets.top, tableView.frame.size.height);
+    
+    
+    
+    
+  //  keyboardState.contentInset = contentInsets;
+    contentInsets.top +=   keyboardState.keyboardRect.size.height;
+    contentInsets.bottom = keyboardState.keyboardRect.size.height;
+    tableView.contentInset = contentInsets;
+    
+    
+    //
+        UIEdgeInsets scrollInsets =tableView.scrollIndicatorInsets;
+  //  keyboardState.indicatorInset =scrollInsets;
+    //
+    scrollInsets.top += keyboardState.keyboardRect.size.height;
+    scrollInsets.bottom = keyboardState.keyboardRect.size.height;
+    tableView.scrollIndicatorInsets = scrollInsets;
+    //
+    
+    NSLog(@"new content insets top %f", contentInsets.top);
+    
+    keyboardState.offset = tableView.contentOffset;
+    
+    for (UITableView *tableView in [_chats allValues]) {
+        //    contentInsets = tableView.contentInset;
         
-        UITableView * tableView =(UITableView *)_swipeView.currentItemView;
+        //      keyboardState.contentInset = contentInsets;
+        //contentInsets.top += keyboardState.keyboardRect.size.height;
+      //  contentInsets.bottom = keyboardState.keyboardRect.size.height;
+        tableView.contentInset = contentInsets;
+        //    keyboardState.indicatorInset = tableView.scrollIndicatorInsets;
         
+      //  contentInsets = keyboardState.indicatorInset;
+       // contentInsets.top += keyboardState.keyboardRect.size.height;
+       // contentInsets.bottom = keyboardState.keyboardRect.size.height;
+        tableView.scrollIndicatorInsets = scrollInsets;
+        //
         
+        //NSLog(@"new content insets top %f", contentInsets.top);
         
+        keyboardState.offset = tableView.contentOffset;
         
-        KeyboardState * keyboardState = [[KeyboardState alloc] init];
-        keyboardState.keyboardRect = [tableView convertRect:keyboardRect fromView:nil];
-        CGSize kbSize = keyboardState.keyboardRect.size;
-        
-        for (UITableView *tableView in [_chats allValues]) {
-            
-            UIEdgeInsets contentInsets =  tableView.contentInset;
-            
-            keyboardState.contentInset = contentInsets;
-            contentInsets.bottom = keyboardRect.size.height;
-            tableView.contentInset = contentInsets;
-            
-            keyboardState.indicatorInset = tableView.scrollIndicatorInsets;
-            
-            contentInsets.bottom = keyboardRect.size.height;
-            tableView.contentInset = contentInsets;
-            
-            keyboardState.offset = tableView.contentOffset;
-        }
-        
-        self.keyboardState = keyboardState;
-        
-        // [self view].frame
-        //   scrollView.contentInset = contentInsets;
-        // scrollView.scrollIndicatorInsets = contentInsets;
-        
-        
-        
-        // If active text field is hidden by keyboard, scroll it so it's visible
-        // Your app might not need or want this behavior.
-        //    CGRect aRect = _swipeView.frame;
-        //    aRect.size.height -= kbSize.height;
-        //    _swipeView.frame = aRect;
-        
-        //    CGRect aRect = self.view.frame;
-        //     aRect.size.height -= kbSize.height;
-        //    self.view.frame = aRect;
-        
-        CGRect aRect = _textField.frame;
-        aRect.origin.y -= kbSize.height;
-        _textField.frame = aRect;
-        //    if (!CGRectContainsPoint(aRect, activeField.frame.origin) ) {
-        //        [self.scrollView scrollRectToVisible:activeField.frame animated:YES];
-        //    }
-   // }
+    }
+    
+    self.keyboardState = keyboardState;
+    
+    // [self view].frame
+    //   scrollView.contentInset = contentInsets;
+    // scrollView.scrollIndicatorInsets = contentInsets;
+    
+    
+    
+    // If active text field is hidden by keyboard, scroll it so it's visible
+    // Your app might not need or want this behavior.
+    //    CGRect aRect = _swipeView.frame;
+    //    aRect.size.height -= kbSize.height;
+    //    _swipeView.frame = aRect;
+    
+    //    CGRect aRect = self.view.frame;
+    //     aRect.size.height -= kbSize.height;
+    //    self.view.frame = aRect;
+    ///
+    //        CGRect aRect = _textField.frame;
+    //        aRect.origin.y -= kbSize.height;
+    //        _textField.frame = aRect;
+    //    if (!CGRectContainsPoint(aRect, activeField.frame.origin) ) {
+    //        [self.scrollView scrollRectToVisible:activeField.frame animated:YES];
+    //    }
+    // }
 }
 
 // Called when the UIKeyboardWillHideNotification is sent
@@ -145,25 +206,34 @@
         //    aRect.size.height += kbSize.height;
         //    _swipeView.frame = aRect;
         //
-        CGRect aRect = _textField.frame;
-        aRect.origin.y += kbSize.height;
-        _textField.frame = aRect;
+        //     CGRect aRect = _textField.frame;
+        //   aRect.origin.y += kbSize.height;
+        // _textField.frame = aRect;
+        
+        self.textBottomConstraint.constant  -= kbSize.height;
+        
         
         //reset all table view states
         
+        [_friendView setContentOffset:self.keyboardState.offset animated:YES];
+        // [CATransaction setCompletionBlock:^{
+        _friendView.scrollIndicatorInsets = self.keyboardState.indicatorInset;
+        _friendView.contentInset = self.keyboardState.contentInset;
         
-        // UITableView * tableView =(UITableView *)_swipeView.currentItemView;
+        
+        
+        //        // UITableView * tableView =(UITableView *)_swipeView.currentItemView;
         for (UITableView *tableView in [_chats allValues]) {
             
             
             
             
-            [tableView setContentOffset:self.keyboardState.offset animated:YES];
+           [tableView setContentOffset:self.keyboardState.offset animated:YES];
             // [CATransaction setCompletionBlock:^{
             tableView.scrollIndicatorInsets = self.keyboardState.indicatorInset;
             tableView.contentInset = self.keyboardState.contentInset;
         }
-        //    }];
+        // }];
         
         //    CGRect aRect = self.view.frame;
         //    aRect.size.height += kbSize.height;
@@ -322,18 +392,12 @@
             
             
             SurespotMessage * message =[messages objectAtIndex:indexPath.row];
-            NSMutableDictionary * jsonMessage = message.messageData;
-            NSString * plainData = [jsonMessage  objectForKey:@"plaindata"];
+            NSString * plainData = [message plaindata];
             
             if (!plainData){
-                
-               
-                //todo decrypt on thread
-                [EncryptionController symmetricDecryptString:[jsonMessage objectForKey:@"data"] ourVersion:[message getOurVersion]  theirUsername:[message getOtherUser] theirVersion:[message getTheirVersion] iv:[jsonMessage objectForKey:@"iv"] callback:^(NSString * plaintext){
+                [[MessageProcessor sharedInstance] decryptMessage:message completionCallback:^(SurespotMessage  * message){
                     
-                    [jsonMessage setObject:plaintext forKey:@"plaindata"];
-                    
-                    cell.textLabel.text = plaintext;
+                    cell.textLabel.text = [message plaindata];
                 }];
                 
                 
@@ -392,7 +456,7 @@
         
         //  [_swipeView reloadData];
         //  [_swipeView loadItemAtIndex:index];
-        [_swipeView updateLayout];
+        //   [_swipeView updateLayout];
         [_swipeView scrollToPage:index duration:0.500];
         //   chatView.frame = _swipeView.frame;
         

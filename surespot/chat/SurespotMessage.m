@@ -16,9 +16,14 @@
     self = [super init];
     if( !self ) return nil;
     
-    self.messageData = [NSJSONSerialization JSONObjectWithData:[jsonString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
+    NSDictionary * messageData = [NSJSONSerialization JSONObjectWithData:[jsonString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
+    
+    
+    [self parseDictionary:messageData];
     return self;
 }
+
+
 
 - (id) initWithMutableDictionary:(NSMutableDictionary *) dictionary {
     
@@ -26,31 +31,39 @@
     self = [super init];
     if( !self ) return nil;
     
-    self.messageData = dictionary;
+    [self parseDictionary:dictionary];
     return self;
 }
 
+-(void) parseDictionary:(NSDictionary *) dictionary {
+    _to = [dictionary objectForKey:@"to"];
+    _from = [dictionary objectForKey:@"from"];
+    _fromVersion = [dictionary objectForKey:@"fromVersion"];
+    _toVersion = [dictionary objectForKey:@"toVersion"];
+    _data =[dictionary objectForKey:@"data"];
+    _iv = [dictionary objectForKey:@"iv"];
+}
+
 - (NSString *) getOtherUser {
-    return [ChatUtils getOtherUserWithFrom:[_messageData objectForKey:@"from"] andTo:[_messageData objectForKey:@"to"]];
+    return [ChatUtils getOtherUserWithFrom:_from andTo:_to];
 }
 - (NSString *) getTheirVersion {
     NSString * otherUser = [self getOtherUser];
-    if ([[_messageData objectForKey:@"from"]  isEqualToString:otherUser]) {
-        return [_messageData objectForKey:@"fromVersion"];
+    if ([_from  isEqualToString:otherUser]) {
+        return _fromVersion;
     }
     else {
-        return [_messageData objectForKey:@"toVersion"] ;
+        return _toVersion;
     }
     
 }
 - (NSString *) getOurVersion {
     NSString * otherUser = [self getOtherUser];
-    if ([[_messageData objectForKey:@"from"]  isEqualToString:otherUser]) {
-        return [_messageData objectForKey:@"toVersion"];
+    if ([_from  isEqualToString:otherUser]) {
+        return _toVersion;
     }
     else {
-        return [_messageData objectForKey:@"fromVersion"] ;
+        return _fromVersion;
     }
-    
 }
 @end

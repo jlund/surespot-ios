@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "EncryptionController.h"
-#import "IdentityController.h"
 #import "PublicKeys.h"
 
 @interface CredentialCachingController : NSObject
@@ -18,4 +17,5 @@
 @property (nonatomic, strong) NSMutableDictionary* identities;
 -(void) getSharedSecretForOurVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion: (NSString *) theirVersion callback: (CallbackBlock) callback;
 -(void) loginIdentity: (SurespotIdentity *) identity;
+
 @end

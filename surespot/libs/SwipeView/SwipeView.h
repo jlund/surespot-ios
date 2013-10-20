@@ -1,7 +1,7 @@
 //
 //  SwipeView.h
 //
-//  Version 1.3 beta 2
+//  Version 1.3 beta 7
 //
 //  Created by Nick Lockwood on 03/09/2010.
 //  Copyright 2010 Charcoal Design
@@ -55,6 +55,7 @@ SwipeViewAlignment;
 
 @interface SwipeView : UIView
 
+@property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, weak_delegate) IBOutlet id<SwipeViewDataSource> dataSource;
 @property (nonatomic, weak_delegate) IBOutlet id<SwipeViewDelegate> delegate;
 @property (nonatomic, readonly) NSInteger numberOfItems;
@@ -91,7 +92,6 @@ SwipeViewAlignment;
 - (UIView *)itemViewAtIndex:(NSInteger)index;
 - (NSInteger)indexOfItemView:(UIView *)view;
 - (NSInteger)indexOfItemViewOrSubview:(UIView *)view;
-- (void)updateLayout;
 
 @end
 

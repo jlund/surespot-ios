@@ -164,7 +164,7 @@
                                 </connections>
                             </textField>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XCg-uf-vcR" customClass="SwipeView">
-                                <rect key="frame" x="0.0" y="66" width="320" height="434"/>
+                                <rect key="frame" x="0.0" y="66" width="320" height="456"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <connections>
@@ -181,12 +181,13 @@
                             <constraint firstAttribute="trailing" secondItem="aRf-OH-qdB" secondAttribute="trailing" constant="20" symbolic="YES" id="fhe-mS-vgC"/>
                             <constraint firstItem="aRf-OH-qdB" firstAttribute="leading" secondItem="34R-ma-0cs" secondAttribute="leading" constant="20" symbolic="YES" id="hCs-j5-KIv"/>
                             <constraint firstItem="HV8-Nm-Qsn" firstAttribute="top" secondItem="aRf-OH-qdB" secondAttribute="bottom" constant="20" symbolic="YES" id="tj3-ji-ewr"/>
-                            <constraint firstItem="aRf-OH-qdB" firstAttribute="top" secondItem="XCg-uf-vcR" secondAttribute="bottom" constant="30" id="xb8-E8-eIh"/>
+                            <constraint firstItem="aRf-OH-qdB" firstAttribute="top" secondItem="XCg-uf-vcR" secondAttribute="bottom" constant="8" id="xb8-E8-eIh"/>
                         </constraints>
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="kQa-JV-Z16"/>
                     <connections>
+                        <outlet property="swipeTopConstraint" destination="dAk-6y-Vtt" id="TJc-WU-DM1"/>
                         <outlet property="swipeView" destination="XCg-uf-vcR" id="Hkv-YP-hj9"/>
                         <outlet property="textBottomConstraint" destination="tj3-ji-ewr" id="kwN-GZ-O9Q"/>
                         <outlet property="textField" destination="aRf-OH-qdB" id="FiH-dU-rOR"/>
