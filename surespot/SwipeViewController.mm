@@ -516,7 +516,10 @@
 
 - (void)reloadMessages:(NSNotification *)notification
 {
-    [[_chats objectForKey:notification.object] reloadData];
+    id tableView = [_chats objectForKey:notification.object];
+    [tableView reloadData];
+    NSIndexPath *scrollIndexPath = [NSIndexPath indexPathForRow:([tableView numberOfRowsInSection:([tableView numberOfSections] - 1)] - 1) inSection:([tableView numberOfSections] - 1)];
+    [tableView scrollToRowAtIndexPath:scrollIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 - (void) inviteUser: (NSString *) username {
