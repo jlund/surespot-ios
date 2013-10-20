@@ -49,9 +49,9 @@
     
     self.navigationItem.title = [@"surespot/" stringByAppendingString:[IdentityController getLoggedInUser]];
     
-//    UIView * tlg = (id) self.topLayoutGuide;
-  //  UIScrollView * scrollView = _swipeView.scrollView;
-//    NSDictionary * viewsDictionary = NSDictionaryOfVariableBindings(scrollView, tlg);
+    //    UIView * tlg = (id) self.topLayoutGuide;
+    //  UIScrollView * scrollView = _swipeView.scrollView;
+    //    NSDictionary * viewsDictionary = NSDictionaryOfVariableBindings(scrollView, tlg);
     
     
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
@@ -105,29 +105,29 @@
     
     self.textBottomConstraint.constant  += keyboardRect.size.height;
     
-
+    
     
     
     NSLog(@"keyboard height before: %f", keyboardRect.size.height);
     
     keyboardState.keyboardRect = keyboardRect;// [tableView convertRect:keyboardRect fromView:nil];
-//        NSLog(@"keyboard height after: %f", keyboardState.keyboardRect.size.height);
+    //        NSLog(@"keyboard height after: %f", keyboardState.keyboardRect.size.height);
     //   CGSize kbSize = keyboardState.keyboardRect.size;
-  //  contentInsets =  tableView.contentInset;
+    //  contentInsets =  tableView.contentInset;
     NSLog(@"after move content insets top %f, view height: %f", contentInsets.top, tableView.frame.size.height);
     
     
     
     
-  //  keyboardState.contentInset = contentInsets;
+    //  keyboardState.contentInset = contentInsets;
     contentInsets.top +=   keyboardState.keyboardRect.size.height;
     contentInsets.bottom = keyboardState.keyboardRect.size.height;
     tableView.contentInset = contentInsets;
     
     
     //
-        UIEdgeInsets scrollInsets =tableView.scrollIndicatorInsets;
-  //  keyboardState.indicatorInset =scrollInsets;
+    UIEdgeInsets scrollInsets =tableView.scrollIndicatorInsets;
+    //  keyboardState.indicatorInset =scrollInsets;
     //
     scrollInsets.top += keyboardState.keyboardRect.size.height;
     scrollInsets.bottom = keyboardState.keyboardRect.size.height;
@@ -143,13 +143,13 @@
         
         //      keyboardState.contentInset = contentInsets;
         //contentInsets.top += keyboardState.keyboardRect.size.height;
-      //  contentInsets.bottom = keyboardState.keyboardRect.size.height;
+        //  contentInsets.bottom = keyboardState.keyboardRect.size.height;
         tableView.contentInset = contentInsets;
         //    keyboardState.indicatorInset = tableView.scrollIndicatorInsets;
         
-      //  contentInsets = keyboardState.indicatorInset;
-       // contentInsets.top += keyboardState.keyboardRect.size.height;
-       // contentInsets.bottom = keyboardState.keyboardRect.size.height;
+        //  contentInsets = keyboardState.indicatorInset;
+        // contentInsets.top += keyboardState.keyboardRect.size.height;
+        // contentInsets.bottom = keyboardState.keyboardRect.size.height;
         tableView.scrollIndicatorInsets = scrollInsets;
         //
         
@@ -228,7 +228,7 @@
             
             
             
-           [tableView setContentOffset:self.keyboardState.offset animated:YES];
+            [tableView setContentOffset:self.keyboardState.offset animated:YES];
             // [CATransaction setCompletionBlock:^{
             tableView.scrollIndicatorInsets = self.keyboardState.indicatorInset;
             tableView.contentInset = self.keyboardState.contentInset;
@@ -395,15 +395,22 @@
             NSString * plainData = [message plaindata];
             
             if (!plainData){
+                NSLog(@"decrypting data for iv: %@", [message iv]);
+                
                 [[MessageProcessor sharedInstance] decryptMessage:message completionCallback:^(SurespotMessage  * message){
                     
-                    cell.textLabel.text = [message plaindata];
+                    NSLog(@"data decrypted, reloading row for iv %@", [message iv]);
+                    
+                    // cell.textLabel.text = [message plaindata];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                    });
                 }];
                 
                 
             }
             else {
-                
+                NSLog(@"setting text for iv: %@ to: %@", [message iv], plainData);
                 cell.textLabel.text = plainData;
             }
             
@@ -456,7 +463,7 @@
         
         //  [_swipeView reloadData];
         //  [_swipeView loadItemAtIndex:index];
-        //   [_swipeView updateLayout];
+        [_swipeView updateLayout];
         [_swipeView scrollToPage:index duration:0.500];
         //   chatView.frame = _swipeView.frame;
         
