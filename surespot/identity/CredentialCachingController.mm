@@ -29,7 +29,7 @@
         sharedInstance.secretQueue = [[NSOperationQueue alloc] init];
         //   [sharedInstance.secretQueue setMaxConcurrentOperationCount:1];
         sharedInstance.publicKeyQueue = [[NSOperationQueue alloc] init];
-        [sharedInstance.publicKeyQueue setMaxConcurrentOperationCount:1];
+        //[sharedInstance.publicKeyQueue setMaxConcurrentOperationCount:1];
         sharedInstance.getSecretQueue = [[NSOperationQueue alloc] init];
         [sharedInstance.getSecretQueue setMaxConcurrentOperationCount:1];
     });

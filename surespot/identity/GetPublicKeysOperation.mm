@@ -15,7 +15,8 @@
 //
 
 #import "GetPublicKeysOperation.h"
-#import "IdentityController.h"
+#import "NetworkController.h"
+#import "EncryptionController.h"
 
 @interface GetPublicKeysOperation()
 @property (nonatomic, strong) NSString * username;
@@ -46,13 +47,37 @@
     _isExecuting = YES;
     [self didChangeValueForKey:@"isExecuting"];
     
-    
-
-        //need to download the public key
-        [[IdentityController sharedInstance] getPublicKeysForUsername:self.username andVersion:self.version callback: ^(PublicKeys * publicKeys) {
-            [self finish:publicKeys];
-        }];
-    
+    [[NetworkController sharedInstance]
+     getPublicKeysForUsername: self.username
+     andVersion: self.version
+     successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+         
+         
+         NSLog(@"get public keys response: %d",  [response statusCode]);
+         //recreate public keys
+         //todo verify
+         NSDictionary * jsonKeys = JSON;
+         
+         NSString * spubDH = [jsonKeys objectForKey:@"dhPub"];
+         NSString * spubDSA = [jsonKeys objectForKey:@"dsaPub"];
+         
+         
+         ECDHPublicKey dhPub = [EncryptionController recreateDhPublicKey:spubDH];
+         ECDHPublicKey dsaPub = [EncryptionController recreateDsaPublicKey:spubDSA];
+         
+         PublicKeys* pk = [[PublicKeys alloc] init];
+         pk.dhPubKey = dhPub;
+         pk.dsaPubKey = dsaPub;
+         
+         NSLog(@"get public keys calling callback");
+         [self finish:pk];
+         
+     } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
+         
+         NSLog(@"response failure: %@",  Error);
+         [self finish:nil];
+         
+     }];
     
     
 }

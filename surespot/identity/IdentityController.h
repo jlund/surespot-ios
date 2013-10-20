@@ -29,7 +29,7 @@ typedef void (^CallbackDictionaryBlock) (NSDictionary * result);
 - (SurespotIdentity *) loggedInIdentity;
 - (NSString *) getOurLatestVersion;
 - (void) getTheirLatestVersionForUsername: (NSString *) username callback:(CallbackStringBlock) callback;
--(void) getPublicKeysForUsername: (NSString *) username andVersion: (NSString *) version callback: (CallbackBlock) callback ;
+
 
 
 

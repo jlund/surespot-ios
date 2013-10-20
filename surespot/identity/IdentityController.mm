@@ -28,7 +28,7 @@
     static dispatch_once_t oncePredicate;
     dispatch_once(&oncePredicate, ^{
         sharedInstance = [[self alloc] init];
-         });
+    });
     
     return sharedInstance;
 }
@@ -221,41 +221,5 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
 -(void) getSharedSecretForOurVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion:( NSString *) theirVersion callback:(CallbackBlock) callback {
     [[CredentialCachingController sharedInstance] getSharedSecretForOurVersion:ourVersion theirUsername:theirUsername theirVersion:theirVersion callback:callback];
 }
-
--(void) getPublicKeysForUsername: (NSString *) username andVersion: (NSString *) version callback: (CallbackBlock) callback {
-    
-    
-    
-    //todo cache
-    [[NetworkController sharedInstance] getPublicKeysForUsername: username
-                                                      andVersion:version
-                                                    successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                                                        NSLog(@"get public keys response: %d",  [response statusCode]);
-                                                        //recreate public keys
-                                                        //todo verify
-                                                        NSDictionary * jsonKeys = JSON;
-                                                        
-                                                        NSString * spubDH = [jsonKeys objectForKey:@"dhPub"];
-                                                        NSString * spubDSA = [jsonKeys objectForKey:@"dsaPub"];
-                                                        
-                                                        
-                                                        ECDHPublicKey dhPub = [EncryptionController recreateDhPublicKey:spubDH];
-                                                        ECDHPublicKey dsaPub = [EncryptionController recreateDsaPublicKey:spubDSA];
-                                                        
-                                                        PublicKeys* pk = [[PublicKeys alloc] init];
-                                                        pk.dhPubKey = dhPub;
-                                                        pk.dsaPubKey = dsaPub;
-                                                        
-                                                        NSLog(@"get public keys calling callback");
-                                                        callback(pk);
-                                                        
-                                                    } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
-                                                        
-                                                        NSLog(@"response failure: %@",  Error);
-                                                        callback(nil);
-                                                        
-                                                    }];
-}
-
 
 @end

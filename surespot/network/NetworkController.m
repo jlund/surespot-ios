@@ -94,8 +94,11 @@
     
     //todo use formatter
     NSURLRequest *request = [self requestWithMethod:@"GET" path:[[[@"publickeys/"  stringByAppendingString:username] stringByAppendingString:@"/"] stringByAppendingString:version] parameters: nil];
-    AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:successBlock
-                                                                                        failure: failureBlock];
+    
+    AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:successBlock failure: failureBlock];     
+    
+    //dont't need this on main thread
+    [operation setSuccessCallbackQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)];
     [operation start];
 }
 
