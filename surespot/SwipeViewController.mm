@@ -488,7 +488,7 @@
         
         //  [_swipeView reloadData];
         //  [_swipeView loadItemAtIndex:index];
-   //     [_swipeView updateLayout];
+        [_swipeView updateLayout];
         [_swipeView scrollToPage:index duration:0.500];
         //   chatView.frame = _swipeView.frame;
         
@@ -507,7 +507,7 @@
         
     }
     _currentChat = username;
-            [_swipeView reloadData];
+    [_swipeView reloadData];
     [_textField resignFirstResponder];
 }
 
