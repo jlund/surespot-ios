@@ -7,16 +7,12 @@
 //
 
 #import "CredentialCachingController.h"
-#import "GenerateSharedSecretOperation.h"
-#import "GetPublicKeysOperation.h"
+#import "GetSharedSecretOperation.h"
 #import "EGOCache.h"
 
+
 @interface CredentialCachingController()
-@property (nonatomic, retain) NSMutableDictionary * sharedSecretsDict;
-@property (nonatomic, retain) NSMutableDictionary * publicKeysDict;
-@property (nonatomic, retain) NSMutableDictionary * identitiesDict;
-@property (nonatomic, strong) NSOperationQueue * secretQueue;
-@property (nonatomic, strong) NSOperationQueue * publicKeyQueue;
+@property (nonatomic, strong) NSOperationQueue * getSecretQueue;
 @end
 
 @implementation CredentialCachingController
@@ -34,6 +30,8 @@
         //   [sharedInstance.secretQueue setMaxConcurrentOperationCount:1];
         sharedInstance.publicKeyQueue = [[NSOperationQueue alloc] init];
         [sharedInstance.publicKeyQueue setMaxConcurrentOperationCount:1];
+        sharedInstance.getSecretQueue = [[NSOperationQueue alloc] init];
+        [sharedInstance.getSecretQueue setMaxConcurrentOperationCount:1];
     });
     
     return sharedInstance;
@@ -44,68 +42,11 @@
 -(void) getSharedSecretForOurVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion: (NSString *) theirVersion callback: (CallbackBlock) callback {
     
     NSLog(@"getSharedSecretForOurVersion");
+   
+    GetSharedSecretOperation * op = [[GetSharedSecretOperation alloc] initWithCache:self ourUsername:self.loggedInUsername ourVersion:ourVersion theirUsername:theirUsername theirVersion:theirVersion callback:callback];
     
-    //see if we have the shared secret cached already
-    NSString * sharedSecretKey = [NSString stringWithFormat:@"%@:%@:%@:%@", self.loggedInUsername, ourVersion, theirUsername, theirVersion];
-    
-    NSData * sharedSecret = [self.sharedSecretsDict objectForKey:sharedSecretKey];
-    
-    if (sharedSecret) {
-        NSLog(@"using cached secret for %@", sharedSecretKey);
-        callback(sharedSecret);
-    }
-    else {
-        SurespotIdentity * identity = [self.identities objectForKey:[self loggedInUsername]];
-        if (!identity) {
-            callback(nil);
-            return;
-        }
+    [self.getSecretQueue addOperation:op];
         
-        //get public keys out of dictionary
-        NSString * publicKeysKey = [NSString stringWithFormat:@"%@:%@", theirUsername, theirVersion];
-        PublicKeys * publicKeys = [self.publicKeysDict objectForKey:publicKeysKey];
-        
-        if (publicKeys) {
-            NSLog(@"using cached public keys for %@", publicKeysKey);
-            
-            GenerateSharedSecretOperation * sharedSecretOp = [[GenerateSharedSecretOperation alloc] initWithOurIdentity:identity theirPublicKeys:publicKeys completionCallback:^(NSData * secret) {
-                //store shared key in dictionary
-                NSLog(@"caching shared secretfor %@", sharedSecretKey);
-                [self.sharedSecretsDict setObject:secret forKey:sharedSecretKey];
-                callback(secret);
-            }];
-            
-            [self.secretQueue addOperation:sharedSecretOp];
-        }
-        else {
-            
-            //get the public keys we need
-            GetPublicKeysOperation * pkOp = [[GetPublicKeysOperation alloc] initWithUsername:theirUsername version:theirVersion completionCallback:
-                                             ^(PublicKeys * keys) {
-                                                 if (keys) {
-                                                     NSLog(@"caching public keys for %@", publicKeysKey);
-                                                     //store keys in dictionary
-                                                     [self.publicKeysDict setObject:keys forKey:publicKeysKey];
-                                                     
-                                                     GenerateSharedSecretOperation * sharedSecretOp = [[GenerateSharedSecretOperation alloc] initWithOurIdentity:identity theirPublicKeys:keys completionCallback:^(NSData * secret) {
-                                                         //store shared key in dictionary
-                                                         NSLog(@"caching shared secretfor %@", sharedSecretKey);
-                                                         [self.sharedSecretsDict setObject:secret forKey:sharedSecretKey];
-                                                         callback(secret);
-                                                     }];
-                                                     
-                                                     [self.secretQueue addOperation:sharedSecretOp];
-                                                 }}];
-            
-            [self.publicKeyQueue addOperation:pkOp];
-        }
-        
-    }
-    
-    
-    
-    
-    
 }
 
 //todo cahe cookie

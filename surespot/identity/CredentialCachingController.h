@@ -13,6 +13,11 @@
 @interface CredentialCachingController : NSObject
 +(CredentialCachingController*)sharedInstance;
 
+@property (nonatomic, retain) NSMutableDictionary * sharedSecretsDict;
+@property (nonatomic, retain) NSMutableDictionary * publicKeysDict;
+@property (nonatomic, retain) NSMutableDictionary * identitiesDict;
+@property (nonatomic, strong) NSOperationQueue * secretQueue;
+@property (nonatomic, strong) NSOperationQueue * publicKeyQueue;
 @property (atomic, strong) NSString * loggedInUsername;
 @property (nonatomic, strong) NSMutableDictionary* identities;
 -(void) getSharedSecretForOurVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion: (NSString *) theirVersion callback: (CallbackBlock) callback;
