@@ -9,6 +9,7 @@
 #import "NetworkController.h"
 
 #define kHost @"http://192.168.10.68:8080"
+//#define kHost @"https://server.surespot.me:443"
 @implementation NetworkController
 
 +(NetworkController*)sharedInstance

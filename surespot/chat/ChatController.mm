@@ -36,8 +36,12 @@
     
     if (self != nil) {
         self.socketIO = [[SocketIO alloc] initWithDelegate:self];
-        self.socketIO.useSecure = NO;
+            self.socketIO.useSecure = NO;
         [self.socketIO connectToHost:@"192.168.10.68" onPort:8080];
+        
+     ////   self.socketIO.useSecure = YES;
+     //   [self.socketIO connectToHost:@"server.surespot.me" onPort:443];
+        
         self.dataSources = [[NSMutableDictionary alloc] init];
         self.tableViews = [[NSMutableDictionary alloc] init];
     }
