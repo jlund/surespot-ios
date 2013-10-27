@@ -18,6 +18,7 @@
 #import "GetPublicKeysOperation.h"
 #import "GenerateSharedSecretOperation.h"
 #import "IdentityController.h"
+#import "NSData+Base64.h"
 
 
 @interface GetSharedSecretOperation()
@@ -68,7 +69,7 @@
     NSData * sharedSecret = [self.cache.sharedSecretsDict objectForKey:sharedSecretKey];
     
     if (sharedSecret) {
-        NSLog(@"using cached secret for %@", sharedSecretKey);
+        NSLog(@"using cached secret %@ for %@", [sharedSecret base64EncodedString], sharedSecretKey);
         [self finish:sharedSecret];
     }
     else {
@@ -87,7 +88,7 @@
             
             GenerateSharedSecretOperation * sharedSecretOp = [[GenerateSharedSecretOperation alloc] initWithOurIdentity:identity theirPublicKeys:publicKeys completionCallback:^(NSData * secret) {
                 //store shared key in dictionary
-                NSLog(@"caching shared secretfor %@", sharedSecretKey);
+                NSLog(@"caching shared secret %@ for %@", [secret base64EncodedString], sharedSecretKey);
                 [self.cache.sharedSecretsDict setObject:secret forKey:sharedSecretKey];
                 [self finish:secret];
             }];
@@ -106,7 +107,7 @@
                                                      
                                                      GenerateSharedSecretOperation * sharedSecretOp = [[GenerateSharedSecretOperation alloc] initWithOurIdentity:identity theirPublicKeys:keys completionCallback:^(NSData * secret) {
                                                          //store shared key in dictionary
-                                                         NSLog(@"caching shared secretfor %@", sharedSecretKey);
+                                                         NSLog(@"caching shared secret %@ for %@", [secret base64EncodedString], sharedSecretKey);
                                                          [self.cache.sharedSecretsDict setObject:secret forKey:sharedSecretKey];
                                                          [self finish:secret];
                                                      }];
