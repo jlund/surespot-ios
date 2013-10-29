@@ -36,7 +36,7 @@
     _swipeView.wrapEnabled = NO;
     _swipeView.truncateFinalPage =YES ;
     // _swipeView.defersItemViewLoading = YES;
-    //  self.edgesForExtendedLayout = UIRectEdgeNone;
+      self.edgesForExtendedLayout = UIRectEdgeNone;
     
     //configure page control
     //_pageControl.numberOfPages = _swipeView.numberOfPages;
@@ -98,34 +98,36 @@
     
     
     UIEdgeInsets contentInsets =  tableView.contentInset;
-    NSLog(@"pre move content insets top %f, view height: %f", contentInsets.top, tableView.frame.size.height);
+    NSLog(@"pre move originy %f,content insets bottom %f, view height: %f", _textField.frame.origin.y, contentInsets.bottom, tableView.frame.size.height);
     
     NSDictionary* info = [aNotification userInfo];
     CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
     
-    self.textBottomConstraint.constant  += keyboardRect.size.height;
-    
-    
-    
+    CGRect textFieldFrame = _textField.frame;
+    textFieldFrame.origin.y -= keyboardRect.size.height;
+//    textFieldFrame.size.height -= keyboardRect.size.height;
+    _textField.frame = textFieldFrame;
     
     NSLog(@"keyboard height before: %f", keyboardRect.size.height);
     
     keyboardState.keyboardRect = keyboardRect;
-    NSLog(@"after move content insets top %f, view height: %f", contentInsets.top, tableView.frame.size.height);
     
     
-    contentInsets.top +=   keyboardState.keyboardRect.size.height;
+    NSLog(@"after move content insets bottom %f, view height: %f", contentInsets.bottom, tableView.frame.size.height);
+    
+    
+    //  contentInsets.top +=   keyboardState.keyboardRect.size.height;
     contentInsets.bottom = keyboardState.keyboardRect.size.height;
     tableView.contentInset = contentInsets;
     
     
     UIEdgeInsets scrollInsets =tableView.scrollIndicatorInsets;
-    scrollInsets.top += keyboardState.keyboardRect.size.height;
+    // scrollInsets.top += keyboardState.keyboardRect.size.height;
     scrollInsets.bottom = keyboardState.keyboardRect.size.height;
     tableView.scrollIndicatorInsets = scrollInsets;
     
     
-    NSLog(@"new content insets top %f", contentInsets.top);
+    NSLog(@"new content insets bottom %f", contentInsets.bottom);
     
     keyboardState.offset = tableView.contentOffset;
     
@@ -135,7 +137,6 @@
     }
     
     self.keyboardState = keyboardState;
-    
 }
 
 // Called when the UIKeyboardWillHideNotification is sent
@@ -151,7 +152,14 @@
     
     if (self.keyboardState) {
         CGSize kbSize = self.keyboardState.keyboardRect.size;
-        self.textBottomConstraint.constant  -= kbSize.height;
+        
+        
+        CGRect textFieldFrame = _textField.frame;
+        textFieldFrame.origin.y += kbSize.height;
+       // textFieldFrame.size.height -= kbSize.height;
+        _textField.frame = textFieldFrame;
+        
+        
         
         
         //reset all table view states
@@ -389,17 +397,24 @@
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    //
-    if ([_swipeView currentPage] == 0) {
-        [self inviteUser:[textField text]];
-        [textField resignFirstResponder];
-    }
-    else {
-        [self send];
+    if ([textField text].length > 0) {
+        
+        
+        if ([_swipeView currentPage] == 0) {
+            [self inviteUser:[textField text]];
+            [textField resignFirstResponder];
+        }
+        else {
+            [self send];
+            
+        }
+        
+        [textField setText:nil];
         
     }
-    
-    [textField setText:nil];
+    else {
+        [textField resignFirstResponder];
+    }
     return NO;
 }
 
@@ -426,7 +441,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [tableView reloadData];
         NSIndexPath *scrollIndexPath = [NSIndexPath indexPathForRow:([tableView numberOfRowsInSection:([tableView numberOfSections] - 1)] - 1) inSection:([tableView numberOfSections] - 1)];
-        [tableView scrollToRowAtIndexPath:scrollIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        //     [tableView scrollToRowAtIndexPath:scrollIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     });
     
     

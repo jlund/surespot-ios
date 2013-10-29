@@ -16,8 +16,7 @@
 		6604A2D117626B9E0072216A /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 6604A2D017626B9E0072216A /* Default.png */; };
 		6604A2D317626B9E0072216A /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6604A2D217626B9E0072216A /* Default@2x.png */; };
 		6604A2D517626B9E0072216A /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6604A2D417626B9E0072216A /* Default-568h@2x.png */; };
-		6604A2D817626B9E0072216A /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6604A2D617626B9E0072216A /* MainStoryboard_iPhone.storyboard */; };
-		6604A2DB17626B9E0072216A /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6604A2D917626B9E0072216A /* MainStoryboard_iPad.storyboard */; };
+		6604A2D817626B9E0072216A /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6604A2D617626B9E0072216A /* MainStoryboard.storyboard */; };
 		6604A2DE17626B9E0072216A /* LoginViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6604A2DD17626B9E0072216A /* LoginViewController.mm */; };
 		6604A2E617626B9E0072216A /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A2E517626B9E0072216A /* SenTestingKit.framework */; };
 		6604A2E717626B9E0072216A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A2BE17626B9E0072216A /* UIKit.framework */; };
@@ -131,8 +130,7 @@
 		661C2ED21763CB56000649E7 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		661C2ED41763D493000649E7 /* NSData+Gunzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Gunzip.h"; sourceTree = "<group>"; };
 		661C2ED51763D4B9000649E7 /* NSData+Gunzip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Gunzip.m"; sourceTree = "<group>"; };
-		6621BB7D17626EE800BC2850 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
-		6621BB7E17626EE800BC2850 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
+		6621BB7D17626EE800BC2850 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		6621BB851762704D00BC2850 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6637107A1812EA1D009D5195 /* GenerateSharedSecretOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GenerateSharedSecretOperation.h; path = identity/GenerateSharedSecretOperation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6637107B1812EA1D009D5195 /* GenerateSharedSecretOperation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = GenerateSharedSecretOperation.mm; path = identity/GenerateSharedSecretOperation.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -411,8 +409,7 @@
 				661C2EC41762B12D000649E7 /* identity */,
 				6604A2CD17626B9E0072216A /* SurespotAppDelegate.h */,
 				6604A2CE17626B9E0072216A /* SurespotAppDelegate.m */,
-				6604A2D617626B9E0072216A /* MainStoryboard_iPhone.storyboard */,
-				6604A2D917626B9E0072216A /* MainStoryboard_iPad.storyboard */,
+				6604A2D617626B9E0072216A /* MainStoryboard.storyboard */,
 				6604A2DC17626B9E0072216A /* LoginViewController.h */,
 				6604A2DD17626B9E0072216A /* LoginViewController.mm */,
 				6654441417F37BCE00F62F7F /* SwipeViewController.h */,
@@ -861,8 +858,7 @@
 				6604A2D117626B9E0072216A /* Default.png in Resources */,
 				6604A2D317626B9E0072216A /* Default@2x.png in Resources */,
 				6604A2D517626B9E0072216A /* Default-568h@2x.png in Resources */,
-				6604A2D817626B9E0072216A /* MainStoryboard_iPhone.storyboard in Resources */,
-				6604A2DB17626B9E0072216A /* MainStoryboard_iPad.storyboard in Resources */,
+				6604A2D817626B9E0072216A /* MainStoryboard.storyboard in Resources */,
 				6621BB841762704D00BC2850 /* Localizable.strings in Resources */,
 				661C2ECB17638C2A000649E7 /* testlocal1.ssi in Resources */,
 				668E0EEC177B2E3500115B19 /* testlocal10.ssi in Resources */,
@@ -974,20 +970,12 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		6604A2D617626B9E0072216A /* MainStoryboard_iPhone.storyboard */ = {
+		6604A2D617626B9E0072216A /* MainStoryboard.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				6621BB7D17626EE800BC2850 /* Base */,
 			);
-			name = MainStoryboard_iPhone.storyboard;
-			sourceTree = "<group>";
-		};
-		6604A2D917626B9E0072216A /* MainStoryboard_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6621BB7E17626EE800BC2850 /* Base */,
-			);
-			name = MainStoryboard_iPad.storyboard;
+			name = MainStoryboard.storyboard;
 			sourceTree = "<group>";
 		};
 		6604A2EE17626B9E0072216A /* InfoPlist.strings */ = {
