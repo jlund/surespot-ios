@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 2fours. All rights reserved.
 //
 
-#import "OurMessageView.h"
+#import "MessageView.h"
 
-@implementation OurMessageView
+@implementation MessageView
 
 - (id)initWithFrame:(CGRect)frame
 {

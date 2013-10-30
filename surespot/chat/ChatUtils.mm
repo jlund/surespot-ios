@@ -13,4 +13,8 @@
 + (NSString *)  getOtherUserWithFrom: (NSString *) from andTo: (NSString *) to {
     return [to isEqualToString:[[IdentityController sharedInstance] getLoggedInUser] ] ? from : to;
 }
++ (BOOL) isOurMessage: (SurespotMessage *) message {
+    return  [[message from] isEqualToString:[[IdentityController sharedInstance] getLoggedInUser]];
+}
+
 @end

@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SurespotMessage.h"
 
 @interface ChatUtils : NSObject
 + (NSString *)  getOtherUserWithFrom: (NSString *) from andTo: (NSString *) to;
-    
++ (BOOL) isOurMessage: (SurespotMessage *) message;
 @end

@@ -13,7 +13,8 @@
 #import "EncryptionController.h"
 #import "MessageProcessor.h"
 #import <UIKit/UIKit.h>
-#import "OurMessageView.h"
+#import "MessageView.h"
+#import "ChatUtils.h"
 //#import <QuartzCore/CATransaction.h>
 
 @interface SwipeViewController ()
@@ -356,6 +357,7 @@
             
             //figure out message height
             if (plainData){
+                
                 UIFont *cellFont = [UIFont fontWithName:@"Helvetica" size:17.0];
                 CGSize constraintSize = CGSizeMake(tableView.frame.size.width - 40, MAXFLOAT);
                 CGSize labelSize = [plainData sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
@@ -396,10 +398,6 @@
         return cell;
     }
     else {
-        static NSString *CellIdentifier = @"OurMessageView";
-        
-        
-        OurMessageView *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
         
         NSArray *keys = [_chats allKeys];
         id aKey = [keys objectAtIndex:index -1];
@@ -411,14 +409,37 @@
             
             SurespotMessage * message =[messages objectAtIndex:indexPath.row];
             NSString * plainData = [message plaindata];
+            static NSString *OurCellIdentifier       = @"OurMessageView";
+            static NSString *TheirCellIdentifier = @"TheirMessageView";
+            
+            NSString * cellIdentifier;
+            BOOL ours = NO;
+            
+            if ([ChatUtils isOurMessage:message]) {
+                ours = YES;
+                cellIdentifier    = OurCellIdentifier;
+                
+            }
+            else {
+                cellIdentifier = TheirCellIdentifier;
+            }
+            MessageView *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+            
+                      cell.messageStatusLabel.text = @"loading and decrypting...";
             
             
-            cell.messageStatusLabel.text = @"loading and decrypting...";
-            cell.messageSentView.backgroundColor = [UIColor blackColor];
-            
-            __block UITableView * blockView = tableView;
+           // __block UITableView * blockView = tableView;
             if (!plainData){
                 if (![message isLoading] && ![message isLoaded]) {
+                    if (ours) {
+                        cell.messageSentView.backgroundColor = [UIColor blackColor];
+                    }
+                    else {
+                        //TODO use constant
+                        cell.messageSentView.backgroundColor =[UIColor colorWithRed:0.2 green:0.71 blue:0.898 alpha:1.0];
+                    }
+                    
+                    
                     [message setLoaded:NO];
                     [message setLoading:YES];
                     NSLog(@"decrypting data for iv: %@", [message iv]);
@@ -427,7 +448,7 @@
                         NSLog(@"data decrypted, reloading row for iv %@", [message iv]);
                         dispatch_async(dispatch_get_main_queue(), ^{
                             //                        [tableView reloadData];
-                            [blockView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
                             [message setLoading:NO];
                             [message setLoaded:YES];
                         });
@@ -439,15 +460,30 @@
                 NSLog(@"setting text for iv: %@ to: %@", [message iv], plainData);
                 cell.messageLabel.text = plainData;
                 cell.messageStatusLabel.text = [self stringFromDate:[message dateTime]];
-                cell.messageSentView.backgroundColor = [UIColor lightGrayColor];
+                
+                if (ours) {
+                    cell.messageSentView.backgroundColor = [UIColor lightGrayColor];
+                }
+                else {
+                    //TODO use constant
+                    cell.messageSentView.backgroundColor =[UIColor colorWithRed:0.2 green:0.71 blue:0.898 alpha:1.0];
+                }
+                
                 
             }
+            return cell;
+        }
+        else {
+            static NSString *CellIdentifier = @"Cell";
+            UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            return cell;
             
         }
         
-        return cell;
         
-    }}
+        
+    }
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -482,6 +518,7 @@
         
         //   [chatView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"ChatCell"];
         [chatView registerNib:[UINib nibWithNibName:@"OurMessageCell" bundle:nil] forCellReuseIdentifier:@"OurMessageView"];
+        [chatView registerNib:[UINib nibWithNibName:@"TheirMessageCell" bundle:nil] forCellReuseIdentifier:@"TheirMessageView"];
         
         NSInteger index = _chats.count;
         NSLog(@"creating and scrolling to index: %d", index);
