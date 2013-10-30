@@ -21,6 +21,8 @@
 @property (nonatomic, strong) NSString * fromVersion;
 @property (nonatomic, strong) NSString * plaindata;
 @property (nonatomic, strong) NSDate * dateTime;
+@property (atomic, assign, getter=isLoading) BOOL loading;
+@property (atomic, assign, getter=isLoaded) BOOL loaded;
 
 - (NSString *) getOtherUser;
 - (NSString *) getTheirVersion;

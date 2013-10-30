@@ -35,7 +35,7 @@
     _dateFormatter = [[NSDateFormatter alloc]init];
     [_dateFormatter setDateStyle:NSDateFormatterShortStyle];
     [_dateFormatter setTimeStyle:NSDateFormatterShortStyle];
-       
+    
     _chats = [[NSMutableDictionary alloc] init];
     
     //configure swipe view
@@ -328,6 +328,22 @@
     
 }
 
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+//
+//    NSInteger index = [_swipeView indexOfItemViewOrSubview:tableView];
+//    NSLog(@"height for row, index: %d, indexPath: %@", index, indexPath);
+//    if (index == NSNotFound) {
+//        return 0;
+//    }
+//
+//
+//    if (index == 0) {
+//           }
+//    else {
+//    }
+//    return 44;
+//}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
@@ -371,18 +387,24 @@
             cell.messageStatusLabel.text = @"loading and decrypting...";
             cell.messageSentView.backgroundColor = [UIColor blackColor];
             
-            
+            __block UITableView * blockView = tableView;
             if (!plainData){
-                NSLog(@"decrypting data for iv: %@", [message iv]);
-                [[MessageProcessor sharedInstance] decryptMessage:message completionCallback:^(SurespotMessage  * message){
+                if (![message isLoading] && ![message isLoaded]) {
+                    [message setLoaded:NO];
+                    [message setLoading:YES];
+                    NSLog(@"decrypting data for iv: %@", [message iv]);
+                    [[MessageProcessor sharedInstance] decryptMessage:message completionCallback:^(SurespotMessage  * message){
+                        
+                        NSLog(@"data decrypted, reloading row for iv %@", [message iv]);
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            //                        [tableView reloadData];
+                            [blockView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                            [message setLoading:NO];
+                            [message setLoaded:YES];
+                        });
+                    }];
                     
-                    NSLog(@"data decrypted, reloading row for iv %@", [message iv]);
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [tableView reloadData];
-                    });
-                }];
-                
-                
+                }
             }
             else {
                 NSLog(@"setting text for iv: %@ to: %@", [message iv], plainData);
