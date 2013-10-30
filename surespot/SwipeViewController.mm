@@ -349,11 +349,12 @@
         NSString * username = aKey;
         NSArray * messages =[[ChatController sharedInstance] getDataSourceForFriendname: username].messages;
         if (messages.count > 0) {
-            
-            
             SurespotMessage * message =[messages objectAtIndex:indexPath.row];
-            NSString * plainData = [message plaindata];
+            if (message.rowHeight > 0) {
+                return message.rowHeight;
+            }
             
+            NSString * plainData = [message plaindata];
             
             //figure out message height
             if (plainData){
@@ -361,8 +362,8 @@
                 UIFont *cellFont = [UIFont fontWithName:@"Helvetica" size:17.0];
                 CGSize constraintSize = CGSizeMake(tableView.frame.size.width - 40, MAXFLOAT);
                 CGSize labelSize = [plainData sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
-                
-                return labelSize.height + 20 > 44 ? labelSize.height + 20 : 44;
+                [ message setRowHeight:(int) (labelSize.height + 20 > 44 ? labelSize.height + 20 : 44) ];
+                return message.rowHeight;
             }
             else {
                 return 44;
@@ -425,10 +426,10 @@
             }
             MessageView *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
             
-                      cell.messageStatusLabel.text = @"loading and decrypting...";
+            cell.messageStatusLabel.text = @"loading and decrypting...";
             
             
-           // __block UITableView * blockView = tableView;
+            // __block UITableView * blockView = tableView;
             if (!plainData){
                 if (![message isLoading] && ![message isLoaded]) {
                     if (ours) {
@@ -447,7 +448,7 @@
                         
                         NSLog(@"data decrypted, reloading row for iv %@", [message iv]);
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            //                        [tableView reloadData];
+                            //  [tableView reloadData];
                             [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
                             [message setLoading:NO];
                             [message setLoaded:YES];
@@ -459,6 +460,7 @@
             else {
                 NSLog(@"setting text for iv: %@ to: %@", [message iv], plainData);
                 cell.messageLabel.text = plainData;
+                cell.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
                 cell.messageStatusLabel.text = [self stringFromDate:[message dateTime]];
                 
                 if (ours) {
