@@ -484,10 +484,11 @@
     return offset;
 }
 
-- (void)setFrameForView:(UIView *)view atIndex:(NSInteger)index
+- (void)setFrameForView:(id)view1 atIndex:(NSInteger)index
 {
     if (self.window)
     {
+        UITableView * view = view1;
         NSLog(@"setFrameForView");
         CGPoint center = view.center;
         if (_vertical)
@@ -509,11 +510,28 @@
         }
         else
         {
-            view.center = CGPointMake(center.x, _scrollView.frame.size.height/2.0f);
+            CGPoint point =CGPointMake(center.x, _scrollView.frame.size.height/2.0f);
+            if (!CGPointEqualToPoint(view.center, point)) {
+                NSLog(@"setting new view center");
+                view.center = point;
+            }
+            else {
+                NSLog(@"center is the same, not setting");
+            }
+            
         }
         
-        view.bounds = CGRectMake(0.0f, 0.0f, _itemSize.width, _itemSize.height);
-        
+        CGRect rect =CGRectMake(0.0f, 0.0f, _itemSize.width, _itemSize.height);
+        if (!CGRectEqualToRect(rect, view.bounds)) {
+            NSLog(@"setting bounds");
+            CGPoint offset =        view.contentOffset;
+            view.bounds = rect;
+            [view setContentOffset:offset animated: NO];
+        }
+        else {
+            NSLog(@"bounds are the same, not setting");
+            
+        }
         if (disableAnimation && animationEnabled) [UIView setAnimationsEnabled:YES];
     }
 }
@@ -537,7 +555,7 @@
 
 - (void)layoutSubviews
 {
-        NSLog(@"layoutSubviews");
+    NSLog(@"layoutSubviews");
     [super layoutSubviews];
     [self updateItemSizeAndCount];
     [self updateScrollViewDimensions];
@@ -582,7 +600,7 @@
     //update view
     //[self layOutItemViews];
     [_delegate swipeViewDidScroll:self];
-
+    
     if (!_defersItemViewLoading || fabsf([self minScrollDistanceFromOffset:_lastUpdateOffset toOffset:_scrollOffset]) >= 1.0f)
     {
         //update item index
@@ -631,12 +649,13 @@
             [_delegate swipeViewDidEndScrollingAnimation:self];
         }
         
-      //  [self layOutItemViews];
+        //AEP commenting this out breaks rotation but leaving it in breaks scroll
+        [self layOutItemViews];
         [self loadUnloadViews];
     }
     else
     {
-                NSLog(@"step not scrolling");
+        NSLog(@"step not scrolling");
         [self stopAnimation];
     }
 }
@@ -858,14 +877,14 @@
     if (oldView)
     {
         [self queueItemView:oldView];
-         NSLog(@"removeFromSuperview");
+        NSLog(@"removeFromSuperview");
         [oldView removeFromSuperview];
     }
     
     [self setItemView:view forIndex:index];
     NSLog(@"setFrameForView before");
     [self setFrameForView:view atIndex:index];
-        NSLog(@"setFrameForView after");
+    NSLog(@"setFrameForView after");
     view.userInteractionEnabled = YES;
     [_scrollView addSubview:view];
     
@@ -918,19 +937,19 @@
             NSInteger index = [self clampedIndex:i + startIndex];
             [visibleIndices addObject:@(index)];
         }
-
+        
         //TODO put this back in when we're preserving scroll positions
         //remove offscreen views
-//        for (NSNumber *number in [_itemViews allKeys])
-//        {
-//            if (![visibleIndices containsObject:number])
-//            {
-//                UIView *view = _itemViews[number];
-//                [self queueItemView:view];
-//                [view removeFromSuperview];
-//                [_itemViews removeObjectForKey:number];
-//            }
-//        }
+        //        for (NSNumber *number in [_itemViews allKeys])
+        //        {
+        //            if (![visibleIndices containsObject:number])
+        //            {
+        //                UIView *view = _itemViews[number];
+        //                [self queueItemView:view];
+        //                [view removeFromSuperview];
+        //                [_itemViews removeObjectForKey:number];
+        //            }
+        //        }
         
         //add onscreen views
         for (NSNumber *number in visibleIndices)

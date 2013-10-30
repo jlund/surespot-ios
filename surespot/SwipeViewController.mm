@@ -191,7 +191,8 @@
     //    }
     
     //   [_swipeView updateLayout];
-    
+    //[_swipeView layOutItemViews];
+
 }
 
 
