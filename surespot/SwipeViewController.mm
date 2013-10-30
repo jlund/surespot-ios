@@ -417,7 +417,9 @@
         NSInteger index = _chats.count;
         NSLog(@"creating and scrolling to index: %d", index);
      
-        [_swipeView reloadData];
+        [_swipeView loadViewAtIndex:index];
+        [_swipeView updateItemSizeAndCount];
+        [_swipeView updateScrollViewDimensions];
         [_swipeView scrollToPage:index duration:0.500];
         
     }

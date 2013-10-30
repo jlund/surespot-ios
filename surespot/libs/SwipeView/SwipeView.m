@@ -631,7 +631,7 @@
             [_delegate swipeViewDidEndScrollingAnimation:self];
         }
         
-        [self layOutItemViews];
+      //  [self layOutItemViews];
         [self loadUnloadViews];
     }
     else
