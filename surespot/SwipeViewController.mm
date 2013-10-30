@@ -328,21 +328,50 @@
     
 }
 
-//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-//
-//    NSInteger index = [_swipeView indexOfItemViewOrSubview:tableView];
-//    NSLog(@"height for row, index: %d, indexPath: %@", index, indexPath);
-//    if (index == NSNotFound) {
-//        return 0;
-//    }
-//
-//
-//    if (index == 0) {
-//           }
-//    else {
-//    }
-//    return 44;
-//}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSInteger index = [_swipeView indexOfItemViewOrSubview:tableView];
+    
+    NSLog(@"height for row, index: %d, indexPath: %@", index, indexPath);
+    if (index == NSNotFound) {
+        return 0;
+    }
+    
+    
+    if (index == 0) {
+        return 44;
+    }
+    else {
+        NSArray *keys = [_chats allKeys];
+        id aKey = [keys objectAtIndex:index -1];
+        
+        NSString * username = aKey;
+        NSArray * messages =[[ChatController sharedInstance] getDataSourceForFriendname: username].messages;
+        if (messages.count > 0) {
+            
+            
+            SurespotMessage * message =[messages objectAtIndex:indexPath.row];
+            NSString * plainData = [message plaindata];
+            
+            
+            //figure out message height
+            if (plainData){
+                UIFont *cellFont = [UIFont fontWithName:@"Helvetica" size:17.0];
+                CGSize constraintSize = CGSizeMake(tableView.frame.size.width - 40, MAXFLOAT);
+                CGSize labelSize = [plainData sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
+                
+                return labelSize.height + 20 > 44 ? labelSize.height + 20 : 44;
+            }
+            else {
+                return 44;
+            }
+        }
+        else {
+            return 0;
+        }
+    }
+    
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
