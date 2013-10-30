@@ -34,7 +34,7 @@
     _swipeView.alignment = SwipeViewAlignmentCenter;
     _swipeView.pagingEnabled = YES;
     _swipeView.wrapEnabled = NO;
-    _swipeView.truncateFinalPage =YES ;
+    _swipeView.truncateFinalPage =NO ;
     // _swipeView.defersItemViewLoading = YES;
       self.edgesForExtendedLayout = UIRectEdgeNone;
     
@@ -401,7 +401,7 @@
         NSInteger index = _chats.count;
         NSLog(@"creating and scrolling to index: %d", index);
         
-        [_swipeView updateLayout];
+        [_swipeView reloadData];
         [_swipeView scrollToPage:index duration:0.500];
         
     }
