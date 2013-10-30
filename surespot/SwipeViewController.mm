@@ -181,11 +181,11 @@
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     NSLog(@"will animate, setting table view framewidth/height %f,%f",_swipeView.frame.size.width,_swipeView.frame.size.height);
     
-    _friendView.frame = _swipeView.frame;
-       for (UITableView *tableView in [_chats allValues]) {
-        tableView.frame=_swipeView.frame;
-        
-    }
+//    _friendView.frame = _swipeView.frame;
+//       for (UITableView *tableView in [_chats allValues]) {
+//        tableView.frame=_swipeView.frame;
+//        
+//    }
     
  //   [_swipeView updateLayout];
 
