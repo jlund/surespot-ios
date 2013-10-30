@@ -89,7 +89,7 @@
     _scrollEnabled = YES;
     _pagingEnabled = YES;
     _delaysContentTouches = YES;
-    _bounces = YES;
+    _bounces = NO;
     _wrapEnabled = NO;
     _itemsPerPage = 1;
     _truncateFinalPage = NO;
@@ -126,6 +126,8 @@
     
     //place scrollview at bottom of hierarchy
     [self insertSubview:_scrollView atIndex:0];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder
@@ -382,9 +384,9 @@
             }
             else
             {
-                frame = CGRectMake((self.frame.size.width - _itemSize.width * _itemsPerPage)/2.0f,
-                                   0.0f, _itemSize.width * _itemsPerPage, self.frame.size.height);
-                contentSize.width = _itemSize.width * _numberOfItems;
+                frame = CGRectMake(0.0f,
+                                   0.0f, self.frame.size.width * _itemsPerPage, self.frame.size.height);
+                contentSize.width = self.frame.size.width * _numberOfItems;
             }
             break;
         }
@@ -434,7 +436,9 @@
     
     if (!CGRectEqualToRect(_scrollView.frame, frame))
     {
+        _suppressScrollEvent = YES;
         _scrollView.frame = frame;
+        _suppressScrollEvent = NO;
     }
     
     if (!CGSizeEqualToSize(_scrollView.contentSize, contentSize))
@@ -447,6 +451,7 @@
 {
     //calculate relative position
     CGFloat offset = index - _scrollOffset;
+    NSLog(@"offsetForItemAtIndex %d, _srolloffset %f", index,_scrollOffset);
     if (_wrapEnabled)
     {
         if (_alignment == SwipeViewAlignmentCenter)
@@ -487,7 +492,8 @@
     }
     else
     {
-        view.center = CGPointMake(([self offsetForItemAtIndex:index] + 0.5f) * _itemSize.width + _scrollView.contentOffset.x, _scrollView.frame.size.height/2.0f);
+        NSLog(@"setFRameForView, _itemSize.width: %f, scrollview offset x: %f, scrollview frame height: %f", _itemSize.width,_scrollView.contentOffset.x, _scrollView.frame.size.height);
+        view.center = CGPointMake(([self offsetForItemAtIndex:index] + 0.5f) * self.frame.size.width + _scrollView.contentOffset.x, _scrollView.frame.size.height/2.0f);
     }
     [UIView setAnimationsEnabled:YES];
 }
@@ -582,7 +588,10 @@
         NSTimeInterval currentTime = [[NSDate date] timeIntervalSinceReferenceDate];
         NSTimeInterval time = fminf(1.0f, (currentTime - _startTime) / _scrollDuration);
         CGFloat delta = [self easeInOut:time];
+    
         _scrollOffset = [self clampedOffset:_startOffset + (_endOffset - _startOffset) * delta];
+        
+        NSLog(@"easeInOut setting _scrollOffset to %f", _scrollOffset);
         if (_vertical)
         {
             [self setContentOffsetWithoutEvent:CGPointMake(0.0f, _scrollOffset * _itemSize.height)];
@@ -713,6 +722,8 @@
 {
     _currentItemIndex = currentItemIndex;
     self.scrollOffset = currentItemIndex;
+    NSLog(@"setCurrentItemIndex setting scroll offset to %f",_scrollOffset);
+
 }
 
 - (void)setCurrentPage:(NSInteger)currentPage
@@ -725,6 +736,7 @@
 
 - (void)setScrollOffset:(CGFloat)scrollOffset
 {
+    NSLog(@"setScrollOffset setting scroll offset, _scrollOffset: %f to %f",_scrollOffset, scrollOffset);
     if (_scrollOffset != scrollOffset)
     {
         _scrollOffset = scrollOffset;
@@ -755,6 +767,7 @@
     else
     {
         self.scrollOffset += offset;
+                NSLog(@"scrollByOffset setting scroll offset to %f",_scrollOffset);
     }
 }
 
@@ -785,6 +798,8 @@
     else
     {
         self.scrollOffset = [self clampedIndex:_previousItemIndex + itemCount];
+        NSLog(@"scrollByNumberOfItems setting scroll offset to %f",_scrollOffset);
+
     }
 }
 
@@ -836,7 +851,7 @@
     _numberOfItems = [_dataSource numberOfItemsInSwipeView:self];
     
     //get item size
-    CGSize size = [_delegate swipeViewItemSize:self];
+    CGSize size = self.bounds.size;//[_delegate swipeViewItemSize:self];
     if (!CGSizeEqualToSize(size, CGSizeZero))
     {
         _itemSize = size;
@@ -851,7 +866,7 @@
 - (void)loadUnloadViews
 {
     //check that item size is known
-    CGFloat itemWidth = _vertical? _itemSize.height: _itemSize.width;
+    CGFloat itemWidth = _vertical? _itemSize.height: self.frame.size.width;
     if (itemWidth)
     {
         //calculate offset and bounds
@@ -860,6 +875,7 @@
         
         //calculate range
         CGFloat startOffset = [self clampedOffset:_scrollOffset - x / itemWidth];
+        NSLog(@"loadUnloadViews: startOffset: %f, x: %f", startOffset,x);
         NSInteger startIndex = floorf(startOffset);
         NSInteger numberOfVisibleItems = ceilf(width / itemWidth + (startOffset - startIndex));
         if (_defersItemViewLoading)
@@ -923,8 +939,17 @@
     self.itemViews = [NSMutableDictionary dictionary];
     self.itemViewPool = [NSMutableSet set];
     
+    
+    //
     //layout views
     [self setNeedsLayout];
+    
+//    if (_numberOfItems > 0 && _scrollOffset < 0.0f) {
+//        self.scrollOffset = 0;
+//    }
+    self.scrollOffset = self.currentItemIndex;
+
+  [self.scrollView setContentOffset:CGPointMake(self.frame.size.width * self.currentItemIndex,0)];
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
@@ -1061,10 +1086,16 @@
         //stop scrolling animation
         _scrolling = NO;
         
+        NSLog(@"scrollViewDidScroll x offset: %f, previous x offset: %f", _scrollView.contentOffset.x, _previousContentOffset.x);
+
+        
         //update scrollOffset
         CGFloat delta = _vertical? (_scrollView.contentOffset.y - _previousContentOffset.y): (_scrollView.contentOffset.x - _previousContentOffset.x);
         _previousContentOffset = _scrollView.contentOffset;
-        _scrollOffset += delta / (_vertical? _itemSize.height: _itemSize.width);
+        
+        
+        _scrollOffset += delta / (_vertical? _itemSize.height: self.frame.size.width);
+                NSLog(@"scrollViewDidScroll setting scroll offset to %f",_scrollOffset);
         
         //update view and call delegate
         [self didScroll];
@@ -1107,6 +1138,7 @@
     if (fabsf(_scrollOffset - integerOffset) < 0.01f)
     {
         _scrollOffset = integerOffset;
+        NSLog(@"set scroll offset to %f",_scrollOffset);
     }
     
     //force refresh
@@ -1114,6 +1146,10 @@
     [self didScroll];
     
     [_delegate swipeViewDidEndDecelerating:self];
+}
+
+- (void)deviceOrientationDidChange:(NSNotification *) notification {
+   // _suppressScrollEvent = YES;
 }
 
 @end

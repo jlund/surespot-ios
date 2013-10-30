@@ -92,6 +92,7 @@ SwipeViewAlignment;
 - (NSInteger)indexOfItemView:(UIView *)view;
 - (NSInteger)indexOfItemViewOrSubview:(UIView *)view;
 - (void)updateLayout;
+- (void)deviceOrientationDidChange: (NSNotification *) notification;
 
 @end
 

@@ -178,6 +178,21 @@
     }
 }
 
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    NSLog(@"will animate, setting table view framewidth/height %f,%f",_swipeView.frame.size.width,_swipeView.frame.size.height);
+    
+    _friendView.frame = _swipeView.frame;
+       for (UITableView *tableView in [_chats allValues]) {
+        tableView.frame=_swipeView.frame;
+        
+    }
+    
+ //   [_swipeView updateLayout];
+
+}
+
+
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return YES;
@@ -296,7 +311,14 @@
     
     
     NSInteger index = [_swipeView indexOfItemViewOrSubview:tableView];
-    NSLog(@"cell for row, index: %d", index);
+    NSLog(@"cell for row, index: %d", index);    
+    if (index == NSNotFound) {
+        static NSString *CellIdentifier = @"Cell";
+        UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        return cell;
+    }
+    
+
     if (index == 0) {
         static NSString *CellIdentifier = @"Cell";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
