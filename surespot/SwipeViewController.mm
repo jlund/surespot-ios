@@ -33,10 +33,13 @@
     //configure swipe view
     _swipeView.alignment = SwipeViewAlignmentCenter;
     _swipeView.pagingEnabled = YES;
-    _swipeView.wrapEnabled = NO;
+    _swipeView.wrapEnabled = YES;
     _swipeView.truncateFinalPage =NO ;
-    // _swipeView.defersItemViewLoading = YES;
-      self.edgesForExtendedLayout = UIRectEdgeNone;
+    
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
+    {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
     
     //configure page control
     //_pageControl.numberOfPages = _swipeView.numberOfPages;
@@ -105,7 +108,7 @@
     
     CGRect textFieldFrame = _textField.frame;
     textFieldFrame.origin.y -= keyboardRect.size.height;
-//    textFieldFrame.size.height -= keyboardRect.size.height;
+    //    textFieldFrame.size.height -= keyboardRect.size.height;
     _textField.frame = textFieldFrame;
     
     NSLog(@"keyboard height before: %f", keyboardRect.size.height);
@@ -156,7 +159,7 @@
         
         CGRect textFieldFrame = _textField.frame;
         textFieldFrame.origin.y += kbSize.height;
-       // textFieldFrame.size.height -= kbSize.height;
+        // textFieldFrame.size.height -= kbSize.height;
         _textField.frame = textFieldFrame;
         
         
@@ -181,14 +184,14 @@
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     NSLog(@"will animate, setting table view framewidth/height %f,%f",_swipeView.frame.size.width,_swipeView.frame.size.height);
     
-//    _friendView.frame = _swipeView.frame;
-//       for (UITableView *tableView in [_chats allValues]) {
-//        tableView.frame=_swipeView.frame;
-//        
-//    }
+    //    _friendView.frame = _swipeView.frame;
+    //       for (UITableView *tableView in [_chats allValues]) {
+    //        tableView.frame=_swipeView.frame;
+    //
+    //    }
     
- //   [_swipeView updateLayout];
-
+    //   [_swipeView updateLayout];
+    
 }
 
 
@@ -213,7 +216,7 @@
             _friendView = [[UITableView alloc] initWithFrame:swipeView.frame style: UITableViewStylePlain];
             [_friendView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
             _friendView.delegate = self;
-            _friendView.dataSource = self;
+            _friendView.dataSource = self;        
             
             [[NetworkController sharedInstance] getFriendsSuccessBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                 NSLog(@"get friends response: %d",  [response statusCode]);
@@ -311,14 +314,14 @@
     
     
     NSInteger index = [_swipeView indexOfItemViewOrSubview:tableView];
-    NSLog(@"cell for row, index: %d", index);    
+    NSLog(@"cell for row, index: %d", index);
     if (index == NSNotFound) {
         static NSString *CellIdentifier = @"Cell";
         UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         return cell;
     }
     
-
+    
     if (index == 0) {
         static NSString *CellIdentifier = @"Cell";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
@@ -391,6 +394,7 @@
         chatView = [[UITableView alloc] initWithFrame:_swipeView.frame];
         [chatView setDelegate:self];
         [chatView setDataSource: self];
+        [chatView setScrollsToTop:NO];
         [_chats setObject:chatView forKey:username];
         //listen for rolead notifications
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadMessages:) name:@"reloadMessages" object:username];
@@ -463,7 +467,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [tableView reloadData];
         NSIndexPath *scrollIndexPath = [NSIndexPath indexPathForRow:([tableView numberOfRowsInSection:([tableView numberOfSections] - 1)] - 1) inSection:([tableView numberOfSections] - 1)];
-        //     [tableView scrollToRowAtIndexPath:scrollIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        [tableView scrollToRowAtIndexPath:scrollIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     });
     
     
