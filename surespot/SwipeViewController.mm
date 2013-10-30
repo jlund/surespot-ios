@@ -33,7 +33,7 @@
     //configure swipe view
     _swipeView.alignment = SwipeViewAlignmentCenter;
     _swipeView.pagingEnabled = YES;
-    _swipeView.wrapEnabled = YES;
+    _swipeView.wrapEnabled = NO;
     _swipeView.truncateFinalPage =NO ;
     
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
@@ -249,10 +249,20 @@
 
 - (void)swipeViewCurrentItemIndexDidChange:(SwipeView *)swipeView
 {
+    NSInteger currPage =swipeView.currentPage;
     //update page control page
-    NSLog(@"swipeview index changed to %d", swipeView.currentPage);
-    _pageControl.currentPage = swipeView.currentPage;
-    [_swipeView reloadData];
+    NSLog(@"swipeview index changed to %d", currPage);
+ //   _pageControl.currentPage = swipeView.currentPage;
+  //  [_swipeView reloadData];
+    UITableView * tableview;
+    if (currPage == 0) {
+        tableview = _friendView;
+    }
+    else {
+        tableview = [_chats allValues][swipeView.currentPage-1];
+    }
+    [tableview reloadData];
+    
 }
 
 - (void)swipeView:(SwipeView *)swipeView didSelectItemAtIndex:(NSInteger)index
@@ -314,7 +324,7 @@
     
     
     NSInteger index = [_swipeView indexOfItemViewOrSubview:tableView];
-    NSLog(@"cell for row, index: %d", index);
+    NSLog(@"cell for row, index: %d, indexPath: %@", index, indexPath);
     if (index == NSNotFound) {
         static NSString *CellIdentifier = @"Cell";
         UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
@@ -395,6 +405,8 @@
         [chatView setDelegate:self];
         [chatView setDataSource: self];
         [chatView setScrollsToTop:NO];
+        [chatView setDirectionalLockEnabled:YES];
+
         [_chats setObject:chatView forKey:username];
         //listen for rolead notifications
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadMessages:) name:@"reloadMessages" object:username];
@@ -404,7 +416,7 @@
         
         NSInteger index = _chats.count;
         NSLog(@"creating and scrolling to index: %d", index);
-        
+     
         [_swipeView reloadData];
         [_swipeView scrollToPage:index duration:0.500];
         
@@ -418,7 +430,7 @@
         
     }
     _currentChat = username;
-    [_swipeView reloadData];
+  //  [_swipeView reloadData];
     [_textField resignFirstResponder];
 }
 

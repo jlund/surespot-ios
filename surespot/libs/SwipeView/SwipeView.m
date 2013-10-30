@@ -488,6 +488,7 @@
 {
     if (self.window)
     {
+        NSLog(@"setFrameForView");
         CGPoint center = view.center;
         if (_vertical)
         {
@@ -519,6 +520,7 @@
 
 - (void)layOutItemViews
 {
+    NSLog(@"layoutItemViews");
     for (UIView *view in self.visibleItemViews)
     {
         [self setFrameForView:view atIndex:[self indexOfItemView:view]];
@@ -527,6 +529,7 @@
 
 - (void)updateLayout
 {
+    NSLog(@"updateLayout");
     [self updateScrollOffset];
     [self loadUnloadViews];
     [self layOutItemViews];
@@ -534,6 +537,7 @@
 
 - (void)layoutSubviews
 {
+        NSLog(@"layoutSubviews");
     [super layoutSubviews];
     [self updateItemSizeAndCount];
     [self updateScrollViewDimensions];
@@ -571,11 +575,12 @@
 
 - (void)didScroll
 {
+    NSLog(@"didScroll");
     //handle wrap
     [self updateScrollOffset];
     
     //update view
-    [self layOutItemViews];
+    //[self layOutItemViews];
     [_delegate swipeViewDidScroll:self];
 
     if (!_defersItemViewLoading || fabsf([self minScrollDistanceFromOffset:_lastUpdateOffset toOffset:_scrollOffset]) >= 1.0f)
@@ -605,6 +610,7 @@
 {
     if (_scrolling)
     {
+        NSLog(@"step scrolling");
         NSTimeInterval currentTime = [[NSDate date] timeIntervalSinceReferenceDate];
         NSTimeInterval time = fminf(1.0f, (currentTime - _startTime) / _scrollDuration);
         CGFloat delta = [self easeInOut:time];
@@ -624,9 +630,13 @@
             [self didScroll];
             [_delegate swipeViewDidEndScrollingAnimation:self];
         }
+        
+        [self layOutItemViews];
+        [self loadUnloadViews];
     }
     else
     {
+                NSLog(@"step not scrolling");
         [self stopAnimation];
     }
 }
@@ -750,6 +760,7 @@
 
 - (void)setScrollOffset:(CGFloat)scrollOffset
 {
+    NSLog(@"setScrollOffset");
     if (_scrollOffset != scrollOffset)
     {
         _scrollOffset = scrollOffset;
@@ -836,6 +847,7 @@
 
 - (UIView *)loadViewAtIndex:(NSInteger)index
 {
+    NSLog(@"loadViewAtIndex");
     UIView *view = [_dataSource swipeView:self viewForItemAtIndex:index reusingView:[self dequeueItemView]];
     if (view == nil)
     {
@@ -846,11 +858,14 @@
     if (oldView)
     {
         [self queueItemView:oldView];
+         NSLog(@"removeFromSuperview");
         [oldView removeFromSuperview];
     }
     
     [self setItemView:view forIndex:index];
+    NSLog(@"setFrameForView before");
     [self setFrameForView:view atIndex:index];
+        NSLog(@"setFrameForView after");
     view.userInteractionEnabled = YES;
     [_scrollView addSubview:view];
     
@@ -904,17 +919,18 @@
             [visibleIndices addObject:@(index)];
         }
 
+        //TODO put this back in when we're preserving scroll positions
         //remove offscreen views
-        for (NSNumber *number in [_itemViews allKeys])
-        {
-            if (![visibleIndices containsObject:number])
-            {
-                UIView *view = _itemViews[number];
-                [self queueItemView:view];
-                [view removeFromSuperview];
-                [_itemViews removeObjectForKey:number];
-            }
-        }
+//        for (NSNumber *number in [_itemViews allKeys])
+//        {
+//            if (![visibleIndices containsObject:number])
+//            {
+//                UIView *view = _itemViews[number];
+//                [self queueItemView:view];
+//                [view removeFromSuperview];
+//                [_itemViews removeObjectForKey:number];
+//            }
+//        }
         
         //add onscreen views
         for (NSNumber *number in visibleIndices)
@@ -939,7 +955,9 @@
 }
 
 - (void)reloadData
+
 {
+    NSLog(@"swipeview reloadData");
     //remove old views
     for (UIView *view in self.visibleItemViews)
     {
