@@ -940,16 +940,17 @@
         
         //TODO put this back in when we're preserving scroll positions
         //remove offscreen views
-        //        for (NSNumber *number in [_itemViews allKeys])
-        //        {
-        //            if (![visibleIndices containsObject:number])
-        //            {
-        //                UIView *view = _itemViews[number];
-        //                [self queueItemView:view];
-        //                [view removeFromSuperview];
-        //                [_itemViews removeObjectForKey:number];
-        //            }
-        //        }
+        
+                for (NSNumber *number in [_itemViews allKeys])
+                {
+                    if (![visibleIndices containsObject:number])
+                    {
+                        UIView *view = _itemViews[number];
+                        [self queueItemView:view];
+                        [view removeFromSuperview];
+                        [_itemViews removeObjectForKey:number];
+                    }
+                }
         
         //add onscreen views
         for (NSNumber *number in visibleIndices)
