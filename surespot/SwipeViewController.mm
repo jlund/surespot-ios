@@ -13,10 +13,13 @@
 #import "EncryptionController.h"
 #import "MessageProcessor.h"
 #import <UIKit/UIKit.h>
+#import "OurMessageView.h"
 //#import <QuartzCore/CATransaction.h>
 
 @interface SwipeViewController ()
 @property (nonatomic, strong) NSString * currentChat;
+@property (nonatomic, strong) dispatch_queue_t dateFormatQueue;
+@property (nonatomic, strong) NSDateFormatter * dateFormatter;
 @end
 
 
@@ -28,6 +31,11 @@
     NSLog(@"swipeviewdidload %@", self);
     [super viewDidLoad];
     
+    _dateFormatQueue = dispatch_queue_create("date format queue", NULL);
+    _dateFormatter = [[NSDateFormatter alloc]init];
+    [_dateFormatter setDateStyle:NSDateFormatterShortStyle];
+    [_dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+       
     _chats = [[NSMutableDictionary alloc] init];
     
     //configure swipe view
@@ -192,7 +200,7 @@
     
     //   [_swipeView updateLayout];
     //[_swipeView layOutItemViews];
-
+    
 }
 
 
@@ -217,7 +225,7 @@
             _friendView = [[UITableView alloc] initWithFrame:swipeView.frame style: UITableViewStylePlain];
             [_friendView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
             _friendView.delegate = self;
-            _friendView.dataSource = self;        
+            _friendView.dataSource = self;
             
             [[NetworkController sharedInstance] getFriendsSuccessBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                 NSLog(@"get friends response: %d",  [response statusCode]);
@@ -253,8 +261,8 @@
     NSInteger currPage =swipeView.currentPage;
     //update page control page
     NSLog(@"swipeview index changed to %d", currPage);
- //   _pageControl.currentPage = swipeView.currentPage;
-  //  [_swipeView reloadData];
+    //   _pageControl.currentPage = swipeView.currentPage;
+    //  [_swipeView reloadData];
     UITableView * tableview;
     if (currPage == 0) {
         tableview = _friendView;
@@ -343,10 +351,10 @@
         return cell;
     }
     else {
-        static NSString *CellIdentifier = @"ChatCell";
+        static NSString *CellIdentifier = @"OurMessageView";
         
         
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+        OurMessageView *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
         
         NSArray *keys = [_chats allKeys];
         id aKey = [keys objectAtIndex:index -1];
@@ -358,6 +366,11 @@
             
             SurespotMessage * message =[messages objectAtIndex:indexPath.row];
             NSString * plainData = [message plaindata];
+            
+            
+            cell.messageStatusLabel.text = @"loading and decrypting...";
+            cell.messageSentView.backgroundColor = [UIColor blackColor];
+            
             
             if (!plainData){
                 NSLog(@"decrypting data for iv: %@", [message iv]);
@@ -373,7 +386,10 @@
             }
             else {
                 NSLog(@"setting text for iv: %@ to: %@", [message iv], plainData);
-                cell.textLabel.text = plainData;
+                cell.messageLabel.text = plainData;
+                cell.messageStatusLabel.text = [self stringFromDate:[message dateTime]];
+                cell.messageSentView.backgroundColor = [UIColor lightGrayColor];
+                
             }
             
         }
@@ -407,17 +423,18 @@
         [chatView setDataSource: self];
         [chatView setScrollsToTop:NO];
         [chatView setDirectionalLockEnabled:YES];
-
+        
         [_chats setObject:chatView forKey:username];
         //listen for rolead notifications
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadMessages:) name:@"reloadMessages" object:username];
         
         
-        [chatView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"ChatCell"];
+        //   [chatView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"ChatCell"];
+        [chatView registerNib:[UINib nibWithNibName:@"OurMessageCell" bundle:nil] forCellReuseIdentifier:@"OurMessageView"];
         
         NSInteger index = _chats.count;
         NSLog(@"creating and scrolling to index: %d", index);
-     
+        
         [_swipeView loadViewAtIndex:index];
         [_swipeView updateItemSizeAndCount];
         [_swipeView updateScrollViewDimensions];
@@ -433,7 +450,7 @@
         
     }
     _currentChat = username;
-  //  [_swipeView reloadData];
+    //  [_swipeView reloadData];
     [_textField resignFirstResponder];
 }
 
@@ -511,6 +528,13 @@
 }
 
 
-
+- (NSString *)stringFromDate:(NSDate *)date
+{
+    __block NSString *string = nil;
+    dispatch_sync(_dateFormatQueue, ^{
+        string = [_dateFormatter stringFromDate:date ];
+    });
+    return string;
+}
 
 @end

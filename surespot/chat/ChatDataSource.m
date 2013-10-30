@@ -65,6 +65,7 @@
         SurespotMessage * existingMessage = [self.messages objectAtIndex:index];
         if (message.serverid) {
             existingMessage.serverid = message.serverid;
+            existingMessage.dateTime = message.dateTime;
         }        
     }
 }

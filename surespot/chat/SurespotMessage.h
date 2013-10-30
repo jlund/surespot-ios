@@ -20,6 +20,7 @@
 @property (nonatomic, strong) NSString * toVersion;
 @property (nonatomic, strong) NSString * fromVersion;
 @property (nonatomic, strong) NSString * plaindata;
+@property (nonatomic, strong) NSDate * dateTime;
 
 - (NSString *) getOtherUser;
 - (NSString *) getTheirVersion;

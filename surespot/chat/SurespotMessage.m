@@ -43,6 +43,7 @@
     _toVersion = [dictionary objectForKey:@"toVersion"];
     _data =[dictionary objectForKey:@"data"];
     _iv = [dictionary objectForKey:@"iv"];
+    _dateTime = [NSDate dateWithTimeIntervalSince1970: [[dictionary objectForKey:@"datetime"] doubleValue]/1000];
 }
 
 - (NSString *) getOtherUser {
