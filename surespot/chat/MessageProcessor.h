@@ -11,5 +11,5 @@
 
 @interface MessageProcessor : NSObject
 +(MessageProcessor*) sharedInstance;
--(void) decryptMessage:(SurespotMessage *) message completionCallback:(void(^)(SurespotMessage *))  callback;
+-(void) decryptMessage:(SurespotMessage *) message width: (CGFloat) width completionCallback:(void(^)(SurespotMessage *))  callback ;
 @end

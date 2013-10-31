@@ -36,14 +36,13 @@
     
     if (self != nil) {
         self.socketIO = [[SocketIO alloc] initWithDelegate:self];
-            self.socketIO.useSecure = NO;
+        self.socketIO.useSecure = NO;
         [self.socketIO connectToHost:@"192.168.10.68" onPort:8080];
         
-     ////   self.socketIO.useSecure = YES;
-     //   [self.socketIO connectToHost:@"server.surespot.me" onPort:443];
+        ////   self.socketIO.useSecure = YES;
+        //   [self.socketIO connectToHost:@"server.surespot.me" onPort:443];
         
         self.dataSources = [[NSMutableDictionary alloc] init];
-        self.tableViews = [[NSMutableDictionary alloc] init];
     }
     
     return self;
@@ -72,35 +71,23 @@
     
     NSString * otherUser = [message getOtherUser];
     
-    [[MessageProcessor sharedInstance] decryptMessage:message completionCallback:^(SurespotMessage * message){
-        
-        //get the datasource for this message and add the message
-        ChatDataSource * dataSource = [self getDataSourceForFriendname: otherUser];
+    //  [[MessageProcessor sharedInstance] decryptMessage:message completionCallback:^(SurespotMessage * message){
+    
+    //get the datasource for this message and add the message
+    ChatDataSource * dataSource = [self getDataSourceForFriendname: otherUser];
+    
+    
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
         [dataSource addMessage: message];
         
-        //get the key out so it is the same object so event is received
-        NSArray * keys = [self.dataSources allKeys];
-        for (NSString * key in keys) {
-            
-            if ([key isEqual: otherUser]) {
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                                [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadMessages" object:key ];
-                });
-                
-
-                break;
-                
-            }
-        }
-        //use if we have issues http://www.cocoanetics.com/2010/05/nsnotifications-and-background-threads/
-        
-        //            NSNotification *note = [NSNotification notificationWithName:@"reloadMessages"  object:from];
-        //            [[NSNotificationCenter defaultCenter] performSelectorOnMainThread:@selector(postNotification:) withObject: note waitUntilDone:NO];
-        //             }];
-        
-        
-    }];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadMessages" object:otherUser ];
+    });
+    
+    
+    
+    
+    // }];
     
 }
 

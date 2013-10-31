@@ -14,7 +14,6 @@
 +(ChatController*)sharedInstance;
 @property (strong) SocketIO * socketIO;
 @property (strong) NSMutableDictionary * dataSources;
-@property (strong) NSMutableDictionary * tableViews;
 
 - (ChatDataSource *) getDataSourceForFriendname: (NSString *) friendname;
 - (void) sendMessage: (NSString *) message toFriendname: (NSString *) friendname;

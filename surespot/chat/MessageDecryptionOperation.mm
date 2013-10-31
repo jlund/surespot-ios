@@ -15,10 +15,11 @@
 @end
 
 @implementation MessageDecryptionOperation
--(id) initWithMessage: (SurespotMessage *) message completionCallback:(void(^)(SurespotMessage *))  callback {
+-(id) initWithMessage: (SurespotMessage *) message width: (CGFloat) width completionCallback:(void(^)(SurespotMessage *))  callback {
     if (self = [super init]) {
         self.callback = callback;
         self.message = message;
+        self.width = width;
         _isExecuting = NO;
         _isFinished = NO;
     }
@@ -35,6 +36,18 @@
     [EncryptionController symmetricDecryptString:[_message data] ourVersion:[_message getOurVersion] theirUsername:[_message getOtherUser] theirVersion:[_message getTheirVersion]  iv:[_message iv]  callback:^(NSString * plaintext){
         
         _message.plaindata = plaintext;
+        
+        //figure out message height
+        if (plaintext){
+            
+            UIFont *cellFont = [UIFont fontWithName:@"Helvetica" size:17.0];
+            CGSize constraintSize = CGSizeMake(_width - 40, MAXFLOAT);
+            CGSize labelSize = [plaintext sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
+            [_message setRowHeight:(int) (labelSize.height + 20 > 44 ? labelSize.height + 20 : 44) ];
+        }
+
+        
+        
         [self finish];
        
     }];

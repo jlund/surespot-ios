@@ -28,9 +28,9 @@
     return sharedInstance;
 }
 
--(void) decryptMessage:(SurespotMessage *) message completionCallback:(void(^)(SurespotMessage *))  callback {
+-(void) decryptMessage:(SurespotMessage *) message width: (CGFloat) width completionCallback:(void(^)(SurespotMessage *))  callback {
     
-        MessageDecryptionOperation * op = [[MessageDecryptionOperation alloc]initWithMessage:message completionCallback:callback];
+    MessageDecryptionOperation * op = [[MessageDecryptionOperation alloc]initWithMessage:message width: width completionCallback:callback];
     
     [_decryptionQueue addOperation:op];
     

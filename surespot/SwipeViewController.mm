@@ -74,9 +74,11 @@
     // Set the constraints for the scroll view and the image view.
     //  [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[scrollView]|" options:0 metrics: 0 views:viewsDictionary]];
     // [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[tlg][scrollView]" options:0 metrics: 0 views:viewsDictionary]];
-    
+    //listen for rolead notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadMessages:) name:@"reloadMessages" object:nil];
     //make sure chat controller loaded
     [ChatController sharedInstance];
+    
     
 }
 
@@ -354,17 +356,6 @@
                 return message.rowHeight;
             }
             
-            NSString * plainData = [message plaindata];
-            
-            //figure out message height
-            if (plainData){
-                
-                UIFont *cellFont = [UIFont fontWithName:@"Helvetica" size:17.0];
-                CGSize constraintSize = CGSizeMake(tableView.frame.size.width - 40, MAXFLOAT);
-                CGSize labelSize = [plainData sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
-                [ message setRowHeight:(int) (labelSize.height + 20 > 44 ? labelSize.height + 20 : 44) ];
-                return message.rowHeight;
-            }
             else {
                 return 44;
             }
@@ -418,7 +409,7 @@
             
             if ([ChatUtils isOurMessage:message]) {
                 ours = YES;
-                cellIdentifier    = OurCellIdentifier;
+                cellIdentifier = OurCellIdentifier;
                 
             }
             else {
@@ -427,7 +418,7 @@
             MessageView *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
             
             cell.messageStatusLabel.text = @"loading and decrypting...";
-            
+            cell.messageLabel.text = @"";
             
             // __block UITableView * blockView = tableView;
             if (!plainData){
@@ -444,7 +435,7 @@
                     [message setLoaded:NO];
                     [message setLoading:YES];
                     NSLog(@"decrypting data for iv: %@", [message iv]);
-                    [[MessageProcessor sharedInstance] decryptMessage:message completionCallback:^(SurespotMessage  * message){
+                    [[MessageProcessor sharedInstance] decryptMessage:message width: tableView.frame.size.width completionCallback:^(SurespotMessage  * message){
                         
                         NSLog(@"data decrypted, reloading row for iv %@", [message iv]);
                         dispatch_async(dispatch_get_main_queue(), ^{
@@ -514,8 +505,7 @@
         [chatView setDirectionalLockEnabled:YES];
         
         [_chats setObject:chatView forKey:username];
-        //listen for rolead notifications
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadMessages:) name:@"reloadMessages" object:username];
+        
         
         
         //   [chatView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"ChatCell"];
