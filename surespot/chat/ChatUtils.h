@@ -12,4 +12,5 @@
 @interface ChatUtils : NSObject
 + (NSString *)  getOtherUserWithFrom: (NSString *) from andTo: (NSString *) to;
 + (BOOL) isOurMessage: (SurespotMessage *) message;
++ (NSString *) hexFromData: (NSData *) data ;
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "NetworkController.h"
+#import "ChatUtils.h"
 
 #define kHost @"http://192.168.10.68:8080"
 //#define kHost @"https://server.surespot.me:443"
@@ -46,7 +47,17 @@
 -(void) loginWithUsername:(NSString*) username andPassword:(NSString *)password andSignature: (NSString *) signature
              successBlock:(JSONSuccessBlock)successBlock failureBlock: (JSONFailureBlock) failureBlock
 {
-    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:username,@"username",password,@"password",signature, @"authSig", nil];
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:username,@"username",password,@"password",signature, @"authSig", nil]
+    
+    ;
+    
+    
+    //add apnTeken if we have one
+    NSData *  apnToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"apnToken"];
+    if (apnToken) {
+        [params setObject:[ChatUtils hexFromData:apnToken] forKey:@"apnToken"];
+    }
+    
     NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"login" parameters: params];
     
     

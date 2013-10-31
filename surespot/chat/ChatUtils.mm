@@ -17,4 +17,14 @@
     return  [[message from] isEqualToString:[[IdentityController sharedInstance] getLoggedInUser]];
 }
 
++ (NSString *) hexFromData: (NSData *) data {
+    NSUInteger dataLength = [data length];
+    NSMutableString *string = [NSMutableString stringWithCapacity:dataLength*2];
+    const unsigned char *dataBytes = (unsigned char *)[data bytes];
+    for (NSInteger idx = 0; idx < dataLength; ++idx) {
+        [string appendFormat:@"%02x", dataBytes[idx]];
+    }
+    return string;
+}
+
 @end
