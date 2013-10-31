@@ -7,6 +7,9 @@
 //
 
 #import "HomeCell.h"
+#define INVITE_ACTION_BLOCK 0;
+#define INVITE_ACTION_IGNORE 1;
+#define INVITE_ACTION_ACCEPT 2;
 
 @implementation HomeCell
 
@@ -27,7 +30,22 @@
 }
 
 - (IBAction)inviteAction:(id)sender {
-    [_friendDelegate inviteAction:[sender tag] forUsername:_friendName];
+    NSString * action;
+    switch ([sender tag]) {
+        case 0:
+            action = @"block";
+            break;
+        case 1:
+            action = @"ignore";
+            break;
+        case 2:
+            action = @"accept";
+            break;
+    }
+    if (action) {
+        
+        [_friendDelegate inviteAction:action forUsername:_friendName];
+    }
 }
 
 

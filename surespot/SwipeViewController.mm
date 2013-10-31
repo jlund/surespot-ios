@@ -17,6 +17,7 @@
 #import "ChatUtils.h"
 #import "HomeCell.h"
 #import "SurespotControlMessage.h"
+#import "FriendDelegate.h"
 
 //#import <QuartzCore/CATransaction.h>
 
@@ -742,8 +743,40 @@
     return string;
 }
 
--(void) inviteAction:(NSInteger)action forUsername:(NSString *)username{
-    NSLog(@"Invite action: %d, for username: %@", action, username);
+-(void) inviteAction:(NSString *) action forUsername:(NSString *)username{
+    NSLog(@"Invite action: %@, for username: %@", action, username);
+    [[NetworkController sharedInstance]
+     respondToInviteName:username action:action
+     
+     
+     successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
+         
+         Friend * afriend = [self getFriendByName:username];
+         [afriend setInviter:NO];
+         
+         if ([action isEqualToString:@"accept"]) {
+             //set new to true
+         }
+         else {
+             if ([action isEqualToString:@"block"]||[action isEqualToString:@"ignore"]) {
+                 if (![afriend isDeleted]) {
+                     [self removeFriend:afriend];
+                 }
+                 
+
+             }
+             
+         }
+         
+         [_friendView reloadData];
+     }
+     
+     failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
+         //TODO notify user
+     }];
+    
+    
+    
 }
 
 @end

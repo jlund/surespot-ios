@@ -7,10 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#define INVITE_ACTION_BLOCK 0;
-#define INVITE_ACTION_IGNORE 1;
-#define INVITE_ACTION_ACCEPT 2;
+
 
 @protocol FriendDelegate <NSObject>
--(void) inviteAction:(NSInteger) action forUsername:(NSString *) username;
+-(void) inviteAction:(NSString *) action forUsername:(NSString *) username;
 @end
