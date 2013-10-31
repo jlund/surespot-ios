@@ -15,6 +15,9 @@
 #import <UIKit/UIKit.h>
 #import "MessageView.h"
 #import "ChatUtils.h"
+#import "HomeCell.h"
+#import "SurespotControlMessage.h"
+
 //#import <QuartzCore/CATransaction.h>
 
 @interface SwipeViewController ()
@@ -76,6 +79,11 @@
     // [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[tlg][scrollView]" options:0 metrics: 0 views:viewsDictionary]];
     //listen for rolead notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadMessages:) name:@"reloadMessages" object:nil];
+    
+    //listen for invited
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(friendInvited:) name:@"friendInvited" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(friendInvite:) name:@"friendInvite" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(friendDelete:) name:@"friendDelete" object:nil];
     //make sure chat controller loaded
     [ChatController sharedInstance];
     
@@ -226,14 +234,20 @@
             NSLog(@"creating friend view");
             
             _friendView = [[UITableView alloc] initWithFrame:swipeView.frame style: UITableViewStylePlain];
-            [_friendView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
+            [_friendView registerNib:[UINib nibWithNibName:@"HomeCell" bundle:nil] forCellReuseIdentifier:@"HomeCell"];
             _friendView.delegate = self;
             _friendView.dataSource = self;
             
             [[NetworkController sharedInstance] getFriendsSuccessBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                 NSLog(@"get friends response: %d",  [response statusCode]);
-                self.friends = [[NSMutableArray alloc] initWithArray: [((NSDictionary *) JSON) objectForKey:@"friends"]];
+                self.friends = [[NSMutableArray alloc ] init];
                 
+                
+                
+                NSArray * friendDicts = [((NSDictionary *) JSON) objectForKey:@"friends"];
+                for (NSDictionary * friendDict in friendDicts) {
+                    [_friends addObject:[[Friend alloc] initWithDictionary: friendDict]];
+                };
                 [_friendView reloadData];
                 
             } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
@@ -342,7 +356,14 @@
     
     
     if (index == 0) {
-        return 44;
+        Friend * afriend = [_friends objectAtIndex:indexPath.row];
+        if ([afriend isInviter] ) {
+            return 70;
+        }
+        else {
+            return 44;
+        }
+        
     }
     else {
         NSArray *keys = [_chats allKeys];
@@ -381,11 +402,20 @@
     
     
     if (index == 0) {
-        static NSString *CellIdentifier = @"Cell";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+        static NSString *CellIdentifier = @"HomeCell";
+        HomeCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
         
         // Configure the cell...
-        cell.textLabel.text = [(NSDictionary *)[_friends objectAtIndex:indexPath.row] objectForKey:@"name"];
+        Friend * afriend = [_friends objectAtIndex:indexPath.row];
+        cell.friendLabel.text = afriend.name;
+        cell.friendName = afriend.name;
+        cell.friendDelegate = self;
+        
+        BOOL isInviter =[afriend isInviter];
+        
+        [cell.ignoreButton setHidden:!isInviter];
+        [cell.acceptButton setHidden:!isInviter];
+        [cell.blockButton setHidden:!isInviter];
         
         return cell;
     }
@@ -401,7 +431,7 @@
             
             SurespotMessage * message =[messages objectAtIndex:indexPath.row];
             NSString * plainData = [message plaindata];
-            static NSString *OurCellIdentifier       = @"OurMessageView";
+            static NSString *OurCellIdentifier = @"OurMessageView";
             static NSString *TheirCellIdentifier = @"TheirMessageView";
             
             NSString * cellIdentifier;
@@ -486,8 +516,7 @@
     if (page == 0) {
         
         // Configure the cell...
-        NSString * friendname =[(NSDictionary *)[_friends objectAtIndex:indexPath.row] objectForKey:@"name"];
-        
+        NSString * friendname =[[_friends objectAtIndex:indexPath.row] name];
         [self showChat:friendname];
     }
 }
@@ -563,10 +592,9 @@
     
     NSArray *keys = [_chats allKeys];
     id friendname = [keys objectAtIndex:[_swipeView currentItemIndex] -1];
-    
     [[ChatController sharedInstance] sendMessage: message toFriendname:friendname];
-    UITableView * chatView = [_chats objectForKey:friendname];
-    [chatView reloadData];
+    // UITableView * chatView = [_chats objectForKey:friendname];
+    // [chatView reloadData];
 }
 
 - (void)reloadMessages:(NSNotification *)notification
@@ -575,14 +603,20 @@
     NSString * username = notification.object;
     
     id tableView = [_chats objectForKey:username];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [tableView reloadData];
-        NSIndexPath *scrollIndexPath = [NSIndexPath indexPathForRow:([tableView numberOfRowsInSection:([tableView numberOfSections] - 1)] - 1) inSection:([tableView numberOfSections] - 1)];
-        [tableView scrollToRowAtIndexPath:scrollIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    });
-    
-    
+    if (tableView) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [tableView reloadData];
+            
+            NSInteger numRows =[tableView numberOfRowsInSection:0];
+            if (numRows > 0) {
+                
+                NSIndexPath *scrollIndexPath = [NSIndexPath indexPathForRow:(numRows - 1) inSection:0];
+                [tableView scrollToRowAtIndexPath:scrollIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+            }
+        });
+        
+    }
 }
 
 - (void) inviteUser: (NSString *) username {
@@ -596,8 +630,11 @@
      inviteFriend:username
      successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
          NSLog(@"invite friend response: %d",  [operation.response statusCode]);
-         NSDictionary * f = [NSDictionary dictionaryWithObjectsAndKeys:username,@"name",[NSNumber numberWithInt:2],@"flags", nil];
-         [_friends addObject:f];
+         Friend * afriend = [[Friend alloc] init];
+         afriend.name = username         ;
+         afriend.flags = 2;
+         
+         [_friends addObject:afriend];
          [_friendView reloadData];
      }
      failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
@@ -605,6 +642,94 @@
          NSLog(@"response failure: %@",  Error);
          
      }];
+}
+
+- (void)friendInvited:(NSNotification *)notification
+{
+    NSLog(@"friendInvited");
+    NSString * username = notification.object;
+    
+    Friend * theFriend = [self getFriendByName:username];
+    if (!theFriend) {
+        theFriend = [[Friend alloc] init];
+        theFriend.name = username;
+        [_friends addObject:theFriend];
+    }
+    
+    [theFriend setInvited:YES];
+    
+    //todo sort
+    [_friendView reloadData];
+    
+    
+}
+
+- (void)friendInvite:(NSNotification *)notification
+{
+    NSLog(@"friendInvite");
+    NSString * username = notification.object;
+    
+    Friend * theFriend = [self getFriendByName:username];
+    
+    if (!theFriend) {
+        theFriend = [[Friend alloc] init];
+        theFriend.name = username;
+        [_friends addObject:theFriend];
+    }
+    
+    [theFriend setInviter:YES];
+    
+    //todo sort
+    [_friendView reloadData];
+    
+    
+}
+
+
+- (void)friendDelete:(NSNotification *)notification
+{
+    NSLog(@"friendDelete");
+    SurespotControlMessage * message = notification.object;
+    
+    Friend * afriend = [self getFriendByName:[message data]];
+    
+    if (afriend) {
+        if ([afriend isInvited] || [afriend isInviter]) {
+            if (![afriend isDeleted]) {
+                [self removeFriend:afriend];
+            }
+            else {
+                [afriend setInvited:NO];
+                [afriend setInviter:NO];
+            }
+        }
+        else {
+            [self handleDeleteUser: [message data] deleter:[message moreData]];
+        }
+    }
+    
+    //todo sort
+    [_friendView reloadData];
+    
+    
+}
+
+-(void) handleDeleteUser: (NSString *) deleted deleter: (NSString *) deleter {
+    
+}
+
+-(void) removeFriend: (Friend *) afriend {
+    [_friends removeObject:afriend];
+}
+
+-(Friend *) getFriendByName: (NSString *) name {
+    for (Friend * afriend in _friends) {
+        if ([[afriend name] isEqualToString:name]) {
+            return  afriend;
+        }
+    }
+    
+    return nil;
 }
 
 
@@ -615,6 +740,10 @@
         string = [_dateFormatter stringFromDate:date ];
     });
     return string;
+}
+
+-(void) inviteAction:(NSInteger)action forUsername:(NSString *)username{
+    NSLog(@"Invite action: %d, for username: %@", action, username);
 }
 
 @end

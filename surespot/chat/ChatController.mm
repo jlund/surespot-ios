@@ -12,6 +12,7 @@
 #import "SocketIOPacket.h"
 #import "NSData+Base64.h"
 #import "SurespotMessage.h"
+#import "SurespotControlMessage.h"
 #import "MessageProcessor.h"
 
 
@@ -62,32 +63,21 @@
     
     
     NSString * name = [jsonData objectForKey:@"name"];
-    if (![name isEqual:@"message"]) {
-        return;
+    
+    if ([name isEqualToString:@"control"]) {
+        
+        SurespotControlMessage * message = [[SurespotControlMessage alloc] initWithJSONString:[jsonData objectForKey:@"args"][0]];
+        [self handleControlMessage: message];
+    }
+    else {
+        
+        if ([name isEqualToString:@"message"]) {
+            SurespotMessage * message = [[SurespotMessage alloc] initWithJSONString:[jsonData objectForKey:@"args"][0]];
+            
+            [self handleMessage:message];
+        }
     }
     
-    SurespotMessage * message = [[SurespotMessage alloc] initWithJSONString:[jsonData objectForKey:@"args"][0]];
-    
-    
-    NSString * otherUser = [message getOtherUser];
-    
-    //  [[MessageProcessor sharedInstance] decryptMessage:message completionCallback:^(SurespotMessage * message){
-    
-    //get the datasource for this message and add the message
-    ChatDataSource * dataSource = [self getDataSourceForFriendname: otherUser];
-    
-    
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [dataSource addMessage: message];
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadMessages" object:otherUser ];
-    });
-    
-    
-    
-    
-    // }];
     
 }
 
@@ -148,4 +138,77 @@
     
 }
 
+-(void) handleMessage: (SurespotMessage *) message {
+    NSString * otherUser = [message getOtherUser];
+    ChatDataSource * dataSource = [self.dataSources objectForKey:otherUser];
+    if (dataSource) {
+        //  [[MessageProcessor sharedInstance] decryptMessage:message completionCallback:^(SurespotMessage * message){
+        
+        
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [dataSource addMessage: message];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadMessages" object:otherUser ];
+        });
+        
+        
+        
+        
+        // }];
+        
+    }
+}
+
+-(void) handleControlMessage: (SurespotControlMessage *) message {
+    if ([message.type isEqualToString:@"user"]) {
+        [self handleUserControlMessage: message];
+    }
+    else {
+        if ([message.type isEqualToString:@"message"]) {
+            
+        }
+    }
+}
+
+-(void) handleUserControlMessage: (SurespotControlMessage *) message {
+    NSString * user;
+    if ([message.action isEqualToString:@"revoke"]) {
+        
+    }
+    else {
+        if ([message.action isEqualToString:@"invited"]) {
+            user = message.data;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"friendInvited" object:user ];
+        }
+        else {
+            if ([message.action isEqualToString:@"added"]) {
+                
+            }
+            else {
+                if ([message.action isEqualToString:@"invite"]) {
+                    user = message.data;
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"friendInvite" object:user ];
+                }
+                else {
+                    if ([message.action isEqualToString:@"ignore"]) {
+                        
+                    }
+                    else {
+                        if ([message.action isEqualToString:@"delete"]) {
+                            [[NSNotificationCenter defaultCenter] postNotificationName:@"friendDelete" object:message ];
+
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
+    }
+    
+}
 @end

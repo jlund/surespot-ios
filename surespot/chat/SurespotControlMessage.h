@@ -1,0 +1,20 @@
+//
+//  SurespotControlMessage.h
+//  surespot
+//
+//  Created by Adam on 10/31/13.
+//  Copyright (c) 2013 2fours. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface SurespotControlMessage : NSObject
+- (id) initWithJSONString: (NSString *) jsonString;
+@property (nonatomic, strong) NSString * type;
+@property (nonatomic, strong) NSString * action;
+@property (nonatomic, strong) NSString * data;
+@property (nonatomic, strong) NSString * moreData;
+@property (nonatomic, assign) NSInteger id;
+@property (nonatomic, strong) NSString * localId;
+@property (nonatomic, strong) NSString * from;
+@end
