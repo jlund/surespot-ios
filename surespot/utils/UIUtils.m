@@ -25,4 +25,19 @@
     }
 
 }
+
++ (CGSize)threadSafeSizeString: (NSString *) string WithFont:(UIFont *)font constrainedToSize:(CGSize)size {
+    // http://stackoverflow.com/questions/12744558/uistringdrawing-methods-dont-seem-to-be-thread-safe-in-ios-6
+    NSAttributedString *attributedText =
+    [[NSAttributedString alloc]
+     initWithString:string
+     attributes:@
+     {
+     NSFontAttributeName: font
+     }];
+    CGRect rect = [attributedText boundingRectWithSize:size
+                                               options:NSStringDrawingUsesLineFragmentOrigin
+                                               context:nil];
+    return rect.size;
+}
 @end

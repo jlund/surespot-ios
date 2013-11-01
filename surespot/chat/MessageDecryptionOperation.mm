@@ -8,6 +8,7 @@
 
 #import "MessageDecryptionOperation.h"
 #import "EncryptionController.h"
+#import "UIUtils.h"
 
 @interface MessageDecryptionOperation()
 @property (nonatomic) BOOL isExecuting;
@@ -45,7 +46,10 @@
                 
                 UIFont *cellFont = [UIFont fontWithName:@"Helvetica" size:17.0];
                 CGSize constraintSize = CGSizeMake(_width - 40, MAXFLOAT);
-                CGSize labelSize = [plaintext sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
+                
+                //http://stackoverflow.com/questions/12744558/uistringdrawing-methods-dont-seem-to-be-thread-safe-in-ios-6
+                CGSize labelSize = //[plaintext sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWord
+                [UIUtils threadSafeSizeString:plaintext WithFont:cellFont constrainedToSize:constraintSize];
                 [_message setRowHeight:(int) (labelSize.height + 20 > 44 ? labelSize.height + 20 : 44) ];
             }
             

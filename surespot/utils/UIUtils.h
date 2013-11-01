@@ -10,4 +10,5 @@
 
 @interface UIUtils : NSObject
 +(void) showNotificationToastView:(UIView *) view data:(NSDictionary *) notificationData;
++ (CGSize)threadSafeSizeString: (NSString *) string WithFont:(UIFont *)font constrainedToSize:(CGSize)size;
 @end
