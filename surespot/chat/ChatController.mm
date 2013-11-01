@@ -44,8 +44,8 @@
         
         self.socketIO = [[SocketIO alloc] initWithDelegate:self];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pause:) name:UIApplicationWillResignActiveNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resume:) name:UIApplicationDidBecomeActiveNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pause:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resume:) name:UIApplicationWillEnterForegroundNotification object:nil];
 
         
         ////   self.socketIO.useSecure = YES;
@@ -67,7 +67,7 @@
 }
 
 -(void) pause: (NSNotification *)  notification{
-        NSLog(@"pause");
+        NSLog(@"chatcontroller pause");
     [self    disconnect];
 }
 
@@ -83,8 +83,7 @@
 }
 
 -(void) resume: (NSNotification *) notification {
-    NSLog(@"resume");
-    
+    NSLog(@"chatcontroller resume");    
     [self connect];
 }
 
@@ -92,7 +91,7 @@
 
 - (void) socketIODidConnect:(SocketIO *)socket {
     NSLog(@"didConnect()");
-    // [socketIO sendJSON:dict];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"socketConnected" object:nil ];
 }
 
 - (void) socketIO:(SocketIO *)socket didReceiveEvent:(SocketIOPacket *)packet
