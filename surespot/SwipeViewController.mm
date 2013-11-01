@@ -431,7 +431,7 @@
             
             
             SurespotMessage * message =[messages objectAtIndex:indexPath.row];
-            NSString * plainData = [message plaindata];
+            NSString * plainData = [message plainData];
             static NSString *OurCellIdentifier = @"OurMessageView";
             static NSString *TheirCellIdentifier = @"TheirMessageView";
             

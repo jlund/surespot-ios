@@ -24,7 +24,7 @@
         _isFinished = NO;
     }
     return self;
-
+    
 }
 
 
@@ -33,25 +33,33 @@
     _isExecuting = YES;
     [self didChangeValueForKey:@"isExecuting"];
     
-    [EncryptionController symmetricDecryptString:[_message data] ourVersion:[_message getOurVersion] theirUsername:[_message getOtherUser] theirVersion:[_message getTheirVersion]  iv:[_message iv]  callback:^(NSString * plaintext){
+    
+    if ([_message.mimeType isEqualToString: @"text/plain"]) {
         
-        _message.plaindata = plaintext;
-        
-        //figure out message height
-        if (plaintext){
+        [EncryptionController symmetricDecryptString:[_message data] ourVersion:[_message getOurVersion] theirUsername:[_message getOtherUser] theirVersion:[_message getTheirVersion]  iv:[_message iv]  callback:^(NSString * plaintext){
             
-            UIFont *cellFont = [UIFont fontWithName:@"Helvetica" size:17.0];
-            CGSize constraintSize = CGSizeMake(_width - 40, MAXFLOAT);
-            CGSize labelSize = [plaintext sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
-            [_message setRowHeight:(int) (labelSize.height + 20 > 44 ? labelSize.height + 20 : 44) ];
-        }
-
-        
-        
+            _message.plainData = plaintext;
+            
+            //figure out message height
+            if (plaintext){
+                
+                UIFont *cellFont = [UIFont fontWithName:@"Helvetica" size:17.0];
+                CGSize constraintSize = CGSizeMake(_width - 40, MAXFLOAT);
+                CGSize labelSize = [plaintext sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
+                [_message setRowHeight:(int) (labelSize.height + 20 > 44 ? labelSize.height + 20 : 44) ];
+            }
+            
+            
+            
+            [self finish];
+            
+        }];
+    }
+    else {
+        _message.plainData = _message.mimeType;
         [self finish];
-       
-    }];
-       
+    }
+    
 }
 
 - (void)finish

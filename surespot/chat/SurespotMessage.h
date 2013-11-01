@@ -19,7 +19,8 @@
 @property (nonatomic, strong) NSString * data;
 @property (nonatomic, strong) NSString * toVersion;
 @property (nonatomic, strong) NSString * fromVersion;
-@property (nonatomic, strong) NSString * plaindata;
+@property (nonatomic, strong) NSString * mimeType;
+@property (nonatomic, strong) NSString * plainData;
 @property (nonatomic, strong) NSDate * dateTime;
 @property (atomic, assign, getter=isLoading) BOOL loading;
 @property (atomic, assign, getter=isLoaded) BOOL loaded;
