@@ -31,7 +31,6 @@
 		66159703176F6732001B32C1 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 66159702176F6732001B32C1 /* NSData+Base64.m */; };
 		661C2EC31762B125000649E7 /* SurespotIdentity.mm in Sources */ = {isa = PBXBuildFile; fileRef = 661C2EC21762B125000649E7 /* SurespotIdentity.mm */; };
 		661C2EC81762C3C0000649E7 /* IdentityKeys.mm in Sources */ = {isa = PBXBuildFile; fileRef = 661C2EC71762C3C0000649E7 /* IdentityKeys.mm */; };
-		661C2ECB17638C2A000649E7 /* testlocal1.ssi in Resources */ = {isa = PBXBuildFile; fileRef = 661C2ECA17638C2A000649E7 /* testlocal1.ssi */; };
 		661C2ECE1763A214000649E7 /* IdentityController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 661C2ECD1763A214000649E7 /* IdentityController.mm */; };
 		661C2ED11763A254000649E7 /* EncryptionController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 661C2ED01763A253000649E7 /* EncryptionController.mm */; };
 		661C2ED31763CB57000649E7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 661C2ED21763CB56000649E7 /* libz.dylib */; };
@@ -52,7 +51,6 @@
 		6640767B1822D52800BFD974 /* SurespotControlMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 6640767A1822D52800BFD974 /* SurespotControlMessage.m */; };
 		6654441317F37A3F00F62F7F /* SwipeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6654441217F37A3F00F62F7F /* SwipeView.m */; };
 		6654441617F37BCF00F62F7F /* SwipeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6654441517F37BCF00F62F7F /* SwipeViewController.mm */; };
-		668E0EEC177B2E3500115B19 /* testlocal10.ssi in Resources */ = {isa = PBXBuildFile; fileRef = 668E0EEB177B2E3500115B19 /* testlocal10.ssi */; };
 		66B3C8ED17B15F2300CC96EE /* ChatController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66B3C8EC17B15F2300CC96EE /* ChatController.mm */; };
 		66B3C8F017B17AC800CC96EE /* ChatDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B3C8EF17B17AC800CC96EE /* ChatDataSource.m */; };
 		66E4F5B6176298CB00596E6B /* libcryptopp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E4F5A1176298CB00596E6B /* libcryptopp.a */; };
@@ -79,6 +77,8 @@
 		66EC6112176E494900937467 /* AFXMLRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EC6108176E494900937467 /* AFXMLRequestOperation.m */; };
 		66EC6113176E494900937467 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EC610A176E494900937467 /* UIImageView+AFNetworking.m */; };
 		66EC6117176E49F800937467 /* NetworkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EC6116176E49F800937467 /* NetworkController.m */; };
+		66FF0FE218242B6B0038ECA6 /* Toast+UIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FE118242B6B0038ECA6 /* Toast+UIView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		66FF0FE518242E420038ECA6 /* UIUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FE418242E420038ECA6 /* UIUtils.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,7 +101,7 @@
 		6604A2CA17626B9E0072216A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6604A2CC17626B9E0072216A /* surespot-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "surespot-Prefix.pch"; sourceTree = "<group>"; };
 		6604A2CD17626B9E0072216A /* SurespotAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SurespotAppDelegate.h; sourceTree = "<group>"; };
-		6604A2CE17626B9E0072216A /* SurespotAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SurespotAppDelegate.m; sourceTree = "<group>"; };
+		6604A2CE17626B9E0072216A /* SurespotAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SurespotAppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6604A2D017626B9E0072216A /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		6604A2D217626B9E0072216A /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		6604A2D417626B9E0072216A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -121,15 +121,14 @@
 		660EB27917FE3D7800DBC53C /* KeyboardState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyboardState.m; sourceTree = "<group>"; };
 		660EB27B17FE64D800DBC53C /* ChatUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatUtils.h; path = chat/ChatUtils.h; sourceTree = "<group>"; };
 		660EB27C17FE64D800DBC53C /* ChatUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ChatUtils.mm; path = chat/ChatUtils.mm; sourceTree = "<group>"; };
-		660EB27E17FE666D00DBC53C /* SurespotMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SurespotMessage.h; path = chat/SurespotMessage.h; sourceTree = "<group>"; };
-		660EB27F17FE666D00DBC53C /* SurespotMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SurespotMessage.m; path = chat/SurespotMessage.m; sourceTree = "<group>"; };
+		660EB27E17FE666D00DBC53C /* SurespotMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SurespotMessage.h; path = chat/SurespotMessage.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		660EB27F17FE666D00DBC53C /* SurespotMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = SurespotMessage.m; path = chat/SurespotMessage.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		66159701176F66F1001B32C1 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "utils/NSData+Base64.h"; sourceTree = "<group>"; };
 		66159702176F6732001B32C1 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Base64.m"; path = "utils/NSData+Base64.m"; sourceTree = "<group>"; };
 		661C2EC11762B125000649E7 /* SurespotIdentity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SurespotIdentity.h; path = identity/SurespotIdentity.h; sourceTree = "<group>"; };
 		661C2EC21762B125000649E7 /* SurespotIdentity.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SurespotIdentity.mm; path = identity/SurespotIdentity.mm; sourceTree = "<group>"; };
 		661C2EC71762C3C0000649E7 /* IdentityKeys.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = IdentityKeys.mm; path = encryption/IdentityKeys.mm; sourceTree = "<group>"; };
 		661C2EC91762C536000649E7 /* IdentityKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IdentityKeys.h; path = encryption/IdentityKeys.h; sourceTree = "<group>"; };
-		661C2ECA17638C2A000649E7 /* testlocal1.ssi */ = {isa = PBXFileReference; lastKnownFileType = file; name = testlocal1.ssi; path = resources/testlocal1.ssi; sourceTree = "<group>"; };
 		661C2ECC1763A214000649E7 /* IdentityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IdentityController.h; path = identity/IdentityController.h; sourceTree = "<group>"; };
 		661C2ECD1763A214000649E7 /* IdentityController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = IdentityController.mm; path = identity/IdentityController.mm; sourceTree = "<group>"; };
 		661C2ECF1763A253000649E7 /* EncryptionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EncryptionController.h; path = encryption/EncryptionController.h; sourceTree = "<group>"; };
@@ -167,9 +166,8 @@
 		6654441217F37A3F00F62F7F /* SwipeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwipeView.m; sourceTree = "<group>"; };
 		6654441417F37BCE00F62F7F /* SwipeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeViewController.h; sourceTree = "<group>"; };
 		6654441517F37BCF00F62F7F /* SwipeViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SwipeViewController.mm; sourceTree = "<group>"; };
-		668E0EEB177B2E3500115B19 /* testlocal10.ssi */ = {isa = PBXFileReference; lastKnownFileType = file; name = testlocal10.ssi; path = resources/testlocal10.ssi; sourceTree = "<group>"; };
 		66B3C8EB17B15F2300CC96EE /* ChatController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatController.h; path = chat/ChatController.h; sourceTree = "<group>"; };
-		66B3C8EC17B15F2300CC96EE /* ChatController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ChatController.mm; path = chat/ChatController.mm; sourceTree = "<group>"; };
+		66B3C8EC17B15F2300CC96EE /* ChatController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = ChatController.mm; path = chat/ChatController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		66B3C8EE17B17AC800CC96EE /* ChatDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatDataSource.h; path = chat/ChatDataSource.h; sourceTree = "<group>"; };
 		66B3C8EF17B17AC800CC96EE /* ChatDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChatDataSource.m; path = chat/ChatDataSource.m; sourceTree = "<group>"; };
 		66E4F51A176298CB00596E6B /* 3way.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 3way.h; sourceTree = "<group>"; };
@@ -353,6 +351,10 @@
 		66EC610A176E494900937467 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
 		66EC6115176E49F800937467 /* NetworkController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NetworkController.h; path = network/NetworkController.h; sourceTree = "<group>"; };
 		66EC6116176E49F800937467 /* NetworkController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NetworkController.m; path = network/NetworkController.m; sourceTree = "<group>"; };
+		66FF0FE018242B6B0038ECA6 /* Toast+UIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Toast+UIView.h"; sourceTree = "<group>"; };
+		66FF0FE118242B6B0038ECA6 /* Toast+UIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Toast+UIView.m"; sourceTree = "<group>"; };
+		66FF0FE318242E420038ECA6 /* UIUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIUtils.h; path = utils/UIUtils.h; sourceTree = "<group>"; };
+		66FF0FE418242E420038ECA6 /* UIUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIUtils.m; path = utils/UIUtils.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -447,8 +449,6 @@
 		6604A2C517626B9E0072216A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				668E0EEB177B2E3500115B19 /* testlocal10.ssi */,
-				661C2ECA17638C2A000649E7 /* testlocal1.ssi */,
 				6621BB861762704D00BC2850 /* Localizable.strings */,
 				6604A2C617626B9E0072216A /* surespot-Info.plist */,
 				6604A2C717626B9E0072216A /* InfoPlist.strings */,
@@ -487,6 +487,8 @@
 				66159702176F6732001B32C1 /* NSData+Base64.m */,
 				6606E4EE179DB134004199BC /* FileController.h */,
 				6606E4EF179DB134004199BC /* FileController.mm */,
+				66FF0FE318242E420038ECA6 /* UIUtils.h */,
+				66FF0FE418242E420038ECA6 /* UIUtils.m */,
 			);
 			name = utils;
 			sourceTree = "<group>";
@@ -582,6 +584,7 @@
 		66E4F517176298CB00596E6B /* libs */ = {
 			isa = PBXGroup;
 			children = (
+				66FF0FDF18242B6B0038ECA6 /* Toast */,
 				6637107D1813172F009D5195 /* EGOCache */,
 				6654441017F37A3F00F62F7F /* SwipeView */,
 				66EC60F7176E494900937467 /* AFNetworking */,
@@ -820,6 +823,15 @@
 			name = network;
 			sourceTree = "<group>";
 		};
+		66FF0FDF18242B6B0038ECA6 /* Toast */ = {
+			isa = PBXGroup;
+			children = (
+				66FF0FE018242B6B0038ECA6 /* Toast+UIView.h */,
+				66FF0FE118242B6B0038ECA6 /* Toast+UIView.m */,
+			);
+			path = Toast;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -902,8 +914,6 @@
 				6604A2D817626B9E0072216A /* MainStoryboard.storyboard in Resources */,
 				6621BB841762704D00BC2850 /* Localizable.strings in Resources */,
 				6640766C1822A84C00BFD974 /* HomeCell.xib in Resources */,
-				661C2ECB17638C2A000649E7 /* testlocal1.ssi in Resources */,
-				668E0EEC177B2E3500115B19 /* testlocal10.ssi in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -957,6 +967,7 @@
 				6654441617F37BCF00F62F7F /* SwipeViewController.mm in Sources */,
 				661C2EC31762B125000649E7 /* SurespotIdentity.mm in Sources */,
 				661C2EC81762C3C0000649E7 /* IdentityKeys.mm in Sources */,
+				66FF0FE218242B6B0038ECA6 /* Toast+UIView.m in Sources */,
 				661C2ECE1763A214000649E7 /* IdentityController.mm in Sources */,
 				661C2ED11763A254000649E7 /* EncryptionController.mm in Sources */,
 				661C2ED61763D4B9000649E7 /* NSData+Gunzip.m in Sources */,
@@ -966,6 +977,7 @@
 				660EB27A17FE3D7800DBC53C /* KeyboardState.m in Sources */,
 				66EC610E176E494900937467 /* AFJSONRequestOperation.m in Sources */,
 				66EC610F176E494900937467 /* AFNetworkActivityIndicatorManager.m in Sources */,
+				66FF0FE518242E420038ECA6 /* UIUtils.m in Sources */,
 				66EC6110176E494900937467 /* AFPropertyListRequestOperation.m in Sources */,
 				66EC6111176E494900937467 /* AFURLConnectionOperation.m in Sources */,
 				66EC6112176E494900937467 /* AFXMLRequestOperation.m in Sources */,

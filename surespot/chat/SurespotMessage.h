@@ -10,7 +10,7 @@
 
 @interface SurespotMessage : NSObject
 - (id) initWithJSONString: (NSString *) jsonString;
-- (id) initWithMutableDictionary: (NSMutableDictionary *) dictionary;
+- (id) initWithDictionary: (NSDictionary *) dictionary;
 
 @property (nonatomic, strong) NSString * serverid;
 @property (nonatomic, strong) NSString * from;

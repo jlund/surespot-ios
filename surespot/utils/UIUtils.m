@@ -1,0 +1,28 @@
+//
+//  UIUtils.m
+//  surespot
+//
+//  Created by Adam on 11/1/13.
+//  Copyright (c) 2013 2fours. All rights reserved.
+//
+
+#import "UIUtils.h"
+#import "Toast+UIView.h"
+
+@implementation UIUtils
++(void) showNotificationToastView:(UIView *) view  data:(NSDictionary *) notificationData {
+    NSString * type = [notificationData valueForKeyPath:@"aps.alert.loc-key"];
+    if (type && [type isEqualToString:@"notification_message"]) {
+        
+        
+        NSString * to =[ notificationData objectForKey:@"to"];
+        NSString * from =[ notificationData objectForKey:@"from"];
+        [view makeToast:[NSString stringWithFormat:NSLocalizedString(@"notification_message", nil), to, from]
+                    duration: 1.0
+                    position:@"top"
+         
+         ];
+    }
+
+}
+@end

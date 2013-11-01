@@ -102,9 +102,9 @@
 "about_support"="<![CDATA["For questions or support please <a href="https://www.surespot.me/support.html>click here</a> or email <a href="mailto:support@2fours.com"="support@2fours.com</a>.]]>";
 */
 "notification_title"="surespot";
-"notification_message"="%1$s: new message from %2$s";
-"notification_invite"="%1$s: friend invite from %2$s";
-"notification_invite_accept"="%1$s: %2$s has accepted your friend invite";
+"notification_message"="%1$@: new message from %2$@";
+"notification_invite"="%1$@: friend invite from %2$@";
+"notification_invite_accept"="%1$@: %2$@ has accepted your friend invite";
 "about_version"="version: %s";
 "surespot"="surespot";
 "about_action_bar_right"="about";

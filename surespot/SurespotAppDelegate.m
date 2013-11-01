@@ -7,6 +7,8 @@
 //
 
 #import "SurespotAppDelegate.h"
+#import "SurespotMessage.h"
+#import "ChatController.h"
 
 @implementation SurespotAppDelegate
 
@@ -22,9 +24,66 @@
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    NSLog(@"received remote notification: %@", userInfo);
+    NSLog(@"received remote notification: %@, applicationstate: %d", userInfo, [application applicationState]);
+    
+    // id apsDict = [userInfo objectForKey:@"aps" ];
+    // NSDictionary * alertDict = [apsDict objectForKey:@"alert" ];
+    // NSString * type = [[alertDict objectForKey:@"loc-key"] copy];
+    
+    NSMutableDictionary *notificationData = [NSMutableDictionary dictionaryWithDictionary:userInfo];
+    
+    //todo download and add the message or just move to tab and tell it to load
+    switch ([application applicationState]) {
+        case UIApplicationStateActive:
+            //application was running when we received
+            //if we're not on the tap, show notification
+            
+            //            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"MyAlertView"
+            //                                                                message:@"Local notification was received"
+            //                                                               delegate:self cancelButtonTitle:@"OK"
+            //                                                      otherButtonTitles:nil];
+            //            [alertView show];
+            
+                   [notificationData setObject:@"active" forKey:@"applicationState"];
+//            if ([[userInfo valueForKeyPath:@"aps.alert.loc-key" ] isEqualToString:@"notification_message"]) {
+//
+//                
+//                NSString * to =[ userInfo objectForKey:@"to"];
+//                NSString * from =[ userInfo objectForKey:@"from"];
+//                
+//                UILocalNotification* localNotification = [[UILocalNotification alloc] init];
+//                localNotification.fireDate = nil;
+//                localNotification.alertBody = [NSString stringWithFormat: NSLocalizedString(@"notification_message", nil), to, from];
+//                localNotification.alertAction = NSLocalizedString(@"notification_title", nil);
+//                localNotification.soundName = UILocalNotificationDefaultSoundName;
+//                [application scheduleLocalNotification:localNotification];
+//            }
+            
+            
+            break;
+        case UIApplicationStateInactive:
+        case UIApplicationStateBackground:
+            [notificationData setObject:@"inactive" forKey:@"applicationState"];
+            
+            //started application from notification, move to correct tab
+            
+            break;
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"pushNotification" object:notificationData ];
+}
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
     
 }
+
+
+
+
+
+
+
 
 
 - (void)applicationWillResignActive:(UIApplication *)application

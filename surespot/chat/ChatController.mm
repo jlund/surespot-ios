@@ -130,13 +130,15 @@
             [dict setObject:message forKey:@"plaindata"];
             
             ChatDataSource * dataSource = [self getDataSourceForFriendname: friendname];
-            [dataSource addMessage: [[SurespotMessage alloc] initWithMutableDictionary: dict]];
+            [dataSource addMessage: [[SurespotMessage alloc] initWithDictionary: dict]];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadMessages" object:friendname ];
             
         }];
     }];
     
 }
+
+
 
 -(void) handleMessage: (SurespotMessage *) message {
     NSString * otherUser = [message getOtherUser];

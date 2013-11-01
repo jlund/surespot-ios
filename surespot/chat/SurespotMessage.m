@@ -25,7 +25,7 @@
 
 
 
-- (id) initWithMutableDictionary:(NSDictionary *) dictionary {
+- (id) initWithDictionary:(NSDictionary *) dictionary {
     
     // Call superclass's initializer
     self = [super init];

@@ -18,6 +18,7 @@
 #import "HomeCell.h"
 #import "SurespotControlMessage.h"
 #import "FriendDelegate.h"
+#import "UIUtils.h"
 
 //#import <QuartzCore/CATransaction.h>
 
@@ -85,6 +86,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(friendInvited:) name:@"friendInvited" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(friendInvite:) name:@"friendInvite" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(friendDelete:) name:@"friendDelete" object:nil];
+    
+    //listen for push notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushNotification:) name:@"pushNotification" object:nil];
     //make sure chat controller loaded
     [ChatController sharedInstance];
     
@@ -763,7 +767,7 @@
                      [self removeFriend:afriend];
                  }
                  
-
+                 
              }
              
          }
@@ -776,6 +780,18 @@
      }];
     
     
+    
+}
+
+- (void)pushNotification:(NSNotification *)notification
+{
+    NSLog(@"pushNotification");
+    NSDictionary * notificationData = notification.object;
+    
+    NSString * from =[ notificationData objectForKey:@"from"];
+    if (![from isEqualToString:_currentChat]) {
+        [UIUtils showNotificationToastView:[self view] data:notificationData];
+    }
     
 }
 
