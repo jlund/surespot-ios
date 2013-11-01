@@ -62,8 +62,8 @@
     _textField.enablesReturnKeyAutomatically = NO;
     [self registerForKeyboardNotifications];
     
-    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"menu" style:UIBarButtonItemStylePlain target:self action:@selector(refreshPropertyList:)];
-    self.navigationItem.rightBarButtonItem = anotherButton;
+//  UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"menu" style:UIBarButtonItemStylePlain target:self action:@selector(refreshPropertyList:)];
+//    self.navigationItem.rightBarButtonItem = anotherButton;
     
     self.navigationItem.title = [@"surespot/" stringByAppendingString:[[IdentityController sharedInstance] getLoggedInUser]];
     
@@ -282,16 +282,20 @@
 {
     NSInteger currPage =swipeView.currentPage;
     //update page control page
-    NSLog(@"swipeview index changed to %d", currPage);
+
     //   _pageControl.currentPage = swipeView.currentPage;
     //  [_swipeView reloadData];
     UITableView * tableview;
     if (currPage == 0) {
+        _currentChat = nil;
         tableview = _friendView;
     }
     else {
         tableview = [_chats allValues][swipeView.currentPage-1];
-    }
+       _currentChat = [_chats allKeys][currPage-1];
+
+        }
+        NSLog(@"swipeview index changed to %d, current chat: %@", currPage, _currentChat);
     [tableview reloadData];
     
 }
@@ -563,8 +567,7 @@
         
         
     }
-    _currentChat = username;
-    //  [_swipeView reloadData];
+
     [_textField resignFirstResponder];
 }
 
