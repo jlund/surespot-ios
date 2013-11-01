@@ -12,7 +12,7 @@
 
 @interface ChatController : NSObject <SocketIODelegate>
 +(ChatController*)sharedInstance;
-@property (strong) SocketIO * socketIO;
+
 @property (strong) NSMutableDictionary * dataSources;
 
 - (ChatDataSource *) getDataSourceForFriendname: (NSString *) friendname;

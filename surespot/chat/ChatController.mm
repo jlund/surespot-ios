@@ -15,9 +15,12 @@
 #import "SurespotControlMessage.h"
 #import "MessageProcessor.h"
 
+@interface ChatController()
+@property (strong) SocketIO * socketIO;
+@end
 
 @implementation ChatController
-@synthesize socketIO;
+
 
 +(ChatController*)sharedInstance
 {
@@ -35,18 +38,54 @@
     //call super init
     self = [super init];
     
+    
+    
     if (self != nil) {
+        
         self.socketIO = [[SocketIO alloc] initWithDelegate:self];
-        self.socketIO.useSecure = NO;
-        [self.socketIO connectToHost:@"192.168.10.68" onPort:8080];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pause:) name:UIApplicationWillResignActiveNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resume:) name:UIApplicationDidBecomeActiveNotification object:nil];
+
         
         ////   self.socketIO.useSecure = YES;
         //   [self.socketIO connectToHost:@"server.surespot.me" onPort:443];
         
         self.dataSources = [[NSMutableDictionary alloc] init];
+        
+        [self connect];
     }
     
     return self;
+}
+
+-(void) disconnect {
+    if (_socketIO) {
+        NSLog(@"disconnecting socket");
+        [_socketIO disconnect ];
+    }
+}
+
+-(void) pause: (NSNotification *)  notification{
+        NSLog(@"pause");
+    [self    disconnect];
+}
+
+-(void) connect {
+    if (_socketIO) {
+        NSLog(@"connecting socket");
+        //  if (![_socketIO isConnected] && ![_socketIO isConnecting]) {
+        self.socketIO.useSecure = NO;
+        [self.socketIO connectToHost:@"192.168.10.68" onPort:8080];
+    }
+    //  }
+   
+}
+
+-(void) resume: (NSNotification *) notification {
+    NSLog(@"resume");
+    
+    [self connect];
 }
 
 
@@ -124,7 +163,7 @@
             NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
             
             
-            [socketIO sendMessage: jsonString];
+            [_socketIO sendMessage: jsonString];
             
             //cache the plain data locally
             [dict setObject:message forKey:@"plaindata"];
@@ -199,7 +238,7 @@
                     else {
                         if ([message.action isEqualToString:@"delete"]) {
                             [[NSNotificationCenter defaultCenter] postNotificationName:@"friendDelete" object:message ];
-
+                            
                         }
                         
                     }
