@@ -14,6 +14,7 @@
 #import "SurespotMessage.h"
 #import "SurespotControlMessage.h"
 #import "MessageProcessor.h"
+#import "NetworkController.h"
 
 @interface ChatController()
 @property (strong, atomic) SocketIO * socketIO;
@@ -254,16 +255,136 @@
                             [[NSNotificationCenter defaultCenter] postNotificationName:@"friendDelete" object:message ];
                             
                         }
-                        
                     }
-                    
                 }
-                
             }
-            
         }
-        
+    }    
+}
+
+-(void) inviteAction:(NSString *) action forUsername:(NSString *)username{
+    NSLog(@"Invite action: %@, for username: %@", action, username);
+    
+    [[NetworkController sharedInstance]
+     respondToInviteName:username action:action
+     
+     
+     successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
+         
+         Friend * afriend = [_homeDataSource getFriendByName:username];
+         [afriend setInviter:NO];
+         
+         if ([action isEqualToString:@"accept"]) {
+             //set new to true
+         }
+         else {
+             if ([action isEqualToString:@"block"]||[action isEqualToString:@"ignore"]) {
+                 if (![afriend isDeleted]) {
+                     [_homeDataSource removeFriend:afriend withRefresh:YES];
+                 }
+             }
+         }
+     }
+     
+     failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
+         //TODO notify user
+     }];
+ 
+}
+
+
+- (void) inviteUser: (NSString *) username {
+    NSString * loggedInUser = [[IdentityController sharedInstance] getLoggedInUser];
+    if ([username isEqualToString:loggedInUser]) {
+        //todo tell user they can't invite themselves
+        return;
     }
     
+    [[NetworkController sharedInstance]
+     inviteFriend:username
+     successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
+         NSLog(@"invite friend response: %d",  [operation.response statusCode]);
+         Friend * afriend = [[Friend alloc] init];
+         afriend.name = username         ;
+         afriend.flags = 2;
+         
+         [_homeDataSource addFriend:afriend withRefresh:YES];
+     }
+     failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
+         
+         NSLog(@"response failure: %@",  Error);
+         
+     }];
 }
+
+- (void)friendInvited:(NSNotification *)notification
+{
+    NSLog(@"friendInvited");
+    NSString * username = notification.object;
+    
+    Friend * theFriend = [_homeDataSource getFriendByName:username];
+    if (!theFriend) {
+        theFriend = [[Friend alloc] init];
+        theFriend.name = username;
+      
+    }
+    
+    [theFriend setInvited:YES];
+    [_homeDataSource postRefresh];
+}
+
+- (void)friendInvite:(NSNotification *)notification
+{
+    NSLog(@"friendInvite");
+    NSString * username = notification.object;
+    
+    Friend * theFriend = [_homeDataSource getFriendByName:username];
+    
+    if (!theFriend) {
+        theFriend = [[Friend alloc] init];
+        theFriend.name = username;
+        [_homeDataSource addFriend:theFriend withRefresh:NO];
+    }
+    
+    [theFriend setInviter:YES];
+    
+    //todo sort
+    [_homeDataSource postRefresh];
+    
+    
+}
+
+
+- (void)friendDelete:(NSNotification *)notification
+{
+    NSLog(@"friendDelete");
+    SurespotControlMessage * message = notification.object;
+    
+    Friend * afriend = [_homeDataSource getFriendByName:[message data]];
+    
+    if (afriend) {
+        if ([afriend isInvited] || [afriend isInviter]) {
+            if (![afriend isDeleted]) {
+                [_homeDataSource removeFriend:afriend withRefresh:NO];
+            }
+            else {
+                [afriend setInvited:NO];
+                [afriend setInviter:NO];
+            }
+        }
+        else {
+            [self handleDeleteUser: [message data] deleter:[message moreData]];
+        }
+    }
+    
+    //todo sort
+    [_homeDataSource postRefresh];
+    
+    
+}
+
+-(void) handleDeleteUser: (NSString *) deleted deleter: (NSString *) deleter {
+    
+}
+
 @end

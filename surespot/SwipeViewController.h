@@ -12,7 +12,7 @@
 #import "FriendDelegate.h"
 #import "Friend.h"
 
-@interface SwipeViewController : UIViewController <SwipeViewDelegate, SwipeViewDataSource, UITableViewDataSource, UITableViewDelegate, FriendDelegate>
+@interface SwipeViewController : UIViewController <SwipeViewDelegate, SwipeViewDataSource, UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) IBOutlet SwipeView *swipeView;
 @property (nonatomic, strong) IBOutlet UIPageControl *pageControl;
 @property (nonatomic, strong) UITableView *friendView;

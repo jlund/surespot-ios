@@ -11,7 +11,8 @@
 
 @interface HomeDataSource : NSObject
 @property (strong, atomic) NSMutableArray *friends;
-- (void) addFriend: (Friend *) afriend;
-- (void) removeFriend: (Friend *) afriend;
-
+- (void) addFriend: (Friend *) afriend withRefresh: (BOOL) refresh;
+- (void) removeFriend: (Friend *) afriend withRefresh: (BOOL) refresh;
+-(Friend *) getFriendByName: (NSString *) name;
+-(void) postRefresh;
 @end

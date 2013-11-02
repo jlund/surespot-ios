@@ -40,16 +40,32 @@
     return self;
 }
 
-- (void) addFriend: (Friend *) afriend {
+- (void) addFriend: (Friend *) afriend withRefresh: (BOOL) refresh {
     [_friends addObject:afriend];
+    if (refresh) {
+        [self postRefresh];
+    }
     
 }
-- (void) removeFriend: (Friend *) afriend {
+- (void) removeFriend: (Friend *) afriend withRefresh: (BOOL) refresh {
     [_friends removeObject:afriend];
+    if (refresh) {
+        [self postRefresh];
+    }
 }
 
 -(void) postRefresh {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshHome" object:nil];
+}
+
+-(Friend *) getFriendByName: (NSString *) name {
+    for (Friend * afriend in _friends) {
+        if ([[afriend name] isEqualToString:name]) {
+            return  afriend;
+        }
+    }
+    
+    return nil;
 }
 
 @end

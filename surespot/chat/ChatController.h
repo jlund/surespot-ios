@@ -11,11 +11,13 @@
 #import "ChatDataSource.h"
 #import "HomeDataSource.h"
 #import "Friend.h"
+#import "FriendDelegate.h"
 
-@interface ChatController : NSObject <SocketIODelegate>
+@interface ChatController : NSObject <SocketIODelegate, FriendDelegate>
 +(ChatController*)sharedInstance;
 
 - (HomeDataSource *) getHomeDataSource;
 - (ChatDataSource *) getDataSourceForFriendname: (NSString *) friendname;
 - (void) sendMessage: (NSString *) message toFriendname: (NSString *) friendname;
+- (void) inviteUser: (NSString *) username;
 @end
