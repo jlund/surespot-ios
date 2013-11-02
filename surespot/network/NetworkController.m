@@ -39,6 +39,8 @@
         // Accept HTTP Header; see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
         [self setDefaultHeader:@"Accept-Charset" value:@"utf-8"];
         //[self setDefaultHeader:@"Accept" value:@"application/json"];
+        
+        self.parameterEncoding = AFJSONParameterEncoding;
     }
     
     return self;
@@ -131,6 +133,25 @@
     [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
     [operation start];}
 
+-(void) getLatestDataSinceUserControlId: (NSInteger) latestUserControlId spotIds: (NSArray *) spotIds successBlock:(JSONSuccessBlock)successBlock failureBlock: (JSONFailureBlock) failureBlock {
+    
+   NSData * jsonData = [NSJSONSerialization dataWithJSONObject:spotIds options:0 error:nil];
+    NSString * jsonString =[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:jsonString,@"spotIds", nil];
+    
+    NSLog(@"GetLatestData: params; %@", params);
+    
+    NSString * path = [NSString stringWithFormat:@"latestdata/%d", latestUserControlId];
+    NSURLRequest *request = [self requestWithMethod:@"POST" path:path parameters: params];
+    
+    AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:successBlock failure:failureBlock];
+    
+    
+    
+    [operation start];
+    
+
+}
 
 
 @end

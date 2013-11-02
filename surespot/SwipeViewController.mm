@@ -77,11 +77,7 @@
     //listen for refresh notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshMessages:) name:@"refreshMessages" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshHome:) name:@"refreshHome" object:nil];
-    //listen for invited
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(friendInvited:) name:@"friendInvited" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(friendInvite:) name:@"friendInvite" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(friendDelete:) name:@"friendDelete" object:nil];
-    
+
     //listen for push notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushNotification:) name:@"pushNotification" object:nil];
 
@@ -335,7 +331,7 @@
     
     NSInteger index = [_swipeView indexOfItemViewOrSubview:tableView];
     
-    NSLog(@"height for row, index: %d, indexPath: %@", index, indexPath);
+  //  NSLog(@"height for row, index: %d, indexPath: %@", index, indexPath);
     if (index == NSNotFound) {
         return 0;
     }
@@ -379,7 +375,7 @@
     
     
     NSInteger index = [_swipeView indexOfItemViewOrSubview:tableView];
-    NSLog(@"cell for row, index: %d, indexPath: %@", index, indexPath);
+  //  NSLog(@"cell for row, index: %d, indexPath: %@", index, indexPath);
     if (index == NSNotFound) {
         static NSString *CellIdentifier = @"Cell";
         UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
@@ -450,10 +446,10 @@
                     
                     [message setLoaded:NO];
                     [message setLoading:YES];
-                    NSLog(@"decrypting data for iv: %@", [message iv]);
+                //    NSLog(@"decrypting data for iv: %@", [message iv]);
                     [[MessageProcessor sharedInstance] decryptMessage:message width: tableView.frame.size.width completionCallback:^(SurespotMessage  * message){
                         
-                        NSLog(@"data decrypted, reloading row for iv %@", [message iv]);
+                     //   NSLog(@"data decrypted, reloading row for iv %@", [message iv]);
                         dispatch_async(dispatch_get_main_queue(), ^{
                             //  [tableView reloadData];
                             [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
@@ -465,7 +461,7 @@
                 }
             }
             else {
-                NSLog(@"setting text for iv: %@ to: %@", [message iv], plainData);
+             //   NSLog(@"setting text for iv: %@ to: %@", [message iv], plainData);
                 cell.messageLabel.text = plainData;
                 cell.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
                 cell.messageStatusLabel.text = [self stringFromDate:[message dateTime]];
@@ -520,9 +516,7 @@
         [chatView setDirectionalLockEnabled:YES];
         
         [_chats setObject:chatView forKey:username];
-        
-        
-        
+                
         //   [chatView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"ChatCell"];
         [chatView registerNib:[UINib nibWithNibName:@"OurMessageCell" bundle:nil] forCellReuseIdentifier:@"OurMessageView"];
         [chatView registerNib:[UINib nibWithNibName:@"TheirMessageCell" bundle:nil] forCellReuseIdentifier:@"TheirMessageView"];

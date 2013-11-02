@@ -10,7 +10,11 @@
 #import "SurespotMessage.h"
 
 @interface ChatUtils : NSObject
+
++ (NSString *) getSpotUserA: (NSString *) userA userB: (NSString *) userB;
 + (NSString *)  getOtherUserWithFrom: (NSString *) from andTo: (NSString *) to;
++ (NSString *) getOtherUserFromSpot: (NSString *) spot andUser: (NSString *) user;
+
 + (BOOL) isOurMessage: (SurespotMessage *) message;
 + (NSString *) hexFromData: (NSData *) data ;
 @end

@@ -22,7 +22,7 @@
             
             
             
-            NSArray * friendDicts = [((NSDictionary *) JSON) objectForKey:@"friends"];
+            NSArray * friendDicts = [JSON objectForKey:@"friends"];
             for (NSDictionary * friendDict in friendDicts) {
                 [_friends addObject:[[Friend alloc] initWithDictionary: friendDict]];
             };
@@ -67,5 +67,20 @@
     
     return nil;
 }
+
+-(void) setAvailableMessageId: (NSInteger) availableId forFriendname: (NSString *) friendname {
+    Friend * afriend = [self getFriendByName:friendname];
+    if (afriend) {
+        afriend.availableMessageId = availableId;
+    }
+}
+
+-(void) setAvailableMessageControlId: (NSInteger) availableId forFriendname: (NSString *) friendname {
+    Friend * afriend = [self getFriendByName:friendname];
+    if (afriend) {
+        afriend.availableMessageControlId = availableId;
+    }
+}
+
 
 @end

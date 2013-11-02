@@ -15,4 +15,7 @@
 @property (strong) NSMutableArray * messages;
 - (void) addMessage:(SurespotMessage *) message;
 @property (strong, nonatomic) NSString * username;
+-(NSInteger) latestMessageId;
+-(NSInteger) latestControlMessageId;
+-(void) postRefresh;
 @end

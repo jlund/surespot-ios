@@ -36,7 +36,7 @@
 
 -(void) parseDictionary:(NSDictionary *) dictionary {
     _type = [dictionary objectForKey:@"type"];
-    _id = [[dictionary objectForKey:@"id"] integerValue];
+    _controlId = [[dictionary objectForKey:@"id"] integerValue];
     _from = [dictionary objectForKey:@"from"];
     _action = [dictionary objectForKey:@"action"];
     _data =[dictionary objectForKey:@"data"];

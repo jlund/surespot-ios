@@ -70,4 +70,26 @@
     }
 }
 
+-(NSInteger) latestMessageId {
+    NSInteger maxId = 0;
+    for (SurespotMessage * message in _messages) {
+        NSInteger idValue =[message.serverid integerValue];
+        if (idValue > maxId) {
+            maxId = idValue;
+        }
+    }
+    
+    return maxId;
+}
+
+-(NSInteger) latestControlMessageId {
+    return 0;
+}
+
+-(void) postRefresh {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshMessages" object:_username ];
+    });
+}
+
 @end

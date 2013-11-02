@@ -15,4 +15,6 @@
 - (void) removeFriend: (Friend *) afriend withRefresh: (BOOL) refresh;
 -(Friend *) getFriendByName: (NSString *) name;
 -(void) postRefresh;
+-(void) setAvailableMessageId: (NSInteger) availableId forFriendname: (NSString *) friendname;
+-(void) setAvailableMessageControlId: (NSInteger) availableId forFriendname: (NSString *) friendname;
 @end

@@ -15,11 +15,13 @@
 #import "SurespotControlMessage.h"
 #import "MessageProcessor.h"
 #import "NetworkController.h"
+#import "ChatUtils.h"
 
 @interface ChatController()
 @property (strong, atomic) SocketIO * socketIO;
 @property (strong, atomic) NSMutableDictionary * dataSources;
 @property (strong, atomic) HomeDataSource * homeDataSource;
+@property (atomic, assign) NSInteger latestUserControlId;
 @end
 
 @implementation ChatController
@@ -49,12 +51,17 @@
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pause:) name:UIApplicationDidEnterBackgroundNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resume:) name:UIApplicationWillEnterForegroundNotification object:nil];
-
+        
         
         ////   self.socketIO.useSecure = YES;
         //   [self.socketIO connectToHost:@"server.surespot.me" onPort:443];
         
         self.dataSources = [[NSMutableDictionary alloc] init];
+        
+        //listen for invited
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(friendInvited:) name:@"friendInvited" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(friendInvite:) name:@"friendInvite" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(friendDelete:) name:@"friendDelete" object:nil];
         
         
         [self connect];
@@ -71,7 +78,7 @@
 }
 
 -(void) pause: (NSNotification *)  notification{
-        NSLog(@"chatcontroller pause");
+    NSLog(@"chatcontroller pause");
     [self    disconnect];
 }
 
@@ -83,11 +90,11 @@
         [self.socketIO connectToHost:@"192.168.10.68" onPort:8080];
     }
     //  }
-   
+    
 }
 
 -(void) resume: (NSNotification *) notification {
-    NSLog(@"chatcontroller resume");    
+    NSLog(@"chatcontroller resume");
     [self connect];
 }
 
@@ -95,7 +102,8 @@
 
 - (void) socketIODidConnect:(SocketIO *)socket {
     NSLog(@"didConnect()");
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"socketConnected" object:nil ];
+    // [[NSNotificationCenter defaultCenter] postNotificationName:@"socketConnected" object:nil ];
+    [self getData];
 }
 
 - (void) socketIO:(SocketIO *)socket didReceiveEvent:(SocketIOPacket *)packet
@@ -109,7 +117,7 @@
     if ([name isEqualToString:@"control"]) {
         
         SurespotControlMessage * message = [[SurespotControlMessage alloc] initWithJSONString:[jsonData objectForKey:@"args"][0]];
-        [self handleControlMessage: message];
+        [self handleControlMessage: message usingChatDataSource:nil];
     }
     else {
         
@@ -135,6 +143,89 @@
         [self.dataSources setObject: dataSource forKey: friendname];
     }
     return dataSource;
+}
+
+
+-(void) getData {
+    if (_homeDataSource.friends.count == 0 && _latestUserControlId == 0) {
+        
+    }
+    else {
+        [self getLatestData];
+    }
+}
+
+-(void) getLatestData {
+    NSLog(@"getLatestData");
+    
+    NSMutableArray * messageIds = [[NSMutableArray alloc] init];
+    
+    //build message id list for open chats
+    for (id username in [_dataSources allKeys]) {
+        ChatDataSource * chatDataSource = [_dataSources objectForKey:username];
+        NSString * spot = [ChatUtils getSpotUserA: [[IdentityController sharedInstance] getLoggedInUser] userB: username];
+        
+        NSLog(@"getting message and control data for spot: %@",spot );
+        NSMutableDictionary * messageId = [[NSMutableDictionary alloc] init];
+        [messageId setObject: username forKey:@"username"];
+        [messageId setObject: [NSNumber numberWithInteger: [chatDataSource latestMessageId]] forKey:@"messageid"];
+        [messageId setObject: [NSNumber numberWithInteger:[chatDataSource latestControlMessageId]] forKey:@"controlmessageid"];
+        
+        [messageIds addObject:messageId];
+    }
+    
+    
+    [[NetworkController sharedInstance] getLatestDataSinceUserControlId:_latestUserControlId spotIds:messageIds successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+        
+        
+        NSArray * conversationIds = [JSON objectForKey:@"conversationIds"];
+        if (conversationIds) {
+            for (id convoId in conversationIds) {
+                NSString * spot = [convoId objectForKey:@"conversation"];
+                NSInteger availableId = [[convoId objectForKey:@"id"] integerValue];
+                NSString * user = [ChatUtils getOtherUserFromSpot:spot andUser:[[IdentityController sharedInstance] getLoggedInUser]];
+                
+                [_homeDataSource setAvailableMessageId:availableId forFriendname: user];
+            }
+        }
+        
+        NSArray * controlIds = [JSON objectForKey:@"controlIds"];
+        if (controlIds) {
+            for (id controlId in controlIds) {
+                NSString * spot = [controlId objectForKey:@"conversation"];
+                NSInteger availableId = [[controlId objectForKey:@"id"] integerValue];
+                NSString * user = [ChatUtils getOtherUserFromSpot:spot andUser:[[IdentityController sharedInstance] getLoggedInUser]];
+                
+                [_homeDataSource setAvailableMessageControlId:availableId forFriendname: user];
+            }
+        }
+        
+        NSArray * userControlMessages = [JSON objectForKey:@"userControlMessages"];
+        if (userControlMessages ) {
+          //  [self handleControlMessages: userControlMessages forUsername: [[IdentityController sharedInstance] getLoggedInUser]];
+        }
+        
+        //update message data
+        NSArray * messageDatas = [JSON objectForKey:@"messageData"];
+   //     if (messageDatas) {
+            for (NSDictionary * messageData in messageDatas) {
+                
+                
+                NSString * friendname = [messageData objectForKey:@"username"];
+                NSArray * controlMessages = [messageData objectForKey:@"controlMessages"];
+                if (controlMessages) {
+                    [self handleControlMessages:controlMessages forUsername:friendname ];
+                }
+                
+                NSArray * messages = [messageData objectForKey:@"messages"];
+                if (messages) {
+                    [self handleMessages: messages forUsername:friendname];
+                }
+            }
+    //    }
+        
+    } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
+    }];
 }
 
 
@@ -185,8 +276,7 @@
             
             ChatDataSource * dataSource = [self getDataSourceForFriendname: friendname];
             [dataSource addMessage: [[SurespotMessage alloc] initWithDictionary: dict]];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshMessages" object:friendname ];
-            
+            [dataSource postRefresh];
         }];
     }];
     
@@ -204,8 +294,7 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [dataSource addMessage: message];
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshMessages" object:otherUser ];
+            [dataSource postRefresh];
         });
         
         
@@ -216,7 +305,72 @@
     }
 }
 
--(void) handleControlMessage: (SurespotControlMessage *) message {
+-(void) handleMessages: (NSArray *) messages forUsername: (NSString *) username {
+    ChatDataSource * cds = [_dataSources objectForKey:username];
+    if (!cds) {
+        return;
+    }
+    
+    SurespotMessage * lastMessage;
+    for (id jsonMessage in messages) {
+        lastMessage = [[SurespotMessage alloc] initWithJSONString:jsonMessage];
+        
+        [cds addMessage:lastMessage];
+    }
+    
+    [cds postRefresh];
+}
+
+-(void) handleControlMessages: (NSArray *) controlMessages forUsername: (NSString *) username {
+    ChatDataSource * cds = [_dataSources objectForKey:username];
+    
+    BOOL userActivity = NO;
+    BOOL messageActivity = NO;
+    SurespotControlMessage * message;
+    
+    for (id jsonMessage in controlMessages) {
+        
+        
+        message = [[SurespotControlMessage alloc] initWithJSONString: jsonMessage];
+        [self handleControlMessage:message usingChatDataSource: cds];
+        
+        if ([[message type] isEqualToString:@"user"]) {
+            userActivity = YES;
+        }
+        else {
+            if ([[message type] isEqualToString:@"message"]) {
+                messageActivity = YES;
+            }
+        }
+    }
+    
+    if (message) {
+        if (messageActivity || userActivity) {
+            Friend * afriend = [_homeDataSource getFriendByName:username];
+            
+            if (afriend) {
+                if (messageActivity) {
+                    if (cds) {
+                        afriend.lastReceivedMessageControlId = message.controlId;
+                    }
+                    
+                    afriend.availableMessageControlId = message.controlId;
+                }
+                
+                
+                
+                if (userActivity) {
+                    afriend.lastReceivedUserControlId = message.controlId;
+                }
+                
+                [_homeDataSource postRefresh];
+            }
+        }
+    }
+}
+
+-(void) handleControlMessage: (SurespotControlMessage *) message usingChatDataSource: cds {
+    
     if ([message.type isEqualToString:@"user"]) {
         [self handleUserControlMessage: message];
     }
@@ -259,7 +413,7 @@
                 }
             }
         }
-    }    
+    }
 }
 
 -(void) inviteAction:(NSString *) action forUsername:(NSString *)username{
@@ -289,7 +443,7 @@
      failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
          //TODO notify user
      }];
- 
+    
 }
 
 
@@ -326,7 +480,7 @@
     if (!theFriend) {
         theFriend = [[Friend alloc] init];
         theFriend.name = username;
-      
+        
     }
     
     [theFriend setInvited:YES];
