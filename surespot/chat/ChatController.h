@@ -7,14 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
-#include "SocketIO.h"
+#import "SocketIO.h"
 #import "ChatDataSource.h"
+#import "HomeDataSource.h"
+#import "Friend.h"
 
 @interface ChatController : NSObject <SocketIODelegate>
 +(ChatController*)sharedInstance;
 
-@property (strong) NSMutableDictionary * dataSources;
-
+- (HomeDataSource *) getHomeDataSource;
 - (ChatDataSource *) getDataSourceForFriendname: (NSString *) friendname;
 - (void) sendMessage: (NSString *) message toFriendname: (NSString *) friendname;
 @end

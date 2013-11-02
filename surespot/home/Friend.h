@@ -10,11 +10,16 @@
 
 @interface Friend : NSObject
 - (id) initWithDictionary:(NSDictionary *) dictionary;
-@property (nonatomic,strong) NSString * name;
-@property (nonatomic,assign) NSInteger flags;
-@property (nonatomic, strong) NSString * imageUrl;
-@property (nonatomic, strong) NSString * imageVersion;
-@property (nonatomic, strong) NSString * imageIv;
+@property (atomic,strong) NSString * name;
+@property (atomic,assign) NSInteger flags;
+@property (atomic, strong) NSString * imageUrl;
+@property (atomic, strong) NSString * imageVersion;
+@property (atomic, strong) NSString * imageIv;
+@property (atomic, assign) NSInteger lastViewMessageId;
+@property (atomic, assign) NSInteger availableMessageId;
+@property (atomic, assign) NSInteger lastReceivedMessageControlId;
+@property (atomic, assign) NSInteger availableMessageControlId;
+@property (atomic, assign) NSInteger lastReceivedUserControlId;
 
 -(BOOL) isInviter;
 -(void) setInviter: (BOOL) set;

@@ -67,21 +67,16 @@
     
     self.navigationItem.title = [@"surespot/" stringByAppendingString:[[IdentityController sharedInstance] getLoggedInUser]];
     
-    //    UIView * tlg = (id) self.topLayoutGuide;
-    //  UIScrollView * scrollView = _swipeView.scrollView;
-    //    NSDictionary * viewsDictionary = NSDictionaryOfVariableBindings(scrollView, tlg);
-    
-    
+   
+    //don't swipe to back stack
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     }
     
-    // Set the constraints for the scroll view and the image view.
-    //  [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[scrollView]|" options:0 metrics: 0 views:viewsDictionary]];
-    // [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[tlg][scrollView]" options:0 metrics: 0 views:viewsDictionary]];
-    //listen for rolead notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadMessages:) name:@"reloadMessages" object:nil];
-    
+
+    //listen for refresh notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshMessages:) name:@"refreshMessages" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshHome:) name:@"refreshHome" object:nil];
     //listen for invited
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(friendInvited:) name:@"friendInvited" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(friendInvite:) name:@"friendInvite" object:nil];
@@ -89,6 +84,8 @@
     
     //listen for push notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushNotification:) name:@"pushNotification" object:nil];
+
+    
     //make sure chat controller loaded
     [ChatController sharedInstance];
     
@@ -142,14 +139,11 @@
     
     NSLog(@"after move content insets bottom %f, view height: %f", contentInsets.bottom, tableView.frame.size.height);
     
-    
-    //  contentInsets.top +=   keyboardState.keyboardRect.size.height;
     contentInsets.bottom = keyboardState.keyboardRect.size.height;
     tableView.contentInset = contentInsets;
     
     
     UIEdgeInsets scrollInsets =tableView.scrollIndicatorInsets;
-    // scrollInsets.top += keyboardState.keyboardRect.size.height;
     scrollInsets.bottom = keyboardState.keyboardRect.size.height;
     tableView.scrollIndicatorInsets = scrollInsets;
     
@@ -183,7 +177,6 @@
         
         CGRect textFieldFrame = _textField.frame;
         textFieldFrame.origin.y += kbSize.height;
-        // textFieldFrame.size.height -= kbSize.height;
         _textField.frame = textFieldFrame;
         
         
@@ -243,23 +236,7 @@
             _friendView.delegate = self;
             _friendView.dataSource = self;
             
-            [[NetworkController sharedInstance] getFriendsSuccessBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                NSLog(@"get friends response: %d",  [response statusCode]);
-                self.friends = [[NSMutableArray alloc ] init];
-                
-                
-                
-                NSArray * friendDicts = [((NSDictionary *) JSON) objectForKey:@"friends"];
-                for (NSDictionary * friendDict in friendDicts) {
-                    [_friends addObject:[[Friend alloc] initWithDictionary: friendDict]];
-                };
-                [_friendView reloadData];
-                
-            } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
-                NSLog(@"response failure: %@",  Error);
-                
-            }];
-        }
+                  }
         
         NSLog(@"returning friend view %@", _friendView);
         //return view
@@ -332,12 +309,12 @@
     NSLog(@"number of rows in section, index: %d", index);
     // Return the number of rows in the section
     if (index == 0) {
-        if (!_friends) {
+        if (![[ChatController sharedInstance] getHomeDataSource]) {
             NSLog(@"returning 0 rows");
             return 0;
         }
         
-        return [_friends count];
+        return [[[ChatController sharedInstance] getHomeDataSource].friends count];
     }
     else {
         NSInteger chatIndex = index-1;
@@ -365,7 +342,7 @@
     
     
     if (index == 0) {
-        Friend * afriend = [_friends objectAtIndex:indexPath.row];
+        Friend * afriend = [[[ChatController sharedInstance] getHomeDataSource].friends objectAtIndex:indexPath.row];
         if ([afriend isInviter] ) {
             return 70;
         }
@@ -415,7 +392,7 @@
         HomeCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
         
         // Configure the cell...
-        Friend * afriend = [_friends objectAtIndex:indexPath.row];
+        Friend * afriend = [[[ChatController sharedInstance] getHomeDataSource].friends objectAtIndex:indexPath.row];
         cell.friendLabel.text = afriend.name;
         cell.friendName = afriend.name;
         cell.friendDelegate = self;
@@ -525,7 +502,7 @@
     if (page == 0) {
         
         // Configure the cell...
-        NSString * friendname =[[_friends objectAtIndex:indexPath.row] name];
+        NSString * friendname =[[[[ChatController sharedInstance] getHomeDataSource].friends objectAtIndex:indexPath.row] name];
         [self showChat:friendname];
     }
 }
@@ -605,9 +582,9 @@
     // [chatView reloadData];
 }
 
-- (void)reloadMessages:(NSNotification *)notification
+- (void)refreshMessages:(NSNotification *)notification
 {
-    NSLog(@"reloadMessages");
+    NSLog(@"refreshMessages");
     NSString * username = notification.object;
     
     id tableView = [_chats objectForKey:username];
@@ -627,6 +604,16 @@
     }
 }
 
+- (void)refreshHome:(NSNotification *)notification
+{
+    NSLog(@"refreshHome");
+
+    if (_friendView) {
+        [_friendView reloadData];
+    }
+   
+}
+
 - (void) inviteUser: (NSString *) username {
     NSString * loggedInUser = [[IdentityController sharedInstance] getLoggedInUser];
     if ([username isEqualToString:loggedInUser]) {
@@ -642,7 +629,7 @@
          afriend.name = username         ;
          afriend.flags = 2;
          
-         [_friends addObject:afriend];
+         [[[ChatController sharedInstance] getHomeDataSource] addFriend:afriend];
          [_friendView reloadData];
      }
      failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
@@ -661,7 +648,7 @@
     if (!theFriend) {
         theFriend = [[Friend alloc] init];
         theFriend.name = username;
-        [_friends addObject:theFriend];
+        [[[ChatController sharedInstance] getHomeDataSource] addFriend:theFriend];
     }
     
     [theFriend setInvited:YES];
@@ -682,7 +669,7 @@
     if (!theFriend) {
         theFriend = [[Friend alloc] init];
         theFriend.name = username;
-        [_friends addObject:theFriend];
+        [[[ChatController sharedInstance] getHomeDataSource] addFriend:theFriend];
     }
     
     [theFriend setInviter:YES];
@@ -727,11 +714,11 @@
 }
 
 -(void) removeFriend: (Friend *) afriend {
-    [_friends removeObject:afriend];
+    [[[ChatController sharedInstance] getHomeDataSource] removeFriend:afriend];
 }
 
 -(Friend *) getFriendByName: (NSString *) name {
-    for (Friend * afriend in _friends) {
+    for (Friend * afriend in [[ChatController sharedInstance] getHomeDataSource].friends) {
         if ([[afriend name] isEqualToString:name]) {
             return  afriend;
         }

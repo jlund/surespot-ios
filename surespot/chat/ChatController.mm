@@ -16,7 +16,9 @@
 #import "MessageProcessor.h"
 
 @interface ChatController()
-@property (strong) SocketIO * socketIO;
+@property (strong, atomic) SocketIO * socketIO;
+@property (strong, atomic) NSMutableDictionary * dataSources;
+@property (strong, atomic) HomeDataSource * homeDataSource;
 @end
 
 @implementation ChatController
@@ -52,6 +54,7 @@
         //   [self.socketIO connectToHost:@"server.surespot.me" onPort:443];
         
         self.dataSources = [[NSMutableDictionary alloc] init];
+        
         
         [self connect];
     }
@@ -133,6 +136,18 @@
     return dataSource;
 }
 
+
+- (HomeDataSource *) getHomeDataSource {
+    
+    if (_homeDataSource == nil) {
+        self.homeDataSource = [[HomeDataSource alloc] init];
+    }
+    return _homeDataSource;
+}
+
+
+
+
 - (void) sendMessage: (NSString *) message toFriendname: (NSString *) friendname
 {
     if (message.length == 0) return;
@@ -169,7 +184,7 @@
             
             ChatDataSource * dataSource = [self getDataSourceForFriendname: friendname];
             [dataSource addMessage: [[SurespotMessage alloc] initWithDictionary: dict]];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadMessages" object:friendname ];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshMessages" object:friendname ];
             
         }];
     }];
@@ -189,7 +204,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             [dataSource addMessage: message];
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadMessages" object:otherUser ];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshMessages" object:otherUser ];
         });
         
         

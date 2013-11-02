@@ -79,6 +79,7 @@
 		66EC6117176E49F800937467 /* NetworkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EC6116176E49F800937467 /* NetworkController.m */; };
 		66FF0FE218242B6B0038ECA6 /* Toast+UIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FE118242B6B0038ECA6 /* Toast+UIView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		66FF0FE518242E420038ECA6 /* UIUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FE418242E420038ECA6 /* UIUtils.m */; };
+		66FF0FE81825416A0038ECA6 /* HomeDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FE71825416A0038ECA6 /* HomeDataSource.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -165,11 +166,11 @@
 		6654441117F37A3F00F62F7F /* SwipeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeView.h; sourceTree = "<group>"; };
 		6654441217F37A3F00F62F7F /* SwipeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwipeView.m; sourceTree = "<group>"; };
 		6654441417F37BCE00F62F7F /* SwipeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeViewController.h; sourceTree = "<group>"; };
-		6654441517F37BCF00F62F7F /* SwipeViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SwipeViewController.mm; sourceTree = "<group>"; };
+		6654441517F37BCF00F62F7F /* SwipeViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = SwipeViewController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		66B3C8EB17B15F2300CC96EE /* ChatController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatController.h; path = chat/ChatController.h; sourceTree = "<group>"; };
 		66B3C8EC17B15F2300CC96EE /* ChatController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = ChatController.mm; path = chat/ChatController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		66B3C8EE17B17AC800CC96EE /* ChatDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatDataSource.h; path = chat/ChatDataSource.h; sourceTree = "<group>"; };
-		66B3C8EF17B17AC800CC96EE /* ChatDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChatDataSource.m; path = chat/ChatDataSource.m; sourceTree = "<group>"; };
+		66B3C8EF17B17AC800CC96EE /* ChatDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = ChatDataSource.m; path = chat/ChatDataSource.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		66E4F51A176298CB00596E6B /* 3way.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 3way.h; sourceTree = "<group>"; };
 		66E4F51B176298CB00596E6B /* adler32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adler32.h; sourceTree = "<group>"; };
 		66E4F51C176298CB00596E6B /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
@@ -355,6 +356,8 @@
 		66FF0FE118242B6B0038ECA6 /* Toast+UIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Toast+UIView.m"; sourceTree = "<group>"; };
 		66FF0FE318242E420038ECA6 /* UIUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIUtils.h; path = utils/UIUtils.h; sourceTree = "<group>"; };
 		66FF0FE418242E420038ECA6 /* UIUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIUtils.m; path = utils/UIUtils.m; sourceTree = "<group>"; };
+		66FF0FE61825416A0038ECA6 /* HomeDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HomeDataSource.h; path = home/HomeDataSource.h; sourceTree = "<group>"; };
+		66FF0FE71825416A0038ECA6 /* HomeDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HomeDataSource.m; path = home/HomeDataSource.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -543,6 +546,8 @@
 				664076731822B40300BFD974 /* FriendDelegate.h */,
 				664076761822C07C00BFD974 /* Friend.h */,
 				664076771822C07C00BFD974 /* Friend.m */,
+				66FF0FE61825416A0038ECA6 /* HomeDataSource.h */,
+				66FF0FE71825416A0038ECA6 /* HomeDataSource.m */,
 			);
 			name = home;
 			sourceTree = "<group>";
@@ -995,6 +1000,7 @@
 				6637108C18140FB2009D5195 /* GetPublicKeysOperation.mm in Sources */,
 				6654441317F37A3F00F62F7F /* SwipeView.m in Sources */,
 				66B3C8ED17B15F2300CC96EE /* ChatController.mm in Sources */,
+				66FF0FE81825416A0038ECA6 /* HomeDataSource.m in Sources */,
 				664076721822AA0100BFD974 /* HomeCell.m in Sources */,
 				6640767B1822D52800BFD974 /* SurespotControlMessage.m in Sources */,
 				66B3C8F017B17AC800CC96EE /* ChatDataSource.m in Sources */,

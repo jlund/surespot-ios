@@ -16,7 +16,7 @@
 @property (nonatomic, strong) IBOutlet SwipeView *swipeView;
 @property (nonatomic, strong) IBOutlet UIPageControl *pageControl;
 @property (nonatomic, strong) UITableView *friendView;
-@property (strong, atomic) NSMutableArray *friends;
+
 - (IBAction)pageControlTapped;
 @property (strong, atomic) NSMutableDictionary *chats;
 @property (strong, nonatomic) IBOutlet UITextField *textField;
