@@ -8,15 +8,26 @@
 
 #import "ChatDataSource.h"
 #import "NetworkController.h"
+#import "MessageProcessor.h"
+#import "MessageDecryptionOperation.h"
+
+@interface ChatDataSource()
+@property (nonatomic, strong) NSOperationQueue * decryptionQueue;
+
+@end
 
 @implementation ChatDataSource
 
--(ChatDataSource*)initWithUsername:(NSString *) username{
+-(ChatDataSource*)initWithUsername:(NSString *) username {
     //call super init
     self = [super init];
     
     if (self != nil) {
+        _decryptionQueue = [[NSOperationQueue alloc] init];
+        
+        
         [self setMessages:[[NSMutableArray alloc] init]];
+        
         _username = username;
         NSLog(@"getting messageData");
         //load message data
@@ -29,15 +40,16 @@
             //convert messages to SurespotMessage
             for (NSString * messageString in messageStrings) {
                 
-                [self addMessage:[[SurespotMessage alloc] initWithJSONString:messageString]];
+                [self addMessage:[[SurespotMessage alloc] initWithJSONString:messageString] refresh:NO];
             }
             
+            [_decryptionQueue waitUntilAllOperationsAreFinished];
             
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshMessages" object:username ];
             });
-   
+            
             
             
         } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
@@ -52,10 +64,28 @@
 }
 
 
-- (void) addMessage:(SurespotMessage *) message {
+- (void) addMessage:(SurespotMessage *) message refresh: (BOOL) refresh {
+
+    
+    //decrypt and compute height
+    if (!message.plainData) {
+        
+        MessageDecryptionOperation * op = [[MessageDecryptionOperation alloc]initWithMessage:message width: 200 completionCallback:^(SurespotMessage  * message){
+            
+            [self addMessageInternal: message refresh:refresh];
+        }];
+        [_decryptionQueue addOperation:op];
+        
+        
+    }
+    else {
+        [self addMessageInternal:message refresh:refresh];
+    }
+    
+}
+
+-(void) addMessageInternal:(SurespotMessage *)message  refresh: (BOOL) refresh {
     NSUInteger index = [self.messages indexOfObject:message];
-    
-    
     if (index == NSNotFound) {
         NSLog(@"adding message iv: %@", message.iv);
         [self.messages addObject:message];
@@ -66,8 +96,13 @@
         if (message.serverid) {
             existingMessage.serverid = message.serverid;
             existingMessage.dateTime = message.dateTime;
-        }        
+        }
     }
+    
+    if (refresh) {
+        [self postRefresh];
+    }
+    
 }
 
 -(NSInteger) latestMessageId {

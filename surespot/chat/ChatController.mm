@@ -219,6 +219,7 @@
                 
                 NSArray * messages = [messageData objectForKey:@"messages"];
                 if (messages) {
+                    
                     [self handleMessages: messages forUsername:friendname];
                 }
             }
@@ -275,8 +276,7 @@
             [dict setObject:message forKey:@"plaindata"];
             
             ChatDataSource * dataSource = [self getDataSourceForFriendname: friendname];
-            [dataSource addMessage: [[SurespotMessage alloc] initWithDictionary: dict]];
-            [dataSource postRefresh];
+            [dataSource addMessage: [[SurespotMessage alloc] initWithDictionary: dict] refresh:YES];
         }];
     }];
     
@@ -293,8 +293,7 @@
         
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [dataSource addMessage: message];
-            [dataSource postRefresh];
+            [dataSource addMessage: message refresh:YES];
         });
         
         
@@ -308,14 +307,14 @@
 -(void) handleMessages: (NSArray *) messages forUsername: (NSString *) username {
     ChatDataSource * cds = [_dataSources objectForKey:username];
     if (!cds) {
+        NSLog(@"no chat data source for %@", username);
         return;
     }
     
     SurespotMessage * lastMessage;
-    for (id jsonMessage in messages) {
-        lastMessage = [[SurespotMessage alloc] initWithJSONString:jsonMessage];
+    for (id jsonMessage in messages) {        lastMessage = [[SurespotMessage alloc] initWithJSONString:jsonMessage];
         
-        [cds addMessage:lastMessage];
+        [cds addMessage:lastMessage refresh:NO];
     }
     
     [cds postRefresh];

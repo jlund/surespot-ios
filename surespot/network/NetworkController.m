@@ -122,6 +122,7 @@
     NSURLRequest *request = [self requestWithMethod:@"GET" path:path parameters: nil];
     AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:successBlock
                                                                                         failure: failureBlock];
+    [operation setSuccessCallbackQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)];
     [operation start];
     
 }

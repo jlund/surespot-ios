@@ -13,7 +13,7 @@
 
 -(ChatDataSource*)initWithUsername:(NSString *) username;
 @property (strong) NSMutableArray * messages;
-- (void) addMessage:(SurespotMessage *) message;
+- (void) addMessage:(SurespotMessage *) message refresh:(BOOL) refresh;
 @property (strong, nonatomic) NSString * username;
 -(NSInteger) latestMessageId;
 -(NSInteger) latestControlMessageId;
