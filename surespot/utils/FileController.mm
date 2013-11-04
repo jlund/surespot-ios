@@ -17,6 +17,7 @@ using CryptoPP::SecByteBlock;
 NSString * const STATE_DIR = @"state";
 NSString * const HOME_FILENAME = @"home";
 NSString * const STATE_EXTENSION = @"sss";
+NSString * const CHAT_DATA_PREFIX = @"chatdata_";
 
 @implementation FileController
 
@@ -51,6 +52,11 @@ NSString * const STATE_EXTENSION = @"sss";
     return [self getFilename:HOME_FILENAME];
 }
 
++(NSString *) getChatDataFilenameForSpot: (NSString *) spot {
+    return [self getFilename:[CHAT_DATA_PREFIX stringByAppendingString:spot]];
+}
+
+
 
 +(NSString *) getFilename: (NSString *) filename {
     return [self getFilename:filename forUser:[[IdentityController sharedInstance] getLoggedInUser]];
@@ -65,8 +71,7 @@ NSString * const STATE_EXTENSION = @"sss";
         }
         
         return [dir stringByAppendingPathComponent:[filename stringByAppendingPathExtension:STATE_EXTENSION]];
-        
-        
+                
     }
     
     return nil;

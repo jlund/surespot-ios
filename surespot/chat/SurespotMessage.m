@@ -35,6 +35,21 @@
     return self;
 }
 
+-(id) initWithCoder:(NSCoder *)coder {
+    self = [super init];
+    if (self) {
+        _serverid = [coder decodeObjectForKey:@"id"];
+        _to = [coder decodeObjectForKey:@"to"];
+        _from = [coder decodeObjectForKey:@"from"];
+        _fromVersion = [coder decodeObjectForKey:@"fromVersion"];
+        _toVersion = [coder decodeObjectForKey:@"toVersion"];
+        _data =[coder decodeObjectForKey:@"data"];
+        _iv = [coder decodeObjectForKey:@"iv"];
+        _mimeType = [coder decodeObjectForKey:@"mimeType"];
+        _dateTime = [coder decodeObjectForKey:@"datetime"];
+    }
+    return self;
+}
 -(void) parseDictionary:(NSDictionary *) dictionary {
     _serverid = [dictionary objectForKey:@"id"];
     _to = [dictionary objectForKey:@"to"];
@@ -78,5 +93,23 @@
     
     return [self.iv isEqual:[other iv]];
 }
+
+- (void)encodeWithCoder:(NSCoder *)encoder{
+    [encoder encodeObject:_serverid forKey:@"id"];
+    [encoder encodeObject:_to forKey:@"to"];
+    [encoder encodeObject:_from forKey:@"from"];
+    [encoder encodeObject:_fromVersion forKey:@"fromVersion"];
+    [encoder encodeObject:_toVersion forKey:@"toVersion"];
+    [encoder encodeObject:_data forKey:@"data"];
+    [encoder encodeObject:_iv forKey:@"iv"];
+    [encoder encodeObject:_mimeType forKey:@"mimeType"];
+    [encoder encodeObject:_dateTime forKey:@"datetime"];
+
+
+   
+
+}
+
+
 
 @end

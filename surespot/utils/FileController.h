@@ -10,7 +10,9 @@
 
 @interface FileController : NSObject
 +(NSString *) getHomeFilename;
++(NSString *) getChatDataFilenameForSpot: (NSString *) spot;
 + (NSString*) getAppSupportDir;
 + (NSData *)gzipDeflate:(NSData *) data;
 + (NSData *)gzipInflate:(NSData *) data;
+
 @end

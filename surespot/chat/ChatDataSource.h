@@ -11,11 +11,13 @@
 
 @interface ChatDataSource : NSObject
 
--(ChatDataSource*)initWithUsername:(NSString *) username;
-@property (strong) NSMutableArray * messages;
-- (void) addMessage:(SurespotMessage *) message refresh:(BOOL) refresh;
-@property (strong, nonatomic) NSString * username;
--(NSInteger) latestMessageId;
--(NSInteger) latestControlMessageId;
+@property (nonatomic, strong) NSMutableArray * messages;
+@property (nonatomic, strong) NSString * username;
+@property (nonatomic, assign) NSInteger latestMessageId;
+@property (nonatomic, assign) NSInteger latestControlMessageId;
+
+-(ChatDataSource*)initWithUsername:(NSString *) username loggedInUser: (NSString * ) loggedInUser;
+-(void) addMessage:(SurespotMessage *) message refresh:(BOOL) refresh;
 -(void) postRefresh;
+
 @end

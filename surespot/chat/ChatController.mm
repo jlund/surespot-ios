@@ -144,7 +144,7 @@
 - (ChatDataSource *) getDataSourceForFriendname: (NSString *) friendname {
     ChatDataSource * dataSource = [self.dataSources objectForKey:friendname];
     if (dataSource == nil) {
-        dataSource = [[ChatDataSource alloc] initWithUsername:friendname];
+        dataSource = [[ChatDataSource alloc] initWithUsername:friendname loggedInUser:[[IdentityController sharedInstance] getLoggedInUser]] ;
         [self.dataSources setObject: dataSource forKey: friendname];
     }
     return dataSource;
@@ -152,7 +152,7 @@
 
 
 -(void) getData {
-   
+    
     [self getLatestData];
     
 }
@@ -160,6 +160,12 @@
 -(void) saveState {
     if (_homeDataSource) {
         [_homeDataSource writeToDisk];
+    }
+    
+    if (_dataSources) {
+        for (id key in _dataSources) {
+            [[_dataSources objectForKey:key] writeToDisk];
+        }
     }
 }
 
@@ -210,28 +216,28 @@
         
         NSArray * userControlMessages = [JSON objectForKey:@"userControlMessages"];
         if (userControlMessages ) {
-          //  [self handleControlMessages: userControlMessages forUsername: [[IdentityController sharedInstance] getLoggedInUser]];
+            //  [self handleControlMessages: userControlMessages forUsername: [[IdentityController sharedInstance] getLoggedInUser]];
         }
         
         //update message data
         NSArray * messageDatas = [JSON objectForKey:@"messageData"];
-   //     if (messageDatas) {
-            for (NSDictionary * messageData in messageDatas) {
-                
-                
-                NSString * friendname = [messageData objectForKey:@"username"];
-                NSArray * controlMessages = [messageData objectForKey:@"controlMessages"];
-                if (controlMessages) {
-                    [self handleControlMessages:controlMessages forUsername:friendname ];
-                }
-                
-                NSArray * messages = [messageData objectForKey:@"messages"];
-                if (messages) {
-                    
-                    [self handleMessages: messages forUsername:friendname];
-                }
+        //     if (messageDatas) {
+        for (NSDictionary * messageData in messageDatas) {
+            
+            
+            NSString * friendname = [messageData objectForKey:@"username"];
+            NSArray * controlMessages = [messageData objectForKey:@"controlMessages"];
+            if (controlMessages) {
+                [self handleControlMessages:controlMessages forUsername:friendname ];
             }
-    //    }
+            
+            NSArray * messages = [messageData objectForKey:@"messages"];
+            if (messages) {
+                
+                [self handleMessages: messages forUsername:friendname];
+            }
+        }
+        //    }
         
     } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
     }];

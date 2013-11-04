@@ -10,28 +10,55 @@
 #import "NetworkController.h"
 #import "MessageProcessor.h"
 #import "MessageDecryptionOperation.h"
+#import "ChatUtils.h"
+#import "FileController.h"
+
 
 @interface ChatDataSource()
 @property (nonatomic, strong) NSOperationQueue * decryptionQueue;
-
+@property (nonatomic, strong) NSString * loggedInUser;
 @end
 
 @implementation ChatDataSource
 
--(ChatDataSource*)initWithUsername:(NSString *) username {
+-(ChatDataSource*)initWithUsername:(NSString *) username loggedInUser: (NSString * ) loggedInUser {
     //call super init
     self = [super init];
     
     if (self != nil) {
         _decryptionQueue = [[NSOperationQueue alloc] init];
-        
-        
-        [self setMessages:[[NSMutableArray alloc] init]];
-        
+        _loggedInUser = loggedInUser;
         _username = username;
-        NSLog(@"getting messageData");
+         _messages = [NSMutableArray new];
+        
+        NSArray * messages;
+        
+        NSString * path =[FileController getChatDataFilenameForSpot:[ChatUtils getSpotUserA:username userB:loggedInUser]];
+        NSLog(@"looking for chat data at: %@", path);
+        id chatData = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+        if (chatData) {
+            NSLog(@"loading chat data from: %@", path);
+           
+            _latestControlMessageId = [[chatData objectForKey:@"latestControlMessageId"] integerValue];
+            messages = [chatData objectForKey:@"messages"];
+            
+            //convert messages to SurespotMessage
+            for (SurespotMessage * message in messages) {
+                
+                [self addMessage:message refresh:NO];
+            }
+            
+            [_decryptionQueue waitUntilAllOperationsAreFinished];
+            NSLog(@"messages completed loading from disk at: %@", path);
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshMessages" object:username ];
+//            });
+        }
+        
+        
+        NSLog(@"getting messageData latestMessageId: %d, latestControlId: %d", _latestMessageId ,_latestControlMessageId);
         //load message data
-        [[NetworkController sharedInstance] getMessageDataForUsername:username andMessageId:0 andControlId:0 successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+        [[NetworkController sharedInstance] getMessageDataForUsername:username andMessageId:_latestMessageId andControlId:_latestControlMessageId successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
             NSLog(@"get messageData response: %d",  [response statusCode]);
             
             NSArray * messageStrings =[((NSDictionary *) JSON) objectForKey:@"messages"];
@@ -65,7 +92,7 @@
 
 
 - (void) addMessage:(SurespotMessage *) message refresh: (BOOL) refresh {
-
+    
     
     //decrypt and compute height
     if (!message.plainData) {
@@ -99,6 +126,14 @@
         }
     }
     
+    if (message.serverid) {
+        NSInteger messageId =[message.serverid integerValue];
+        if (messageId > _latestMessageId) {
+             NSLog(@"updating latest message id: %d", messageId);
+            _latestMessageId = messageId;
+        }
+    }
+    
     if (refresh) {
         [self postRefresh];
     }
@@ -125,6 +160,23 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshMessages" object:_username ];
     });
+}
+
+-(void) writeToDisk {
+    
+    
+    NSString * spot = [ChatUtils getSpotUserA:_loggedInUser userB:_username];
+    NSString * filename =[FileController getChatDataFilenameForSpot: spot];
+    NSLog(@"saving chat data to disk, spot: %@", spot);
+    NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:_messages forKey:@"messages"];
+    //[dict setObject:_username  forKey:@"username"];
+    [dict setObject:[NSNumber numberWithInteger:_latestControlMessageId] forKey:@"latestControlMessageId"];
+    
+    
+    BOOL saved =[NSKeyedArchiver archiveRootObject:dict toFile:filename];
+    NSLog(@"save success?: %@",saved ? @"YES" : @"NO");
+    
 }
 
 @end

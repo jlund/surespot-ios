@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SurespotMessage : NSObject
+@interface SurespotMessage : NSObject<NSCoding>
 - (id) initWithJSONString: (NSString *) jsonString;
 - (id) initWithDictionary: (NSDictionary *) dictionary;
 

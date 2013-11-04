@@ -29,8 +29,6 @@
 -(BOOL) isDeleted;
 -(void) setDeleted: (BOOL) set;
 
--(id) initWithCoder:(NSCoder *)coder;
--(void) encodeWithCoder:(NSCoder *)encoder;
 
 
 
