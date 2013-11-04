@@ -10,7 +10,13 @@
 #import "NSData+Gunzip.h"
 #include <zlib.h>
 #include "secblock.h"
+#import "IdentityController.h"
 using CryptoPP::SecByteBlock;
+
+
+NSString * const STATE_DIR = @"state";
+NSString * const HOME_FILENAME = @"home";
+NSString * const STATE_EXTENSION = @"sss";
 
 @implementation FileController
 
@@ -39,6 +45,31 @@ using CryptoPP::SecByteBlock;
     }
     
     return appSupportDir;
+}
+
++(NSString *) getHomeFilename {
+    return [self getFilename:HOME_FILENAME];
+}
+
+
++(NSString *) getFilename: (NSString *) filename {
+    return [self getFilename:filename forUser:[[IdentityController sharedInstance] getLoggedInUser]];
+}
+
++(NSString *) getFilename: (NSString *) filename forUser: (NSString *) user {
+    if (user) {
+        NSString * dir = [[[FileController getAppSupportDir] stringByAppendingPathComponent:STATE_DIR ] stringByAppendingPathComponent:user];
+        NSError * error = nil;
+        if (![[NSFileManager defaultManager] createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:nil error:&error]) {
+            NSLog(@"%@", error.localizedDescription);
+        }
+        
+        return [dir stringByAppendingPathComponent:[filename stringByAppendingPathExtension:STATE_EXTENSION]];
+        
+        
+    }
+    
+    return nil;
 }
 
 

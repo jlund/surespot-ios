@@ -39,6 +39,18 @@
     return self;
 }
 
+-(id) initWithCoder:(NSCoder *)coder {
+    self = [super init];
+    if (self) {
+        _name = [coder decodeObjectForKey:@"name"];
+        _flags = [coder decodeIntegerForKey:@"flags"];
+        _imageUrl = [coder decodeObjectForKey:@"imageUrl"];
+        _imageIv = [coder decodeObjectForKey:@"imageIv"];                        
+        _imageVersion = [coder decodeObjectForKey:@"imageVersion"];
+    }
+    return self;
+}
+
 
 -(void) parseDictionary:(NSDictionary *) dictionary {
     _name = [dictionary objectForKey:@"name"];
@@ -47,6 +59,15 @@
     _imageUrl = [dictionary objectForKey:@"imageUrl"];
     _imageIv = [dictionary objectForKey:@"imageIv"];
 }
+
+-(void) encodeWithCoder:(NSCoder *)encoder {
+    [encoder encodeObject:_name forKey:@"name"];
+    [encoder encodeInteger:_flags forKey:@"flags"];
+  //  [encoder encodeObject:_imageVersion forKey:@"imageVersion"];
+  //  [encoder encodeObject:_imageUrl forKey:@"imageUrl"];
+  //  [encoder encodeObject:_imageIv forKey:@"imageIv"];
+}
+
 
 
 -(BOOL) isInviter {

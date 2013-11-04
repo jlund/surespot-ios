@@ -8,14 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Friend : NSObject
+@interface Friend : NSObject<NSCoding>
 - (id) initWithDictionary:(NSDictionary *) dictionary;
 @property (atomic,strong) NSString * name;
 @property (atomic,assign) NSInteger flags;
 @property (atomic, strong) NSString * imageUrl;
 @property (atomic, strong) NSString * imageVersion;
 @property (atomic, strong) NSString * imageIv;
-@property (atomic, assign) NSInteger lastViewMessageId;
+@property (atomic, assign) NSInteger lastViewedMessageId;
 @property (atomic, assign) NSInteger availableMessageId;
 @property (atomic, assign) NSInteger lastReceivedMessageControlId;
 @property (atomic, assign) NSInteger availableMessageControlId;
@@ -29,6 +29,8 @@
 -(BOOL) isDeleted;
 -(void) setDeleted: (BOOL) set;
 
+-(id) initWithCoder:(NSCoder *)coder;
+-(void) encodeWithCoder:(NSCoder *)encoder;
 
 
 

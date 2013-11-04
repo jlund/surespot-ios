@@ -16,12 +16,12 @@
 #import "MessageProcessor.h"
 #import "NetworkController.h"
 #import "ChatUtils.h"
+#import "StateController.h"
 
 @interface ChatController()
 @property (strong, atomic) SocketIO * socketIO;
 @property (strong, atomic) NSMutableDictionary * dataSources;
 @property (strong, atomic) HomeDataSource * homeDataSource;
-@property (atomic, assign) NSInteger latestUserControlId;
 @end
 
 @implementation ChatController
@@ -56,7 +56,8 @@
         ////   self.socketIO.useSecure = YES;
         //   [self.socketIO connectToHost:@"server.surespot.me" onPort:443];
         
-        self.dataSources = [[NSMutableDictionary alloc] init];
+        _homeDataSource = [[HomeDataSource alloc] init];
+        _dataSources = [[NSMutableDictionary alloc] init];
         
         //listen for invited
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(friendInvited:) name:@"friendInvited" object:nil];
@@ -70,6 +71,9 @@
     return self;
 }
 
+
+
+
 -(void) disconnect {
     if (_socketIO) {
         NSLog(@"disconnecting socket");
@@ -79,7 +83,8 @@
 
 -(void) pause: (NSNotification *)  notification{
     NSLog(@"chatcontroller pause");
-    [self    disconnect];
+    [self disconnect];
+    [self saveState];
 }
 
 -(void) connect {
@@ -147,11 +152,14 @@
 
 
 -(void) getData {
-    if (_homeDataSource.friends.count == 0 && _latestUserControlId == 0) {
-        
-    }
-    else {
-        [self getLatestData];
+   
+    [self getLatestData];
+    
+}
+
+-(void) saveState {
+    if (_homeDataSource) {
+        [_homeDataSource writeToDisk];
     }
 }
 
@@ -175,7 +183,7 @@
     }
     
     
-    [[NetworkController sharedInstance] getLatestDataSinceUserControlId:_latestUserControlId spotIds:messageIds successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+    [[NetworkController sharedInstance] getLatestDataSinceUserControlId:_homeDataSource.latestUserControlId spotIds:messageIds successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         
         
         NSArray * conversationIds = [JSON objectForKey:@"conversationIds"];
@@ -539,5 +547,7 @@
 -(void) handleDeleteUser: (NSString *) deleted deleter: (NSString *) deleter {
     
 }
+
+
 
 @end

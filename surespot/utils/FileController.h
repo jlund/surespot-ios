@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface FileController : NSObject
-
++(NSString *) getHomeFilename;
 + (NSString*) getAppSupportDir;
 + (NSData *)gzipDeflate:(NSData *) data;
 + (NSData *)gzipInflate:(NSData *) data;

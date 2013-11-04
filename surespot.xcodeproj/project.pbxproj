@@ -80,6 +80,7 @@
 		66FF0FE218242B6B0038ECA6 /* Toast+UIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FE118242B6B0038ECA6 /* Toast+UIView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		66FF0FE518242E420038ECA6 /* UIUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FE418242E420038ECA6 /* UIUtils.m */; };
 		66FF0FE81825416A0038ECA6 /* HomeDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FE71825416A0038ECA6 /* HomeDataSource.m */; };
+		66FF0FEE1827FAEE0038ECA6 /* StateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FED1827FAEE0038ECA6 /* StateController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -358,6 +359,8 @@
 		66FF0FE418242E420038ECA6 /* UIUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIUtils.m; path = utils/UIUtils.m; sourceTree = "<group>"; };
 		66FF0FE61825416A0038ECA6 /* HomeDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HomeDataSource.h; path = home/HomeDataSource.h; sourceTree = "<group>"; };
 		66FF0FE71825416A0038ECA6 /* HomeDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HomeDataSource.m; path = home/HomeDataSource.m; sourceTree = "<group>"; };
+		66FF0FEC1827FAE00038ECA6 /* StateController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StateController.h; path = utils/StateController.h; sourceTree = "<group>"; };
+		66FF0FED1827FAEE0038ECA6 /* StateController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StateController.m; path = utils/StateController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -492,6 +495,8 @@
 				6606E4EF179DB134004199BC /* FileController.mm */,
 				66FF0FE318242E420038ECA6 /* UIUtils.h */,
 				66FF0FE418242E420038ECA6 /* UIUtils.m */,
+				66FF0FEC1827FAE00038ECA6 /* StateController.h */,
+				66FF0FED1827FAEE0038ECA6 /* StateController.m */,
 			);
 			name = utils;
 			sourceTree = "<group>";
@@ -990,6 +995,7 @@
 				66EC6117176E49F800937467 /* NetworkController.m in Sources */,
 				66159703176F6732001B32C1 /* NSData+Base64.m in Sources */,
 				6606E4ED179D9C3A004199BC /* SignupViewController.mm in Sources */,
+				66FF0FEE1827FAEE0038ECA6 /* StateController.m in Sources */,
 				6606E4F0179DB134004199BC /* FileController.mm in Sources */,
 				6637108918134295009D5195 /* MessageDecryptionOperation.mm in Sources */,
 				66371086181331E8009D5195 /* MessageProcessor.mm in Sources */,

@@ -8,36 +8,60 @@
 
 #import "HomeDataSource.h"
 #import "NetworkController.h"
+#import "FileController.h"
+
+@interface  HomeDataSource()
+
+@end
 
 @implementation HomeDataSource
 -(HomeDataSource*)init {
-    //call super init
     self = [super init];
     
     if (self != nil) {
-        [self setFriends:[[NSMutableArray alloc] init]];
-        [[NetworkController sharedInstance] getFriendsSuccessBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-            NSLog(@"get friends response: %d",  [response statusCode]);
-            self.friends = [[NSMutableArray alloc ] init];
-            
-            
-            
-            NSArray * friendDicts = [JSON objectForKey:@"friends"];
-            for (NSDictionary * friendDict in friendDicts) {
-                [_friends addObject:[[Friend alloc] initWithDictionary: friendDict]];
-            };
-            
-            [self postRefresh];
-            
-        } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
-            NSLog(@"response failure: %@",  Error);
-            [self postRefresh];  
-        }];
-        
-        
+        //if we have data on file, load it
+        //otherwise load from network
+        NSString * path =[FileController getHomeFilename];
+        NSLog(@"looking for home data at: %@", path);
+        id homeData = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+        if (homeData) {
+            NSLog(@"loading home data from: %@", path);
+            _latestUserControlId = [[homeData objectForKey:@"userControlId"] integerValue];
+            _friends = [homeData objectForKey:@"friends"];
+            if (!_friends) {
+                [self getFriends];
+            }
+        }
+        else {
+            NSLog(@"loading home data from cloud");
+            [self getFriends];
+        }
     }
     
+    NSLog(@"HomeDataSource init, latestUserControlId: %d", _latestUserControlId);
     return self;
+}
+
+-(void) getFriends {
+    _friends = [[NSMutableArray alloc] init];
+    [[NetworkController sharedInstance] getFriendsSuccessBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+        NSLog(@"get friends response: %d",  [response statusCode]);
+        
+        _latestUserControlId = [[JSON objectForKey:@"userControlId"] integerValue];
+        _friends = [[NSMutableArray alloc] init];
+        
+        NSArray * friendDicts = [JSON objectForKey:@"friends"];
+        for (NSDictionary * friendDict in friendDicts) {
+            [_friends addObject:[[Friend alloc] initWithDictionary: friendDict]];
+        };
+        [self writeToDisk];
+        [self postRefresh];
+        
+    } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
+        NSLog(@"response failure: %@",  Error);
+        [self postRefresh];
+    }];
+    
 }
 
 - (void) addFriend: (Friend *) afriend withRefresh: (BOOL) refresh {
@@ -82,5 +106,20 @@
     }
 }
 
+-(void) writeToDisk {
+    if (_latestUserControlId > 0 || _friends.count > 0) {
+        NSString * filename =[FileController getHomeFilename];
+        NSLog(@"saving home data to disk at %@, latestUSerControlId: %d",filename, _latestUserControlId);
+        NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
+        if (_friends.count > 0) {
+            [dict setObject:_friends  forKey:@"friends"];
+        }
+        if (_latestUserControlId > 0) {
+            [dict setObject:[NSNumber numberWithInteger: _latestUserControlId] forKey:@"userControlId"];
+        }
+        BOOL saved =[NSKeyedArchiver archiveRootObject:dict toFile:filename];
+        NSLog(@"save success?: %@",saved ? @"YES" : @"NO");
+    }
+}
 
 @end

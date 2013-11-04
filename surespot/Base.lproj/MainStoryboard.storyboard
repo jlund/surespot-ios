@@ -83,11 +83,13 @@
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" minimumFontSize="17" id="oBQ-en-mfr">
                                 <rect key="frame" x="17" y="98" width="286" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" id="4qE-be-iiM">
                                 <rect key="frame" x="20" y="136" width="280" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
@@ -106,7 +108,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="create identity" id="qUe-0a-kTs"/>
+                    <navigationItem key="navigationItem" title="create identity" id="cSw-Oc-s4R"/>
                     <connections>
                         <outlet property="bCreateIdentity" destination="gmo-KK-DEU" id="yO9-Oj-PUr"/>
                         <outlet property="tbPassword" destination="4qE-be-iiM" id="XO1-5U-3XE"/>
@@ -166,6 +168,6 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="qzP-R7-Qz4"/>
-        <segue reference="CFG-TY-gjC"/>
+        <segue reference="0Gr-2N-xaD"/>
     </inferredMetricsTieBreakers>
 </document>
