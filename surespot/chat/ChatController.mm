@@ -20,7 +20,7 @@
 
 @interface ChatController()
 @property (strong, atomic) SocketIO * socketIO;
-@property (strong, atomic) NSMutableDictionary * dataSources;
+@property (strong, atomic) NSMutableDictionary * chatDataSources;
 @property (strong, atomic) HomeDataSource * homeDataSource;
 @end
 
@@ -57,7 +57,10 @@
         //   [self.socketIO connectToHost:@"server.surespot.me" onPort:443];
         
         _homeDataSource = [[HomeDataSource alloc] init];
-        _dataSources = [[NSMutableDictionary alloc] init];
+        _chatDataSources = [[NSMutableDictionary alloc] init];
+        
+        //open active chats
+        
         
         //listen for invited
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(friendInvited:) name:@"friendInvited" object:nil];
@@ -142,10 +145,10 @@
 }
 
 - (ChatDataSource *) getDataSourceForFriendname: (NSString *) friendname {
-    ChatDataSource * dataSource = [self.dataSources objectForKey:friendname];
+    ChatDataSource * dataSource = [self.chatDataSources objectForKey:friendname];
     if (dataSource == nil) {
         dataSource = [[ChatDataSource alloc] initWithUsername:friendname loggedInUser:[[IdentityController sharedInstance] getLoggedInUser]] ;
-        [self.dataSources setObject: dataSource forKey: friendname];
+        [self.chatDataSources setObject: dataSource forKey: friendname];
     }
     return dataSource;
 }
@@ -162,9 +165,9 @@
         [_homeDataSource writeToDisk];
     }
     
-    if (_dataSources) {
-        for (id key in _dataSources) {
-            [[_dataSources objectForKey:key] writeToDisk];
+    if (_chatDataSources) {
+        for (id key in _chatDataSources) {
+            [[_chatDataSources objectForKey:key] writeToDisk];
         }
     }
 }
@@ -175,8 +178,8 @@
     NSMutableArray * messageIds = [[NSMutableArray alloc] init];
     
     //build message id list for open chats
-    for (id username in [_dataSources allKeys]) {
-        ChatDataSource * chatDataSource = [_dataSources objectForKey:username];
+    for (id username in [_chatDataSources allKeys]) {
+        ChatDataSource * chatDataSource = [_chatDataSources objectForKey:username];
         NSString * spot = [ChatUtils getSpotUserA: [[IdentityController sharedInstance] getLoggedInUser] userB: username];
         
         NSLog(@"getting message and control data for spot: %@",spot );
@@ -300,7 +303,7 @@
 
 -(void) handleMessage: (SurespotMessage *) message {
     NSString * otherUser = [message getOtherUser];
-    ChatDataSource * dataSource = [self.dataSources objectForKey:otherUser];
+    ChatDataSource * dataSource = [self.chatDataSources objectForKey:otherUser];
     if (dataSource) {
         //  [[MessageProcessor sharedInstance] decryptMessage:message completionCallback:^(SurespotMessage * message){
         
@@ -319,7 +322,7 @@
 }
 
 -(void) handleMessages: (NSArray *) messages forUsername: (NSString *) username {
-    ChatDataSource * cds = [_dataSources objectForKey:username];
+    ChatDataSource * cds = [_chatDataSources objectForKey:username];
     if (!cds) {
         NSLog(@"no chat data source for %@", username);
         return;
@@ -335,7 +338,7 @@
 }
 
 -(void) handleControlMessages: (NSArray *) controlMessages forUsername: (NSString *) username {
-    ChatDataSource * cds = [_dataSources objectForKey:username];
+    ChatDataSource * cds = [_chatDataSources objectForKey:username];
     
     BOOL userActivity = NO;
     BOOL messageActivity = NO;
@@ -554,6 +557,15 @@
     
 }
 
+- (void) setCurrentChat: (NSString *) username {
+    [_homeDataSource setCurrentChat: username];
+    
+      
+}
+
+-(NSString *) getCurrentChat {
+    return [_homeDataSource currentChat];
+}
 
 
 @end

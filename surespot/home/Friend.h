@@ -28,7 +28,8 @@
 
 -(BOOL) isDeleted;
 -(void) setDeleted: (BOOL) set;
-
+-(BOOL) isChatActive;
+-(void) setChatActive: (BOOL) set;
 
 
 

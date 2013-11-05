@@ -13,6 +13,7 @@
 
 @property (strong, atomic) NSMutableArray *friends;
 @property (atomic, assign) NSInteger latestUserControlId;
+@property (strong, nonatomic) NSString * currentChat;
 
 - (void) addFriend: (Friend *) afriend withRefresh: (BOOL) refresh;
 - (void) removeFriend: (Friend *) afriend withRefresh: (BOOL) refresh;

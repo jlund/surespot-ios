@@ -23,9 +23,9 @@
 //#import <QuartzCore/CATransaction.h>
 
 @interface SwipeViewController ()
-@property (nonatomic, strong) NSString * currentChat;
 @property (nonatomic, strong) dispatch_queue_t dateFormatQueue;
 @property (nonatomic, strong) NSDateFormatter * dateFormatter;
+@property (nonatomic, weak) HomeDataSource * homeDataSource;
 @end
 
 
@@ -62,28 +62,41 @@
     _textField.enablesReturnKeyAutomatically = NO;
     [self registerForKeyboardNotifications];
     
-//  UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"menu" style:UIBarButtonItemStylePlain target:self action:@selector(refreshPropertyList:)];
-//    self.navigationItem.rightBarButtonItem = anotherButton;
+    //  UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"menu" style:UIBarButtonItemStylePlain target:self action:@selector(refreshPropertyList:)];
+    //    self.navigationItem.rightBarButtonItem = anotherButton;
     
     self.navigationItem.title = [@"surespot/" stringByAppendingString:[[IdentityController sharedInstance] getLoggedInUser]];
     
-   
+    
     //don't swipe to back stack
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     }
     
-
+    
     //listen for refresh notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshMessages:) name:@"refreshMessages" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshHome:) name:@"refreshHome" object:nil];
-
+    
     //listen for push notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushNotification:) name:@"pushNotification" object:nil];
-
     
-    //make sure chat controller loaded
-    [ChatController sharedInstance];
+    _homeDataSource = [[ChatController sharedInstance] getHomeDataSource];
+    
+    //show currently open tab immediately
+    NSString * currentChat = _homeDataSource.currentChat;
+    if (currentChat) {
+        [self showChat:currentChat];
+    }
+    
+    
+    
+    //open active tabs
+    for (Friend * afriend in [_homeDataSource friends]) {
+        if ([afriend isChatActive]) {
+            [self loadChat:[afriend name] show:NO];
+        }
+    }
     
     
 }
@@ -232,7 +245,7 @@
             _friendView.delegate = self;
             _friendView.dataSource = self;
             
-                  }
+        }
         
         NSLog(@"returning friend view %@", _friendView);
         //return view
@@ -255,20 +268,20 @@
 {
     NSInteger currPage =swipeView.currentPage;
     //update page control page
-
+    
     //   _pageControl.currentPage = swipeView.currentPage;
     //  [_swipeView reloadData];
     UITableView * tableview;
     if (currPage == 0) {
-        _currentChat = nil;
+        [[ChatController sharedInstance] setCurrentChat:nil];
         tableview = _friendView;
     }
     else {
         tableview = [_chats allValues][swipeView.currentPage-1];
-       _currentChat = [_chats allKeys][currPage-1];
-
-        }
-        NSLog(@"swipeview index changed to %d, current chat: %@", currPage, _currentChat);
+        [[ChatController sharedInstance] setCurrentChat: [_chats allKeys][currPage-1]];
+        
+    }
+    NSLog(@"swipeview index changed to %d", currPage);
     [tableview reloadData];
     
 }
@@ -331,7 +344,7 @@
     
     NSInteger index = [_swipeView indexOfItemViewOrSubview:tableView];
     
-  //  NSLog(@"height for row, index: %d, indexPath: %@", index, indexPath);
+    //  NSLog(@"height for row, index: %d, indexPath: %@", index, indexPath);
     if (index == NSNotFound) {
         return 0;
     }
@@ -375,7 +388,7 @@
     
     
     NSInteger index = [_swipeView indexOfItemViewOrSubview:tableView];
-  //  NSLog(@"cell for row, index: %d, indexPath: %@", index, indexPath);
+    //  NSLog(@"cell for row, index: %d, indexPath: %@", index, indexPath);
     if (index == NSNotFound) {
         static NSString *CellIdentifier = @"Cell";
         UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
@@ -446,10 +459,10 @@
                     
                     [message setLoaded:NO];
                     [message setLoading:YES];
-                //    NSLog(@"decrypting data for iv: %@", [message iv]);
+                    //    NSLog(@"decrypting data for iv: %@", [message iv]);
                     [[MessageProcessor sharedInstance] decryptMessage:message width: tableView.frame.size.width completionCallback:^(SurespotMessage  * message){
                         
-                     //   NSLog(@"data decrypted, reloading row for iv %@", [message iv]);
+                        //   NSLog(@"data decrypted, reloading row for iv %@", [message iv]);
                         dispatch_async(dispatch_get_main_queue(), ^{
                             //  [tableView reloadData];
                             [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
@@ -461,7 +474,7 @@
                 }
             }
             else {
-             //   NSLog(@"setting text for iv: %@ to: %@", [message iv], plainData);
+                //   NSLog(@"setting text for iv: %@ to: %@", [message iv], plainData);
                 cell.messageLabel.text = plainData;
                 cell.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
                 cell.messageStatusLabel.text = [self stringFromDate:[message dateTime]];
@@ -503,8 +516,7 @@
     }
 }
 
--(void) showChat:(NSString *) username {
-    NSLog(@"showChat, %@", username);
+-(void) loadChat:(NSString *) username show: (BOOL) show {
     //get existing view if there is one
     UITableView * chatView = [_chats objectForKey:username];
     if (!chatView) {
@@ -516,29 +528,40 @@
         [chatView setDirectionalLockEnabled:YES];
         
         [_chats setObject:chatView forKey:username];
-                
+        
         //   [chatView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"ChatCell"];
         [chatView registerNib:[UINib nibWithNibName:@"OurMessageCell" bundle:nil] forCellReuseIdentifier:@"OurMessageView"];
         [chatView registerNib:[UINib nibWithNibName:@"TheirMessageCell" bundle:nil] forCellReuseIdentifier:@"TheirMessageView"];
         
         NSInteger index = _chats.count;
-        NSLog(@"creating and scrolling to index: %d", index);
+        NSLog(@"creatingindex: %d", index);
         
         [_swipeView loadViewAtIndex:index];
         [_swipeView updateItemSizeAndCount];
         [_swipeView updateScrollViewDimensions];
-        [_swipeView scrollToPage:index duration:0.500];
+        
+        if (show) {
+            [_swipeView scrollToPage:index duration:0.500];
+            [[ChatController sharedInstance] setCurrentChat: username];
+        }
         
     }
     
     else {
-        NSInteger index = [[_chats allKeys] indexOfObject:username] + 1;
-        NSLog(@"scrolling to index: %d", index);
-        [_swipeView scrollToPage:index duration:0.500];
-        
-        
+        if (show) {
+            [[ChatController sharedInstance] setCurrentChat: username];
+            NSInteger index = [[_chats allKeys] indexOfObject:username] + 1;
+            NSLog(@"scrolling to index: %d", index);
+            [_swipeView scrollToPage:index duration:0.500];
+            
+        }
     }
+}
 
+-(void) showChat:(NSString *) username {
+    NSLog(@"showChat, %@", username);
+    
+    [self loadChat:username show:YES];
     [_textField resignFirstResponder];
 }
 
@@ -601,11 +624,11 @@
 - (void)refreshHome:(NSNotification *)notification
 {
     NSLog(@"refreshHome");
-
+    
     if (_friendView) {
         [_friendView reloadData];
     }
-   
+    
 }
 
 
@@ -631,7 +654,7 @@
     NSDictionary * notificationData = notification.object;
     
     NSString * from =[ notificationData objectForKey:@"from"];
-    if (![from isEqualToString:_currentChat]) {
+    if (![from isEqualToString:[[ChatController sharedInstance] getCurrentChat]]) {
         [UIUtils showNotificationToastView:[self view] data:notificationData];
     }
     

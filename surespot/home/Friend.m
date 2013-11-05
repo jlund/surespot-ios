@@ -104,6 +104,17 @@
         _flags &= ~DELETED;
     }
 }
+-(BOOL) isChatActive {
+    return (_flags & CHAT_ACTIVE) == CHAT_ACTIVE;
+}
+-(void) setChatActive:(BOOL)set {
+    if (set) {
+        _flags |= CHAT_ACTIVE;
+    }
+    else {
+        _flags &= ~CHAT_ACTIVE;
+    }
+}
 
 -(BOOL) isEqual:(id)other {
     if (other == self)

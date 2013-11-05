@@ -26,6 +26,7 @@
         id homeData = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
         if (homeData) {
             NSLog(@"loading home data from: %@", path);
+            _currentChat = [homeData objectForKey:@"currentChat"];
             _latestUserControlId = [[homeData objectForKey:@"userControlId"] integerValue];
             _friends = [homeData objectForKey:@"friends"];
             if (!_friends) {
@@ -38,7 +39,7 @@
         }
     }
     
-    NSLog(@"HomeDataSource init, latestUserControlId: %d", _latestUserControlId);
+    NSLog(@"HomeDataSource init, latestUserControlId: %d, currentChat: %@", _latestUserControlId, _currentChat);
     return self;
 }
 
@@ -109,7 +110,7 @@
 -(void) writeToDisk {
     if (_latestUserControlId > 0 || _friends.count > 0) {
         NSString * filename =[FileController getHomeFilename];
-        NSLog(@"saving home data to disk at %@, latestUSerControlId: %d",filename, _latestUserControlId);
+        NSLog(@"saving home data to disk at %@, latestUSerControlId: %d, currentChat: %@",filename, _latestUserControlId, _currentChat);
         NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
         if (_friends.count > 0) {
             [dict setObject:_friends  forKey:@"friends"];
@@ -117,9 +118,22 @@
         if (_latestUserControlId > 0) {
             [dict setObject:[NSNumber numberWithInteger: _latestUserControlId] forKey:@"userControlId"];
         }
+        if (_currentChat) {
+            [dict setObject:_currentChat forKey:@"currentChat"];
+        }
         BOOL saved =[NSKeyedArchiver archiveRootObject:dict toFile:filename];
         NSLog(@"save success?: %@",saved ? @"YES" : @"NO");
     }
+}
+
+-(void) setCurrentChat: (NSString *) username {
+    if (username) {
+        Friend * afriend = [self getFriendByName:username];
+        [afriend setChatActive:YES];
+    }
+  
+    _currentChat = username;
+    
 }
 
 @end
