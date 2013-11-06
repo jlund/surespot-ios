@@ -81,6 +81,8 @@
 		66FF0FE518242E420038ECA6 /* UIUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FE418242E420038ECA6 /* UIUtils.m */; };
 		66FF0FE81825416A0038ECA6 /* HomeDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FE71825416A0038ECA6 /* HomeDataSource.m */; };
 		66FF0FEE1827FAEE0038ECA6 /* StateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FED1827FAEE0038ECA6 /* StateController.m */; };
+		66FF0FF4182AE44C0038ECA6 /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FF3182AE44C0038ECA6 /* LoadingView.m */; };
+		66FF0FF6182AE6960038ECA6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66FF0FF5182AE6960038ECA6 /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -361,6 +363,9 @@
 		66FF0FE71825416A0038ECA6 /* HomeDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HomeDataSource.m; path = home/HomeDataSource.m; sourceTree = "<group>"; };
 		66FF0FEC1827FAE00038ECA6 /* StateController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StateController.h; path = utils/StateController.h; sourceTree = "<group>"; };
 		66FF0FED1827FAEE0038ECA6 /* StateController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StateController.m; path = utils/StateController.m; sourceTree = "<group>"; };
+		66FF0FF2182AE4420038ECA6 /* LoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoadingView.h; path = utils/LoadingView.h; sourceTree = "<group>"; };
+		66FF0FF3182AE44C0038ECA6 /* LoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoadingView.m; path = utils/LoadingView.m; sourceTree = "<group>"; };
+		66FF0FF5182AE6960038ECA6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -368,6 +373,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66FF0FF6182AE6960038ECA6 /* QuartzCore.framework in Frameworks */,
 				661C2ED31763CB57000649E7 /* libz.dylib in Frameworks */,
 				66E4F5C417629B6400596E6B /* Security.framework in Frameworks */,
 				66E4F5C217629B5C00596E6B /* libicucore.dylib in Frameworks */,
@@ -415,6 +421,7 @@
 		6604A2BD17626B9E0072216A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				66FF0FF5182AE6960038ECA6 /* QuartzCore.framework */,
 				66E4F5BF17629B4500596E6B /* CFNetwork.framework */,
 				66E4F5C117629B5C00596E6B /* libicucore.dylib */,
 				66E4F5C317629B6400596E6B /* Security.framework */,
@@ -489,6 +496,8 @@
 		66159700176F669A001B32C1 /* utils */ = {
 			isa = PBXGroup;
 			children = (
+				66FF0FF3182AE44C0038ECA6 /* LoadingView.m */,
+				66FF0FF2182AE4420038ECA6 /* LoadingView.h */,
 				66159701176F66F1001B32C1 /* NSData+Base64.h */,
 				66159702176F6732001B32C1 /* NSData+Base64.m */,
 				6606E4EE179DB134004199BC /* FileController.h */,
@@ -971,6 +980,7 @@
 				66E4F5BB176298CB00596E6B /* SocketIOTransportXHR.m in Sources */,
 				6637107C1812EA1D009D5195 /* GenerateSharedSecretOperation.mm in Sources */,
 				66E4F5BC176298CB00596E6B /* base64.c in Sources */,
+				66FF0FF4182AE44C0038ECA6 /* LoadingView.m in Sources */,
 				660EB27D17FE64D800DBC53C /* ChatUtils.mm in Sources */,
 				66E4F5BD176298CB00596E6B /* NSData+SRB64Additions.m in Sources */,
 				66E4F5BE176298CB00596E6B /* SRWebSocket.m in Sources */,

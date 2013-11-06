@@ -52,8 +52,6 @@
 //todo cahe cookie
 -(void) loginIdentity: (SurespotIdentity *) identity {
     self.loggedInUsername = [identity username];
-    
-    
     [self.identities setObject:identity forKey:self.loggedInUsername];
 }
 

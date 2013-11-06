@@ -61,5 +61,4 @@
     [UIApplication sharedApplication].networkActivityIndicatorVisible = TRUE;
     return indicator;
 }
-
 @end

@@ -12,6 +12,7 @@
 #import "NetworkController.h"
 #import "NSData+Base64.h"
 #import "UIUtils.h"
+#import "LoadingView.h"
 
 @interface LoginViewController ()
 @property (atomic, strong) NSArray * identityNames;
@@ -24,7 +25,7 @@
 {
     [super viewDidLoad];
     [self loadIdentityNames];
-    _progressView = [UIUtils createProgressView:self.view];
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -42,8 +43,9 @@
     }
     
     NSLog(@"starting login");
-    [_progressView startAnimating];
-    
+    [_textPassword resignFirstResponder];
+    _progressView = [LoadingView loadingViewInView:self.view];
+
     dispatch_queue_t q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     
     dispatch_async(q, ^{
@@ -53,9 +55,11 @@
         
         if (!identity) {
             [UIUtils showToastView:_userPicker key: @"login_check_password" ];
-            [_progressView stopAnimating];
+            [_progressView removeView];
             return;
         }
+        
+    
         
         
        // NSLog(@"loaded salt: %@", [identity salt]);
@@ -78,13 +82,13 @@
              
              [[IdentityController sharedInstance] userLoggedInWithIdentity:identity];
              [self performSegueWithIdentifier: @"loginToMainSegue" sender: nil ];
-             [_progressView stopAnimating];
+            [_progressView removeView];
              
          }
          failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
              NSLog(@"response failure: %@",  Error);
              [UIUtils showToastView:_userPicker key: @"login_try_again_later" duration: 2.0];
-             [_progressView stopAnimating];
+            [_progressView removeView];
              
          }];
     });
