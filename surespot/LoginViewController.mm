@@ -50,14 +50,12 @@ NSArray * identityNames;
     
     
     NSData * decodedSalt =     [NSData dataFromBase64String: [identity salt]];
-    byte * derivedPassword = [EncryptionController deriveKeyUsingPassword:password andSalt: (byte *)[decodedSalt bytes]];
-    NSData * passwordData = [NSData dataWithBytes:derivedPassword length:AES_KEY_LENGTH];
+    NSData * derivedPassword = [EncryptionController deriveKeyUsingPassword:password andSalt: decodedSalt];
+    NSData * passwordData = [NSData dataWithBytes:[derivedPassword bytes] length:AES_KEY_LENGTH];
     NSData * encodedPassword = [passwordData SR_dataByBase64Encoding];
     
     NSData * signature = [EncryptionController signUsername:username andPassword: encodedPassword withPrivateKey:[identity getDsaPrivateKey]];
-    // NSData * signatureData = [NSData dataWithBytes:signature length:sizeof(signature)];
-    
-    NSString * passwordString = [passwordData SR_stringByBase64Encoding];
+       NSString * passwordString = [passwordData SR_stringByBase64Encoding];
     NSString * signatureString = [signature SR_stringByBase64Encoding];
     
     [[NetworkController sharedInstance]

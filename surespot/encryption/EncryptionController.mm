@@ -14,6 +14,7 @@ using CryptoPP::BitBucket;
 
 static CryptoPP::AutoSeededRandomPool rng;
 
+
 @implementation EncryptionController
 
 int const IV_LENGTH = 16;
@@ -71,11 +72,11 @@ int const PBKDF_ROUNDS = 1000;
     memcpy(saltBytes, identityBytes + IV_LENGTH, SALT_LENGTH);
     memcpy(cipherByte, identityBytes + IV_LENGTH + SALT_LENGTH, cipherLength);
     
-    byte * bytes = [self deriveKeyUsingPassword: password andSalt:saltBytes];
+    NSData * key = [self deriveKeyUsingPassword: password andSalt:[NSData dataWithBytes:saltBytes length:SALT_LENGTH]];
     
     
     GCM<AES>::Decryption d;
-    d.SetKeyWithIV(bytes, AES_KEY_LENGTH, ivBytes,IV_LENGTH);
+    d.SetKeyWithIV((byte *)[key bytes], AES_KEY_LENGTH, ivBytes,IV_LENGTH);
     
     string jsonIdentity;
     
@@ -111,9 +112,9 @@ int const PBKDF_ROUNDS = 1000;
     return [NSData dataWithBytes:iv length:IV_LENGTH];
 }
 
-+(NSData *) encryptPlain: (NSString *) plain usingKey: (byte *) key usingIv: (NSData *) iv {
++(NSData *) encryptPlain: (NSString *) plain usingKey: (NSData *) key usingIv: (NSData *) iv {
     GCM<AES>::Encryption e;
-    e.SetKeyWithIV(key, AES_KEY_LENGTH, (byte *)[iv bytes],IV_LENGTH);
+    e.SetKeyWithIV((byte *)[key bytes], AES_KEY_LENGTH, (byte *)[iv bytes],IV_LENGTH);
     
     
     string encrypted;
@@ -155,15 +156,15 @@ int const PBKDF_ROUNDS = 1000;
     return key;
 }
 
-+(byte *) deriveKeyUsingPassword:(NSString *)password andSalt:(byte *)salt {
++(NSData *) deriveKeyUsingPassword:(NSString *)password andSalt:(NSData *)salt {
     
     byte * bytes = new byte[AES_KEY_LENGTH];
     NSData * passwordData = [password dataUsingEncoding:NSUTF8StringEncoding];
     byte * passwordBytes = (byte *) [passwordData bytes];
     
     CryptoPP::PKCS5_PBKDF2_HMAC<SHA256> kdf;
-    kdf.DeriveKey(bytes, AES_KEY_LENGTH, 0, passwordBytes, [passwordData length], salt,  SALT_LENGTH, PBKDF_ROUNDS, 0);
-    return bytes;
+    kdf.DeriveKey(bytes, AES_KEY_LENGTH, 0, passwordBytes, [passwordData length], (byte *)[salt bytes],  SALT_LENGTH, PBKDF_ROUNDS, 0);
+    return [NSData dataWithBytes:bytes length:AES_KEY_LENGTH];
 }
 
 + (NSDictionary *) deriveKeyFromPassword: (NSString *) password {
@@ -384,7 +385,7 @@ int const PBKDF_ROUNDS = 1000;
 +(void) symmetricEncryptString: (NSString *) plaintext ourVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion: (NSString *) theirVersion iv: (NSData *) iv callback: (CallbackBlock) callback {
     
     [[CredentialCachingController sharedInstance] getSharedSecretForOurVersion:ourVersion theirUsername:theirUsername theirVersion:theirVersion callback: ^(NSData * secret) {
-        NSData * cipherText = [EncryptionController encryptPlain:plaintext usingKey:(byte *)[secret bytes] usingIv:iv];
+        NSData * cipherText = [EncryptionController encryptPlain:plaintext usingKey:secret usingIv:iv];
         callback([cipherText SR_stringByBase64Encoding]);
     }];
     

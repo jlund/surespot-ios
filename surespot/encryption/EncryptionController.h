@@ -87,20 +87,16 @@ extern int const IV_LENGTH;
 extern int const SALT_LENGTH;
 extern int const AES_KEY_LENGTH;
 
-
-
-
-
 @interface EncryptionController : NSObject
 + (NSData *) encryptIdentity:(NSData *) identityData withPassword:(NSString *) password;
 + (NSData *) decryptIdentity:(NSData *) identityData withPassword:(NSString *) password;
 + (ECDHPrivateKey) recreateDhPrivateKey:(NSString *) encodedKey;
 + (ECDSAPrivateKey) recreateDsaPrivateKey:(NSString *) encodedKey;
-+ (byte *) deriveKeyUsingPassword: (NSString *) password andSalt: (byte *) salt;
++ (NSData *) deriveKeyUsingPassword: (NSString *) password andSalt: (NSData *) salt;
 + (NSDictionary *) deriveKeyFromPassword: (NSString *) password;
 + (NSData *) signUsername: (NSString *) username andPassword: (NSData *) password withPrivateKey: (ECDSAPrivateKey) privateKey;
 + (NSData *) getIv;
-+ (NSData *) encryptPlain: (NSString *) plain usingKey: (byte *) key usingIv: (NSData *) iv;
++ (NSData *) encryptPlain: (NSString *) plain usingKey: (NSData *) key usingIv: (NSData *) iv;
 + (NSData *) generateSharedSecret: (ECDHPrivateKey) privateKey publicKey:(ECDHPublicKey) publicKey;
 + (IdentityKeys *) generateKeyPairs;
 + (NSString *) encodeDHPrivateKey: (ECDHPrivateKey) dhPrivKey;
