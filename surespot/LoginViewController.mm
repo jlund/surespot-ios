@@ -15,6 +15,7 @@
 
 @interface LoginViewController ()
 @property (atomic, strong) NSArray * identityNames;
+@property (atomic, strong) id progressView;
 @end
 
 @implementation LoginViewController
@@ -23,6 +24,7 @@
 {
     [super viewDidLoad];
     [self loadIdentityNames];
+    _progressView = [UIUtils createProgressView:self.view];
 }
 
 - (void)didReceiveMemoryWarning
@@ -35,38 +37,57 @@
     NSString * username = [_identityNames objectAtIndex:[_userPicker selectedRowInComponent:0]];
     NSString * password = self.textPassword.text;
     
-    SurespotIdentity * identity = [[IdentityController sharedInstance] getIdentityWithUsername:username andPassword:password];
-    
-    if (!identity) {
-        [UIUtils showToastView:_userPicker key: @"login_check_password" ];
+    if (!password) {
         return;
     }
     
-    NSLog(@"loaded salt: %@", [identity salt]);
+    NSLog(@"starting login");
+    [_progressView startAnimating];
     
-    NSData * decodedSalt =     [NSData dataFromBase64String: [identity salt]];
-    NSData * derivedPassword = [EncryptionController deriveKeyUsingPassword:password andSalt: decodedSalt];
-    NSData * passwordData = [NSData dataWithBytes:[derivedPassword bytes] length:AES_KEY_LENGTH];
-    NSData * encodedPassword = [passwordData SR_dataByBase64Encoding];
+    dispatch_queue_t q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     
-    NSData * signature = [EncryptionController signUsername:username andPassword: encodedPassword withPrivateKey:[identity getDsaPrivateKey]];
-    NSString * passwordString = [passwordData SR_stringByBase64Encoding];
-    NSString * signatureString = [signature SR_stringByBase64Encoding];
-    
-    [[NetworkController sharedInstance]
-     loginWithUsername:username
-     andPassword:passwordString
-     andSignature: signatureString
-     successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-         NSLog(@"login response: %d",  [response statusCode]);
-         
-         [[IdentityController sharedInstance] userLoggedInWithIdentity:identity];
-         [self performSegueWithIdentifier: @"loginToMainSegue" sender: nil ];
-     }
-     failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
-         NSLog(@"response failure: %@",  Error);
-         [UIUtils showToastView:_userPicker key: @"login_try_again_later" duration: 2.0];
-     }];
+    dispatch_async(q, ^{
+        
+        
+        SurespotIdentity * identity = [[IdentityController sharedInstance] getIdentityWithUsername:username andPassword:password];
+        
+        if (!identity) {
+            [UIUtils showToastView:_userPicker key: @"login_check_password" ];
+            [_progressView stopAnimating];
+            return;
+        }
+        
+        
+       // NSLog(@"loaded salt: %@", [identity salt]);
+        
+        NSData * decodedSalt = [NSData dataFromBase64String: [identity salt]];
+        NSData * derivedPassword = [EncryptionController deriveKeyUsingPassword:password andSalt: decodedSalt];
+        NSData * passwordData = [NSData dataWithBytes:[derivedPassword bytes] length:AES_KEY_LENGTH];
+        NSData * encodedPassword = [passwordData SR_dataByBase64Encoding];
+        
+        NSData * signature = [EncryptionController signUsername:username andPassword: encodedPassword withPrivateKey:[identity getDsaPrivateKey]];
+        NSString * passwordString = [passwordData SR_stringByBase64Encoding];
+        NSString * signatureString = [signature SR_stringByBase64Encoding];
+        
+        [[NetworkController sharedInstance]
+         loginWithUsername:username
+         andPassword:passwordString
+         andSignature: signatureString
+         successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+             NSLog(@"login response: %d",  [response statusCode]);
+             
+             [[IdentityController sharedInstance] userLoggedInWithIdentity:identity];
+             [self performSegueWithIdentifier: @"loginToMainSegue" sender: nil ];
+             [_progressView stopAnimating];
+             
+         }
+         failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
+             NSLog(@"response failure: %@",  Error);
+             [UIUtils showToastView:_userPicker key: @"login_try_again_later" duration: 2.0];
+             [_progressView stopAnimating];
+             
+         }];
+    });
 }
 
 // returns the number of 'columns' to display.
