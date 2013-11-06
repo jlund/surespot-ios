@@ -22,5 +22,4 @@
 -(void) setAvailableMessageId: (NSInteger) availableId forFriendname: (NSString *) friendname;
 -(void) setAvailableMessageControlId: (NSInteger) availableId forFriendname: (NSString *) friendname;
 -(void) writeToDisk ;
--(void) logout;
 @end

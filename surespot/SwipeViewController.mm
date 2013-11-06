@@ -88,10 +88,10 @@
     _homeDataSource = [[ChatController sharedInstance] getHomeDataSource];
     
     //show currently open tab immediately
-    NSString * currentChat = _homeDataSource.currentChat;
-    if (currentChat) {
-        [self showChat:currentChat];
-    }
+    //    NSString * currentChat = _homeDataSource.currentChat;
+    //    if (currentChat) {
+    //        [self showChat:currentChat];
+    //    }
     
     
     
@@ -707,7 +707,7 @@
     
 }
 -(void) logout {
-   
+    
     //blow the views away
     [_chats removeAllObjects];
     _friendView = nil;
@@ -715,15 +715,7 @@
     [[NetworkController sharedInstance] logout];
     [[ChatController sharedInstance] logout];
     
-    //see if previous is login and pop
-//    id pvc = [self.navigationController.viewControllers objectAtIndex:[self.navigationController.viewControllers count] - 2];
-//    if (pvc && [pvc isKindOfClass:[LoginViewController class]]) {
-//        [self.navigationController popViewControllerAnimated:TRUE];
-//    }
-//    else {
-        [self performSegueWithIdentifier: @"loginSegue" sender: nil ];
-       // [self dismissViewControllerAnimated:NO completion:nil];
-//    }
-
+    [self performSegueWithIdentifier: @"returnToLogin" sender: self ];
+    
 }
 @end

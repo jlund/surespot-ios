@@ -101,4 +101,8 @@ NSArray * identityNames;
     [self setUserPicker:nil];
     [super viewDidUnload];
 }
+
+-(IBAction) returnToLogin:(UIStoryboardSegue *) segue {
+    
+}
 @end
