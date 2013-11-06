@@ -709,12 +709,12 @@
 -(void) logout {
     
     //blow the views away
-    [_chats removeAllObjects];
+   
     _friendView = nil;
     
     [[NetworkController sharedInstance] logout];
     [[ChatController sharedInstance] logout];
-    
+     [_chats removeAllObjects];
     [self performSegueWithIdentifier: @"returnToLogin" sender: self ];
     
 }

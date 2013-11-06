@@ -74,9 +74,6 @@
     return self;
 }
 
-
-
-
 -(void) disconnect {
     if (_socketIO) {
         NSLog(@"disconnecting socket");

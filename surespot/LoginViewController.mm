@@ -14,17 +14,17 @@
 #import "UIUtils.h"
 
 @interface LoginViewController ()
-
+@property (atomic, strong) NSArray * identityNames;
 @end
 
 @implementation LoginViewController
 
-NSArray * identityNames;
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    identityNames = [[IdentityController sharedInstance] getIdentityNames];
+    [self loadIdentityNames];
 }
 
 - (void)didReceiveMemoryWarning
@@ -34,7 +34,7 @@ NSArray * identityNames;
 }
 
 - (IBAction)login:(id)sender {
-    NSString * username = [identityNames objectAtIndex:[_userPicker selectedRowInComponent:0]];
+    NSString * username = [_identityNames objectAtIndex:[_userPicker selectedRowInComponent:0]];
     NSString * password = self.textPassword.text;
     
     SurespotIdentity * identity = [[IdentityController sharedInstance] getIdentityWithUsername:username andPassword:password];
@@ -46,16 +46,13 @@ NSArray * identityNames;
     
     NSLog(@"loaded salt: %@", [identity salt]);
     
-    //  NSData * saltData = [[identity salt] dataUsingEncoding:NSUTF8StringEncoding];
-    
-    
     NSData * decodedSalt =     [NSData dataFromBase64String: [identity salt]];
     NSData * derivedPassword = [EncryptionController deriveKeyUsingPassword:password andSalt: decodedSalt];
     NSData * passwordData = [NSData dataWithBytes:[derivedPassword bytes] length:AES_KEY_LENGTH];
     NSData * encodedPassword = [passwordData SR_dataByBase64Encoding];
     
     NSData * signature = [EncryptionController signUsername:username andPassword: encodedPassword withPrivateKey:[identity getDsaPrivateKey]];
-       NSString * passwordString = [passwordData SR_stringByBase64Encoding];
+    NSString * passwordString = [passwordData SR_stringByBase64Encoding];
     NSString * signatureString = [signature SR_stringByBase64Encoding];
     
     [[NetworkController sharedInstance]
@@ -69,13 +66,9 @@ NSArray * identityNames;
          [self performSegueWithIdentifier: @"loginToMainSegue" sender: nil ];
      }
      failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
-         
-         //todo tell user
          NSLog(@"response failure: %@",  Error);
-         
+         [UIUtils showToastView:_userPicker key: @"login_try_again_later" ];
      }];
-    
-    
 }
 
 // returns the number of 'columns' to display.
@@ -85,13 +78,13 @@ NSArray * identityNames;
 
 // returns the # of rows in each component..
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-    return [identityNames count];
+    return [_identityNames count];
 }
 
 -(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     //set item per row
-    return [identityNames objectAtIndex:row];
+    return [_identityNames objectAtIndex:row];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -104,7 +97,12 @@ NSArray * identityNames;
     [super viewDidUnload];
 }
 
+-(void) loadIdentityNames {
+    _identityNames = [[IdentityController sharedInstance] getIdentityNames];
+}
+
 -(IBAction) returnToLogin:(UIStoryboardSegue *) segue {
-    
+    [self loadIdentityNames];
+    [_userPicker reloadAllComponents];
 }
 @end
