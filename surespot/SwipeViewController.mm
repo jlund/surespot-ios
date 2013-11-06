@@ -19,6 +19,7 @@
 #import "SurespotControlMessage.h"
 #import "FriendDelegate.h"
 #import "UIUtils.h"
+#import "LoginViewController.h"
 
 //#import <QuartzCore/CATransaction.h>
 
@@ -62,8 +63,8 @@
     _textField.enablesReturnKeyAutomatically = NO;
     [self registerForKeyboardNotifications];
     
-    //  UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"menu" style:UIBarButtonItemStylePlain target:self action:@selector(refreshPropertyList:)];
-    //    self.navigationItem.rightBarButtonItem = anotherButton;
+    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"menu" style:UIBarButtonItemStylePlain target:self action:@selector(showMenu)];
+    self.navigationItem.rightBarButtonItem = anotherButton;
     
     self.navigationItem.title = [@"surespot/" stringByAppendingString:[[IdentityController sharedInstance] getLoggedInUser]];
     
@@ -72,6 +73,9 @@
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     }
+    
+    //
+    self.navigationItem.hidesBackButton = YES;
     
     
     //listen for refresh notifications
@@ -660,4 +664,66 @@
     
 }
 
+-(void) showMenu {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc]
+                                  initWithTitle:nil
+                                  delegate:self
+                                  cancelButtonTitle:nil
+                                  destructiveButtonTitle:nil
+                                  otherButtonTitles:nil];
+    
+    
+    if (_homeDataSource.currentChat) {
+        [actionSheet addButtonWithTitle: @"close tab"];
+    }
+    [actionSheet addButtonWithTitle: @"logout"];
+    [actionSheet addButtonWithTitle: @"cancel"];
+    actionSheet.cancelButtonIndex = actionSheet.numberOfButtons - 1;
+    
+    [actionSheet showInView:self.view];
+}
+
+-(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    NSString *buttonTitle = [actionSheet buttonTitleAtIndex:buttonIndex];
+    
+    NSLog(@"menu click: %@", buttonTitle);
+    
+    if ([buttonTitle isEqualToString:@"close tab"]) {
+        [self closeTab];
+        return;
+    }
+    if ([buttonTitle isEqualToString:@"logout"]) {
+        
+        [self logout];
+        return;
+    }
+}
+
+-(void) closeTab {
+    if (_homeDataSource.currentChat) {
+        [_chats removeObjectForKey:_homeDataSource.currentChat];
+        [_swipeView reloadData];
+    }
+    
+}
+-(void) logout {
+   
+    //blow the views away
+    [_chats removeAllObjects];
+    _friendView = nil;
+    
+    [[NetworkController sharedInstance] logout];
+    [[ChatController sharedInstance] logout];
+    
+    //see if previous is login and pop
+//    id pvc = [self.navigationController.viewControllers objectAtIndex:[self.navigationController.viewControllers count] - 2];
+//    if (pvc && [pvc isKindOfClass:[LoginViewController class]]) {
+//        [self.navigationController popViewControllerAnimated:TRUE];
+//    }
+//    else {
+        [self performSegueWithIdentifier: @"loginSegue" sender: nil ];
+       // [self dismissViewControllerAnimated:NO completion:nil];
+//    }
+
+}
 @end

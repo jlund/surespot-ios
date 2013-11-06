@@ -21,4 +21,6 @@
 - (void) inviteUser: (NSString *) username;
 - (void) setCurrentChat: (NSString *) username;
 - (NSString *) getCurrentChat;
+- (void) login;
+- (void) logout;
 @end

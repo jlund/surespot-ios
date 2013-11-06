@@ -9,8 +9,9 @@
 #import "NetworkController.h"
 #import "ChatUtils.h"
 
-#define kHost @"http://192.168.10.68:8080"
-//#define kHost @"https://server.surespot.me:443"
+NSString *const baseUrl = @"http://192.168.10.68:8080";
+// @"https://server.surespot.me:443"
+
 @implementation NetworkController
 
 +(NetworkController*)sharedInstance
@@ -18,7 +19,7 @@
     static NetworkController *sharedInstance = nil;
     static dispatch_once_t oncePredicate;
     dispatch_once(&oncePredicate, ^{
-        sharedInstance = [[self alloc] initWithBaseURL:[NSURL URLWithString:kHost]];
+        sharedInstance = [[self alloc] initWithBaseURL:[NSURL URLWithString:baseUrl]];
     });
     
     return sharedInstance;
@@ -49,10 +50,7 @@
 -(void) loginWithUsername:(NSString*) username andPassword:(NSString *)password andSignature: (NSString *) signature
              successBlock:(JSONSuccessBlock)successBlock failureBlock: (JSONFailureBlock) failureBlock
 {
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:username,@"username",password,@"password",signature, @"authSig", nil]
-    
-    ;
-    
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:username,@"username",password,@"password",signature, @"authSig", nil];
     
     //add apnTeken if we have one
     NSData *  apnToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"apnToken"];
@@ -63,10 +61,27 @@
     NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"login" parameters: params];
     
     
-    AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:successBlock failure:failureBlock];
+    AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+        
+        //save the cookie
+        NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:baseUrl]];
+        
+        NSHTTPCookie * surespotCookie;
+        for (NSHTTPCookie *cookie in cookies)
+        {
+            if ([cookie.name isEqualToString:@"connect.sid"]) {
+                surespotCookie = cookie;
+            }
+        }
+        
+        successBlock(request, response, JSON);
+        
+    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+        failureBlock(request, response, error, JSON);
+    } ];
+    
     
     [operation start];
-    
     
 }
 
@@ -107,7 +122,7 @@
 - (void) getPublicKeysForUsername:(NSString *)username andVersion:(NSString *)version successBlock:(JSONSuccessBlock)successBlock failureBlock:(JSONFailureBlock) failureBlock{
     
     //todo use formatter
-    NSURLRequest *request = [self requestWithMethod:@"GET" path:[[[@"publickeys/"  stringByAppendingString:username] stringByAppendingString:@"/"] stringByAppendingString:version] parameters: nil];
+    NSURLRequest *request = [self requestWithMethod:@"GET" path: [NSString stringWithFormat: @"publickeys/%@/%@",username, version] parameters: nil];
     
     AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:successBlock failure: failureBlock];
     
@@ -136,7 +151,7 @@
 
 -(void) getLatestDataSinceUserControlId: (NSInteger) latestUserControlId spotIds: (NSArray *) spotIds successBlock:(JSONSuccessBlock)successBlock failureBlock: (JSONFailureBlock) failureBlock {
     
-   NSData * jsonData = [NSJSONSerialization dataWithJSONObject:spotIds options:0 error:nil];
+    NSData * jsonData = [NSJSONSerialization dataWithJSONObject:spotIds options:0 error:nil];
     NSString * jsonString =[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:jsonString,@"spotIds", nil];
     
@@ -151,8 +166,31 @@
     
     [operation start];
     
-
+    
 }
 
+-(void) logout {
+    //send logout
+    NSURLRequest *request = [self requestWithMethod:@"POST" path:@"logout"  parameters:nil];
+    AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self deleteCookies];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [self deleteCookies];
+    }];
+    [operation start];
+    
+    
+}
+
+-(void) deleteCookies {
+    //blow cookies away
+    NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:baseUrl]];
+    for (NSHTTPCookie *cookie in cookies)
+    {
+        [[NSHTTPCookieStorage sharedHTTPCookieStorage]  deleteCookie:cookie];
+    }
+    
+}
 
 @end

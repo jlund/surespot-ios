@@ -56,7 +56,7 @@
         ////   self.socketIO.useSecure = YES;
         //   [self.socketIO connectToHost:@"server.surespot.me" onPort:443];
         
-        _homeDataSource = [[HomeDataSource alloc] init];
+       // _homeDataSource = [[HomeDataSource alloc] init];
         _chatDataSources = [[NSMutableDictionary alloc] init];
         
         //open active chats
@@ -567,5 +567,20 @@
     return [_homeDataSource currentChat];
 }
 
+
+-(void) login {
+    [self connect];
+    _homeDataSource = [[HomeDataSource alloc] init];
+}
+
+-(void) logout {
+    [self disconnect];
+    [self saveState];
+    [_chatDataSources removeAllObjects];
+  //  _homeDataSource.currentChat = nil;
+    _homeDataSource = nil;
+    
+   
+}
 
 @end

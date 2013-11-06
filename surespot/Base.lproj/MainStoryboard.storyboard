@@ -154,6 +154,7 @@
                     <connections>
                         <outlet property="swipeView" destination="XCg-uf-vcR" id="Hkv-YP-hj9"/>
                         <outlet property="textField" destination="aRf-OH-qdB" id="FiH-dU-rOR"/>
+                        <segue destination="2" kind="push" identifier="loginSegue" id="gpX-Bd-Cqz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s1j-Zl-x1y" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -168,6 +169,7 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="qzP-R7-Qz4"/>
+        <segue reference="gpX-Bd-Cqz"/>
         <segue reference="0Gr-2N-xaD"/>
     </inferredMetricsTieBreakers>
 </document>

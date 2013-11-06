@@ -23,7 +23,13 @@
         //otherwise load from network
         NSString * path =[FileController getHomeFilename];
         NSLog(@"looking for home data at: %@", path);
-        id homeData = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+        id homeData = nil;
+        @try {
+            homeData = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+        }
+        @catch (NSException * e) {
+            
+        }
         if (homeData) {
             NSLog(@"loading home data from: %@", path);
             _currentChat = [homeData objectForKey:@"currentChat"];

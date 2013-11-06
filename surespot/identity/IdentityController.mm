@@ -16,6 +16,7 @@
 #import "PublicKeys.h"
 #include <zlib.h>
 #import "CredentialCachingController.h"
+#import "ChatController.h"
 
 @interface IdentityController()
 @property  (nonatomic, strong) SurespotIdentity * loggedInIdentity;
@@ -130,6 +131,7 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
 -(void) setLoggedInUserIdentity: (SurespotIdentity *) identity {
     @synchronized (self) {
         self.loggedInIdentity = identity;
+        [[ChatController sharedInstance] login];
         [[CredentialCachingController sharedInstance] loginIdentity:identity];
     }
 }
@@ -178,7 +180,7 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
 
 - (void) userLoggedInWithIdentity: (SurespotIdentity *) identity {
     [self setLoggedInUserIdentity:identity];
-}
+   }
 
 
 
