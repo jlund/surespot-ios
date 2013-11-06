@@ -53,14 +53,14 @@
      successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
          
          
-         NSLog(@"get public keys response: %d",  [response statusCode]);
+
          //recreate public keys
          //todo verify
          NSDictionary * jsonKeys = JSON;
          
          NSString * spubDH = [jsonKeys objectForKey:@"dhPub"];
          NSString * spubDSA = [jsonKeys objectForKey:@"dsaPub"];
-         
+         NSLog(@"get public keys response: %d, key: %@",  [response statusCode], spubDH);
          
          ECDHPublicKey dhPub = [EncryptionController recreateDhPublicKey:spubDH];
          ECDHPublicKey dsaPub = [EncryptionController recreateDsaPublicKey:spubDSA];

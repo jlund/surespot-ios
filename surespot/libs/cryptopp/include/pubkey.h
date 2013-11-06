@@ -1415,6 +1415,25 @@ public:
 		}
 		return true;
 	}
+    
+    
+    //added this to be able to pass in the params directly without having to convert them to a byte * first
+    //and avoid the conversion back
+    bool Agree(byte *agreedValue, const Integer x, const Element w, bool validateOtherPublicKey=true) const
+	{
+		try
+		{
+			const DL_GroupParameters<T> &params = GetAbstractGroupParameters();
+			Element z = GetKeyAgreementAlgorithm().AgreeWithStaticPrivateKey(
+                            GetAbstractGroupParameters(), w, validateOtherPublicKey, x);
+			params.EncodeElement(false, z, agreedValue);
+		}
+		catch (DL_BadElement &)
+		{
+			return false;
+		}
+		return true;
+	}
 
 	const Element &GetGenerator() const {return GetAbstractGroupParameters().GetSubgroupGenerator();}
 
