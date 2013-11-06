@@ -45,7 +45,7 @@ int const PBKDF_ROUNDS = 1000;
     ef.MessageEnd();
     
     
-
+    
     //return the iv salt and encrypted identity data in one buffer
     int returnLength = IV_LENGTH + SALT_LENGTH + cipherString.length();
     NSMutableData * returnData = [[NSMutableData alloc] initWithCapacity: returnLength];
@@ -53,20 +53,20 @@ int const PBKDF_ROUNDS = 1000;
     [returnData appendData:[derived objectForKey:@"salt"]];
     [returnData appendBytes:cipherString.data() length:cipherString.length()];
     
-           
+    
     return returnData;
 }
 
 + (NSData *) decryptIdentity:(NSData *) identityData withPassword:(NSString *) password
 {
-   // CryptoPP::PKCS5_PBKDF2_HMAC<SHA256> kdf;
+    // CryptoPP::PKCS5_PBKDF2_HMAC<SHA256> kdf;
     byte * identityBytes = (byte*)[identityData bytes];
     
     int cipherLength = [identityData length] - IV_LENGTH - SALT_LENGTH;
     byte cipherByte[cipherLength];
     byte ivBytes[IV_LENGTH];
     byte saltBytes[SALT_LENGTH];
-   // byte * passwordBytes = (byte *) [[password dataUsingEncoding:NSUTF8StringEncoding] bytes];
+    // byte * passwordBytes = (byte *) [[password dataUsingEncoding:NSUTF8StringEncoding] bytes];
     memcpy(ivBytes, identityBytes, IV_LENGTH);
     memcpy(saltBytes, identityBytes + IV_LENGTH, SALT_LENGTH);
     memcpy(cipherByte, identityBytes + IV_LENGTH + SALT_LENGTH, cipherLength);
@@ -79,14 +79,21 @@ int const PBKDF_ROUNDS = 1000;
     
     string jsonIdentity;
     
-    CryptoPP::AuthenticatedDecryptionFilter df (d, new StringSink(jsonIdentity));
-    df.Put(cipherByte, cipherLength);
-    df.MessageEnd();
+    
+    try {
+        CryptoPP::AuthenticatedDecryptionFilter df (d, new StringSink(jsonIdentity));
+        df.Put(cipherByte, cipherLength);
+        df.MessageEnd();
+    }
+    catch (CryptoPP::HashVerificationFilter::HashVerificationFailed e) {
+        NSLog(@"error decrypting identity: %@", [NSString stringWithUTF8String: e.GetWhat().data()]);
+        return nil;
+    }
     
     
     //StringSource s(cipherByte, false, new CryptoPP::Redirector(df));
     
-   // bool b =  df.GetLastResult();
+    // bool b =  df.GetLastResult();
     
     cout << "Recovered " << jsonIdentity << endl;
     
@@ -94,7 +101,7 @@ int const PBKDF_ROUNDS = 1000;
     
     NSString * jsonNSString =[[NSString alloc] initWithUTF8String:jsonIdentity.data()];
     NSData * jsonData = [jsonNSString dataUsingEncoding:NSUTF8StringEncoding];
-
+    
     return jsonData;
 }
 
@@ -108,15 +115,15 @@ int const PBKDF_ROUNDS = 1000;
     GCM<AES>::Encryption e;
     e.SetKeyWithIV(key, AES_KEY_LENGTH, (byte *)[iv bytes],IV_LENGTH);
     
-
+    
     string encrypted;
     CryptoPP::AuthenticatedEncryptionFilter ef (e, new StringSink(encrypted));
-
-
+    
+    
     
     ef.Put(reinterpret_cast<const unsigned char *>([plain cStringUsingEncoding:NSUTF8StringEncoding]), [plain lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
     ef.MessageEnd();
-
+    
     return [NSData dataWithBytes:encrypted.data() length:encrypted.length()];
 }
 
@@ -140,7 +147,7 @@ int const PBKDF_ROUNDS = 1000;
 }
 
 +(NSData *) generateSharedSecret: (ECDHPrivateKey) privateKey publicKey:(ECDHPublicKey) publicKey {
-    OID CURVE = secp521r1();    
+    OID CURVE = secp521r1();
     ECDH < ECP >::Domain dhA( CURVE );
     CryptoPP::SecByteBlock secA(dhA.AgreedValueLength());
     dhA.Agree(secA, privateKey.GetPrivateExponent(), publicKey.GetPublicElement());
@@ -149,7 +156,7 @@ int const PBKDF_ROUNDS = 1000;
 }
 
 +(byte *) deriveKeyUsingPassword:(NSString *)password andSalt:(byte *)salt {
-  
+    
     byte * bytes = new byte[AES_KEY_LENGTH];
     NSData * passwordData = [password dataUsingEncoding:NSUTF8StringEncoding];
     byte * passwordBytes = (byte *) [passwordData bytes];
@@ -163,14 +170,14 @@ int const PBKDF_ROUNDS = 1000;
     NSMutableDictionary * derived = [[NSMutableDictionary alloc] initWithCapacity:2];
     CryptoPP::SecByteBlock keyBytes(AES_KEY_LENGTH);
     CryptoPP::SecByteBlock saltBytes(SALT_LENGTH);
-
+    
     rng.GenerateBlock(saltBytes, SALT_LENGTH);
     
     [derived setObject:[NSData dataWithBytes:saltBytes length:SALT_LENGTH] forKey:@"salt"];
     
     CryptoPP::PKCS5_PBKDF2_HMAC<SHA256> kdf;
     NSData * passwordData = [password dataUsingEncoding:NSUTF8StringEncoding];
-
+    
     kdf.DeriveKey(keyBytes, AES_KEY_LENGTH, 0, (byte *)[passwordData bytes], [passwordData length], saltBytes,  SALT_LENGTH, PBKDF_ROUNDS, 0);
     
     [derived setObject:[NSData dataWithBytes:keyBytes length:AES_KEY_LENGTH] forKey:@"key"];
@@ -202,7 +209,7 @@ int const PBKDF_ROUNDS = 1000;
 
 + (ECDHPrivateKey) recreateDhPrivateKey:(NSString *) encodedKey {
     
-        
+    
     ECDHPrivateKey privateKey;
     NSData * decodedKey = [NSData dataFromBase64String: encodedKey];
     ByteQueue byteQueue;
@@ -236,7 +243,7 @@ int const PBKDF_ROUNDS = 1000;
     privateKey.Validate(rng, 3);
     
     return privateKey;
- 
+    
 }
 
 + (NSData *) signUsername: (NSString *) username andPassword: (NSData *) password withPrivateKey: (ECDSAPrivateKey) privateKey {
@@ -245,7 +252,7 @@ int const PBKDF_ROUNDS = 1000;
     
     byte * random = new byte[16];
     rng.GenerateBlock(random,16);
-        
+    
     NSMutableData *concatData = [NSMutableData dataWithData: usernameData];
     [concatData appendData:password];
     [concatData appendBytes:random length:16];
@@ -259,13 +266,13 @@ int const PBKDF_ROUNDS = 1000;
     
     NSMutableData * sig = [NSMutableData dataWithBytesNoCopy:random  length:16 freeWhenDone:true];
     [sig appendBytes:buffer length:put];
-            
+    
     return sig;
 }
 
 +(IdentityKeys *) generateKeyPairs {
     CryptoPP::DL_PrivateKey_EC<ECP>::DL_PrivateKey_EC dhKey;
-
+    
     dhKey.Initialize(rng, secp521r1());
     bool dhvalid = dhKey.Validate(rng, 3);
     
@@ -277,7 +284,7 @@ int const PBKDF_ROUNDS = 1000;
         
         if (dsaValid) {
             IdentityKeys * ik = [[IdentityKeys alloc] init];
-          
+            
             ik.dhPrivKey = dhKey;
             CryptoPP::DL_PublicKey_EC<ECP> dhPubKey;
             dhKey.MakePublicKey(dhPubKey);
@@ -298,7 +305,7 @@ int const PBKDF_ROUNDS = 1000;
     ByteQueue dhPrivByteQueue;
     dhPrivKey.Save(dhPrivByteQueue);
     size_t size = dhPrivByteQueue.TotalBytesRetrievable();
-    byte encoded[dhPrivByteQueue.TotalBytesRetrievable()];    
+    byte encoded[dhPrivByteQueue.TotalBytesRetrievable()];
     dhPrivByteQueue.Get(encoded, size);
     
     NSData * keyData = [NSData dataWithBytes:encoded length:size];
@@ -307,12 +314,12 @@ int const PBKDF_ROUNDS = 1000;
 
 +(NSString *) encodeDHPublicKey: (ECDHPublicKey) dhPubKey {
     
-               
+    
     ByteQueue byteQueue;
     
     //hard code the asn.1 oids for the curve we're using to the encoded output...don't know why crypto++ doesn't do this
     //will have to revisit if we ever use any other curves
-   byte oidBytes[] = {0x30, 0x81, 0x9B, 0x30, 0x10, 0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01, 0x06, 0x05, 0x2B, 0x81, 0x04, 0x00, 0x23, 0x03, 0x81, 0x86, 0x00};
+    byte oidBytes[] = {0x30, 0x81, 0x9B, 0x30, 0x10, 0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01, 0x06, 0x05, 0x2B, 0x81, 0x04, 0x00, 0x23, 0x03, 0x81, 0x86, 0x00};
     byteQueue.Put(oidBytes, 25);
     
     dhPubKey.DEREncodePublicKey(byteQueue);
@@ -325,7 +332,7 @@ int const PBKDF_ROUNDS = 1000;
     byteQueue.Get(encoded, size);
     
     NSData * keyData = [NSData dataWithBytes:encoded length:size];
-  
+    
     return [self pemKey:keyData];
 }
 
@@ -360,7 +367,7 @@ int const PBKDF_ROUNDS = 1000;
     NSData * keyData = [NSData dataWithBytes:encoded length:size];
     
     return [self pemKey:keyData];
-
+    
 }
 
 
@@ -371,14 +378,14 @@ int const PBKDF_ROUNDS = 1000;
     [keyString appendString: @"\n-----END PUBLIC KEY-----"];
     
     return keyString;
-
+    
 }
 
 +(void) symmetricEncryptString: (NSString *) plaintext ourVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion: (NSString *) theirVersion iv: (NSData *) iv callback: (CallbackBlock) callback {
     
-   [[CredentialCachingController sharedInstance] getSharedSecretForOurVersion:ourVersion theirUsername:theirUsername theirVersion:theirVersion callback: ^(NSData * secret) {
-       NSData * cipherText = [EncryptionController encryptPlain:plaintext usingKey:(byte *)[secret bytes] usingIv:iv];
-       callback([cipherText SR_stringByBase64Encoding]);
+    [[CredentialCachingController sharedInstance] getSharedSecretForOurVersion:ourVersion theirUsername:theirUsername theirVersion:theirVersion callback: ^(NSData * secret) {
+        NSData * cipherText = [EncryptionController encryptPlain:plaintext usingKey:(byte *)[secret bytes] usingIv:iv];
+        callback([cipherText SR_stringByBase64Encoding]);
     }];
     
 }
@@ -411,7 +418,7 @@ int const PBKDF_ROUNDS = 1000;
     //generate key pair
     SecByteBlock privA(dhA.PrivateKeyLength()), pubA(dhA.PublicKeyLength());
     
-//output keys
+    //output keys
     unsigned int ppkLength = dhA.PrivateKeyLength();
     unsigned int pkLength = dhA.PublicKeyLength();
     

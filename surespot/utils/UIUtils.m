@@ -18,12 +18,19 @@
         NSString * to =[ notificationData objectForKey:@"to"];
         NSString * from =[ notificationData objectForKey:@"from"];
         [view makeToast:[NSString stringWithFormat:NSLocalizedString(@"notification_message", nil), to, from]
-                    duration: 1.0
-                    position:@"top"
+               duration: 1.0
+               position:@"top"
          
          ];
     }
+    
+}
 
++(void) showToastView: (UIView *) view key: (NSString *) key {
+    [view makeToast:NSLocalizedString(key, nil)
+           duration: 1.0
+           position:@"top"
+     ];
 }
 
 + (CGSize)threadSafeSizeString: (NSString *) string WithFont:(UIFont *)font constrainedToSize:(CGSize)size {

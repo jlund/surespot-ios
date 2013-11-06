@@ -48,7 +48,9 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
         //NSError* error = nil;
         NSData* unzipped = [myData gzipInflate];
         NSData * identity = [EncryptionController decryptIdentity: unzipped withPassword:[password stringByAppendingString:CACHE_IDENTITY_ID]];
-        return [self decodeIdentityData:identity withUsername:username andPassword:password];
+        if (identity) {
+            return [self decodeIdentityData:identity withUsername:username andPassword:password];
+        }
     }
     
     return nil;

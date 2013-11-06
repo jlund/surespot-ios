@@ -11,6 +11,7 @@
 #import "IdentityController.h"
 #import "NetworkController.h"
 #import "NSData+Base64.h"
+#import "UIUtils.h"
 
 @interface LoginViewController ()
 
@@ -38,7 +39,10 @@ NSArray * identityNames;
     
     SurespotIdentity * identity = [[IdentityController sharedInstance] getIdentityWithUsername:username andPassword:password];
     
-    
+    if (!identity) {
+        [UIUtils showToastView:_userPicker key: @"login_check_password" ];
+        return;
+    }
     
     NSLog(@"loaded salt: %@", [identity salt]);
     
