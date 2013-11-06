@@ -30,7 +30,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="SW9-JJ-OEP">
-                                <rect key="frame" x="126" y="295" width="68" height="17"/>
+                                <rect key="frame" x="87" y="307" width="146" height="46"/>
                                 <state key="normal" title="login">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -39,7 +39,8 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" id="JPD-8G-y9p">
-                                <rect key="frame" x="19" y="235" width="282" height="30"/>
+                                <rect key="frame" x="20" y="269" width="282" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
@@ -47,7 +48,9 @@
                                 </connections>
                             </textField>
                             <pickerView contentMode="scaleToFill" id="WV1-5E-HKR">
-                                <rect key="frame" x="-2" y="65" width="322" height="162"/>
+                                <rect key="frame" x="0.0" y="73" width="322" height="171"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <inset key="insetFor6xAndEarlier" minX="0.0" minY="-27" maxX="0.0" maxY="27"/>
                                 <connections>
                                     <outlet property="dataSource" destination="2" id="Myq-Bc-wXw"/>
                                     <outlet property="delegate" destination="2" id="yaU-74-A3F"/>
