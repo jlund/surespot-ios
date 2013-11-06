@@ -83,6 +83,7 @@
 		66FF0FEE1827FAEE0038ECA6 /* StateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FED1827FAEE0038ECA6 /* StateController.m */; };
 		66FF0FF4182AE44C0038ECA6 /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FF3182AE44C0038ECA6 /* LoadingView.m */; };
 		66FF0FF6182AE6960038ECA6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66FF0FF5182AE6960038ECA6 /* QuartzCore.framework */; };
+		66FF0FF8182AEA280038ECA6 /* surespot_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 66FF0FF7182AEA280038ECA6 /* surespot_logo.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -366,6 +367,7 @@
 		66FF0FF2182AE4420038ECA6 /* LoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoadingView.h; path = utils/LoadingView.h; sourceTree = "<group>"; };
 		66FF0FF3182AE44C0038ECA6 /* LoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoadingView.m; path = utils/LoadingView.m; sourceTree = "<group>"; };
 		66FF0FF5182AE6960038ECA6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		66FF0FF7182AEA280038ECA6 /* surespot_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = surespot_logo.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -438,10 +440,10 @@
 			children = (
 				6640766A1822A7E900BFD974 /* home */,
 				66B3C8EA17B15F0C00CC96EE /* chat */,
-				66159700176F669A001B32C1 /* utils */,
 				66EC6114176E49C900937467 /* network */,
 				661C2EC51762C399000649E7 /* encryption */,
 				661C2EC41762B12D000649E7 /* identity */,
+				66159700176F669A001B32C1 /* utils */,
 				6604A2CD17626B9E0072216A /* SurespotAppDelegate.h */,
 				6604A2CE17626B9E0072216A /* SurespotAppDelegate.m */,
 				6604A2D617626B9E0072216A /* MainStoryboard.storyboard */,
@@ -462,6 +464,7 @@
 		6604A2C517626B9E0072216A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				66FF0FF7182AEA280038ECA6 /* surespot_logo.png */,
 				6621BB861762704D00BC2850 /* Localizable.strings */,
 				6604A2C617626B9E0072216A /* surespot-Info.plist */,
 				6604A2C717626B9E0072216A /* InfoPlist.strings */,
@@ -931,6 +934,7 @@
 				6604A2D317626B9E0072216A /* Default@2x.png in Resources */,
 				6604A2D517626B9E0072216A /* Default-568h@2x.png in Resources */,
 				6604A2D817626B9E0072216A /* MainStoryboard.storyboard in Resources */,
+				66FF0FF8182AEA280038ECA6 /* surespot_logo.png in Resources */,
 				6621BB841762704D00BC2850 /* Localizable.strings in Resources */,
 				6640766C1822A84C00BFD974 /* HomeCell.xib in Resources */,
 			);
