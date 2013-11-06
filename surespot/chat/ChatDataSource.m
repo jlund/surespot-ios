@@ -48,7 +48,7 @@
                 [self addMessage:message refresh:NO];
             }
             
-            [_decryptionQueue waitUntilAllOperationsAreFinished];
+           // [_decryptionQueue waitUntilAllOperationsAreFinished];
             NSLog(@"messages completed loading from disk at: %@", path);
 //            dispatch_async(dispatch_get_main_queue(), ^{
 //                [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshMessages" object:username ];

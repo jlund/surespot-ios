@@ -27,8 +27,12 @@
 }
 
 +(void) showToastView: (UIView *) view key: (NSString *) key {
+    [self showToastView:view key:key duration:1.0];
+}
++(void) showToastView: (UIView *) view key: (NSString *) key duration: (CGFloat) duration {
+
     [view makeToast:NSLocalizedString(key, nil)
-           duration: 1.0
+           duration: duration
            position:@"top"
      ];
 }

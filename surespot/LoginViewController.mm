@@ -19,8 +19,6 @@
 
 @implementation LoginViewController
 
-
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -67,7 +65,7 @@
      }
      failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
          NSLog(@"response failure: %@",  Error);
-         [UIUtils showToastView:_userPicker key: @"login_try_again_later" ];
+         [UIUtils showToastView:_userPicker key: @"login_try_again_later" duration: 2.0];
      }];
 }
 

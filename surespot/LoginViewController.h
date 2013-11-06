@@ -10,13 +10,11 @@
 
 @interface LoginViewController : UIViewController <UIPickerViewDataSource, UIPickerViewDelegate>
 
-
 @property (weak, nonatomic) IBOutlet UITextField *textUsername;
-- (IBAction)login:(id)sender;
 @property (weak, nonatomic) IBOutlet UITextField *textPassword;
-
 @property (copy, nonatomic) NSString *username;
 @property (strong, nonatomic) IBOutlet UIPickerView *userPicker;
 
+- (IBAction)login:(id)sender;
 
 @end
