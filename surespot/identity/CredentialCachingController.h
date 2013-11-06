@@ -23,4 +23,5 @@
 -(void) getSharedSecretForOurVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion: (NSString *) theirVersion callback: (CallbackBlock) callback;
 -(void) loginIdentity: (SurespotIdentity *) identity;
 
+-(SurespotIdentity *) getIdentityWithUsername: (NSString *) username;
 @end

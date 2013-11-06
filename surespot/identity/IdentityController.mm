@@ -40,6 +40,16 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
 
 
 - (SurespotIdentity *) getIdentityWithUsername:(NSString *) username andPassword:(NSString *) password {
+    SurespotIdentity * identity = [[CredentialCachingController sharedInstance] getIdentityWithUsername:username];
+    if (!identity) {
+        identity = [self loadIdentityUsername: (NSString *) username password:password];
+    }
+    return identity;
+    
+  }
+
+-(SurespotIdentity *) loadIdentityUsername: (NSString * ) username password: (NSString *) password {
+    
     NSString *filePath = [[[FileController getAppSupportDir] stringByAppendingPathComponent: username ] stringByAppendingString:IDENTITY_EXTENSION];
     NSData *myData = [NSData dataWithContentsOfFile:filePath];
     
@@ -54,6 +64,7 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
     }
     
     return nil;
+
 }
 
 -(NSData *) encryptIdentity: (SurespotIdentity *) identity withPassword:(NSString *)password {
