@@ -26,7 +26,8 @@
     [super viewDidLoad];
     [UIUtils setNavBarAttributes:self.navigationController.navigationBar];
     
-    
+    [self.navigationItem setTitle:NSLocalizedString(@"login", nil)];
+  
 
     [self loadIdentityNames];
      

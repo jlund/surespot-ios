@@ -33,6 +33,9 @@
     [super viewDidLoad];
     [UIUtils setNavBarAttributes:self.navigationController.navigationBar];
     
+    [self.navigationItem setTitle:NSLocalizedString(@"create", nil)];
+    
+    
     
 }
 

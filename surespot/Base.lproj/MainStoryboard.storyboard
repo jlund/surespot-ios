@@ -173,7 +173,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="qzP-R7-Qz4"/>
         <segue reference="CFG-TY-gjC"/>
+        <segue reference="qzP-R7-Qz4"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -119,7 +119,7 @@
 "sms"="sms";
 "social"="social";
 "unknown"="unknown";
-"login"="login";
+"login"="log in";
 "login_progress"="logging in";
 "login_check_password"="Could not login, please make sure your password is correct.";
 "login_try_again_later"="Error logging in, please try again later.";
