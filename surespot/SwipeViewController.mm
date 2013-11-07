@@ -284,7 +284,6 @@
             [_friendView registerNib:[UINib nibWithNibName:@"HomeCell" bundle:nil] forCellReuseIdentifier:@"HomeCell"];
             _friendView.delegate = self;
             _friendView.dataSource = self;
-            
         }
         
         NSLog(@"returning friend view %@", _friendView);
@@ -323,8 +322,6 @@
     }
     NSLog(@"swipeview index changed to %d", currPage);
     [tableview reloadData];
-    
-    
    
 }
 
@@ -581,7 +578,7 @@
         [_swipeView loadViewAtIndex:index];
         [_swipeView updateItemSizeAndCount];
         [_swipeView updateScrollViewDimensions];
-        
+          
         if (show) {
             [_swipeView scrollToPage:index duration:0.500];
             [[ChatController sharedInstance] setCurrentChat: username];
