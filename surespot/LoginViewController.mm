@@ -55,9 +55,12 @@
         SurespotIdentity * identity = [[IdentityController sharedInstance] getIdentityWithUsername:username andPassword:password];
         
         if (!identity) {
-            [UIUtils showToastView:_userPicker key: @"login_check_password" ];
-            [_progressView removeView];
-            self.navigationItem.rightBarButtonItem.enabled = YES;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [UIUtils showToastView:_userPicker key: @"login_check_password" ];
+                [_progressView removeView];
+                self.navigationItem.rightBarButtonItem.enabled = YES;
+                
+            });
             return;
         }
         
