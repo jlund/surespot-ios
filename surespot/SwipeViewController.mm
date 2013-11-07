@@ -27,6 +27,7 @@
 @property (nonatomic, strong) dispatch_queue_t dateFormatQueue;
 @property (nonatomic, strong) NSDateFormatter * dateFormatter;
 @property (nonatomic, weak) HomeDataSource * homeDataSource;
+@property (nonatomic, strong) UIViewPager * viewPager;
 @end
 
 
@@ -93,6 +94,12 @@
     //        [self showChat:currentChat];
     //    }
     
+    _viewPager = [[UIViewPager alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 30)];
+    [self.view addSubview:_viewPager];
+    _viewPager.delegate = self;
+    
+    
+    
     
     
     //open active tabs
@@ -104,6 +111,13 @@
     
     
 }
+
+- (void) swipeViewDidScroll:(SwipeView *)scrollView {
+    NSLog(@"swipeViewDidScroll");
+    [_viewPager scrollViewDidScroll: scrollView.scrollView];
+    
+}
+
 
 - (void)registerForKeyboardNotifications
 {
@@ -232,6 +246,28 @@
     return YES;
 }
 
+-(int) currentPage {
+    return [_swipeView currentPage];
+}
+
+-(int) pageCount {
+    return [self numberOfItemsInSwipeView:nil];
+}
+
+-(NSString * ) titleForLabelForPage:(int)page {
+    NSLog(@"titleForLabelForPage %d", page);
+    if (page == 0) {
+        return @"home";
+    }
+    else {
+        if ([_chats count] > 0) {
+            return [[_chats allKeys] objectAtIndex:page-1];
+        }
+    }
+    
+    return nil;
+}
+
 - (NSInteger)numberOfItemsInSwipeView:(SwipeView *)swipeView
 {
     return 1 + [_chats count];
@@ -288,6 +324,8 @@
     NSLog(@"swipeview index changed to %d", currPage);
     [tableview reloadData];
     
+    
+   
 }
 
 - (void)swipeView:(SwipeView *)swipeView didSelectItemAtIndex:(NSInteger)index
@@ -709,12 +747,12 @@
 -(void) logout {
     
     //blow the views away
-   
+    
     _friendView = nil;
     
     [[NetworkController sharedInstance] logout];
     [[ChatController sharedInstance] logout];
-     [_chats removeAllObjects];
+    [_chats removeAllObjects];
     [self performSegueWithIdentifier: @"returnToLogin" sender: self ];
     
 }

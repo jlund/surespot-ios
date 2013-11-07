@@ -11,6 +11,7 @@
 #import "KeyboardState.h"
 #import "FriendDelegate.h"
 #import "Friend.h"
+#import "UIViewPager.h"
 
 @interface SwipeViewController : UIViewController
 <
@@ -18,7 +19,8 @@
     SwipeViewDataSource,
     UITableViewDataSource,
     UITableViewDelegate,
-    UIActionSheetDelegate
+    UIActionSheetDelegate,
+    UIViewPagerDelegate
 >
 @property (nonatomic, strong) IBOutlet SwipeView *swipeView;
 @property (nonatomic, strong) IBOutlet UIPageControl *pageControl;

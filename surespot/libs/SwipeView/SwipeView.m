@@ -59,7 +59,7 @@
 
 @interface SwipeView () <UIScrollViewDelegate, UIGestureRecognizerDelegate>
 
-@property (nonatomic, strong) UIScrollView *scrollView;
+
 @property (nonatomic, strong) NSMutableDictionary *itemViews;
 @property (nonatomic, strong) NSMutableSet *itemViewPool;
 @property (nonatomic, assign) NSInteger previousItemIndex;
@@ -593,9 +593,11 @@
 
 - (void)didScroll
 {
-    NSLog(@"didScroll");
+
     //handle wrap
     [self updateScrollOffset];
+
+        NSLog(@"didScroll, offset: %f",_scrollOffset) ;
     
     //update view
     //[self layOutItemViews];
@@ -1186,5 +1188,6 @@
     
     [_delegate swipeViewDidEndDecelerating:self];
 }
+
 
 @end

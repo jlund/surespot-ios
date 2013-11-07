@@ -84,6 +84,7 @@
 		66FF0FF4182AE44C0038ECA6 /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FF3182AE44C0038ECA6 /* LoadingView.m */; };
 		66FF0FF6182AE6960038ECA6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66FF0FF5182AE6960038ECA6 /* QuartzCore.framework */; };
 		66FF0FF8182AEA280038ECA6 /* surespot_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 66FF0FF7182AEA280038ECA6 /* surespot_logo.png */; };
+		66FF0FFB182B04B10038ECA6 /* UIViewPager.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FFA182B04B10038ECA6 /* UIViewPager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -368,6 +369,8 @@
 		66FF0FF3182AE44C0038ECA6 /* LoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoadingView.m; path = utils/LoadingView.m; sourceTree = "<group>"; };
 		66FF0FF5182AE6960038ECA6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		66FF0FF7182AEA280038ECA6 /* surespot_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = surespot_logo.png; sourceTree = "<group>"; };
+		66FF0FF9182B04B10038ECA6 /* UIViewPager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewPager.h; sourceTree = "<group>"; };
+		66FF0FFA182B04B10038ECA6 /* UIViewPager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewPager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -606,6 +609,8 @@
 		66E4F517176298CB00596E6B /* libs */ = {
 			isa = PBXGroup;
 			children = (
+				66FF0FF9182B04B10038ECA6 /* UIViewPager.h */,
+				66FF0FFA182B04B10038ECA6 /* UIViewPager.m */,
 				66FF0FDF18242B6B0038ECA6 /* Toast */,
 				6637107D1813172F009D5195 /* EGOCache */,
 				6654441017F37A3F00F62F7F /* SwipeView */,
@@ -991,6 +996,7 @@
 				6654441617F37BCF00F62F7F /* SwipeViewController.mm in Sources */,
 				661C2EC31762B125000649E7 /* SurespotIdentity.mm in Sources */,
 				661C2EC81762C3C0000649E7 /* IdentityKeys.mm in Sources */,
+				66FF0FFB182B04B10038ECA6 /* UIViewPager.m in Sources */,
 				66FF0FE218242B6B0038ECA6 /* Toast+UIView.m in Sources */,
 				661C2ECE1763A214000649E7 /* IdentityController.mm in Sources */,
 				661C2ED11763A254000649E7 /* EncryptionController.mm in Sources */,
