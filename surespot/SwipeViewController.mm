@@ -263,6 +263,10 @@
     return YES;
 }
 
+-(void) switchToPageIndex:(NSInteger)page {
+    [_swipeView scrollToPage:page duration:0.5f];
+}
+
 -(NSInteger) currentPage {
     return [_swipeView currentPage];
 }
@@ -347,11 +351,6 @@
     NSLog(@"Selected item at index %i", index);
 }
 
-- (IBAction)pageControlTapped
-{
-    //update swipe view page
-    [_swipeView scrollToPage:_pageControl.currentPage duration:0.4];
-}
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

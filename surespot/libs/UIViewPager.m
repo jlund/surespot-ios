@@ -21,6 +21,8 @@
         _secondLabel = [self createLabel];
         _thirdLabel = [self createLabel];
         [self setBackgroundColor:[UIColor blackColor]];
+        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
+        [self addGestureRecognizer:tapGestureRecognizer];
         
     }
     return self;
@@ -30,6 +32,7 @@
     
     UILabel * label =[[UILabel alloc] initWithFrame:CGRectZero];
     label.textColor = [UIUtils surespotBlue];
+    label.backgroundColor = [UIColor clearColor];
     [self addSubview:label];
     return label;
 }
@@ -40,8 +43,8 @@
     int currentPage = [_delegate currentPage];
     int count = [_delegate pageCount];
     float offset = _horizontalOffset - currentPage * width;
-    
-    NSLog(@"layoutsubviews, page: %d, count: %d,  adj offset: %f", currentPage, count, offset);
+   
+ //   NSLog(@"layoutsubviews, page: %d, count: %d,  adj offset: %f", currentPage, count, offset);
     
     if (count == 0) {return;}
     
@@ -93,7 +96,7 @@
 #pragma mark UIScrollViewDelegate protocol implementation.
 
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView {
-    NSLog(@"Content offset:%@",NSStringFromCGPoint(scrollView.contentOffset));
+   // NSLog(@"Content offset:%@",NSStringFromCGPoint(scrollView.contentOffset));
     _horizontalOffset = scrollView.contentOffset.x;
     [self setNeedsLayout];
 }
@@ -101,14 +104,11 @@
 - (void) tapped:(UITapGestureRecognizer *) tapGestureRecognizer {
     CGPoint locationInView = [tapGestureRecognizer locationInView:self];
     CGFloat width = self.bounds.size.width;
-    if (locationInView.x < width/3) {
-        if (_horizontalOffset >= width / 2) {
-            [_delegate switchToPageIndex:0];
-        }
-    } else if (locationInView.x > width * 2/3) {
-        if (_horizontalOffset <= width/2) {
-            [_delegate switchToPageIndex:1];
-        }
+    NSInteger page = [_delegate currentPage];
+    NSInteger count = [_delegate pageCount];
+    if (locationInView.x < width/3 && page > 0) {
+        [_delegate switchToPageIndex: page - 1];
+    } else if (locationInView.x > width * 2/3 && page < count - 1) {           [_delegate switchToPageIndex:page+1];
     }
 }
 
@@ -116,10 +116,4 @@
     _delegate = delegate;
 }
 
--(void) refreshViews {
-    
-    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
-    [self addGestureRecognizer:tapGestureRecognizer];
-    
-}
 @end
