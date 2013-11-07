@@ -15,4 +15,5 @@
 + (CGSize)threadSafeSizeString: (NSString *) string WithFont:(UIFont *)font constrainedToSize:(CGSize)size;
 +(id) createProgressView: (UIView * )view;
 +(UIColor *) surespotBlue;
++ (void)setNavBarAttributes:(UINavigationBar*)bar;
 @end

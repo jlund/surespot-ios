@@ -12,7 +12,7 @@
 @implementation UIUtils
 
 +(UIColor *) surespotBlue {
-   return [UIColor colorWithRed:0.2 green:0.71 blue:0.898 alpha:1.0];
+    return [UIColor colorWithRed:0.2 green:0.71 blue:0.898 alpha:1.0];
 }
 
 +(void) showNotificationToastView:(UIView *) view  data:(NSDictionary *) notificationData {
@@ -35,7 +35,7 @@
     [self showToastView:view key:key duration:1.0];
 }
 +(void) showToastView: (UIView *) view key: (NSString *) key duration: (CGFloat) duration {
-
+    
     [view makeToast:NSLocalizedString(key, nil)
            duration: duration
            position:@"top"
@@ -65,5 +65,20 @@
     [indicator bringSubviewToFront:view];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = TRUE;
     return indicator;
+}
+
++ (void)setNavBarAttributes:(UINavigationBar*)bar {
+    if ([bar respondsToSelector:@selector(setBarTintColor:)]) {
+        [bar setBarTintColor: [UIColor colorWithRed:22/255.0f green:22/255.0f blue:22/255.0f alpha:1.0f]];
+        
+        
+        bar.translucent = NO;
+    }else {
+        bar.tintColor = [UIColor colorWithRed:22/255.0f green:22/255.0f blue:22/255.0f alpha:1.0f];
+        bar.opaque = YES;
+
+    }
+    [bar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [UIColor lightGrayColor],  UITextAttributeTextColor,nil]];
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
 }
 @end

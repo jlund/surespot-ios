@@ -65,8 +65,9 @@
     [self registerForKeyboardNotifications];
     
     UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"menu" style:UIBarButtonItemStylePlain target:self action:@selector(showMenu)];
+    [anotherButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [UIUtils surespotBlue],  UITextAttributeTextColor,nil] forState:UIControlStateNormal];
     self.navigationItem.rightBarButtonItem = anotherButton;
-    
+   
     self.navigationItem.title = [@"surespot/" stringByAppendingString:[[IdentityController sharedInstance] getLoggedInUser]];
     
     
@@ -109,12 +110,16 @@
             [self loadChat:[afriend name] show:NO];
         }
     }
+    [UIUtils setNavBarAttributes:self.navigationController.navigationBar];
+    
     
     
 }
 
 
-
+-(UIStatusBarStyle)preferredStatusBarStyle{
+    return UIStatusBarStyleLightContent;
+}
 
 - (void)registerForKeyboardNotifications
 {
