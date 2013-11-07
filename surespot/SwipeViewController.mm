@@ -95,6 +95,7 @@
     //    }
     
     _viewPager = [[UIViewPager alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 30)];
+    _viewPager.autoresizingMask =UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:_viewPager];
     _viewPager.delegate = self;
     
