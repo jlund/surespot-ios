@@ -492,7 +492,7 @@
                     }
                     else {
                         //TODO use constant
-                        cell.messageSentView.backgroundColor =[UIColor colorWithRed:0.2 green:0.71 blue:0.898 alpha:1.0];
+                        cell.messageSentView.backgroundColor = UIUtils.surespotBlue;
                     }
                     
                     

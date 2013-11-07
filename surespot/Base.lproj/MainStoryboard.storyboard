@@ -133,7 +133,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view clipsSubviews="YES" contentMode="scaleToFill" id="XCg-uf-vcR" customClass="SwipeView">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="456"/>
+                                <rect key="frame" x="0.0" y="30" width="320" height="426"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <connections>

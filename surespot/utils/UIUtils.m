@@ -10,6 +10,11 @@
 #import "Toast+UIView.h"
 
 @implementation UIUtils
+
++(UIColor *) surespotBlue {
+   return [UIColor colorWithRed:0.2 green:0.71 blue:0.898 alpha:1.0];
+}
+
 +(void) showNotificationToastView:(UIView *) view  data:(NSDictionary *) notificationData {
     NSString * type = [notificationData valueForKeyPath:@"aps.alert.loc-key"];
     if (type && [type isEqualToString:@"notification_message"]) {

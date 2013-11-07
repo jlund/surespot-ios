@@ -1,5 +1,5 @@
 #import "UIViewPager.h"
-
+#import "UIUtils.h"
 
 @implementation UIViewPager
 
@@ -11,7 +11,7 @@
         firstLabel = [self createLabel];
         secondLabel = [self createLabel];
         thirdLabel = [self createLabel];
-        [self setBackgroundColor:[UIColor whiteColor]];
+        [self setBackgroundColor:[UIColor blackColor]];
         
     }
     return self;
@@ -20,9 +20,7 @@
 - (id) createLabel {
     
     UILabel * label =[[UILabel alloc] initWithFrame:CGRectZero];
-    // label.backgroundColor = [UIColor clearColor];
-    //  label.text = labelText;
-    
+    label.textColor = [UIUtils surespotBlue];
     [self addSubview:label];
     return label;
 }
@@ -97,28 +95,6 @@
     [self setNeedsLayout];
 }
 
-- (void) drawRect:(CGRect)rect {
-    [super drawRect:rect];
-    
-    //TODO: draw a small triangle.
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    //    CGFloat halfWidth = self.bounds.size.width / 2;
-    CGFloat height = self.bounds.size.height - 3;
-    //
-    //    CGContextBeginPath(ctx);
-    //    CGContextMoveToPoint   (ctx, halfWidth - 8/2, height);
-    //    CGContextAddLineToPoint(ctx, halfWidth, height - 8/2 /** sqrt(3)*/);
-    //    CGContextAddLineToPoint(ctx, halfWidth + 8/2, height);
-    //    CGContextClosePath(ctx);
-    //
-    //    CGContextSetRGBFillColor(ctx, 0, 0, 0, 1);
-    ////    CGContextSetStrokeColorWithColor(ctx, [UIColor redColor].CGColor);
-    ////    CGContextStrokePath(ctx);
-    //    CGContextFillPath(ctx);
-    
-    CGContextFillRect(ctx, CGRectMake(0, height, self.bounds.size.width, 3));
-}
-
 - (void) tapped:(UITapGestureRecognizer *) tapGestureRecognizer {
     CGPoint locationInView = [tapGestureRecognizer locationInView:self];
     CGFloat width = self.bounds.size.width;
@@ -136,7 +112,6 @@
 - (void) setDelegate:(id<UIViewPagerDelegate>)delegate_ {
     delegate = delegate_;
 }
-
 
 -(void) refreshViews {
     
