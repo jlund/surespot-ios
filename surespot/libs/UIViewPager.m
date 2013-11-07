@@ -1,16 +1,25 @@
 #import "UIViewPager.h"
 #import "UIUtils.h"
 
-@implementation UIViewPager
+@interface  UIViewPager()
+@property UILabel *firstLabel;
+@property CGFloat firstLabelWidth;
+@property UILabel *secondLabel;
+@property CGFloat secondLabelWidth;
+@property UILabel *thirdLabel;
+@property CGFloat thirdLabelWidth;
+@property CGFloat horizontalOffset;
+@end
 
-@synthesize delegate;
+
+@implementation UIViewPager
 
 - (id) initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        firstLabel = [self createLabel];
-        secondLabel = [self createLabel];
-        thirdLabel = [self createLabel];
+        _firstLabel = [self createLabel];
+        _secondLabel = [self createLabel];
+        _thirdLabel = [self createLabel];
         [self setBackgroundColor:[UIColor blackColor]];
         
     }
@@ -25,73 +34,67 @@
     return label;
 }
 
-
-
-- (void) layoutSubviews {
+- (void) layoutSubviews {    
     CGFloat width = self.bounds.size.width;
     
-    int currentPage = [delegate currentPage];
-    int count = [delegate pageCount];
-    float offset = horizontalOffset - currentPage * width;
+    int currentPage = [_delegate currentPage];
+    int count = [_delegate pageCount];
+    float offset = _horizontalOffset - currentPage * width;
     
     NSLog(@"layoutsubviews, page: %d, count: %d,  adj offset: %f", currentPage, count, offset);
     
     if (count == 0) {return;}
     
     if (currentPage == 0) {
-        firstLabel.text =@"";
-        firstLabelWidth = [firstLabel sizeThatFits:self.bounds.size].width;
-        
-        secondLabel.text = [delegate titleForLabelForPage:currentPage];
-        secondLabelWidth = [secondLabel sizeThatFits:self.bounds.size].width;
+        _firstLabel.text = @"";
     }
     else {
-        firstLabel.text = [delegate titleForLabelForPage:currentPage-1];
-        firstLabelWidth = [firstLabel sizeThatFits:self.bounds.size].width;
+        _firstLabel.text = [_delegate titleForLabelForPage:currentPage-1];
     }
+    _firstLabelWidth = [_firstLabel sizeThatFits:self.bounds.size].width;
     
-    secondLabel.text = [delegate titleForLabelForPage:currentPage];
-    secondLabelWidth = [secondLabel sizeThatFits:self.bounds.size].width;
+    _secondLabel.text = [_delegate titleForLabelForPage:currentPage];
+    _secondLabelWidth = [_secondLabel sizeThatFits:self.bounds.size].width;
     
     if ( currentPage < count - 1) {
-        thirdLabel.text = [delegate titleForLabelForPage:currentPage + 1];
-        thirdLabelWidth = [thirdLabel sizeThatFits:self.bounds.size].width;
+        _thirdLabel.text = [_delegate titleForLabelForPage:currentPage + 1];
     }
     else {
-        thirdLabel.text= @"";
+        _thirdLabel.text = @"";
     }
+    _thirdLabelWidth = [_thirdLabel sizeThatFits:self.bounds.size].width;
     
-    CGFloat firstLabelOffset = width/2 - firstLabelWidth/2;
+    CGFloat firstLabelOffset = width/2 - _firstLabelWidth/2;
     if (offset < 0) {
         firstLabelOffset = 0;
     } else {
-        firstLabelOffset = width/2 - horizontalOffset - firstLabelWidth/2;
+        firstLabelOffset = width/2 - _horizontalOffset - _firstLabelWidth/2;
     }
     if (firstLabelOffset < 0) {
         firstLabelOffset = 0;
     }
-    firstLabel.frame = CGRectMake(firstLabelOffset, 0, firstLabelWidth, self.bounds.size.height);
+    _firstLabel.frame = CGRectMake(firstLabelOffset, 0, _firstLabelWidth, self.bounds.size.height);
     
     
-    CGFloat secondLabelOffset = width/2 - secondLabelWidth/2 - offset;
-    secondLabel.frame = CGRectMake(secondLabelOffset, 0, secondLabelWidth, self.bounds.size.height);
+    CGFloat secondLabelOffset = width/2 - _secondLabelWidth/2 - offset;
+    _secondLabel.frame = CGRectMake(secondLabelOffset, 0, _secondLabelWidth, self.bounds.size.height);
     
     
-    CGFloat thirdLabelOffset = width - thirdLabelWidth;
+    CGFloat thirdLabelOffset = width - _thirdLabelWidth;
     if (offset < 0) {
-        thirdLabelOffset = width - thirdLabelWidth;
+        thirdLabelOffset = width - _thirdLabelWidth;
     }
-    if (thirdLabelWidth + thirdLabelOffset > width) {
-        thirdLabelOffset = width - thirdLabelWidth;
+    if (_thirdLabelWidth + thirdLabelOffset > width) {
+        thirdLabelOffset = width - _thirdLabelWidth;
     }
-    thirdLabel.frame = CGRectMake(thirdLabelOffset, 0, thirdLabelWidth, self.bounds.size.height);    
+    _thirdLabel.frame = CGRectMake(thirdLabelOffset, 0, _thirdLabelWidth, self.bounds.size.height);
 }
 
 #pragma mark UIScrollViewDelegate protocol implementation.
 
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView {
     NSLog(@"Content offset:%@",NSStringFromCGPoint(scrollView.contentOffset));
-    horizontalOffset = scrollView.contentOffset.x;
+    _horizontalOffset = scrollView.contentOffset.x;
     [self setNeedsLayout];
 }
 
@@ -99,18 +102,18 @@
     CGPoint locationInView = [tapGestureRecognizer locationInView:self];
     CGFloat width = self.bounds.size.width;
     if (locationInView.x < width/3) {
-        if (horizontalOffset >= width / 2) {
-            [delegate switchToPageIndex:0];
+        if (_horizontalOffset >= width / 2) {
+            [_delegate switchToPageIndex:0];
         }
     } else if (locationInView.x > width * 2/3) {
-        if (horizontalOffset <= width/2) {
-            [delegate switchToPageIndex:1];
+        if (_horizontalOffset <= width/2) {
+            [_delegate switchToPageIndex:1];
         }
     }
 }
 
-- (void) setDelegate:(id<UIViewPagerDelegate>)delegate_ {
-    delegate = delegate_;
+- (void) setDelegate:(id<UIViewPagerDelegate>)delegate {
+    _delegate = delegate;
 }
 
 -(void) refreshViews {

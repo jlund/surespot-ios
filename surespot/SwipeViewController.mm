@@ -113,11 +113,7 @@
     
 }
 
-- (void) swipeViewDidScroll:(SwipeView *)scrollView {
-    NSLog(@"swipeViewDidScroll");
-    [_viewPager scrollViewDidScroll: scrollView.scrollView];
-    
-}
+
 
 
 - (void)registerForKeyboardNotifications
@@ -241,21 +237,39 @@
 }
 
 
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)orientation
+                                duration:(NSTimeInterval)duration
+{
+    NSLog(@"will rotate");
+    _swipeView.suppressScrollEvent = YES;
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromOrientation
+{
+    NSLog(@"did rotate");
+    _swipeView.suppressScrollEvent= NO;
+}
+
+- (void) swipeViewDidScroll:(SwipeView *)scrollView {
+    NSLog(@"swipeViewDidScroll");
+    [_viewPager scrollViewDidScroll: scrollView.scrollView];
+    
+}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return YES;
 }
 
--(int) currentPage {
+-(NSInteger) currentPage {
     return [_swipeView currentPage];
 }
 
--(int) pageCount {
+-(NSInteger) pageCount {
     return [self numberOfItemsInSwipeView:nil];
 }
 
--(NSString * ) titleForLabelForPage:(int)page {
+-(NSString * ) titleForLabelForPage:(NSInteger)page {
     NSLog(@"titleForLabelForPage %d", page);
     if (page == 0) {
         return @"home";
@@ -323,7 +337,7 @@
     }
     NSLog(@"swipeview index changed to %d", currPage);
     [tableview reloadData];
-   
+    
 }
 
 - (void)swipeView:(SwipeView *)swipeView didSelectItemAtIndex:(NSInteger)index
@@ -579,7 +593,7 @@
         [_swipeView loadViewAtIndex:index];
         [_swipeView updateItemSizeAndCount];
         [_swipeView updateScrollViewDimensions];
-          
+        
         if (show) {
             [_swipeView scrollToPage:index duration:0.500];
             [[ChatController sharedInstance] setCurrentChat: username];
