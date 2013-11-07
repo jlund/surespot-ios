@@ -11,6 +11,7 @@
 #import "IdentityController.h"
 #import "NetworkController.h"
 #import "NSData+Base64.h"
+#import "UIUtils.h"
 
 @interface SignupViewController ()
 
@@ -30,7 +31,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+    [UIUtils setNavBarAttributes:self.navigationController.navigationBar];
+    
+    
 }
 
 - (void)didReceiveMemoryWarning

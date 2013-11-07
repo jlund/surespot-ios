@@ -24,7 +24,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [UIUtils setNavBarAttributes:self.navigationController.navigationBar];
+    
+    
+
     [self loadIdentityNames];
+     
     
 }
 

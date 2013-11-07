@@ -79,6 +79,10 @@
     //
     self.navigationItem.hidesBackButton = YES;
     
+    [UIUtils setNavBarAttributes:self.navigationController.navigationBar];
+    
+    
+
     
     //listen for refresh notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshMessages:) name:@"refreshMessages" object:nil];
@@ -110,16 +114,9 @@
             [self loadChat:[afriend name] show:NO];
         }
     }
-    [UIUtils setNavBarAttributes:self.navigationController.navigationBar];
-    
-    
     
 }
 
-
--(UIStatusBarStyle)preferredStatusBarStyle{
-    return UIStatusBarStyleLightContent;
-}
 
 - (void)registerForKeyboardNotifications
 {
