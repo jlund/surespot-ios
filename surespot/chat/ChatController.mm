@@ -18,6 +18,7 @@
 #import "ChatUtils.h"
 #import "StateController.h"
 #import "DDLog.h"
+#import "UIUtils.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
@@ -309,7 +310,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void) sendMessage: (NSString *) message toFriendname: (NSString *) friendname
 {
-    if (message.length == 0) return;
+    if ([UIUtils stringIsNilOrEmpty:friendname]) return;
     
     NSString * ourLatestVersion = [[IdentityController sharedInstance] getOurLatestVersion];
     NSString * loggedInUser = [[IdentityController sharedInstance] getLoggedInUser];
@@ -519,7 +520,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void) inviteUser: (NSString *) username {
     NSString * loggedInUser = [[IdentityController sharedInstance] getLoggedInUser];
-    if ([username isEqualToString:loggedInUser]) {
+    if ([UIUtils stringIsNilOrEmpty:username] || [username isEqualToString:loggedInUser]) {
         //todo tell user they can't invite themselves
         return;
     }

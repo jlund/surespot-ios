@@ -13,33 +13,26 @@
 #import "NSData+Base64.h"
 #import "UIUtils.h"
 #import "DDLog.h"
+#import "LoadingView.h"
 
+#ifdef DEBUG
+static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+#else
 static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
+
 
 @interface SignupViewController ()
-
+@property (atomic, strong) id progressView;
 @end
 
 @implementation SignupViewController
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [UIUtils setNavBarAttributes:self.navigationController.navigationBar];
-    
     [self.navigationItem setTitle:NSLocalizedString(@"create", nil)];
-    
-    
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -58,39 +51,53 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSString * username = self.tbUsername.text;
     NSString * password = self.tbPassword.text;
     
-    NSDictionary *derived = [EncryptionController deriveKeyFromPassword:password];
+    if ([UIUtils stringIsNilOrEmpty:username] || [UIUtils stringIsNilOrEmpty:password]) {
+        return;
+    }
     
-    NSString * salt = [[derived objectForKey:@"salt" ] SR_stringByBase64Encoding];
-    NSString * encPassword = [[derived objectForKey:@"key" ] SR_stringByBase64Encoding];
+     [_tbPassword resignFirstResponder];
+    _progressView = [LoadingView loadingViewInView:self.view textKey:@"create_user_progress"];
     
+    dispatch_queue_t q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     
-    IdentityKeys * keys = [EncryptionController generateKeyPairs];
-    
-    NSString * encodedDHKey = [EncryptionController encodeDHPublicKey: [keys dhPubKey]];
-    NSString * encodedDSAKey = [EncryptionController encodeDSAPublicKey:[keys dsaPubKey]];
-    NSString * signature = [[EncryptionController signUsername:username andPassword: [encPassword dataUsingEncoding:NSUTF8StringEncoding] withPrivateKey:keys.dsaPrivKey] SR_stringByBase64Encoding];
-    
-    [[NetworkController sharedInstance]
-     addUser: username
-     derivedPassword: encPassword
-     dhKey: encodedDHKey
-     dsaKey: encodedDSAKey
-     signature: signature
-     version: @"ios is my bitch"
-     successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
-         DDLogVerbose(@"signup response: %d",  [operation.response statusCode]);
-         [[IdentityController sharedInstance] createIdentityWithUsername:username andPassword:password andSalt:salt andKeys:keys];
-         [self performSegueWithIdentifier: @"signupToMain" sender: nil];
-         
-     }
-     failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
-         
-         DDLogVerbose(@"signup response failure: %@",  Error);
-         
-     }
-     ];
-    
-    
+    dispatch_async(q, ^{
+        
+        
+        NSDictionary *derived = [EncryptionController deriveKeyFromPassword:password];
+        
+        NSString * salt = [[derived objectForKey:@"salt" ] SR_stringByBase64Encoding];
+        NSString * encPassword = [[derived objectForKey:@"key" ] SR_stringByBase64Encoding];
+        
+        
+        IdentityKeys * keys = [EncryptionController generateKeyPairs];
+        
+        NSString * encodedDHKey = [EncryptionController encodeDHPublicKey: [keys dhPubKey]];
+        NSString * encodedDSAKey = [EncryptionController encodeDSAPublicKey:[keys dsaPubKey]];
+        NSString * signature = [[EncryptionController signUsername:username andPassword: [encPassword dataUsingEncoding:NSUTF8StringEncoding] withPrivateKey:keys.dsaPrivKey] SR_stringByBase64Encoding];
+        
+        [[NetworkController sharedInstance]
+         addUser: username
+         derivedPassword: encPassword
+         dhKey: encodedDHKey
+         dsaKey: encodedDSAKey
+         signature: signature
+         version: @"ios is my bitch"
+         successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
+             DDLogVerbose(@"signup response: %d",  [operation.response statusCode]);
+             [[IdentityController sharedInstance] createIdentityWithUsername:username andPassword:password andSalt:salt andKeys:keys];
+             [self performSegueWithIdentifier: @"signupToMain" sender: nil];
+             [_progressView removeView];
+             
+         }
+         failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
+             
+             DDLogVerbose(@"signup response failure: %@",  Error);
+             [UIUtils showToastView:[self view] key:@"could_not_create_user"];
+             [_progressView removeView];
+         }
+         ];
+        
+    });
     
 }
 //

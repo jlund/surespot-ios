@@ -668,7 +668,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 - (void) send {
     NSString* message = self.textField.text;
     
-    if (message.length == 0) return;
+    if ([UIUtils stringIsNilOrEmpty:message]) return;
     
     NSArray *keys = [_chats allKeys];
     id friendname = [keys objectAtIndex:[_swipeView currentItemIndex] -1];

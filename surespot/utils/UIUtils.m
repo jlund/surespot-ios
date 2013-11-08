@@ -81,4 +81,8 @@
     [bar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [UIColor lightGrayColor],  UITextAttributeTextColor,nil]];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
 }
+
++(BOOL)stringIsNilOrEmpty:(NSString*)aString {
+    return !(aString && aString.length);
+}
 @end

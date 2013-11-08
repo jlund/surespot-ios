@@ -151,13 +151,13 @@
 "usernames_case_sensitive"="Usernames are case sensitive";
 "aware_username_password"="so be aware of this when sharing them with others. The password should be at least 8 characters long and contain funky characters in weird places.";
 "warning_password_reset"="WARNING: There is no password reset functionality in surespot so make sure you remember it!";
-"create_user_progress"="creating a user and generating key pairs";
+"create_user_progress"="creating identity and generating key pairs";
 "create"="create";
 "passwords_do_not_match"="passwords do not match";
 "username_exists"="That username already exists, please choose another.";
-"user_creation_throttled"="too many user creation attempts, try again later";
-"signup_update"="please update surespot to create a new user";
-"could_not_create_user"="could not create user, please try again later";
+"user_creation_throttled"="too many identity creation attempts, try again later";
+"signup_update"="please update surespot to create a new identity";
+"could_not_create_user"="could not create identity, please try again later";
 "pay"="pay";
 "what_you_like"="what you like";
 "billing_could_not_enable"="Could not enable in-app billing.";

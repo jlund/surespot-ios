@@ -47,14 +47,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSString * username = [_identityNames objectAtIndex:[_userPicker selectedRowInComponent:0]];
     NSString * password = self.textPassword.text;
     
-    if (!password) {
+    if ([UIUtils stringIsNilOrEmpty:password]) {
         return;
     }
     
     DDLogVerbose(@"starting login");
     self.navigationItem.rightBarButtonItem.enabled = NO;
     [_textPassword resignFirstResponder];
-    _progressView = [LoadingView loadingViewInView:self.view];
+    _progressView = [LoadingView loadingViewInView:self.view textKey:@"login_progress"];
     
     dispatch_queue_t q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     

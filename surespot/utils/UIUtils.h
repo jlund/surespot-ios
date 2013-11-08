@@ -9,11 +9,12 @@
 #import <Foundation/Foundation.h>
 
 @interface UIUtils : NSObject
-+(void) showNotificationToastView:(UIView *) view data:(NSDictionary *) notificationData;
-+(void) showToastView: (UIView *) view key: (NSString *) key;
-+(void) showToastView: (UIView *) view key: (NSString *) key duration: (CGFloat) duration;
++ (void) showNotificationToastView:(UIView *) view data:(NSDictionary *) notificationData;
++ (void) showToastView: (UIView *) view key: (NSString *) key;
++ (void) showToastView: (UIView *) view key: (NSString *) key duration: (CGFloat) duration;
 + (CGSize)threadSafeSizeString: (NSString *) string WithFont:(UIFont *)font constrainedToSize:(CGSize)size;
-+(id) createProgressView: (UIView * )view;
-+(UIColor *) surespotBlue;
++ (id) createProgressView: (UIView * )view;
++ (UIColor *) surespotBlue;
 + (void)setNavBarAttributes:(UINavigationBar*)bar;
++ (BOOL)stringIsNilOrEmpty:(NSString*)aString;
 @end

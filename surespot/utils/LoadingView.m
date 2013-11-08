@@ -85,7 +85,7 @@ CGPathRef NewPathWithRoundRect(CGRect rect, CGFloat cornerRadius)
 // returns the constructed view, already added as a subview of the aSuperview
 //	(and hence retained by the superview)
 //
-+ (id)loadingViewInView:(UIView *)aSuperview
++ (id)loadingViewInView:(UIView *)aSuperview textKey: (NSString *) textKey
 {
 	LoadingView *loadingView =
     [[LoadingView alloc] initWithFrame:[aSuperview bounds]];
@@ -106,7 +106,7 @@ CGPathRef NewPathWithRoundRect(CGRect rect, CGFloat cornerRadius)
     [[UILabel alloc]
      initWithFrame:labelFrame];
     
-	loadingLabel.text = NSLocalizedString(@"login_progress", nil);
+	loadingLabel.text = NSLocalizedString(textKey, nil);
 	loadingLabel.textColor = [UIColor whiteColor];
 	loadingLabel.backgroundColor = [UIColor clearColor];
 	loadingLabel.textAlignment = NSTextAlignmentLeft;

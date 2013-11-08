@@ -19,7 +19,7 @@
 
 }
 
-+ (id)loadingViewInView:(UIView *)aSuperview;
++ (id)loadingViewInView:(UIView *)aSuperview textKey: (NSString *) textKey;
 - (void)removeView;
 
 @end
