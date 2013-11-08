@@ -65,7 +65,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         ////   self.socketIO.useSecure = YES;
         //   [self.socketIO connectToHost:@"server.surespot.me" onPort:443];
         
-       // _homeDataSource = [[HomeDataSource alloc] init];
+        // _homeDataSource = [[HomeDataSource alloc] init];
         _chatDataSources = [[NSMutableDictionary alloc] init];
         
         //open active chats
@@ -121,7 +121,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 - (void) socketIODidDisconnect:(SocketIO *)socket disconnectedWithError:(NSError *)error {
-
+    
     DDLogVerbose(@"didDisconnectWithError       %@", error);
     
     if (error ) {
@@ -166,12 +166,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [self.chatDataSources setObject: dataSource forKey: friendname];
     }
     return dataSource;
- 
+    
 }
 
 - (ChatDataSource *) getDataSourceForFriendname: (NSString *) friendname {
     return [self.chatDataSources objectForKey:friendname];
- }
+}
 
 -(void) destroyDataSourceForFriendname: (NSString *) friendname {
     id cds = [_chatDataSources objectForKey:friendname];
@@ -233,10 +233,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 NSString * user = [ChatUtils getOtherUserFromSpot:spot andUser:[[IdentityController sharedInstance] getLoggedInUser]];
                 
                 [_homeDataSource setAvailableMessageId:availableId forFriendname: user];
-//                ChatDataSource * chatDataSource = [self getDataSourceForFriendname: user];
-//                if (chatDataSource) {
-//                    [chatDataSource setAvailableId: availableId];
-//                }
+                //                ChatDataSource * chatDataSource = [self getDataSourceForFriendname: user];
+                //                if (chatDataSource) {
+                //                    [chatDataSource setAvailableId: availableId];
+                //                }
             }
         }
         
@@ -253,7 +253,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         NSArray * userControlMessages = [JSON objectForKey:@"userControlMessages"];
         if (userControlMessages ) {
-            //  [self handleControlMessages: userControlMessages forUsername: [[IdentityController sharedInstance] getLoggedInUser]];
+            [self handleControlMessages: userControlMessages forUsername: [[IdentityController sharedInstance] getLoggedInUser]];
         }
         
         //update message data
@@ -369,8 +369,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     SurespotMessage * lastMessage;
-    for (id jsonMessage in messages) {        lastMessage = [[SurespotMessage alloc] initWithJSONString:jsonMessage];
-        
+    for (id jsonMessage in messages) {
+        lastMessage = [[SurespotMessage alloc] initWithJSONString:jsonMessage];
         [cds addMessage:lastMessage refresh:YES];
     }
 }
@@ -397,29 +397,27 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             }
         }
     }
-    
-    if (message) {
-        if (messageActivity || userActivity) {
-            Friend * afriend = [_homeDataSource getFriendByName:username];
-            
-            if (afriend) {
-                if (messageActivity) {
-                    if (cds) {
-                        afriend.lastReceivedMessageControlId = message.controlId;
-                    }
-                    
-                    afriend.availableMessageControlId = message.controlId;
+    if (messageActivity || userActivity) {
+        Friend * afriend = [_homeDataSource getFriendByName:username];
+        
+        if (afriend) {
+            if (messageActivity) {
+                if (cds) {
+                    afriend.lastReceivedMessageControlId = message.controlId;
                 }
+               
                 
-                
-                
-                if (userActivity) {
-                    afriend.lastReceivedUserControlId = message.controlId;
-                }
-                
-                [_homeDataSource postRefresh];
+                afriend.availableMessageControlId = message.controlId;
             }
+            
+            
+            
+            if (userActivity) {
+            }
+
+            [_homeDataSource postRefresh];
         }
+        
     }
 }
 
@@ -436,6 +434,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) handleUserControlMessage: (SurespotControlMessage *) message {
+    if (message.controlId > _homeDataSource.latestUserControlId) {
+        _homeDataSource.latestUserControlId = message.controlId;
+    }
     NSString * user;
     if ([message.action isEqualToString:@"revoke"]) {
         
@@ -598,7 +599,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void) setCurrentChat: (NSString *) username {
     [_homeDataSource setCurrentChat: username];
     
-      
+    
 }
 
 -(NSString *) getCurrentChat {
@@ -615,10 +616,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self disconnect];
     [self saveState];
     [_chatDataSources removeAllObjects];
-  //  _homeDataSource.currentChat = nil;
+    //  _homeDataSource.currentChat = nil;
     _homeDataSource = nil;
     
-   
+    
 }
 
 @end

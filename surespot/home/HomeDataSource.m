@@ -11,7 +11,12 @@
 #import "FileController.h"
 #import "DDLog.h"
 
+#ifdef DEBUG
+static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+#else
 static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
+
 
 @interface  HomeDataSource()
 
@@ -119,7 +124,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(void) writeToDisk {
     if (_latestUserControlId > 0 || _friends.count > 0) {
         NSString * filename =[FileController getHomeFilename];
-        DDLogVerbose(@"saving home data to disk at %@, latestUSerControlId: %d, currentChat: %@",filename, _latestUserControlId, _currentChat);
+        DDLogVerbose(@"saving home data to disk at %@, latestUserControlId: %d, currentChat: %@",filename, _latestUserControlId, _currentChat);
         NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
         if (_friends.count > 0) {
             [dict setObject:_friends  forKey:@"friends"];

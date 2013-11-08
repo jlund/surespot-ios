@@ -19,7 +19,6 @@
 @property (atomic, assign) NSInteger availableMessageId;
 @property (atomic, assign) NSInteger lastReceivedMessageControlId;
 @property (atomic, assign) NSInteger availableMessageControlId;
-@property (atomic, assign) NSInteger lastReceivedUserControlId;
 
 -(BOOL) isInviter;
 -(void) setInviter: (BOOL) set;
