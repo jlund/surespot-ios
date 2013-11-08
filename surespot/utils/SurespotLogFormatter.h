@@ -9,7 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "DDLog.h"
 
-@interface SurespotLogFormatter : NSObject<DDLogFormatter>
+@interface SurespotLogFormatter : NSObject<DDLogFormatter> {
+    int loggerCount;
+    NSDateFormatter *threadUnsafeDateFormatter;
+}
 
 - (NSString *)formatLogMessage:(DDLogMessage *)logMessage;
 

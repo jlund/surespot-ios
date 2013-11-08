@@ -8,7 +8,20 @@
 
 #import "SurespotLogFormatter.h"
 
+
 @implementation SurespotLogFormatter
+
+- (id)init
+{
+    if((self = [super init]))
+    {
+        threadUnsafeDateFormatter = [[NSDateFormatter alloc] init];
+        [threadUnsafeDateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
+        [threadUnsafeDateFormatter setDateFormat:@"yyyy/MM/dd HH:mm:ss:SSS"];
+    }
+    return self;
+}
+
 - (NSString *)formatLogMessage:(DDLogMessage *)logMessage
 {
     NSString *logLevel;
@@ -20,8 +33,11 @@
         default             : logLevel = @"V"; break;
     }
     
+    NSString * function = [[NSString stringWithCString: logMessage->function encoding:NSASCIIStringEncoding] stringByPaddingToLength:12 withString:@" " startingAtIndex:0];
+    
+    NSString *dateAndTime = [threadUnsafeDateFormatter stringFromDate:(logMessage->timestamp)];
     NSString *path = [NSString stringWithCString:logMessage->file encoding:NSASCIIStringEncoding];
     NSString *fileName = [[path lastPathComponent] stringByDeletingPathExtension];
-    return [NSString stringWithFormat:@"%@ %@ [%u:%s] [%@:%s %d] %@",logLevel, logMessage->timestamp, logMessage->machThreadID, logMessage->queueLabel, fileName, logMessage->function, logMessage->lineNumber, logMessage->logMsg];
+    return [NSString stringWithFormat:@"%@ %@ [%u:%s] [%8@:%@ %3d] %@",logLevel, dateAndTime, logMessage->machThreadID, logMessage->queueLabel, fileName, function, logMessage->lineNumber, logMessage->logMsg];
 }
 @end

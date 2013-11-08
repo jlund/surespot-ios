@@ -99,7 +99,7 @@ int const PBKDF_ROUNDS = 1000;
     
     // bool b =  df.GetLastResult();
     
-    cout << "Recovered " << jsonIdentity << endl;
+    DDLogVerbose(@"recovered: %s", jsonIdentity.data());
     
     //convert json to NSDictionary
     
