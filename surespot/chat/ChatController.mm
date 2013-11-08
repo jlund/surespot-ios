@@ -17,6 +17,9 @@
 #import "NetworkController.h"
 #import "ChatUtils.h"
 #import "StateController.h"
+#import "DDLog.h"
+
+static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 
 @interface ChatController()
 @property (strong, atomic) SocketIO * socketIO;
@@ -76,20 +79,20 @@
 
 -(void) disconnect {
     if (_socketIO) {
-        NSLog(@"disconnecting socket");
+        DDLogVerbose(@"disconnecting socket");
         [_socketIO disconnect ];
     }
 }
 
 -(void) pause: (NSNotification *)  notification{
-    NSLog(@"chatcontroller pause");
+    DDLogVerbose(@"chatcontroller pause");
     [self disconnect];
     [self saveState];
 }
 
 -(void) connect {
     if (_socketIO) {
-        NSLog(@"connecting socket");
+        DDLogVerbose(@"connecting socket");
         //  if (![_socketIO isConnected] && ![_socketIO isConnecting]) {
         self.socketIO.useSecure = NO;
         [self.socketIO connectToHost:@"192.168.10.68" onPort:8080];
@@ -99,21 +102,21 @@
 }
 
 -(void) resume: (NSNotification *) notification {
-    NSLog(@"chatcontroller resume");
+    DDLogVerbose(@"chatcontroller resume");
     [self connect];
 }
 
 
 
 - (void) socketIODidConnect:(SocketIO *)socket {
-    NSLog(@"didConnect()");
+    DDLogVerbose(@"didConnect()");
     // [[NSNotificationCenter defaultCenter] postNotificationName:@"socketConnected" object:nil ];
     [self getData];
 }
 
 - (void) socketIODidDisconnect:(SocketIO *)socket disconnectedWithError:(NSError *)error {
 
-    NSLog(@"didDisconnectWithError       %@", error);
+    DDLogVerbose(@"didDisconnectWithError       %@", error);
     
     if (error ) {
         //start reconnect cycle
@@ -122,7 +125,7 @@
 
 - (void) socketIO:(SocketIO *)socket didReceiveEvent:(SocketIOPacket *)packet
 {
-    NSLog(@"didReceiveEvent() >>> data: %@", packet.data);
+    DDLogVerbose(@"didReceiveEvent() >>> data: %@", packet.data);
     NSDictionary * jsonData = [NSJSONSerialization JSONObjectWithData:[packet.data dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
     
     
@@ -147,7 +150,7 @@
 
 - (void) socketIO:(SocketIO *)socket didReceiveMessage:(SocketIOPacket *)packet
 {
-    NSLog(@"didReceiveMessage() >>> data: %@", packet.data);
+    DDLogVerbose(@"didReceiveMessage() >>> data: %@", packet.data);
 }
 
 - (ChatDataSource *) getDataSourceForFriendname: (NSString *) friendname {
@@ -179,7 +182,7 @@
 }
 
 -(void) getLatestData {
-    NSLog(@"getLatestData");
+    DDLogVerbose(@"getLatestData");
     
     NSMutableArray * messageIds = [[NSMutableArray alloc] init];
     
@@ -188,7 +191,7 @@
         ChatDataSource * chatDataSource = [_chatDataSources objectForKey:username];
         NSString * spot = [ChatUtils getSpotUserA: [[IdentityController sharedInstance] getLoggedInUser] userB: username];
         
-        NSLog(@"getting message and control data for spot: %@",spot );
+        DDLogVerbose(@"getting message and control data for spot: %@",spot );
         NSMutableDictionary * messageId = [[NSMutableDictionary alloc] init];
         [messageId setObject: username forKey:@"username"];
         [messageId setObject: [NSNumber numberWithInteger: [chatDataSource latestMessageId]] forKey:@"messageid"];
@@ -330,7 +333,7 @@
 -(void) handleMessages: (NSArray *) messages forUsername: (NSString *) username {
     ChatDataSource * cds = [_chatDataSources objectForKey:username];
     if (!cds) {
-        NSLog(@"no chat data source for %@", username);
+        DDLogVerbose(@"no chat data source for %@", username);
         return;
     }
     
@@ -439,7 +442,7 @@
 }
 
 -(void) inviteAction:(NSString *) action forUsername:(NSString *)username{
-    NSLog(@"Invite action: %@, for username: %@", action, username);
+    DDLogVerbose(@"Invite action: %@, for username: %@", action, username);
     
     [[NetworkController sharedInstance]
      respondToInviteName:username action:action
@@ -479,7 +482,7 @@
     [[NetworkController sharedInstance]
      inviteFriend:username
      successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
-         NSLog(@"invite friend response: %d",  [operation.response statusCode]);
+         DDLogVerbose(@"invite friend response: %d",  [operation.response statusCode]);
          Friend * afriend = [[Friend alloc] init];
          afriend.name = username         ;
          afriend.flags = 2;
@@ -488,14 +491,14 @@
      }
      failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
          
-         NSLog(@"response failure: %@",  Error);
+         DDLogVerbose(@"response failure: %@",  Error);
          
      }];
 }
 
 - (void)friendInvited:(NSNotification *)notification
 {
-    NSLog(@"friendInvited");
+    DDLogVerbose(@"friendInvited");
     NSString * username = notification.object;
     
     Friend * theFriend = [_homeDataSource getFriendByName:username];
@@ -511,7 +514,7 @@
 
 - (void)friendInvite:(NSNotification *)notification
 {
-    NSLog(@"friendInvite");
+    DDLogVerbose(@"friendInvite");
     NSString * username = notification.object;
     
     Friend * theFriend = [_homeDataSource getFriendByName:username];
@@ -533,7 +536,7 @@
 
 - (void)friendDelete:(NSNotification *)notification
 {
-    NSLog(@"friendDelete");
+    DDLogVerbose(@"friendDelete");
     SurespotControlMessage * message = notification.object;
     
     Friend * afriend = [_homeDataSource getFriendByName:[message data]];

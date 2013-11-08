@@ -8,6 +8,9 @@
 
 #import "NetworkController.h"
 #import "ChatUtils.h"
+#import "DDLog.h"
+
+static const int ddLogLevel = LOG_LEVEL_OFF;
 
 NSString *const baseUrl = @"http://192.168.10.68:8080";
 // @"https://server.surespot.me:443"
@@ -155,7 +158,7 @@ NSString *const baseUrl = @"http://192.168.10.68:8080";
     NSString * jsonString =[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:jsonString,@"spotIds", nil];
     
-    NSLog(@"GetLatestData: params; %@", params);
+    DDLogVerbose(@"GetLatestData: params; %@", params);
     
     NSString * path = [NSString stringWithFormat:@"latestdata/%d", latestUserControlId];
     NSURLRequest *request = [self requestWithMethod:@"POST" path:path parameters: params];

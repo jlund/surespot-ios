@@ -33,6 +33,9 @@
 
 #import "SwipeView.h"
 #import <objc/message.h>
+#import "DDLog.h"
+
+static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 #import <Availability.h>
@@ -489,7 +492,7 @@
     if (self.window)
     {
         UITableView * view = view1;
-        NSLog(@"setFrameForView");
+        DDLogVerbose(@"setFrameForView");
         CGPoint center = view.center;
         if (_vertical)
         {
@@ -512,24 +515,24 @@
         {
             CGPoint point =CGPointMake(center.x, _scrollView.frame.size.height/2.0f);
             if (!CGPointEqualToPoint(view.center, point)) {
-                NSLog(@"setting new view center");
+                DDLogVerbose(@"setting new view center");
                 view.center = point;
             }
             else {
-                NSLog(@"center is the same, not setting");
+                DDLogVerbose(@"center is the same, not setting");
             }
             
         }
         
         CGRect rect =CGRectMake(0.0f, 0.0f, _itemSize.width, _itemSize.height);
         if (!CGRectEqualToRect(rect, view.bounds)) {
-            NSLog(@"setting bounds");
+            DDLogVerbose(@"setting bounds");
             CGPoint offset =        view.contentOffset;
             view.bounds = rect;
             [view setContentOffset:offset animated: NO];
         }
         else {
-            NSLog(@"bounds are the same, not setting");
+            DDLogVerbose(@"bounds are the same, not setting");
             
         }
         if (disableAnimation && animationEnabled) [UIView setAnimationsEnabled:YES];
@@ -538,7 +541,7 @@
 
 - (void)layOutItemViews
 {
-    NSLog(@"layoutItemViews");
+    DDLogVerbose(@"layoutItemViews");
     for (UIView *view in self.visibleItemViews)
     {
         [self setFrameForView:view atIndex:[self indexOfItemView:view]];
@@ -547,7 +550,7 @@
 
 - (void)updateLayout
 {
-    NSLog(@"updateLayout");
+    DDLogVerbose(@"updateLayout");
     [self updateScrollOffset];
     [self loadUnloadViews];
     [self layOutItemViews];
@@ -555,7 +558,7 @@
 
 - (void)layoutSubviews
 {
-    NSLog(@"layoutSubviews");
+    DDLogVerbose(@"layoutSubviews");
     [super layoutSubviews];
     [self updateItemSizeAndCount];
     [self updateScrollViewDimensions];
@@ -597,7 +600,7 @@
     //handle wrap
     [self updateScrollOffset];
 
-        NSLog(@"didScroll, offset: %f",_scrollOffset) ;
+        DDLogVerbose(@"didScroll, offset: %f",_scrollOffset) ;
     
     //update view
     //[self layOutItemViews];
@@ -630,7 +633,7 @@
 {
     if (_scrolling)
     {
-        NSLog(@"step scrolling");
+        DDLogVerbose(@"step scrolling");
         NSTimeInterval currentTime = [[NSDate date] timeIntervalSinceReferenceDate];
         NSTimeInterval time = fminf(1.0f, (currentTime - _startTime) / _scrollDuration);
         CGFloat delta = [self easeInOut:time];
@@ -657,7 +660,7 @@
     }
     else
     {
-        NSLog(@"step not scrolling");
+        DDLogVerbose(@"step not scrolling");
         [self stopAnimation];
     }
 }
@@ -781,7 +784,7 @@
 
 - (void)setScrollOffset:(CGFloat)scrollOffset
 {
-    NSLog(@"setScrollOffset");
+    DDLogVerbose(@"setScrollOffset");
     if (_scrollOffset != scrollOffset)
     {
         _scrollOffset = scrollOffset;
@@ -868,7 +871,7 @@
 
 - (UIView *)loadViewAtIndex:(NSInteger)index
 {
-    NSLog(@"loadViewAtIndex");
+    DDLogVerbose(@"loadViewAtIndex");
     UIView *view = [_dataSource swipeView:self viewForItemAtIndex:index reusingView:[self dequeueItemView]];
     if (view == nil)
     {
@@ -879,14 +882,14 @@
     if (oldView)
     {
         [self queueItemView:oldView];
-        NSLog(@"removeFromSuperview");
+        DDLogVerbose(@"removeFromSuperview");
         [oldView removeFromSuperview];
     }
     
     [self setItemView:view forIndex:index];
-    NSLog(@"setFrameForView before");
+    DDLogVerbose(@"setFrameForView before");
     [self setFrameForView:view atIndex:index];
-    NSLog(@"setFrameForView after");
+    DDLogVerbose(@"setFrameForView after");
     view.userInteractionEnabled = YES;
     [_scrollView addSubview:view];
     
@@ -979,7 +982,7 @@
 - (void)reloadData
 
 {
-    NSLog(@"swipeview reloadData");
+    DDLogVerbose(@"swipeview reloadData");
     //remove old views
     for (UIView *view in self.visibleItemViews)
     {

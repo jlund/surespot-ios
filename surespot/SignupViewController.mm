@@ -12,6 +12,9 @@
 #import "NetworkController.h"
 #import "NSData+Base64.h"
 #import "UIUtils.h"
+#import "DDLog.h"
+
+static const int ddLogLevel = LOG_LEVEL_OFF;
 
 @interface SignupViewController ()
 
@@ -75,14 +78,14 @@
      signature: signature
      version: @"ios is my bitch"
      successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
-         NSLog(@"signup response: %d",  [operation.response statusCode]);
+         DDLogVerbose(@"signup response: %d",  [operation.response statusCode]);
          [[IdentityController sharedInstance] createIdentityWithUsername:username andPassword:password andSalt:salt andKeys:keys];
          [self performSegueWithIdentifier: @"signupToMain" sender: nil];
          
      }
      failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
          
-         NSLog(@"signup response failure: %@",  Error);
+         DDLogVerbose(@"signup response failure: %@",  Error);
          
      }
      ];

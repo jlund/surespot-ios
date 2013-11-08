@@ -11,6 +11,7 @@
 #include <zlib.h>
 #include "secblock.h"
 #import "IdentityController.h"
+#import "DDLog.h"
 using CryptoPP::SecByteBlock;
 
 
@@ -18,6 +19,8 @@ NSString * const STATE_DIR = @"state";
 NSString * const HOME_FILENAME = @"home";
 NSString * const STATE_EXTENSION = @"sss";
 NSString * const CHAT_DATA_PREFIX = @"chatdata_";
+
+static const int ddLogLevel = LOG_LEVEL_OFF;
 
 @implementation FileController
 
@@ -28,7 +31,7 @@ NSString * const CHAT_DATA_PREFIX = @"chatdata_";
         NSError *error = nil;
         //Create one
         if (![[NSFileManager defaultManager] createDirectoryAtPath:appSupportDir withIntermediateDirectories:YES attributes:nil error:&error]) {
-            NSLog(@"%@", error.localizedDescription);
+            DDLogVerbose(@"%@", error.localizedDescription);
         }
         else {
             // *** OPTIONAL *** Mark the directory as excluded from iCloud backups
@@ -37,10 +40,10 @@ NSString * const CHAT_DATA_PREFIX = @"chatdata_";
                                 forKey:NSURLIsExcludedFromBackupKey
                                  error:&error])
             {
-                NSLog(@"Error excluding %@ from backup %@", [url lastPathComponent], error.localizedDescription);
+                DDLogVerbose(@"Error excluding %@ from backup %@", [url lastPathComponent], error.localizedDescription);
             }
             else {
-                NSLog(@"Yay");
+                DDLogVerbose(@"Yay");
             }
         }
     }
@@ -67,7 +70,7 @@ NSString * const CHAT_DATA_PREFIX = @"chatdata_";
         NSString * dir = [[[FileController getAppSupportDir] stringByAppendingPathComponent:STATE_DIR ] stringByAppendingPathComponent:user];
         NSError * error = nil;
         if (![[NSFileManager defaultManager] createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:nil error:&error]) {
-            NSLog(@"%@", error.localizedDescription);
+            DDLogVerbose(@"%@", error.localizedDescription);
         }
         
         return [dir stringByAppendingPathComponent:[filename stringByAppendingPathExtension:STATE_EXTENSION]];

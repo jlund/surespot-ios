@@ -9,6 +9,9 @@
 #import "HomeDataSource.h"
 #import "NetworkController.h"
 #import "FileController.h"
+#import "DDLog.h"
+
+static const int ddLogLevel = LOG_LEVEL_OFF;
 
 @interface  HomeDataSource()
 
@@ -22,7 +25,7 @@
         //if we have data on file, load it
         //otherwise load from network
         NSString * path =[FileController getHomeFilename];
-        NSLog(@"looking for home data at: %@", path);
+        DDLogVerbose(@"looking for home data at: %@", path);
         id homeData = nil;
         @try {
             homeData = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
@@ -31,7 +34,7 @@
             
         }
         if (homeData) {
-            NSLog(@"loading home data from: %@", path);
+            DDLogVerbose(@"loading home data from: %@", path);
             _currentChat = [homeData objectForKey:@"currentChat"];
             _latestUserControlId = [[homeData objectForKey:@"userControlId"] integerValue];
             _friends = [homeData objectForKey:@"friends"];
@@ -40,19 +43,19 @@
             }
         }
         else {
-            NSLog(@"loading home data from cloud");
+            DDLogVerbose(@"loading home data from cloud");
             [self getFriends];
         }
     }
     
-    NSLog(@"HomeDataSource init, latestUserControlId: %d, currentChat: %@", _latestUserControlId, _currentChat);
+    DDLogVerbose(@"HomeDataSource init, latestUserControlId: %d, currentChat: %@", _latestUserControlId, _currentChat);
     return self;
 }
 
 -(void) getFriends {
     _friends = [[NSMutableArray alloc] init];
     [[NetworkController sharedInstance] getFriendsSuccessBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        NSLog(@"get friends response: %d",  [response statusCode]);
+        DDLogVerbose(@"get friends response: %d",  [response statusCode]);
         
         _latestUserControlId = [[JSON objectForKey:@"userControlId"] integerValue];
         _friends = [[NSMutableArray alloc] init];
@@ -65,7 +68,7 @@
         [self postRefresh];
         
     } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
-        NSLog(@"response failure: %@",  Error);
+        DDLogVerbose(@"response failure: %@",  Error);
         [self postRefresh];
     }];
     
@@ -116,7 +119,7 @@
 -(void) writeToDisk {
     if (_latestUserControlId > 0 || _friends.count > 0) {
         NSString * filename =[FileController getHomeFilename];
-        NSLog(@"saving home data to disk at %@, latestUSerControlId: %d, currentChat: %@",filename, _latestUserControlId, _currentChat);
+        DDLogVerbose(@"saving home data to disk at %@, latestUSerControlId: %d, currentChat: %@",filename, _latestUserControlId, _currentChat);
         NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
         if (_friends.count > 0) {
             [dict setObject:_friends  forKey:@"friends"];
@@ -128,7 +131,7 @@
             [dict setObject:_currentChat forKey:@"currentChat"];
         }
         BOOL saved =[NSKeyedArchiver archiveRootObject:dict toFile:filename];
-        NSLog(@"save success?: %@",saved ? @"YES" : @"NO");
+        DDLogVerbose(@"save success?: %@",saved ? @"YES" : @"NO");
     }
 }
 

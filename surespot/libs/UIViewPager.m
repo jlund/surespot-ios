@@ -44,7 +44,7 @@
     int count = [_delegate pageCount];
     float offset = _horizontalOffset - currentPage * width;
    
- //   NSLog(@"layoutsubviews, page: %d, count: %d,  adj offset: %f", currentPage, count, offset);
+ //   DDLogVerbose(@"layoutsubviews, page: %d, count: %d,  adj offset: %f", currentPage, count, offset);
     
     if (count == 0) {return;}
     
@@ -96,7 +96,7 @@
 #pragma mark UIScrollViewDelegate protocol implementation.
 
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView {
-   // NSLog(@"Content offset:%@",NSStringFromCGPoint(scrollView.contentOffset));
+   // DDLogVerbose(@"Content offset:%@",NSStringFromCGPoint(scrollView.contentOffset));
     _horizontalOffset = scrollView.contentOffset.x;
     [self setNeedsLayout];
 }

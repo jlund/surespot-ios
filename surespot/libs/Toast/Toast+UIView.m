@@ -9,6 +9,9 @@
 #import "Toast+UIView.h"
 #import <QuartzCore/QuartzCore.h>
 #import <objc/runtime.h>
+#import "DDLog.h"
+
+static const int ddLogLevel = LOG_LEVEL_OFF;
 
 /*
  *  CONFIGURE THESE VALUES TO ADJUST LOOK & FEEL,
@@ -184,7 +187,7 @@ static const NSString * CSToastActivityViewKey  = @"CSToastActivityViewKey";
         return [point CGPointValue];
     }
     
-    NSLog(@"Warning: Invalid position for toast.");
+    DDLogVerbose(@"Warning: Invalid position for toast.");
     return [self centerPointForPosition:CSToastDefaultPosition withToast:toast];
 }
 

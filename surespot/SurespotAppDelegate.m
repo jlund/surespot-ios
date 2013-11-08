@@ -9,6 +9,11 @@
 #import "SurespotAppDelegate.h"
 #import "SurespotMessage.h"
 #import "ChatController.h"
+#import "DDLog.h"
+#import "DDTTYLogger.h"
+#import "SurespotLogFormatter.h"
+
+static const int ddLogLevel = LOG_LEVEL_OFF;
 
 @implementation SurespotAppDelegate
 
@@ -16,15 +21,17 @@
 {
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge|UIReturnKeyDefault) ];
     if  (launchOptions) {
-        NSLog(@"received launch options: %@", launchOptions);
+        DDLogVerbose(@"received launch options: %@", launchOptions);
     }
     
+    [DDLog addLogger:[DDTTYLogger sharedInstance]];
+    [[DDTTYLogger sharedInstance]setLogFormatter: [SurespotLogFormatter new]];
     
     return YES;
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    NSLog(@"received remote notification: %@, applicationstate: %d", userInfo, [application applicationState]);
+    DDLogVerbose(@"received remote notification: %@, applicationstate: %d", userInfo, [application applicationState]);
     
     // id apsDict = [userInfo objectForKey:@"aps" ];
     // NSDictionary * alertDict = [apsDict objectForKey:@"alert" ];
@@ -89,13 +96,13 @@
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     
- //   NSLog(@"background");
+ //   DDLogVerbose(@"background");
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-  //  NSLog(@"foreground");
+  //  DDLogVerbose(@"foreground");
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -106,7 +113,7 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-    NSLog(@"application will terminate");
+    DDLogVerbose(@"application will terminate");
 }
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
@@ -116,7 +123,7 @@
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
-    NSLog(@"Error in registration. Error: %@", err);
+    DDLogVerbose(@"Error in registration. Error: %@", err);
 }
 
 

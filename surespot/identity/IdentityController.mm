@@ -17,6 +17,9 @@
 #include <zlib.h>
 #import "CredentialCachingController.h"
 #import "ChatController.h"
+#import "DDLog.h"
+
+static const int ddLogLevel = LOG_LEVEL_OFF;
 
 @interface IdentityController()
 @property  (nonatomic, strong) SurespotIdentity * loggedInIdentity;
@@ -211,19 +214,19 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
 }
 
 - (void) getTheirLatestVersionForUsername: (NSString *) username callback:(CallbackStringBlock) callback {
-    NSLog(@"getTheirLatestVersionForUsername");
+    DDLogVerbose(@"getTheirLatestVersionForUsername");
     
     [[NetworkController sharedInstance]
      getKeyVersionForUsername: username
      successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
          NSString * responseObjectS =   [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-         NSLog(@"getTheirLatestVersionForUsername response: %d, object: %@",  [operation.response statusCode], responseObjectS);
+         DDLogVerbose(@"getTheirLatestVersionForUsername response: %d, object: %@",  [operation.response statusCode], responseObjectS);
          callback(responseObjectS);
          
      }
      failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
          
-         NSLog(@"response failure: %@",  Error);
+         DDLogVerbose(@"response failure: %@",  Error);
          callback(nil);
          
      }];

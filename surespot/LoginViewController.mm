@@ -13,6 +13,9 @@
 #import "NSData+Base64.h"
 #import "UIUtils.h"
 #import "LoadingView.h"
+#import "DDLog.h"
+
+static const int ddLogLevel = LOG_LEVEL_OFF;
 
 @interface LoginViewController ()
 @property (atomic, strong) NSArray * identityNames;
@@ -48,7 +51,7 @@
         return;
     }
     
-    NSLog(@"starting login");
+    DDLogVerbose(@"starting login");
     self.navigationItem.rightBarButtonItem.enabled = NO;
     [_textPassword resignFirstResponder];
     _progressView = [LoadingView loadingViewInView:self.view];
@@ -73,7 +76,7 @@
         
         
         
-        // NSLog(@"loaded salt: %@", [identity salt]);
+        // DDLogVerbose(@"loaded salt: %@", [identity salt]);
         
         NSData * decodedSalt = [NSData dataFromBase64String: [identity salt]];
         NSData * derivedPassword = [EncryptionController deriveKeyUsingPassword:password andSalt: decodedSalt];
@@ -89,7 +92,7 @@
          andPassword:passwordString
          andSignature: signatureString
          successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-             NSLog(@"login response: %d",  [response statusCode]);
+             DDLogVerbose(@"login response: %d",  [response statusCode]);
              
              [[IdentityController sharedInstance] userLoggedInWithIdentity:identity];
              [self performSegueWithIdentifier: @"loginToMainSegue" sender: nil ];
@@ -97,7 +100,7 @@
              self.navigationItem.rightBarButtonItem.enabled = YES;
          }
          failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
-             NSLog(@"response failure: %@",  Error);
+             DDLogVerbose(@"response failure: %@",  Error);
              [UIUtils showToastView:_userPicker key: @"login_try_again_later" duration: 2.0];
              [_progressView removeView];
              self.navigationItem.rightBarButtonItem.enabled = YES;

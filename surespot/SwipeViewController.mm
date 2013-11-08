@@ -20,6 +20,9 @@
 #import "FriendDelegate.h"
 #import "UIUtils.h"
 #import "LoginViewController.h"
+#import "DDLog.h"
+
+static const int ddLogLevel = LOG_LEVEL_INFO;
 
 //#import <QuartzCore/CATransaction.h>
 
@@ -36,7 +39,7 @@
 
 - (void)viewDidLoad
 {
-    NSLog(@"swipeviewdidload %@", self);
+    DDLogVerbose(@"swipeviewdidload %@", self);
     [super viewDidLoad];
     
     _dateFormatQueue = dispatch_queue_create("date format queue", NULL);
@@ -137,7 +140,7 @@
     
     
     
-    NSLog(@"keyboardWasShown");
+    DDLogVerbose(@"keyboardWasShown");
     
     
     UITableView * tableView =(UITableView *)_friendView;
@@ -148,7 +151,7 @@
     
     
     UIEdgeInsets contentInsets =  tableView.contentInset;
-    NSLog(@"pre move originy %f,content insets bottom %f, view height: %f", _textField.frame.origin.y, contentInsets.bottom, tableView.frame.size.height);
+    DDLogVerbose(@"pre move originy %f,content insets bottom %f, view height: %f", _textField.frame.origin.y, contentInsets.bottom, tableView.frame.size.height);
     
     NSDictionary* info = [aNotification userInfo];
     CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
@@ -158,12 +161,12 @@
     //    textFieldFrame.size.height -= keyboardRect.size.height;
     _textField.frame = textFieldFrame;
     
-    NSLog(@"keyboard height before: %f", keyboardRect.size.height);
+    DDLogVerbose(@"keyboard height before: %f", keyboardRect.size.height);
     
     keyboardState.keyboardRect = keyboardRect;
     
     
-    NSLog(@"after move content insets bottom %f, view height: %f", contentInsets.bottom, tableView.frame.size.height);
+    DDLogVerbose(@"after move content insets bottom %f, view height: %f", contentInsets.bottom, tableView.frame.size.height);
     
     contentInsets.bottom = keyboardState.keyboardRect.size.height;
     tableView.contentInset = contentInsets;
@@ -174,7 +177,7 @@
     tableView.scrollIndicatorInsets = scrollInsets;
     
     
-    NSLog(@"new content insets bottom %f", contentInsets.bottom);
+    DDLogVerbose(@"new content insets bottom %f", contentInsets.bottom);
     
     keyboardState.offset = tableView.contentOffset;
     
@@ -189,7 +192,7 @@
 // Called when the UIKeyboardWillHideNotification is sent
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification
 {
-    NSLog(@"keyboardWillBeHidden");
+    DDLogVerbose(@"keyboardWillBeHidden");
     [self handleKeyboardHide];
     
 }
@@ -225,7 +228,7 @@
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-    NSLog(@"will animate, setting table view framewidth/height %f,%f",_swipeView.frame.size.width,_swipeView.frame.size.height);
+    DDLogVerbose(@"will animate, setting table view framewidth/height %f,%f",_swipeView.frame.size.width,_swipeView.frame.size.height);
     
     //    _friendView.frame = _swipeView.frame;
     //       for (UITableView *tableView in [_chats allValues]) {
@@ -242,18 +245,18 @@
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)orientation
                                 duration:(NSTimeInterval)duration
 {
-    NSLog(@"will rotate");
+    DDLogVerbose(@"will rotate");
     _swipeView.suppressScrollEvent = YES;
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromOrientation
 {
-    NSLog(@"did rotate");
+    DDLogVerbose(@"did rotate");
     _swipeView.suppressScrollEvent= NO;
 }
 
 - (void) swipeViewDidScroll:(SwipeView *)scrollView {
-    NSLog(@"swipeViewDidScroll");
+    DDLogVerbose(@"swipeViewDidScroll");
     [_viewPager scrollViewDidScroll: scrollView.scrollView];
     
 }
@@ -276,7 +279,7 @@
 }
 
 -(NSString * ) titleForLabelForPage:(NSInteger)page {
-    NSLog(@"titleForLabelForPage %d", page);
+    DDLogVerbose(@"titleForLabelForPage %d", page);
     if (page == 0) {
         return @"home";
     }
@@ -307,10 +310,10 @@
 
 - (UIView *)swipeView:(SwipeView *)swipeView viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view
 {
-    NSLog(@"view for item at index %d", index);
+    DDLogVerbose(@"view for item at index %d", index);
     if (index == 0) {
         if (!_friendView) {
-            NSLog(@"creating friend view");
+            DDLogVerbose(@"creating friend view");
             
             _friendView = [[UITableView alloc] initWithFrame:swipeView.frame style: UITableViewStylePlain];
             [_friendView registerNib:[UINib nibWithNibName:@"HomeCell" bundle:nil] forCellReuseIdentifier:@"HomeCell"];
@@ -318,14 +321,14 @@
             _friendView.dataSource = self;
         }
         
-        NSLog(@"returning friend view %@", _friendView);
+        DDLogVerbose(@"returning friend view %@", _friendView);
         //return view
         return _friendView;
         
         
     }
     else {
-        NSLog(@"returning chat view");
+        DDLogVerbose(@"returning chat view");
         NSArray *keys = [_chats allKeys];
         id aKey = [keys objectAtIndex:index -1];
         id anObject = [_chats objectForKey:aKey];
@@ -352,21 +355,21 @@
         [[ChatController sharedInstance] setCurrentChat: [_chats allKeys][currPage-1]];
         
     }
-    NSLog(@"swipeview index changed to %d", currPage);
+    DDLogVerbose(@"swipeview index changed to %d", currPage);
     [tableview reloadData];
     
 }
 
 - (void)swipeView:(SwipeView *)swipeView didSelectItemAtIndex:(NSInteger)index
 {
-    NSLog(@"Selected item at index %i", index);
+    DDLogVerbose(@"Selected item at index %i", index);
 }
 
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    NSLog(@"number of sections");
+    DDLogVerbose(@"number of sections");
     // Return the number of sections.
     return 1;
 }
@@ -381,11 +384,11 @@
     else {
         index++;
     }
-    NSLog(@"number of rows in section, index: %d", index);
+    DDLogVerbose(@"number of rows in section, index: %d", index);
     // Return the number of rows in the section
     if (index == 0) {
         if (![[ChatController sharedInstance] getHomeDataSource]) {
-            NSLog(@"returning 0 rows");
+            DDLogVerbose(@"returning 0 rows");
             return 0;
         }
         
@@ -410,7 +413,7 @@
     
     NSInteger index = [_swipeView indexOfItemViewOrSubview:tableView];
     
-    //  NSLog(@"height for row, index: %d, indexPath: %@", index, indexPath);
+    //  DDLogVerbose(@"height for row, index: %d, indexPath: %@", index, indexPath);
     if (index == NSNotFound) {
         return 0;
     }
@@ -454,7 +457,7 @@
     
     
     NSInteger index = [_swipeView indexOfItemViewOrSubview:tableView];
-    //  NSLog(@"cell for row, index: %d, indexPath: %@", index, indexPath);
+    //  DDLogVerbose(@"cell for row, index: %d, indexPath: %@", index, indexPath);
     if (index == NSNotFound) {
         static NSString *CellIdentifier = @"Cell";
         UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
@@ -527,10 +530,10 @@
                     
                     [message setLoaded:NO];
                     [message setLoading:YES];
-                    //    NSLog(@"decrypting data for iv: %@", [message iv]);
+                    //    DDLogVerbose(@"decrypting data for iv: %@", [message iv]);
                     [[MessageProcessor sharedInstance] decryptMessage:message width: tableView.frame.size.width completionCallback:^(SurespotMessage  * message){
                         
-                        //   NSLog(@"data decrypted, reloading row for iv %@", [message iv]);
+                        //   DDLogVerbose(@"data decrypted, reloading row for iv %@", [message iv]);
                         dispatch_async(dispatch_get_main_queue(), ^{
                             //  [tableView reloadData];
                             [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
@@ -542,7 +545,7 @@
                 }
             }
             else {
-                //   NSLog(@"setting text for iv: %@ to: %@", [message iv], plainData);
+                //   DDLogVerbose(@"setting text for iv: %@ to: %@", [message iv], plainData);
                 cell.messageLabel.text = plainData;
                 cell.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
                 cell.messageStatusLabel.text = [self stringFromDate:[message dateTime]];
@@ -574,7 +577,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSInteger page = [_swipeView indexOfItemViewOrSubview:tableView];
-    NSLog(@"selected, on page: %d", page);
+    DDLogVerbose(@"selected, on page: %d", page);
     
     if (page == 0) {
         
@@ -602,7 +605,7 @@
         [chatView registerNib:[UINib nibWithNibName:@"TheirMessageCell" bundle:nil] forCellReuseIdentifier:@"TheirMessageView"];
         
         NSInteger index = _chats.count;
-        NSLog(@"creatingindex: %d", index);
+        DDLogVerbose(@"creatingindex: %d", index);
         
         [_swipeView loadViewAtIndex:index];
         [_swipeView updateItemSizeAndCount];
@@ -619,7 +622,7 @@
         if (show) {
             [[ChatController sharedInstance] setCurrentChat: username];
             NSInteger index = [[_chats allKeys] indexOfObject:username] + 1;
-            NSLog(@"scrolling to index: %d", index);
+            DDLogVerbose(@"scrolling to index: %d", index);
             [_swipeView scrollToPage:index duration:0.500];
             
         }
@@ -627,7 +630,7 @@
 }
 
 -(void) showChat:(NSString *) username {
-    NSLog(@"showChat, %@", username);
+    DDLogVerbose(@"showChat, %@", username);
     
     [self loadChat:username show:YES];
     [_textField resignFirstResponder];
@@ -669,7 +672,7 @@
 
 - (void)refreshMessages:(NSNotification *)notification
 {
-    NSLog(@"refreshMessages");
+    DDLogVerbose(@"refreshMessages");
     NSString * username = notification.object;
     
     id tableView = [_chats objectForKey:username];
@@ -691,7 +694,7 @@
 
 - (void)refreshHome:(NSNotification *)notification
 {
-    NSLog(@"refreshHome");
+    DDLogVerbose(@"refreshHome");
     
     if (_friendView) {
         [_friendView reloadData];
@@ -718,7 +721,7 @@
 
 - (void)pushNotification:(NSNotification *)notification
 {
-    NSLog(@"pushNotification");
+    DDLogVerbose(@"pushNotification");
     NSDictionary * notificationData = notification.object;
     
     NSString * from =[ notificationData objectForKey:@"from"];
@@ -750,7 +753,7 @@
 -(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     NSString *buttonTitle = [actionSheet buttonTitleAtIndex:buttonIndex];
     
-    NSLog(@"menu click: %@", buttonTitle);
+    DDLogVerbose(@"menu click: %@", buttonTitle);
     
     if ([buttonTitle isEqualToString:@"close tab"]) {
         [self closeTab];

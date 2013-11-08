@@ -9,11 +9,14 @@
 #import "SurespotIdentity.h"
 #import "CredentialCachingController.h"
 #import "NSData+Base64.h"
+#import "DDLog.h"
+
+
 
 using CryptoPP::BitBucket;
 
 static CryptoPP::AutoSeededRandomPool rng;
-
+static const int ddLogLevel = LOG_LEVEL_OFF;
 
 @implementation EncryptionController
 
@@ -87,7 +90,7 @@ int const PBKDF_ROUNDS = 1000;
         df.MessageEnd();
     }
     catch (CryptoPP::HashVerificationFilter::HashVerificationFailed e) {
-        NSLog(@"error decrypting identity: %@", [NSString stringWithUTF8String: e.GetWhat().data()]);
+        DDLogVerbose(@"error decrypting identity: %@", [NSString stringWithUTF8String: e.GetWhat().data()]);
         return nil;
     }
     

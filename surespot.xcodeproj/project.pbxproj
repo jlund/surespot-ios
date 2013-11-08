@@ -53,12 +53,12 @@
 		6654441617F37BCF00F62F7F /* SwipeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6654441517F37BCF00F62F7F /* SwipeViewController.mm */; };
 		66B3C8ED17B15F2300CC96EE /* ChatController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66B3C8EC17B15F2300CC96EE /* ChatController.mm */; };
 		66B3C8F017B17AC800CC96EE /* ChatDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B3C8EF17B17AC800CC96EE /* ChatDataSource.m */; };
+		66D3B04D182D47DF00B37A6C /* SurespotLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 66D3B04C182D47DF00B37A6C /* SurespotLogFormatter.m */; };
 		66E4F5B6176298CB00596E6B /* libcryptopp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E4F5A1176298CB00596E6B /* libcryptopp.a */; };
 		66E4F5B7176298CB00596E6B /* SocketIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5A4176298CB00596E6B /* SocketIO.m */; };
 		66E4F5B8176298CB00596E6B /* SocketIOJSONSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5A6176298CB00596E6B /* SocketIOJSONSerialization.m */; };
 		66E4F5B9176298CB00596E6B /* SocketIOPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5A8176298CB00596E6B /* SocketIOPacket.m */; };
 		66E4F5BA176298CB00596E6B /* SocketIOTransportWebsocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5AB176298CB00596E6B /* SocketIOTransportWebsocket.m */; };
-		66E4F5BB176298CB00596E6B /* SocketIOTransportXHR.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5AD176298CB00596E6B /* SocketIOTransportXHR.m */; };
 		66E4F5BC176298CB00596E6B /* base64.c in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5AF176298CB00596E6B /* base64.c */; };
 		66E4F5BD176298CB00596E6B /* NSData+SRB64Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5B2176298CB00596E6B /* NSData+SRB64Additions.m */; };
 		66E4F5BE176298CB00596E6B /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5B5176298CB00596E6B /* SRWebSocket.m */; };
@@ -85,6 +85,8 @@
 		66FF0FF6182AE6960038ECA6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66FF0FF5182AE6960038ECA6 /* QuartzCore.framework */; };
 		66FF0FF8182AEA280038ECA6 /* surespot_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 66FF0FF7182AEA280038ECA6 /* surespot_logo.png */; };
 		66FF0FFB182B04B10038ECA6 /* UIViewPager.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FFA182B04B10038ECA6 /* UIViewPager.m */; };
+		66FF1001182D3D920038ECA6 /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FFE182D3D920038ECA6 /* DDLog.m */; };
+		66FF1002182D3D920038ECA6 /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF1000182D3D920038ECA6 /* DDTTYLogger.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,7 +114,7 @@
 		6604A2D217626B9E0072216A /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		6604A2D417626B9E0072216A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		6604A2DC17626B9E0072216A /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
-		6604A2DD17626B9E0072216A /* LoginViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = LoginViewController.mm; sourceTree = "<group>"; };
+		6604A2DD17626B9E0072216A /* LoginViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = LoginViewController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6604A2E417626B9E0072216A /* surespotTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = surespotTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6604A2E517626B9E0072216A /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		6604A2ED17626B9E0072216A /* surespotTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "surespotTests-Info.plist"; sourceTree = "<group>"; };
@@ -120,9 +122,9 @@
 		6604A2F117626B9E0072216A /* surespotTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = surespotTests.h; sourceTree = "<group>"; };
 		6604A2F217626B9E0072216A /* surespotTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = surespotTests.m; sourceTree = "<group>"; };
 		6606E4EB179D9C3A004199BC /* SignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignupViewController.h; sourceTree = "<group>"; };
-		6606E4EC179D9C3A004199BC /* SignupViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SignupViewController.mm; sourceTree = "<group>"; };
+		6606E4EC179D9C3A004199BC /* SignupViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = SignupViewController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6606E4EE179DB134004199BC /* FileController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileController.h; path = utils/FileController.h; sourceTree = "<group>"; };
-		6606E4EF179DB134004199BC /* FileController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = FileController.mm; path = utils/FileController.mm; sourceTree = "<group>"; };
+		6606E4EF179DB134004199BC /* FileController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = FileController.mm; path = utils/FileController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		660EB27817FE3D7800DBC53C /* KeyboardState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardState.h; sourceTree = "<group>"; };
 		660EB27917FE3D7800DBC53C /* KeyboardState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyboardState.m; sourceTree = "<group>"; };
 		660EB27B17FE64D800DBC53C /* ChatUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatUtils.h; path = chat/ChatUtils.h; sourceTree = "<group>"; };
@@ -136,9 +138,9 @@
 		661C2EC71762C3C0000649E7 /* IdentityKeys.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = IdentityKeys.mm; path = encryption/IdentityKeys.mm; sourceTree = "<group>"; };
 		661C2EC91762C536000649E7 /* IdentityKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IdentityKeys.h; path = encryption/IdentityKeys.h; sourceTree = "<group>"; };
 		661C2ECC1763A214000649E7 /* IdentityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IdentityController.h; path = identity/IdentityController.h; sourceTree = "<group>"; };
-		661C2ECD1763A214000649E7 /* IdentityController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = IdentityController.mm; path = identity/IdentityController.mm; sourceTree = "<group>"; };
+		661C2ECD1763A214000649E7 /* IdentityController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = IdentityController.mm; path = identity/IdentityController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		661C2ECF1763A253000649E7 /* EncryptionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EncryptionController.h; path = encryption/EncryptionController.h; sourceTree = "<group>"; };
-		661C2ED01763A253000649E7 /* EncryptionController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = EncryptionController.mm; path = encryption/EncryptionController.mm; sourceTree = "<group>"; };
+		661C2ED01763A253000649E7 /* EncryptionController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = EncryptionController.mm; path = encryption/EncryptionController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		661C2ED21763CB56000649E7 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		661C2ED41763D493000649E7 /* NSData+Gunzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Gunzip.h"; sourceTree = "<group>"; };
 		661C2ED51763D4B9000649E7 /* NSData+Gunzip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Gunzip.m"; sourceTree = "<group>"; };
@@ -147,7 +149,7 @@
 		6637107A1812EA1D009D5195 /* GenerateSharedSecretOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GenerateSharedSecretOperation.h; path = identity/GenerateSharedSecretOperation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6637107B1812EA1D009D5195 /* GenerateSharedSecretOperation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = GenerateSharedSecretOperation.mm; path = identity/GenerateSharedSecretOperation.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6637107E1813172F009D5195 /* EGOCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOCache.h; sourceTree = "<group>"; };
-		6637107F1813172F009D5195 /* EGOCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOCache.m; sourceTree = "<group>"; };
+		6637107F1813172F009D5195 /* EGOCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EGOCache.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		66371084181331E8009D5195 /* MessageProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageProcessor.h; path = chat/MessageProcessor.h; sourceTree = "<group>"; };
 		66371085181331E8009D5195 /* MessageProcessor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MessageProcessor.mm; path = chat/MessageProcessor.mm; sourceTree = "<group>"; };
 		6637108718134295009D5195 /* MessageDecryptionOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageDecryptionOperation.h; path = chat/MessageDecryptionOperation.h; sourceTree = "<group>"; };
@@ -155,7 +157,7 @@
 		6637108A18140FB2009D5195 /* GetPublicKeysOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GetPublicKeysOperation.h; path = identity/GetPublicKeysOperation.h; sourceTree = "<group>"; };
 		6637108B18140FB2009D5195 /* GetPublicKeysOperation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = GetPublicKeysOperation.mm; path = identity/GetPublicKeysOperation.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6637108D181424DE009D5195 /* GetSharedSecretOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GetSharedSecretOperation.h; path = identity/GetSharedSecretOperation.h; sourceTree = "<group>"; };
-		6637108E181424DE009D5195 /* GetSharedSecretOperation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GetSharedSecretOperation.mm; path = identity/GetSharedSecretOperation.mm; sourceTree = "<group>"; };
+		6637108E181424DE009D5195 /* GetSharedSecretOperation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = GetSharedSecretOperation.mm; path = identity/GetSharedSecretOperation.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6640765C1821856D00BFD974 /* MessageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageView.h; path = chat/MessageView.h; sourceTree = "<group>"; };
 		6640765D1821856D00BFD974 /* MessageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageView.m; path = chat/MessageView.m; sourceTree = "<group>"; };
 		664076611821892700BFD974 /* OurMessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OurMessageCell.xib; sourceTree = "<group>"; };
@@ -169,13 +171,15 @@
 		664076791822D52800BFD974 /* SurespotControlMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SurespotControlMessage.h; path = chat/SurespotControlMessage.h; sourceTree = "<group>"; };
 		6640767A1822D52800BFD974 /* SurespotControlMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SurespotControlMessage.m; path = chat/SurespotControlMessage.m; sourceTree = "<group>"; };
 		6654441117F37A3F00F62F7F /* SwipeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeView.h; sourceTree = "<group>"; };
-		6654441217F37A3F00F62F7F /* SwipeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwipeView.m; sourceTree = "<group>"; };
+		6654441217F37A3F00F62F7F /* SwipeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SwipeView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6654441417F37BCE00F62F7F /* SwipeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeViewController.h; sourceTree = "<group>"; };
 		6654441517F37BCF00F62F7F /* SwipeViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = SwipeViewController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		66B3C8EB17B15F2300CC96EE /* ChatController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatController.h; path = chat/ChatController.h; sourceTree = "<group>"; };
 		66B3C8EC17B15F2300CC96EE /* ChatController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = ChatController.mm; path = chat/ChatController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		66B3C8EE17B17AC800CC96EE /* ChatDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatDataSource.h; path = chat/ChatDataSource.h; sourceTree = "<group>"; };
 		66B3C8EF17B17AC800CC96EE /* ChatDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = ChatDataSource.m; path = chat/ChatDataSource.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		66D3B04B182D47DF00B37A6C /* SurespotLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SurespotLogFormatter.h; path = utils/SurespotLogFormatter.h; sourceTree = "<group>"; };
+		66D3B04C182D47DF00B37A6C /* SurespotLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SurespotLogFormatter.m; path = utils/SurespotLogFormatter.m; sourceTree = "<group>"; };
 		66E4F51A176298CB00596E6B /* 3way.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 3way.h; sourceTree = "<group>"; };
 		66E4F51B176298CB00596E6B /* adler32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adler32.h; sourceTree = "<group>"; };
 		66E4F51C176298CB00596E6B /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
@@ -312,23 +316,21 @@
 		66E4F59F176298CB00596E6B /* zlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zlib.h; sourceTree = "<group>"; };
 		66E4F5A1176298CB00596E6B /* libcryptopp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcryptopp.a; sourceTree = "<group>"; };
 		66E4F5A3176298CB00596E6B /* SocketIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketIO.h; sourceTree = "<group>"; };
-		66E4F5A4176298CB00596E6B /* SocketIO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketIO.m; sourceTree = "<group>"; };
+		66E4F5A4176298CB00596E6B /* SocketIO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SocketIO.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		66E4F5A5176298CB00596E6B /* SocketIOJSONSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketIOJSONSerialization.h; sourceTree = "<group>"; };
 		66E4F5A6176298CB00596E6B /* SocketIOJSONSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketIOJSONSerialization.m; sourceTree = "<group>"; };
 		66E4F5A7176298CB00596E6B /* SocketIOPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketIOPacket.h; sourceTree = "<group>"; };
 		66E4F5A8176298CB00596E6B /* SocketIOPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketIOPacket.m; sourceTree = "<group>"; };
 		66E4F5A9176298CB00596E6B /* SocketIOTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketIOTransport.h; sourceTree = "<group>"; };
 		66E4F5AA176298CB00596E6B /* SocketIOTransportWebsocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketIOTransportWebsocket.h; sourceTree = "<group>"; };
-		66E4F5AB176298CB00596E6B /* SocketIOTransportWebsocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketIOTransportWebsocket.m; sourceTree = "<group>"; };
-		66E4F5AC176298CB00596E6B /* SocketIOTransportXHR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketIOTransportXHR.h; sourceTree = "<group>"; };
-		66E4F5AD176298CB00596E6B /* SocketIOTransportXHR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketIOTransportXHR.m; sourceTree = "<group>"; };
+		66E4F5AB176298CB00596E6B /* SocketIOTransportWebsocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SocketIOTransportWebsocket.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		66E4F5AF176298CB00596E6B /* base64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = base64.c; sourceTree = "<group>"; };
 		66E4F5B0176298CB00596E6B /* base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
 		66E4F5B1176298CB00596E6B /* NSData+SRB64Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+SRB64Additions.h"; sourceTree = "<group>"; };
 		66E4F5B2176298CB00596E6B /* NSData+SRB64Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+SRB64Additions.m"; sourceTree = "<group>"; };
 		66E4F5B3176298CB00596E6B /* SocketRocket-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SocketRocket-Prefix.pch"; sourceTree = "<group>"; };
 		66E4F5B4176298CB00596E6B /* SRWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRWebSocket.h; sourceTree = "<group>"; };
-		66E4F5B5176298CB00596E6B /* SRWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRWebSocket.m; sourceTree = "<group>"; };
+		66E4F5B5176298CB00596E6B /* SRWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SRWebSocket.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		66E4F5BF17629B4500596E6B /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		66E4F5C117629B5C00596E6B /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		66E4F5C317629B6400596E6B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -337,7 +339,7 @@
 		66E6536E17B0583F000F81BD /* PublicKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PublicKeys.h; path = identity/PublicKeys.h; sourceTree = "<group>"; };
 		66E6536F17B0583F000F81BD /* PublicKeys.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PublicKeys.mm; path = identity/PublicKeys.mm; sourceTree = "<group>"; };
 		66EC60F8176E494900937467 /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
-		66EC60F9176E494900937467 /* AFHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPClient.m; sourceTree = "<group>"; };
+		66EC60F9176E494900937467 /* AFHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AFHTTPClient.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		66EC60FA176E494900937467 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		66EC60FB176E494900937467 /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
 		66EC60FC176E494900937467 /* AFImageRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFImageRequestOperation.h; sourceTree = "<group>"; };
@@ -356,13 +358,13 @@
 		66EC6109176E494900937467 /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
 		66EC610A176E494900937467 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
 		66EC6115176E49F800937467 /* NetworkController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NetworkController.h; path = network/NetworkController.h; sourceTree = "<group>"; };
-		66EC6116176E49F800937467 /* NetworkController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NetworkController.m; path = network/NetworkController.m; sourceTree = "<group>"; };
+		66EC6116176E49F800937467 /* NetworkController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = NetworkController.m; path = network/NetworkController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		66FF0FE018242B6B0038ECA6 /* Toast+UIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Toast+UIView.h"; sourceTree = "<group>"; };
 		66FF0FE118242B6B0038ECA6 /* Toast+UIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Toast+UIView.m"; sourceTree = "<group>"; };
 		66FF0FE318242E420038ECA6 /* UIUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIUtils.h; path = utils/UIUtils.h; sourceTree = "<group>"; };
 		66FF0FE418242E420038ECA6 /* UIUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIUtils.m; path = utils/UIUtils.m; sourceTree = "<group>"; };
 		66FF0FE61825416A0038ECA6 /* HomeDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HomeDataSource.h; path = home/HomeDataSource.h; sourceTree = "<group>"; };
-		66FF0FE71825416A0038ECA6 /* HomeDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HomeDataSource.m; path = home/HomeDataSource.m; sourceTree = "<group>"; };
+		66FF0FE71825416A0038ECA6 /* HomeDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = HomeDataSource.m; path = home/HomeDataSource.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		66FF0FEC1827FAE00038ECA6 /* StateController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StateController.h; path = utils/StateController.h; sourceTree = "<group>"; };
 		66FF0FED1827FAEE0038ECA6 /* StateController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StateController.m; path = utils/StateController.m; sourceTree = "<group>"; };
 		66FF0FF2182AE4420038ECA6 /* LoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoadingView.h; path = utils/LoadingView.h; sourceTree = "<group>"; };
@@ -371,6 +373,10 @@
 		66FF0FF7182AEA280038ECA6 /* surespot_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = surespot_logo.png; sourceTree = "<group>"; };
 		66FF0FF9182B04B10038ECA6 /* UIViewPager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewPager.h; sourceTree = "<group>"; };
 		66FF0FFA182B04B10038ECA6 /* UIViewPager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewPager.m; sourceTree = "<group>"; };
+		66FF0FFD182D3D920038ECA6 /* DDLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = DDLog.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		66FF0FFE182D3D920038ECA6 /* DDLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DDLog.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		66FF0FFF182D3D920038ECA6 /* DDTTYLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = DDTTYLogger.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		66FF1000182D3D920038ECA6 /* DDTTYLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DDTTYLogger.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -512,6 +518,8 @@
 				66FF0FE418242E420038ECA6 /* UIUtils.m */,
 				66FF0FEC1827FAE00038ECA6 /* StateController.h */,
 				66FF0FED1827FAEE0038ECA6 /* StateController.m */,
+				66D3B04B182D47DF00B37A6C /* SurespotLogFormatter.h */,
+				66D3B04C182D47DF00B37A6C /* SurespotLogFormatter.m */,
 			);
 			name = utils;
 			sourceTree = "<group>";
@@ -609,6 +617,7 @@
 		66E4F517176298CB00596E6B /* libs */ = {
 			isa = PBXGroup;
 			children = (
+				66FF0FFC182D3D920038ECA6 /* Lumberjack */,
 				66FF0FF9182B04B10038ECA6 /* UIViewPager.h */,
 				66FF0FFA182B04B10038ECA6 /* UIViewPager.m */,
 				66FF0FDF18242B6B0038ECA6 /* Toast */,
@@ -794,8 +803,6 @@
 				66E4F5A9176298CB00596E6B /* SocketIOTransport.h */,
 				66E4F5AA176298CB00596E6B /* SocketIOTransportWebsocket.h */,
 				66E4F5AB176298CB00596E6B /* SocketIOTransportWebsocket.m */,
-				66E4F5AC176298CB00596E6B /* SocketIOTransportXHR.h */,
-				66E4F5AD176298CB00596E6B /* SocketIOTransportXHR.m */,
 			);
 			path = socketio;
 			sourceTree = "<group>";
@@ -857,6 +864,17 @@
 				66FF0FE118242B6B0038ECA6 /* Toast+UIView.m */,
 			);
 			path = Toast;
+			sourceTree = "<group>";
+		};
+		66FF0FFC182D3D920038ECA6 /* Lumberjack */ = {
+			isa = PBXGroup;
+			children = (
+				66FF0FFD182D3D920038ECA6 /* DDLog.h */,
+				66FF0FFE182D3D920038ECA6 /* DDLog.m */,
+				66FF0FFF182D3D920038ECA6 /* DDTTYLogger.h */,
+				66FF1000182D3D920038ECA6 /* DDTTYLogger.m */,
+			);
+			path = Lumberjack;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -978,15 +996,16 @@
 			files = (
 				664076781822C07C00BFD974 /* Friend.m in Sources */,
 				6604A2CB17626B9E0072216A /* main.m in Sources */,
+				66D3B04D182D47DF00B37A6C /* SurespotLogFormatter.m in Sources */,
 				6604A2CF17626B9E0072216A /* SurespotAppDelegate.m in Sources */,
 				6604A2DE17626B9E0072216A /* LoginViewController.mm in Sources */,
 				66E4F5B7176298CB00596E6B /* SocketIO.m in Sources */,
+				66FF1001182D3D920038ECA6 /* DDLog.m in Sources */,
 				663710801813172F009D5195 /* EGOCache.m in Sources */,
 				66E4F5B8176298CB00596E6B /* SocketIOJSONSerialization.m in Sources */,
 				66E4F5B9176298CB00596E6B /* SocketIOPacket.m in Sources */,
 				6637108F181424DE009D5195 /* GetSharedSecretOperation.mm in Sources */,
 				66E4F5BA176298CB00596E6B /* SocketIOTransportWebsocket.m in Sources */,
-				66E4F5BB176298CB00596E6B /* SocketIOTransportXHR.m in Sources */,
 				6637107C1812EA1D009D5195 /* GenerateSharedSecretOperation.mm in Sources */,
 				66E4F5BC176298CB00596E6B /* base64.c in Sources */,
 				66FF0FF4182AE44C0038ECA6 /* LoadingView.m in Sources */,
@@ -1008,6 +1027,7 @@
 				66EC610E176E494900937467 /* AFJSONRequestOperation.m in Sources */,
 				66EC610F176E494900937467 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				66FF0FE518242E420038ECA6 /* UIUtils.m in Sources */,
+				66FF1002182D3D920038ECA6 /* DDTTYLogger.m in Sources */,
 				66EC6110176E494900937467 /* AFPropertyListRequestOperation.m in Sources */,
 				66EC6111176E494900937467 /* AFURLConnectionOperation.m in Sources */,
 				66EC6112176E494900937467 /* AFXMLRequestOperation.m in Sources */,

@@ -25,10 +25,13 @@
 //
 
 #import "EGOCache.h"
+#import "DDLog.h"
+
+static const int ddLogLevel = LOG_LEVEL_OFF;
 
 #if DEBUG
 #define CHECK_FOR_EGOCACHE_PLIST() if([key isEqualToString:@"EGOCache.plist"]) { \
-NSLog(@"EGOCache.plist is a reserved key and can not be modified."); \
+DDLogVerbose(@"EGOCache.plist is a reserved key and can not be modified."); \
 return; }
 #else
 #define CHECK_FOR_EGOCACHE_PLIST() if([key isEqualToString:@"EGOCache.plist"]) return;

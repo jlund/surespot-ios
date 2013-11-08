@@ -17,6 +17,9 @@
 #import "GetPublicKeysOperation.h"
 #import "NetworkController.h"
 #import "EncryptionController.h"
+#import "DDLog.h"
+
+static const int ddLogLevel = LOG_LEVEL_OFF;
 
 @interface GetPublicKeysOperation()
 @property (nonatomic, strong) NSString * username;
@@ -60,7 +63,7 @@
          
          NSString * spubDH = [jsonKeys objectForKey:@"dhPub"];
          NSString * spubDSA = [jsonKeys objectForKey:@"dsaPub"];
-         NSLog(@"get public keys response: %d, key: %@",  [response statusCode], spubDH);
+         DDLogVerbose(@"get public keys response: %d, key: %@",  [response statusCode], spubDH);
          
          ECDHPublicKey dhPub = [EncryptionController recreateDhPublicKey:spubDH];
          ECDHPublicKey dsaPub = [EncryptionController recreateDsaPublicKey:spubDSA];
@@ -69,12 +72,12 @@
          pk.dhPubKey = dhPub;
          pk.dsaPubKey = dsaPub;
          
-         NSLog(@"get public keys calling callback");
+         DDLogVerbose(@"get public keys calling callback");
          [self finish:pk];
          
      } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
          
-         NSLog(@"response failure: %@",  Error);
+         DDLogVerbose(@"response failure: %@",  Error);
          [self finish:nil];
          
      }];

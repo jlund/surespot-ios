@@ -16,6 +16,9 @@
 
 
 #import "SRWebSocket.h"
+#import "DDLog.h"
+
+static const int ddLogLevel = LOG_LEVEL_OFF;
 
 #if TARGET_OS_IPHONE
 #define HAS_ICU
@@ -583,7 +586,7 @@ static __strong NSData *CRLFCRLF;
         
 #if DEBUG
         [SSLOptions setValue:[NSNumber numberWithBool:NO] forKey:(__bridge id)kCFStreamSSLValidatesCertificateChain];
-        NSLog(@"SocketRocket: In debug mode.  Allowing connection to any root cert");
+        DDLogVerbose(@"SocketRocket: In debug mode.  Allowing connection to any root cert");
 #endif
         
         [_outputStream setProperty:SSLOptions
@@ -1624,7 +1627,7 @@ static inline void SRFastLog(NSString *format, ...)  {
     
     va_end(arg_list);
     
-    NSLog(@"[SR] %@", formattedString);
+    DDLogVerbose(@"[SR] %@", formattedString);
 #endif
 }
 

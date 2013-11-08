@@ -8,7 +8,9 @@
 
 #import "CredentialCachingController.h"
 #import "GetSharedSecretOperation.h"
-#import "EGOCache.h"
+#import "DDLog.h"
+
+static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 @interface CredentialCachingController()
@@ -41,7 +43,7 @@
 
 -(void) getSharedSecretForOurVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion: (NSString *) theirVersion callback: (CallbackBlock) callback {
     
-    NSLog(@"getSharedSecretForOurVersion");
+    DDLogVerbose(@"getSharedSecretForOurVersion");
    
     GetSharedSecretOperation * op = [[GetSharedSecretOperation alloc] initWithCache:self ourUsername:self.loggedInUsername ourVersion:ourVersion theirUsername:theirUsername theirVersion:theirVersion callback:callback];
     

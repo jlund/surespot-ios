@@ -26,13 +26,16 @@
 #import "SocketIOJSONSerialization.h"
 
 #import "SocketIOTransportWebsocket.h"
-#import "SocketIOTransportXHR.h"
+
+#import "DDLog.h"
+
+static const int ddLogLevel = LOG_LEVEL_OFF;
 
 #define DEBUG_LOGS 1
 #define DEBUG_CERTIFICATE 1
 
 #if DEBUG_LOGS
-#define DEBUGLOG(...) NSLog(__VA_ARGS__)
+#define DEBUGLOG(...) DDLogVerbose(__VA_ARGS__)
 #else
 #define DEBUGLOG(...)
 #endif
@@ -670,13 +673,13 @@ NSString* const SocketIOException = @"SocketIOException";
 
 - (void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error 
 {
-    NSLog(@"ERROR: handshake failed ... %@", [error localizedDescription]);
+    DDLogVerbose(@"ERROR: handshake failed ... %@", [error localizedDescription]);
     
     _isConnected = NO;
     _isConnecting = NO;
     
     if ([_delegate respondsToSelector:@selector(socketIO:onError:)]) {
-        NSMutableDictionary *errorInfo = [NSDictionary dictionaryWithObject:error forKey:NSLocalizedDescriptionKey];
+        NSMutableDictionary *errorInfo = [NSMutableDictionary dictionaryWithObject:error forKey:NSLocalizedDescriptionKey];
         
         NSError *err = [NSError errorWithDomain:SocketIOError
                                            code:SocketIOHandshakeFailed
@@ -742,10 +745,6 @@ NSString* const SocketIOException = @"SocketIOException";
         if ([transports indexOfObject:@"websocket"] != NSNotFound) {
             DEBUGLOG(@"websocket supported -> using it now");
             _transport = [[SocketIOTransportWebsocket alloc] initWithDelegate:self];
-        }
-        else if ([transports indexOfObject:@"xhr-polling"] != NSNotFound) {
-            DEBUGLOG(@"xhr polling supported -> using it now");
-            _transport = [[SocketIOTransportXHR alloc] initWithDelegate:self];
         }
         else {
             DEBUGLOG(@"no transport found that is supported :( -> fail");

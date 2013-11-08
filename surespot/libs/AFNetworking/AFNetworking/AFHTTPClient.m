@@ -27,6 +27,10 @@
 
 #import <Availability.h>
 
+#import "DDLog.h"
+
+static const int ddLogLevel = LOG_LEVEL_OFF;
+
 #ifdef _SYSTEMCONFIGURATION_H
 #import <netinet/in.h>
 #import <netinet6/in6.h>
@@ -491,7 +495,7 @@ static void AFNetworkReachabilityReleaseCallback(const void *info) {
             }
 
             if (error) {
-                NSLog(@"%@ %@: %@", [self class], NSStringFromSelector(_cmd), error);
+                DDLogVerbose(@"%@ %@: %@", [self class], NSStringFromSelector(_cmd), error);
             }
         }
     }
