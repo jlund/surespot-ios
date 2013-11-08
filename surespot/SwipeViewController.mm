@@ -281,6 +281,17 @@
         return @"home";
     }
     else {
+        return [self nameForPage:page];    }
+    
+    return nil;
+}
+
+-(NSString * ) nameForPage:(NSInteger)page {
+   
+    if (page == 0) {
+        return nil;
+    }
+    else {
         if ([_chats count] > 0) {
             return [[_chats allKeys] objectAtIndex:page-1];
         }
@@ -752,10 +763,17 @@
 
 -(void) closeTab {
     if (_homeDataSource.currentChat) {
+        [[_homeDataSource getFriendByName:_homeDataSource.currentChat] setChatActive:NO];
         [_chats removeObjectForKey:_homeDataSource.currentChat];
         [_swipeView reloadData];
+                
+        NSInteger page = [_swipeView currentPage];
+        if (page >_swipeView.numberOfPages) {
+            page--;
+        }
+        
+        [_swipeView scrollToPage:page duration:0.5];
     }
-    
 }
 -(void) logout {
     

@@ -449,7 +449,6 @@
 				66159700176F669A001B32C1 /* utils */,
 				6604A2CD17626B9E0072216A /* SurespotAppDelegate.h */,
 				6604A2CE17626B9E0072216A /* SurespotAppDelegate.m */,
-				6604A2D617626B9E0072216A /* MainStoryboard.storyboard */,
 				6604A2DC17626B9E0072216A /* LoginViewController.h */,
 				6604A2DD17626B9E0072216A /* LoginViewController.mm */,
 				6654441417F37BCE00F62F7F /* SwipeViewController.h */,
@@ -458,6 +457,7 @@
 				660EB27917FE3D7800DBC53C /* KeyboardState.m */,
 				6606E4EB179D9C3A004199BC /* SignupViewController.h */,
 				6606E4EC179D9C3A004199BC /* SignupViewController.mm */,
+				6604A2D617626B9E0072216A /* MainStoryboard.storyboard */,
 				66E4F517176298CB00596E6B /* libs */,
 				6604A2C517626B9E0072216A /* Supporting Files */,
 			);
