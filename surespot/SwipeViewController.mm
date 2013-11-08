@@ -114,7 +114,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     //open active tabs
     for (Friend * afriend in [_homeDataSource friends]) {
         if ([afriend isChatActive]) {
-            [self loadChat:[afriend name] show:NO getData:NO];
+            [self loadChat:[afriend name] show:NO availableId: [afriend availableMessageId]];
         }
     }
     
@@ -513,34 +513,34 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
             }
             MessageView *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
             
-            cell.messageStatusLabel.text = @"loading and decrypting...";
+            cell.messageStatusLabel.text = NSLocalizedString(@"message_loading_and_decrypting",nil);
             cell.messageLabel.text = @"";
             
             // __block UITableView * blockView = tableView;
             if (!plainData){
                 if (![message isLoading] && ![message isLoaded]) {
                     if (ours) {
+                        
                         cell.messageSentView.backgroundColor = [UIColor blackColor];
                     }
                     else {
-                        //TODO use constant
                         cell.messageSentView.backgroundColor = UIUtils.surespotBlue;
                     }
                     
                     
-                    [message setLoaded:NO];
-                    [message setLoading:YES];
-                    //    DDLogVerbose(@"decrypting data for iv: %@", [message iv]);
-                    [[MessageProcessor sharedInstance] decryptMessage:message width: tableView.frame.size.width completionCallback:^(SurespotMessage  * message){
-                        
-                        //   DDLogVerbose(@"data decrypted, reloading row for iv %@", [message iv]);
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            //  [tableView reloadData];
-                            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                            [message setLoading:NO];
-                            [message setLoaded:YES];
-                        });
-                    }];
+//                    [message setLoaded:NO];
+//                    [message setLoading:YES];
+//                    //    DDLogVerbose(@"decrypting data for iv: %@", [message iv]);
+//                    [[MessageProcessor sharedInstance] decryptMessage:message width: tableView.frame.size.width completionCallback:^(SurespotMessage  * message){
+//                        
+//                        //   DDLogVerbose(@"data decrypted, reloading row for iv %@", [message iv]);
+//                        dispatch_async(dispatch_get_main_queue(), ^{
+//                            //  [tableView reloadData];
+//                            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
+//                            [message setLoading:NO];
+//                            [message setLoaded:YES];
+//                        });
+//                    }];
                     
                 }
             }
@@ -587,7 +587,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     }
 }
 
--(void) loadChat:(NSString *) username show: (BOOL) show  getData: (BOOL) getData {
+-(void) loadChat:(NSString *) username show: (BOOL) show  availableId: (NSInteger) availableId {
     //get existing view if there is one
     UITableView * chatView = [_chats objectForKey:username];
     if (!chatView) {
@@ -600,7 +600,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
         
         
         //create the data source
-        [[ChatController sharedInstance] createDataSourceForFriendname:username getData:getData];
+        [[ChatController sharedInstance] createDataSourceForFriendname:username availableId: availableId];
         
         
         [_chats setObject:chatView forKey:username];
@@ -637,7 +637,9 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 -(void) showChat:(NSString *) username {
     DDLogVerbose(@"showChat, %@", username);
     
-    [self loadChat:username show:YES getData:YES];
+    Friend * afriend = [_homeDataSource getFriendByName:username];
+    
+    [self loadChat:username show:YES availableId:[afriend availableMessageId]];
     [_textField resignFirstResponder];
 }
 
@@ -773,6 +775,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 
 -(void) closeTab {
     if (_homeDataSource.currentChat) {
+        [[ChatController sharedInstance] destroyDataSourceForFriendname: _homeDataSource.currentChat];
         [[_homeDataSource getFriendByName:_homeDataSource.currentChat] setChatActive:NO];
         [_chats removeObjectForKey:_homeDataSource.currentChat];
         [_swipeView reloadData];

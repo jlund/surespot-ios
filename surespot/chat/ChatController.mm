@@ -159,10 +159,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     DDLogVerbose(@"didReceiveMessage() >>> data: %@", packet.data);
 }
 
-- (ChatDataSource *) createDataSourceForFriendname: (NSString *) friendname getData: (BOOL) getData {
+- (ChatDataSource *) createDataSourceForFriendname: (NSString *) friendname availableId:(NSInteger)availableId {
     ChatDataSource * dataSource = [self.chatDataSources objectForKey:friendname];
     if (dataSource == nil) {
-        dataSource = [[ChatDataSource alloc] initWithUsername:friendname loggedInUser:[[IdentityController sharedInstance] getLoggedInUser] getData:getData] ;
+        dataSource = [[ChatDataSource alloc] initWithUsername:friendname loggedInUser:[[IdentityController sharedInstance] getLoggedInUser] availableId: availableId] ;
         [self.chatDataSources setObject: dataSource forKey: friendname];
     }
     return dataSource;
@@ -172,6 +172,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (ChatDataSource *) getDataSourceForFriendname: (NSString *) friendname {
     return [self.chatDataSources objectForKey:friendname];
  }
+
+-(void) destroyDataSourceForFriendname: (NSString *) friendname {
+    id cds = [_chatDataSources objectForKey:friendname];
+    
+    if (cds) {
+        [cds writeToDisk];
+        [_chatDataSources removeObjectForKey:friendname];
+    }
+    
+}
 
 
 -(void) getData {
@@ -199,7 +209,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     //build message id list for open chats
     for (id username in [_chatDataSources allKeys]) {
-        ChatDataSource * chatDataSource = [_chatDataSources objectForKey:username];
+        ChatDataSource * chatDataSource = [self getDataSourceForFriendname: username];
         NSString * spot = [ChatUtils getSpotUserA: [[IdentityController sharedInstance] getLoggedInUser] userB: username];
         
         DDLogVerbose(@"getting message and control data for spot: %@",spot );
@@ -223,6 +233,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 NSString * user = [ChatUtils getOtherUserFromSpot:spot andUser:[[IdentityController sharedInstance] getLoggedInUser]];
                 
                 [_homeDataSource setAvailableMessageId:availableId forFriendname: user];
+//                ChatDataSource * chatDataSource = [self getDataSourceForFriendname: user];
+//                if (chatDataSource) {
+//                    [chatDataSource setAvailableId: availableId];
+//                }
             }
         }
         
@@ -323,7 +337,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) handleMessage: (SurespotMessage *) message {
     NSString * otherUser = [message getOtherUser];
-    ChatDataSource * dataSource = [self.chatDataSources objectForKey:otherUser];
+    ChatDataSource * dataSource = [self getDataSourceForFriendname:otherUser];
     if (dataSource) {
         //  [[MessageProcessor sharedInstance] decryptMessage:message completionCallback:^(SurespotMessage * message){
         
@@ -339,6 +353,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         // }];
         
     }
+    
+    //update available id
+    Friend * afriend = [_homeDataSource getFriendByName:otherUser];
+    if (afriend && message.serverid) {
+        afriend.availableMessageId = [message.serverid integerValue];
+    }
 }
 
 -(void) handleMessages: (NSArray *) messages forUsername: (NSString *) username {
@@ -351,10 +371,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     SurespotMessage * lastMessage;
     for (id jsonMessage in messages) {        lastMessage = [[SurespotMessage alloc] initWithJSONString:jsonMessage];
         
-        [cds addMessage:lastMessage refresh:NO];
+        [cds addMessage:lastMessage refresh:YES];
     }
-    
-    [cds postRefresh];
 }
 
 -(void) handleControlMessages: (NSArray *) controlMessages forUsername: (NSString *) username {
