@@ -99,26 +99,10 @@ CGPathRef NewPathWithRoundRect(CGRect rect, CGFloat cornerRadius)
     UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[aSuperview addSubview:loadingView];
     
-	const CGFloat DEFAULT_LABEL_WIDTH = 280.0;
+	const CGFloat DEFAULT_LABEL_WIDTH = aSuperview.bounds.size.width;
 	const CGFloat DEFAULT_LABEL_HEIGHT = 50.0;
-	CGRect labelFrame = CGRectMake(0, 0, DEFAULT_LABEL_WIDTH, DEFAULT_LABEL_HEIGHT);
-	UILabel *loadingLabel =
-    [[UILabel alloc]
-     initWithFrame:labelFrame];
-    
-	loadingLabel.text = NSLocalizedString(textKey, nil);
-	loadingLabel.textColor = [UIColor whiteColor];
-	loadingLabel.backgroundColor = [UIColor clearColor];
-	loadingLabel.textAlignment = NSTextAlignmentLeft;
-	loadingLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
-	loadingLabel.autoresizingMask =
-    UIViewAutoresizingFlexibleLeftMargin |
-    UIViewAutoresizingFlexibleRightMargin |
-    UIViewAutoresizingFlexibleTopMargin |
-    UIViewAutoresizingFlexibleBottomMargin;
 	
-	[loadingView addSubview:loadingLabel];
-    
+	   
     UIImage * image =[UIImage imageNamed:@"surespot_logo.png"];
     UIImageView * imageView = [[UIImageView alloc] initWithImage: image];
     
@@ -136,14 +120,40 @@ CGPathRef NewPathWithRoundRect(CGRect rect, CGFloat cornerRadius)
     rotation.duration = 1.1; // Speed
     rotation.repeatCount = HUGE_VALF; //
     [imageView.layer addAnimation:rotation forKey:@"spin"];
+    
+    
+    CGRect labelFrame = CGRectMake(0, 0, DEFAULT_LABEL_WIDTH - (imageView.frame.size.width + 50), imageView.frame.size.height);
+    UILabel *loadingLabel =
+    [[UILabel alloc]
+     initWithFrame:labelFrame];
+    
+	loadingLabel.text = NSLocalizedString(textKey, nil);
+    loadingLabel.numberOfLines = 0;
+    loadingLabel.lineBreakMode = NSLineBreakByWordWrapping;
+	loadingLabel.textColor = [UIColor whiteColor];
+	loadingLabel.backgroundColor = [UIColor clearColor];
+	loadingLabel.textAlignment = NSTextAlignmentLeft;
+	loadingLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
+	loadingLabel.autoresizingMask =
+    UIViewAutoresizingFlexibleLeftMargin |
+    UIViewAutoresizingFlexibleRightMargin |
+    UIViewAutoresizingFlexibleTopMargin |
+    UIViewAutoresizingFlexibleBottomMargin;
+    
+    [loadingLabel sizeToFit];
+	
+	[loadingView addSubview:loadingLabel];
+
+    
 	
     CGFloat totalHeight =  MAX(loadingLabel.frame.size.height ,imageView.frame.size.height);
 		
 	CGRect activityIndicatorRect = imageView.frame;
-	activityIndicatorRect.origin.x =floor(0.5 * (loadingView.frame.size.width - DEFAULT_LABEL_WIDTH));
+	activityIndicatorRect.origin.x =floor(0.5 * (loadingView.frame.size.width - DEFAULT_LABEL_WIDTH + 50));
 	activityIndicatorRect.origin.y = floor(0.5 * (loadingView.frame.size.height - totalHeight));
 	imageView.frame = activityIndicatorRect;
     
+   
     labelFrame.origin.x = imageView.frame.origin.x + imageView.frame.size.width + 20;
 	labelFrame.origin.y = floor(0.5 * (loadingView.frame.size.height - totalHeight));
 	loadingLabel.frame = labelFrame;
