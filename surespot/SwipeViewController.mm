@@ -478,6 +478,8 @@
         [cell.acceptButton setHidden:!isInviter];
         [cell.blockButton setHidden:!isInviter];
         
+        cell.activeStatus.backgroundColor = [afriend isChatActive] ? [UIUtils surespotBlue] : [UIColor clearColor];
+        
         return cell;
     }
     else {
@@ -768,10 +770,11 @@
         [_swipeView reloadData];
                 
         NSInteger page = [_swipeView currentPage];
-        if (page >_swipeView.numberOfPages) {
-            page--;
+        if (page >= _swipeView.numberOfPages) {
+            page = _swipeView.numberOfPages - 1;
         }
-        
+        NSString * name = [self nameForPage:page];
+        [_homeDataSource setCurrentChat:name];
         [_swipeView scrollToPage:page duration:0.5];
     }
 }
