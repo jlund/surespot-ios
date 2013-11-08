@@ -19,7 +19,13 @@
 #import "StateController.h"
 #import "DDLog.h"
 
+#ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+#else
+static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
+
+
 
 @interface ChatController()
 @property (strong, atomic) SocketIO * socketIO;
@@ -153,14 +159,19 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
     DDLogVerbose(@"didReceiveMessage() >>> data: %@", packet.data);
 }
 
-- (ChatDataSource *) getDataSourceForFriendname: (NSString *) friendname {
+- (ChatDataSource *) createDataSourceForFriendname: (NSString *) friendname getData: (BOOL) getData {
     ChatDataSource * dataSource = [self.chatDataSources objectForKey:friendname];
     if (dataSource == nil) {
-        dataSource = [[ChatDataSource alloc] initWithUsername:friendname loggedInUser:[[IdentityController sharedInstance] getLoggedInUser]] ;
+        dataSource = [[ChatDataSource alloc] initWithUsername:friendname loggedInUser:[[IdentityController sharedInstance] getLoggedInUser] getData:getData] ;
         [self.chatDataSources setObject: dataSource forKey: friendname];
     }
     return dataSource;
+ 
 }
+
+- (ChatDataSource *) getDataSourceForFriendname: (NSString *) friendname {
+    return [self.chatDataSources objectForKey:friendname];
+ }
 
 
 -(void) getData {
@@ -182,7 +193,7 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 }
 
 -(void) getLatestData {
-    DDLogVerbose(@"getLatestData");
+    DDLogVerbose(@"getLatestData, chatDatasources count: %d", [_chatDataSources count]);
     
     NSMutableArray * messageIds = [[NSMutableArray alloc] init];
     

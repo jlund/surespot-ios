@@ -16,6 +16,7 @@
 @interface ChatController : NSObject <SocketIODelegate, FriendDelegate>
 +(ChatController*)sharedInstance;
 - (HomeDataSource *) getHomeDataSource;
+- (ChatDataSource *) createDataSourceForFriendname: (NSString *) friendname getData: (BOOL) getData;
 - (ChatDataSource *) getDataSourceForFriendname: (NSString *) friendname;
 - (void) sendMessage: (NSString *) message toFriendname: (NSString *) friendname;
 - (void) inviteUser: (NSString *) username;

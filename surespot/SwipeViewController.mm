@@ -114,7 +114,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     //open active tabs
     for (Friend * afriend in [_homeDataSource friends]) {
         if ([afriend isChatActive]) {
-            [self loadChat:[afriend name] show:NO];
+            [self loadChat:[afriend name] show:NO getData:NO];
         }
     }
     
@@ -587,7 +587,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     }
 }
 
--(void) loadChat:(NSString *) username show: (BOOL) show {
+-(void) loadChat:(NSString *) username show: (BOOL) show  getData: (BOOL) getData {
     //get existing view if there is one
     UITableView * chatView = [_chats objectForKey:username];
     if (!chatView) {
@@ -597,6 +597,11 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
         [chatView setDataSource: self];
         [chatView setScrollsToTop:NO];
         [chatView setDirectionalLockEnabled:YES];
+        
+        
+        //create the data source
+        [[ChatController sharedInstance] createDataSourceForFriendname:username getData:getData];
+        
         
         [_chats setObject:chatView forKey:username];
         
@@ -632,7 +637,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 -(void) showChat:(NSString *) username {
     DDLogVerbose(@"showChat, %@", username);
     
-    [self loadChat:username show:YES];
+    [self loadChat:username show:YES getData:YES];
     [_textField resignFirstResponder];
 }
 

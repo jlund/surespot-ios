@@ -10,7 +10,11 @@
 #import "ChatUtils.h"
 #import "DDLog.h"
 
+#ifdef DEBUG
+static const int ddLogLevel = LOG_LEVEL_INFO;
+#else
 static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
 
 NSString *const baseUrl = @"http://192.168.10.68:8080";
 // @"https://server.surespot.me:443"
@@ -153,12 +157,13 @@ NSString *const baseUrl = @"http://192.168.10.68:8080";
     [operation start];}
 
 -(void) getLatestDataSinceUserControlId: (NSInteger) latestUserControlId spotIds: (NSArray *) spotIds successBlock:(JSONSuccessBlock)successBlock failureBlock: (JSONFailureBlock) failureBlock {
-    
-    NSData * jsonData = [NSJSONSerialization dataWithJSONObject:spotIds options:0 error:nil];
-    NSString * jsonString =[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:jsonString,@"spotIds", nil];
-    
-    DDLogVerbose(@"GetLatestData: params; %@", params);
+    NSMutableDictionary *params = nil;
+    if ([spotIds count] > 0) {
+        NSData * jsonData = [NSJSONSerialization dataWithJSONObject:spotIds options:0 error:nil];
+        NSString * jsonString =[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        params = [NSMutableDictionary dictionaryWithObjectsAndKeys:jsonString,@"spotIds", nil];
+    }
+    DDLogInfo(@"GetLatestData: params; %@", params);
     
     NSString * path = [NSString stringWithFormat:@"latestdata/%d", latestUserControlId];
     NSURLRequest *request = [self requestWithMethod:@"POST" path:path parameters: params];

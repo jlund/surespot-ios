@@ -14,7 +14,11 @@
 #import "FileController.h"
 #import "DDLog.h"
 
+#ifdef DEBUG
+static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+#else
 static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
 
 @interface ChatDataSource()
 @property (nonatomic, strong) NSOperationQueue * decryptionQueue;
@@ -23,7 +27,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 @implementation ChatDataSource
 
--(ChatDataSource*)initWithUsername:(NSString *) username loggedInUser: (NSString * ) loggedInUser {
+-(ChatDataSource*)initWithUsername:(NSString *) username loggedInUser: (NSString * ) loggedInUser getData: (BOOL) getData {
     //call super init
     self = [super init];
     
@@ -31,7 +35,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         _decryptionQueue = [[NSOperationQueue alloc] init];
         _loggedInUser = loggedInUser;
         _username = username;
-         _messages = [NSMutableArray new];
+        _messages = [NSMutableArray new];
         
         NSArray * messages;
         
@@ -40,7 +44,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         id chatData = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
         if (chatData) {
             DDLogVerbose(@"loading chat data from: %@", path);
-           
+            
             _latestControlMessageId = [[chatData objectForKey:@"latestControlMessageId"] integerValue];
             messages = [chatData objectForKey:@"messages"];
             
@@ -50,41 +54,43 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 [self addMessage:message refresh:NO];
             }
             
-           // [_decryptionQueue waitUntilAllOperationsAreFinished];
-            DDLogVerbose(@"messages completed loading from disk at: %@", path);
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshMessages" object:username ];
-//            });
+            // [_decryptionQueue waitUntilAllOperationsAreFinished];
+            DDLogVerbose(@"loaded %d messages from disk at: %@", [messages count] ,path);
+            //            dispatch_async(dispatch_get_main_queue(), ^{
+            //                [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshMessages" object:username ];
+            //            });
         }
         
-        
-        DDLogVerbose(@"getting messageData latestMessageId: %d, latestControlId: %d", _latestMessageId ,_latestControlMessageId);
-        //load message data
-        [[NetworkController sharedInstance] getMessageDataForUsername:username andMessageId:_latestMessageId andControlId:_latestControlMessageId successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-            DDLogVerbose(@"get messageData response: %d",  [response statusCode]);
+        if (getData) {
             
-            NSArray * messageStrings =[((NSDictionary *) JSON) objectForKey:@"messages"];
-            
-            
-            //convert messages to SurespotMessage
-            for (NSString * messageString in messageStrings) {
+            DDLogVerbose(@"getting messageData latestMessageId: %d, latestControlId: %d", _latestMessageId ,_latestControlMessageId);
+            //load message data
+            [[NetworkController sharedInstance] getMessageDataForUsername:username andMessageId:_latestMessageId andControlId:_latestControlMessageId successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                DDLogVerbose(@"get messageData response: %d",  [response statusCode]);
                 
-                [self addMessage:[[SurespotMessage alloc] initWithJSONString:messageString] refresh:NO];
-            }
-            
-            [_decryptionQueue waitUntilAllOperationsAreFinished];
-            
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshMessages" object:username ];
-            });
-            
-            
-            
-        } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
-            DDLogVerbose(@"get messagedata response error: %@",  Error);
-            
-        }];
+                NSArray * messageStrings =[((NSDictionary *) JSON) objectForKey:@"messages"];
+                
+                
+                //convert messages to SurespotMessage
+                for (NSString * messageString in messageStrings) {
+                    
+                    [self addMessage:[[SurespotMessage alloc] initWithJSONString:messageString] refresh:NO];
+                }
+                
+                [_decryptionQueue waitUntilAllOperationsAreFinished];
+                
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshMessages" object:username ];
+                });
+                
+                
+                
+            } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
+                DDLogVerbose(@"get messagedata response error: %@",  Error);
+                
+            }];
+        }
         
         
     }
@@ -98,6 +104,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     //decrypt and compute height
     if (!message.plainData) {
+        [self addMessageInternal: message refresh:NO];
         
         MessageDecryptionOperation * op = [[MessageDecryptionOperation alloc]initWithMessage:message width: 200 completionCallback:^(SurespotMessage  * message){
             
@@ -131,7 +138,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (message.serverid) {
         NSInteger messageId =[message.serverid integerValue];
         if (messageId > _latestMessageId) {
-             DDLogVerbose(@"updating latest message id: %d", messageId);
+            DDLogVerbose(@"updating latest message id: %d", messageId);
             _latestMessageId = messageId;
         }
     }
