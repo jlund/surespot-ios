@@ -111,6 +111,15 @@
     [self getData];
 }
 
+- (void) socketIODidDisconnect:(SocketIO *)socket disconnectedWithError:(NSError *)error {
+
+    NSLog(@"didDisconnectWithError       %@", error);
+    
+    if (error ) {
+        //start reconnect cycle
+    }
+}
+
 - (void) socketIO:(SocketIO *)socket didReceiveEvent:(SocketIOPacket *)packet
 {
     NSLog(@"didReceiveEvent() >>> data: %@", packet.data);
