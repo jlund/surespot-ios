@@ -37,7 +37,9 @@
     
     NSString *dateAndTime = [threadUnsafeDateFormatter stringFromDate:(logMessage->timestamp)];
     NSString *path = [NSString stringWithCString:logMessage->file encoding:NSASCIIStringEncoding];
-    NSString *fileName = [[path lastPathComponent] stringByDeletingPathExtension];
-    return [NSString stringWithFormat:@"%@ %@ [%u:%s] [%8@:%@ %3d] %@",logLevel, dateAndTime, logMessage->machThreadID, logMessage->queueLabel, fileName, function, logMessage->lineNumber, logMessage->logMsg];
+    NSString *fileName = [[[path lastPathComponent] stringByDeletingPathExtension] stringByPaddingToLength:12 withString:@" " startingAtIndex:0];
+    
+//    NSString *qLabel = [NSString stringWithUTF8String:logMessage->queueLabel] substringFromIndex:
+    return [NSString stringWithFormat:@"%@ %@ [%5u:%.12s] [%8@:%@ %3d] %@",logLevel, dateAndTime, logMessage->machThreadID, logMessage->queueLabel, fileName, function, logMessage->lineNumber, logMessage->logMsg];
 }
 @end
