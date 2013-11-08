@@ -42,14 +42,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             DDLogVerbose(@"loading home data from: %@", path);
             _currentChat = [homeData objectForKey:@"currentChat"];
             _latestUserControlId = [[homeData objectForKey:@"userControlId"] integerValue];
-            _friends = [homeData objectForKey:@"friends"];
-            if (!_friends) {
-                [self getFriends];
-            }
+            _friends = [homeData objectForKey:@"friends"];                   
         }
         else {
-            DDLogVerbose(@"loading home data from cloud");
-            [self getFriends];
+            _friends = [NSMutableArray new];
         }
     }
     
@@ -57,13 +53,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return self;
 }
 
--(void) getFriends {
-    _friends = [[NSMutableArray alloc] init];
+-(void) loadFriendsCallback: (void(^)(BOOL success)) callback{
     [[NetworkController sharedInstance] getFriendsSuccessBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         DDLogVerbose(@"get friends response: %d",  [response statusCode]);
         
         _latestUserControlId = [[JSON objectForKey:@"userControlId"] integerValue];
-        _friends = [[NSMutableArray alloc] init];
         
         NSArray * friendDicts = [JSON objectForKey:@"friends"];
         for (NSDictionary * friendDict in friendDicts) {
@@ -71,10 +65,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         };
         [self writeToDisk];
         [self postRefresh];
+        callback(YES);
         
     } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
         DDLogVerbose(@"response failure: %@",  Error);
         [self postRefresh];
+        callback(NO);
     }];
     
 }

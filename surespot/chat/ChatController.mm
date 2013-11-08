@@ -185,8 +185,23 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 -(void) getData {
-    
-    [self getLatestData];
+    //if we have no friends and have never received a user control message
+    //load friends and latest ids
+    if ([_homeDataSource.friends count] ==0 && _homeDataSource.latestUserControlId == 0) {
+        
+        [_homeDataSource loadFriendsCallback:^(BOOL success) {
+            if (success) {
+                //not gonna be much data if we don't have any friends
+                if ([_homeDataSource.friends count] > 0 || _homeDataSource.latestUserControlId > 0) {
+                    [self getLatestData];
+                }
+            }
+            
+        }];
+    }
+    else {
+        [self getLatestData];
+    }
     
 }
 
@@ -405,7 +420,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 if (cds) {
                     afriend.lastReceivedMessageControlId = message.controlId;
                 }
-               
+                
                 
                 afriend.availableMessageControlId = message.controlId;
             }
@@ -414,7 +429,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             if (userActivity) {
             }
-
+            
             [_homeDataSource postRefresh];
         }
         
