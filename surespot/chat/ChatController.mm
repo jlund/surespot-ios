@@ -161,27 +161,32 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 - (ChatDataSource *) createDataSourceForFriendname: (NSString *) friendname availableId:(NSInteger)availableId {
-    ChatDataSource * dataSource = [self.chatDataSources objectForKey:friendname];
-    if (dataSource == nil) {
-        dataSource = [[ChatDataSource alloc] initWithUsername:friendname loggedInUser:[[IdentityController sharedInstance] getLoggedInUser] availableId: availableId] ;
-        [self.chatDataSources setObject: dataSource forKey: friendname];
+    @synchronized (_chatDataSources) {
+        ChatDataSource * dataSource = [self.chatDataSources objectForKey:friendname];
+        if (dataSource == nil) {
+            dataSource = [[ChatDataSource alloc] initWithUsername:friendname loggedInUser:[[IdentityController sharedInstance] getLoggedInUser] availableId: availableId] ;
+            [self.chatDataSources setObject: dataSource forKey: friendname];
+        }
+        return dataSource;
     }
-    return dataSource;
     
 }
 
 - (ChatDataSource *) getDataSourceForFriendname: (NSString *) friendname {
-    return [self.chatDataSources objectForKey:friendname];
+    @synchronized (_chatDataSources) {
+        return [self.chatDataSources objectForKey:friendname];
+    }
 }
 
 -(void) destroyDataSourceForFriendname: (NSString *) friendname {
-    id cds = [_chatDataSources objectForKey:friendname];
-    
-    if (cds) {
-        [cds writeToDisk];
-        [_chatDataSources removeObjectForKey:friendname];
+    @synchronized (_chatDataSources) {
+        id cds = [_chatDataSources objectForKey:friendname];
+        
+        if (cds) {
+            [cds writeToDisk];
+            [_chatDataSources removeObjectForKey:friendname];
+        }
     }
-    
 }
 
 
@@ -212,8 +217,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     if (_chatDataSources) {
-        for (id key in _chatDataSources) {
-            [[_chatDataSources objectForKey:key] writeToDisk];
+        @synchronized (_chatDataSources) {
+            for (id key in _chatDataSources) {
+                [[_chatDataSources objectForKey:key] writeToDisk];
+            }
         }
     }
 }
@@ -224,17 +231,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSMutableArray * messageIds = [[NSMutableArray alloc] init];
     
     //build message id list for open chats
-    for (id username in [_chatDataSources allKeys]) {
-        ChatDataSource * chatDataSource = [self getDataSourceForFriendname: username];
-        NSString * spot = [ChatUtils getSpotUserA: [[IdentityController sharedInstance] getLoggedInUser] userB: username];
-        
-        DDLogVerbose(@"getting message and control data for spot: %@",spot );
-        NSMutableDictionary * messageId = [[NSMutableDictionary alloc] init];
-        [messageId setObject: username forKey:@"username"];
-        [messageId setObject: [NSNumber numberWithInteger: [chatDataSource latestMessageId]] forKey:@"messageid"];
-        [messageId setObject: [NSNumber numberWithInteger:[chatDataSource latestControlMessageId]] forKey:@"controlmessageid"];
-        
-        [messageIds addObject:messageId];
+    @synchronized (_chatDataSources) {
+        for (id username in [_chatDataSources allKeys]) {
+            ChatDataSource * chatDataSource = [self getDataSourceForFriendname: username];
+            NSString * spot = [ChatUtils getSpotUserA: [[IdentityController sharedInstance] getLoggedInUser] userB: username];
+            
+            DDLogVerbose(@"getting message and control data for spot: %@",spot );
+            NSMutableDictionary * messageId = [[NSMutableDictionary alloc] init];
+            [messageId setObject: username forKey:@"username"];
+            [messageId setObject: [NSNumber numberWithInteger: [chatDataSource latestMessageId]] forKey:@"messageid"];
+            [messageId setObject: [NSNumber numberWithInteger:[chatDataSource latestControlMessageId]] forKey:@"controlmessageid"];
+            
+            [messageIds addObject:messageId];
+        }
     }
     
     
@@ -378,62 +387,67 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) handleMessages: (NSArray *) messages forUsername: (NSString *) username {
-    ChatDataSource * cds = [_chatDataSources objectForKey:username];
-    if (!cds) {
-        DDLogVerbose(@"no chat data source for %@", username);
-        return;
-    }
-    
-    SurespotMessage * lastMessage;
-    for (id jsonMessage in messages) {
-        lastMessage = [[SurespotMessage alloc] initWithJSONString:jsonMessage];
-        [cds addMessage:lastMessage refresh:YES];
+    @synchronized (_chatDataSources) {
+        ChatDataSource * cds = [_chatDataSources objectForKey:username];
+        if (!cds) {
+            DDLogVerbose(@"no chat data source for %@", username);
+            return;
+        }
+        
+        SurespotMessage * lastMessage;
+        for (id jsonMessage in messages) {
+            lastMessage = [[SurespotMessage alloc] initWithJSONString:jsonMessage];
+            [cds addMessage:lastMessage refresh:YES];
+        }
     }
 }
 
 -(void) handleControlMessages: (NSArray *) controlMessages forUsername: (NSString *) username {
-    ChatDataSource * cds = [_chatDataSources objectForKey:username];
-    
-    BOOL userActivity = NO;
-    BOOL messageActivity = NO;
-    SurespotControlMessage * message;
-    
-    for (id jsonMessage in controlMessages) {
+    @synchronized (_chatDataSources) {
+        ChatDataSource * cds = [_chatDataSources objectForKey:username];
         
+        BOOL userActivity = NO;
+        BOOL messageActivity = NO;
+        SurespotControlMessage * message;
         
-        message = [[SurespotControlMessage alloc] initWithJSONString: jsonMessage];
-        [self handleControlMessage:message usingChatDataSource: cds];
-        
-        if ([[message type] isEqualToString:@"user"]) {
-            userActivity = YES;
-        }
-        else {
-            if ([[message type] isEqualToString:@"message"]) {
-                messageActivity = YES;
+        for (id jsonMessage in controlMessages) {
+            
+            
+            message = [[SurespotControlMessage alloc] initWithJSONString: jsonMessage];
+            [self handleControlMessage:message usingChatDataSource: cds];
+            
+            if ([[message type] isEqualToString:@"user"]) {
+                userActivity = YES;
+            }
+            else {
+                if ([[message type] isEqualToString:@"message"]) {
+                    messageActivity = YES;
+                }
             }
         }
-    }
-    if (messageActivity || userActivity) {
-        Friend * afriend = [_homeDataSource getFriendByName:username];
         
-        if (afriend) {
-            if (messageActivity) {
-                if (cds) {
-                    afriend.lastReceivedMessageControlId = message.controlId;
+        if (messageActivity || userActivity) {
+            Friend * afriend = [_homeDataSource getFriendByName:username];
+            
+            if (afriend) {
+                if (messageActivity) {
+                    if (cds) {
+                        afriend.lastReceivedMessageControlId = message.controlId;
+                    }
+                    
+                    
+                    afriend.availableMessageControlId = message.controlId;
                 }
                 
                 
-                afriend.availableMessageControlId = message.controlId;
+                
+                if (userActivity) {
+                }
+                
+                [_homeDataSource postRefresh];
             }
             
-            
-            
-            if (userActivity) {
-            }
-            
-            [_homeDataSource postRefresh];
         }
-        
     }
 }
 
@@ -631,7 +645,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(void) logout {
     [self disconnect];
     [self saveState];
-    [_chatDataSources removeAllObjects];
+    @synchronized (_chatDataSources) {
+        [_chatDataSources removeAllObjects];
+    }
     //  _homeDataSource.currentChat = nil;
     _homeDataSource = nil;
     
