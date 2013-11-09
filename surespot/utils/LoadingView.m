@@ -100,8 +100,7 @@ CGPathRef NewPathWithRoundRect(CGRect rect, CGFloat cornerRadius)
 	[aSuperview addSubview:loadingView];
     
 	const CGFloat DEFAULT_LABEL_WIDTH = aSuperview.bounds.size.width;
-	const CGFloat DEFAULT_LABEL_HEIGHT = 50.0;
-	
+
 	   
     UIImage * image =[UIImage imageNamed:@"surespot_logo.png"];
     UIImageView * imageView = [[UIImageView alloc] initWithImage: image];

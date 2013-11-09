@@ -31,14 +31,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [UIUtils setNavBarAttributes:self.navigationController.navigationBar];
     [self.navigationItem setTitle:NSLocalizedString(@"create", nil)];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    self.navigationController.navigationBar.tintColor = [UIUtils surespotBlue];
+    _tbUsername.returnKeyType = UIReturnKeyNext;
+    _tbPassword.returnKeyType = UIReturnKeyGo;
 }
 
 - (void)viewDidUnload {
@@ -47,6 +43,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self setTbPassword:nil];
     [super viewDidUnload];
 }
+
 - (IBAction)createIdentity:(id)sender {
     NSString * username = self.tbUsername.text;
     NSString * password = self.tbPassword.text;
@@ -55,7 +52,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         return;
     }
     
-     [_tbPassword resignFirstResponder];
+    [_tbPassword resignFirstResponder];
     _progressView = [LoadingView loadingViewInView:self.view textKey:@"create_user_progress"];
     
     dispatch_queue_t q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
@@ -100,18 +97,28 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     });
     
 }
-//
-//
-//- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-//    [textField resignFirstResponder];
-//    return NO;
-//}
-//
-//- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-//    [textField resignFirstResponder];
-//    [self send];
-//    [textField setText:nil];
-//    return NO;
-//}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (textField == _tbUsername) {
+        if (![UIUtils stringIsNilOrEmpty: textField.text]) {
+            [_tbPassword becomeFirstResponder];
+            [_tbUsername resignFirstResponder];
+        }
+        return NO;
+    }
+    else {
+        if (textField == _tbPassword) {
+            if (![UIUtils stringIsNilOrEmpty: textField.text]) {
+                [textField resignFirstResponder];
+                [self createIdentity:nil];
+                return YES;
+            }
+        }
+    }
+    
+    
+    return NO;
+}
+
 
 @end

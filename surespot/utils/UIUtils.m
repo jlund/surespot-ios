@@ -67,22 +67,36 @@
     return indicator;
 }
 
-+ (void)setNavBarAttributes:(UINavigationBar*)bar {
-    if ([bar respondsToSelector:@selector(setBarTintColor:)]) {
-        [bar setBarTintColor: [UIColor colorWithRed:22/255.0f green:22/255.0f blue:22/255.0f alpha:1.0f]];
-        
-        
-        bar.translucent = NO;
-    }else {
-        bar.tintColor = [UIColor colorWithRed:22/255.0f green:22/255.0f blue:22/255.0f alpha:1.0f];
-        bar.opaque = YES;
-
++ (void)setAppAppearances {
+    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
+        [[UINavigationBar appearance] setBarTintColor: [UIColor colorWithRed:22/255.0f green:22/255.0f blue:22/255.0f alpha:1.0f]];         }
+    else {
+        [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:22/255.0f green:22/255.0f blue:22/255.0f alpha:1.0f]];
+      //  [[UINavigationBar appearance] setOpaque:YES];
     }
-    [bar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [UIColor lightGrayColor],  UITextAttributeTextColor,nil]];
+    
+    [[UIBarButtonItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [self surespotBlue],  UITextAttributeTextColor,nil] forState:UIControlStateNormal];
+    
+    [[UIButton appearance] setTitleColor:[self surespotBlue] forState:UIControlStateNormal];
+    
+       
+    [[UINavigationBar appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [UIColor lightGrayColor],  UITextAttributeTextColor,nil]];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    
+    
 }
 
 +(BOOL)stringIsNilOrEmpty:(NSString*)aString {
     return !(aString && aString.length);
+}
+
++(CGFloat) keyboardHeightAdjustedForOrientation: (CGSize) size {
+    UIInterfaceOrientation  orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+        return size.width;
+    }
+    else {
+        return size.height;
+    }
 }
 @end

@@ -12,6 +12,7 @@
 #import "DDLog.h"
 #import "DDTTYLogger.h"
 #import "SurespotLogFormatter.h"
+#import "UIUtils.h"
 
 static const int ddLogLevel = LOG_LEVEL_OFF;
 
@@ -26,7 +27,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [DDLog addLogger:[DDTTYLogger sharedInstance]];
     [[DDTTYLogger sharedInstance]setLogFormatter: [SurespotLogFormatter new]];
-    
+    [UIUtils setAppAppearances];
     return YES;
 }
 

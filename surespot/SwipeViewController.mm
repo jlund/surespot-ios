@@ -60,15 +60,10 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     
-    //configure page control
-    //_pageControl.numberOfPages = _swipeView.numberOfPages;
-    //_pageControl.defersCurrentPageDisplay = YES;
-    
     _textField.enablesReturnKeyAutomatically = NO;
     [self registerForKeyboardNotifications];
     
     UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"menu" style:UIBarButtonItemStylePlain target:self action:@selector(showMenu)];
-    [anotherButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [UIUtils surespotBlue],  UITextAttributeTextColor,nil] forState:UIControlStateNormal];
     self.navigationItem.rightBarButtonItem = anotherButton;
    
     self.navigationItem.title = [@"surespot/" stringByAppendingString:[[IdentityController sharedInstance] getLoggedInUser]];
@@ -82,10 +77,6 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     //
     self.navigationItem.hidesBackButton = YES;
     
-    [UIUtils setNavBarAttributes:self.navigationController.navigationBar];
-    
-    
-
     
     //listen for refresh notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshMessages:) name:@"refreshMessages" object:nil];
@@ -106,10 +97,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     _viewPager.autoresizingMask =UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:_viewPager];
     _viewPager.delegate = self;
-    
-    
-    
-    
+
     
     //open active tabs
     for (Friend * afriend in [_homeDataSource friends]) {
@@ -770,6 +758,21 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
         
         [self logout];
         return;
+    }
+}
+
+
+- (void)willPresentActionSheet:(UIActionSheet *)actionSheet
+{
+    UIColor *customTitleColor = [UIUtils surespotBlue];
+    for (UIView *subview in actionSheet.subviews) {
+        if ([subview isKindOfClass:[UIButton class]]) {
+            UIButton *button = (UIButton *)subview;
+            
+            [button setTitleColor:customTitleColor forState:UIControlStateHighlighted];
+            [button setTitleColor:customTitleColor forState:UIControlStateNormal];
+            [button setTitleColor:customTitleColor forState:UIControlStateSelected];
+        }
     }
 }
 
