@@ -40,7 +40,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
         if (homeData) {
             DDLogVerbose(@"loading home data from: %@", path);
-            _currentChat = [homeData objectForKey:@"currentChat"];
+           // _currentChat = [homeData objectForKey:@"currentChat"];
             _latestUserControlId = [[homeData objectForKey:@"userControlId"] integerValue];
             _friends = [homeData objectForKey:@"friends"];
         }

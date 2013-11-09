@@ -22,7 +22,11 @@
 #import "LoginViewController.h"
 #import "DDLog.h"
 
+#ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
+#else
+static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
 
 //#import <QuartzCore/CATransaction.h>
 
@@ -31,6 +35,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 @property (nonatomic, strong) NSDateFormatter * dateFormatter;
 @property (nonatomic, weak) HomeDataSource * homeDataSource;
 @property (nonatomic, strong) UIViewPager * viewPager;
+@property (nonatomic, strong) NSMutableDictionary * needsScroll;
 @end
 
 
@@ -41,6 +46,8 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 {
     DDLogVerbose(@"swipeviewdidload %@", self);
     [super viewDidLoad];
+    
+    _needsScroll = [NSMutableDictionary new];
     
     _dateFormatQueue = dispatch_queue_create("date format queue", NULL);
     _dateFormatter = [[NSDateFormatter alloc]init];
@@ -360,6 +367,14 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     }
     DDLogVerbose(@"swipeview index changed to %d", currPage);
     [tableview reloadData];
+    
+    //scroll if we need to
+    NSString * name =[self nameForPage:currPage];
+    id needsit = [_needsScroll  objectForKey:name];
+    if (needsit) {
+        [self scrollTableViewToBottom:tableview];
+        [_needsScroll removeObjectForKey:name];
+    }
     
 }
 
@@ -702,34 +717,46 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     }
     
     [[ChatController sharedInstance] sendMessage: message toFriendname:friendname];
-    
-    // UITableView * chatView = [_chats objectForKey:friendname];
-    // [chatView reloadData];
 }
 
-- (void)refreshMessages:(NSNotification *)notification
-{
-    DDLogVerbose(@"refreshMessages");
+- (void)refreshMessages:(NSNotification *)notification {
     NSString * username = notification.object;
-    id tableView;
-    @synchronized (_chats) {
-        tableView = [_chats objectForKey:username];
-    }
-    if (tableView) {
+    DDLogInfo(@"username: %@, currentchat: %@", username, _homeDataSource.currentChat);
+    
+    if ([username isEqualToString: _homeDataSource.currentChat]) {
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [tableView reloadData];
+        UITableView * tableView;
+        @synchronized (_chats) {
+            tableView = [_chats objectForKey:username];
+            [_needsScroll removeObjectForKey:username];
+        }
+        if (tableView) {
             
-            NSInteger numRows =[tableView numberOfRowsInSection:0];
-            if (numRows > 0) {
-                
-                NSIndexPath *scrollIndexPath = [NSIndexPath indexPathForRow:(numRows - 1) inSection:0];
-                [tableView scrollToRowAtIndexPath:scrollIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-            }
-        });
-        
-        
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [tableView reloadData];
+                [self scrollTableViewToBottom:tableView];
+            });
+            
+            
+        }
     }
+    else {
+        [_needsScroll setObject:@"yourmama" forKey:username];
+    }
+}
+
+- (void) scrollTableViewToBottom: (UITableView *) tableView {
+    NSInteger numRows =[tableView numberOfRowsInSection:0];
+    if (numRows > 0) {
+        DDLogInfo(@"scrolling to row: %d", numRows);
+        
+        //     CGPoint bottomOffset = CGPointMake(0, tableView.contentSize.height - tableView.frame.size.height);
+        //   [tableView setContentOffset:bottomOffset animated:NO];
+        NSIndexPath *scrollIndexPath = [NSIndexPath indexPathForRow:(numRows - 1) inSection:0];
+        [tableView scrollToRowAtIndexPath:scrollIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
+    
 }
 
 - (void)refreshHome:(NSNotification *)notification

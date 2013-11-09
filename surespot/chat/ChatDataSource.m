@@ -15,7 +15,7 @@
 #import "DDLog.h"
 
 #ifdef DEBUG
-static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+static const int ddLogLevel = LOG_LEVEL_INFO;
 #else
 static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
@@ -54,11 +54,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 [self addMessage:message refresh:YES];
             }
             
-            // [_decryptionQueue waitUntilAllOperationsAreFinished];
+            //[_decryptionQueue waitUntilAllOperationsAreFinished];
             DDLogVerbose(@"loaded %d messages from disk at: %@", [messages count] ,path);
-            //            dispatch_async(dispatch_get_main_queue(), ^{
-            //                [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshMessages" object:username ];
-            //            });
+            [self postRefresh];
         }
         
         [self setAvailableId:availableId];
@@ -85,13 +83,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 [self addMessage:[[SurespotMessage alloc] initWithJSONString:messageString] refresh:YES];
             }
             
-      //      [_decryptionQueue waitUntilAllOperationsAreFinished];
+            //      [_decryptionQueue waitUntilAllOperationsAreFinished];
             
             
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshMessages" object:_username ];
-//            });
-            
+            [self postRefresh];
             
             
         } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
