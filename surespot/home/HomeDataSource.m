@@ -42,7 +42,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             DDLogVerbose(@"loading home data from: %@", path);
             _currentChat = [homeData objectForKey:@"currentChat"];
             _latestUserControlId = [[homeData objectForKey:@"userControlId"] integerValue];
-            _friends = [homeData objectForKey:@"friends"];                   
+            _friends = [homeData objectForKey:@"friends"];
         }
         else {
             _friends = [NSMutableArray new];
@@ -141,7 +141,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         Friend * afriend = [self getFriendByName:username];
         [afriend setChatActive:YES];
     }
-  
+    
     _currentChat = username;
     
 }

@@ -51,7 +51,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             //convert messages to SurespotMessage
             for (SurespotMessage * message in messages) {
                 
-                [self addMessage:message refresh:NO];
+                [self addMessage:message refresh:YES];
             }
             
             // [_decryptionQueue waitUntilAllOperationsAreFinished];
@@ -82,15 +82,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             //convert messages to SurespotMessage
             for (NSString * messageString in messageStrings) {
                 
-                [self addMessage:[[SurespotMessage alloc] initWithJSONString:messageString] refresh:NO];
+                [self addMessage:[[SurespotMessage alloc] initWithJSONString:messageString] refresh:YES];
             }
             
-            [_decryptionQueue waitUntilAllOperationsAreFinished];
+      //      [_decryptionQueue waitUntilAllOperationsAreFinished];
             
             
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshMessages" object:_username ];
-            });
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshMessages" object:_username ];
+//            });
             
             
             
