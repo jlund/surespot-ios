@@ -31,5 +31,6 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *swipeTopConstraint;
 @property (strong, nonatomic) IBOutlet UIButton *theButton;
 - (IBAction)buttonTouchUpInside:(id)sender;
+@property (strong, nonatomic) IBOutlet UIView *textFieldContainer;
 
 @end

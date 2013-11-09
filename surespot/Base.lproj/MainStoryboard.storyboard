@@ -152,17 +152,24 @@
                                     <outlet property="delegate" destination="tcp-OJ-fTS" id="xyT-N7-5qo"/>
                                 </connections>
                             </view>
-                            <textField clipsSubviews="YES" contentMode="bottom" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="whileEditing" id="aRf-OH-qdB">
-                                <rect key="frame" x="0.0" y="465" width="259" height="30"/>
+                            <view contentMode="scaleToFill" id="Mgi-22-lGU">
+                                <rect key="frame" x="0.0" y="459" width="279" height="45"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES"/>
-                                <connections>
-                                    <outlet property="delegate" destination="tcp-OJ-fTS" id="JXA-4z-jTj"/>
-                                </connections>
-                            </textField>
+                                <subviews>
+                                    <textField clipsSubviews="YES" contentMode="bottom" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="whileEditing" id="aRf-OH-qdB">
+                                        <rect key="frame" x="0.0" y="10" width="265" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="tcp-OJ-fTS" id="JXA-4z-jTj"/>
+                                        </connections>
+                                    </textField>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
                             <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="byV-5h-Uzr" customClass="SurespotButton">
-                                <rect key="frame" x="259" y="445" width="70" height="70"/>
+                                <rect key="frame" x="259" y="443" width="70" height="70"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" none="YES" button="YES" updatesFrequently="YES"/>
@@ -181,6 +188,7 @@
                     <connections>
                         <outlet property="swipeView" destination="XCg-uf-vcR" id="Hkv-YP-hj9"/>
                         <outlet property="textField" destination="aRf-OH-qdB" id="FiH-dU-rOR"/>
+                        <outlet property="textFieldContainer" destination="Mgi-22-lGU" id="7W7-M6-lr3"/>
                         <outlet property="theButton" destination="byV-5h-Uzr" id="Fk8-y9-s2y"/>
                         <segue destination="onN-2k-VwT" kind="unwind" identifier="returnToLogin" unwindAction="returnToLogin:" id="Awy-8C-GBS"/>
                     </connections>

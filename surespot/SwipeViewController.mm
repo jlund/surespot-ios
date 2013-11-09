@@ -156,16 +156,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     
     UIEdgeInsets contentInsets =  tableView.contentInset;
-    DDLogVerbose(@"pre move originy %f,content insets bottom %f, view height: %f", _textField.frame.origin.y, contentInsets.bottom, tableView.frame.size.height);
+    DDLogVerbose(@"pre move originy %f,content insets bottom %f, view height: %f", _textFieldContainer.frame.origin.y, contentInsets.bottom, tableView.frame.size.height);
     
     NSDictionary* info = [aNotification userInfo];
     CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
     CGFloat keyboardHeight = [UIUtils keyboardHeightAdjustedForOrientation:keyboardRect.size];
     
-    CGRect textFieldFrame = _textField.frame;
+    CGRect textFieldFrame = _textFieldContainer.frame;
     textFieldFrame.origin.y -= keyboardHeight;
     
-    _textField.frame = textFieldFrame;
+    _textFieldContainer.frame = textFieldFrame;
     
     DDLogVerbose(@"keyboard height before: %f", keyboardHeight);
     
@@ -174,23 +174,28 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     DDLogVerbose(@"after move content insets bottom %f, view height: %f", contentInsets.bottom, tableView.frame.size.height);
     
-    contentInsets.bottom = keyboardHeight;
+    contentInsets.bottom = keyboardHeight + 2;
     tableView.contentInset = contentInsets;
     
     
+    
     UIEdgeInsets scrollInsets =tableView.scrollIndicatorInsets;
-    scrollInsets.bottom = keyboardHeight;
+    scrollInsets.bottom = keyboardHeight + 2;
     tableView.scrollIndicatorInsets = scrollInsets;
     
     
-    DDLogVerbose(@"new content insets bottom %f", contentInsets.bottom);
-    
-    keyboardState.offset = tableView.contentOffset;
-    
     @synchronized (_chats) {
         for (UITableView *tableView in [_chats allValues]) {
+            
+            DDLogInfo(@"content offset y: %f", tableView.contentOffset.y);
+            
             tableView.contentInset = contentInsets;
             tableView.scrollIndicatorInsets = scrollInsets;
+            CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y + keyboardHeight);
+            [tableView setContentOffset:newOffset animated:NO];
+            
+            
+            
         }
     }
     
@@ -216,9 +221,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (self.keyboardState) {
         
         
-        CGRect textFieldFrame = _textField.frame;
+        CGRect textFieldFrame = _textFieldContainer.frame;
         textFieldFrame.origin.y += self.keyboardState.keyboardHeight;
-        _textField.frame = textFieldFrame;
+        _textFieldContainer.frame = textFieldFrame;
         
         
         
