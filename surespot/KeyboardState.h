@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface KeyboardState : NSObject
-@property (nonatomic) CGRect keyboardRect;
+@property (nonatomic) CGFloat keyboardHeight;
 @property (nonatomic) UIEdgeInsets contentInset;
 @property (nonatomic) UIEdgeInsets indicatorInset;
 @property (nonatomic) CGPoint offset;

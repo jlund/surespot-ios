@@ -143,25 +143,26 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     
     NSDictionary* info = [aNotification userInfo];
     CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    CGFloat keyboardHeight = [UIUtils keyboardHeightAdjustedForOrientation:keyboardRect.size];
     
     CGRect textFieldFrame = _textField.frame;
-    textFieldFrame.origin.y -= keyboardRect.size.height;
-    //    textFieldFrame.size.height -= keyboardRect.size.height;
+    textFieldFrame.origin.y -= keyboardHeight;
+   
     _textField.frame = textFieldFrame;
     
-    DDLogVerbose(@"keyboard height before: %f", keyboardRect.size.height);
+    DDLogVerbose(@"keyboard height before: %f", keyboardHeight);
     
-    keyboardState.keyboardRect = keyboardRect;
+    keyboardState.keyboardHeight = keyboardHeight;
     
     
     DDLogVerbose(@"after move content insets bottom %f, view height: %f", contentInsets.bottom, tableView.frame.size.height);
     
-    contentInsets.bottom = keyboardState.keyboardRect.size.height;
+    contentInsets.bottom = keyboardHeight;
     tableView.contentInset = contentInsets;
     
     
     UIEdgeInsets scrollInsets =tableView.scrollIndicatorInsets;
-    scrollInsets.bottom = keyboardState.keyboardRect.size.height;
+    scrollInsets.bottom = keyboardHeight;
     tableView.scrollIndicatorInsets = scrollInsets;
     
     
@@ -189,11 +190,10 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     
     
     if (self.keyboardState) {
-        CGSize kbSize = self.keyboardState.keyboardRect.size;
         
         
         CGRect textFieldFrame = _textField.frame;
-        textFieldFrame.origin.y += kbSize.height;
+        textFieldFrame.origin.y += self.keyboardState.keyboardHeight;
         _textField.frame = textFieldFrame;
         
         
