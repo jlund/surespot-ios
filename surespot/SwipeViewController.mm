@@ -61,6 +61,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _swipeView.pagingEnabled = YES;
     _swipeView.wrapEnabled = NO;
     _swipeView.truncateFinalPage =NO ;
+    _swipeView.delaysContentTouches = YES;
     
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
     {
@@ -112,6 +113,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [self loadChat:[afriend name] show:NO availableId: [afriend availableMessageId]];
         }
     }
+    
+    //setup the button
+    _theButton.layer.cornerRadius = 35;
+    _theButton.layer.borderColor = [[UIUtils surespotBlue] CGColor];
+    _theButton.layer.borderWidth = 3.0f;
+    _theButton.backgroundColor = [UIColor whiteColor];
+    _theButton.opaque = YES;
+    [_theButton setImage:[UIImage imageNamed:@"ic_menu_home"] forState:UIControlStateNormal];
+    [_theButton setTintColor:[UIUtils surespotBlue]];
     
 }
 
@@ -184,6 +194,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
     }
     
+    
+    CGRect buttonFrame = _theButton.frame;
+    buttonFrame.origin.y -= keyboardHeight;
+    _theButton.frame = buttonFrame;
+    
     self.keyboardState = keyboardState;
 }
 
@@ -222,6 +237,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 
             }
         }
+        CGRect buttonFrame = _theButton.frame;
+        buttonFrame.origin.y += self.keyboardState.keyboardHeight;
+        _theButton.frame = buttonFrame;
+        
         self.keyboardState = nil;
     }
 }
@@ -642,7 +661,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         @synchronized (_chats) {
             
             [_chats setObject:chatView forKey:username];
-            index = [[_chats allKeys] indexOfObject:username] + 1;
+            index = [[_chats allKeys] indexOfObject:username] + 1          ;
             
         }
         
@@ -687,26 +706,26 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    if ([textField text].length > 0) {
-        
-        
-        if ([_swipeView currentPage] == 0) {
-            [[ChatController sharedInstance] inviteUser:[textField text]];
-            [textField resignFirstResponder];
+    [self handleTextAction];
+    return NO;
+}
+
+- (void) handleTextAction {
+    if ([_textField text].length > 0) {
+        if (!_homeDataSource.currentChat) {
+            [[ChatController sharedInstance] inviteUser:[_textField text]];
+            [_textField resignFirstResponder];
+            [_textField setText:nil];
         }
         else {
             [self send];
-            
         }
-        
-        [textField setText:nil];
-        
     }
     else {
-        [textField resignFirstResponder];
+        [_textField resignFirstResponder];
     }
-    return NO;
 }
+
 
 - (void) send {
     NSString* message = self.textField.text;
@@ -719,6 +738,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     [[ChatController sharedInstance] sendMessage: message toFriendname:friendname];
+    [_textField setText:nil];
 }
 
 - (void)refreshMessages:(NSNotification *)notification {
@@ -730,7 +750,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         UITableView * tableView;
         @synchronized (_chats) {
             tableView = [_chats objectForKey:username];
-
+            
         }
         @synchronized (_needsScroll) {
             [_needsScroll removeObjectForKey:username];
@@ -748,9 +768,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
     }
     else {
-         @synchronized (_needsScroll) {
-             [_needsScroll setObject:@"yourmama" forKey:username];
-         }
+        @synchronized (_needsScroll) {
+            [_needsScroll setObject:@"yourmama" forKey:username];
+        }
     }
 }
 
@@ -862,7 +882,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [_swipeView reloadData];
         
         NSInteger page = [_swipeView currentPage];
-
+        
         if (page >= _swipeView.numberOfPages) {
             page = _swipeView.numberOfPages - 1;
         }
@@ -870,7 +890,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         NSString * name = [self nameForPage:page];
         DDLogInfo(@"name after close: %@", name);
         [_homeDataSource setCurrentChat:name];
-        [_swipeView scrollToPage:page duration:0.5];
+        [_swipeView scrollToPage:page duration:0.2];
     }
 }
 -(void) logout {
@@ -886,5 +906,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     [self performSegueWithIdentifier: @"returnToLogin" sender: self ];
     
+}
+- (IBAction)buttonTouchUpInside:(id)sender {
+    if (_textField.text.length > 0) {
+        [self handleTextAction];
+    }else {
+        [_swipeView scrollToPage:0 duration:0.5];
+    }
 }
 @end

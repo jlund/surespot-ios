@@ -153,7 +153,7 @@
                                 </connections>
                             </view>
                             <textField clipsSubviews="YES" contentMode="bottom" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="whileEditing" id="aRf-OH-qdB">
-                                <rect key="frame" x="0.0" y="465" width="320" height="30"/>
+                                <rect key="frame" x="0.0" y="465" width="259" height="30"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES"/>
@@ -161,6 +161,17 @@
                                     <outlet property="delegate" destination="tcp-OJ-fTS" id="JXA-4z-jTj"/>
                                 </connections>
                             </textField>
+                            <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="byV-5h-Uzr" customClass="SurespotButton">
+                                <rect key="frame" x="259" y="445" width="70" height="70"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <accessibility key="accessibilityConfiguration">
+                                    <accessibilityTraits key="traits" none="YES" button="YES" updatesFrequently="YES"/>
+                                </accessibility>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <connections>
+                                    <action selector="buttonTouchUpInside:" destination="tcp-OJ-fTS" eventType="touchUpInside" id="Wn5-ya-7Ky"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -170,6 +181,7 @@
                     <connections>
                         <outlet property="swipeView" destination="XCg-uf-vcR" id="Hkv-YP-hj9"/>
                         <outlet property="textField" destination="aRf-OH-qdB" id="FiH-dU-rOR"/>
+                        <outlet property="theButton" destination="byV-5h-Uzr" id="Fk8-y9-s2y"/>
                         <segue destination="onN-2k-VwT" kind="unwind" identifier="returnToLogin" unwindAction="returnToLogin:" id="Awy-8C-GBS"/>
                     </connections>
                 </viewController>

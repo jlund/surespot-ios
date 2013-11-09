@@ -13,9 +13,6 @@
 		6604A2C917626B9E0072216A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6604A2C717626B9E0072216A /* InfoPlist.strings */; };
 		6604A2CB17626B9E0072216A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6604A2CA17626B9E0072216A /* main.m */; };
 		6604A2CF17626B9E0072216A /* SurespotAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6604A2CE17626B9E0072216A /* SurespotAppDelegate.m */; };
-		6604A2D117626B9E0072216A /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 6604A2D017626B9E0072216A /* Default.png */; };
-		6604A2D317626B9E0072216A /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6604A2D217626B9E0072216A /* Default@2x.png */; };
-		6604A2D517626B9E0072216A /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6604A2D417626B9E0072216A /* Default-568h@2x.png */; };
 		6604A2D817626B9E0072216A /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6604A2D617626B9E0072216A /* MainStoryboard.storyboard */; };
 		6604A2DE17626B9E0072216A /* LoginViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6604A2DD17626B9E0072216A /* LoginViewController.mm */; };
 		6604A2E617626B9E0072216A /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A2E517626B9E0072216A /* SenTestingKit.framework */; };
@@ -51,9 +48,11 @@
 		6640767B1822D52800BFD974 /* SurespotControlMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 6640767A1822D52800BFD974 /* SurespotControlMessage.m */; };
 		6654441317F37A3F00F62F7F /* SwipeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6654441217F37A3F00F62F7F /* SwipeView.m */; };
 		6654441617F37BCF00F62F7F /* SwipeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6654441517F37BCF00F62F7F /* SwipeViewController.mm */; };
+		665F4DE4182EB2180083BCE7 /* SurespotButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DE3182EB2180083BCE7 /* SurespotButton.m */; };
 		66B3C8ED17B15F2300CC96EE /* ChatController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66B3C8EC17B15F2300CC96EE /* ChatController.mm */; };
 		66B3C8F017B17AC800CC96EE /* ChatDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B3C8EF17B17AC800CC96EE /* ChatDataSource.m */; };
 		66D3B04D182D47DF00B37A6C /* SurespotLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 66D3B04C182D47DF00B37A6C /* SurespotLogFormatter.m */; };
+		66D3B04F182EAB4200B37A6C /* surespot.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66D3B04E182EAB4200B37A6C /* surespot.xcassets */; };
 		66E4F5B6176298CB00596E6B /* libcryptopp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E4F5A1176298CB00596E6B /* libcryptopp.a */; };
 		66E4F5B7176298CB00596E6B /* SocketIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5A4176298CB00596E6B /* SocketIO.m */; };
 		66E4F5B8176298CB00596E6B /* SocketIOJSONSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5A6176298CB00596E6B /* SocketIOJSONSerialization.m */; };
@@ -83,7 +82,6 @@
 		66FF0FEE1827FAEE0038ECA6 /* StateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FED1827FAEE0038ECA6 /* StateController.m */; };
 		66FF0FF4182AE44C0038ECA6 /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FF3182AE44C0038ECA6 /* LoadingView.m */; };
 		66FF0FF6182AE6960038ECA6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66FF0FF5182AE6960038ECA6 /* QuartzCore.framework */; };
-		66FF0FF8182AEA280038ECA6 /* surespot_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 66FF0FF7182AEA280038ECA6 /* surespot_logo.png */; };
 		66FF0FFB182B04B10038ECA6 /* UIViewPager.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FFA182B04B10038ECA6 /* UIViewPager.m */; };
 		66FF1001182D3D920038ECA6 /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FFE182D3D920038ECA6 /* DDLog.m */; };
 		66FF1002182D3D920038ECA6 /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF1000182D3D920038ECA6 /* DDTTYLogger.m */; };
@@ -110,9 +108,6 @@
 		6604A2CC17626B9E0072216A /* surespot-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "surespot-Prefix.pch"; sourceTree = "<group>"; };
 		6604A2CD17626B9E0072216A /* SurespotAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SurespotAppDelegate.h; sourceTree = "<group>"; };
 		6604A2CE17626B9E0072216A /* SurespotAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SurespotAppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		6604A2D017626B9E0072216A /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		6604A2D217626B9E0072216A /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		6604A2D417626B9E0072216A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		6604A2DC17626B9E0072216A /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		6604A2DD17626B9E0072216A /* LoginViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = LoginViewController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6604A2E417626B9E0072216A /* surespotTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = surespotTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -174,12 +169,15 @@
 		6654441217F37A3F00F62F7F /* SwipeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SwipeView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6654441417F37BCE00F62F7F /* SwipeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeViewController.h; sourceTree = "<group>"; };
 		6654441517F37BCF00F62F7F /* SwipeViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = SwipeViewController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		665F4DE2182EB2180083BCE7 /* SurespotButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SurespotButton.h; path = chat/SurespotButton.h; sourceTree = "<group>"; };
+		665F4DE3182EB2180083BCE7 /* SurespotButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SurespotButton.m; path = chat/SurespotButton.m; sourceTree = "<group>"; };
 		66B3C8EB17B15F2300CC96EE /* ChatController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatController.h; path = chat/ChatController.h; sourceTree = "<group>"; };
 		66B3C8EC17B15F2300CC96EE /* ChatController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = ChatController.mm; path = chat/ChatController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		66B3C8EE17B17AC800CC96EE /* ChatDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatDataSource.h; path = chat/ChatDataSource.h; sourceTree = "<group>"; };
 		66B3C8EF17B17AC800CC96EE /* ChatDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = ChatDataSource.m; path = chat/ChatDataSource.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		66D3B04B182D47DF00B37A6C /* SurespotLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SurespotLogFormatter.h; path = utils/SurespotLogFormatter.h; sourceTree = "<group>"; };
 		66D3B04C182D47DF00B37A6C /* SurespotLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SurespotLogFormatter.m; path = utils/SurespotLogFormatter.m; sourceTree = "<group>"; };
+		66D3B04E182EAB4200B37A6C /* surespot.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = surespot.xcassets; sourceTree = "<group>"; };
 		66E4F51A176298CB00596E6B /* 3way.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 3way.h; sourceTree = "<group>"; };
 		66E4F51B176298CB00596E6B /* adler32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adler32.h; sourceTree = "<group>"; };
 		66E4F51C176298CB00596E6B /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
@@ -370,7 +368,6 @@
 		66FF0FF2182AE4420038ECA6 /* LoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoadingView.h; path = utils/LoadingView.h; sourceTree = "<group>"; };
 		66FF0FF3182AE44C0038ECA6 /* LoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoadingView.m; path = utils/LoadingView.m; sourceTree = "<group>"; };
 		66FF0FF5182AE6960038ECA6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		66FF0FF7182AEA280038ECA6 /* surespot_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = surespot_logo.png; sourceTree = "<group>"; };
 		66FF0FF9182B04B10038ECA6 /* UIViewPager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewPager.h; sourceTree = "<group>"; };
 		66FF0FFA182B04B10038ECA6 /* UIViewPager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewPager.m; sourceTree = "<group>"; };
 		66FF0FFD182D3D920038ECA6 /* DDLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = DDLog.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -463,6 +460,7 @@
 				660EB27917FE3D7800DBC53C /* KeyboardState.m */,
 				6606E4EB179D9C3A004199BC /* SignupViewController.h */,
 				6606E4EC179D9C3A004199BC /* SignupViewController.mm */,
+				66D3B04E182EAB4200B37A6C /* surespot.xcassets */,
 				6604A2D617626B9E0072216A /* MainStoryboard.storyboard */,
 				66E4F517176298CB00596E6B /* libs */,
 				6604A2C517626B9E0072216A /* Supporting Files */,
@@ -473,15 +471,11 @@
 		6604A2C517626B9E0072216A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				66FF0FF7182AEA280038ECA6 /* surespot_logo.png */,
 				6621BB861762704D00BC2850 /* Localizable.strings */,
 				6604A2C617626B9E0072216A /* surespot-Info.plist */,
 				6604A2C717626B9E0072216A /* InfoPlist.strings */,
 				6604A2CA17626B9E0072216A /* main.m */,
 				6604A2CC17626B9E0072216A /* surespot-Prefix.pch */,
-				6604A2D017626B9E0072216A /* Default.png */,
-				6604A2D217626B9E0072216A /* Default@2x.png */,
-				6604A2D417626B9E0072216A /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -610,6 +604,8 @@
 				664076661821B25A00BFD974 /* TheirMessageCell.xib */,
 				664076791822D52800BFD974 /* SurespotControlMessage.h */,
 				6640767A1822D52800BFD974 /* SurespotControlMessage.m */,
+				665F4DE2182EB2180083BCE7 /* SurespotButton.h */,
+				665F4DE3182EB2180083BCE7 /* SurespotButton.m */,
 			);
 			name = chat;
 			sourceTree = "<group>";
@@ -953,11 +949,8 @@
 				664076671821B25A00BFD974 /* TheirMessageCell.xib in Resources */,
 				6604A2C917626B9E0072216A /* InfoPlist.strings in Resources */,
 				664076621821892700BFD974 /* OurMessageCell.xib in Resources */,
-				6604A2D117626B9E0072216A /* Default.png in Resources */,
-				6604A2D317626B9E0072216A /* Default@2x.png in Resources */,
-				6604A2D517626B9E0072216A /* Default-568h@2x.png in Resources */,
 				6604A2D817626B9E0072216A /* MainStoryboard.storyboard in Resources */,
-				66FF0FF8182AEA280038ECA6 /* surespot_logo.png in Resources */,
+				66D3B04F182EAB4200B37A6C /* surespot.xcassets in Resources */,
 				6621BB841762704D00BC2850 /* Localizable.strings in Resources */,
 				6640766C1822A84C00BFD974 /* HomeCell.xib in Resources */,
 			);
@@ -1041,6 +1034,7 @@
 				66371086181331E8009D5195 /* MessageProcessor.mm in Sources */,
 				660EB28017FE666D00DBC53C /* SurespotMessage.m in Sources */,
 				6640765E1821856D00BFD974 /* MessageView.m in Sources */,
+				665F4DE4182EB2180083BCE7 /* SurespotButton.m in Sources */,
 				66E6536A17B043D2000F81BD /* CredentialCachingController.mm in Sources */,
 				66E6537017B0583F000F81BD /* PublicKeys.mm in Sources */,
 				6637108C18140FB2009D5195 /* GetPublicKeysOperation.mm in Sources */,

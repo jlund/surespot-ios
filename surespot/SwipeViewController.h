@@ -29,5 +29,7 @@
 @property (strong, nonatomic) KeyboardState * keyboardState;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *textBottomConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *swipeTopConstraint;
+@property (strong, nonatomic) IBOutlet UIButton *theButton;
+- (IBAction)buttonTouchUpInside:(id)sender;
 
 @end
