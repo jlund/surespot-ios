@@ -125,17 +125,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) addMessageInternal:(SurespotMessage *)message  refresh: (BOOL) refresh {
-    NSUInteger index = [self.messages indexOfObject:message];
-    if (index == NSNotFound) {
-        DDLogVerbose(@"adding message iv: %@", message.iv);
-        [self.messages addObject:message];
-    }
-    else {
-        DDLogVerbose(@"updating message iv: %@", message.iv);
-        SurespotMessage * existingMessage = [self.messages objectAtIndex:index];
-        if (message.serverid) {
-            existingMessage.serverid = message.serverid;
-            existingMessage.dateTime = message.dateTime;
+    @synchronized (_messages)  {
+        NSUInteger index = [self.messages indexOfObject:message];
+        if (index == NSNotFound) {
+            DDLogVerbose(@"adding message iv: %@", message.iv);
+            [self.messages addObject:message];
+        }
+        else {
+            DDLogVerbose(@"updating message iv: %@", message.iv);
+            SurespotMessage * existingMessage = [self.messages objectAtIndex:index];
+            if (message.serverid) {
+                existingMessage.serverid = message.serverid;
+                existingMessage.dateTime = message.dateTime;
+            }
         }
     }
     
@@ -153,14 +155,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
     }
     
+    
 }
 
 -(NSInteger) latestMessageId {
     NSInteger maxId = 0;
-    for (SurespotMessage * message in _messages) {
-        NSInteger idValue =[message.serverid integerValue];
-        if (idValue > maxId) {
-            maxId = idValue;
+    @synchronized (_messages)  {
+        for (SurespotMessage * message in _messages) {
+            NSInteger idValue =[message.serverid integerValue];
+            if (idValue > maxId) {
+                maxId = idValue;
+            }
         }
     }
     
@@ -184,13 +189,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSString * filename =[FileController getChatDataFilenameForSpot: spot];
     DDLogVerbose(@"saving chat data to disk, spot: %@", spot);
     NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
-    [dict setObject:_messages forKey:@"messages"];
-    //[dict setObject:_username  forKey:@"username"];
-    [dict setObject:[NSNumber numberWithInteger:_latestControlMessageId] forKey:@"latestControlMessageId"];
     
-    
-    BOOL saved =[NSKeyedArchiver archiveRootObject:dict toFile:filename];
-    DDLogVerbose(@"save success?: %@",saved ? @"YES" : @"NO");
+    @synchronized (_messages)  {
+        [dict setObject:_messages forKey:@"messages"];
+        //[dict setObject:_username  forKey:@"username"];
+        [dict setObject:[NSNumber numberWithInteger:_latestControlMessageId] forKey:@"latestControlMessageId"];
+        
+        
+        BOOL saved =[NSKeyedArchiver archiveRootObject:dict toFile:filename];
+        
+        DDLogVerbose(@"save success?: %@",saved ? @"YES" : @"NO");
+    }
     
 }
 

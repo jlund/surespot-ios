@@ -32,7 +32,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     [super viewDidLoad];
     [self.navigationItem setTitle:NSLocalizedString(@"create", nil)];
-    self.navigationController.navigationBar.tintColor = [UIUtils surespotBlue];
+    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
+        self.navigationController.navigationBar.tintColor = [UIUtils surespotBlue];
+    }
     _tbUsername.returnKeyType = UIReturnKeyNext;
     _tbPassword.returnKeyType = UIReturnKeyGo;
 }
