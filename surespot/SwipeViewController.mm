@@ -370,10 +370,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     //scroll if we need to
     NSString * name =[self nameForPage:currPage];
-    id needsit = [_needsScroll  objectForKey:name];
-    if (needsit) {
-        [self scrollTableViewToBottom:tableview];
-        [_needsScroll removeObjectForKey:name];
+    @synchronized (_needsScroll ) {
+        id needsit = [_needsScroll  objectForKey:name];
+        if (needsit) {
+            [self scrollTableViewToBottom:tableview];
+            [_needsScroll removeObjectForKey:name];
+        }
     }
     
 }
@@ -640,11 +642,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         @synchronized (_chats) {
             
             [_chats setObject:chatView forKey:username];
-            index = _chats.count;
+            index = [[_chats allKeys] indexOfObject:username] + 1;
             
         }
         
-        DDLogVerbose(@"creatingindex: %d", index);
+        DDLogInfo(@"creatingindex: %d", index);
         
         //   [chatView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"ChatCell"];
         [chatView registerNib:[UINib nibWithNibName:@"OurMessageCell" bundle:nil] forCellReuseIdentifier:@"OurMessageView"];
@@ -669,14 +671,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 index = [[_chats allKeys] indexOfObject:username] + 1;
             }
             
-            DDLogVerbose(@"scrolling to index: %d", index);
+            DDLogInfo(@"scrolling to index: %d", index);
             [_swipeView scrollToPage:index duration:0.500];
         }
     }
 }
 
 -(void) showChat:(NSString *) username {
-    DDLogVerbose(@"showChat, %@", username);
+    DDLogInfo(@"showChat, %@", username);
     
     Friend * afriend = [_homeDataSource getFriendByName:username];
     
@@ -721,15 +723,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)refreshMessages:(NSNotification *)notification {
     NSString * username = notification.object;
-    DDLogInfo(@"username: %@, currentchat: %@", username, _homeDataSource.currentChat);
+    DDLogVerbose(@"username: %@, currentchat: %@", username, _homeDataSource.currentChat);
     
     if ([username isEqualToString: _homeDataSource.currentChat]) {
         
         UITableView * tableView;
         @synchronized (_chats) {
             tableView = [_chats objectForKey:username];
+
+        }
+        @synchronized (_needsScroll) {
             [_needsScroll removeObjectForKey:username];
         }
+        
         if (tableView) {
             
             
@@ -742,21 +748,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
     }
     else {
-        [_needsScroll setObject:@"yourmama" forKey:username];
+         @synchronized (_needsScroll) {
+             [_needsScroll setObject:@"yourmama" forKey:username];
+         }
     }
 }
 
 - (void) scrollTableViewToBottom: (UITableView *) tableView {
     NSInteger numRows =[tableView numberOfRowsInSection:0];
     if (numRows > 0) {
-        DDLogInfo(@"scrolling to row: %d", numRows);
-        
-        //     CGPoint bottomOffset = CGPointMake(0, tableView.contentSize.height - tableView.frame.size.height);
-        //   [tableView setContentOffset:bottomOffset animated:NO];
+        DDLogVerbose(@"scrolling to row: %d", numRows);
         NSIndexPath *scrollIndexPath = [NSIndexPath indexPathForRow:(numRows - 1) inSection:0];
         [tableView scrollToRowAtIndexPath:scrollIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }
-    
 }
 
 - (void)refreshHome:(NSNotification *)notification
@@ -858,10 +862,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [_swipeView reloadData];
         
         NSInteger page = [_swipeView currentPage];
+
         if (page >= _swipeView.numberOfPages) {
             page = _swipeView.numberOfPages - 1;
         }
+        DDLogInfo(@"page after close: %d", page);
         NSString * name = [self nameForPage:page];
+        DDLogInfo(@"name after close: %@", name);
         [_homeDataSource setCurrentChat:name];
         [_swipeView scrollToPage:page duration:0.5];
     }
