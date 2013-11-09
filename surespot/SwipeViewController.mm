@@ -65,7 +65,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     
     UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"menu" style:UIBarButtonItemStylePlain target:self action:@selector(showMenu)];
     self.navigationItem.rightBarButtonItem = anotherButton;
-   
+    
     self.navigationItem.title = [@"surespot/" stringByAppendingString:[[IdentityController sharedInstance] getLoggedInUser]];
     
     
@@ -97,7 +97,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     _viewPager.autoresizingMask =UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:_viewPager];
     _viewPager.delegate = self;
-
+    
     
     //open active tabs
     for (Friend * afriend in [_homeDataSource friends]) {
@@ -147,7 +147,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     
     CGRect textFieldFrame = _textField.frame;
     textFieldFrame.origin.y -= keyboardHeight;
-   
+    
     _textField.frame = textFieldFrame;
     
     DDLogVerbose(@"keyboard height before: %f", keyboardHeight);
@@ -170,9 +170,11 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     
     keyboardState.offset = tableView.contentOffset;
     
-    for (UITableView *tableView in [_chats allValues]) {
-        tableView.contentInset = contentInsets;
-        tableView.scrollIndicatorInsets = scrollInsets;
+    @synchronized (_chats) {
+        for (UITableView *tableView in [_chats allValues]) {
+            tableView.contentInset = contentInsets;
+            tableView.scrollIndicatorInsets = scrollInsets;
+        }
     }
     
     self.keyboardState = keyboardState;
@@ -205,12 +207,14 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
         
         _friendView.scrollIndicatorInsets = self.keyboardState.indicatorInset;
         _friendView.contentInset = self.keyboardState.contentInset;
-        for (UITableView *tableView in [_chats allValues]) {
-            tableView.scrollIndicatorInsets = self.keyboardState.indicatorInset;
-            tableView.contentInset = self.keyboardState.contentInset;
+        @synchronized (_chats) {
             
+            for (UITableView *tableView in [_chats allValues]) {
+                tableView.scrollIndicatorInsets = self.keyboardState.indicatorInset;
+                tableView.contentInset = self.keyboardState.contentInset;
+                
+            }
         }
-        
         self.keyboardState = nil;
     }
 }
@@ -278,13 +282,15 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 }
 
 -(NSString * ) nameForPage:(NSInteger)page {
-   
+    
     if (page == 0) {
         return nil;
     }
     else {
-        if ([_chats count] > 0) {
-            return [[_chats allKeys] objectAtIndex:page-1];
+        @synchronized (_chats) {
+            if ([_chats count] > 0) {
+                return [[_chats allKeys] objectAtIndex:page-1];
+            }
         }
     }
     
@@ -293,7 +299,10 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 
 - (NSInteger)numberOfItemsInSwipeView:(SwipeView *)swipeView
 {
-    return 1 + [_chats count];
+    @synchronized (_chats) {
+        
+        return 1 + [_chats count];
+    }
 }
 
 - (UIView *)swipeView:(SwipeView *)swipeView viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view
@@ -317,11 +326,14 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     }
     else {
         DDLogVerbose(@"returning chat view");
-        NSArray *keys = [_chats allKeys];
-        id aKey = [keys objectAtIndex:index -1];
-        id anObject = [_chats objectForKey:aKey];
-        
-        return anObject;
+        @synchronized (_chats) {
+            
+            NSArray *keys = [_chats allKeys];
+            id aKey = [keys objectAtIndex:index -1];
+            id anObject = [_chats objectForKey:aKey];
+            
+            return anObject;
+        }
     }
     
 }
@@ -339,8 +351,11 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
         tableview = _friendView;
     }
     else {
-        tableview = [_chats allValues][swipeView.currentPage-1];
-        [[ChatController sharedInstance] setCurrentChat: [_chats allKeys][currPage-1]];
+        @synchronized (_chats) {
+            
+            tableview = [_chats allValues][swipeView.currentPage-1];
+            [[ChatController sharedInstance] setCurrentChat: [_chats allKeys][currPage-1]];
+        }
         
     }
     DDLogVerbose(@"swipeview index changed to %d", currPage);
@@ -364,7 +379,11 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSUInteger index = [[_chats allValues] indexOfObject:tableView];
+    NSUInteger index =  NSNotFound;
+    
+    @synchronized (_chats) {
+        index = [[_chats allValues] indexOfObject:tableView];
+    }
     
     if (index == NSNotFound) {
         index = [_swipeView indexOfItemViewOrSubview:tableView];
@@ -384,11 +403,16 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     }
     else {
         NSInteger chatIndex = index-1;
-        
-        NSArray *keys = [_chats allKeys];
-        if(chatIndex >= 0 && chatIndex < keys.count ) {
-            id aKey = [keys objectAtIndex:chatIndex];
-            NSString * username = aKey;
+        NSString * username;
+        @synchronized (_chats) {
+            
+            NSArray *keys = [_chats allKeys];
+            if(chatIndex >= 0 && chatIndex < keys.count ) {
+                id aKey = [keys objectAtIndex:chatIndex];
+                username = aKey;
+            }
+        }
+        if (username) {
             return  [[ChatController sharedInstance] getDataSourceForFriendname: username].messages.count;
         }
     }
@@ -418,23 +442,26 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
         
     }
     else {
-        NSArray *keys = [_chats allKeys];
-        id aKey = [keys objectAtIndex:index -1];
-        
-        NSString * username = aKey;
-        NSArray * messages =[[ChatController sharedInstance] getDataSourceForFriendname: username].messages;
-        if (messages.count > 0) {
-            SurespotMessage * message =[messages objectAtIndex:indexPath.row];
-            if (message.rowHeight > 0) {
-                return message.rowHeight;
-            }
+        @synchronized (_chats) {
             
-            else {
-                return 44;
+            NSArray *keys = [_chats allKeys];
+            id aKey = [keys objectAtIndex:index -1];
+            
+            NSString * username = aKey;
+            NSArray * messages =[[ChatController sharedInstance] getDataSourceForFriendname: username].messages;
+            if (messages.count > 0) {
+                SurespotMessage * message =[messages objectAtIndex:indexPath.row];
+                if (message.rowHeight > 0) {
+                    return message.rowHeight;
+                }
+                
+                else {
+                    return 44;
+                }
             }
-        }
-        else {
-            return 0;
+            else {
+                return 0;
+            }
         }
     }
     
@@ -474,10 +501,11 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
         return cell;
     }
     else {
-        
-        NSArray *keys = [_chats allKeys];
-        id aKey = [keys objectAtIndex:index -1];
-        
+        id aKey;
+        @synchronized (_chats) {
+            NSArray *keys = [_chats allKeys];
+            aKey = [keys objectAtIndex:index -1];
+        }
         NSString * username = aKey;
         NSArray * messages =[[ChatController sharedInstance] getDataSourceForFriendname: username].messages;
         if (messages.count > 0) {
@@ -516,19 +544,19 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
                     }
                     
                     
-//                    [message setLoaded:NO];
-//                    [message setLoading:YES];
-//                    //    DDLogVerbose(@"decrypting data for iv: %@", [message iv]);
-//                    [[MessageProcessor sharedInstance] decryptMessage:message width: tableView.frame.size.width completionCallback:^(SurespotMessage  * message){
-//                        
-//                        //   DDLogVerbose(@"data decrypted, reloading row for iv %@", [message iv]);
-//                        dispatch_async(dispatch_get_main_queue(), ^{
-//                            //  [tableView reloadData];
-//                            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
-//                            [message setLoading:NO];
-//                            [message setLoaded:YES];
-//                        });
-//                    }];
+                    //                    [message setLoaded:NO];
+                    //                    [message setLoading:YES];
+                    //                    //    DDLogVerbose(@"decrypting data for iv: %@", [message iv]);
+                    //                    [[MessageProcessor sharedInstance] decryptMessage:message width: tableView.frame.size.width completionCallback:^(SurespotMessage  * message){
+                    //
+                    //                        //   DDLogVerbose(@"data decrypted, reloading row for iv %@", [message iv]);
+                    //                        dispatch_async(dispatch_get_main_queue(), ^{
+                    //                            //  [tableView reloadData];
+                    //                            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                    //                            [message setLoading:NO];
+                    //                            [message setLoaded:YES];
+                    //                        });
+                    //                    }];
                     
                 }
             }
@@ -577,7 +605,10 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 
 -(void) loadChat:(NSString *) username show: (BOOL) show  availableId: (NSInteger) availableId {
     //get existing view if there is one
-    UITableView * chatView = [_chats objectForKey:username];
+    UITableView * chatView;
+    @synchronized (_chats) {
+        chatView = [_chats objectForKey:username];
+    }
     if (!chatView) {
         
         chatView = [[UITableView alloc] initWithFrame:_swipeView.frame];
@@ -590,15 +621,19 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
         //create the data source
         [[ChatController sharedInstance] createDataSourceForFriendname:username availableId: availableId];
         
+        NSInteger index = 0;
+        @synchronized (_chats) {
+            
+            [_chats setObject:chatView forKey:username];
+            index = _chats.count;
+            
+        }
         
-        [_chats setObject:chatView forKey:username];
+        DDLogVerbose(@"creatingindex: %d", index);
         
         //   [chatView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"ChatCell"];
         [chatView registerNib:[UINib nibWithNibName:@"OurMessageCell" bundle:nil] forCellReuseIdentifier:@"OurMessageView"];
         [chatView registerNib:[UINib nibWithNibName:@"TheirMessageCell" bundle:nil] forCellReuseIdentifier:@"TheirMessageView"];
-        
-        NSInteger index = _chats.count;
-        DDLogVerbose(@"creatingindex: %d", index);
         
         [_swipeView loadViewAtIndex:index];
         [_swipeView updateItemSizeAndCount];
@@ -614,10 +649,13 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     else {
         if (show) {
             [[ChatController sharedInstance] setCurrentChat: username];
-            NSInteger index = [[_chats allKeys] indexOfObject:username] + 1;
+            NSInteger index;
+            @synchronized (_chats) {
+                index = [[_chats allKeys] indexOfObject:username] + 1;
+            }
+            
             DDLogVerbose(@"scrolling to index: %d", index);
             [_swipeView scrollToPage:index duration:0.500];
-            
         }
     }
 }
@@ -657,10 +695,14 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     NSString* message = self.textField.text;
     
     if ([UIUtils stringIsNilOrEmpty:message]) return;
+    id friendname;
+    @synchronized (_chats) {
+        NSArray *keys = [_chats allKeys];
+        friendname = [keys objectAtIndex:[_swipeView currentItemIndex] -1];
+    }
     
-    NSArray *keys = [_chats allKeys];
-    id friendname = [keys objectAtIndex:[_swipeView currentItemIndex] -1];
     [[ChatController sharedInstance] sendMessage: message toFriendname:friendname];
+    
     // UITableView * chatView = [_chats objectForKey:friendname];
     // [chatView reloadData];
 }
@@ -669,8 +711,10 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 {
     DDLogVerbose(@"refreshMessages");
     NSString * username = notification.object;
-    
-    id tableView = [_chats objectForKey:username];
+    id tableView;
+    @synchronized (_chats) {
+        tableView = [_chats objectForKey:username];
+    }
     if (tableView) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -683,6 +727,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
                 [tableView scrollToRowAtIndexPath:scrollIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
             }
         });
+        
         
     }
 }
@@ -780,9 +825,11 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     if (_homeDataSource.currentChat) {
         [[ChatController sharedInstance] destroyDataSourceForFriendname: _homeDataSource.currentChat];
         [[_homeDataSource getFriendByName:_homeDataSource.currentChat] setChatActive:NO];
-        [_chats removeObjectForKey:_homeDataSource.currentChat];
+        @synchronized (_chats) {
+            [_chats removeObjectForKey:_homeDataSource.currentChat];
+        }
         [_swipeView reloadData];
-                
+        
         NSInteger page = [_swipeView currentPage];
         if (page >= _swipeView.numberOfPages) {
             page = _swipeView.numberOfPages - 1;
@@ -800,7 +847,9 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     
     [[NetworkController sharedInstance] logout];
     [[ChatController sharedInstance] logout];
-    [_chats removeAllObjects];
+    @synchronized (_chats) {
+        [_chats removeAllObjects];
+    }
     [self performSegueWithIdentifier: @"returnToLogin" sender: self ];
     
 }
