@@ -275,8 +275,8 @@ static const int MAX_CONNECTION_RETRIES = 16;
             NSMutableDictionary * messageId = [[NSMutableDictionary alloc] init];
             [messageId setObject: username forKey:@"username"];
             [messageId setObject: [NSNumber numberWithInteger: [chatDataSource latestMessageId]] forKey:@"messageid"];
-            [messageId setObject: [NSNumber numberWithInteger:[chatDataSource latestControlMessageId]] forKey:@"controlmessageid"];
-            
+            [messageId setObject: [NSNumber numberWithInt:-1] forKey:@"controlmessageid"];
+            //[NSNumber numberWithInteger:[chatDataSource latestControlMessageId]];
             [messageIds addObject:messageId];
         }
     }
