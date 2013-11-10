@@ -162,6 +162,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES"/>
                                         <connections>
+                                            <action selector="textFieldChanged:" destination="tcp-OJ-fTS" eventType="editingChanged" id="KHh-xK-iue"/>
                                             <outlet property="delegate" destination="tcp-OJ-fTS" id="JXA-4z-jTj"/>
                                         </connections>
                                     </textField>

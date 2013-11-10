@@ -393,7 +393,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
     }
     DDLogVerbose(@"swipeview index changed to %d", currPage);
-  //  [tableview reloadData];
+    [tableview reloadData];
     
     //scroll if we need to
     NSString * name =[self nameForPage:currPage];
@@ -725,8 +725,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if ([_textField text].length > 0) {
         if (!_homeDataSource.currentChat) {
             [[ChatController sharedInstance] inviteUser:[_textField text]];
-            [_textField resignFirstResponder];
+//            [_textField resignFirstResponder];
             [_textField setText:nil];
+            [self updateButtonIcons];
         }
         else {
             [self send];
@@ -750,6 +751,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [[ChatController sharedInstance] sendMessage: message toFriendname:friendname];
     [_textField setText:nil];
+    [self updateButtonIcons];
 }
 
 -(void) updateButtonIcons {
@@ -938,5 +940,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }else {
         [_swipeView scrollToPage:0 duration:0.5];
     }
+}
+- (IBAction)textFieldChanged:(id)sender {
+    [self updateButtonIcons];
 }
 @end
