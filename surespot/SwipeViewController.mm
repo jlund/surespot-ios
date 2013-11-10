@@ -120,9 +120,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _theButton.layer.borderWidth = 3.0f;
     _theButton.backgroundColor = [UIColor whiteColor];
     _theButton.opaque = YES;
-    [_theButton setImage:[UIImage imageNamed:@"ic_menu_home"] forState:UIControlStateNormal];
-    [_theButton setTintColor:[UIUtils surespotBlue]];
-    
+
+    [self updateButtonIcons];
 }
 
 
@@ -394,7 +393,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
     }
     DDLogVerbose(@"swipeview index changed to %d", currPage);
-    [tableview reloadData];
+  //  [tableview reloadData];
     
     //scroll if we need to
     NSString * name =[self nameForPage:currPage];
@@ -405,6 +404,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [_needsScroll removeObjectForKey:name];
         }
     }
+    
+    //update button
+    [self updateButtonIcons];
     
 }
 
@@ -748,6 +750,20 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [[ChatController sharedInstance] sendMessage: message toFriendname:friendname];
     [_textField setText:nil];
+}
+
+-(void) updateButtonIcons {
+    if (!_homeDataSource.currentChat) {
+                    [_theButton setImage:[UIImage imageNamed:@"ic_menu_invite"] forState:UIControlStateNormal];
+             }
+    else {
+        if ([_textField.text length] > 0) {
+            [_theButton setImage:[UIImage imageNamed:@"ic_menu_send"] forState:UIControlStateNormal];
+        }
+        else {
+            [_theButton setImage:[UIImage imageNamed:@"ic_menu_home"] forState:UIControlStateNormal];
+        }
+    }
 }
 
 - (void)refreshMessages:(NSNotification *)notification {

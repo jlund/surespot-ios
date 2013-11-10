@@ -3,12 +3,12 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "ic_menu_send-1.png"
+      "filename" : "ic_menu_invite.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "ic_menu_send.png"
+      "filename" : "ic_menu_invite-1.png"
     }
   ],
   "info" : {

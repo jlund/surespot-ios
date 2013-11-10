@@ -12,7 +12,6 @@
 @implementation SurespotButton 
 
 
-
 -(void) setHighlighted:(BOOL)highlighted {
     
     if(highlighted) {
