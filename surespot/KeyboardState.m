@@ -9,4 +9,12 @@
 #import "KeyboardState.h"
 
 @implementation KeyboardState
+- (id)init
+{
+    self = [super init];
+    if (self) {
+     //   _offsets = [NSMutableDictionary new];
+    }
+    return self;
+}
 @end

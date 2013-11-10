@@ -185,15 +185,18 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     
     @synchronized (_chats) {
-        for (UITableView *tableView in [_chats allValues]) {
+        for (NSString * key in [_chats allKeys]) {
+            UITableView * tableView = [_chats objectForKey:key];
             
-            DDLogInfo(@"content offset y: %f", tableView.contentOffset.y);
-            
+           
+          //  DDLogInfo(@"saving content offset for %@, y: %f", key, tableView.contentOffset.y);
+          //  [keyboardState.offsets setObject:[NSNumber numberWithFloat: tableView.contentOffset.y ] forKey:key];
+
             tableView.contentInset = contentInsets;
             tableView.scrollIndicatorInsets = scrollInsets;
-            CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y + keyboardHeight);
-            [tableView setContentOffset:newOffset animated:NO];
             
+         //   CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y + keyboardHeight);
+         //   [tableView setContentOffset:newOffset animated:NO];
             
             
         }
@@ -224,28 +227,29 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         CGRect textFieldFrame = _textFieldContainer.frame;
         textFieldFrame.origin.y += self.keyboardState.keyboardHeight;
         _textFieldContainer.frame = textFieldFrame;
-        
-        
-        
-        
         //reset all table view states
-        
-        [_friendView setContentOffset:self.keyboardState.offset animated:YES];
         
         _friendView.scrollIndicatorInsets = self.keyboardState.indicatorInset;
         _friendView.contentInset = self.keyboardState.contentInset;
         @synchronized (_chats) {
             
-            for (UITableView *tableView in [_chats allValues]) {
+            for (NSString * key in [_chats allKeys]) {
+                UITableView * tableView = [_chats objectForKey:key];
                 tableView.scrollIndicatorInsets = self.keyboardState.indicatorInset;
                 tableView.contentInset = self.keyboardState.contentInset;
-                
+              //  CGPoint oldOffset = CGPointMake(0, [[self.keyboardState.offsets objectForKey: key] floatValue]);
+              //  DDLogInfo(@"restoring content offset for %@, y: %f", key, oldOffset.y);
+//                [tableView setContentOffset:  oldOffset animated:YES];
+               //    CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y - self.keyboardState.keyboardHeight);
+            //    [tableView setContentOffset:  newOffset animated:YES];
+              //  [tableView layoutIfNeeded];
             }
         }
         CGRect buttonFrame = _theButton.frame;
         buttonFrame.origin.y += self.keyboardState.keyboardHeight;
         _theButton.frame = buttonFrame;
         
+       // [self.keyboardState.offsets removeAllObjects];
         self.keyboardState = nil;
     }
 }

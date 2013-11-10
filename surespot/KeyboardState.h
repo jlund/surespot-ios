@@ -12,6 +12,5 @@
 @property (nonatomic) CGFloat keyboardHeight;
 @property (nonatomic) UIEdgeInsets contentInset;
 @property (nonatomic) UIEdgeInsets indicatorInset;
-@property (nonatomic) CGPoint offset;
-@property (strong, nonatomic) UITableView * tableView;
+//@property (nonatomic, strong) NSMutableDictionary * offsets;
 @end
