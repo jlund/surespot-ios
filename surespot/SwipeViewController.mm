@@ -195,8 +195,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             tableView.contentInset = contentInsets;
             tableView.scrollIndicatorInsets = scrollInsets;
             
-         //   CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y + keyboardHeight);
-         //   [tableView setContentOffset:newOffset animated:NO];
+            CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y + keyboardHeight);
+            [tableView setContentOffset:newOffset animated:NO];
             
             
         }
