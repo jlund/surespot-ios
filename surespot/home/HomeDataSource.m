@@ -75,13 +75,47 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
 }
 
-- (void) addFriend: (Friend *) afriend withRefresh: (BOOL) refresh {
-    [_friends addObject:afriend];
-    if (refresh) {
-        [self postRefresh];
+- (void) setFriend: (NSString *) username  {
+    Friend * theFriend = [self getFriendByName:username];
+    if (!theFriend) {
+        theFriend = [Friend new];
+        theFriend.name = username;
+    }
+
+    [theFriend setFriend];
+    [self postRefresh];
+}
+
+- (void)addFriendInvited:(NSString *) username
+{
+    DDLogVerbose(@"entered");
+    Friend * theFriend = [self getFriendByName:username];
+    if (!theFriend) {
+        theFriend = [Friend new];
+        theFriend.name = username;
     }
     
+    [theFriend setInvited:YES];
+    [self postRefresh];
 }
+
+- (void)addFriendInviter:(NSString *) username
+{
+    DDLogVerbose(@"entered");
+    Friend * theFriend = [self getFriendByName:username];
+    
+    if (!theFriend) {
+        theFriend = [Friend new];
+        theFriend.name = username;
+    }
+    
+    [theFriend setInviter:YES];
+    
+    //todo sort
+    [self postRefresh];
+    
+}
+
 - (void) removeFriend: (Friend *) afriend withRefresh: (BOOL) refresh {
     [_friends removeObject:afriend];
     if (refresh) {

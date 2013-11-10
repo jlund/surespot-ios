@@ -68,6 +68,19 @@
   //  [encoder encodeObject:_imageIv forKey:@"imageIv"];
 }
 
+-(void) setFriend {
+ //   if (set) {
+  //      _flags |= NEW_FRIEND;
+        _flags &= ~INVITED;
+        _flags &= ~INVITER;
+        _flags &= ~DELETED;
+   // }
+//    else {
+//        _flags &= ~NEW_FRIEND;
+//    }
+    
+
+}
 
 
 -(BOOL) isInviter {

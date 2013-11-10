@@ -15,7 +15,9 @@
 @property (atomic, assign) NSInteger latestUserControlId;
 @property (strong, nonatomic) NSString * currentChat;
 
-- (void) addFriend: (Friend *) afriend withRefresh: (BOOL) refresh;
+- (void) addFriendInvited: (NSString *) name;
+- (void) addFriendInviter: (NSString *) name;
+- (void) setFriend: (NSString *) username;
 - (void) removeFriend: (Friend *) afriend withRefresh: (BOOL) refresh;
 -(Friend *) getFriendByName: (NSString *) name;
 -(void) postRefresh;

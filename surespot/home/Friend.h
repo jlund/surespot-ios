@@ -20,6 +20,8 @@
 @property (atomic, assign) NSInteger lastReceivedMessageControlId;
 @property (atomic, assign) NSInteger availableMessageControlId;
 
+-(void) setFriend;
+
 -(BOOL) isInviter;
 -(void) setInviter: (BOOL) set;
 -(BOOL) isInvited;

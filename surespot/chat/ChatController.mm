@@ -66,22 +66,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pause:) name:UIApplicationDidEnterBackgroundNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resume:) name:UIApplicationWillEnterForegroundNotification object:nil];
         
-        
-        ////   self.socketIO.useSecure = YES;
-        //   [self.socketIO connectToHost:@"server.surespot.me" onPort:443];
-        
-        // _homeDataSource = [[HomeDataSource alloc] init];
-        _chatDataSources = [[NSMutableDictionary alloc] init];
-        
-        //open active chats
-        
-        
-        //listen for invited
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(friendInvited:) name:@"friendInvited" object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(friendInvite:) name:@"friendInvite" object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(friendDelete:) name:@"friendDelete" object:nil];
-        
-        
+         _chatDataSources = [[NSMutableDictionary alloc] init];
         [self connect];
     }
     
@@ -281,8 +266,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
         }
     }
     
-    
-    [[NetworkController sharedInstance] getLatestDataSinceUserControlId:_homeDataSource.latestUserControlId spotIds:messageIds successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+    [[NetworkController sharedInstance] getLatestDataSinceUserControlId: _homeDataSource.latestUserControlId spotIds:messageIds successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         
         
         NSArray * conversationIds = [JSON objectForKey:@"conversationIds"];
@@ -509,16 +493,16 @@ static const int MAX_CONNECTION_RETRIES = 16;
     else {
         if ([message.action isEqualToString:@"invited"]) {
             user = message.data;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"friendInvited" object:user ];
+            [_homeDataSource addFriendInvited:user];
         }
         else {
             if ([message.action isEqualToString:@"added"]) {
-                
+                [self friendAdded:[message data]];
             }
             else {
                 if ([message.action isEqualToString:@"invite"]) {
                     user = message.data;
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"friendInvite" object:user ];
+                    [_homeDataSource addFriendInviter: user ];
                 }
                 else {
                     if ([message.action isEqualToString:@"ignore"]) {
@@ -526,7 +510,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
                     }
                     else {
                         if ([message.action isEqualToString:@"delete"]) {
-                            [[NSNotificationCenter defaultCenter] postNotificationName:@"friendDelete" object:message ];
+                            [self friendDelete: message ];
                             
                         }
                     }
@@ -549,7 +533,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
          [afriend setInviter:NO];
          
          if ([action isEqualToString:@"accept"]) {
-             //set new to true
+             [_homeDataSource setFriend: username] ;
          }
          else {
              if ([action isEqualToString:@"block"]||[action isEqualToString:@"ignore"]) {
@@ -578,11 +562,8 @@ static const int MAX_CONNECTION_RETRIES = 16;
      inviteFriend:username
      successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
          DDLogVerbose(@"invite friend response: %d",  [operation.response statusCode]);
-         Friend * afriend = [[Friend alloc] init];
-         afriend.name = username         ;
-         afriend.flags = 2;
          
-         [_homeDataSource addFriend:afriend withRefresh:YES];
+         [_homeDataSource addFriendInvited:username];
      }
      failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
          
@@ -591,49 +572,22 @@ static const int MAX_CONNECTION_RETRIES = 16;
      }];
 }
 
-- (void)friendInvited:(NSNotification *)notification
+
+
+- (void)friendAdded:(NSString *) username
 {
-    DDLogVerbose(@"friendInvited");
-    NSString * username = notification.object;
-    
-    Friend * theFriend = [_homeDataSource getFriendByName:username];
-    if (!theFriend) {
-        theFriend = [[Friend alloc] init];
-        theFriend.name = username;
-        
+    DDLogInfo(@"friendAdded");
+    [_homeDataSource setFriend: username];
+    ChatDataSource * cds = [self getDataSourceForFriendname:username];
+    if (cds) {
+        //set deleted
     }
-    
-    [theFriend setInvited:YES];
-    [_homeDataSource postRefresh];
-}
+ }
 
-- (void)friendInvite:(NSNotification *)notification
+
+- (void)friendDelete: (SurespotControlMessage *) message
 {
-    DDLogVerbose(@"friendInvite");
-    NSString * username = notification.object;
-    
-    Friend * theFriend = [_homeDataSource getFriendByName:username];
-    
-    if (!theFriend) {
-        theFriend = [[Friend alloc] init];
-        theFriend.name = username;
-        [_homeDataSource addFriend:theFriend withRefresh:NO];
-    }
-    
-    [theFriend setInviter:YES];
-    
-    //todo sort
-    [_homeDataSource postRefresh];
-    
-    
-}
-
-
-- (void)friendDelete:(NSNotification *)notification
-{
-    DDLogVerbose(@"friendDelete");
-    SurespotControlMessage * message = notification.object;
-    
+    DDLogInfo(@"entered");
     Friend * afriend = [_homeDataSource getFriendByName:[message data]];
     
     if (afriend) {
@@ -658,6 +612,17 @@ static const int MAX_CONNECTION_RETRIES = 16;
 }
 
 -(void) handleDeleteUser: (NSString *) deleted deleter: (NSString *) deleter {
+    DDLogInfo(@"entered");
+    NSString * username = [[IdentityController sharedInstance] getLoggedInUser];
+    Friend * theFriend = [_homeDataSource getFriendByName:deleted];
+    BOOL iDeleted = [deleter isEqualToString:username];
+    
+    if (iDeleted) {
+        [_homeDataSource removeFriend:theFriend withRefresh:YES];
+    }
+    else {
+        [theFriend setDeleted:YES];
+    }
     
 }
 
