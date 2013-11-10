@@ -26,12 +26,16 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
 
+static const int MAX_CONNECTION_RETRIES = 16;
+
 
 
 @interface ChatController()
 @property (strong, atomic) SocketIO * socketIO;
 @property (strong, atomic) NSMutableDictionary * chatDataSources;
 @property (strong, atomic) HomeDataSource * homeDataSource;
+@property (assign, atomic) NSInteger connectionRetries;
+@property (strong, atomic) NSTimer * reconnectTimer;
 @end
 
 @implementation ChatController
@@ -95,17 +99,18 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     DDLogVerbose(@"chatcontroller pause");
     [self disconnect];
     [self saveState];
+    if (_reconnectTimer) {
+        [_reconnectTimer invalidate];
+        _connectionRetries = 0;
+    }
 }
 
 -(void) connect {
     if (_socketIO) {
         DDLogVerbose(@"connecting socket");
-        //  if (![_socketIO isConnected] && ![_socketIO isConnecting]) {
         self.socketIO.useSecure = NO;
         [self.socketIO connectToHost:@"192.168.10.68" onPort:8080];
     }
-    //  }
-    
 }
 
 -(void) resume: (NSNotification *) notification {
@@ -118,16 +123,46 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void) socketIODidConnect:(SocketIO *)socket {
     DDLogVerbose(@"didConnect()");
     // [[NSNotificationCenter defaultCenter] postNotificationName:@"socketConnected" object:nil ];
+    _connectionRetries = 0;
+    if (_reconnectTimer) {
+        [_reconnectTimer invalidate];
+    }
     [self getData];
+}
+
+- (void) socketIO:(SocketIO *)socket onError:(NSError *)error {
+        DDLogVerbose(@"error %@", error);
+    [self reconnect];
 }
 
 - (void) socketIODidDisconnect:(SocketIO *)socket disconnectedWithError:(NSError *)error {
     
-    DDLogVerbose(@"didDisconnectWithError       %@", error);
-    
-    if (error ) {
-        //start reconnect cycle
+    DDLogVerbose(@"didDisconnectWithError %@", error);
+    if (error) {
+        [self connect];
     }
+    
+}
+
+-(void) reconnect {
+    //start reconnect cycle
+    if (_connectionRetries < MAX_CONNECTION_RETRIES) {
+        if (_reconnectTimer) {
+            [_reconnectTimer invalidate];
+        }
+        
+        //exponential backoff
+        NSInteger timerInterval = pow(2,_connectionRetries++);
+        DDLogInfo(@ "attempting reconnect in: %d" , timerInterval);
+        _reconnectTimer = [NSTimer scheduledTimerWithTimeInterval:timerInterval target:self selector:@selector(reconnectTimerFired:) userInfo:nil repeats:NO];
+    }
+    else {
+        DDLogInfo(@"reconnect retries exhausted, giving up");
+    }
+}
+
+-(void) reconnectTimerFired: (NSTimer *) timer {
+    [self connect];
 }
 
 - (void) socketIO:(SocketIO *)socket didReceiveEvent:(SocketIOPacket *)packet
@@ -643,8 +678,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) logout {
-    [self disconnect];
-    [self saveState];
+    [self pause:nil];
     @synchronized (_chatDataSources) {
         [_chatDataSources removeAllObjects];
     }
