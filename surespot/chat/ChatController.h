@@ -12,6 +12,7 @@
 #import "HomeDataSource.h"
 #import "Friend.h"
 #import "FriendDelegate.h"
+#import "SurespotMessage.h"
 
 @interface ChatController : NSObject <SocketIODelegate, FriendDelegate>
 +(ChatController*)sharedInstance;
@@ -27,4 +28,5 @@
 - (void) login;
 - (void) logout;
 - (void) deleteFriend: (Friend *) thefriend;
+-(void) deleteMessage: (SurespotMessage *) message;
 @end

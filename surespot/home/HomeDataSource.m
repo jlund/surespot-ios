@@ -43,7 +43,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             _latestUserControlId = [[homeData objectForKey:@"userControlId"] integerValue];
             _friends = [homeData objectForKey:@"friends"];
         }
-        else {
+        
+        if (!_friends) {
             _friends = [NSMutableArray new];
         }
     }
@@ -133,7 +134,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) postRefresh {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshHome" object:nil];
+     dispatch_async(dispatch_get_main_queue(), ^{
+         [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshHome" object:nil];
+     });
 }
 
 -(Friend *) getFriendByName: (NSString *) name {

@@ -11,7 +11,6 @@
 #import "EncryptionController.h"
 #import "SocketIOPacket.h"
 #import "NSData+Base64.h"
-#import "SurespotMessage.h"
 #import "SurespotControlMessage.h"
 #import "MessageProcessor.h"
 #import "NetworkController.h"
@@ -470,7 +469,26 @@ static const int MAX_CONNECTION_RETRIES = 16;
     }
     else {
         if ([message.type isEqualToString:@"message"]) {
+            NSString * otherUser = [ChatUtils getOtherUserFromSpot:message.data andUser:[[IdentityController sharedInstance] getLoggedInUser]];
+            Friend * thefriend = [_homeDataSource getFriendByName:otherUser];
             
+            if (!cds) {
+                cds = [_chatDataSources objectForKey:otherUser];
+                
+            }
+            
+            if (cds) {
+                BOOL controlFromMe = [[message from] isEqualToString:[[IdentityController sharedInstance] getLoggedInUser]];
+                
+                if ([[message action] isEqualToString:@"delete"]) {
+                    NSInteger messageId = [[message moreData] integerValue];
+                    SurespotMessage * dMessage = [cds getMessageById: messageId];
+                    
+                    if (dMessage) {
+                        [cds deleteMessage:dMessage initiatedByMe:controlFromMe];
+                    }
+                }
+            }
         }
     }
 }
@@ -684,5 +702,27 @@ static const int MAX_CONNECTION_RETRIES = 16;
         }];
     }
 }
+
+-(void) deleteMessage: (SurespotMessage *) message {
+    if (message) {
+        ChatDataSource * cds = [_chatDataSources objectForKey:[message getOtherUser]];
+        if (cds) {
+            if (message.serverid) {
+                
+                
+                [[NetworkController sharedInstance] deleteMessageName:[message getOtherUser] serverId:[[message serverid] integerValue] successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
+                    [cds deleteMessage: message initiatedByMe: YES];
+                } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
+                    //todo notify user
+                }];
+                
+            }
+            else {
+                [cds deleteMessageByIv: [message iv] ];
+            }
+        }
+    }
+}
+
 
 @end

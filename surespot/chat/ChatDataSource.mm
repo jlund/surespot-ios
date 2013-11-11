@@ -11,6 +11,7 @@
 #import "MessageProcessor.h"
 #import "MessageDecryptionOperation.h"
 #import "ChatUtils.h"
+#import "IdentityController.h"
 #import "FileController.h"
 #import "DDLog.h"
 
@@ -197,5 +198,50 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
 }
+
+-(void) deleteMessage: (SurespotMessage *) message initiatedByMe: (BOOL) initiatedByMe {
+    BOOL myMessage = [[message from] isEqualToString:[[IdentityController sharedInstance] getLoggedInUser]];
+    if (initiatedByMe || !myMessage) {
+        [self deleteMessageById: [message.serverid  integerValue]];
+    }
+}
+
+-(SurespotMessage *) getMessageById: (NSInteger) serverId {
+    @synchronized (_messages) {
+        __block SurespotMessage * message;
+        [_messages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            if([obj serverid] && [[obj serverid] integerValue] == serverId) {
+                message = obj;
+                *stop = YES;
+            }
+        }];
+        return message;
+    }
+}
+
+-(void) deleteMessageById: (NSInteger) serverId {
+    @synchronized (_messages) {
+        [_messages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            if([obj serverid] && [[obj serverid] integerValue] == serverId) {
+                [_messages removeObjectAtIndex:idx];
+                [self postRefresh];
+                *stop = YES;
+            }
+        }];
+    }
+}
+
+-(void) deleteMessageByIv: (NSString *) iv {
+    @synchronized (_messages) {
+        [_messages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            if([[obj iv] isEqualToString:iv]) {
+                [_messages removeObjectAtIndex:idx];
+                [self postRefresh];
+                *stop = YES;
+            }
+        }];
+    }
+}
+
 
 @end

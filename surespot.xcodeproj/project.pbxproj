@@ -50,7 +50,7 @@
 		6654441617F37BCF00F62F7F /* SwipeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6654441517F37BCF00F62F7F /* SwipeViewController.mm */; };
 		665F4DE4182EB2180083BCE7 /* SurespotButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DE3182EB2180083BCE7 /* SurespotButton.m */; };
 		66B3C8ED17B15F2300CC96EE /* ChatController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66B3C8EC17B15F2300CC96EE /* ChatController.mm */; };
-		66B3C8F017B17AC800CC96EE /* ChatDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B3C8EF17B17AC800CC96EE /* ChatDataSource.m */; };
+		66B3C8F017B17AC800CC96EE /* ChatDataSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66B3C8EF17B17AC800CC96EE /* ChatDataSource.mm */; };
 		66D3B04D182D47DF00B37A6C /* SurespotLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 66D3B04C182D47DF00B37A6C /* SurespotLogFormatter.m */; };
 		66D3B04F182EAB4200B37A6C /* surespot.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66D3B04E182EAB4200B37A6C /* surespot.xcassets */; };
 		66E4F5B6176298CB00596E6B /* libcryptopp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E4F5A1176298CB00596E6B /* libcryptopp.a */; };
@@ -174,7 +174,7 @@
 		66B3C8EB17B15F2300CC96EE /* ChatController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatController.h; path = chat/ChatController.h; sourceTree = "<group>"; };
 		66B3C8EC17B15F2300CC96EE /* ChatController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = ChatController.mm; path = chat/ChatController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		66B3C8EE17B17AC800CC96EE /* ChatDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatDataSource.h; path = chat/ChatDataSource.h; sourceTree = "<group>"; };
-		66B3C8EF17B17AC800CC96EE /* ChatDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = ChatDataSource.m; path = chat/ChatDataSource.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		66B3C8EF17B17AC800CC96EE /* ChatDataSource.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = ChatDataSource.mm; path = chat/ChatDataSource.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		66D3B04B182D47DF00B37A6C /* SurespotLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SurespotLogFormatter.h; path = utils/SurespotLogFormatter.h; sourceTree = "<group>"; };
 		66D3B04C182D47DF00B37A6C /* SurespotLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SurespotLogFormatter.m; path = utils/SurespotLogFormatter.m; sourceTree = "<group>"; };
 		66D3B04E182EAB4200B37A6C /* surespot.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = surespot.xcassets; sourceTree = "<group>"; };
@@ -589,7 +589,7 @@
 				66B3C8EB17B15F2300CC96EE /* ChatController.h */,
 				66B3C8EC17B15F2300CC96EE /* ChatController.mm */,
 				66B3C8EE17B17AC800CC96EE /* ChatDataSource.h */,
-				66B3C8EF17B17AC800CC96EE /* ChatDataSource.m */,
+				66B3C8EF17B17AC800CC96EE /* ChatDataSource.mm */,
 				660EB27B17FE64D800DBC53C /* ChatUtils.h */,
 				660EB27C17FE64D800DBC53C /* ChatUtils.mm */,
 				660EB27E17FE666D00DBC53C /* SurespotMessage.h */,
@@ -1043,7 +1043,7 @@
 				66FF0FE81825416A0038ECA6 /* HomeDataSource.m in Sources */,
 				664076721822AA0100BFD974 /* HomeCell.m in Sources */,
 				6640767B1822D52800BFD974 /* SurespotControlMessage.m in Sources */,
-				66B3C8F017B17AC800CC96EE /* ChatDataSource.m in Sources */,
+				66B3C8F017B17AC800CC96EE /* ChatDataSource.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

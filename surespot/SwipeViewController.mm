@@ -926,6 +926,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             if (_homeDataSource.currentChat) {
                 [actionSheet addButtonWithTitle:  NSLocalizedString(@"menu_close_tab", nil)];
+                [actionSheet addButtonWithTitle:  NSLocalizedString(@"menu_delete_all_messages", nil)];
             }
             [actionSheet addButtonWithTitle:NSLocalizedString(@"logout", nil)];
             [actionSheet addButtonWithTitle:NSLocalizedString(@"cancel", nil)];
@@ -1032,6 +1033,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     
                     DDLogInfo(@"taking action for chat iv: %@, plaindata: %@", message.iv, message.plainData);
                     
+                    if (message) {
+                        
+                        if ([buttonTitle isEqualToString:NSLocalizedString(@"menu_delete_message", nil)]) {
+                            [[ChatController sharedInstance] deleteMessage: message];
+                            return;
+                        }
+                    }
                 }
                 break;
                 

@@ -19,4 +19,7 @@
 -(ChatDataSource*)initWithUsername:(NSString *) username loggedInUser: (NSString * ) loggedInUser availableId: (NSInteger) availableId;
 -(void) addMessage:(SurespotMessage *) message refresh:(BOOL) refresh;
 -(void) postRefresh;
+-(void) deleteMessage: (SurespotMessage *) message initiatedByMe: (BOOL) initiatedByMe;
+-(SurespotMessage *) getMessageById: (NSInteger) serverId;
+-(void) deleteMessageByIv: (NSString *) iv;
 @end

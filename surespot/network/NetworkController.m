@@ -213,4 +213,15 @@ NSString *const baseUrl = @"http://192.168.10.68:8080";
     [operation start];
 
 }
+
+
+-(void) deleteMessageName:(NSString *) name serverId: (NSInteger) serverid successBlock:(HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock {
+    
+    NSString * path = [NSString stringWithFormat:@"messages/%@/%ld", name, (long)serverid];
+    NSURLRequest *request = [self requestWithMethod:@"DELETE" path:path  parameters:nil];
+    AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
+    [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
+    [operation start];
+    
+}
 @end
