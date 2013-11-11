@@ -383,20 +383,13 @@ static const int MAX_CONNECTION_RETRIES = 16;
     NSString * otherUser = [message getOtherUser];
     ChatDataSource * dataSource = [self getDataSourceForFriendname:otherUser];
     if (dataSource) {
-        //  [[MessageProcessor sharedInstance] decryptMessage:message completionCallback:^(SurespotMessage * message){
-        
         
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [dataSource addMessage: message refresh:YES];
         });
         
-        
-        
-        
-        // }];
-        
-    }
+           }
     
     //update available id
     Friend * afriend = [_homeDataSource getFriendByName:otherUser];

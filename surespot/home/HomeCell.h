@@ -16,6 +16,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *ignoreButton;
 @property (strong, nonatomic) IBOutlet UIButton *acceptButton;
 @property (strong, nonatomic) IBOutlet UILabel *friendLabel;
+@property (strong, nonatomic) IBOutlet UILabel *friendStatus;
 - (IBAction)inviteAction:(id)sender;
 @property (weak, nonatomic) id <FriendDelegate> friendDelegate;
 @property (strong, nonatomic) NSString * friendName;

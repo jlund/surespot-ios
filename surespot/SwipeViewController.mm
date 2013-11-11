@@ -579,6 +579,33 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         cell.activeStatus.backgroundColor = [afriend isChatActive] ? [UIUtils surespotBlue] : [UIColor clearColor];
         
+        if (afriend.isInvited || afriend.isInviter || afriend.isDeleted) {
+            if (afriend.isDeleted) {
+                cell.friendStatus.text = NSLocalizedString(@"friend_status_is_deleted", nil);
+            }
+            else {
+                if (afriend.isInvited) {
+                    cell.friendStatus.text = NSLocalizedString(@"friend_status_is_invited", nil);
+                }
+                else {
+                    if (afriend.isInviter) {
+                        cell.friendStatus.text = NSLocalizedString(@"friend_status_is_inviting", nil);
+                    }
+                    else {
+                        if (afriend.isDeleted) {
+                            cell.friendStatus.text = @"";
+                        }
+
+                    }
+
+                }
+
+            }
+        }
+        else {
+            cell.friendStatus.hidden = YES;
+        }
+        
         return cell;
     }
     else {
@@ -651,8 +678,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     cell.messageSentView.backgroundColor = [UIColor lightGrayColor];
                 }
                 else {
-                    //TODO use constant
-                    cell.messageSentView.backgroundColor =[UIColor colorWithRed:0.2 green:0.71 blue:0.898 alpha:1.0];
+                    cell.messageSentView.backgroundColor = [UIUtils surespotBlue];
                 }
                 
                 

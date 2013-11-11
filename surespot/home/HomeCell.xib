@@ -14,13 +14,13 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="72"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="8p9-4b-236">
+                    <imageView userInteractionEnabled="NO" alpha="0.49999999999999961" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="surespot_logo" id="8p9-4b-236">
                         <rect key="frame" x="5" y="0.0" width="44" height="44"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <autoresizingMask key="autoresizingMask"/>
                     </imageView>
                     <view contentMode="scaleToFill" id="wS1-7b-2cA">
                         <rect key="frame" x="0.0" y="0.0" width="5" height="44"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="dcr-bs-wa8">
@@ -59,6 +59,15 @@
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" id="kfL-8d-kis">
+                        <rect key="frame" x="270" y="0.0" width="50" height="44"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.70980392156862748" blue="0.89803921568627454" alpha="1" colorSpace="deviceRGB"/>
+                        <color key="highlightedColor" red="0.20000000000000001" green="0.70980392160000005" blue="0.8980392157" alpha="1" colorSpace="deviceRGB"/>
+                    </label>
                 </subviews>
             </tableViewCellContentView>
             <connections>
@@ -67,8 +76,12 @@
                 <outlet property="blockButton" destination="dcr-bs-wa8" id="7T8-nk-diD"/>
                 <outlet property="friendImage" destination="8p9-4b-236" id="QqB-CD-tXD"/>
                 <outlet property="friendLabel" destination="kTf-EF-cp2" id="YO4-ol-nva"/>
+                <outlet property="friendStatus" destination="kfL-8d-kis" id="71W-xM-2Hf"/>
                 <outlet property="ignoreButton" destination="GkS-PY-diP" id="JLn-c8-cii"/>
             </connections>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="surespot_logo" width="48" height="48"/>
+    </resources>
 </document>
