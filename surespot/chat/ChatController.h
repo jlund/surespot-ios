@@ -26,4 +26,5 @@
 - (NSString *) getCurrentChat;
 - (void) login;
 - (void) logout;
+- (void) deleteFriend: (Friend *) thefriend;
 @end

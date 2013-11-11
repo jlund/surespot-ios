@@ -986,7 +986,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSInteger index = actionSheet.tag;
     switch (index) {
         case -1:
-            
+            //menu button
             if ([buttonTitle isEqualToString:NSLocalizedString(@"menu_close_tab", nil)]) {
                 [self closeTab];
                 return;
@@ -998,6 +998,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             }
             break;
         case 0:
+            //friend table
             if (_menuIndexPath ) {
                 
                 Friend * afriend = [[[ChatController sharedInstance] getHomeDataSource].friends objectAtIndex:_menuIndexPath.row];
@@ -1007,12 +1008,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     return;
                 }
                 
+                if ([buttonTitle isEqualToString:NSLocalizedString(@"menu_delete_friend", nil)]) {
+                    [[ChatController sharedInstance] deleteFriend: afriend];
+                    return;
+                }
+
+                
                 
                 DDLogInfo(@"taking action for friend: %@", afriend.name);
             }
             
             break;
         default:
+            //chat table
             if (index > 0 && _menuIndexPath) {
                 NSString * name = [self nameForPage:index];
                 NSArray * messages =[[ChatController sharedInstance] getDataSourceForFriendname: name].messages;

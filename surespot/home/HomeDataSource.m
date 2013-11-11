@@ -40,7 +40,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
         if (homeData) {
             DDLogVerbose(@"loading home data from: %@", path);
-           // _currentChat = [homeData objectForKey:@"currentChat"];
             _latestUserControlId = [[homeData objectForKey:@"userControlId"] integerValue];
             _friends = [homeData objectForKey:@"friends"];
         }
@@ -78,12 +77,20 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void) setFriend: (NSString *) username  {
     Friend * theFriend = [self getFriendByName:username];
     if (!theFriend) {
-        theFriend = [Friend new];
-        theFriend.name = username;
+        [self addFriend:username];
     }
-
+    
     [theFriend setFriend];
     [self postRefresh];
+}
+
+- (void) addFriend: (NSString *) name {
+    Friend *    theFriend = [Friend new];
+    theFriend.name =name;
+    @synchronized (_friends) {
+        [_friends addObject:theFriend];
+    }
+    
 }
 
 - (void)addFriendInvited:(NSString *) username
@@ -91,8 +98,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     DDLogVerbose(@"entered");
     Friend * theFriend = [self getFriendByName:username];
     if (!theFriend) {
-        theFriend = [Friend new];
-        theFriend.name = username;
+        [self addFriend:username];
+        
     }
     
     [theFriend setInvited:YES];
@@ -105,9 +112,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     Friend * theFriend = [self getFriendByName:username];
     
     if (!theFriend) {
-        theFriend = [Friend new];
-        theFriend.name = username;
-    }
+        [self addFriend:username];    }
     
     [theFriend setInviter:YES];
     
@@ -117,7 +122,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 - (void) removeFriend: (Friend *) afriend withRefresh: (BOOL) refresh {
-    [_friends removeObject:afriend];
+    DDLogInfo(@"name: %@", afriend.name);
+    @synchronized (_friends) {
+        [_friends removeObject:afriend];
+    }
     if (refresh) {
         [self postRefresh];
     }
@@ -128,9 +136,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(Friend *) getFriendByName: (NSString *) name {
-    for (Friend * afriend in _friends) {
-        if ([[afriend name] isEqualToString:name]) {
-            return  afriend;
+    @synchronized (_friends) {
+        for (Friend * afriend in _friends) {
+            if ([[afriend name] isEqualToString:name]) {
+                return  afriend;
+            }
         }
     }
     
@@ -152,21 +162,23 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) writeToDisk {
-    if (_latestUserControlId > 0 || _friends.count > 0) {
-        NSString * filename =[FileController getHomeFilename];
-        DDLogVerbose(@"saving home data to disk at %@, latestUserControlId: %d, currentChat: %@",filename, _latestUserControlId, _currentChat);
-        NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
-        if (_friends.count > 0) {
-            [dict setObject:_friends  forKey:@"friends"];
+    @synchronized (_friends) {
+        if (_latestUserControlId > 0 || _friends.count > 0) {
+            NSString * filename =[FileController getHomeFilename];
+            DDLogVerbose(@"saving home data to disk at %@, latestUserControlId: %d, currentChat: %@",filename, _latestUserControlId, _currentChat);
+            NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
+            if (_friends.count > 0) {
+                [dict setObject:_friends  forKey:@"friends"];
+            }
+            if (_latestUserControlId > 0) {
+                [dict setObject:[NSNumber numberWithInteger: _latestUserControlId] forKey:@"userControlId"];
+            }
+            if (_currentChat) {
+                [dict setObject:_currentChat forKey:@"currentChat"];
+            }
+            BOOL saved =[NSKeyedArchiver archiveRootObject:dict toFile:filename];
+            DDLogVerbose(@"save success?: %@",saved ? @"YES" : @"NO");
         }
-        if (_latestUserControlId > 0) {
-            [dict setObject:[NSNumber numberWithInteger: _latestUserControlId] forKey:@"userControlId"];
-        }
-        if (_currentChat) {
-            [dict setObject:_currentChat forKey:@"currentChat"];
-        }
-        BOOL saved =[NSKeyedArchiver archiveRootObject:dict toFile:filename];
-        DDLogVerbose(@"save success?: %@",saved ? @"YES" : @"NO");
     }
 }
 

@@ -66,7 +66,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pause:) name:UIApplicationDidEnterBackgroundNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resume:) name:UIApplicationWillEnterForegroundNotification object:nil];
         
-         _chatDataSources = [[NSMutableDictionary alloc] init];
+        _chatDataSources = [[NSMutableDictionary alloc] init];
         [self connect];
     }
     
@@ -116,7 +116,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
 }
 
 - (void) socketIO:(SocketIO *)socket onError:(NSError *)error {
-        DDLogVerbose(@"error %@", error);
+    DDLogVerbose(@"error %@", error);
     [self reconnect];
 }
 
@@ -389,7 +389,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
             [dataSource addMessage: message refresh:YES];
         });
         
-           }
+    }
     
     //update available id
     Friend * afriend = [_homeDataSource getFriendByName:otherUser];
@@ -499,7 +499,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
                 }
                 else {
                     if ([message.action isEqualToString:@"ignore"]) {
-                        
+                        [self friendIgnore: message.data];
                     }
                     else {
                         if ([message.action isEqualToString:@"delete"]) {
@@ -575,7 +575,28 @@ static const int MAX_CONNECTION_RETRIES = 16;
     if (cds) {
         //set deleted
     }
- }
+}
+
+-(void) friendIgnore: (NSString * ) name {
+    DDLogInfo(@"entered");
+    Friend * afriend = [_homeDataSource getFriendByName:name];
+    
+    if (afriend) {
+        if (![afriend isDeleted]) {
+            [_homeDataSource removeFriend:afriend withRefresh:NO];
+        }
+        else {
+            [afriend setInvited:NO];
+            [afriend setInviter:NO];
+        }
+        
+    }
+    
+    //todo sort
+    [_homeDataSource postRefresh];
+    
+    
+}
 
 
 - (void)friendDelete: (SurespotControlMessage *) message
@@ -606,14 +627,19 @@ static const int MAX_CONNECTION_RETRIES = 16;
 
 -(void) handleDeleteUser: (NSString *) deleted deleter: (NSString *) deleter {
     DDLogInfo(@"entered");
-    NSString * username = [[IdentityController sharedInstance] getLoggedInUser];
+    
     Friend * theFriend = [_homeDataSource getFriendByName:deleted];
-    BOOL iDeleted = [deleter isEqualToString:username];
-    if (iDeleted) {
-        [_homeDataSource removeFriend:theFriend withRefresh:YES];
-    }
-    else {
-        [theFriend setDeleted:YES];
+    if (theFriend) {
+        
+        NSString * username = [[IdentityController sharedInstance] getLoggedInUser];
+        BOOL iDeleted = [deleter isEqualToString:username];
+        if (iDeleted) {
+            
+            [_homeDataSource removeFriend:theFriend withRefresh:YES];
+        }
+        else {
+            [theFriend setDeleted:YES];
+        }
     }
 }
 
@@ -642,6 +668,21 @@ static const int MAX_CONNECTION_RETRIES = 16;
     _homeDataSource = nil;
     
     
+    
+    
+}
+
+- (void) deleteFriend: (Friend *) thefriend {
+    if (thefriend) {
+        NSString * username = [[IdentityController sharedInstance] getLoggedInUser];
+        NSString * friendname = thefriend.name;
+        
+        [[NetworkController sharedInstance] deleteFriend:friendname successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [self handleDeleteUser:friendname deleter:username];
+        } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
+            //todo tell user
+        }];
+    }
 }
 
 @end

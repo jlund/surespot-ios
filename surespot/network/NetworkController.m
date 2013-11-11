@@ -177,6 +177,8 @@ NSString *const baseUrl = @"http://192.168.10.68:8080";
     
 }
 
+
+
 -(void) logout {
     //send logout
     NSURLRequest *request = [self requestWithMethod:@"POST" path:@"logout"  parameters:nil];
@@ -201,4 +203,14 @@ NSString *const baseUrl = @"http://192.168.10.68:8080";
     
 }
 
+
+-(void) deleteFriend:(NSString *) friendname successBlock:(HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock {
+    
+    NSString * path = [NSString stringWithFormat:@"friends/%@", friendname];
+    NSURLRequest *request = [self requestWithMethod:@"DELETE" path:path  parameters:nil];
+    AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
+    [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
+    [operation start];
+
+}
 @end
