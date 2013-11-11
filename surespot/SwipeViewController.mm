@@ -36,6 +36,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, weak) HomeDataSource * homeDataSource;
 @property (nonatomic, strong) UIViewPager * viewPager;
 @property (nonatomic, strong) NSMutableDictionary * needsScroll;
+@property (atomic, strong) NSIndexPath * menuIndexPath;
 @end
 
 
@@ -71,7 +72,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _textField.enablesReturnKeyAutomatically = NO;
     [self registerForKeyboardNotifications];
     
-    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"menu" style:UIBarButtonItemStylePlain target:self action:@selector(showMenu)];
+    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"menu" style:UIBarButtonItemStylePlain target:self action:@selector(showMenuMenu)];
     self.navigationItem.rightBarButtonItem = anotherButton;
     
     self.navigationItem.title = [@"surespot/" stringByAppendingString:[[IdentityController sharedInstance] getLoggedInUser]];
@@ -120,7 +121,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _theButton.layer.borderWidth = 3.0f;
     _theButton.backgroundColor = [UIColor whiteColor];
     _theButton.opaque = YES;
-
+    
     [self updateButtonIcons];
 }
 
@@ -187,10 +188,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         for (NSString * key in [_chats allKeys]) {
             UITableView * tableView = [_chats objectForKey:key];
             
-           
-          //  DDLogInfo(@"saving content offset for %@, y: %f", key, tableView.contentOffset.y);
-          //  [keyboardState.offsets setObject:[NSNumber numberWithFloat: tableView.contentOffset.y ] forKey:key];
-
+            
+            //  DDLogInfo(@"saving content offset for %@, y: %f", key, tableView.contentOffset.y);
+            //  [keyboardState.offsets setObject:[NSNumber numberWithFloat: tableView.contentOffset.y ] forKey:key];
+            
             tableView.contentInset = contentInsets;
             tableView.scrollIndicatorInsets = scrollInsets;
             
@@ -236,19 +237,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 UITableView * tableView = [_chats objectForKey:key];
                 tableView.scrollIndicatorInsets = self.keyboardState.indicatorInset;
                 tableView.contentInset = self.keyboardState.contentInset;
-              //  CGPoint oldOffset = CGPointMake(0, [[self.keyboardState.offsets objectForKey: key] floatValue]);
-              //  DDLogInfo(@"restoring content offset for %@, y: %f", key, oldOffset.y);
-//                [tableView setContentOffset:  oldOffset animated:YES];
-               //    CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y - self.keyboardState.keyboardHeight);
-            //    [tableView setContentOffset:  newOffset animated:YES];
-              //  [tableView layoutIfNeeded];
+                //  CGPoint oldOffset = CGPointMake(0, [[self.keyboardState.offsets objectForKey: key] floatValue]);
+                //  DDLogInfo(@"restoring content offset for %@, y: %f", key, oldOffset.y);
+                //                [tableView setContentOffset:  oldOffset animated:YES];
+                //    CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y - self.keyboardState.keyboardHeight);
+                //    [tableView setContentOffset:  newOffset animated:YES];
+                //  [tableView layoutIfNeeded];
             }
         }
         CGRect buttonFrame = _theButton.frame;
         buttonFrame.origin.y += self.keyboardState.keyboardHeight;
         _theButton.frame = buttonFrame;
         
-       // [self.keyboardState.offsets removeAllObjects];
+        // [self.keyboardState.offsets removeAllObjects];
         self.keyboardState = nil;
     }
 }
@@ -350,6 +351,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [_friendView registerNib:[UINib nibWithNibName:@"HomeCell" bundle:nil] forCellReuseIdentifier:@"HomeCell"];
             _friendView.delegate = self;
             _friendView.dataSource = self;
+            
+            [self addLongPressGestureRecognizer:_friendView];
         }
         
         DDLogVerbose(@"returning friend view %@", _friendView);
@@ -370,6 +373,37 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
     }
     
+}
+
+-(void) addLongPressGestureRecognizer: (UITableView  *) tableView {
+    UILongPressGestureRecognizer *lpgr = [[UILongPressGestureRecognizer alloc]
+                                          initWithTarget:self action:@selector(tableLongPress:) ];
+    lpgr.minimumPressDuration = .7; //seconds
+    [tableView addGestureRecognizer:lpgr];
+    
+}
+
+-(void)tableLongPress:(UILongPressGestureRecognizer *)gestureRecognizer
+{
+    NSInteger page = _swipeView.currentPage;
+    UITableView * currentView = page == 0 ? _friendView : [[_chats allValues] objectAtIndex:page-1];
+    
+    CGPoint p = [gestureRecognizer locationInView:currentView];
+    
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        
+        NSIndexPath *indexPath = [currentView indexPathForRowAtPoint:p];
+        if (indexPath == nil) {
+            _menuIndexPath = nil;
+            NSLog(@"long press on table view at page %d but not on a row", page);
+        }
+        else {
+            _menuIndexPath = indexPath;
+            [currentView selectRowAtIndexPath:_menuIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+            [self showMenu:page];
+            NSLog(@"long press on table view at page %d, row %d", page, indexPath.row);
+        }
+    }
 }
 
 - (void)swipeViewCurrentItemIndexDidChange:(SwipeView *)swipeView
@@ -663,6 +697,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [chatView setDataSource: self];
         [chatView setScrollsToTop:NO];
         [chatView setDirectionalLockEnabled:YES];
+        [self addLongPressGestureRecognizer:chatView];
         
         
         //create the data source
@@ -725,7 +760,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if ([_textField text].length > 0) {
         if (!_homeDataSource.currentChat) {
             [[ChatController sharedInstance] inviteUser:[_textField text]];
-//            [_textField resignFirstResponder];
+            //            [_textField resignFirstResponder];
             [_textField setText:nil];
             [self updateButtonIcons];
         }
@@ -756,8 +791,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) updateButtonIcons {
     if (!_homeDataSource.currentChat) {
-                    [_theButton setImage:[UIImage imageNamed:@"ic_menu_invite"] forState:UIControlStateNormal];
-             }
+        [_theButton setImage:[UIImage imageNamed:@"ic_menu_invite"] forState:UIControlStateNormal];
+    }
     else {
         if ([_textField.text length] > 0) {
             [_theButton setImage:[UIImage imageNamed:@"ic_menu_send"] forState:UIControlStateNormal];
@@ -849,23 +884,74 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
 }
 
--(void) showMenu {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc]
-                                  initWithTitle:nil
-                                  delegate:self
-                                  cancelButtonTitle:nil
-                                  destructiveButtonTitle:nil
-                                  otherButtonTitles:nil];
-    
-    
-    if (_homeDataSource.currentChat) {
-        [actionSheet addButtonWithTitle: @"close tab"];
+-(void) showMenuMenu {
+    [self showMenu: -1];
+}
+
+-(void) showMenu: (NSInteger) actionSheetIndex {
+    UIActionSheet * actionSheet;
+    switch (actionSheetIndex) {
+        case -1:
+            
+            actionSheet = [[UIActionSheet alloc]
+                           initWithTitle:nil
+                           delegate:self
+                           cancelButtonTitle:nil
+                           destructiveButtonTitle:nil
+                           otherButtonTitles:nil];
+            
+            
+            if (_homeDataSource.currentChat) {
+                [actionSheet addButtonWithTitle:  NSLocalizedString(@"menu_close_tab", nil)];
+            }
+            [actionSheet addButtonWithTitle:NSLocalizedString(@"logout", nil)];
+            [actionSheet addButtonWithTitle:NSLocalizedString(@"cancel", nil)];
+            actionSheet.cancelButtonIndex = actionSheet.numberOfButtons - 1;
+            
+            
+            break;
+        case 0:
+            if (_menuIndexPath ) {
+                Friend * afriend = [[[ChatController sharedInstance] getHomeDataSource].friends objectAtIndex:_menuIndexPath.row];
+                
+                actionSheet = [[UIActionSheet alloc]
+                               initWithTitle: afriend.name
+                               delegate:self
+                               cancelButtonTitle:nil
+                               destructiveButtonTitle:nil
+                               otherButtonTitles:nil];
+                
+                
+                [actionSheet addButtonWithTitle: NSLocalizedString(@"menu_close_tab", nil)];
+                [actionSheet addButtonWithTitle:  NSLocalizedString(@"menu_delete_all_messages", nil)];
+                [actionSheet addButtonWithTitle:  NSLocalizedString(@"menu_delete_friend", nil)];
+                [actionSheet addButtonWithTitle:NSLocalizedString(@"cancel", nil)];
+                actionSheet.cancelButtonIndex = actionSheet.numberOfButtons - 1;
+            }
+            
+            break;
+        default:
+            if (actionSheetIndex > 0 && _menuIndexPath ) {
+                actionSheet = [[UIActionSheet alloc]
+                               initWithTitle:nil
+                               delegate:self
+                               cancelButtonTitle:nil
+                               destructiveButtonTitle:nil
+                               otherButtonTitles:nil];
+                
+                
+                
+                [actionSheet addButtonWithTitle: NSLocalizedString(@"menu_delete_message", nil)];
+                [actionSheet addButtonWithTitle:NSLocalizedString(@"cancel", nil)];
+                actionSheet.cancelButtonIndex = actionSheet.numberOfButtons - 1;
+            }
+            
+            break;
+            
     }
-    [actionSheet addButtonWithTitle: @"logout"];
-    [actionSheet addButtonWithTitle: @"cancel"];
-    actionSheet.cancelButtonIndex = actionSheet.numberOfButtons - 1;
-    
+    [actionSheet setTag:actionSheetIndex];
     [actionSheet showInView:self.view];
+    
 }
 
 -(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -873,14 +959,46 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     DDLogVerbose(@"menu click: %@", buttonTitle);
     
-    if ([buttonTitle isEqualToString:@"close tab"]) {
-        [self closeTab];
-        return;
-    }
-    if ([buttonTitle isEqualToString:@"logout"]) {
-        
-        [self logout];
-        return;
+    NSInteger index = actionSheet.tag;
+    switch (index) {
+        case -1:
+            
+            if ([buttonTitle isEqualToString:NSLocalizedString(@"menu_close_tab", nil)]) {
+                [self closeTab];
+                return;
+            }
+            if ([buttonTitle isEqualToString:NSLocalizedString(@"logout", nil)]) {
+                
+                [self logout];
+                return;
+            }
+            break;
+        case 0:
+            if (_menuIndexPath ) {
+                
+                Friend * afriend = [[[ChatController sharedInstance] getHomeDataSource].friends objectAtIndex:_menuIndexPath.row];
+                
+                
+                DDLogInfo(@"taking action for friend: %@", afriend.name);
+            }
+            
+            break;
+        default:
+            if (index > 0 && _menuIndexPath) {
+                NSString * name = [self nameForPage:index];
+                NSArray * messages =[[ChatController sharedInstance] getDataSourceForFriendname: name].messages;
+                if (messages.count > 0) {
+                    
+                    
+                    SurespotMessage * message =[messages objectAtIndex:_menuIndexPath.row];
+                    
+                    
+                    DDLogInfo(@"taking action for chat iv: %@, plaindata: %@", message.iv, message.plainData);
+                    
+                }
+                break;
+                
+            }
     }
 }
 

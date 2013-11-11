@@ -12,7 +12,6 @@
 #import "FriendDelegate.h"
 #import "Friend.h"
 #import "UIViewPager.h"
-
 @interface SwipeViewController : UIViewController
 <
     SwipeViewDelegate,

@@ -502,8 +502,8 @@
 		66159700176F669A001B32C1 /* utils */ = {
 			isa = PBXGroup;
 			children = (
-				66FF0FF3182AE44C0038ECA6 /* LoadingView.m */,
 				66FF0FF2182AE4420038ECA6 /* LoadingView.h */,
+				66FF0FF3182AE44C0038ECA6 /* LoadingView.m */,
 				66159701176F66F1001B32C1 /* NSData+Base64.h */,
 				66159702176F6732001B32C1 /* NSData+Base64.m */,
 				6606E4EE179DB134004199BC /* FileController.h */,
