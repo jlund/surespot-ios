@@ -77,20 +77,20 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void) setFriend: (NSString *) username  {
     Friend * theFriend = [self getFriendByName:username];
     if (!theFriend) {
-        [self addFriend:username];
+        theFriend = [self addFriend:username];
     }
     
     [theFriend setFriend];
     [self postRefresh];
 }
 
-- (void) addFriend: (NSString *) name {
+- (Friend *) addFriend: (NSString *) name {
     Friend *    theFriend = [Friend new];
     theFriend.name =name;
     @synchronized (_friends) {
         [_friends addObject:theFriend];
     }
-    
+    return theFriend;
 }
 
 - (void)addFriendInvited:(NSString *) username
@@ -98,7 +98,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     DDLogVerbose(@"entered");
     Friend * theFriend = [self getFriendByName:username];
     if (!theFriend) {
-        [self addFriend:username];
+        theFriend = [self addFriend:username];
         
     }
     
@@ -112,7 +112,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     Friend * theFriend = [self getFriendByName:username];
     
     if (!theFriend) {
-        [self addFriend:username];    }
+        theFriend = [self addFriend:username];
+    }
     
     [theFriend setInviter:YES];
     
