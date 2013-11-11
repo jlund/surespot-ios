@@ -921,8 +921,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                destructiveButtonTitle:nil
                                otherButtonTitles:nil];
                 
-                
-                [actionSheet addButtonWithTitle: NSLocalizedString(@"menu_close_tab", nil)];
+                if ([afriend isChatActive]) {
+                    [actionSheet addButtonWithTitle: NSLocalizedString(@"menu_close_tab", nil)];
+                }
                 [actionSheet addButtonWithTitle:  NSLocalizedString(@"menu_delete_all_messages", nil)];
                 [actionSheet addButtonWithTitle:  NSLocalizedString(@"menu_delete_friend", nil)];
                 [actionSheet addButtonWithTitle:NSLocalizedString(@"cancel", nil)];
@@ -978,6 +979,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 
                 Friend * afriend = [[[ChatController sharedInstance] getHomeDataSource].friends objectAtIndex:_menuIndexPath.row];
                 
+                if ([buttonTitle isEqualToString:NSLocalizedString(@"menu_close_tab", nil)]) {
+                    [self closeTabName: afriend.name];
+                    return;
+                }
+                
                 
                 DDLogInfo(@"taking action for friend: %@", afriend.name);
             }
@@ -1017,27 +1023,39 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
 }
 
--(void) closeTab {
-    if (_homeDataSource.currentChat) {
-        [[ChatController sharedInstance] destroyDataSourceForFriendname: _homeDataSource.currentChat];
-        [[_homeDataSource getFriendByName:_homeDataSource.currentChat] setChatActive:NO];
+-(void) closeTabName: (NSString *) name {
+    if (name) {
+        [[ChatController sharedInstance] destroyDataSourceForFriendname: name];
+        [[_homeDataSource getFriendByName:name] setChatActive:NO];
         @synchronized (_chats) {
-            [_chats removeObjectForKey:_homeDataSource.currentChat];
+            [_chats removeObjectForKey:name];
         }
         [_swipeView reloadData];
-        
         NSInteger page = [_swipeView currentPage];
         
-        if (page >= _swipeView.numberOfPages) {
-            page = _swipeView.numberOfPages - 1;
+        if ([name isEqualToString:_homeDataSource.currentChat]) {
+            
+            
+            if (page >= _swipeView.numberOfPages) {
+                page = _swipeView.numberOfPages - 1;
+            }
+            [_swipeView scrollToPage:page duration:0.2];
         }
         DDLogInfo(@"page after close: %d", page);
         NSString * name = [self nameForPage:page];
         DDLogInfo(@"name after close: %@", name);
         [_homeDataSource setCurrentChat:name];
-        [_swipeView scrollToPage:page duration:0.2];
+        
+        
+        
     }
+    
 }
+
+-(void) closeTab {
+    [self closeTabName: _homeDataSource.currentChat];
+}
+
 -(void) logout {
     
     //blow the views away
