@@ -609,14 +609,12 @@ static const int MAX_CONNECTION_RETRIES = 16;
     NSString * username = [[IdentityController sharedInstance] getLoggedInUser];
     Friend * theFriend = [_homeDataSource getFriendByName:deleted];
     BOOL iDeleted = [deleter isEqualToString:username];
-    
     if (iDeleted) {
         [_homeDataSource removeFriend:theFriend withRefresh:YES];
     }
     else {
         [theFriend setDeleted:YES];
     }
-    
 }
 
 - (void) setCurrentChat: (NSString *) username {
