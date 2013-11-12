@@ -21,6 +21,7 @@
 #import "UIUtils.h"
 #import "LoginViewController.h"
 #import "DDLog.h"
+#import "REMenu.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -36,9 +37,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, weak) HomeDataSource * homeDataSource;
 @property (nonatomic, strong) UIViewPager * viewPager;
 @property (nonatomic, strong) NSMutableDictionary * needsScroll;
-@property (atomic, strong) NSIndexPath * menuIndexPath;
+@property (strong, readwrite, nonatomic) REMenu *menu;
 @end
-
 
 @implementation SwipeViewController
 
@@ -123,6 +123,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _theButton.opaque = YES;
     
     [self updateButtonIcons];
+    
 }
 
 
@@ -383,28 +384,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
 }
 
--(void)tableLongPress:(UILongPressGestureRecognizer *)gestureRecognizer
-{
-    NSInteger page = _swipeView.currentPage;
-    UITableView * currentView = page == 0 ? _friendView : [[_chats allValues] objectAtIndex:page-1];
-    
-    CGPoint p = [gestureRecognizer locationInView:currentView];
-    
-    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        
-        NSIndexPath *indexPath = [currentView indexPathForRowAtPoint:p];
-        if (indexPath == nil) {
-            _menuIndexPath = nil;
-            NSLog(@"long press on table view at page %d but not on a row", page);
-        }
-        else {
-            _menuIndexPath = indexPath;
-            [currentView selectRowAtIndexPath:_menuIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-            [self showMenu:page];
-            NSLog(@"long press on table view at page %d, row %d", page, indexPath.row);
-        }
-    }
-}
+
 
 - (void)swipeViewCurrentItemIndexDidChange:(SwipeView *)swipeView
 {
@@ -581,7 +561,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         if (afriend.isInvited || afriend.isInviter || afriend.isDeleted) {
             cell.friendStatus.hidden = NO;
-
+            
             if (afriend.isDeleted) {
                 cell.friendStatus.text = NSLocalizedString(@"friend_status_is_deleted", nil);
             }
@@ -594,7 +574,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                         cell.friendStatus.text = NSLocalizedString(@"friend_status_is_inviting", nil);
                     }
                     else {
-                        cell.friendStatus.text = @"";                                                
+                        cell.friendStatus.text = @"";
                     }
                 }
             }
@@ -907,160 +887,185 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
 }
 
--(void) showMenuMenu {
-    [self showMenu: -1];
-}
-
--(void) showMenu: (NSInteger) actionSheetIndex {
-    UIActionSheet * actionSheet;
-    switch (actionSheetIndex) {
-        case -1:
-            
-            actionSheet = [[UIActionSheet alloc]
-                           initWithTitle:nil
-                           delegate:self
-                           cancelButtonTitle:nil
-                           destructiveButtonTitle:nil
-                           otherButtonTitles:nil];
-            
-            
-            if (_homeDataSource.currentChat) {
-                [actionSheet addButtonWithTitle:  NSLocalizedString(@"menu_close_tab", nil)];
-                [actionSheet addButtonWithTitle:  NSLocalizedString(@"menu_delete_all_messages", nil)];
-            }
-            [actionSheet addButtonWithTitle:NSLocalizedString(@"logout", nil)];
-            [actionSheet addButtonWithTitle:NSLocalizedString(@"cancel", nil)];
-            actionSheet.cancelButtonIndex = actionSheet.numberOfButtons - 1;
-            
-            
-            break;
-        case 0:
-            if (_menuIndexPath ) {
-                Friend * afriend = [[[ChatController sharedInstance] getHomeDataSource].friends objectAtIndex:_menuIndexPath.row];
-                
-                actionSheet = [[UIActionSheet alloc]
-                               initWithTitle: afriend.name
-                               delegate:self
-                               cancelButtonTitle:nil
-                               destructiveButtonTitle:nil
-                               otherButtonTitles:nil];
-                
-                if ([afriend isChatActive]) {
-                    [actionSheet addButtonWithTitle: NSLocalizedString(@"menu_close_tab", nil)];
-                }
-                [actionSheet addButtonWithTitle:  NSLocalizedString(@"menu_delete_all_messages", nil)];
-                [actionSheet addButtonWithTitle:  NSLocalizedString(@"menu_delete_friend", nil)];
-                [actionSheet addButtonWithTitle:NSLocalizedString(@"cancel", nil)];
-                actionSheet.cancelButtonIndex = actionSheet.numberOfButtons - 1;
-            }
-            
-            break;
-        default:
-            if (actionSheetIndex > 0 && _menuIndexPath ) {
-                actionSheet = [[UIActionSheet alloc]
-                               initWithTitle:nil
-                               delegate:self
-                               cancelButtonTitle:nil
-                               destructiveButtonTitle:nil
-                               otherButtonTitles:nil];
-                
-                
-                
-                [actionSheet addButtonWithTitle: NSLocalizedString(@"menu_delete_message", nil)];
-                [actionSheet addButtonWithTitle:NSLocalizedString(@"cancel", nil)];
-                actionSheet.cancelButtonIndex = actionSheet.numberOfButtons - 1;
-            }
-            
-            break;
-            
+-(REMenu *) createMenuMenu {
+    //menu menu
+    
+    NSMutableArray * menuItems = [NSMutableArray new];
+    
+    if (_homeDataSource.currentChat) {
+        
+        REMenuItem * closeTabItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_close_tab", nil) image:[UIImage imageNamed:@"ic_menu_end_conversation"] highlightedImage:nil action:^(REMenuItem * item){
+            [self closeTab];
+        }];
+        
+        [menuItems addObject:closeTabItem];
+        
+        REMenuItem * deleteAllItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_delete_all_messages", nil) image:[UIImage imageNamed:@"ic_menu_delete"] highlightedImage:nil action:^(REMenuItem * item){
+        }];
+        
+        [menuItems addObject:deleteAllItem];
     }
-    [actionSheet setTag:actionSheetIndex];
-    [actionSheet showInView:self.view];
+    REMenuItem * logoutItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"logout", nil) image:[UIImage imageNamed:@"ic_lock_power_off"] highlightedImage:nil action:^(REMenuItem * item){
+        [self logout];
+        
+    }];
     
+    [menuItems addObject:logoutItem];
+    
+    REMenu * menu = [[REMenu alloc] initWithItems:menuItems];
+    menu.imageOffset = CGSizeMake(-5, -1);
+    [menu setCloseCompletionHandler:^{
+        _menu = nil;
+    }];
+    return menu;
 }
 
--(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    NSString *buttonTitle = [actionSheet buttonTitleAtIndex:buttonIndex];
-    
-    DDLogVerbose(@"menu click: %@", buttonTitle);
-    
-    NSInteger index = actionSheet.tag;
-    switch (index) {
-        case -1:
-            //menu button
-            if ([buttonTitle isEqualToString:NSLocalizedString(@"menu_close_tab", nil)]) {
-                [self closeTab];
-                return;
-            }
-            if ([buttonTitle isEqualToString:NSLocalizedString(@"logout", nil)]) {
-                
-                [self logout];
-                return;
-            }
-            break;
-        case 0:
-            //friend table
-            if (_menuIndexPath ) {
-                
-                Friend * afriend = [[[ChatController sharedInstance] getHomeDataSource].friends objectAtIndex:_menuIndexPath.row];
-                
-                if ([buttonTitle isEqualToString:NSLocalizedString(@"menu_close_tab", nil)]) {
-                    [self closeTabName: afriend.name];
-                    return;
-                }
-                
-                if ([buttonTitle isEqualToString:NSLocalizedString(@"menu_delete_friend", nil)]) {
-                    [[ChatController sharedInstance] deleteFriend: afriend];
-                    return;
-                }
 
-                
-                
-                DDLogInfo(@"taking action for friend: %@", afriend.name);
-            }
-            
-            break;
-        default:
-            //chat table
-            if (index > 0 && _menuIndexPath) {
-                NSString * name = [self nameForPage:index];
-                NSArray * messages =[[ChatController sharedInstance] getDataSourceForFriendname: name].messages;
-                if (messages.count > 0) {
-                    
-                    
-                    SurespotMessage * message =[messages objectAtIndex:_menuIndexPath.row];
-                    
-                    
-                    DDLogInfo(@"taking action for chat iv: %@, plaindata: %@", message.iv, message.plainData);
-                    
-                    if (message) {
-                        
-                        if ([buttonTitle isEqualToString:NSLocalizedString(@"menu_delete_message", nil)]) {
-                            [[ChatController sharedInstance] deleteMessage: message];
-                            return;
-                        }
-                    }
-                }
-                break;
-                
-            }
+-(REMenu *) createHomeMenuFriend: (Friend *) thefriend {
+    //home menu
+    
+    
+    NSMutableArray * menuItems = [NSMutableArray new];
+    
+    
+    if ([thefriend isChatActive]) {
+        REMenuItem * closeTabHomeItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_close_tab", nil) image:[UIImage imageNamed:@"ic_menu_end_conversation"] highlightedImage:nil action:^(REMenuItem * item){
+            [self closeTabName: thefriend.name];
+        }];
+        [menuItems addObject:closeTabHomeItem];
     }
+    
+    
+    REMenuItem * deleteAllHomeItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_delete_all_messages", nil) image:[UIImage imageNamed:@"ic_menu_delete"] highlightedImage:nil action:^(REMenuItem * item){
+        
+        
+    }];
+    [menuItems addObject:deleteAllHomeItem];
+    
+    REMenuItem * deleteFriendItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_delete_friend", nil) image:[UIImage imageNamed:@"ic_menu_delete"] highlightedImage:nil action:^(REMenuItem * item){
+        [[ChatController sharedInstance] deleteFriend: thefriend];
+    }];
+    [menuItems addObject:deleteFriendItem];
+    
+    
+    REMenu * menu = [[REMenu alloc] initWithItems:menuItems];
+    menu.imageOffset = CGSizeMake(-5, -1);
+    [menu setCloseCompletionHandler:^{
+        _menu = nil;
+    }];
+
+    return menu;
+}
+
+-(REMenu *) createChatMenuMessage: (SurespotMessage *) message {
+    //home menu
+    
+    
+    NSMutableArray * menuItems = [NSMutableArray new];
+    
+    //chat menu
+    REMenuItem * deleteItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_delete_message", nil) image:[UIImage imageNamed:@"ic_menu_delete"] highlightedImage:nil action:^(REMenuItem * item){
+        
+        
+        [self deleteMessage: message];
+
+    }];
+    
+    [menuItems addObject:deleteItem];
+    
+    
+    REMenu * menu = [[REMenu alloc] initWithItems:menuItems];
+    menu.imageOffset = CGSizeMake(-5, -1);
+    [menu setCloseCompletionHandler:^{
+        _menu = nil;
+    }];
+
+    
+    return menu;
 }
 
 
-- (void)willPresentActionSheet:(UIActionSheet *)actionSheet
+-(void)tableLongPress:(UILongPressGestureRecognizer *)gestureRecognizer
 {
-    UIColor *customTitleColor = [UIUtils surespotBlue];
-    for (UIView *subview in actionSheet.subviews) {
-        if ([subview isKindOfClass:[UIButton class]]) {
-            UIButton *button = (UIButton *)subview;
+    NSInteger _menuPage = _swipeView.currentPage;
+    UITableView * currentView = _menuPage == 0 ? _friendView : [[_chats allValues] objectAtIndex:_menuPage-1];
+    
+    CGPoint p = [gestureRecognizer locationInView:currentView];
+    
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        
+        NSIndexPath *indexPath = [currentView indexPathForRowAtPoint:p];
+        if (indexPath == nil) {
+            DDLogInfo(@"long press on table view at page %d but not on a row", _menuPage);
+        }
+        else {
             
-            [button setTitleColor:customTitleColor forState:UIControlStateHighlighted];
-            [button setTitleColor:customTitleColor forState:UIControlStateNormal];
-            [button setTitleColor:customTitleColor forState:UIControlStateSelected];
+            
+            [currentView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+            [self showMenuForPage: _menuPage indexPath: indexPath];
+            DDLogInfo(@"long press on table view at page %d, row %d", _menuPage, indexPath.row);
         }
     }
 }
+
+-(void) deleteMessage: (SurespotMessage *) message {
+    
+    
+    
+    if (message) {
+        DDLogInfo(@"taking action for chat iv: %@, plaindata: %@", message.iv, message.plainData);
+        
+        
+        [[ChatController sharedInstance] deleteMessage: message];
+        
+        
+    }
+    
+    
+}
+
+-(void) showMenuMenu {
+    if (!_menu) {
+        _menu = [self createMenuMenu];
+        if (_menu) {
+            CGRect rect = CGRectMake(25, 10, self.view.frame.size.width
+                                     - 50, self.view.frame.size.height -20);
+            
+            [_menu showFromRect:rect inView:self.view];
+        }
+    }
+    
+}
+
+-(void) showMenuForPage: (NSInteger) page indexPath: (NSIndexPath *) indexPath {
+    if (!_menu) {
+        
+        if (page == 0) {
+            Friend * afriend = [[[ChatController sharedInstance] getHomeDataSource].friends objectAtIndex:indexPath.row];
+            _menu = [self createHomeMenuFriend:afriend];
+        }
+        
+        else {
+            NSString * name = [self nameForPage:page];
+            NSArray * messages =[[ChatController sharedInstance] getDataSourceForFriendname: name].messages;
+            if (messages.count > 0) {
+                
+                
+                SurespotMessage * message =[messages objectAtIndex:indexPath.row];
+                
+                _menu = [self createChatMenuMessage:message];
+            }
+        }
+        
+        if (_menu) {
+            CGRect rect = CGRectMake(25, 10, self.view.frame.size.width
+                                     - 50, self.view.frame.size.height -20);
+            
+            [_menu showFromRect:rect inView:self.view];
+        }
+    }
+}
+
 
 -(void) closeTabName: (NSString *) name {
     if (name) {

@@ -49,6 +49,11 @@
 		6654441317F37A3F00F62F7F /* SwipeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6654441217F37A3F00F62F7F /* SwipeView.m */; };
 		6654441617F37BCF00F62F7F /* SwipeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6654441517F37BCF00F62F7F /* SwipeViewController.mm */; };
 		665F4DE4182EB2180083BCE7 /* SurespotButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DE3182EB2180083BCE7 /* SurespotButton.m */; };
+		665F4DF51831923C0083BCE7 /* RECommonFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DEC1831923C0083BCE7 /* RECommonFunctions.m */; };
+		665F4DF61831923C0083BCE7 /* REMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DEE1831923C0083BCE7 /* REMenu.m */; };
+		665F4DF71831923C0083BCE7 /* REMenuContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DF01831923C0083BCE7 /* REMenuContainerView.m */; };
+		665F4DF81831923C0083BCE7 /* REMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DF21831923C0083BCE7 /* REMenuItem.m */; };
+		665F4DF91831923C0083BCE7 /* REMenuItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DF41831923C0083BCE7 /* REMenuItemView.m */; };
 		66B3C8ED17B15F2300CC96EE /* ChatController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66B3C8EC17B15F2300CC96EE /* ChatController.mm */; };
 		66B3C8F017B17AC800CC96EE /* ChatDataSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66B3C8EF17B17AC800CC96EE /* ChatDataSource.mm */; };
 		66D3B04D182D47DF00B37A6C /* SurespotLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 66D3B04C182D47DF00B37A6C /* SurespotLogFormatter.m */; };
@@ -171,6 +176,16 @@
 		6654441517F37BCF00F62F7F /* SwipeViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = SwipeViewController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		665F4DE2182EB2180083BCE7 /* SurespotButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SurespotButton.h; path = chat/SurespotButton.h; sourceTree = "<group>"; };
 		665F4DE3182EB2180083BCE7 /* SurespotButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SurespotButton.m; path = chat/SurespotButton.m; sourceTree = "<group>"; };
+		665F4DEB1831923C0083BCE7 /* RECommonFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RECommonFunctions.h; sourceTree = "<group>"; };
+		665F4DEC1831923C0083BCE7 /* RECommonFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RECommonFunctions.m; sourceTree = "<group>"; };
+		665F4DED1831923C0083BCE7 /* REMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REMenu.h; sourceTree = "<group>"; };
+		665F4DEE1831923C0083BCE7 /* REMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = REMenu.m; sourceTree = "<group>"; };
+		665F4DEF1831923C0083BCE7 /* REMenuContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REMenuContainerView.h; sourceTree = "<group>"; };
+		665F4DF01831923C0083BCE7 /* REMenuContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = REMenuContainerView.m; sourceTree = "<group>"; };
+		665F4DF11831923C0083BCE7 /* REMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REMenuItem.h; sourceTree = "<group>"; };
+		665F4DF21831923C0083BCE7 /* REMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = REMenuItem.m; sourceTree = "<group>"; };
+		665F4DF31831923C0083BCE7 /* REMenuItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REMenuItemView.h; sourceTree = "<group>"; };
+		665F4DF41831923C0083BCE7 /* REMenuItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = REMenuItemView.m; sourceTree = "<group>"; };
 		66B3C8EB17B15F2300CC96EE /* ChatController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatController.h; path = chat/ChatController.h; sourceTree = "<group>"; };
 		66B3C8EC17B15F2300CC96EE /* ChatController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = ChatController.mm; path = chat/ChatController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		66B3C8EE17B17AC800CC96EE /* ChatDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatDataSource.h; path = chat/ChatDataSource.h; sourceTree = "<group>"; };
@@ -583,6 +598,23 @@
 			path = SwipeView;
 			sourceTree = "<group>";
 		};
+		665F4DEA1831923C0083BCE7 /* REMenu */ = {
+			isa = PBXGroup;
+			children = (
+				665F4DEB1831923C0083BCE7 /* RECommonFunctions.h */,
+				665F4DEC1831923C0083BCE7 /* RECommonFunctions.m */,
+				665F4DED1831923C0083BCE7 /* REMenu.h */,
+				665F4DEE1831923C0083BCE7 /* REMenu.m */,
+				665F4DEF1831923C0083BCE7 /* REMenuContainerView.h */,
+				665F4DF01831923C0083BCE7 /* REMenuContainerView.m */,
+				665F4DF11831923C0083BCE7 /* REMenuItem.h */,
+				665F4DF21831923C0083BCE7 /* REMenuItem.m */,
+				665F4DF31831923C0083BCE7 /* REMenuItemView.h */,
+				665F4DF41831923C0083BCE7 /* REMenuItemView.m */,
+			);
+			path = REMenu;
+			sourceTree = "<group>";
+		};
 		66B3C8EA17B15F0C00CC96EE /* chat */ = {
 			isa = PBXGroup;
 			children = (
@@ -613,6 +645,7 @@
 		66E4F517176298CB00596E6B /* libs */ = {
 			isa = PBXGroup;
 			children = (
+				665F4DEA1831923C0083BCE7 /* REMenu */,
 				66FF0FFC182D3D920038ECA6 /* Lumberjack */,
 				66FF0FF9182B04B10038ECA6 /* UIViewPager.h */,
 				66FF0FFA182B04B10038ECA6 /* UIViewPager.m */,
@@ -989,11 +1022,13 @@
 			files = (
 				664076781822C07C00BFD974 /* Friend.m in Sources */,
 				6604A2CB17626B9E0072216A /* main.m in Sources */,
+				665F4DF81831923C0083BCE7 /* REMenuItem.m in Sources */,
 				66D3B04D182D47DF00B37A6C /* SurespotLogFormatter.m in Sources */,
 				6604A2CF17626B9E0072216A /* SurespotAppDelegate.m in Sources */,
 				6604A2DE17626B9E0072216A /* LoginViewController.mm in Sources */,
 				66E4F5B7176298CB00596E6B /* SocketIO.m in Sources */,
 				66FF1001182D3D920038ECA6 /* DDLog.m in Sources */,
+				665F4DF61831923C0083BCE7 /* REMenu.m in Sources */,
 				663710801813172F009D5195 /* EGOCache.m in Sources */,
 				66E4F5B8176298CB00596E6B /* SocketIOJSONSerialization.m in Sources */,
 				66E4F5B9176298CB00596E6B /* SocketIOPacket.m in Sources */,
@@ -1002,6 +1037,7 @@
 				6637107C1812EA1D009D5195 /* GenerateSharedSecretOperation.mm in Sources */,
 				66E4F5BC176298CB00596E6B /* base64.c in Sources */,
 				66FF0FF4182AE44C0038ECA6 /* LoadingView.m in Sources */,
+				665F4DF71831923C0083BCE7 /* REMenuContainerView.m in Sources */,
 				660EB27D17FE64D800DBC53C /* ChatUtils.mm in Sources */,
 				66E4F5BD176298CB00596E6B /* NSData+SRB64Additions.m in Sources */,
 				66E4F5BE176298CB00596E6B /* SRWebSocket.m in Sources */,
@@ -1024,6 +1060,7 @@
 				66EC6110176E494900937467 /* AFPropertyListRequestOperation.m in Sources */,
 				66EC6111176E494900937467 /* AFURLConnectionOperation.m in Sources */,
 				66EC6112176E494900937467 /* AFXMLRequestOperation.m in Sources */,
+				665F4DF51831923C0083BCE7 /* RECommonFunctions.m in Sources */,
 				66EC6113176E494900937467 /* UIImageView+AFNetworking.m in Sources */,
 				66EC6117176E49F800937467 /* NetworkController.m in Sources */,
 				66159703176F6732001B32C1 /* NSData+Base64.m in Sources */,
@@ -1041,6 +1078,7 @@
 				6654441317F37A3F00F62F7F /* SwipeView.m in Sources */,
 				66B3C8ED17B15F2300CC96EE /* ChatController.mm in Sources */,
 				66FF0FE81825416A0038ECA6 /* HomeDataSource.m in Sources */,
+				665F4DF91831923C0083BCE7 /* REMenuItemView.m in Sources */,
 				664076721822AA0100BFD974 /* HomeCell.m in Sources */,
 				6640767B1822D52800BFD974 /* SurespotControlMessage.m in Sources */,
 				66B3C8F017B17AC800CC96EE /* ChatDataSource.mm in Sources */,
