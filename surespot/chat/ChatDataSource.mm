@@ -30,6 +30,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @implementation ChatDataSource
 
 -(ChatDataSource*)initWithUsername:(NSString *) username loggedInUser: (NSString * ) loggedInUser availableId:(NSInteger)availableId availableControlId:( NSInteger) availableControlId {
+    
+    DDLogInfo(@"username: %@, loggedInUser: %@, availableid: %d, availableControlId: %d", username, loggedInUser, availableId, availableControlId);
     //call super init
     self = [super init];
     
@@ -58,6 +60,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             //[_decryptionQueue waitUntilAllOperationsAreFinished];
             DDLogVerbose(@"loaded %d messages from disk at: %@", [messages count] ,path);
+            DDLogInfo( @"latestMEssageid: %d, latestControlId: %d", _latestMessageId ,_latestControlMessageId);
+            
             [self postRefresh];
         }
         
@@ -66,7 +70,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             DDLogInfo(@"getting messageData latestMessageId: %d, latestControlId: %d", _latestMessageId ,_latestControlMessageId);
             //load message data
             [[NetworkController sharedInstance] getMessageDataForUsername:_username andMessageId:_latestMessageId andControlId:_latestControlMessageId successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                DDLogVerbose(@"get messageData response: %d",  [response statusCode]);
+                DDLogInfo(@"get messageData response: %d",  [response statusCode]);
                 
                 NSArray * controlMessageStrings =[((NSDictionary *) JSON) objectForKey:@"controlMessages"];
                 

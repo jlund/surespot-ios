@@ -124,7 +124,26 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [self updateButtonIcons];
     
+    [[ChatController sharedInstance] resume];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pause:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resume:) name:UIApplicationWillEnterForegroundNotification object:nil];
+    
 }
+
+-(void) pause: (NSNotification *)  notification{
+    DDLogVerbose(@"pause");
+    [[ChatController sharedInstance] pause];
+
+   }
+
+
+-(void) resume: (NSNotification *) notification {
+    DDLogVerbose(@"resume");
+    [[ChatController sharedInstance] resume];
+
+}
+
 
 
 - (void)registerForKeyboardNotifications
@@ -1113,7 +1132,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [_chats removeAllObjects];
     }
     [self performSegueWithIdentifier: @"returnToLogin" sender: self ];
-    
 }
 - (IBAction)buttonTouchUpInside:(id)sender {
     if (_textField.text.length > 0) {

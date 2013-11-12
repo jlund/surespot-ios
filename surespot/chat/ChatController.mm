@@ -60,13 +60,8 @@ static const int MAX_CONNECTION_RETRIES = 16;
     
     if (self != nil) {
         
-        self.socketIO = [[SocketIO alloc] initWithDelegate:self];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pause:) name:UIApplicationDidEnterBackgroundNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resume:) name:UIApplicationWillEnterForegroundNotification object:nil];
-        
+        self.socketIO = [[SocketIO alloc] initWithDelegate:self];               
         _chatDataSources = [[NSMutableDictionary alloc] init];
-        [self connect];
     }
     
     return self;
@@ -79,7 +74,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
     }
 }
 
--(void) pause: (NSNotification *)  notification{
+-(void) pause {
     DDLogVerbose(@"chatcontroller pause");
     [self disconnect];
     [self saveState];
@@ -97,7 +92,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
     }
 }
 
--(void) resume: (NSNotification *) notification {
+-(void) resume {
     DDLogVerbose(@"chatcontroller resume");
     [self connect];
 }
@@ -648,12 +643,12 @@ static const int MAX_CONNECTION_RETRIES = 16;
 
 
 -(void) login {
-    [self connect];
+   // [self connect];
     _homeDataSource = [[HomeDataSource alloc] init];
 }
 
 -(void) logout {
-    [self pause:nil];
+    [self pause];
     @synchronized (_chatDataSources) {
         [_chatDataSources removeAllObjects];
     }

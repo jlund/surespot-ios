@@ -29,4 +29,6 @@
 - (void) logout;
 - (void) deleteFriend: (Friend *) thefriend;
 -(void) deleteMessage: (SurespotMessage *) message;
+-(void) pause;
+-(void) resume;
 @end
