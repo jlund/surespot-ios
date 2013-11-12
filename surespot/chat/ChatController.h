@@ -31,4 +31,5 @@
 -(void) deleteMessage: (SurespotMessage *) message;
 -(void) pause;
 -(void) resume;
+- (void) deleteMessagesForFriend: (Friend *) afriend;
 @end

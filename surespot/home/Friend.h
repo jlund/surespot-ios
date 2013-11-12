@@ -17,7 +17,6 @@
 @property (atomic, strong) NSString * imageIv;
 @property (atomic, assign) NSInteger lastViewedMessageId;
 @property (atomic, assign) NSInteger availableMessageId;
-@property (atomic, assign) NSInteger lastReceivedMessageControlId;
 @property (atomic, assign) NSInteger availableMessageControlId;
 
 -(void) setFriend;

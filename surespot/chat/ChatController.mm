@@ -703,4 +703,26 @@ static const int MAX_CONNECTION_RETRIES = 16;
 }
 
 
-@end
+- (void) deleteMessagesForFriend: (Friend  *) afriend {
+    ChatDataSource * cds = [self getDataSourceForFriendname:afriend.name];
+    
+    int lastMessageId = 0;
+    if (cds) {
+        lastMessageId = [cds latestMessageId];
+    }
+    else {
+        lastMessageId = [afriend lastViewedMessageId];
+    }
+    
+    [[NetworkController sharedInstance] deleteMessagesUTAI:lastMessageId name:afriend.name successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (cds) {
+            [cds deleteAllMessagesUTAI:lastMessageId];
+        }
+    } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
+        //todo tell user
+    }];
+
+
+}
+
+  @end

@@ -921,6 +921,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [menuItems addObject:closeTabItem];
         
         REMenuItem * deleteAllItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_delete_all_messages", nil) image:[UIImage imageNamed:@"ic_menu_delete"] highlightedImage:nil action:^(REMenuItem * item){
+            [[ChatController sharedInstance] deleteMessagesForFriend: [_homeDataSource getFriendByName:_homeDataSource.currentChat]];
+
         }];
         
         [menuItems addObject:deleteAllItem];
@@ -957,7 +959,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     
     REMenuItem * deleteAllHomeItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_delete_all_messages", nil) image:[UIImage imageNamed:@"ic_menu_delete"] highlightedImage:nil action:^(REMenuItem * item){
-        
+        [[ChatController sharedInstance] deleteMessagesForFriend: thefriend];
+   
         
     }];
     [menuItems addObject:deleteAllHomeItem];

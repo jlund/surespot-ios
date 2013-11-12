@@ -172,13 +172,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
     }
     
-    if (message.serverid > 0) {
-        NSInteger messageId = message.serverid;
-        if (messageId > _latestMessageId) {
-            DDLogVerbose(@"updating latest message id: %d", messageId);
-            _latestMessageId = messageId;
-        }
+    if (message.serverid > _latestMessageId) {
+        DDLogVerbose(@"updating latest message id: %d", message.serverid);
+        _latestMessageId = message.serverid;
     }
+    
     
     if (refresh) {
         if ([_decryptionQueue operationCount] == 0) {
@@ -187,20 +185,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     
-}
-
--(NSInteger) latestMessageId {
-    NSInteger maxId = 0;
-    @synchronized (_messages)  {
-        for (SurespotMessage * message in _messages) {
-            NSInteger idValue =message.serverid;
-            if (idValue > maxId) {
-                maxId = idValue;
-            }
-        }
-    }
-    
-    return maxId;
 }
 
 -(void) postRefresh {
@@ -251,6 +235,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) deleteMessageById: (NSInteger) serverId {
+    DDLogInfo(@"serverID: %d", serverId);
     @synchronized (_messages) {
         [_messages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             if([obj serverid] == serverId) {
@@ -263,6 +248,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) deleteMessageByIv: (NSString *) iv {
+    DDLogInfo(@"iv: %@", iv);
     @synchronized (_messages) {
         [_messages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             if([[obj iv] isEqualToString:iv]) {
@@ -329,7 +315,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     }
                 }
             }
-        }                
+        }
     }
     
     @synchronized (_controlMessages) {
@@ -338,9 +324,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) deleteAllMessagesUTAI: (NSInteger) messageId {
+    DDLogInfo(@"UTAI messageID: %d", messageId);
     @synchronized (_messages) {
         [_messages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             if([obj serverid] <= messageId) {
+                DDLogInfo(@"deleting messageID: %d", [obj serverid]);
                 [_messages removeObjectAtIndex:idx];
             }
         }];
@@ -350,11 +338,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) deleteTheirMessagesUTAI: (NSInteger) messageId {
+    
     @synchronized (_messages) {
         [_messages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(SurespotMessage * obj, NSUInteger idx, BOOL *stop) {
             if([obj serverid] <= messageId && ![[obj getOtherUser] isEqualToString:_loggedInUser]) {
-                
-                
+                DDLogInfo(@"deleting messageID: %d", [obj serverid]);
                 [_messages removeObjectAtIndex:idx];
             }
         }];

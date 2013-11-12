@@ -27,5 +27,5 @@
 
 -(void) handleControlMessages: (NSArray *) controlMessages;
 -(void) handleControlMessage: (SurespotControlMessage *) message;
-
+-(void) deleteAllMessagesUTAI: (NSInteger) messageId;
 @end
