@@ -60,7 +60,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
     
     if (self != nil) {
         
-        self.socketIO = [[SocketIO alloc] initWithDelegate:self];               
+        self.socketIO = [[SocketIO alloc] initWithDelegate:self];
         _chatDataSources = [[NSMutableDictionary alloc] init];
     }
     
@@ -335,34 +335,41 @@ static const int MAX_CONNECTION_RETRIES = 16;
     NSData * iv = [EncryptionController getIv];
     
     [[IdentityController sharedInstance] getTheirLatestVersionForUsername:friendname callback:^(NSString * version) {
-        [EncryptionController symmetricEncryptString: message ourVersion:ourLatestVersion theirUsername:friendname theirVersion:version iv:iv callback:^(NSString * cipherText) {
+        
+        if (version) {
             
-            NSString * b64iv = [iv base64EncodedStringWithSeparateLines:NO];
-            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-            
-            [dict setObject:friendname forKey:@"to"];
-            [dict setObject:loggedInUser forKey:@"from"];
-            [dict setObject:version forKey:@"toVersion"];
-            [dict setObject:ourLatestVersion forKey:@"fromVersion"];
-            [dict setObject:b64iv forKey:@"iv"];
-            [dict setObject:cipherText forKey:@"data"];
-            [dict setObject:@"text/plain" forKey:@"mimeType"];
-            [dict setObject:[NSNumber  numberWithBool:FALSE] forKey:@"shareable"];
-            
-            
-            NSError *error;
-            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
-            NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-            
-            
-            [_socketIO sendMessage: jsonString];
-            
-            //cache the plain data locally
-            [dict setObject:message forKey:@"plaindata"];
-            
-            ChatDataSource * dataSource = [self getDataSourceForFriendname: friendname];
-            [dataSource addMessage: [[SurespotMessage alloc] initWithDictionary: dict] refresh:YES];
-        }];
+            [EncryptionController symmetricEncryptString: message ourVersion:ourLatestVersion theirUsername:friendname theirVersion:version iv:iv callback:^(NSString * cipherText) {
+                
+                NSString * b64iv = [iv base64EncodedStringWithSeparateLines:NO];
+                NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+                
+                [dict setObject:friendname forKey:@"to"];
+                [dict setObject:loggedInUser forKey:@"from"];
+                [dict setObject:version forKey:@"toVersion"];
+                [dict setObject:ourLatestVersion forKey:@"fromVersion"];
+                [dict setObject:b64iv forKey:@"iv"];
+                [dict setObject:cipherText forKey:@"data"];
+                [dict setObject:@"text/plain" forKey:@"mimeType"];
+                [dict setObject:[NSNumber  numberWithBool:FALSE] forKey:@"shareable"];
+                
+                
+                NSError *error;
+                NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
+                NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+                
+                
+                [_socketIO sendMessage: jsonString];
+                
+                //cache the plain data locally
+                [dict setObject:message forKey:@"plaindata"];
+                
+                ChatDataSource * dataSource = [self getDataSourceForFriendname: friendname];
+                [dataSource addMessage: [[SurespotMessage alloc] initWithDictionary: dict] refresh:YES];
+            }];
+        }
+        else {
+            //todo tell user we can't send
+        }
     }];
     
 }
@@ -427,15 +434,15 @@ static const int MAX_CONNECTION_RETRIES = 16;
                 [cds handleControlMessage:message];
             }
             
-
+            
             Friend * thefriend = [_homeDataSource getFriendByName:otherUser];
             if (thefriend) {
                 
                 NSInteger messageId = message.controlId;
                 
-                thefriend.availableMessageControlId = messageId;               
+                thefriend.availableMessageControlId = messageId;
             }
-
+            
         }
     }
 }
@@ -643,7 +650,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
 
 
 -(void) login {
-   // [self connect];
+    // [self connect];
     _homeDataSource = [[HomeDataSource alloc] init];
 }
 
@@ -683,14 +690,14 @@ static const int MAX_CONNECTION_RETRIES = 16;
                 [[NetworkController sharedInstance] deleteMessageName:[message getOtherUser] serverId:[message serverid] successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
                     [cds deleteMessage: message initiatedByMe: YES];
                 } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
-                  
+                    
                     
                     //if it's 404, delete it locally as it's not on the server
                     if ([operation.response statusCode] == 404) {
                         [cds deleteMessage: message initiatedByMe: YES];
                     }
                     else {
-                          //todo notify user
+                        //todo notify user
                     }
                 }];
                 
@@ -721,8 +728,8 @@ static const int MAX_CONNECTION_RETRIES = 16;
     } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
         //todo tell user
     }];
-
-
+    
+    
 }
 
-  @end
+@end
