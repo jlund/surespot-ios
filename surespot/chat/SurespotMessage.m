@@ -38,7 +38,7 @@
 -(id) initWithCoder:(NSCoder *)coder {
     self = [super init];
     if (self) {
-        _serverid = [coder decodeObjectForKey:@"id"];
+        _serverid = [[coder decodeObjectForKey:@"id"] integerValue];
         _to = [coder decodeObjectForKey:@"to"];
         _from = [coder decodeObjectForKey:@"from"];
         _fromVersion = [coder decodeObjectForKey:@"fromVersion"];
@@ -51,7 +51,7 @@
     return self;
 }
 -(void) parseDictionary:(NSDictionary *) dictionary {
-    _serverid = [dictionary objectForKey:@"id"];
+    _serverid = [[dictionary objectForKey:@"id"] integerValue];
     _to = [dictionary objectForKey:@"to"];
     _from = [dictionary objectForKey:@"from"];
     _fromVersion = [dictionary objectForKey:@"fromVersion"];
@@ -95,7 +95,8 @@
 }
 
 - (void)encodeWithCoder:(NSCoder *)encoder{
-    [encoder encodeObject:_serverid forKey:@"id"];
+    NSString * serverid = [@(_serverid) stringValue];
+    [encoder encodeObject: serverid forKey:@"id"];
     [encoder encodeObject:_to forKey:@"to"];
     [encoder encodeObject:_from forKey:@"from"];
     [encoder encodeObject:_fromVersion forKey:@"fromVersion"];

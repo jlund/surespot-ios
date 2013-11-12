@@ -383,8 +383,8 @@ static const int MAX_CONNECTION_RETRIES = 16;
     
     //update available id
     Friend * afriend = [_homeDataSource getFriendByName:otherUser];
-    if (afriend && message.serverid) {
-        afriend.availableMessageId = [message.serverid integerValue];
+    if (afriend && message.serverid > 0) {
+        afriend.availableMessageId = message.serverid;
     }
 }
 
@@ -402,8 +402,8 @@ static const int MAX_CONNECTION_RETRIES = 16;
         Friend * thefriend = [_homeDataSource getFriendByName:username];
         if (thefriend) {
             
-            SurespotMessage * cm = [[SurespotMessage alloc] initWithJSONString:[messages objectAtIndex:[messages count ] -1]];
-            NSInteger messageId =[cm.serverid integerValue];
+            SurespotMessage * m = [[SurespotMessage alloc] initWithJSONString:[messages objectAtIndex:[messages count ] -1]];
+            NSInteger messageId = m.serverid;
             
             thefriend.availableMessageId = messageId;
             if ([_homeDataSource.currentChat isEqualToString: username]) {
@@ -677,10 +677,10 @@ static const int MAX_CONNECTION_RETRIES = 16;
     if (message) {
         ChatDataSource * cds = [_chatDataSources objectForKey:[message getOtherUser]];
         if (cds) {
-            if (message.serverid) {
+            if (message.serverid > 0) {
                 
                 
-                [[NetworkController sharedInstance] deleteMessageName:[message getOtherUser] serverId:[[message serverid] integerValue] successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
+                [[NetworkController sharedInstance] deleteMessageName:[message getOtherUser] serverId:[message serverid] successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
                     [cds deleteMessage: message initiatedByMe: YES];
                 } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
                   
