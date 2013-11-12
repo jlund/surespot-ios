@@ -683,7 +683,15 @@ static const int MAX_CONNECTION_RETRIES = 16;
                 [[NetworkController sharedInstance] deleteMessageName:[message getOtherUser] serverId:[[message serverid] integerValue] successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
                     [cds deleteMessage: message initiatedByMe: YES];
                 } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
-                    //todo notify user
+                  
+                    
+                    //if it's 404, delete it locally as it's not on the server
+                    if ([operation.response statusCode] == 404) {
+                        [cds deleteMessage: message initiatedByMe: YES];
+                    }
+                    else {
+                          //todo notify user
+                    }
                 }];
                 
             }

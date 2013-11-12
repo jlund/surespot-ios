@@ -45,7 +45,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)viewDidLoad
 {
-    DDLogVerbose(@"swipeviewdidload %@", self);
+    DDLogInfo(@"swipeviewdidload %@", self);
     [super viewDidLoad];
     
     _needsScroll = [NSMutableDictionary new];
