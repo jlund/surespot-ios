@@ -39,7 +39,7 @@ withDsaPubKey: (CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey) dsaPubKey {
         self.latestVersion = version;
     }
     else {
-        if ([self.latestVersion compare:version] == NSOrderedAscending) {
+        if ([self.latestVersion integerValue] < [version integerValue]) {
             self.latestVersion = version;
         }
     }

@@ -63,6 +63,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
          PublicKeys* pk = [[PublicKeys alloc] init];
          pk.dhPubKey = dhPub;
          pk.dsaPubKey = dsaPub;
+         pk.version = _version;
+         pk.lastModified = [NSNumber numberWithLong: [[NSDate date] timeIntervalSince1970] * 1000];
          
          DDLogVerbose(@"get public keys calling callback");
          [self finish:pk];

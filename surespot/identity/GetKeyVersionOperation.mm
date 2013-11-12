@@ -57,7 +57,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
          getKeyVersionForUsername: _username
          successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
              NSString * responseObjectS =   [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-             DDLogInfo(@"caching version: %@ for username: %@", responseObjectS, _username);
+             DDLogInfo(@"caching key version: %@ for username: %@", responseObjectS, _username);
              
              [_cache.latestVersionsDict setObject:responseObjectS forKey:_username];
              [self finish:responseObjectS];

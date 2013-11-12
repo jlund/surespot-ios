@@ -116,6 +116,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                      //store keys in dictionary
                                                      [self.cache.publicKeysDict setObject:keys forKey:publicKeysKey];
                                                      
+                                                     NSString * theirVersion = [self.cache.latestVersionsDict objectForKey:_theirUsername];
+                                                     //if the version is greater than what we have then cache it
+                                                     if (!theirVersion || [theirVersion integerValue] < [keys.version integerValue]) {
+                                                         DDLogInfo(@"caching key version: %@ for username: %@", keys.version, _theirUsername);
+
+                                                         [self.cache.latestVersionsDict setObject:keys.version forKey:_theirUsername];
+                                                     }
+                                                     
+                                                     
                                                      GenerateSharedSecretOperation * sharedSecretOp = [[GenerateSharedSecretOperation alloc] initWithOurIdentity:identity theirPublicKeys:keys completionCallback:^(NSData * secret) {
                                                          //store shared key in dictionary
                                                          DDLogInfo(@"caching shared secret %@ for %@", [secret base64EncodedString], sharedSecretKey);
