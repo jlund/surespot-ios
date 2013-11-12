@@ -8,6 +8,14 @@
 
 #import "GenerateSharedSecretOperation.h"
 #import "EncryptionController.h"
+#import "DDLog.h"
+
+
+#ifdef DEBUG
+static const int ddLogLevel = LOG_LEVEL_INFO;
+#else
+static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
 
 @interface GenerateSharedSecretOperation()
 @property (nonatomic, strong) SurespotIdentity * ourIdentity;
@@ -28,6 +36,7 @@
 
 -(void) main {
     @autoreleasepool {
+        DDLogInfo(@"getting pub key");
         ECDHPublicKey pubKey = [self.theirPublicKeys dhPubKey];
         
         //generate shared secret and store it in cache

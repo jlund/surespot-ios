@@ -10,8 +10,11 @@
 #import "GetSharedSecretOperation.h"
 #import "DDLog.h"
 
+#ifdef DEBUG
+static const int ddLogLevel = LOG_LEVEL_INFO;
+#else
 static const int ddLogLevel = LOG_LEVEL_OFF;
-
+#endif
 
 @interface CredentialCachingController()
 @property (nonatomic, strong) NSOperationQueue * getSecretQueue;
@@ -28,10 +31,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         sharedInstance.identities = [[NSMutableDictionary alloc] init];
         sharedInstance.sharedSecretsDict = [[NSMutableDictionary alloc] init];
         sharedInstance.publicKeysDict = [[NSMutableDictionary alloc] init];
-        sharedInstance.secretQueue = [[NSOperationQueue alloc] init];
-        //   [sharedInstance.secretQueue setMaxConcurrentOperationCount:1];
+        sharedInstance.genSecretQueue = [[NSOperationQueue alloc] init];
         sharedInstance.publicKeyQueue = [[NSOperationQueue alloc] init];
-        //[sharedInstance.publicKeyQueue setMaxConcurrentOperationCount:1];
         sharedInstance.getSecretQueue = [[NSOperationQueue alloc] init];
         [sharedInstance.getSecretQueue setMaxConcurrentOperationCount:1];
     });
@@ -43,7 +44,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) getSharedSecretForOurVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion: (NSString *) theirVersion callback: (CallbackBlock) callback {
     
-    DDLogVerbose(@"getSharedSecretForOurVersion");
+    DDLogInfo(@"getSharedSecretForOurVersion, queue size: %d", [_getSecretQueue operationCount] );
    
     GetSharedSecretOperation * op = [[GetSharedSecretOperation alloc] initWithCache:self ourUsername:self.loggedInUsername ourVersion:ourVersion theirUsername:theirUsername theirVersion:theirVersion callback:callback];
     

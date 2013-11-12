@@ -6,14 +6,6 @@
 //  Copyright (c) 2013 2fours. All rights reserved.
 //
 
-//
-//  GenerateSharedSecretOperation.m
-//  surespot
-//
-//  Created by Adam on 10/19/13.
-//  Copyright (c) 2013 2fours. All rights reserved.
-//
-
 #import "GetPublicKeysOperation.h"
 #import "NetworkController.h"
 #import "EncryptionController.h"
