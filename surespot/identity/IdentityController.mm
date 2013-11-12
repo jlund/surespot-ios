@@ -216,21 +216,8 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
 - (void) getTheirLatestVersionForUsername: (NSString *) username callback:(CallbackStringBlock) callback {
     DDLogVerbose(@"getTheirLatestVersionForUsername");
     
-    [[NetworkController sharedInstance]
-     getKeyVersionForUsername: username
-     successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
-         NSString * responseObjectS =   [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-         DDLogVerbose(@"getTheirLatestVersionForUsername response: %d, object: %@",  [operation.response statusCode], responseObjectS);
-         callback(responseObjectS);
-         
-     }
-     failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
-         
-         DDLogVerbose(@"response failure: %@",  Error);
-         callback(nil);
-         
-     }];
-    
+    [[CredentialCachingController sharedInstance] getLatestVersionForUsername: username callback: callback];
+      
     
     
     

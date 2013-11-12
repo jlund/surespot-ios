@@ -16,6 +16,7 @@
 @property (nonatomic, retain) NSMutableDictionary * sharedSecretsDict;
 @property (nonatomic, retain) NSMutableDictionary * publicKeysDict;
 @property (nonatomic, retain) NSMutableDictionary * identitiesDict;
+@property (nonatomic, strong) NSMutableDictionary * latestVersionsDict;
 @property (nonatomic, strong) NSOperationQueue * genSecretQueue;
 @property (nonatomic, strong) NSOperationQueue * publicKeyQueue;
 @property (atomic, strong) NSString * loggedInUsername;
@@ -24,4 +25,6 @@
 -(void) loginIdentity: (SurespotIdentity *) identity;
 
 -(SurespotIdentity *) getIdentityWithUsername: (NSString *) username;
+- (void) getLatestVersionForUsername: (NSString *) username callback:(CallbackStringBlock) callback;
+
 @end

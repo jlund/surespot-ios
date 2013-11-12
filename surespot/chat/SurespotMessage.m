@@ -59,7 +59,14 @@
     _data =[dictionary objectForKey:@"data"];
     _iv = [dictionary objectForKey:@"iv"];
     _mimeType = [dictionary objectForKey:@"mimeType"];
-    _dateTime = [NSDate dateWithTimeIntervalSince1970: [[dictionary objectForKey:@"datetime"] doubleValue]/1000];
+    
+    id dateTime = [dictionary objectForKey:@"datetime"];
+    if (dateTime) {
+        _dateTime = [NSDate dateWithTimeIntervalSince1970: [dateTime doubleValue]/1000];
+    }
+    else {
+        _dateTime = nil;
+    }
 }
 
 - (NSString *) getOtherUser {
@@ -104,11 +111,13 @@
     [encoder encodeObject:_data forKey:@"data"];
     [encoder encodeObject:_iv forKey:@"iv"];
     [encoder encodeObject:_mimeType forKey:@"mimeType"];
-    [encoder encodeObject:_dateTime forKey:@"datetime"];
-
-
-   
-
+    if (_dateTime) {
+        [encoder encodeObject:_dateTime forKey:@"datetime"];
+    }
+    
+    
+    
+    
 }
 
 

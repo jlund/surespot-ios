@@ -54,6 +54,7 @@
 		665F4DF71831923C0083BCE7 /* REMenuContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DF01831923C0083BCE7 /* REMenuContainerView.m */; };
 		665F4DF81831923C0083BCE7 /* REMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DF21831923C0083BCE7 /* REMenuItem.m */; };
 		665F4DF91831923C0083BCE7 /* REMenuItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DF41831923C0083BCE7 /* REMenuItemView.m */; };
+		665F4DFC1832E69C0083BCE7 /* GetKeyVersionOperation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DFB1832E69C0083BCE7 /* GetKeyVersionOperation.mm */; };
 		66B3C8ED17B15F2300CC96EE /* ChatController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66B3C8EC17B15F2300CC96EE /* ChatController.mm */; };
 		66B3C8F017B17AC800CC96EE /* ChatDataSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66B3C8EF17B17AC800CC96EE /* ChatDataSource.mm */; };
 		66D3B04D182D47DF00B37A6C /* SurespotLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 66D3B04C182D47DF00B37A6C /* SurespotLogFormatter.m */; };
@@ -186,6 +187,8 @@
 		665F4DF21831923C0083BCE7 /* REMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = REMenuItem.m; sourceTree = "<group>"; };
 		665F4DF31831923C0083BCE7 /* REMenuItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REMenuItemView.h; sourceTree = "<group>"; };
 		665F4DF41831923C0083BCE7 /* REMenuItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = REMenuItemView.m; sourceTree = "<group>"; };
+		665F4DFA1832E6890083BCE7 /* GetKeyVersionOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GetKeyVersionOperation.h; path = identity/GetKeyVersionOperation.h; sourceTree = "<group>"; };
+		665F4DFB1832E69C0083BCE7 /* GetKeyVersionOperation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GetKeyVersionOperation.mm; path = identity/GetKeyVersionOperation.mm; sourceTree = "<group>"; };
 		66B3C8EB17B15F2300CC96EE /* ChatController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatController.h; path = chat/ChatController.h; sourceTree = "<group>"; };
 		66B3C8EC17B15F2300CC96EE /* ChatController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = ChatController.mm; path = chat/ChatController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		66B3C8EE17B17AC800CC96EE /* ChatDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatDataSource.h; path = chat/ChatDataSource.h; sourceTree = "<group>"; };
@@ -536,6 +539,10 @@
 		661C2EC41762B12D000649E7 /* identity */ = {
 			isa = PBXGroup;
 			children = (
+				6637108A18140FB2009D5195 /* GetPublicKeysOperation.h */,
+				6637108B18140FB2009D5195 /* GetPublicKeysOperation.mm */,
+				665F4DFA1832E6890083BCE7 /* GetKeyVersionOperation.h */,
+				665F4DFB1832E69C0083BCE7 /* GetKeyVersionOperation.mm */,
 				661C2EC11762B125000649E7 /* SurespotIdentity.h */,
 				661C2EC21762B125000649E7 /* SurespotIdentity.mm */,
 				661C2ECC1763A214000649E7 /* IdentityController.h */,
@@ -546,8 +553,6 @@
 				66E6536F17B0583F000F81BD /* PublicKeys.mm */,
 				6637107A1812EA1D009D5195 /* GenerateSharedSecretOperation.h */,
 				6637107B1812EA1D009D5195 /* GenerateSharedSecretOperation.mm */,
-				6637108A18140FB2009D5195 /* GetPublicKeysOperation.h */,
-				6637108B18140FB2009D5195 /* GetPublicKeysOperation.mm */,
 				6637108D181424DE009D5195 /* GetSharedSecretOperation.h */,
 				6637108E181424DE009D5195 /* GetSharedSecretOperation.mm */,
 			);
@@ -1064,6 +1069,7 @@
 				66EC6113176E494900937467 /* UIImageView+AFNetworking.m in Sources */,
 				66EC6117176E49F800937467 /* NetworkController.m in Sources */,
 				66159703176F6732001B32C1 /* NSData+Base64.m in Sources */,
+				665F4DFC1832E69C0083BCE7 /* GetKeyVersionOperation.mm in Sources */,
 				6606E4ED179D9C3A004199BC /* SignupViewController.mm in Sources */,
 				66FF0FEE1827FAEE0038ECA6 /* StateController.m in Sources */,
 				6606E4F0179DB134004199BC /* FileController.mm in Sources */,

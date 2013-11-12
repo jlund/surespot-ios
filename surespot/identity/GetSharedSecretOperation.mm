@@ -74,6 +74,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     //see if we have the shared secret cached already
     NSString * sharedSecretKey = [NSString stringWithFormat:@"%@:%@:%@:%@", self.cache.loggedInUsername, self.ourVersion, self.theirUsername, self.theirVersion];
     
+    DDLogInfo(@"checking dictionary for shared secret for:  %@" , sharedSecretKey);
     NSData * sharedSecret = [self.cache.sharedSecretsDict objectForKey:sharedSecretKey];
     
     if (sharedSecret) {
@@ -81,6 +82,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [self finish:sharedSecret];
     }
     else {
+        DDLogInfo(@"shared secret not cached");
         SurespotIdentity * identity = [self.cache.identities objectForKey:[self.cache loggedInUsername]];
         if (!identity) {
             [self finish:nil];
@@ -104,7 +106,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [self.cache.genSecretQueue addOperation:sharedSecretOp];
         }
         else {
-            
+            DDLogInfo(@"public keys not cached for %@", publicKeysKey );
+
             //get the public keys we need
             GetPublicKeysOperation * pkOp = [[GetPublicKeysOperation alloc] initWithUsername:self.theirUsername version:self.theirVersion completionCallback:
                                              ^(PublicKeys * keys) {
