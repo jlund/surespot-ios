@@ -241,7 +241,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     @synchronized (_messages) {
         __block SurespotMessage * message;
         [_messages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            if([obj serverid] && [obj serverid]  == serverId) {
+            if([obj serverid]  == serverId) {
                 message = obj;
                 *stop = YES;
             }
@@ -253,7 +253,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(void) deleteMessageById: (NSInteger) serverId {
     @synchronized (_messages) {
         [_messages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            if([obj serverid] && [obj serverid] == serverId) {
+            if([obj serverid] == serverId) {
                 [_messages removeObjectAtIndex:idx];
                 [self postRefresh];
                 *stop = YES;
@@ -302,6 +302,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) handleControlMessage: (SurespotControlMessage *) message {
     if ([message.type isEqualToString:@"message"]) {
+        
+        DDLogInfo(@"action: %@, id: %d", message.action, message.controlId );
+        
         if  (message.controlId >  self.latestControlMessageId) {
             self.latestControlMessageId = message.controlId;
         }
@@ -315,11 +318,50 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 [self deleteMessage:dMessage initiatedByMe:controlFromMe];
             }
         }
+        else {
+            if ([[message action] isEqualToString:@"deleteAll"]) {
+                if (message.moreData) {
+                    if (controlFromMe) {
+                        [self deleteAllMessagesUTAI:[ message.moreData integerValue] ];
+                    }
+                    else {
+                        [self deleteTheirMessagesUTAI:[ message.moreData integerValue] ];
+                    }
+                }
+            }
+        }                
     }
     
     @synchronized (_controlMessages) {
         [_controlMessages setObject:message forKey:[NSNumber numberWithInteger: message.controlId  ]];
     }
+}
+
+-(void) deleteAllMessagesUTAI: (NSInteger) messageId {
+    @synchronized (_messages) {
+        [_messages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            if([obj serverid] <= messageId) {
+                [_messages removeObjectAtIndex:idx];
+            }
+        }];
+    }
+    
+    [self postRefresh];
+}
+
+-(void) deleteTheirMessagesUTAI: (NSInteger) messageId {
+    @synchronized (_messages) {
+        [_messages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(SurespotMessage * obj, NSUInteger idx, BOOL *stop) {
+            if([obj serverid] <= messageId && ![[obj getOtherUser] isEqualToString:_loggedInUser]) {
+                
+                
+                [_messages removeObjectAtIndex:idx];
+            }
+        }];
+    }
+    
+    [self postRefresh];
+    
 }
 
 @end
