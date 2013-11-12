@@ -108,10 +108,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _viewPager.delegate = self;
     
     
-    //open active tabs
+    //open active tabs, don't load data now well get it after connect
     for (Friend * afriend in [_homeDataSource friends]) {
         if ([afriend isChatActive]) {
-            [self loadChat:[afriend name] show:NO availableId: [afriend availableMessageId]];
+            [self loadChat:[afriend name] show:NO availableId: -1 availableControlId:-1];
         }
     }
     
@@ -687,7 +687,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
 }
 
--(void) loadChat:(NSString *) username show: (BOOL) show  availableId: (NSInteger) availableId {
+-(void) loadChat:(NSString *) username show: (BOOL) show  availableId: (NSInteger) availableId availableControlId: (NSInteger) availableControlId {
+    DDLogInfo(@"entered");
     //get existing view if there is one
     UITableView * chatView;
     @synchronized (_chats) {
@@ -704,7 +705,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         
         //create the data source
-        [[ChatController sharedInstance] createDataSourceForFriendname:username availableId: availableId];
+        [[ChatController sharedInstance] createDataSourceForFriendname:username availableId: availableId availableControlId:availableControlId];
         
         NSInteger index = 0;
         @synchronized (_chats) {
@@ -750,7 +751,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     Friend * afriend = [_homeDataSource getFriendByName:username];
     
-    [self loadChat:username show:YES availableId:[afriend availableMessageId]];
+    [self loadChat:username show:YES availableId:[afriend availableMessageId] availableControlId:[afriend availableMessageControlId]];
     [_textField resignFirstResponder];
 }
 

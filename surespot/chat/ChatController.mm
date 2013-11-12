@@ -160,7 +160,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
     if ([name isEqualToString:@"control"]) {
         
         SurespotControlMessage * message = [[SurespotControlMessage alloc] initWithJSONString:[jsonData objectForKey:@"args"][0]];
-        [self handleControlMessage: message usingChatDataSource:nil];
+        [self handleControlMessage: message];
     }
     else {
         
@@ -179,11 +179,11 @@ static const int MAX_CONNECTION_RETRIES = 16;
     DDLogVerbose(@"didReceiveMessage() >>> data: %@", packet.data);
 }
 
-- (ChatDataSource *) createDataSourceForFriendname: (NSString *) friendname availableId:(NSInteger)availableId {
+- (ChatDataSource *) createDataSourceForFriendname: (NSString *) friendname availableId:(NSInteger)availableId availableControlId: (NSInteger) availableControlId {
     @synchronized (_chatDataSources) {
         ChatDataSource * dataSource = [self.chatDataSources objectForKey:friendname];
         if (dataSource == nil) {
-            dataSource = [[ChatDataSource alloc] initWithUsername:friendname loggedInUser:[[IdentityController sharedInstance] getLoggedInUser] availableId: availableId] ;
+            dataSource = [[ChatDataSource alloc] initWithUsername:friendname loggedInUser:[[IdentityController sharedInstance] getLoggedInUser] availableId: availableId availableControlId:availableControlId] ;
             [self.chatDataSources setObject: dataSource forKey: friendname];
         }
         return dataSource;
@@ -259,14 +259,14 @@ static const int MAX_CONNECTION_RETRIES = 16;
             NSMutableDictionary * messageId = [[NSMutableDictionary alloc] init];
             [messageId setObject: username forKey:@"username"];
             [messageId setObject: [NSNumber numberWithInteger: [chatDataSource latestMessageId]] forKey:@"messageid"];
-            [messageId setObject: [NSNumber numberWithInt:-1] forKey:@"controlmessageid"];
-            //[NSNumber numberWithInteger:[chatDataSource latestControlMessageId]];
+            [messageId setObject: [NSNumber numberWithInteger:[chatDataSource latestControlMessageId]] forKey:@"controlmessageid"];
             [messageIds addObject:messageId];
         }
     }
     
     [[NetworkController sharedInstance] getLatestDataSinceUserControlId: _homeDataSource.latestUserControlId spotIds:messageIds successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         
+        DDLogInfo(@"network call complete");
         
         NSArray * conversationIds = [JSON objectForKey:@"conversationIds"];
         if (conversationIds) {
@@ -276,10 +276,6 @@ static const int MAX_CONNECTION_RETRIES = 16;
                 NSString * user = [ChatUtils getOtherUserFromSpot:spot andUser:[[IdentityController sharedInstance] getLoggedInUser]];
                 
                 [_homeDataSource setAvailableMessageId:availableId forFriendname: user];
-                //                ChatDataSource * chatDataSource = [self getDataSourceForFriendname: user];
-                //                if (chatDataSource) {
-                //                    [chatDataSource setAvailableId: availableId];
-                //                }
             }
         }
         
@@ -296,7 +292,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
         
         NSArray * userControlMessages = [JSON objectForKey:@"userControlMessages"];
         if (userControlMessages ) {
-            [self handleControlMessages: userControlMessages forUsername: [[IdentityController sharedInstance] getLoggedInUser]];
+            [self handleUserControlMessages: userControlMessages];
         }
         
         //update message data
@@ -398,71 +394,30 @@ static const int MAX_CONNECTION_RETRIES = 16;
 }
 
 -(void) handleMessages: (NSArray *) messages forUsername: (NSString *) username {
-    @synchronized (_chatDataSources) {
-        ChatDataSource * cds = [_chatDataSources objectForKey:username];
-        if (!cds) {
-            DDLogVerbose(@"no chat data source for %@", username);
-            return;
+    if (messages && [messages count ] > 0) {
+        ChatDataSource * cds = nil;
+        
+        @synchronized (_chatDataSources) {
+            cds = [_chatDataSources objectForKey:username];
+        }
+        if (cds) {
+            [cds handleMessages: messages];
         }
         
-        SurespotMessage * lastMessage;
-        for (id jsonMessage in messages) {
-            lastMessage = [[SurespotMessage alloc] initWithJSONString:jsonMessage];
-            [cds addMessage:lastMessage refresh:YES];
+        Friend * thefriend = [_homeDataSource getFriendByName:username];
+        if (thefriend) {
+            
+            SurespotMessage * cm = [[SurespotMessage alloc] initWithJSONString:[messages objectAtIndex:[messages count ] -1]];
+            NSInteger messageId =[cm.serverid integerValue];
+            
+            thefriend.availableMessageId = messageId;
+            if ([_homeDataSource.currentChat isEqualToString: username]) {
+                thefriend.lastViewedMessageId = messageId;
+            }
         }
     }
 }
-
--(void) handleControlMessages: (NSArray *) controlMessages forUsername: (NSString *) username {
-    @synchronized (_chatDataSources) {
-        ChatDataSource * cds = [_chatDataSources objectForKey:username];
-        
-        BOOL userActivity = NO;
-        BOOL messageActivity = NO;
-        SurespotControlMessage * message;
-        
-        for (id jsonMessage in controlMessages) {
-            
-            
-            message = [[SurespotControlMessage alloc] initWithJSONString: jsonMessage];
-            [self handleControlMessage:message usingChatDataSource: cds];
-            
-            if ([[message type] isEqualToString:@"user"]) {
-                userActivity = YES;
-            }
-            else {
-                if ([[message type] isEqualToString:@"message"]) {
-                    messageActivity = YES;
-                }
-            }
-        }
-        
-        if (messageActivity || userActivity) {
-            Friend * afriend = [_homeDataSource getFriendByName:username];
-            
-            if (afriend) {
-                if (messageActivity) {
-                    if (cds) {
-                        afriend.lastReceivedMessageControlId = message.controlId;
-                    }
-                    
-                    
-                    afriend.availableMessageControlId = message.controlId;
-                }
-                
-                
-                
-                if (userActivity) {
-                }
-                
-                [_homeDataSource postRefresh];
-            }
-            
-        }
-    }
-}
-
--(void) handleControlMessage: (SurespotControlMessage *) message usingChatDataSource: cds {
+-(void) handleControlMessage: (SurespotControlMessage *) message {
     
     if ([message.type isEqualToString:@"user"]) {
         [self handleUserControlMessage: message];
@@ -470,26 +425,46 @@ static const int MAX_CONNECTION_RETRIES = 16;
     else {
         if ([message.type isEqualToString:@"message"]) {
             NSString * otherUser = [ChatUtils getOtherUserFromSpot:message.data andUser:[[IdentityController sharedInstance] getLoggedInUser]];
-            Friend * thefriend = [_homeDataSource getFriendByName:otherUser];
+            ChatDataSource * cds = [_chatDataSources objectForKey:otherUser];
             
-            if (!cds) {
-                cds = [_chatDataSources objectForKey:otherUser];
-                
-            }
             
             if (cds) {
-                BOOL controlFromMe = [[message from] isEqualToString:[[IdentityController sharedInstance] getLoggedInUser]];
-                
-                if ([[message action] isEqualToString:@"delete"]) {
-                    NSInteger messageId = [[message moreData] integerValue];
-                    SurespotMessage * dMessage = [cds getMessageById: messageId];
-                    
-                    if (dMessage) {
-                        [cds deleteMessage:dMessage initiatedByMe:controlFromMe];
-                    }
-                }
+                [cds handleControlMessage:message];
             }
+            
+
+            Friend * thefriend = [_homeDataSource getFriendByName:otherUser];
+            if (thefriend) {
+                
+                NSInteger messageId = message.controlId;
+                
+                thefriend.availableMessageControlId = messageId;               
+            }
+
         }
+    }
+}
+
+-(void) handleControlMessages: (NSArray *) controlMessages forUsername: (NSString *) username {
+    if (controlMessages && [controlMessages count] > 0) {
+        ChatDataSource * cds = nil;
+        @synchronized (_chatDataSources) {
+            cds = [_chatDataSources objectForKey:username];
+        }
+        
+        if (cds) {
+            [cds handleControlMessages:controlMessages];
+        }
+    }
+}
+
+
+-(void) handleUserControlMessages: (NSArray *) controlMessages {
+    for (id jsonMessage in controlMessages) {
+        
+        
+        SurespotControlMessage * message = [[SurespotControlMessage alloc] initWithJSONString: jsonMessage];
+        [self handleUserControlMessage:message];
     }
 }
 

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "SurespotMessage.h"
+#import "SurespotControlMessage.h"
 
 @interface ChatDataSource : NSObject
 
@@ -16,10 +17,15 @@
 @property (nonatomic, assign) NSInteger latestMessageId;
 @property (nonatomic, assign) NSInteger latestControlMessageId;
 
--(ChatDataSource*)initWithUsername:(NSString *) username loggedInUser: (NSString * ) loggedInUser availableId: (NSInteger) availableId;
+-(ChatDataSource*)initWithUsername:(NSString *) username loggedInUser: (NSString * ) loggedInUser availableId: (NSInteger) availableId availableControlId: (NSInteger) availableControlId;
 -(void) addMessage:(SurespotMessage *) message refresh:(BOOL) refresh;
 -(void) postRefresh;
 -(void) deleteMessage: (SurespotMessage *) message initiatedByMe: (BOOL) initiatedByMe;
 -(SurespotMessage *) getMessageById: (NSInteger) serverId;
 -(void) deleteMessageByIv: (NSString *) iv;
+-(void) handleMessages: (NSArray *) messages;
+
+-(void) handleControlMessages: (NSArray *) controlMessages;
+-(void) handleControlMessage: (SurespotControlMessage *) message;
+
 @end

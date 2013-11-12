@@ -15,6 +15,7 @@
 #import "FileController.h"
 #import "DDLog.h"
 
+
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
 #else
@@ -28,7 +29,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 @implementation ChatDataSource
 
--(ChatDataSource*)initWithUsername:(NSString *) username loggedInUser: (NSString * ) loggedInUser availableId:(NSInteger)availableId {
+-(ChatDataSource*)initWithUsername:(NSString *) username loggedInUser: (NSString * ) loggedInUser availableId:(NSInteger)availableId availableControlId:( NSInteger) availableControlId {
     //call super init
     self = [super init];
     
@@ -60,43 +61,48 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [self postRefresh];
         }
         
-        [self setAvailableId:availableId];
+        if (availableId > _latestMessageId || availableControlId > _latestControlMessageId) {
+            
+            DDLogInfo(@"getting messageData latestMessageId: %d, latestControlId: %d", _latestMessageId ,_latestControlMessageId);
+            //load message data
+            [[NetworkController sharedInstance] getMessageDataForUsername:_username andMessageId:_latestMessageId andControlId:_latestControlMessageId successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                DDLogVerbose(@"get messageData response: %d",  [response statusCode]);
+                
+                NSArray * controlMessageStrings =[((NSDictionary *) JSON) objectForKey:@"controlMessages"];
+                
+                [self handleControlMessages:controlMessageStrings];
+                
+                
+                
+                NSArray * messageStrings =[((NSDictionary *) JSON) objectForKey:@"messages"];
+                
+                
+                //convert messages to SurespotMessage
+                for (NSString * messageString in messageStrings) {
+                    
+                    [self addMessage:[[SurespotMessage alloc] initWithJSONString:messageString] refresh:YES];
+                }
+                
+                //      [_decryptionQueue waitUntilAllOperationsAreFinished];
+                
+                
+                [self postRefresh];
+                
+                
+            } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
+                DDLogVerbose(@"get messagedata response error: %@",  Error);
+                
+            }];
+        }
+        
         
     }
+    
+    DDLogInfo(@"init complete");
     
     return self;
 }
 
--(void) setAvailableId: (NSInteger) availableId {
-    if (availableId > _latestMessageId) {
-        
-        DDLogVerbose(@"getting messageData latestMessageId: %d, latestControlId: %d", _latestMessageId ,_latestControlMessageId);
-        //load message data
-        [[NetworkController sharedInstance] getMessageDataForUsername:_username andMessageId:_latestMessageId andControlId:_latestControlMessageId successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-            DDLogVerbose(@"get messageData response: %d",  [response statusCode]);
-            
-            NSArray * messageStrings =[((NSDictionary *) JSON) objectForKey:@"messages"];
-            
-            
-            //convert messages to SurespotMessage
-            for (NSString * messageString in messageStrings) {
-                
-                [self addMessage:[[SurespotMessage alloc] initWithJSONString:messageString] refresh:YES];
-            }
-            
-            //      [_decryptionQueue waitUntilAllOperationsAreFinished];
-            
-            
-            [self postRefresh];
-            
-            
-        } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
-            DDLogVerbose(@"get messagedata response error: %@",  Error);
-            
-        }];
-    }
-    
-}
 
 
 - (void) addMessage:(SurespotMessage *) message refresh: (BOOL) refresh {
@@ -166,10 +172,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     return maxId;
-}
-
--(NSInteger) latestControlMessageId {
-    return 0;
 }
 
 -(void) postRefresh {
@@ -243,5 +245,51 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
 }
 
+
+-(void) handleMessages: (NSArray *) messages {
+    
+    SurespotMessage * lastMessage;
+    for (id jsonMessage in messages) {
+        lastMessage = [[SurespotMessage alloc] initWithJSONString:jsonMessage];
+        [self addMessage:lastMessage refresh:YES];
+    }
+    
+}
+
+
+-(void) handleControlMessages: (NSArray *) controlMessages {
+    
+    SurespotControlMessage * message;
+    
+    for (id jsonMessage in controlMessages) {
+        
+        
+        message = [[SurespotControlMessage alloc] initWithJSONString: jsonMessage];
+        [self handleControlMessage:message];
+        
+    }
+    
+}
+
+-(void) handleControlMessage: (SurespotControlMessage *) message {
+    
+    if ([message.type isEqualToString:@"message"]) {
+        if  (message.controlId >  self.latestControlMessageId) {
+            self.latestControlMessageId = message.controlId;
+        }
+        BOOL controlFromMe = [[message from] isEqualToString:_loggedInUser];
+        
+        if ([[message action] isEqualToString:@"delete"]) {
+            NSInteger messageId = [[message moreData] integerValue];
+            SurespotMessage * dMessage = [self getMessageById: messageId];
+            
+            if (dMessage) {
+                [self deleteMessage:dMessage initiatedByMe:controlFromMe];
+            }
+        }
+    }
+    
+    
+}
 
 @end

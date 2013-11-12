@@ -140,7 +140,7 @@ NSString *const baseUrl = @"http://192.168.10.68:8080";
 
 -(void) getMessageDataForUsername:(NSString *)username andMessageId:(NSInteger)messageId andControlId:(NSInteger) controlId successBlock:(JSONSuccessBlock)successBlock failureBlock: (JSONFailureBlock) failureBlock {
     
-    NSString * path = [NSString stringWithFormat:@"messageData/%@/%u/%u", username, messageId, -1];
+    NSString * path = [NSString stringWithFormat:@"messageData/%@/%u/%u", username, messageId, controlId];
     NSURLRequest *request = [self requestWithMethod:@"GET" path:path parameters: nil];
     AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:successBlock
                                                                                         failure: failureBlock];
