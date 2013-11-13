@@ -13,6 +13,7 @@
 #import "DDTTYLogger.h"
 #import "SurespotLogFormatter.h"
 #import "UIUtils.h"
+#import "TestFlight.h"
 
 static const int ddLogLevel = LOG_LEVEL_OFF;
 
@@ -20,6 +21,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+      [TestFlight takeOff:@"477c73c2-7b09-4198-a7a8-95b5d3581f91"];
+    
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge|UIReturnKeyDefault) ];
     if  (launchOptions) {
         DDLogVerbose(@"received launch options: %@", launchOptions);

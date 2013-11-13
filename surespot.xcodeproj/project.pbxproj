@@ -55,6 +55,8 @@
 		665F4DF81831923C0083BCE7 /* REMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DF21831923C0083BCE7 /* REMenuItem.m */; };
 		665F4DF91831923C0083BCE7 /* REMenuItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DF41831923C0083BCE7 /* REMenuItemView.m */; };
 		665F4DFC1832E69C0083BCE7 /* GetKeyVersionOperation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DFB1832E69C0083BCE7 /* GetKeyVersionOperation.mm */; };
+		665F4E0D183324360083BCE7 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 665F4E081833238D0083BCE7 /* libTestFlight.a */; };
+		665F4E0F183325C50083BCE7 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 665F4E0E183325C50083BCE7 /* AdSupport.framework */; };
 		66B3C8ED17B15F2300CC96EE /* ChatController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66B3C8EC17B15F2300CC96EE /* ChatController.mm */; };
 		66B3C8F017B17AC800CC96EE /* ChatDataSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66B3C8EF17B17AC800CC96EE /* ChatDataSource.mm */; };
 		66D3B04D182D47DF00B37A6C /* SurespotLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 66D3B04C182D47DF00B37A6C /* SurespotLogFormatter.m */; };
@@ -189,6 +191,11 @@
 		665F4DF41831923C0083BCE7 /* REMenuItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = REMenuItemView.m; sourceTree = "<group>"; };
 		665F4DFA1832E6890083BCE7 /* GetKeyVersionOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GetKeyVersionOperation.h; path = identity/GetKeyVersionOperation.h; sourceTree = "<group>"; };
 		665F4DFB1832E69C0083BCE7 /* GetKeyVersionOperation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GetKeyVersionOperation.mm; path = identity/GetKeyVersionOperation.mm; sourceTree = "<group>"; };
+		665F4E081833238D0083BCE7 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
+		665F4E091833238D0083BCE7 /* TestFlight+AsyncLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+AsyncLogging.h"; sourceTree = "<group>"; };
+		665F4E0A1833238D0083BCE7 /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+ManualSessions.h"; sourceTree = "<group>"; };
+		665F4E0B1833238D0083BCE7 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
+		665F4E0E183325C50083BCE7 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		66B3C8EB17B15F2300CC96EE /* ChatController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatController.h; path = chat/ChatController.h; sourceTree = "<group>"; };
 		66B3C8EC17B15F2300CC96EE /* ChatController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = ChatController.mm; path = chat/ChatController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		66B3C8EE17B17AC800CC96EE /* ChatDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatDataSource.h; path = chat/ChatDataSource.h; sourceTree = "<group>"; };
@@ -399,14 +406,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				665F4E0F183325C50083BCE7 /* AdSupport.framework in Frameworks */,
+				665F4E0D183324360083BCE7 /* libTestFlight.a in Frameworks */,
 				66FF0FF6182AE6960038ECA6 /* QuartzCore.framework in Frameworks */,
 				661C2ED31763CB57000649E7 /* libz.dylib in Frameworks */,
 				66E4F5C417629B6400596E6B /* Security.framework in Frameworks */,
 				66E4F5C217629B5C00596E6B /* libicucore.dylib in Frameworks */,
+				6604A2C317626B9E0072216A /* CoreGraphics.framework in Frameworks */,
 				66E4F5C017629B4500596E6B /* CFNetwork.framework in Frameworks */,
 				6604A2BF17626B9E0072216A /* UIKit.framework in Frameworks */,
 				6604A2C117626B9E0072216A /* Foundation.framework in Frameworks */,
-				6604A2C317626B9E0072216A /* CoreGraphics.framework in Frameworks */,
 				66E4F5B6176298CB00596E6B /* libcryptopp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -447,6 +456,7 @@
 		6604A2BD17626B9E0072216A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				665F4E0E183325C50083BCE7 /* AdSupport.framework */,
 				66FF0FF5182AE6960038ECA6 /* QuartzCore.framework */,
 				66E4F5BF17629B4500596E6B /* CFNetwork.framework */,
 				66E4F5C117629B5C00596E6B /* libicucore.dylib */,
@@ -620,6 +630,17 @@
 			path = REMenu;
 			sourceTree = "<group>";
 		};
+		665F4E071833238D0083BCE7 /* TestFlightSDK */ = {
+			isa = PBXGroup;
+			children = (
+				665F4E081833238D0083BCE7 /* libTestFlight.a */,
+				665F4E091833238D0083BCE7 /* TestFlight+AsyncLogging.h */,
+				665F4E0A1833238D0083BCE7 /* TestFlight+ManualSessions.h */,
+				665F4E0B1833238D0083BCE7 /* TestFlight.h */,
+			);
+			path = TestFlightSDK;
+			sourceTree = "<group>";
+		};
 		66B3C8EA17B15F0C00CC96EE /* chat */ = {
 			isa = PBXGroup;
 			children = (
@@ -650,6 +671,7 @@
 		66E4F517176298CB00596E6B /* libs */ = {
 			isa = PBXGroup;
 			children = (
+				665F4E071833238D0083BCE7 /* TestFlightSDK */,
 				665F4DEA1831923C0083BCE7 /* REMenu */,
 				66FF0FFC182D3D920038ECA6 /* Lumberjack */,
 				66FF0FF9182B04B10038ECA6 /* UIViewPager.h */,
@@ -1223,10 +1245,12 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/surespot\"",
 					"\"$(SRCROOT)/surespot/libs/cryptopp/lib\"",
+					/Users/adam/dev/surespot/ios/surespot/libs/TestFlightSDK,
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "F46DC9CB-4E7E-4F4A-AB38-D4C80194155F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F46DC9CB-4E7E-4F4A-AB38-D4C80194155F";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1247,11 +1271,12 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/surespot\"",
 					"\"$(SRCROOT)/surespot/libs/cryptopp/lib\"",
+					/Users/adam/dev/surespot/ios/surespot/libs/TestFlightSDK,
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "F46DC9CB-4E7E-4F4A-AB38-D4C80194155F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F46DC9CB-4E7E-4F4A-AB38-D4C80194155F";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
