@@ -36,7 +36,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) main {
     @autoreleasepool {
-        DDLogInfo(@"getting pub key");
+        DDLogVerbose(@"getting pub key");
         ECDHPublicKey pubKey = [self.theirPublicKeys dhPubKey];
         
         //generate shared secret and store it in cache

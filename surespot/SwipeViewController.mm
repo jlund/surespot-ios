@@ -45,7 +45,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)viewDidLoad
 {
-    DDLogInfo(@"swipeviewdidload %@", self);
+    DDLogVerbose(@"swipeviewdidload %@", self);
     [super viewDidLoad];
     
     _needsScroll = [NSMutableDictionary new];
@@ -209,7 +209,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             UITableView * tableView = [_chats objectForKey:key];
             
             
-            //  DDLogInfo(@"saving content offset for %@, y: %f", key, tableView.contentOffset.y);
+            //  DDLogVerbose(@"saving content offset for %@, y: %f", key, tableView.contentOffset.y);
             //  [keyboardState.offsets setObject:[NSNumber numberWithFloat: tableView.contentOffset.y ] forKey:key];
             
             tableView.contentInset = contentInsets;
@@ -258,7 +258,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 tableView.scrollIndicatorInsets = self.keyboardState.indicatorInset;
                 tableView.contentInset = self.keyboardState.contentInset;
                 //  CGPoint oldOffset = CGPointMake(0, [[self.keyboardState.offsets objectForKey: key] floatValue]);
-                //  DDLogInfo(@"restoring content offset for %@, y: %f", key, oldOffset.y);
+                //  DDLogVerbose(@"restoring content offset for %@, y: %f", key, oldOffset.y);
                 //                [tableView setContentOffset:  oldOffset animated:YES];
                 //    CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y - self.keyboardState.keyboardHeight);
                 //    [tableView setContentOffset:  newOffset animated:YES];
@@ -695,7 +695,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) loadChat:(NSString *) username show: (BOOL) show  availableId: (NSInteger) availableId availableControlId: (NSInteger) availableControlId {
-    DDLogInfo(@"entered");
+    DDLogVerbose(@"entered");
     //get existing view if there is one
     UITableView * chatView;
     @synchronized (_chats) {
@@ -722,7 +722,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
         }
         
-        DDLogInfo(@"creatingindex: %d", index);
+        DDLogVerbose(@"creatingindex: %d", index);
         
         //   [chatView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"ChatCell"];
         [chatView registerNib:[UINib nibWithNibName:@"OurMessageCell" bundle:nil] forCellReuseIdentifier:@"OurMessageView"];
@@ -747,14 +747,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 index = [[_chats allKeys] indexOfObject:username] + 1;
             }
             
-            DDLogInfo(@"scrolling to index: %d", index);
+            DDLogVerbose(@"scrolling to index: %d", index);
             [_swipeView scrollToPage:index duration:0.500];
         }
     }
 }
 
 -(void) showChat:(NSString *) username {
-    DDLogInfo(@"showChat, %@", username);
+    DDLogVerbose(@"showChat, %@", username);
     
     Friend * afriend = [_homeDataSource getFriendByName:username];
     
@@ -1007,14 +1007,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         NSIndexPath *indexPath = [currentView indexPathForRowAtPoint:p];
         if (indexPath == nil) {
-            DDLogInfo(@"long press on table view at page %d but not on a row", _menuPage);
+            DDLogVerbose(@"long press on table view at page %d but not on a row", _menuPage);
         }
         else {
             
             
             [currentView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
             [self showMenuForPage: _menuPage indexPath: indexPath];
-            DDLogInfo(@"long press on table view at page %d, row %d", _menuPage, indexPath.row);
+            DDLogVerbose(@"long press on table view at page %d, row %d", _menuPage, indexPath.row);
         }
     }
 }
@@ -1024,7 +1024,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     
     if (message) {
-        DDLogInfo(@"taking action for chat iv: %@, plaindata: %@", message.iv, message.plainData);
+        DDLogVerbose(@"taking action for chat iv: %@, plaindata: %@", message.iv, message.plainData);
         
         
         [[ChatController sharedInstance] deleteMessage: message];
@@ -1096,9 +1096,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             }
             [_swipeView scrollToPage:page duration:0.2];
         }
-        DDLogInfo(@"page after close: %d", page);
+        DDLogVerbose(@"page after close: %d", page);
         NSString * name = [self nameForPage:page];
-        DDLogInfo(@"name after close: %@", name);
+        DDLogVerbose(@"name after close: %@", name);
         [_homeDataSource setCurrentChat:name];
         
         

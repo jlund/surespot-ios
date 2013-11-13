@@ -33,7 +33,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(ChatDataSource*)initWithUsername:(NSString *) username loggedInUser: (NSString * ) loggedInUser availableId:(NSInteger)availableId availableControlId:( NSInteger) availableControlId {
     
-    DDLogInfo(@"username: %@, loggedInUser: %@, availableid: %d, availableControlId: %d", username, loggedInUser, availableId, availableControlId);
+    DDLogVerbose(@"username: %@, loggedInUser: %@, availableid: %d, availableControlId: %d", username, loggedInUser, availableId, availableControlId);
     //call super init
     self = [super init];
     
@@ -63,17 +63,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             //[_decryptionQueue waitUntilAllOperationsAreFinished];
             DDLogVerbose(@"loaded %d messages from disk at: %@", [messages count] ,path);
-            DDLogInfo( @"latestMEssageid: %d, latestControlId: %d", _latestMessageId ,_latestControlMessageId);
+            DDLogVerbose( @"latestMEssageid: %d, latestControlId: %d", _latestMessageId ,_latestControlMessageId);
             
             [self postRefresh];
         }
         
         if (availableId > _latestMessageId || availableControlId > _latestControlMessageId) {
             
-            DDLogInfo(@"getting messageData latestMessageId: %d, latestControlId: %d", _latestMessageId ,_latestControlMessageId);
+            DDLogVerbose(@"getting messageData latestMessageId: %d, latestControlId: %d", _latestMessageId ,_latestControlMessageId);
             //load message data
             [[NetworkController sharedInstance] getMessageDataForUsername:_username andMessageId:_latestMessageId andControlId:_latestControlMessageId successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                DDLogInfo(@"get messageData response: %d",  [response statusCode]);
+                DDLogVerbose(@"get messageData response: %d",  [response statusCode]);
                 
                 NSArray * controlMessageStrings =[((NSDictionary *) JSON) objectForKey:@"controlMessages"];
                 
@@ -105,7 +105,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
     }
     
-    DDLogInfo(@"init complete");
+    DDLogVerbose(@"init complete");
     
     return self;
 }
@@ -133,10 +133,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             if (!message.plainData) {
                 BOOL blockRefresh = refresh;
                 refresh = false;
-                DDLogInfo(@"decrypting message iv: %@", message.iv);
+                DDLogVerbose(@"decrypting message iv: %@", message.iv);
                 
                 MessageDecryptionOperation * op = [[MessageDecryptionOperation alloc]initWithMessage:message width: 200 completionCallback:^(SurespotMessage  * message){
-                    DDLogInfo(@"adding message iv: %@", message.iv);
+                    DDLogVerbose(@"adding message iv: %@", message.iv);
                     [self.messages addObject:message];
                     
                     if (blockRefresh) {
@@ -152,12 +152,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 
             }
             else {
-                DDLogInfo(@"adding message iv: %@", message.iv);
+                DDLogVerbose(@"adding message iv: %@", message.iv);
                 [self.messages addObject:message];
             }
         }
         else {
-            DDLogInfo(@"updating message iv: %@", message.iv);
+            DDLogVerbose(@"updating message iv: %@", message.iv);
             SurespotMessage * existingMessage = [self.messages objectAtIndex:index];
             if (message.serverid > 0) {
                 existingMessage.serverid = message.serverid;
@@ -166,7 +166,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
         
         if (applicableControlMessages && [applicableControlMessages count] > 0) {
-            DDLogInfo(@"retroactively applying control messages to message id %d", message.serverid);
+            DDLogVerbose(@"retroactively applying control messages to message id %d", message.serverid);
             for (SurespotControlMessage * cm in applicableControlMessages) {
                 [self handleControlMessage:cm];
             }
@@ -237,7 +237,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) deleteMessageById: (NSInteger) serverId {
-    DDLogInfo(@"serverID: %d", serverId);
+    DDLogVerbose(@"serverID: %d", serverId);
     @synchronized (_messages) {
         [_messages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             if([obj serverid] == serverId) {
@@ -250,7 +250,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) deleteMessageByIv: (NSString *) iv {
-    DDLogInfo(@"iv: %@", iv);
+    DDLogVerbose(@"iv: %@", iv);
     @synchronized (_messages) {
         [_messages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             if([[obj iv] isEqualToString:iv]) {
@@ -291,7 +291,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(void) handleControlMessage: (SurespotControlMessage *) message {
     if ([message.type isEqualToString:@"message"]) {
         
-        DDLogInfo(@"action: %@, id: %d", message.action, message.controlId );
+        DDLogVerbose(@"action: %@, id: %d", message.action, message.controlId );
         
         if  (message.controlId >  self.latestControlMessageId) {
             self.latestControlMessageId = message.controlId;
@@ -326,11 +326,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) deleteAllMessagesUTAI: (NSInteger) messageId {
-    DDLogInfo(@"UTAI messageID: %d", messageId);
+    DDLogVerbose(@"UTAI messageID: %d", messageId);
     @synchronized (_messages) {
         [_messages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             if([obj serverid] <= messageId) {
-                DDLogInfo(@"deleting messageID: %d", [obj serverid]);
+                DDLogVerbose(@"deleting messageID: %d", [obj serverid]);
                 [_messages removeObjectAtIndex:idx];
             }
         }];
@@ -344,7 +344,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     @synchronized (_messages) {
         [_messages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(SurespotMessage * obj, NSUInteger idx, BOOL *stop) {
             if([obj serverid] <= messageId && ![[obj from] isEqualToString:_loggedInUser]) {
-                DDLogInfo(@"deleting messageID: %d", [obj serverid]);
+                DDLogVerbose(@"deleting messageID: %d", [obj serverid]);
                 [_messages removeObjectAtIndex:idx];
             }
         }];
@@ -356,16 +356,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) sort {
     @synchronized (_messages) {
-        DDLogInfo(@"sorting messages");
+        DDLogVerbose(@"sorting messages");
         NSArray *sortedArray;
         sortedArray = [_messages sortedArrayUsingComparator:^NSComparisonResult(SurespotMessage * a, SurespotMessage * b) {
-         //   DDLogInfo(@"comparing a serverid: %d, b serverId: %d", a.serverid, b.serverid);
+         //   DDLogVerbose(@"comparing a serverid: %d, b serverId: %d", a.serverid, b.serverid);
             if (a.serverid == b.serverid) {return NSOrderedSame;}
             if (a.serverid == 0) {return NSOrderedDescending;}
             if (b.serverid == 0) {return NSOrderedAscending;}
             if (a.serverid < b.serverid) return NSOrderedAscending;
             if (b.serverid < a.serverid) return NSOrderedDescending;
-          //  DDLogInfo(@"returning same");
+          //  DDLogVerbose(@"returning same");
             return NSOrderedSame;
             
         }];

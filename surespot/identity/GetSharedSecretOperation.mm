@@ -68,21 +68,21 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _isExecuting = YES;
     [self didChangeValueForKey:@"isExecuting"];
     
-    DDLogInfo(@"executing");
+    DDLogVerbose(@"executing");
     
     
     //see if we have the shared secret cached already
     NSString * sharedSecretKey = [NSString stringWithFormat:@"%@:%@:%@:%@", self.cache.loggedInUsername, self.ourVersion, self.theirUsername, self.theirVersion];
     
-    DDLogInfo(@"checking dictionary for shared secret for:  %@" , sharedSecretKey);
+    DDLogVerbose(@"checking dictionary for shared secret for:  %@" , sharedSecretKey);
     NSData * sharedSecret = [self.cache.sharedSecretsDict objectForKey:sharedSecretKey];
     
     if (sharedSecret) {
-        DDLogInfo(@"using cached secret %@ for %@", [sharedSecret base64EncodedString], sharedSecretKey);
+        DDLogVerbose(@"using cached secret %@ for %@", [sharedSecret base64EncodedString], sharedSecretKey);
         [self finish:sharedSecret];
     }
     else {
-        DDLogInfo(@"shared secret not cached");
+        DDLogVerbose(@"shared secret not cached");
         SurespotIdentity * identity = [self.cache.identities objectForKey:[self.cache loggedInUsername]];
         if (!identity) {
             [self finish:nil];
@@ -94,11 +94,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         PublicKeys * publicKeys = [self.cache.publicKeysDict objectForKey:publicKeysKey];
         
         if (publicKeys) {
-            DDLogInfo(@"using cached public keys for %@", publicKeysKey);
+            DDLogVerbose(@"using cached public keys for %@", publicKeysKey);
             
             GenerateSharedSecretOperation * sharedSecretOp = [[GenerateSharedSecretOperation alloc] initWithOurIdentity:identity theirPublicKeys:publicKeys completionCallback:^(NSData * secret) {
                 //store shared key in dictionary
-                DDLogInfo(@"caching shared secret %@ for %@", [secret base64EncodedString], sharedSecretKey);
+                DDLogVerbose(@"caching shared secret %@ for %@", [secret base64EncodedString], sharedSecretKey);
                 [self.cache.sharedSecretsDict setObject:secret forKey:sharedSecretKey];
                 [self finish:secret];
             }];
@@ -106,20 +106,20 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [self.cache.genSecretQueue addOperation:sharedSecretOp];
         }
         else {
-            DDLogInfo(@"public keys not cached for %@", publicKeysKey );
+            DDLogVerbose(@"public keys not cached for %@", publicKeysKey );
 
             //get the public keys we need
             GetPublicKeysOperation * pkOp = [[GetPublicKeysOperation alloc] initWithUsername:self.theirUsername version:self.theirVersion completionCallback:
                                              ^(PublicKeys * keys) {
                                                  if (keys) {
-                                                     DDLogInfo(@"caching public keys for %@", publicKeysKey);
+                                                     DDLogVerbose(@"caching public keys for %@", publicKeysKey);
                                                      //store keys in dictionary
                                                      [self.cache.publicKeysDict setObject:keys forKey:publicKeysKey];
                                                      
                                                      NSString * theirVersion = [self.cache.latestVersionsDict objectForKey:_theirUsername];
                                                      //if the version is greater than what we have then cache it
                                                      if (!theirVersion || [theirVersion integerValue] < [keys.version integerValue]) {
-                                                         DDLogInfo(@"caching key version: %@ for username: %@", keys.version, _theirUsername);
+                                                         DDLogVerbose(@"caching key version: %@ for username: %@", keys.version, _theirUsername);
 
                                                          [self.cache.latestVersionsDict setObject:keys.version forKey:_theirUsername];
                                                      }
@@ -127,7 +127,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                      
                                                      GenerateSharedSecretOperation * sharedSecretOp = [[GenerateSharedSecretOperation alloc] initWithOurIdentity:identity theirPublicKeys:keys completionCallback:^(NSData * secret) {
                                                          //store shared key in dictionary
-                                                         DDLogInfo(@"caching shared secret %@ for %@", [secret base64EncodedString], sharedSecretKey);
+                                                         DDLogVerbose(@"caching shared secret %@ for %@", [secret base64EncodedString], sharedSecretKey);
                                                          [self.cache.sharedSecretsDict setObject:secret forKey:sharedSecretKey];
                                                          [self finish:secret];
                                                      }];
@@ -142,7 +142,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)finish: (NSData *) secret
 {
-    DDLogInfo(@"finished");
+    DDLogVerbose(@"finished");
     [self willChangeValueForKey:@"isExecuting"];
     [self willChangeValueForKey:@"isFinished"];
     

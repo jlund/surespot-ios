@@ -132,11 +132,11 @@ static const int MAX_CONNECTION_RETRIES = 16;
         
         //exponential backoff
         NSInteger timerInterval = pow(2,_connectionRetries++);
-        DDLogInfo(@ "attempting reconnect in: %d" , timerInterval);
+        DDLogVerbose(@ "attempting reconnect in: %d" , timerInterval);
         _reconnectTimer = [NSTimer scheduledTimerWithTimeInterval:timerInterval target:self selector:@selector(reconnectTimerFired:) userInfo:nil repeats:NO];
     }
     else {
-        DDLogInfo(@"reconnect retries exhausted, giving up");
+        DDLogVerbose(@"reconnect retries exhausted, giving up");
     }
 }
 
@@ -261,7 +261,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
     
     [[NetworkController sharedInstance] getLatestDataSinceUserControlId: _homeDataSource.latestUserControlId spotIds:messageIds successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         
-        DDLogInfo(@"network call complete");
+        DDLogVerbose(@"network call complete");
         
         NSArray * conversationIds = [JSON objectForKey:@"conversationIds"];
         if (conversationIds) {
@@ -330,7 +330,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
 {
     if ([UIUtils stringIsNilOrEmpty:friendname]) return;
     
-    DDLogInfo(@"message: %@", message);
+    DDLogVerbose(@"message: %@", message);
     
     NSString * ourLatestVersion = [[IdentityController sharedInstance] getOurLatestVersion];
     NSString * loggedInUser = [[IdentityController sharedInstance] getLoggedInUser];
@@ -567,7 +567,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
 
 - (void)friendAdded:(NSString *) username
 {
-    DDLogInfo(@"friendAdded");
+    DDLogVerbose(@"friendAdded");
     [_homeDataSource setFriend: username];
     ChatDataSource * cds = [self getDataSourceForFriendname:username];
     if (cds) {
@@ -576,7 +576,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
 }
 
 -(void) friendIgnore: (NSString * ) name {
-    DDLogInfo(@"entered");
+    DDLogVerbose(@"entered");
     Friend * afriend = [_homeDataSource getFriendByName:name];
     
     if (afriend) {
@@ -599,7 +599,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
 
 - (void)friendDelete: (SurespotControlMessage *) message
 {
-    DDLogInfo(@"entered");
+    DDLogVerbose(@"entered");
     Friend * afriend = [_homeDataSource getFriendByName:[message data]];
     
     if (afriend) {
@@ -624,7 +624,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
 }
 
 -(void) handleDeleteUser: (NSString *) deleted deleter: (NSString *) deleter {
-    DDLogInfo(@"entered");
+    DDLogVerbose(@"entered");
     
     Friend * theFriend = [_homeDataSource getFriendByName:deleted];
     if (theFriend) {
