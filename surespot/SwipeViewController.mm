@@ -72,6 +72,20 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _textField.enablesReturnKeyAutomatically = NO;
     [self registerForKeyboardNotifications];
     
+  //  [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[UIImage imageNamed:@"surespot_logo"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+//    [self.navigationItem.leftBarButtonItem setImage:];
+      //  [[UINavigationBar appearance] setBackIndicatorImage:[UIImage imageNamed:@"surespot_logo"] ];
+    
+    UIButton *backButton = [[UIButton alloc] initWithFrame: CGRectMake(0, 0, 36.0f, 36.0f)];
+    
+    UIImage *backImage = [UIImage imageNamed:@"surespot_logo"];
+    [backButton setBackgroundImage:backImage  forState:UIControlStateNormal];
+    [backButton setContentMode:UIViewContentModeScaleAspectFit];
+ 
+    [backButton addTarget:self action:@selector(backPressed) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    self.navigationItem.leftBarButtonItem = backButtonItem;
+    
     UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"menu" style:UIBarButtonItemStylePlain target:self action:@selector(showMenuMenu)];
     self.navigationItem.rightBarButtonItem = anotherButton;
     
@@ -82,10 +96,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     }
-    
-    //
-    self.navigationItem.hidesBackButton = YES;
-    
+        
     
     //listen for refresh notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshMessages:) name:@"refreshMessages" object:nil];
@@ -1137,6 +1148,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }else {
         [_swipeView scrollToPage:0 duration:0.5];
     }
+    
+}
+- (void) backPressed {
+    [_swipeView scrollToPage:0 duration:0.5];
 }
 - (IBAction)textFieldChanged:(id)sender {
     [self updateButtonIcons];
