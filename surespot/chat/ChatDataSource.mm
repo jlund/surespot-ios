@@ -189,6 +189,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) postRefresh {
+    [self sort];
     dispatch_async(dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshMessages" object:_username ];
     });
@@ -351,6 +352,25 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [self postRefresh];
     
+}
+
+-(void) sort {
+    @synchronized (_messages) {
+        DDLogInfo(@"sorting messages");
+        NSArray *sortedArray;
+        sortedArray = [_messages sortedArrayUsingComparator:^NSComparisonResult(SurespotMessage * a, SurespotMessage * b) {
+         //   DDLogInfo(@"comparing a serverid: %d, b serverId: %d", a.serverid, b.serverid);
+            if (a.serverid == b.serverid) {return NSOrderedSame;}
+            if (a.serverid == 0) {return NSOrderedDescending;}
+            if (b.serverid == 0) {return NSOrderedAscending;}
+            if (a.serverid < b.serverid) return NSOrderedAscending;
+            if (b.serverid < a.serverid) return NSOrderedDescending;
+          //  DDLogInfo(@"returning same");
+            return NSOrderedSame;
+            
+        }];
+        _messages = [NSMutableArray arrayWithArray: sortedArray];
+    }
 }
 
 @end
