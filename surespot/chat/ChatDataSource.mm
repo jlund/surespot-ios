@@ -111,29 +111,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 
-
-- (void) addMessage:(SurespotMessage *) message refresh: (BOOL) refresh {
-    
-    
-    //decrypt and compute height
-    if (!message.plainData) {
-        [self addMessageInternal: message refresh:NO];
-        
-        MessageDecryptionOperation * op = [[MessageDecryptionOperation alloc]initWithMessage:message width: 200 completionCallback:^(SurespotMessage  * message){
-            
-            [self addMessageInternal: message refresh:refresh];
-        }];
-        [_decryptionQueue addOperation:op];
-        
-        
-    }
-    else {
-        [self addMessageInternal:message refresh:refresh];
-    }
-    
-}
-
--(void) addMessageInternal:(SurespotMessage *)message  refresh: (BOOL) refresh {
+-(void) addMessage:(SurespotMessage *)message  refresh: (BOOL) refresh {
     @synchronized (_messages)  {
         NSMutableArray * applicableControlMessages  = nil;
         if (message.serverid > 0 && ![UIUtils stringIsNilOrEmpty:message.plainData]) {
@@ -152,11 +130,25 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         NSUInteger index = [self.messages indexOfObject:message];
         if (index == NSNotFound) {
-            DDLogVerbose(@"adding message iv: %@", message.iv);
-            [self.messages addObject:message];
+            if (!message.plainData) {
+                DDLogInfo(@"decrypting message iv: %@", message.iv);
+                
+                MessageDecryptionOperation * op = [[MessageDecryptionOperation alloc]initWithMessage:message width: 200 completionCallback:^(SurespotMessage  * message){
+                    DDLogInfo(@"adding message iv: %@", message.iv);
+                    [self.messages addObject:message];
+                    
+                }];
+                [_decryptionQueue addOperation:op];
+                
+                
+            }
+            else {
+                DDLogInfo(@"adding message iv: %@", message.iv);
+                [self.messages addObject:message];
+            }
         }
         else {
-            DDLogVerbose(@"updating message iv: %@", message.iv);
+            DDLogInfo(@"updating message iv: %@", message.iv);
             SurespotMessage * existingMessage = [self.messages objectAtIndex:index];
             if (message.serverid > 0) {
                 existingMessage.serverid = message.serverid;

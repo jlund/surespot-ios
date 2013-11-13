@@ -330,6 +330,8 @@ static const int MAX_CONNECTION_RETRIES = 16;
 {
     if ([UIUtils stringIsNilOrEmpty:friendname]) return;
     
+    DDLogInfo(@"message: %@", message);
+    
     NSString * ourLatestVersion = [[IdentityController sharedInstance] getOurLatestVersion];
     NSString * loggedInUser = [[IdentityController sharedInstance] getLoggedInUser];
     NSData * iv = [EncryptionController getIv];
@@ -361,10 +363,11 @@ static const int MAX_CONNECTION_RETRIES = 16;
                 [_socketIO sendMessage: jsonString];
                 
                 //cache the plain data locally
-                [dict setObject:message forKey:@"plaindata"];
+                SurespotMessage * sm =[[SurespotMessage alloc] initWithDictionary: dict];
+                sm.plainData = message;
                 
                 ChatDataSource * dataSource = [self getDataSourceForFriendname: friendname];
-                [dataSource addMessage: [[SurespotMessage alloc] initWithDictionary: dict] refresh:YES];
+                [dataSource addMessage: sm refresh:YES];
             }];
         }
         else {
