@@ -589,8 +589,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
         }
         
     }
-    
-    //todo sort
+
     [_homeDataSource postRefresh];
     
     

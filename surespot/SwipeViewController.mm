@@ -344,7 +344,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     else {
         @synchronized (_chats) {
             if ([_chats count] > 0) {
-                return [[_chats allKeys] objectAtIndex:page-1];
+                return [[self sortedChats] objectAtIndex:page-1];
             }
         }
     }
@@ -385,7 +385,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         DDLogVerbose(@"returning chat view");
         @synchronized (_chats) {
             
-            NSArray *keys = [_chats allKeys];
+            NSArray *keys = [self sortedChats];
             id aKey = [keys objectAtIndex:index -1];
             id anObject = [_chats objectForKey:aKey];
             
@@ -421,7 +421,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         @synchronized (_chats) {
             
             tableview = [_chats allValues][swipeView.currentPage-1];
-            [[ChatController sharedInstance] setCurrentChat: [_chats allKeys][currPage-1]];
+            [[ChatController sharedInstance] setCurrentChat: [self sortedChats][currPage-1]];
         }
         
     }
@@ -486,7 +486,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         NSString * username;
         @synchronized (_chats) {
             
-            NSArray *keys = [_chats allKeys];
+            NSArray *keys = [self sortedChats];
             if(chatIndex >= 0 && chatIndex < keys.count ) {
                 id aKey = [keys objectAtIndex:chatIndex];
                 username = aKey;
@@ -524,7 +524,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     else {
         @synchronized (_chats) {
             
-            NSArray *keys = [_chats allKeys];
+            NSArray *keys = [self sortedChats];
             id aKey = [keys objectAtIndex:index -1];
             
             NSString * username = aKey;
@@ -607,7 +607,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     else {
         id aKey;
         @synchronized (_chats) {
-            NSArray *keys = [_chats allKeys];
+            NSArray *keys = [self sortedChats];
             aKey = [keys objectAtIndex:index -1];
         }
         NSString * username = aKey;
@@ -694,6 +694,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
 }
 
+-(NSArray *) sortedChats {
+    return [[_chats allKeys] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        return [obj1 compare:obj2];
+    }];
+}
+
 -(void) loadChat:(NSString *) username show: (BOOL) show  availableId: (NSInteger) availableId availableControlId: (NSInteger) availableControlId {
     DDLogVerbose(@"entered");
     //get existing view if there is one
@@ -718,7 +724,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         @synchronized (_chats) {
             
             [_chats setObject:chatView forKey:username];
-            index = [[_chats allKeys] indexOfObject:username] + 1          ;
+            index = [[self sortedChats] indexOfObject:username] + 1          ;
             
         }
         
@@ -744,7 +750,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [[ChatController sharedInstance] setCurrentChat: username];
             NSInteger index;
             @synchronized (_chats) {
-                index = [[_chats allKeys] indexOfObject:username] + 1;
+                index = [[self sortedChats] indexOfObject:username] + 1;
             }
             
             DDLogVerbose(@"scrolling to index: %d", index);
@@ -791,7 +797,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if ([UIUtils stringIsNilOrEmpty:message]) return;
     id friendname;
     @synchronized (_chats) {
-        NSArray *keys = [_chats allKeys];
+        NSArray *keys = [self sortedChats];
         friendname = [keys objectAtIndex:[_swipeView currentItemIndex] -1];
     }
     
