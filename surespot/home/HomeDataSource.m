@@ -188,10 +188,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(void) setCurrentChat: (NSString *) username {
     if (username) {
         Friend * afriend = [self getFriendByName:username];
-        [afriend setChatActive:YES];
-
+        if (! afriend.isChatActive) {
+            [afriend setChatActive:YES];
+            [self postRefresh];            
+        }
     }
-    [self postRefresh];
+   
     _currentChat = username;
     
 }

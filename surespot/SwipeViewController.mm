@@ -1106,6 +1106,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         NSString * name = [self nameForPage:page];
         DDLogVerbose(@"name after close: %@", name);
         [_homeDataSource setCurrentChat:name];
+        [_homeDataSource postRefresh];
         
         
         
