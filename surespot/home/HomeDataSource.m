@@ -12,7 +12,7 @@
 #import "DDLog.h"
 
 #ifdef DEBUG
-static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+static const int ddLogLevel = LOG_LEVEL_INFO;
 #else
 static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
@@ -117,8 +117,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     [theFriend setInviter:YES];
-    
-    //todo sort
     [self postRefresh];
     
 }
@@ -134,6 +132,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) postRefresh {
+    [self sort];
      dispatch_async(dispatch_get_main_queue(), ^{
          [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshHome" object:nil];
      });
@@ -190,10 +189,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (username) {
         Friend * afriend = [self getFriendByName:username];
         [afriend setChatActive:YES];
+
     }
-    
+    [self postRefresh];
     _currentChat = username;
     
 }
+
+-(void) sort {
+    @synchronized (_friends) {
+        DDLogInfo(@"sorting friends");      
+        _friends = [NSMutableArray  arrayWithArray:[_friends sortedArrayUsingSelector:@selector(compare:)]];
+    }
+}
+
 
 @end

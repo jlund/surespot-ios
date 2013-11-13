@@ -138,5 +138,21 @@
     return [self.name isEqualToString:[other name]];
 }
 
+- (NSComparisonResult)compare:(Friend  *)other {
+    NSInteger myflags = self.flags  & (CHAT_ACTIVE | MESSAGE_ACTIVITY | INVITER);
+    NSInteger theirflags = other.flags  & (CHAT_ACTIVE | MESSAGE_ACTIVITY | INVITER);
+    
+    if ((theirflags == myflags) || (theirflags < CHAT_ACTIVE && myflags < CHAT_ACTIVE)) {
+        //sort my name
+        return [self.name compare: other.name options:NSNumericSearch];
+    }
+    else {
+        //sort by flag value
+        if (theirflags > myflags) return NSOrderedDescending;
+        else return NSOrderedAscending;
+    }
+}
+
+
 
 @end
