@@ -134,14 +134,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(void) pause: (NSNotification *)  notification{
     DDLogVerbose(@"pause");
     [[ChatController sharedInstance] pause];
-
-   }
+    
+}
 
 
 -(void) resume: (NSNotification *) notification {
     DDLogVerbose(@"resume");
     [[ChatController sharedInstance] resume];
-
+    
 }
 
 
@@ -632,52 +632,44 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 cellIdentifier = TheirCellIdentifier;
             }
             MessageView *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+            if (!ours) {
+                
+                cell.messageSentView.backgroundColor = [UIUtils surespotBlue];
+            }
             
-            cell.messageStatusLabel.text = NSLocalizedString(@"message_loading_and_decrypting",nil);
-            cell.messageLabel.text = @"";
-            
-            // __block UITableView * blockView = tableView;
-            if (!plainData){
-                if (![message isLoading] && ![message isLoaded]) {
-                    if (ours) {
-                        
-                        cell.messageSentView.backgroundColor = [UIColor blackColor];
-                    }
-                    else {
-                        cell.messageSentView.backgroundColor = UIUtils.surespotBlue;
-                    }
-                    
-                    
-                    //                    [message setLoaded:NO];
-                    //                    [message setLoading:YES];
-                    //                    //    DDLogVerbose(@"decrypting data for iv: %@", [message iv]);
-                    //                    [[MessageProcessor sharedInstance] decryptMessage:message width: tableView.frame.size.width completionCallback:^(SurespotMessage  * message){
-                    //
-                    //                        //   DDLogVerbose(@"data decrypted, reloading row for iv %@", [message iv]);
-                    //                        dispatch_async(dispatch_get_main_queue(), ^{
-                    //                            //  [tableView reloadData];
-                    //                            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                    //                            [message setLoading:NO];
-                    //                            [message setLoaded:YES];
-                    //                        });
-                    //                    }];
-                    
+            if (message.serverid <= 0) {
+                cell.messageStatusLabel.text = NSLocalizedString(@"message_sending",nil);
+                cell.messageLabel.text = plainData;
+                
+                if (ours) {
+                    cell.messageSentView.backgroundColor = [UIColor blackColor];
                 }
             }
             else {
-                //   DDLogVerbose(@"setting text for iv: %@ to: %@", [message iv], plainData);
-                cell.messageLabel.text = plainData;
-                cell.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
-                cell.messageStatusLabel.text = [self stringFromDate:[message dateTime]];
-                
                 if (ours) {
                     cell.messageSentView.backgroundColor = [UIColor lightGrayColor];
                 }
-                else {
-                    cell.messageSentView.backgroundColor = [UIUtils surespotBlue];
+                
+                if (!message.plainData) {
+                    
+                    cell.messageStatusLabel.text = NSLocalizedString(@"message_loading_and_decrypting",nil);
+                    cell.messageLabel.text = @"";
+                    
                 }
-                
-                
+                else {
+                    
+                    //   DDLogVerbose(@"setting text for iv: %@ to: %@", [message iv], plainData);
+                    cell.messageLabel.text = plainData;
+                    cell.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
+                    cell.messageStatusLabel.text = [self stringFromDate:[message dateTime]];
+                    
+                    if (ours) {
+                        cell.messageSentView.backgroundColor = [UIColor lightGrayColor];
+                    }
+                    else {
+                        cell.messageSentView.backgroundColor = [UIUtils surespotBlue];
+                    }
+                }
             }
             return cell;
         }
@@ -685,11 +677,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             static NSString *CellIdentifier = @"Cell";
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
             return cell;
-            
         }
-        
-        
-        
     }
 }
 
@@ -922,7 +910,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         REMenuItem * deleteAllItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_delete_all_messages", nil) image:[UIImage imageNamed:@"ic_menu_delete"] highlightedImage:nil action:^(REMenuItem * item){
             [[ChatController sharedInstance] deleteMessagesForFriend: [_homeDataSource getFriendByName:_homeDataSource.currentChat]];
-
+            
         }];
         
         [menuItems addObject:deleteAllItem];
@@ -960,7 +948,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     REMenuItem * deleteAllHomeItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_delete_all_messages", nil) image:[UIImage imageNamed:@"ic_menu_delete"] highlightedImage:nil action:^(REMenuItem * item){
         [[ChatController sharedInstance] deleteMessagesForFriend: thefriend];
-   
+        
         
     }];
     [menuItems addObject:deleteAllHomeItem];
@@ -976,7 +964,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [menu setCloseCompletionHandler:^{
         _menu = nil;
     }];
-
+    
     return menu;
 }
 
@@ -991,7 +979,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         
         [self deleteMessage: message];
-
+        
     }];
     
     [menuItems addObject:deleteItem];
@@ -1002,7 +990,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [menu setCloseCompletionHandler:^{
         _menu = nil;
     }];
-
+    
     
     return menu;
 }
