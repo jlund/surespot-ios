@@ -131,11 +131,20 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         NSUInteger index = [self.messages indexOfObject:message];
         if (index == NSNotFound) {
             if (!message.plainData) {
+                BOOL blockRefresh = refresh;
+                refresh = false;
                 DDLogInfo(@"decrypting message iv: %@", message.iv);
                 
                 MessageDecryptionOperation * op = [[MessageDecryptionOperation alloc]initWithMessage:message width: 200 completionCallback:^(SurespotMessage  * message){
                     DDLogInfo(@"adding message iv: %@", message.iv);
                     [self.messages addObject:message];
+                    
+                    if (blockRefresh) {
+                        if ([_decryptionQueue operationCount] == 0) {
+                            [self postRefresh];
+                        }
+                    }
+
                     
                 }];
                 [_decryptionQueue addOperation:op];
@@ -333,7 +342,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     @synchronized (_messages) {
         [_messages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(SurespotMessage * obj, NSUInteger idx, BOOL *stop) {
-            if([obj serverid] <= messageId && ![[obj getOtherUser] isEqualToString:_loggedInUser]) {
+            if([obj serverid] <= messageId && ![[obj from] isEqualToString:_loggedInUser]) {
                 DDLogInfo(@"deleting messageID: %d", [obj serverid]);
                 [_messages removeObjectAtIndex:idx];
             }
