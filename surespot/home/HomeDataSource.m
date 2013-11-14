@@ -19,7 +19,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 @interface  HomeDataSource()
-
 @end
 
 @implementation HomeDataSource

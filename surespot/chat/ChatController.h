@@ -32,4 +32,5 @@
 -(void) pause;
 -(void) resume;
 - (void) deleteMessagesForFriend: (Friend *) afriend;
+-(void) sendMessageOnSocket: (NSString *) jsonMessage;
 @end

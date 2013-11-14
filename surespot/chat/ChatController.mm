@@ -18,6 +18,7 @@
 #import "StateController.h"
 #import "DDLog.h"
 #import "UIUtils.h"
+#import "SendMessageOperation.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
@@ -35,6 +36,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
 @property (strong, atomic) HomeDataSource * homeDataSource;
 @property (assign, atomic) NSInteger connectionRetries;
 @property (strong, atomic) NSTimer * reconnectTimer;
+@property (strong, atomic) NSOperationQueue * messageSendQueue;
 @end
 
 @implementation ChatController
@@ -61,7 +63,9 @@ static const int MAX_CONNECTION_RETRIES = 16;
     if (self != nil) {
         
         self.socketIO = [[SocketIO alloc] initWithDelegate:self];
-        _chatDataSources = [[NSMutableDictionary alloc] init];
+        _chatDataSources = [NSMutableDictionary new];
+        _messageSendQueue = [NSOperationQueue new];
+        [_messageSendQueue setMaxConcurrentOperationCount:1];
     }
     
     return self;
@@ -119,6 +123,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
     DDLogVerbose(@"didDisconnectWithError %@", error);
     if (error) {
         [self connect];
+        
     }
     
 }
@@ -360,7 +365,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
                 NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
                 
                 
-                [_socketIO sendMessage: jsonString];
+                [self queueMessage:jsonString];
                 
                 //cache the plain data locally
                 SurespotMessage * sm =[[SurespotMessage alloc] initWithDictionary: dict];
@@ -377,6 +382,14 @@ static const int MAX_CONNECTION_RETRIES = 16;
     
 }
 
+-(void) queueMessage: (NSString * ) jsonMessage {
+    SendMessageOperation * smo = [[SendMessageOperation alloc] initWithJsonMessage: jsonMessage];
+    [_messageSendQueue addOperation:smo];
+}
+
+-(void) sendMessageOnSocket: (NSString *) jsonMessage {
+    [_socketIO sendMessage: jsonMessage];
+}
 
 
 -(void) handleMessage: (SurespotMessage *) message {
@@ -445,7 +458,6 @@ static const int MAX_CONNECTION_RETRIES = 16;
                 
                 thefriend.availableMessageControlId = messageId;
             }
-            
         }
     }
 }
@@ -462,7 +474,6 @@ static const int MAX_CONNECTION_RETRIES = 16;
         }
     }
 }
-
 
 -(void) handleUserControlMessages: (NSArray *) controlMessages {
     for (id jsonMessage in controlMessages) {
@@ -589,7 +600,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
         }
         
     }
-
+    
     [_homeDataSource postRefresh];
     
     

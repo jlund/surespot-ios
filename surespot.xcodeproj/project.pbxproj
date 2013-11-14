@@ -46,6 +46,7 @@
 		664076721822AA0100BFD974 /* HomeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 664076711822AA0100BFD974 /* HomeCell.m */; };
 		664076781822C07C00BFD974 /* Friend.m in Sources */ = {isa = PBXBuildFile; fileRef = 664076771822C07C00BFD974 /* Friend.m */; };
 		6640767B1822D52800BFD974 /* SurespotControlMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 6640767A1822D52800BFD974 /* SurespotControlMessage.m */; };
+		664B1AF118354CBB002EF373 /* SendMessageOperation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 664B1AF018354CBB002EF373 /* SendMessageOperation.mm */; };
 		6654441317F37A3F00F62F7F /* SwipeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6654441217F37A3F00F62F7F /* SwipeView.m */; };
 		6654441617F37BCF00F62F7F /* SwipeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6654441517F37BCF00F62F7F /* SwipeViewController.mm */; };
 		665F4DE4182EB2180083BCE7 /* SurespotButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DE3182EB2180083BCE7 /* SurespotButton.m */; };
@@ -173,6 +174,8 @@
 		664076771822C07C00BFD974 /* Friend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Friend.m; path = home/Friend.m; sourceTree = "<group>"; };
 		664076791822D52800BFD974 /* SurespotControlMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SurespotControlMessage.h; path = chat/SurespotControlMessage.h; sourceTree = "<group>"; };
 		6640767A1822D52800BFD974 /* SurespotControlMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SurespotControlMessage.m; path = chat/SurespotControlMessage.m; sourceTree = "<group>"; };
+		664B1AEF18354CBB002EF373 /* SendMessageOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SendMessageOperation.h; path = chat/SendMessageOperation.h; sourceTree = "<group>"; };
+		664B1AF018354CBB002EF373 /* SendMessageOperation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SendMessageOperation.mm; path = chat/SendMessageOperation.mm; sourceTree = "<group>"; };
 		6654441117F37A3F00F62F7F /* SwipeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeView.h; sourceTree = "<group>"; };
 		6654441217F37A3F00F62F7F /* SwipeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SwipeView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6654441417F37BCE00F62F7F /* SwipeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeViewController.h; sourceTree = "<group>"; };
@@ -664,6 +667,8 @@
 				6640767A1822D52800BFD974 /* SurespotControlMessage.m */,
 				665F4DE2182EB2180083BCE7 /* SurespotButton.h */,
 				665F4DE3182EB2180083BCE7 /* SurespotButton.m */,
+				664B1AEF18354CBB002EF373 /* SendMessageOperation.h */,
+				664B1AF018354CBB002EF373 /* SendMessageOperation.mm */,
 			);
 			name = chat;
 			sourceTree = "<group>";
@@ -1096,6 +1101,7 @@
 				66FF0FEE1827FAEE0038ECA6 /* StateController.m in Sources */,
 				6606E4F0179DB134004199BC /* FileController.mm in Sources */,
 				6637108918134295009D5195 /* MessageDecryptionOperation.mm in Sources */,
+				664B1AF118354CBB002EF373 /* SendMessageOperation.mm in Sources */,
 				66371086181331E8009D5195 /* MessageProcessor.mm in Sources */,
 				660EB28017FE666D00DBC53C /* SurespotMessage.m in Sources */,
 				6640765E1821856D00BFD974 /* MessageView.m in Sources */,
