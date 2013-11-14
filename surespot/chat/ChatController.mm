@@ -388,7 +388,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
 }
 
 -(void) enqueueMessage: (SurespotMessage * ) message {
-
+    
     [_sendBuffer addObject:message];
 }
 
@@ -405,10 +405,11 @@ static const int MAX_CONNECTION_RETRIES = 16;
 }
 
 -(void) sendMessages {
-    [_sendBuffer enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        
+    NSMutableArray * sendBuffer = _sendBuffer;
+    _sendBuffer = [NSMutableArray new];
+
+    [sendBuffer enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {        
         [_resendBuffer addObject:obj];
-        [_sendBuffer removeObjectAtIndex:idx];
         
         if (_socketIO) {
             [_socketIO sendMessage:[obj toJsonString]];
@@ -422,13 +423,12 @@ static const int MAX_CONNECTION_RETRIES = 16;
 }
 
 -(void) resendMessages {
+    NSMutableArray * resendBuffer = _resendBuffer;
+    _resendBuffer = [NSMutableArray new];
     NSMutableArray * jsonMessageList = [NSMutableArray new];
-    [_resendBuffer enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    [resendBuffer enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         
-        if ([obj serverid] > 0) {
-            [_resendBuffer removeObjectAtIndex:idx];
-        }
-        else {
+        if ([obj serverid] <= 0) {
             NSString * otherUser = [obj getOtherUser];
             NSInteger lastMessageId = 0;
             ChatDataSource * cds = [_chatDataSources objectForKey:otherUser];
@@ -443,6 +443,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
             }
             
             [obj setResendId:lastMessageId];
+            [_resendBuffer addObject:obj];
             [jsonMessageList addObject:[obj toNSDictionary]];
         }
     }];
