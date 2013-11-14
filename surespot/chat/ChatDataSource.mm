@@ -60,8 +60,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 
                 [self addMessage:message refresh:YES];
             }
-            
-            //[_decryptionQueue waitUntilAllOperationsAreFinished];
+                    
             DDLogVerbose(@"loaded %d messages from disk at: %@", [messages count] ,path);
             DDLogVerbose( @"latestMEssageid: %d, latestControlId: %d", _latestMessageId ,_latestControlMessageId);
             

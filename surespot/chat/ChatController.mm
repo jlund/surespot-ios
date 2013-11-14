@@ -36,7 +36,9 @@ static const int MAX_CONNECTION_RETRIES = 16;
 @property (strong, atomic) HomeDataSource * homeDataSource;
 @property (assign, atomic) NSInteger connectionRetries;
 @property (strong, atomic) NSTimer * reconnectTimer;
-@property (strong, atomic) NSOperationQueue * messageSendQueue;
+@property (strong, nonatomic) NSMutableArray * sendBuffer;
+@property (strong, nonatomic) NSMutableArray * resendBuffer;
+
 @end
 
 @implementation ChatController
@@ -64,8 +66,8 @@ static const int MAX_CONNECTION_RETRIES = 16;
         
         self.socketIO = [[SocketIO alloc] initWithDelegate:self];
         _chatDataSources = [NSMutableDictionary new];
-        _messageSendQueue = [NSOperationQueue new];
-        [_messageSendQueue setMaxConcurrentOperationCount:1];
+        _sendBuffer = [NSMutableArray new];
+        _resendBuffer = [NSMutableArray new];
     }
     
     return self;
@@ -110,7 +112,11 @@ static const int MAX_CONNECTION_RETRIES = 16;
     if (_reconnectTimer) {
         [_reconnectTimer invalidate];
     }
+    
+    //send unsent messages
+    [self resendMessages];
     [self getData];
+    
 }
 
 - (void) socketIO:(SocketIO *)socket onError:(NSError *)error {
@@ -168,6 +174,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
             SurespotMessage * message = [[SurespotMessage alloc] initWithJSONString:[jsonData objectForKey:@"args"][0]];
             
             [self handleMessage:message];
+            [self checkAndSendNextMessage:message];
         }
     }
     
@@ -210,6 +217,8 @@ static const int MAX_CONNECTION_RETRIES = 16;
 
 
 -(void) getData {
+    
+    
     //if we have no friends and have never received a user control message
     //load friends and latest ids
     if ([_homeDataSource.friends count] ==0 && _homeDataSource.latestUserControlId == 0) {
@@ -329,8 +338,6 @@ static const int MAX_CONNECTION_RETRIES = 16;
 }
 
 
-
-
 - (void) sendMessage: (NSString *) message toFriendname: (NSString *) friendname
 {
     if ([UIUtils stringIsNilOrEmpty:friendname]) return;
@@ -360,15 +367,14 @@ static const int MAX_CONNECTION_RETRIES = 16;
                 [dict setObject:[NSNumber  numberWithBool:FALSE] forKey:@"shareable"];
                 
                 
-                NSError *error;
-                NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
-                NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
                 
                 
-                [self queueMessage:jsonString];
                 
-                //cache the plain data locally
                 SurespotMessage * sm =[[SurespotMessage alloc] initWithDictionary: dict];
+                
+                [self enqueueMessage:sm];
+                [self sendMessages];
+                //cache the plain data locally
                 sm.plainData = message;
                 
                 ChatDataSource * dataSource = [self getDataSourceForFriendname: friendname];
@@ -382,13 +388,64 @@ static const int MAX_CONNECTION_RETRIES = 16;
     
 }
 
--(void) queueMessage: (NSString * ) jsonMessage {
-    SendMessageOperation * smo = [[SendMessageOperation alloc] initWithJsonMessage: jsonMessage];
-    [_messageSendQueue addOperation:smo];
+-(void) enqueueMessage: (SurespotMessage * ) message {
+    [_sendBuffer addObject:message];
 }
 
 -(void) sendMessageOnSocket: (NSString *) jsonMessage {
     [_socketIO sendMessage: jsonMessage];
+}
+
+-(void) sendMessages {
+    [_sendBuffer enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        
+        [_resendBuffer addObject:obj];
+        [_sendBuffer removeObjectAtIndex:idx];
+        
+        if (_socketIO) {
+            [_socketIO sendMessage:[obj toJsonString]];
+        }
+    }];
+}
+
+-(void ) checkAndSendNextMessage: (SurespotMessage *) message {
+    [self sendMessages];
+    [_resendBuffer removeObject:message];
+}
+
+-(void) resendMessages {
+    NSMutableArray * jsonMessageList = [NSMutableArray new];
+    [_resendBuffer enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        
+        if ([obj serverid] > 0) {
+            [_resendBuffer removeObjectAtIndex:idx];
+        }
+        else {
+            NSString * otherUser = [obj getOtherUser];
+            NSInteger lastMessageId = 0;
+            ChatDataSource * cds = [_chatDataSources objectForKey:otherUser];
+            if (cds) {
+                lastMessageId = [cds latestMessageId];
+            }
+            else {
+                Friend * afriend = [_homeDataSource getFriendByName:otherUser];
+                if (afriend) {
+                    lastMessageId =  afriend.lastViewedMessageId;
+                }
+            }
+            
+            [obj setResendId:lastMessageId];
+            [jsonMessageList addObject:[obj toNSDictionary]];
+        }
+    }];
+    
+    if ([jsonMessageList count]>0) {
+        NSError *error;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonMessageList options:0 error:&error];
+        NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        
+        [self sendMessageOnSocket:jsonString];
+    }
 }
 
 

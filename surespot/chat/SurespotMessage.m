@@ -114,12 +114,38 @@
     if (_dateTime) {
         [encoder encodeObject:_dateTime forKey:@"datetime"];
     }
-    
-    
-    
-    
 }
 
+
+- (NSMutableDictionary * ) toNSDictionary {
+    NSMutableDictionary * dict =[NSMutableDictionary new];
+    NSString * serverid = [@(_serverid) stringValue];
+    [dict setObject:serverid forKey:@"id"];
+    [dict setObject:_to forKey:@"to"];
+    [dict setObject:_from forKey:@"from"];
+    [dict setObject:_fromVersion forKey:@"fromVersion"];
+    [dict setObject:_toVersion forKey:@"toVersion"];
+    [dict setObject:_data forKey:@"data"];
+    [dict setObject:_iv forKey:@"iv"];
+    [dict setObject:_mimeType forKey:@"mimeType"];
+    if (_dateTime) {
+        [dict setObject:_dateTime forKey:@"datetime"];
+    }
+    
+    [dict setObject:[@(_resendId) stringValue] forKey:@"resendId"];
+    
+    return dict;
+}
+
+
+- (NSString * ) toJsonString {
+    
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:[self toNSDictionary] options:0 error:&error];
+    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    return jsonString;
+    
+}
 
 
 @end
