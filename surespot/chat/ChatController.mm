@@ -18,7 +18,6 @@
 #import "StateController.h"
 #import "DDLog.h"
 #import "UIUtils.h"
-#import "SendMessageOperation.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
@@ -389,8 +388,17 @@ static const int MAX_CONNECTION_RETRIES = 16;
 }
 
 -(void) enqueueMessage: (SurespotMessage * ) message {
+
     [_sendBuffer addObject:message];
 }
+
+
+-(void) enqueueResendMessage: (SurespotMessage * ) message {
+    if (![_resendBuffer containsObject:message]) {
+        [_resendBuffer addObject:message];
+    }
+}
+
 
 -(void) sendMessageOnSocket: (NSString *) jsonMessage {
     [_socketIO sendMessage: jsonMessage];

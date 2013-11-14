@@ -15,10 +15,10 @@
 #import "FileController.h"
 #import "DDLog.h"
 #import "UIUtils.h"
-
+#import "ChatController.h"
 
 #ifdef DEBUG
-static const int ddLogLevel = LOG_LEVEL_INFO;
+static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 #else
 static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
@@ -57,9 +57,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             //convert messages to SurespotMessage
             for (SurespotMessage * message in messages) {
-                
+                            DDLogVerbose(@"adding message");
                 [self addMessage:message refresh:YES];
+                
+                //if the message doesn't have a server id, add it to the resend buffer
+                if (message.serverid <= 0) {
+                    [[ChatController sharedInstance] enqueueResendMessage: message];
+                }
+                
             }
+            
+            
                     
             DDLogVerbose(@"loaded %d messages from disk at: %@", [messages count] ,path);
             DDLogVerbose( @"latestMEssageid: %d, latestControlId: %d", _latestMessageId ,_latestControlMessageId);
@@ -126,17 +134,20 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 }
             }
         }
-        
+
+        DDLogVerbose(@"looking for message iv: %@", message.iv);
         NSUInteger index = [self.messages indexOfObject:message];
         if (index == NSNotFound) {
+            [self.messages addObject:message];
             if (!message.plainData) {
                 BOOL blockRefresh = refresh;
                 refresh = false;
-                DDLogVerbose(@"decrypting message iv: %@", message.iv);
+                DDLogVerbose(@"added, now decrypting message iv: %@", message.iv);
                 
                 MessageDecryptionOperation * op = [[MessageDecryptionOperation alloc]initWithMessage:message width: 200 completionCallback:^(SurespotMessage  * message){
-                    DDLogVerbose(@"adding message iv: %@", message.iv);
-                    [self.messages addObject:message];
+                   // DDLogInfo(@"adding message post decryption iv: %@", message.iv);
+                    
+                
                     
                     if (blockRefresh) {
                         if ([_decryptionQueue operationCount] == 0) {
@@ -151,12 +162,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 
             }
             else {
-                DDLogVerbose(@"adding message iv: %@", message.iv);
-                [self.messages addObject:message];
+                DDLogVerbose(@"added message already decrypted iv: %@", message.iv);
             }
         }
         else {
-            DDLogVerbose(@"updating message iv: %@", message.iv);
+            DDLogInfo(@"updating message iv: %@", message.iv);
             SurespotMessage * existingMessage = [self.messages objectAtIndex:index];
             if (message.serverid > 0) {
                 existingMessage.serverid = message.serverid;
