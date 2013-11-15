@@ -129,7 +129,7 @@
     [dict setObject:_iv forKey:@"iv"];
     [dict setObject:_mimeType forKey:@"mimeType"];
     if (_dateTime) {
-        [dict setObject:_dateTime forKey:@"datetime"];
+        [dict setObject:[@([_dateTime timeIntervalSince1970]*1000/1000) stringValue] forKey:@"datetime"];
     }
     
     [dict setObject:[@(_resendId) stringValue] forKey:@"resendId"];
