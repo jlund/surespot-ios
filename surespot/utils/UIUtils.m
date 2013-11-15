@@ -16,7 +16,7 @@
 }
 
 +(UIColor *) surespotTransparentBlue {
-    return [UIColor colorWithRed:0.2 green:0.71 blue:0.898 alpha:0.4];
+    return [UIColor colorWithRed:0.2 green:0.71 blue:0.898 alpha:0.5];
 }
 
 +(void) showNotificationToastView:(UIView *) view  data:(NSDictionary *) notificationData {

@@ -984,12 +984,27 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [menuItems addObject:logoutItem];
     
+    return [self createMenu: menuItems];
+}
+
+-(REMenu *) createMenu: (NSArray *) menuItems {
     REMenu * menu = [[REMenu alloc] initWithItems:menuItems];
-    menu.imageOffset = CGSizeMake(-5, -1);
+    menu.imageOffset = CGSizeMake(10, 0);
+    menu.textAlignment = NSTextAlignmentLeft;
+    menu.textColor = [UIColor whiteColor];
+    menu.highlightedTextColor = [UIColor whiteColor];
+    menu.highlightedBackgroundColor = [UIUtils surespotTransparentBlue];
+    menu.textShadowOffset = CGSizeZero;
+    menu.highlightedTextShadowOffset = CGSizeZero;
+    menu.textOffset =CGSizeMake(64,0);
+    menu.font = [UIFont systemFontOfSize:21.0];
+    
     [menu setCloseCompletionHandler:^{
         _menu = nil;
     }];
+    
     return menu;
+
 }
 
 
@@ -1021,13 +1036,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [menuItems addObject:deleteFriendItem];
     
     
-    REMenu * menu = [[REMenu alloc] initWithItems:menuItems];
-    menu.imageOffset = CGSizeMake(-5, -1);
-    [menu setCloseCompletionHandler:^{
-        _menu = nil;
-    }];
-    
-    return menu;
+    return [self createMenu: menuItems];
 }
 
 -(REMenu *) createChatMenuMessage: (SurespotMessage *) message {
@@ -1047,14 +1056,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [menuItems addObject:deleteItem];
     
     
-    REMenu * menu = [[REMenu alloc] initWithItems:menuItems];
-    menu.imageOffset = CGSizeMake(-5, -1);
-    [menu setCloseCompletionHandler:^{
-        _menu = nil;
-    }];
-    
-    
-    return menu;
+    return [self createMenu: menuItems];
 }
 
 
