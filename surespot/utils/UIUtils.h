@@ -15,6 +15,7 @@
 + (CGSize)threadSafeSizeString: (NSString *) string WithFont:(UIFont *)font constrainedToSize:(CGSize)size;
 + (id) createProgressView: (UIView * )view;
 + (UIColor *) surespotBlue;
++(UIColor *) surespotTransparentBlue;
 + (void)setAppAppearances;
 + (BOOL)stringIsNilOrEmpty:(NSString*)aString;
 +(CGFloat) keyboardHeightAdjustedForOrientation: (CGSize) size;

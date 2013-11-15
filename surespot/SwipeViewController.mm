@@ -428,7 +428,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     else {
         @synchronized (_chats) {
             
-            tableview = [_chats allValues][swipeView.currentPage-1];
+            tableview = [self sortedValues][swipeView.currentPage-1];
             [[ChatController sharedInstance] setCurrentChat: [self sortedChats][currPage-1]];
         }
         
@@ -637,6 +637,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             cell.friendStatus.hidden = YES;
         }
         
+        
+        UIView *bgColorView = [[UIView alloc] init];
+        bgColorView.backgroundColor = [UIUtils surespotBlue];
+        bgColorView.layer.masksToBounds = YES;
+        cell.selectedBackgroundView = bgColorView;
+
         return cell;
     }
     else {
@@ -706,6 +712,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     }
                 }
             }
+            
+            UIView *bgColorView = [[UIView alloc] init];
+            bgColorView.backgroundColor = [UIUtils surespotBlue];
+            bgColorView.layer.masksToBounds = YES;
+            cell.selectedBackgroundView = bgColorView;
+
             return cell;
         }
         else {
@@ -733,6 +745,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return [[_chats allKeys] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         return [obj1 compare:obj2];
     }];
+}
+
+-(NSArray *) sortedValues {
+    NSArray * sortedKeys = [self sortedChats];
+    NSMutableArray * sortedValues = [NSMutableArray new];
+    for (NSString * key in sortedKeys) {
+        [sortedValues addObject:[_chats objectForKey:key]];
+    }
+    return sortedValues;
 }
 
 -(void) loadChat:(NSString *) username show: (BOOL) show  availableId: (NSInteger) availableId availableControlId: (NSInteger) availableControlId {
@@ -1040,7 +1061,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(void)tableLongPress:(UILongPressGestureRecognizer *)gestureRecognizer
 {
     NSInteger _menuPage = _swipeView.currentPage;
-    UITableView * currentView = _menuPage == 0 ? _friendView : [[_chats allValues] objectAtIndex:_menuPage-1];
+    UITableView * currentView = _menuPage == 0 ? _friendView : [[self sortedValues] objectAtIndex:_menuPage-1];
     
     CGPoint p = [gestureRecognizer locationInView:currentView];
     
@@ -1055,7 +1076,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             [currentView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
             [self showMenuForPage: _menuPage indexPath: indexPath];
-            DDLogVerbose(@"long press on table view at page %d, row %d", _menuPage, indexPath.row);
+            DDLogInfo(@"long press on table view at page %d, row %d", _menuPage, indexPath.row);
         }
     }
 }

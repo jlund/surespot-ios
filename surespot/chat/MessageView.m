@@ -7,25 +7,28 @@
 //
 
 #import "MessageView.h"
+#import "UIUtils.h"
 
 @implementation MessageView
 
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
+-(void) setHighlighted:(BOOL)highlighted animated:(BOOL)animated{
+    if (highlighted) {
+        self.backgroundColor = [UIUtils surespotTransparentBlue];
+    } else {
+        self.backgroundColor = [UIColor whiteColor];
     }
-    return self;
+//    self.backgroundColor = [UIColor whiteColor];
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
+//
+//- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+//{
+//    
+//    if (selected) {
+//        self.backgroundColor = [UIUtils surespotBlue];
+//    } else {
+//        self.backgroundColor = [UIColor whiteColor];
+//    }
+//}
 
 @end

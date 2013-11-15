@@ -7,26 +7,21 @@
 //
 
 #import "HomeCell.h"
+#import "UIUtils.h"
+
 #define INVITE_ACTION_BLOCK 0;
 #define INVITE_ACTION_IGNORE 1;
 #define INVITE_ACTION_ACCEPT 2;
 
 @implementation HomeCell
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        // Initialization code
+-(void) setHighlighted:(BOOL)highlighted animated:(BOOL)animated{
+    if (highlighted) {
+        self.backgroundColor = [UIUtils surespotTransparentBlue];
+    } else {
+        self.backgroundColor = [UIColor whiteColor];
     }
-    return self;
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
-    
-    // Configure the view for the selected state
+    //    self.backgroundColor = [UIColor whiteColor];
 }
 
 - (IBAction)inviteAction:(id)sender {
