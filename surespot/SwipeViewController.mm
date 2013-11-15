@@ -558,7 +558,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             NSString * username = aKey;
             NSArray * messages =[[ChatController sharedInstance] getDataSourceForFriendname: username].messages;
-            if (messages.count > 0) {
+            if (messages.count > 0 && (indexPath.row < messages.count)) {
                 SurespotMessage * message =[messages objectAtIndex:indexPath.row];
                 if (message.rowHeight > 0) {
                     return message.rowHeight;
