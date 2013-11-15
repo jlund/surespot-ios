@@ -542,6 +542,7 @@
 				66FF0FED1827FAEE0038ECA6 /* StateController.m */,
 				66D3B04B182D47DF00B37A6C /* SurespotLogFormatter.h */,
 				66D3B04C182D47DF00B37A6C /* SurespotLogFormatter.m */,
+				66A2D90C1836B7FF00785270 /* ui */,
 			);
 			name = utils;
 			sourceTree = "<group>";
@@ -639,6 +640,13 @@
 				665F4E0B1833238D0083BCE7 /* TestFlight.h */,
 			);
 			path = TestFlightSDK;
+			sourceTree = "<group>";
+		};
+		66A2D90C1836B7FF00785270 /* ui */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = ui;
 			sourceTree = "<group>";
 		};
 		66B3C8EA17B15F0C00CC96EE /* chat */ = {

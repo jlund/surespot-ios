@@ -998,6 +998,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     menu.highlightedTextShadowOffset = CGSizeZero;
     menu.textOffset =CGSizeMake(64,0);
     menu.font = [UIFont systemFontOfSize:21.0];
+    menu.cornerRadius = 2;
     
     [menu setCloseCompletionHandler:^{
         _menu = nil;
@@ -1103,8 +1104,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (!_menu) {
         _menu = [self createMenuMenu];
         if (_menu) {
-            CGRect rect = CGRectMake(25, 10, self.view.frame.size.width
-                                     - 50, self.view.frame.size.height -20);
+            CGRect rect = CGRectMake(25, 0, self.view.frame.size.width
+                                     - 50, self.view.frame.size.height);
             
             [_menu showFromRect:rect inView:self.view];
         }
@@ -1133,8 +1134,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
         
         if (_menu) {
-            CGRect rect = CGRectMake(25, 10, self.view.frame.size.width
-                                     - 50, self.view.frame.size.height -20);
+            CGRect rect = CGRectMake(25, 0, self.view.frame.size.width
+                                     - 50, self.view.frame.size.height);
             
             [_menu showFromRect:rect inView:self.view];
         }

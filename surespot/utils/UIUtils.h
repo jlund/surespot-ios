@@ -19,4 +19,6 @@
 + (void)setAppAppearances;
 + (BOOL)stringIsNilOrEmpty:(NSString*)aString;
 +(CGFloat) keyboardHeightAdjustedForOrientation: (CGSize) size;
++(UIColor *) surespotGrey;
++(UIColor *) surespotTransparentGrey;
 @end

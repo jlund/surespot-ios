@@ -19,6 +19,14 @@
     return [UIColor colorWithRed:0.2 green:0.71 blue:0.898 alpha:0.5];
 }
 
++(UIColor *) surespotGrey {
+    return [UIColor colorWithRed:22/255.0f green:22/255.0f blue:22/255.0f alpha:1.0f];
+}
+
++(UIColor *) surespotTransparentGrey {
+    return [UIColor colorWithRed:22/255.0f green:22/255.0f blue:22/255.0f alpha:0.5f];
+}
+
 +(void) showNotificationToastView:(UIView *) view  data:(NSDictionary *) notificationData {
     NSString * type = [notificationData valueForKeyPath:@"aps.alert.loc-key"];
     if (type && [type isEqualToString:@"notification_message"]) {
@@ -73,17 +81,18 @@
 
 + (void)setAppAppearances {
     if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
-        [[UINavigationBar appearance] setBarTintColor: [UIColor colorWithRed:22/255.0f green:22/255.0f blue:22/255.0f alpha:1.0f]];         }
+        [[UINavigationBar appearance] setBarTintColor: [self surespotGrey]];
+    }
     else {
-        [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:22/255.0f green:22/255.0f blue:22/255.0f alpha:1.0f]];
-      //  [[UINavigationBar appearance] setOpaque:YES];
+        [[UINavigationBar appearance] setTintColor: [self surespotGrey]];
+        //  [[UINavigationBar appearance] setOpaque:YES];
     }
     
     [[UIBarButtonItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [self surespotBlue],  UITextAttributeTextColor,nil] forState:UIControlStateNormal];
     
     [[UIButton appearance] setTitleColor:[self surespotBlue] forState:UIControlStateNormal];
     
-       
+    
     [[UINavigationBar appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [UIColor lightGrayColor],  UITextAttributeTextColor,nil]];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
