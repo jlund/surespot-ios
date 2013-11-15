@@ -2,13 +2,13 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="mXI-aR-0Jk">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
         <scene sceneID="26D-wz-Bwm">
             <objects>
-                <navigationController definesPresentationContext="YES" id="mXI-aR-0Jk" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="navigationController" definesPresentationContext="YES" id="mXI-aR-0Jk" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="0oc-Eq-hkf">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -24,7 +24,7 @@
         <!--Login View Controller-->
         <scene sceneID="5">
             <objects>
-                <viewController id="2" customClass="LoginViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="loginViewController" id="2" customClass="LoginViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="sVW-VT-uDz">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -85,7 +85,7 @@
         <!--Signup View Controller - create identity-->
         <scene sceneID="Tmn-To-eq6">
             <objects>
-                <viewController id="VAm-bF-dbx" customClass="SignupViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="signupViewController" id="VAm-bF-dbx" customClass="SignupViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WjX-SG-dIZ">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -206,7 +206,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="CFG-TY-gjC"/>
-        <segue reference="qzP-R7-Qz4"/>
+        <segue reference="lhN-By-7jG"/>
+        <segue reference="0Gr-2N-xaD"/>
     </inferredMetricsTieBreakers>
 </document>

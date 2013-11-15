@@ -12,7 +12,7 @@
 		6604A2C317626B9E0072216A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A2C217626B9E0072216A /* CoreGraphics.framework */; };
 		6604A2C917626B9E0072216A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6604A2C717626B9E0072216A /* InfoPlist.strings */; };
 		6604A2CB17626B9E0072216A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6604A2CA17626B9E0072216A /* main.m */; };
-		6604A2CF17626B9E0072216A /* SurespotAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6604A2CE17626B9E0072216A /* SurespotAppDelegate.m */; };
+		6604A2CF17626B9E0072216A /* SurespotAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6604A2CE17626B9E0072216A /* SurespotAppDelegate.mm */; };
 		6604A2D817626B9E0072216A /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6604A2D617626B9E0072216A /* MainStoryboard.storyboard */; };
 		6604A2DE17626B9E0072216A /* LoginViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6604A2DD17626B9E0072216A /* LoginViewController.mm */; };
 		6604A2E617626B9E0072216A /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A2E517626B9E0072216A /* SenTestingKit.framework */; };
@@ -115,7 +115,7 @@
 		6604A2CA17626B9E0072216A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6604A2CC17626B9E0072216A /* surespot-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "surespot-Prefix.pch"; sourceTree = "<group>"; };
 		6604A2CD17626B9E0072216A /* SurespotAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SurespotAppDelegate.h; sourceTree = "<group>"; };
-		6604A2CE17626B9E0072216A /* SurespotAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SurespotAppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		6604A2CE17626B9E0072216A /* SurespotAppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = SurespotAppDelegate.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6604A2DC17626B9E0072216A /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		6604A2DD17626B9E0072216A /* LoginViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = LoginViewController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6604A2E417626B9E0072216A /* surespotTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = surespotTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -479,7 +479,7 @@
 				661C2EC41762B12D000649E7 /* identity */,
 				66159700176F669A001B32C1 /* utils */,
 				6604A2CD17626B9E0072216A /* SurespotAppDelegate.h */,
-				6604A2CE17626B9E0072216A /* SurespotAppDelegate.m */,
+				6604A2CE17626B9E0072216A /* SurespotAppDelegate.mm */,
 				6604A2DC17626B9E0072216A /* LoginViewController.h */,
 				6604A2DD17626B9E0072216A /* LoginViewController.mm */,
 				6654441417F37BCE00F62F7F /* SwipeViewController.h */,
@@ -1059,7 +1059,7 @@
 				6604A2CB17626B9E0072216A /* main.m in Sources */,
 				665F4DF81831923C0083BCE7 /* REMenuItem.m in Sources */,
 				66D3B04D182D47DF00B37A6C /* SurespotLogFormatter.m in Sources */,
-				6604A2CF17626B9E0072216A /* SurespotAppDelegate.m in Sources */,
+				6604A2CF17626B9E0072216A /* SurespotAppDelegate.mm in Sources */,
 				6604A2DE17626B9E0072216A /* LoginViewController.mm in Sources */,
 				66E4F5B7176298CB00596E6B /* SocketIO.m in Sources */,
 				66FF1001182D3D920038ECA6 /* DDLog.m in Sources */,

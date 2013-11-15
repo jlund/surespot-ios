@@ -14,14 +14,14 @@
 #import "SurespotLogFormatter.h"
 #import "UIUtils.h"
 #import "TestFlight.h"
-
+#import "IdentityController.h"
 static const int ddLogLevel = LOG_LEVEL_OFF;
 
 @implementation SurespotAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-      [TestFlight takeOff:@"477c73c2-7b09-4198-a7a8-95b5d3581f91"];
+    [TestFlight takeOff:@"477c73c2-7b09-4198-a7a8-95b5d3581f91"];
     
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge|UIReturnKeyDefault) ];
     if  (launchOptions) {
@@ -31,6 +31,28 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [DDLog addLogger:[DDTTYLogger sharedInstance]];
     [[DDTTYLogger sharedInstance]setLogFormatter: [SurespotLogFormatter new]];
     [UIUtils setAppAppearances];
+    
+    //show create if we don't have any identities, otherwise login
+    
+    UIStoryboard *storyboard = self.window.rootViewController.storyboard;
+    UINavigationController *rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"navigationController"];
+    self.window.rootViewController = rootViewController;
+    
+    
+    
+    if ([[[IdentityController sharedInstance] getIdentityNames ] count] == 0 ) {
+        
+        [rootViewController setViewControllers:@[[storyboard instantiateViewControllerWithIdentifier:@"loginViewController"], [storyboard instantiateViewControllerWithIdentifier:@"signupViewController"]]];
+    }
+    else {
+       [rootViewController setViewControllers:@[[storyboard instantiateViewControllerWithIdentifier:@"loginViewController"]]];
+    }
+    
+    [self.window makeKeyAndVisible];
+    
+    
+    
+    
     return YES;
 }
 
@@ -55,20 +77,20 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             //                                                      otherButtonTitles:nil];
             //            [alertView show];
             
-                   [notificationData setObject:@"active" forKey:@"applicationState"];
-//            if ([[userInfo valueForKeyPath:@"aps.alert.loc-key" ] isEqualToString:@"notification_message"]) {
-//
-//                
-//                NSString * to =[ userInfo objectForKey:@"to"];
-//                NSString * from =[ userInfo objectForKey:@"from"];
-//                
-//                UILocalNotification* localNotification = [[UILocalNotification alloc] init];
-//                localNotification.fireDate = nil;
-//                localNotification.alertBody = [NSString stringWithFormat: NSLocalizedString(@"notification_message", nil), to, from];
-//                localNotification.alertAction = NSLocalizedString(@"notification_title", nil);
-//                localNotification.soundName = UILocalNotificationDefaultSoundName;
-//                [application scheduleLocalNotification:localNotification];
-//            }
+            [notificationData setObject:@"active" forKey:@"applicationState"];
+            //            if ([[userInfo valueForKeyPath:@"aps.alert.loc-key" ] isEqualToString:@"notification_message"]) {
+            //
+            //
+            //                NSString * to =[ userInfo objectForKey:@"to"];
+            //                NSString * from =[ userInfo objectForKey:@"from"];
+            //
+            //                UILocalNotification* localNotification = [[UILocalNotification alloc] init];
+            //                localNotification.fireDate = nil;
+            //                localNotification.alertBody = [NSString stringWithFormat: NSLocalizedString(@"notification_message", nil), to, from];
+            //                localNotification.alertAction = NSLocalizedString(@"notification_title", nil);
+            //                localNotification.soundName = UILocalNotificationDefaultSoundName;
+            //                [application scheduleLocalNotification:localNotification];
+            //            }
             
             
             break;
@@ -100,13 +122,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     
- //   DDLogVerbose(@"background");
+    //   DDLogVerbose(@"background");
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-  //  DDLogVerbose(@"foreground");
+    //  DDLogVerbose(@"foreground");
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
