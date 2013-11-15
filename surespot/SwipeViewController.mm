@@ -72,16 +72,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _textField.enablesReturnKeyAutomatically = NO;
     [self registerForKeyboardNotifications];
     
-  //  [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[UIImage imageNamed:@"surespot_logo"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-//    [self.navigationItem.leftBarButtonItem setImage:];
-      //  [[UINavigationBar appearance] setBackIndicatorImage:[UIImage imageNamed:@"surespot_logo"] ];
     
     UIButton *backButton = [[UIButton alloc] initWithFrame: CGRectMake(0, 0, 36.0f, 36.0f)];
     
     UIImage *backImage = [UIImage imageNamed:@"surespot_logo"];
     [backButton setBackgroundImage:backImage  forState:UIControlStateNormal];
     [backButton setContentMode:UIViewContentModeScaleAspectFit];
- 
+    
     [backButton addTarget:self action:@selector(backPressed) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     self.navigationItem.leftBarButtonItem = backButtonItem;
@@ -96,7 +93,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     }
-        
+    
     
     //listen for refresh notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshMessages:) name:@"refreshMessages" object:nil];
@@ -468,20 +465,35 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return 1;
 }
 
+- (NSInteger) indexForTableView: (UITableView *) tableView {
+    if (tableView == _friendView) {
+        return 0;
+    }
+    @synchronized (_chats) {
+        NSArray * sortedChats = [self sortedChats];
+        for (int i=0; i<[_chats count]; i++) {
+            if ([_chats objectForKey:[sortedChats objectAtIndex:i]] == tableView) {
+                return i+1;
+                
+            }
+            
+        }}
+    
+    return NSNotFound;
+    
+    
+}
+
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSUInteger index =  NSNotFound;
+    NSUInteger index = [self indexForTableView:tableView];
     
-    @synchronized (_chats) {
-        index = [[_chats allValues] indexOfObject:tableView];
-    }
     
     if (index == NSNotFound) {
         index = [_swipeView indexOfItemViewOrSubview:tableView];
     }
-    else {
-        index++;
-    }
+    
     DDLogVerbose(@"number of rows in section, index: %d", index);
     // Return the number of rows in the section
     if (index == 0) {
@@ -512,9 +524,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
 }
 
+
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSInteger index = [_swipeView indexOfItemViewOrSubview:tableView];
+    NSInteger index = [self indexForTableView:tableView];
+    
+    if (index == NSNotFound) {
+        index = [_swipeView indexOfItemViewOrSubview:tableView];
+    }
     
     //  DDLogVerbose(@"height for row, index: %d, indexPath: %@", index, indexPath);
     if (index == NSNotFound) {
@@ -562,7 +580,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     
     
-    NSInteger index = [_swipeView indexOfItemViewOrSubview:tableView];
+    NSInteger index = [self indexForTableView:tableView];
+    
+    if (index == NSNotFound) {
+        index = [_swipeView indexOfItemViewOrSubview:tableView];
+    }
+    
+
     //  DDLogVerbose(@"cell for row, index: %d, indexPath: %@", index, indexPath);
     if (index == NSNotFound) {
         static NSString *CellIdentifier = @"Cell";
