@@ -8,6 +8,15 @@
 
 #import "HomeCell.h"
 #import "UIUtils.h"
+#import "DDLog.h"
+
+
+#ifdef DEBUG
+static const int ddLogLevel = LOG_LEVEL_INFO;
+#else
+static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
+
 
 #define INVITE_ACTION_BLOCK 0;
 #define INVITE_ACTION_IGNORE 1;
@@ -22,6 +31,7 @@
         self.backgroundColor = [UIColor whiteColor];
     }
     //    self.backgroundColor = [UIColor whiteColor];
+    DDLogInfo(@"width: %f",self.frame.size.width);
 }
 
 - (IBAction)inviteAction:(id)sender {
@@ -44,5 +54,8 @@
 }
 
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+}
 
 @end
