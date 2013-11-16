@@ -45,7 +45,7 @@
         _name = [coder decodeObjectForKey:@"name"];
         _flags = [coder decodeIntegerForKey:@"flags"];
         _imageUrl = [coder decodeObjectForKey:@"imageUrl"];
-        _imageIv = [coder decodeObjectForKey:@"imageIv"];                        
+        _imageIv = [coder decodeObjectForKey:@"imageIv"];
         _imageVersion = [coder decodeObjectForKey:@"imageVersion"];
     }
     return self;
@@ -63,23 +63,23 @@
 -(void) encodeWithCoder:(NSCoder *)encoder {
     [encoder encodeObject:_name forKey:@"name"];
     [encoder encodeInteger:_flags forKey:@"flags"];
-  //  [encoder encodeObject:_imageVersion forKey:@"imageVersion"];
-  //  [encoder encodeObject:_imageUrl forKey:@"imageUrl"];
-  //  [encoder encodeObject:_imageIv forKey:@"imageIv"];
+    //  [encoder encodeObject:_imageVersion forKey:@"imageVersion"];
+    //  [encoder encodeObject:_imageUrl forKey:@"imageUrl"];
+    //  [encoder encodeObject:_imageIv forKey:@"imageIv"];
 }
 
 -(void) setFriend {
- //   if (set) {
-  //      _flags |= NEW_FRIEND;
-        _flags &= ~INVITED;
-        _flags &= ~INVITER;
-        _flags &= ~DELETED;
-   // }
-//    else {
-//        _flags &= ~NEW_FRIEND;
-//    }
+    //   if (set) {
+    //      _flags |= NEW_FRIEND;
+    _flags &= ~INVITED;
+    _flags &= ~INVITER;
+    _flags &= ~DELETED;
+    // }
+    //    else {
+    //        _flags &= ~NEW_FRIEND;
+    //    }
     
-
+    
 }
 
 
@@ -95,9 +95,11 @@
         _flags &= ~INVITER;
     }
 }
+
 -(BOOL) isInvited {
     return (_flags & INVITED) == INVITED;
 }
+
 -(void) setInvited: (BOOL) set {
     if (set) {
         _flags |= INVITED;
@@ -106,20 +108,20 @@
         _flags &= ~INVITED;
     }
 }
+
 -(BOOL) isDeleted {
     return (_flags & DELETED) == DELETED;
 }
--(void) setDeleted: (BOOL) set {
-    if (set) {
-        _flags |= DELETED;
-    }
-    else {
-        _flags &= ~DELETED;
-    }
+
+-(void) setDeleted {
+    int active = _flags & CHAT_ACTIVE;
+    _flags = DELETED | active;
 }
+
 -(BOOL) isChatActive {
     return (_flags & CHAT_ACTIVE) == CHAT_ACTIVE;
 }
+
 -(void) setChatActive:(BOOL)set {
     if (set) {
         _flags |= CHAT_ACTIVE;
@@ -127,6 +129,10 @@
     else {
         _flags &= ~CHAT_ACTIVE;
     }
+}
+
+-(BOOL) isFriend {
+    return  !self.isInvited && !self.isInviter;
 }
 
 -(BOOL) isEqual:(id)other {

@@ -27,10 +27,10 @@
 -(void) setInvited: (BOOL) set;
 
 -(BOOL) isDeleted;
--(void) setDeleted: (BOOL) set;
+-(void) setDeleted;
 -(BOOL) isChatActive;
 -(void) setChatActive: (BOOL) set;
 
-
+-(BOOL) isFriend;
 
 @end

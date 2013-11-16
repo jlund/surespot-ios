@@ -611,7 +611,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
      
      failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
          //TODO notify user
-     }];
+    }];
     
 }
 
@@ -709,7 +709,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
             [_homeDataSource removeFriend:theFriend withRefresh:YES];
         }
         else {
-            [theFriend setDeleted:YES];
+            [theFriend setDeleted];
         }
     }
 }

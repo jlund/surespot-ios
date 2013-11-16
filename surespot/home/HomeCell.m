@@ -31,7 +31,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         self.backgroundColor = [UIColor whiteColor];
     }
     //    self.backgroundColor = [UIColor whiteColor];
-    DDLogInfo(@"width: %f",self.frame.size.width);
+    DDLogVerbose(@"width: %f",self.frame.size.width);
 }
 
 - (IBAction)inviteAction:(id)sender {

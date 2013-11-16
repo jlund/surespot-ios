@@ -367,10 +367,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) sort {
     @synchronized (_messages) {
-        DDLogVerbose(@"sorting messages");
+        DDLogVerbose(@"sorting messages for %@", _username);
         NSArray *sortedArray;
         sortedArray = [_messages sortedArrayUsingComparator:^NSComparisonResult(SurespotMessage * a, SurespotMessage * b) {
-            //   DDLogVerbose(@"comparing a serverid: %d, b serverId: %d", a.serverid, b.serverid);
+               DDLogVerbose(@"comparing a serverid: %d, b serverId: %d", a.serverid, b.serverid);
             if (a.serverid == b.serverid) {return NSOrderedSame;}
             if (a.serverid == 0) {return NSOrderedDescending;}
             if (b.serverid == 0) {return NSOrderedAscending;}

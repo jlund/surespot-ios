@@ -568,7 +568,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 else {
                     height  = message.rowPortraitHeight;
                 }
-        
+                
                 if (height > 0) {
                     return height;
                 }
@@ -595,7 +595,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         index = [_swipeView indexOfItemViewOrSubview:tableView];
     }
     
-
+    
     //  DDLogVerbose(@"cell for row, index: %d, indexPath: %@", index, indexPath);
     if (index == NSNotFound) {
         static NSString *CellIdentifier = @"Cell";
@@ -651,7 +651,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         bgColorView.backgroundColor = [UIUtils surespotBlue];
         bgColorView.layer.masksToBounds = YES;
         cell.selectedBackgroundView = bgColorView;
-
+        
         return cell;
     }
     else {
@@ -662,7 +662,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
         NSString * username = aKey;
         NSArray * messages =[[ChatController sharedInstance] getDataSourceForFriendname: username].messages;
-        if (messages.count > 0) {
+        if (messages.count > 0 && indexPath.row < messages.count) {
             
             
             SurespotMessage * message =[messages objectAtIndex:indexPath.row];
@@ -726,7 +726,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             bgColorView.backgroundColor = [UIUtils surespotBlue];
             bgColorView.layer.masksToBounds = YES;
             cell.selectedBackgroundView = bgColorView;
-
+            
             return cell;
         }
         else {
@@ -743,10 +743,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     DDLogVerbose(@"selected, on page: %d", page);
     
     if (page == 0) {
+        Friend * afriend = [[[ChatController sharedInstance] getHomeDataSource].friends objectAtIndex:indexPath.row];
         
-        // Configure the cell...
-        NSString * friendname =[[[[ChatController sharedInstance] getHomeDataSource].friends objectAtIndex:indexPath.row] name];
-        [self showChat:friendname];
+        if (afriend && [afriend isFriend]) {
+            NSString * friendname =[afriend name];
+            [self showChat:friendname];
+        }
+        else {
+         [_friendView deselectRowAtIndexPath:[_friendView indexPathForSelectedRow] animated:YES];
+        }
     }
 }
 
@@ -1014,7 +1019,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }];
     
     return menu;
-
+    
 }
 
 
