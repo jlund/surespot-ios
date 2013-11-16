@@ -365,16 +365,13 @@ static const int MAX_CONNECTION_RETRIES = 16;
                 [dict setObject:@"text/plain" forKey:@"mimeType"];
                 [dict setObject:[NSNumber  numberWithBool:FALSE] forKey:@"shareable"];
                 
-                
-                
-                
-                
                 SurespotMessage * sm =[[SurespotMessage alloc] initWithDictionary: dict];
                 
                 [self enqueueMessage:sm];
                 [self sendMessages];
                 //cache the plain data locally
                 sm.plainData = message;
+                [UIUtils setMessageHeights:sm size:[UIScreen mainScreen].bounds.size];
                 
                 ChatDataSource * dataSource = [self getDataSourceForFriendname: friendname];
                 [dataSource addMessage: sm refresh:YES];

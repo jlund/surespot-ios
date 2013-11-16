@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SurespotMessage.h"
 
 @interface UIUtils : NSObject
 + (void) showNotificationToastView:(UIView *) view data:(NSDictionary *) notificationData;
@@ -21,4 +22,5 @@
 +(CGFloat) keyboardHeightAdjustedForOrientation: (CGSize) size;
 +(UIColor *) surespotGrey;
 +(UIColor *) surespotTransparentGrey;
++(void) setMessageHeights: (SurespotMessage *)  message size: (CGSize) size;
 @end

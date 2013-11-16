@@ -8,6 +8,7 @@
 
 #import "UIUtils.h"
 #import "Toast+UIView.h"
+#import "ChatUtils.h"
 
 @implementation UIUtils
 
@@ -110,6 +111,28 @@
     }
     else {
         return size.height;
+    }
+}
+
++(void) setMessageHeights: (SurespotMessage *)  message size: (CGSize) size { 
+    NSString * plaintext = message.plainData;
+    
+    //figure out message height for both orientations
+    if (plaintext){
+        
+        //BOOL ours = [ChatUtils isOurMessage:message];
+        
+        UIFont *cellFont = [UIFont fontWithName:@"Helvetica" size:17.0];
+        CGSize constraintSize = CGSizeMake(size.width -70, MAXFLOAT);
+        
+        //http://stackoverflow.com/questions/12744558/uistringdrawing-methods-dont-seem-to-be-thread-safe-in-ios-6
+        CGSize labelSize =       [self threadSafeSizeString:plaintext WithFont:cellFont constrainedToSize:constraintSize];
+        [message setRowPortraitHeight:(int) (labelSize.height + 20 > 44 ? labelSize.height + 20 : 44) ];
+        
+        constraintSize = CGSizeMake(size.height - 70 , MAXFLOAT);
+        
+        labelSize =      [UIUtils threadSafeSizeString:plaintext WithFont:cellFont constrainedToSize:constraintSize];
+        [message setRowLandscapeHeight:(int) (labelSize.height + 20 > 44 ? labelSize.height + 20 : 44) ];
     }
 }
 @end

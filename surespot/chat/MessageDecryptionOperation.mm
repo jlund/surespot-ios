@@ -16,11 +16,11 @@
 @end
 
 @implementation MessageDecryptionOperation
--(id) initWithMessage: (SurespotMessage *) message width: (CGFloat) width completionCallback:(void(^)(SurespotMessage *))  callback {
+-(id) initWithMessage: (SurespotMessage *) message size: (CGSize) size completionCallback:(void(^)(SurespotMessage *))  callback {
     if (self = [super init]) {
         self.callback = callback;
         self.message = message;
-        self.width = width;
+        self.size = size;
         _isExecuting = NO;
         _isFinished = NO;
     }
@@ -41,19 +41,10 @@
             
             _message.plainData = plaintext;
             
-            //figure out message height
+            //figure out message height for both orientations
             if (plaintext){
-                
-                UIFont *cellFont = [UIFont fontWithName:@"Helvetica" size:17.0];
-                CGSize constraintSize = CGSizeMake(_width - 40, MAXFLOAT);
-                
-                //http://stackoverflow.com/questions/12744558/uistringdrawing-methods-dont-seem-to-be-thread-safe-in-ios-6
-                CGSize labelSize = //[plaintext sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWord
-                [UIUtils threadSafeSizeString:plaintext WithFont:cellFont constrainedToSize:constraintSize];
-                [_message setRowHeight:(int) (labelSize.height + 20 > 44 ? labelSize.height + 20 : 44) ];
-            }
-            
-            
+                [UIUtils setMessageHeights:_message size:_size];
+            }     
             
             [self finish];
             

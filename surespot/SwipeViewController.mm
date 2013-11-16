@@ -560,8 +560,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             NSArray * messages =[[ChatController sharedInstance] getDataSourceForFriendname: username].messages;
             if (messages.count > 0 && (indexPath.row < messages.count)) {
                 SurespotMessage * message =[messages objectAtIndex:indexPath.row];
-                if (message.rowHeight > 0) {
-                    return message.rowHeight;
+                UIInterfaceOrientation  orientation = [[UIApplication sharedApplication] statusBarOrientation];
+                NSInteger height = 44;
+                if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+                    height = message.rowLandscapeHeight;
+                }
+                else {
+                    height  = message.rowPortraitHeight;
+                }
+        
+                if (height > 0) {
+                    return height;
                 }
                 
                 else {

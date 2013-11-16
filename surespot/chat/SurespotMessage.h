@@ -26,7 +26,8 @@
 @property (atomic, assign) NSInteger resendId;
 @property (atomic, assign, getter=isLoading) BOOL loading;
 @property (atomic, assign, getter=isLoaded) BOOL loaded;
-@property (atomic, assign) NSInteger rowHeight;
+@property (atomic, assign) NSInteger rowPortraitHeight;
+@property (atomic, assign) NSInteger rowLandscapeHeight;
 
 - (NSString *) getOtherUser;
 - (NSString *) getTheirVersion;

@@ -14,9 +14,9 @@
 
 @property (nonatomic, strong) SurespotMessage * message;
 @property (nonatomic, strong) void (^callback) (SurespotMessage *);
-@property (nonatomic, assign) CGFloat width;
+@property (nonatomic, assign) CGSize size;
 
--(id) initWithMessage: (SurespotMessage *) message width: (CGFloat) width completionCallback:(void(^)(SurespotMessage *))  callback;
+-(id) initWithMessage: (SurespotMessage *) message size: (CGSize) size completionCallback:(void(^)(SurespotMessage *))  callback;
 @end
 
 

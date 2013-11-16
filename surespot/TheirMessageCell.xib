@@ -27,7 +27,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="6hK-2i-BEE" userLabel="message label">
-                        <rect key="frame" x="63" y="14" width="307" height="29"/>
+                        <rect key="frame" x="63" y="14" width="240" height="29"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="highlightedColor"/>

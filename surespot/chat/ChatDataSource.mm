@@ -57,7 +57,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             //convert messages to SurespotMessage
             for (SurespotMessage * message in messages) {
-                            DDLogVerbose(@"adding message");
+                DDLogVerbose(@"adding message");
                 [self addMessage:message refresh:YES];
                 
                 //if the message doesn't have a server id, add it to the resend buffer
@@ -68,7 +68,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             }
             
             
-                    
+            
             DDLogVerbose(@"loaded %d messages from disk at: %@", [messages count] ,path);
             DDLogVerbose( @"latestMEssageid: %d, latestControlId: %d", _latestMessageId ,_latestControlMessageId);
             
@@ -134,7 +134,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 }
             }
         }
-
+        
         DDLogVerbose(@"looking for message iv: %@", message.iv);
         NSUInteger index = [self.messages indexOfObject:message];
         if (index == NSNotFound) {
@@ -142,19 +142,21 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             if (!message.plainData) {
                 BOOL blockRefresh = refresh;
                 refresh = false;
-                DDLogVerbose(@"added, now decrypting message iv: %@", message.iv);
+                CGSize size = [UIScreen mainScreen ].bounds.size;
                 
-                MessageDecryptionOperation * op = [[MessageDecryptionOperation alloc]initWithMessage:message width: 200 completionCallback:^(SurespotMessage  * message){
-                   // DDLogInfo(@"adding message post decryption iv: %@", message.iv);
+                DDLogVerbose(@"added, now decrypting message iv: %@, width: %f, height: %f", message.iv, size.width, size.height);
+                
+                MessageDecryptionOperation * op = [[MessageDecryptionOperation alloc]initWithMessage:message size: size completionCallback:^(SurespotMessage  * message){
+                    // DDLogInfo(@"adding message post decryption iv: %@", message.iv);
                     
-                
+                    
                     
                     if (blockRefresh) {
                         if ([_decryptionQueue operationCount] == 0) {
                             [self postRefresh];
                         }
                     }
-
+                    
                     
                 }];
                 [_decryptionQueue addOperation:op];
@@ -368,13 +370,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         DDLogVerbose(@"sorting messages");
         NSArray *sortedArray;
         sortedArray = [_messages sortedArrayUsingComparator:^NSComparisonResult(SurespotMessage * a, SurespotMessage * b) {
-         //   DDLogVerbose(@"comparing a serverid: %d, b serverId: %d", a.serverid, b.serverid);
+            //   DDLogVerbose(@"comparing a serverid: %d, b serverId: %d", a.serverid, b.serverid);
             if (a.serverid == b.serverid) {return NSOrderedSame;}
             if (a.serverid == 0) {return NSOrderedDescending;}
             if (b.serverid == 0) {return NSOrderedAscending;}
             if (a.serverid < b.serverid) return NSOrderedAscending;
             if (b.serverid < a.serverid) return NSOrderedDescending;
-          //  DDLogVerbose(@"returning same");
+            //  DDLogVerbose(@"returning same");
             return NSOrderedSame;
             
         }];
