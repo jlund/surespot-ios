@@ -102,6 +102,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     //listen for push notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushNotification:) name:@"pushNotification" object:nil];
     
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteFriend:) name:@"deleteFriend" object:nil];
     _homeDataSource = [[ChatController sharedInstance] getHomeDataSource];
     
     //show currently open tab immediately
@@ -750,7 +752,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [self showChat:friendname];
         }
         else {
-         [_friendView deselectRowAtIndexPath:[_friendView indexPathForSelectedRow] animated:YES];
+            [_friendView deselectRowAtIndexPath:[_friendView indexPathForSelectedRow] animated:YES];
         }
     }
 }
@@ -1156,6 +1158,20 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
 }
 
+- (void)deleteFriend:(NSNotification *)notification
+{
+    NSArray * data =  notification.object;
+    
+    NSString * name  =[data objectAtIndex:0];
+    BOOL ideleted = [[data objectAtIndex:1] boolValue];
+    
+    if (ideleted) {
+        [self closeTabName:name];
+    }
+    else {
+        //hide text field
+    }
+}
 
 -(void) closeTabName: (NSString *) name {
     if (name) {
@@ -1181,10 +1197,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [_homeDataSource setCurrentChat:name];
         [_homeDataSource postRefresh];
         
-        
-        
     }
-    
 }
 
 -(void) closeTab {

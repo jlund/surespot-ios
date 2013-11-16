@@ -365,6 +365,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
 }
 
+-(void) userDeleted {
+    
+    [self deleteTheirMessagesUTAI:NSIntegerMax];
+}
+
 -(void) sort {
     @synchronized (_messages) {
         DDLogVerbose(@"sorting messages for %@", _username);

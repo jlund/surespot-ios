@@ -190,6 +190,14 @@ static const int MAX_CONNECTION_RETRIES = 16;
         ChatDataSource * dataSource = [self.chatDataSources objectForKey:friendname];
         if (dataSource == nil) {
             dataSource = [[ChatDataSource alloc] initWithUsername:friendname loggedInUser:[[IdentityController sharedInstance] getLoggedInUser] availableId: availableId availableControlId:availableControlId] ;
+            
+            Friend  * afriend = [_homeDataSource getFriendByName:friendname];
+            if (afriend && [afriend isDeleted]) {
+                [dataSource userDeleted];
+            }
+            
+            
+            
             [self.chatDataSources setObject: dataSource forKey: friendname];
         }
         return dataSource;
@@ -404,8 +412,8 @@ static const int MAX_CONNECTION_RETRIES = 16;
 -(void) sendMessages {
     NSMutableArray * sendBuffer = _sendBuffer;
     _sendBuffer = [NSMutableArray new];
-
-    [sendBuffer enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {        
+    
+    [sendBuffer enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         [_resendBuffer addObject:obj];
         
         if (_socketIO) {
@@ -611,7 +619,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
      
      failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
          //TODO notify user
-    }];
+     }];
     
 }
 
@@ -690,27 +698,33 @@ static const int MAX_CONNECTION_RETRIES = 16;
         }
     }
     
-    //todo sort
     [_homeDataSource postRefresh];
-    
-    
 }
 
 -(void) handleDeleteUser: (NSString *) deleted deleter: (NSString *) deleter {
     DDLogVerbose(@"entered");
     
+    
     Friend * theFriend = [_homeDataSource getFriendByName:deleted];
+    
     if (theFriend) {
-        
-        NSString * username = [[IdentityController sharedInstance] getLoggedInUser];
+        NSString * username = [[IdentityController sharedInstance] getLoggedInUser];    
         BOOL iDeleted = [deleter isEqualToString:username];
         if (iDeleted) {
             
             [_homeDataSource removeFriend:theFriend withRefresh:YES];
+            
         }
         else {
             [theFriend setDeleted];
+            ChatDataSource * cds = [_chatDataSources objectForKey:deleter];
+            if (cds) {
+                [cds  userDeleted];
+            }
         }
+        
+        NSArray * data = [NSArray arrayWithObjects:theFriend.name, [NSNumber numberWithBool: iDeleted], nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteFriend" object: data];
     }
 }
 
