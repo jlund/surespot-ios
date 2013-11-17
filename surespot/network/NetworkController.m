@@ -59,7 +59,7 @@ NSString *const baseUrl = @"http://192.168.10.68:8080";
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:username,@"username",password,@"password",signature, @"authSig", nil];
     
-    //add apnTeken if we have one
+    //add apnToken if we have one
     NSData *  apnToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"apnToken"];
     if (apnToken) {
         [params setObject:[ChatUtils hexFromData:apnToken] forKey:@"apnToken"];
@@ -93,7 +93,15 @@ NSString *const baseUrl = @"http://192.168.10.68:8080";
 }
 
 -(void) addUser: (NSString *) username derivedPassword:  (NSString *)derivedPassword dhKey: (NSString *)encodedDHKey dsaKey: (NSString *)encodedDSAKey signature: (NSString *)signature version: (NSString *) version successBlock:(HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock {
-    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:username,@"username",derivedPassword,@"password",signature, @"authSig", encodedDHKey, @"dhPub", encodedDSAKey, @"dsaPub", version, @"version", nil];
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:username,@"username",derivedPassword,@"password",signature, @"authSig", encodedDHKey, @"dhPub", encodedDSAKey, @"dsaPub", version, @"version", nil];
+    
+    //add apnToken if we have one
+    NSData *  apnToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"apnToken"];
+    if (apnToken) {
+        [params setObject:[ChatUtils hexFromData:apnToken] forKey:@"apnToken"];
+    }
+
+    
     NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"users" parameters: params];
     
     
