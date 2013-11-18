@@ -30,6 +30,7 @@ typedef void (^CallbackDictionaryBlock) (NSDictionary * result);
 - (NSString *) getOurLatestVersion;
 - (void) getTheirLatestVersionForUsername: (NSString *) username callback:(CallbackStringBlock) callback;
 
+-(BOOL) verifyPublicKeys: (NSDictionary *) keys;
 
 
 

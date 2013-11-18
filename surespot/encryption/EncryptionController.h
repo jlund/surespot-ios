@@ -107,4 +107,6 @@ extern int const AES_KEY_LENGTH;
 +  (ECDSAPublicKey) recreateDsaPublicKey: (NSString *) encodedKey;
 +(void) symmetricEncryptString: (NSString *) plaintext ourVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion: (NSString *)  theirVersion iv: (NSData *) iv callback: (CallbackBlock) callback;
 +(void) symmetricDecryptString: (NSString *) cipherData ourVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion: (NSString *) theirVersion iv: (NSString *) iv callback: (CallbackBlock) callback;
+
++(BOOL) verifyPublicKeySignature: (NSData *) signature data: (NSData *) data;
 @end

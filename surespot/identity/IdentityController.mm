@@ -18,6 +18,7 @@
 #import "CredentialCachingController.h"
 #import "ChatController.h"
 #import "DDLog.h"
+#import "NSData+Base64.h"
 
 static const int ddLogLevel = LOG_LEVEL_OFF;
 
@@ -225,6 +226,28 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
 
 -(void) getSharedSecretForOurVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion:( NSString *) theirVersion callback:(CallbackBlock) callback {
     [[CredentialCachingController sharedInstance] getSharedSecretForOurVersion:ourVersion theirUsername:theirUsername theirVersion:theirVersion callback:callback];
+}
+
+-(BOOL) verifyPublicKeys: (NSDictionary *) keys {
+    
+    BOOL dhVerify = [EncryptionController
+                     verifyPublicKeySignature: [NSData dataFromBase64String:[keys objectForKey:@"dhPubSig"]]
+                     data:[keys objectForKey:@"dhPub"]];
+    
+    if (!dhVerify) {
+        return NO;
+    }
+    
+    BOOL dsaVerify = [EncryptionController
+                     verifyPublicKeySignature: [NSData dataFromBase64String:[keys objectForKey:@"dsaPubSig"]]
+                     data:[keys objectForKey:@"dsaPub"]];
+    
+    if (!dsaVerify) {
+        return NO;
+    }
+    
+    return YES;
+ 
 }
 
 @end

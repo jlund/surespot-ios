@@ -10,15 +10,22 @@
 #import "CredentialCachingController.h"
 #import "NSData+Base64.h"
 #import "DDLog.h"
+#import "SurespotConstants.h"
+#import "cryptlib.h"
+#import "filters.h"
 
 using CryptoPP::BitBucket;
 static CryptoPP::AutoSeededRandomPool rng;
 
 #ifdef DEBUG
-static const int ddLogLevel = LOG_LEVEL_OFF;
+static const int ddLogLevel = LOG_LEVEL_INFO;
 #else
 static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
+
+@interface EncryptionController()
++(ECDSAPPublicKey) serverPublicKey;
+@end
 
 @implementation EncryptionController
 
@@ -26,6 +33,18 @@ int const IV_LENGTH = 16;
 int const SALT_LENGTH = 16;
 int const AES_KEY_LENGTH = 32;
 int const PBKDF_ROUNDS = 1000;
+
++(ECDSAPPublicKey) serverPublicKey {
+    static ECDSAPPublicKey serverPublicKey;
+    static dispatch_once_t oncePredicate;
+    
+    dispatch_once(&oncePredicate, ^{
+        serverPublicKey = [self recreateDsaPublicKey:serverPublicKeyString];
+    });
+    
+    return serverPublicKey;
+}
+
 
 + (NSData *) encryptIdentity:(NSData *) identityData withPassword:(NSString *) password
 {
@@ -213,14 +232,16 @@ int const PBKDF_ROUNDS = 1000;
     ByteQueue byteQueue;
     byteQueue.Put((byte *) [decodedKey bytes], [decodedKey length]);
     publicKey.Load(byteQueue);
-    publicKey.Validate(rng, 3);
+    bool validated = publicKey.Validate(rng, 3);
     
+    if (!validated) {
+        DDLogWarn(@"public key not validated");
+    }
     return publicKey;
 }
 
 
 + (ECDHPrivateKey) recreateDhPrivateKey:(NSString *) encodedKey {
-    
     
     ECDHPrivateKey privateKey;
     NSData * decodedKey = [NSData dataFromBase64String: encodedKey];
@@ -238,7 +259,11 @@ int const PBKDF_ROUNDS = 1000;
     ByteQueue byteQueue;
     byteQueue.Put((byte *) [decodedKey bytes], [decodedKey length]);
     publicKey.Load(byteQueue);
-    publicKey.Validate(rng, 3);
+    bool validated = publicKey.Validate(rng, 3);
+    
+    if (!validated) {
+        DDLogWarn(@"public key not validated");
+    }
     
     return publicKey;
 }
@@ -280,6 +305,29 @@ int const PBKDF_ROUNDS = 1000;
     [sig appendBytes:buffer length:put];
     
     return sig;
+}
+
++(BOOL) verifyPublicKeySignature: (NSData *) signature data: (NSString *) data {
+    CryptoPP::ECDSA<ECP, SHA256>::Verifier verifier( [self serverPublicKey]);
+    NSMutableData * keyData = [NSMutableData dataWithData:[data dataUsingEncoding:NSUTF8StringEncoding ]];
+    byte * buffer = new Byte[verifier.SignatureLength()];
+    
+    int put = CryptoPP::DSAConvertSignatureFormat(buffer,verifier.SignatureLength(), CryptoPP::DSASignatureFormat::DSA_P1363, reinterpret_cast<unsigned char const* >([signature bytes]), [signature length], CryptoPP::DSASignatureFormat::DSA_DER);
+    
+    [keyData appendBytes:buffer length:put];
+    delete buffer;
+    
+    bool result = false;
+    StringSource ss((byte *)[keyData bytes], [keyData length], true,
+                    new CryptoPP::SignatureVerificationFilter(
+                                                              verifier,
+                                                              new CryptoPP::ArraySink((byte*)&result, sizeof(result)),
+                                                              CryptoPP::SignatureVerificationFilter::Flags::PUT_RESULT |
+                                                              CryptoPP::SignatureVerificationFilter::Flags::SIGNATURE_AT_END
+                                                              ) // SignatureVerificationFilter
+                    ); // StringSource}
+    return result ? YES : NO;
+    
 }
 
 +(IdentityKeys *) generateKeyPairs {

@@ -11,7 +11,12 @@
 #import "EncryptionController.h"
 #import "DDLog.h"
 
+#ifdef DEBUG
+static const int ddLogLevel = LOG_LEVEL_INFO;
+#else
 static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
+
 
 @interface GetPublicKeysOperation()
 @property (nonatomic, strong) NSString * username;
@@ -47,27 +52,40 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
      andVersion: self.version
      successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
          
-         
+         if (JSON) {
+             DDLogInfo(@"verifying public keys for %@", _username);
+             BOOL verified = [[IdentityController sharedInstance  ] verifyPublicKeys: JSON];
+             
+             if (!verified) {
+                 DDLogWarn(@"could not verify public keys!");
+                 [self finish: nil];
+             }
+             else {
+                 DDLogInfo(@"public keys verified against server signature");
 
-         //recreate public keys
-         //todo verify
-         NSDictionary * jsonKeys = JSON;
-         
-         NSString * spubDH = [jsonKeys objectForKey:@"dhPub"];
-         NSString * spubDSA = [jsonKeys objectForKey:@"dsaPub"];
-         DDLogVerbose(@"get public keys response: %d, key: %@",  [response statusCode], spubDH);
-         
-         ECDHPublicKey dhPub = [EncryptionController recreateDhPublicKey:spubDH];
-         ECDHPublicKey dsaPub = [EncryptionController recreateDsaPublicKey:spubDSA];
-         
-         PublicKeys* pk = [[PublicKeys alloc] init];
-         pk.dhPubKey = dhPub;
-         pk.dsaPubKey = dsaPub;
-         pk.version = _version;
-         pk.lastModified = [NSNumber numberWithLong: [[NSDate date] timeIntervalSince1970] * 1000];
-         
-         DDLogVerbose(@"get public keys calling callback");
-         [self finish:pk];
+                 //recreate public keys
+                 NSDictionary * jsonKeys = JSON;
+                 
+                 NSString * spubDH = [jsonKeys objectForKey:@"dhPub"];
+                 NSString * spubDSA = [jsonKeys objectForKey:@"dsaPub"];
+                 DDLogVerbose(@"get public keys response: %d, key: %@",  [response statusCode], spubDH);
+                 
+                 ECDHPublicKey dhPub = [EncryptionController recreateDhPublicKey:spubDH];
+                 ECDHPublicKey dsaPub = [EncryptionController recreateDsaPublicKey:spubDSA];
+                 
+                 PublicKeys* pk = [[PublicKeys alloc] init];
+                 pk.dhPubKey = dhPub;
+                 pk.dsaPubKey = dsaPub;
+                 pk.version = _version;
+                 pk.lastModified = [NSNumber numberWithLong: [[NSDate date] timeIntervalSince1970] * 1000];
+                 
+                 DDLogVerbose(@"get public keys calling callback");
+                 [self finish:pk];
+             }
+         }
+         else {
+             [self finish:nil];
+         }
          
      } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
          
