@@ -1,7 +1,11 @@
 #import "UIViewPager.h"
 #import "UIUtils.h"
+#import "DDLog.h"
+
+
 
 @interface  UIViewPager()
+@property UIImageView *homeView;
 @property UILabel *firstLabel;
 @property CGFloat firstLabelWidth;
 @property UILabel *secondLabel;
@@ -10,6 +14,12 @@
 @property CGFloat thirdLabelWidth;
 @property CGFloat horizontalOffset;
 @end
+
+#ifdef DEBUG
+static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+#else
+static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
 
 
 @implementation UIViewPager
@@ -24,6 +34,11 @@
         UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
         [self addGestureRecognizer:tapGestureRecognizer];
         
+        
+        _homeView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_menu_home_blue"]];
+        _homeView.contentMode = UIViewContentModeScaleAspectFill;
+        _homeView.frame = CGRectMake(0, 0, 25, 25);
+        [self addSubview:_homeView];
     }
     return self;
 }
@@ -37,27 +52,55 @@
     return label;
 }
 
-- (void) layoutSubviews {    
+- (void) layoutSubviews {
     CGFloat width = self.bounds.size.width;
     
     int currentPage = [_delegate currentPage];
     int count = [_delegate pageCount];
     float offset = _horizontalOffset - currentPage * width;
-   
- //   DDLogVerbose(@"layoutsubviews, page: %d, count: %d,  adj offset: %f", currentPage, count, offset);
+    UIView * firstView;
+    UIView * secondView;
+    
+    DDLogInfo(@"layoutsubviews, page: %d, count: %d,  adj offset: %f", currentPage, count, offset);
     
     if (count == 0) {return;}
     
     if (currentPage == 0) {
+        _homeView.hidden = NO;
+        
+        firstView = _firstLabel;
         _firstLabel.text = @"";
+        _firstLabelWidth = [_firstLabel sizeThatFits:self.bounds.size].width;
+        
+        secondView = _homeView;
+        _secondLabel.text = @"";
+        _secondLabelWidth = _homeView.frame.size.width;
     }
     else {
-        _firstLabel.text = [_delegate titleForLabelForPage:currentPage-1];
+        if (currentPage == 1) {
+            _homeView.hidden = NO;
+            
+            firstView = _homeView;
+            _firstLabelWidth = _homeView.frame.size.width;
+            _firstLabel.text = @"";
+            
+            secondView = _secondLabel;        ;
+            _secondLabel.text = [_delegate titleForLabelForPage:currentPage];
+            _secondLabelWidth = [_secondLabel sizeThatFits:self.bounds.size].width;
+        }
+        else {
+            _homeView.hidden = YES;
+            firstView = _firstLabel;
+            _firstLabel.text = [_delegate titleForLabelForPage:currentPage-1];
+            _firstLabelWidth = [_firstLabel sizeThatFits:self.bounds.size].width;
+            
+            secondView = _secondLabel;        ;
+            _secondLabel.text = [_delegate titleForLabelForPage:currentPage];
+            _secondLabelWidth = [_secondLabel sizeThatFits:self.bounds.size].width;
+        }
     }
-    _firstLabelWidth = [_firstLabel sizeThatFits:self.bounds.size].width;
     
-    _secondLabel.text = [_delegate titleForLabelForPage:currentPage];
-    _secondLabelWidth = [_secondLabel sizeThatFits:self.bounds.size].width;
+    
     
     if ( currentPage < count - 1) {
         _thirdLabel.text = [_delegate titleForLabelForPage:currentPage + 1];
@@ -76,11 +119,11 @@
     if (firstLabelOffset < 0) {
         firstLabelOffset = 0;
     }
-    _firstLabel.frame = CGRectMake(firstLabelOffset, 0, _firstLabelWidth, self.bounds.size.height);
+    firstView.frame = CGRectMake(firstLabelOffset, 0, _firstLabelWidth, self.bounds.size.height);
     
     
     CGFloat secondLabelOffset = width/2 - _secondLabelWidth/2 - offset;
-    _secondLabel.frame = CGRectMake(secondLabelOffset, 0, _secondLabelWidth, self.bounds.size.height);
+    secondView.frame = CGRectMake(secondLabelOffset, 0, _secondLabelWidth, self.bounds.size.height);
     
     
     CGFloat thirdLabelOffset = width - _thirdLabelWidth;
@@ -96,7 +139,7 @@
 #pragma mark UIScrollViewDelegate protocol implementation.
 
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView {
-   // DDLogVerbose(@"Content offset:%@",NSStringFromCGPoint(scrollView.contentOffset));
+    // DDLogVerbose(@"Content offset:%@",NSStringFromCGPoint(scrollView.contentOffset));
     _horizontalOffset = scrollView.contentOffset.x;
     [self setNeedsLayout];
 }
