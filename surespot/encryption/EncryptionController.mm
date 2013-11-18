@@ -235,7 +235,7 @@ int const PBKDF_ROUNDS = 1000;
     bool validated = publicKey.Validate(rng, 3);
     
     if (!validated) {
-        DDLogWarn(@"public key not validated");
+        DDLogWarn(@"dh public key not validated");
     }
     return publicKey;
 }
@@ -248,7 +248,13 @@ int const PBKDF_ROUNDS = 1000;
     ByteQueue byteQueue;
     byteQueue.Put((byte *) [decodedKey bytes], [decodedKey length]);
     privateKey.Load(byteQueue);
-    privateKey.Validate(rng, 3);
+    bool validated = privateKey.Validate(rng, 3);
+    
+    
+    if (!validated) {
+        DDLogWarn(@"dh private key not validated");
+    }
+
     
     return privateKey;
 }
@@ -262,7 +268,7 @@ int const PBKDF_ROUNDS = 1000;
     bool validated = publicKey.Validate(rng, 3);
     
     if (!validated) {
-        DDLogWarn(@"public key not validated");
+        DDLogWarn(@"dsa public key not validated");
     }
     
     return publicKey;
@@ -277,10 +283,13 @@ int const PBKDF_ROUNDS = 1000;
     byteQueue.Put((byte *) [decodedKey bytes], [decodedKey length]);
     privateKey.Load(byteQueue);
     
-    privateKey.Validate(rng, 3);
+    bool validated = privateKey.Validate(rng, 3);
     
-    return privateKey;
+    if (!validated) {
+        DDLogWarn(@"dh private key not validated");
+    }
     
+    return privateKey;    
 }
 
 + (NSData *) signUsername: (NSString *) username andPassword: (NSData *) password withPrivateKey: (ECDSAPrivateKey) privateKey {
