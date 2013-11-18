@@ -59,6 +59,7 @@
 		66A2D910183A730D00785270 /* TheirMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66A2D90E183A730D00785270 /* TheirMessageCell.xib */; };
 		66A2D915183A732900785270 /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D912183A732900785270 /* LoadingView.m */; };
 		66A2D916183A732900785270 /* UIViewPager.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D914183A732900785270 /* UIViewPager.m */; };
+		66A2D919183A7A7F00785270 /* SurespotConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D918183A7A7F00785270 /* SurespotConstants.m */; };
 		66B3C8ED17B15F2300CC96EE /* ChatController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66B3C8EC17B15F2300CC96EE /* ChatController.mm */; };
 		66B3C8F017B17AC800CC96EE /* ChatDataSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66B3C8EF17B17AC800CC96EE /* ChatDataSource.mm */; };
 		66D3B04D182D47DF00B37A6C /* SurespotLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 66D3B04C182D47DF00B37A6C /* SurespotLogFormatter.m */; };
@@ -200,6 +201,8 @@
 		66A2D912183A732900785270 /* LoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoadingView.m; path = ui/LoadingView.m; sourceTree = "<group>"; };
 		66A2D913183A732900785270 /* UIViewPager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIViewPager.h; path = ui/UIViewPager.h; sourceTree = "<group>"; };
 		66A2D914183A732900785270 /* UIViewPager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIViewPager.m; path = ui/UIViewPager.m; sourceTree = "<group>"; };
+		66A2D917183A7A7F00785270 /* SurespotConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SurespotConstants.h; sourceTree = "<group>"; };
+		66A2D918183A7A7F00785270 /* SurespotConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SurespotConstants.m; sourceTree = "<group>"; };
 		66B3C8EB17B15F2300CC96EE /* ChatController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatController.h; path = chat/ChatController.h; sourceTree = "<group>"; };
 		66B3C8EC17B15F2300CC96EE /* ChatController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = ChatController.mm; path = chat/ChatController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		66B3C8EE17B17AC800CC96EE /* ChatDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatDataSource.h; path = chat/ChatDataSource.h; sourceTree = "<group>"; };
@@ -478,10 +481,13 @@
 				661C2EC51762C399000649E7 /* encryption */,
 				661C2EC41762B12D000649E7 /* identity */,
 				66159700176F669A001B32C1 /* utils */,
+				66A2D90C1836B7FF00785270 /* ui */,
 				6604A2CD17626B9E0072216A /* SurespotAppDelegate.h */,
 				6604A2CE17626B9E0072216A /* SurespotAppDelegate.mm */,
 				6604A2DC17626B9E0072216A /* LoginViewController.h */,
 				6604A2DD17626B9E0072216A /* LoginViewController.mm */,
+				66A2D917183A7A7F00785270 /* SurespotConstants.h */,
+				66A2D918183A7A7F00785270 /* SurespotConstants.m */,
 				6654441417F37BCE00F62F7F /* SwipeViewController.h */,
 				6654441517F37BCF00F62F7F /* SwipeViewController.mm */,
 				660EB27817FE3D7800DBC53C /* KeyboardState.h */,
@@ -540,7 +546,6 @@
 				66FF0FED1827FAEE0038ECA6 /* StateController.m */,
 				66D3B04B182D47DF00B37A6C /* SurespotLogFormatter.h */,
 				66D3B04C182D47DF00B37A6C /* SurespotLogFormatter.m */,
-				66A2D90C1836B7FF00785270 /* ui */,
 			);
 			name = utils;
 			sourceTree = "<group>";
@@ -1071,6 +1076,7 @@
 				6637108F181424DE009D5195 /* GetSharedSecretOperation.mm in Sources */,
 				66E4F5BA176298CB00596E6B /* SocketIOTransportWebsocket.m in Sources */,
 				6637107C1812EA1D009D5195 /* GenerateSharedSecretOperation.mm in Sources */,
+				66A2D919183A7A7F00785270 /* SurespotConstants.m in Sources */,
 				66E4F5BC176298CB00596E6B /* base64.c in Sources */,
 				665F4DF71831923C0083BCE7 /* REMenuContainerView.m in Sources */,
 				660EB27D17FE64D800DBC53C /* ChatUtils.mm in Sources */,

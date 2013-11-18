@@ -9,6 +9,7 @@
 #import "NetworkController.h"
 #import "ChatUtils.h"
 #import "DDLog.h"
+#import "SurespotConstants.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -16,8 +17,9 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
 
-NSString *const baseUrl = @"http://192.168.10.68:8080";
-// @"https://server.surespot.me:443"
+@interface NetworkController()
+@property (nonatomic, strong) NSString * baseUrl;
+@end
 
 @implementation NetworkController
 
@@ -26,7 +28,8 @@ NSString *const baseUrl = @"http://192.168.10.68:8080";
     static NetworkController *sharedInstance = nil;
     static dispatch_once_t oncePredicate;
     dispatch_once(&oncePredicate, ^{
-        sharedInstance = [[self alloc] initWithBaseURL:[NSURL URLWithString:baseUrl]];
+        sharedInstance = [[self alloc] init];
+        
     });
     
     return sharedInstance;
@@ -34,15 +37,19 @@ NSString *const baseUrl = @"http://192.168.10.68:8080";
 
 -(NetworkController*)init
 {
+    NSString * baseUrl = serverSecure ?
+        [NSString stringWithFormat: @"https://%@:%d", serverBaseIPAddress, serverPort] :
+        [NSString stringWithFormat: @"http://%@:%d", serverBaseIPAddress, serverPort];
+    
     //call super init
-    self = [super init];
+    self = [super initWithBaseURL:[NSURL URLWithString: baseUrl]];
     
     if (self != nil) {
+        _baseUrl = baseUrl;
         
         [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
         [self registerHTTPOperationClass:[AFHTTPRequestOperation class]];
-        
-        
+       
         
         // Accept HTTP Header; see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
         [self setDefaultHeader:@"Accept-Charset" value:@"utf-8"];
@@ -71,7 +78,7 @@ NSString *const baseUrl = @"http://192.168.10.68:8080";
     AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         
         //save the cookie
-        NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:baseUrl]];
+        NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:_baseUrl]];
         
         NSHTTPCookie * surespotCookie;
         for (NSHTTPCookie *cookie in cookies)
@@ -100,7 +107,7 @@ NSString *const baseUrl = @"http://192.168.10.68:8080";
     if (apnToken) {
         [params setObject:[ChatUtils hexFromData:apnToken] forKey:@"apnToken"];
     }
-
+    
     
     NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"users" parameters: params];
     
@@ -203,7 +210,7 @@ NSString *const baseUrl = @"http://192.168.10.68:8080";
 
 -(void) deleteCookies {
     //blow cookies away
-    NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:baseUrl]];
+    NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:_baseUrl]];
     for (NSHTTPCookie *cookie in cookies)
     {
         [[NSHTTPCookieStorage sharedHTTPCookieStorage]  deleteCookie:cookie];
@@ -219,7 +226,7 @@ NSString *const baseUrl = @"http://192.168.10.68:8080";
     AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
     [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
     [operation start];
-
+    
 }
 
 

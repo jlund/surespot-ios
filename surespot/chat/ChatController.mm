@@ -18,6 +18,7 @@
 #import "StateController.h"
 #import "DDLog.h"
 #import "UIUtils.h"
+#import "SurespotConstants.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
@@ -92,12 +93,9 @@ static const int MAX_CONNECTION_RETRIES = 16;
 -(void) connect {
     if (_socketIO) {
         DDLogVerbose(@"connecting socket");
-       // self.socketIO.useSecure = NO;
-      //  [self.socketIO connectToHost:@"192.168.10.68" onPort:8080];
-        
-        self.socketIO.useSecure = YES;
-        [self.socketIO connectToHost:@"server.surespot.me" onPort:443];
-
+        self.socketIO.useSecure = serverSecure;
+        [self.socketIO connectToHost:serverBaseIPAddress onPort:serverPort];
+         
     }
 }
 
