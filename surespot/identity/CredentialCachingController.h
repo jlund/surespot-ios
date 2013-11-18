@@ -26,5 +26,5 @@
 
 -(SurespotIdentity *) getIdentityWithUsername: (NSString *) username;
 - (void) getLatestVersionForUsername: (NSString *) username callback:(CallbackStringBlock) callback;
-
+-(void) clearUserData: (NSString *) username;
 @end

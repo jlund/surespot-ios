@@ -12,6 +12,8 @@
 #include "secblock.h"
 #import "IdentityController.h"
 #import "DDLog.h"
+#import "ChatUtils.h"
+
 using CryptoPP::SecByteBlock;
 
 
@@ -20,9 +22,15 @@ NSString * const HOME_FILENAME = @"home";
 NSString * const STATE_EXTENSION = @"sss";
 NSString * const CHAT_DATA_PREFIX = @"chatdata_";
 
+#ifdef DEBUG
+static const int ddLogLevel = LOG_LEVEL_INFO;
+#else
 static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
+
 
 @implementation FileController
+
 
 + (NSString*) getAppSupportDir {
     NSString *appSupportDir = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject];
@@ -57,6 +65,23 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 +(NSString *) getChatDataFilenameForSpot: (NSString *) spot {
     return [self getFilename:[CHAT_DATA_PREFIX stringByAppendingString:spot]];
+}
+
++(void) wipeDataForUsername: (NSString *) username friendUsername: (NSString *) friendUsername {
+    //todo delete public keys
+    
+    
+    
+    NSString * spot = [ChatUtils getSpotUserA:username userB:friendUsername];
+    NSString * messageFile = [self getChatDataFilenameForSpot:spot];
+    
+    DDLogInfo( @"wiping data for username: %@, friendname: %@, path: %@", username,friendUsername,messageFile);
+    //file manager thread safe supposedly
+    NSFileManager * fileMgr = [NSFileManager defaultManager];
+    BOOL wiped = [fileMgr removeItemAtPath:messageFile error:nil];
+    
+    DDLogInfo(@"wiped: %@", wiped ? @"YES" : @"NO");
+    
 }
 
 

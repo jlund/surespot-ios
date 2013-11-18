@@ -14,5 +14,5 @@
 + (NSString*) getAppSupportDir;
 + (NSData *)gzipDeflate:(NSData *) data;
 + (NSData *)gzipInflate:(NSData *) data;
-
++(void) wipeDataForUsername: (NSString *) username friendUsername: (NSString *) friendUsername;
 @end

@@ -47,10 +47,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         NSArray * messages;
         
         NSString * path =[FileController getChatDataFilenameForSpot:[ChatUtils getSpotUserA:username userB:loggedInUser]];
-        DDLogVerbose(@"looking for chat data at: %@", path);
+        DDLogInfo(@"looking for chat data at: %@", path);
         id chatData = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
         if (chatData) {
-            DDLogVerbose(@"loading chat data from: %@", path);
+            DDLogInfo(@"loading chat data from: %@", path);
             
             _latestControlMessageId = [[chatData objectForKey:@"latestControlMessageId"] integerValue];
             messages = [chatData objectForKey:@"messages"];
@@ -69,7 +69,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             
             
-            DDLogVerbose(@"loaded %d messages from disk at: %@", [messages count] ,path);
+            DDLogInfo(@"loaded %d messages from disk at: %@", [messages count] ,path);
             DDLogVerbose( @"latestMEssageid: %d, latestControlId: %d", _latestMessageId ,_latestControlMessageId);
             
             [self postRefresh];
@@ -79,6 +79,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             DDLogVerbose(@"getting messageData latestMessageId: %d, latestControlId: %d", _latestMessageId ,_latestControlMessageId);
             //load message data
+                DDLogInfo(@"startProgress");
             [[NSNotificationCenter defaultCenter] postNotificationName:@"startProgress" object:nil];
             [[NetworkController sharedInstance] getMessageDataForUsername:_username andMessageId:_latestMessageId andControlId:_latestControlMessageId successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                 DDLogVerbose(@"get messageData response: %d",  [response statusCode]);
@@ -102,11 +103,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 
                 
                 [self postRefresh];
+                    DDLogInfo(@"stopProgress");
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object:nil];
                 
                 
             } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
                 DDLogVerbose(@"get messagedata response error: %@",  Error);
+                    DDLogInfo(@"stopProgress");
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object:nil];
                 
             }];
@@ -214,7 +217,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     NSString * spot = [ChatUtils getSpotUserA:_loggedInUser userB:_username];
     NSString * filename =[FileController getChatDataFilenameForSpot: spot];
-    DDLogVerbose(@"saving chat data to disk, spot: %@", spot);
+    DDLogInfo(@"saving chat data to disk,filename: %@, spot: %@", filename, spot);
     NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
     
     @synchronized (_messages)  {

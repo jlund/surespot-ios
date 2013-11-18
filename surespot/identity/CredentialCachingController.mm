@@ -69,6 +69,39 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return [self.identities objectForKey:username];
 }
 
+-(void) clearUserData: (NSString *) friendname {
+    [_latestVersionsDict removeObjectForKey:friendname];
+    
+    //    NSString * sharedSecretKey = [NSString stringWithFormat:@"%@:%@:%@:%@", self.cache.loggedInUsername, self.ourVersion, self.theirUsername, self.theirVersion];
+    //      NSString * publicKeysKey = [NSString stringWithFormat:@"%@:%@", self.theirUsername, self.theirVersion];
+    
+    NSMutableArray * keysToRemove = [NSMutableArray new];
+    //iterate through shared secret keys and delete those that match the passed in user
+    for (NSString * key in [_sharedSecretsDict allKeys]) {
+        NSArray * keyComponents = [key componentsSeparatedByString:@":"];
+        if ([[keyComponents objectAtIndex:0] isEqualToString:_loggedInUsername] && [[keyComponents objectAtIndex:2] isEqualToString:friendname] ) {
+            DDLogInfo(@"removing shared secret for: %@", key);
+            [keysToRemove addObject:key];
+        }
+    }
+    
+    [_sharedSecretsDict removeObjectsForKeys:keysToRemove];
+
+    //TODO public keys for this user will get removed for all identities
+    keysToRemove = [NSMutableArray new];
+    //iterate through public keys and delete those that match the passed in user
+    for (NSString * key in [_publicKeysDict allKeys]) {
+        NSArray * keyComponents = [key componentsSeparatedByString:@":"];
+        if ([[keyComponents objectAtIndex:0] isEqualToString:friendname] ) {
+            DDLogInfo(@"removing public key for: %@", key);
+            [keysToRemove addObject:key];
+        }
+    }
+    
+    [_publicKeysDict removeObjectsForKeys:keysToRemove];
+    
+}
+
 
 - (void) getLatestVersionForUsername: (NSString *) username callback:(CallbackStringBlock) callback {
     DDLogVerbose(@"getLatestVersionForUsername, queue size: %d", [_keyVersionQueue operationCount] );

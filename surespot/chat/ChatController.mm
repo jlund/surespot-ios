@@ -19,6 +19,8 @@
 #import "DDLog.h"
 #import "UIUtils.h"
 #import "SurespotConstants.h"
+#import "FileController.h"
+#import "CredentialCachingController.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
@@ -95,7 +97,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
         DDLogVerbose(@"connecting socket");
         self.socketIO.useSecure = serverSecure;
         [self.socketIO connectToHost:serverBaseIPAddress onPort:serverPort];
-         
+        
     }
 }
 
@@ -226,6 +228,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
 
 
 -(void) getData {
+    DDLogInfo(@"startProgress");
     [[NSNotificationCenter defaultCenter] postNotificationName:@"startProgress" object: nil];
     
     //if we have no friends and have never received a user control message
@@ -238,10 +241,15 @@ static const int MAX_CONNECTION_RETRIES = 16;
                 if ([_homeDataSource.friends count] > 0 || _homeDataSource.latestUserControlId > 0) {
                     [self getLatestData];
                 }
+                else {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object: nil];
+                    
+                }
             }
             else {
+                DDLogInfo(@"stopProgress");
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object: nil];
-
+                
             }
             
         }];
@@ -335,12 +343,14 @@ static const int MAX_CONNECTION_RETRIES = 16;
                 [self handleMessages: messages forUsername:friendname];
             }
         }
-         [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object: nil];
-
+        DDLogInfo(@"stopProgress");
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object: nil];
+        
         //    }
         
     } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
-         [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object: nil];
+        DDLogInfo(@"stopProgress");
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object: nil];
     }];
 }
 
@@ -717,11 +727,24 @@ static const int MAX_CONNECTION_RETRIES = 16;
     Friend * theFriend = [_homeDataSource getFriendByName:deleted];
     
     if (theFriend) {
-    NSString * username = [[IdentityController sharedInstance] getLoggedInUser];
+        NSString * username = [[IdentityController sharedInstance] getLoggedInUser];
         BOOL iDeleted = [deleter isEqualToString:username];
+        NSArray * data = [NSArray arrayWithObjects:theFriend.name, [NSNumber numberWithBool: iDeleted], nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteFriend" object: data];
+        
         if (iDeleted) {
             
             [_homeDataSource removeFriend:theFriend withRefresh:YES];
+            
+            //wipe user state
+            [FileController wipeDataForUsername:username friendUsername:deleted];
+            
+            //clear cached user data
+            [[CredentialCachingController sharedInstance] clearUserData: deleted];
+            
+            
+            //clear http cache
+            
             
         }
         else {
@@ -733,8 +756,6 @@ static const int MAX_CONNECTION_RETRIES = 16;
             }
         }
         
-        NSArray * data = [NSArray arrayWithObjects:theFriend.name, [NSNumber numberWithBool: iDeleted], nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteFriend" object: data];
     }
 }
 
