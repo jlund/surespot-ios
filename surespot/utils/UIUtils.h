@@ -23,4 +23,5 @@
 +(UIColor *) surespotGrey;
 +(UIColor *) surespotTransparentGrey;
 +(void) setMessageHeights: (SurespotMessage *)  message size: (CGSize) size;
++(void) startSpinAnimation: (UIView *) view;
 @end

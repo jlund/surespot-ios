@@ -53,6 +53,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) loadFriendsCallback: (void(^)(BOOL success)) callback{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"startProgress" object:nil];
+    
     [[NetworkController sharedInstance] getFriendsSuccessBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         DDLogVerbose(@"get friends response: %d",  [response statusCode]);
         
@@ -65,11 +67,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [self writeToDisk];
         [self postRefresh];
         callback(YES);
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object:nil];
         
     } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
         DDLogVerbose(@"response failure: %@",  Error);
         [self postRefresh];
         callback(NO);
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object:nil];
     }];
     
 }
@@ -132,9 +136,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) postRefresh {
     [self sort];
-     dispatch_async(dispatch_get_main_queue(), ^{
-         [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshHome" object:nil];
-     });
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshHome" object:nil];
+    });
 }
 
 -(Friend *) getFriendByName: (NSString *) name {
@@ -189,17 +193,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         Friend * afriend = [self getFriendByName:username];
         if (! afriend.isChatActive) {
             [afriend setChatActive:YES];
-            [self postRefresh];            
+            [self postRefresh];
         }
     }
-   
+    
     _currentChat = username;
     
 }
 
 -(void) sort {
     @synchronized (_friends) {
-        DDLogInfo(@"sorting friends");      
+        DDLogInfo(@"sorting friends");
         _friends = [NSMutableArray  arrayWithArray:[_friends sortedArrayUsingSelector:@selector(compare:)]];
     }
 }

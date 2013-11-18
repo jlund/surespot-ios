@@ -38,6 +38,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) UIViewPager * viewPager;
 @property (nonatomic, strong) NSMutableDictionary * needsScroll;
 @property (strong, readwrite, nonatomic) REMenu *menu;
+@property (atomic, assign) NSInteger progressCount;
+@property (nonatomic, weak) UIView * backImageView;
 @end
 
 @implementation SwipeViewController
@@ -75,9 +77,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     UIButton *backButton = [[UIButton alloc] initWithFrame: CGRectMake(0, 0, 36.0f, 36.0f)];
     
-    UIImage *backImage = [UIImage imageNamed:@"surespot_logo"];
+    
+    UIImage * backImage = [UIImage imageNamed:@"surespot_logo"];
     [backButton setBackgroundImage:backImage  forState:UIControlStateNormal];
     [backButton setContentMode:UIViewContentModeScaleAspectFit];
+    _backImageView = backButton;
     
     [backButton addTarget:self action:@selector(backPressed) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
@@ -95,15 +99,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     
-    //listen for refresh notifications
+    //listen for  notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshMessages:) name:@"refreshMessages" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshHome:) name:@"refreshHome" object:nil];
-    
-    //listen for push notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushNotification:) name:@"pushNotification" object:nil];
+   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteFriend:) name:@"deleteFriend" object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startProgress:) name:@"startProgress" object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopProgress:) name:@"stopProgress" object:nil];
+
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteFriend:) name:@"deleteFriend" object:nil];
     _homeDataSource = [[ChatController sharedInstance] getHomeDataSource];
     
     //show currently open tab immediately
@@ -1231,4 +1237,22 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (IBAction)textFieldChanged:(id)sender {
     [self updateButtonIcons];
 }
+
+- (void) startProgress: (NSNotification *) notification {
+    
+    if (_progressCount++ == 0) {
+        [UIUtils startSpinAnimation: _backImageView];
+    }
+    
+    DDLogInfo(@"progress count:%d", _progressCount);
+}
+
+-(void) stopProgress: (NSNotification *) notification {
+    if (--_progressCount == 0) {
+        [_backImageView.layer removeAllAnimations];
+    }
+        DDLogInfo(@"progress count:%d", _progressCount);
+}
+
+
 @end

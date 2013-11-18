@@ -135,4 +135,16 @@
         [message setRowLandscapeHeight:(int) (labelSize.height + 20 > 44 ? labelSize.height + 20 : 44) ];
     }
 }
+
+
++(void) startSpinAnimation: (UIView *) view {
+    CABasicAnimation *rotation;
+    rotation = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
+    rotation.fromValue = [NSNumber numberWithFloat:0];
+    rotation.toValue = [NSNumber numberWithFloat:(2*M_PI)];
+    rotation.duration = 1.1; // Speed
+    rotation.repeatCount = HUGE_VALF; //
+    [view.layer addAnimation:rotation forKey:@"spin"];
+}
+
 @end

@@ -92,8 +92,12 @@ static const int MAX_CONNECTION_RETRIES = 16;
 -(void) connect {
     if (_socketIO) {
         DDLogVerbose(@"connecting socket");
-        self.socketIO.useSecure = NO;
-        [self.socketIO connectToHost:@"192.168.10.68" onPort:8080];
+       // self.socketIO.useSecure = NO;
+      //  [self.socketIO connectToHost:@"192.168.10.68" onPort:8080];
+        
+        self.socketIO.useSecure = YES;
+        [self.socketIO connectToHost:@"server.surespot.me" onPort:443];
+
     }
 }
 
@@ -224,7 +228,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
 
 
 -(void) getData {
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"startProgress" object: nil];
     
     //if we have no friends and have never received a user control message
     //load friends and latest ids
@@ -236,6 +240,10 @@ static const int MAX_CONNECTION_RETRIES = 16;
                 if ([_homeDataSource.friends count] > 0 || _homeDataSource.latestUserControlId > 0) {
                     [self getLatestData];
                 }
+            }
+            else {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object: nil];
+
             }
             
         }];
@@ -329,9 +337,12 @@ static const int MAX_CONNECTION_RETRIES = 16;
                 [self handleMessages: messages forUsername:friendname];
             }
         }
+         [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object: nil];
+
         //    }
         
     } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
+         [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object: nil];
     }];
 }
 
@@ -708,7 +719,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
     Friend * theFriend = [_homeDataSource getFriendByName:deleted];
     
     if (theFriend) {
-        NSString * username = [[IdentityController sharedInstance] getLoggedInUser];    
+    NSString * username = [[IdentityController sharedInstance] getLoggedInUser];
         BOOL iDeleted = [deleter isEqualToString:username];
         if (iDeleted) {
             
@@ -717,6 +728,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
         }
         else {
             [theFriend setDeleted];
+            
             ChatDataSource * cds = [_chatDataSources objectForKey:deleter];
             if (cds) {
                 [cds  userDeleted];
