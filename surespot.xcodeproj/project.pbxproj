@@ -57,6 +57,10 @@
 		665F4DFC1832E69C0083BCE7 /* GetKeyVersionOperation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DFB1832E69C0083BCE7 /* GetKeyVersionOperation.mm */; };
 		665F4E0D183324360083BCE7 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 665F4E081833238D0083BCE7 /* libTestFlight.a */; };
 		665F4E0F183325C50083BCE7 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 665F4E0E183325C50083BCE7 /* AdSupport.framework */; };
+		66A2D90F183A730D00785270 /* OurMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66A2D90D183A730D00785270 /* OurMessageCell.xib */; };
+		66A2D910183A730D00785270 /* TheirMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66A2D90E183A730D00785270 /* TheirMessageCell.xib */; };
+		66A2D915183A732900785270 /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D912183A732900785270 /* LoadingView.m */; };
+		66A2D916183A732900785270 /* UIViewPager.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D914183A732900785270 /* UIViewPager.m */; };
 		66B3C8ED17B15F2300CC96EE /* ChatController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66B3C8EC17B15F2300CC96EE /* ChatController.mm */; };
 		66B3C8F017B17AC800CC96EE /* ChatDataSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66B3C8EF17B17AC800CC96EE /* ChatDataSource.mm */; };
 		66D3B04D182D47DF00B37A6C /* SurespotLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 66D3B04C182D47DF00B37A6C /* SurespotLogFormatter.m */; };
@@ -196,6 +200,12 @@
 		665F4E0A1833238D0083BCE7 /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+ManualSessions.h"; sourceTree = "<group>"; };
 		665F4E0B1833238D0083BCE7 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		665F4E0E183325C50083BCE7 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		66A2D90D183A730D00785270 /* OurMessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OurMessageCell.xib; path = chat/OurMessageCell.xib; sourceTree = "<group>"; };
+		66A2D90E183A730D00785270 /* TheirMessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TheirMessageCell.xib; path = chat/TheirMessageCell.xib; sourceTree = "<group>"; };
+		66A2D911183A732900785270 /* LoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoadingView.h; path = ui/LoadingView.h; sourceTree = "<group>"; };
+		66A2D912183A732900785270 /* LoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoadingView.m; path = ui/LoadingView.m; sourceTree = "<group>"; };
+		66A2D913183A732900785270 /* UIViewPager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIViewPager.h; path = ui/UIViewPager.h; sourceTree = "<group>"; };
+		66A2D914183A732900785270 /* UIViewPager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIViewPager.m; path = ui/UIViewPager.m; sourceTree = "<group>"; };
 		66B3C8EB17B15F2300CC96EE /* ChatController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatController.h; path = chat/ChatController.h; sourceTree = "<group>"; };
 		66B3C8EC17B15F2300CC96EE /* ChatController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = ChatController.mm; path = chat/ChatController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		66B3C8EE17B17AC800CC96EE /* ChatDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatDataSource.h; path = chat/ChatDataSource.h; sourceTree = "<group>"; };
@@ -393,8 +403,8 @@
 		66FF0FF2182AE4420038ECA6 /* LoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoadingView.h; path = utils/LoadingView.h; sourceTree = "<group>"; };
 		66FF0FF3182AE44C0038ECA6 /* LoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoadingView.m; path = utils/LoadingView.m; sourceTree = "<group>"; };
 		66FF0FF5182AE6960038ECA6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		66FF0FF9182B04B10038ECA6 /* UIViewPager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewPager.h; sourceTree = "<group>"; };
-		66FF0FFA182B04B10038ECA6 /* UIViewPager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewPager.m; sourceTree = "<group>"; };
+		66FF0FF9182B04B10038ECA6 /* UIViewPager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIViewPager.h; path = libs/UIViewPager.h; sourceTree = "<group>"; };
+		66FF0FFA182B04B10038ECA6 /* UIViewPager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIViewPager.m; path = libs/UIViewPager.m; sourceTree = "<group>"; };
 		66FF0FFD182D3D920038ECA6 /* DDLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = DDLog.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		66FF0FFE182D3D920038ECA6 /* DDLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DDLog.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		66FF0FFF182D3D920038ECA6 /* DDTTYLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = DDTTYLogger.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -530,8 +540,6 @@
 		66159700176F669A001B32C1 /* utils */ = {
 			isa = PBXGroup;
 			children = (
-				66FF0FF2182AE4420038ECA6 /* LoadingView.h */,
-				66FF0FF3182AE44C0038ECA6 /* LoadingView.m */,
 				66159701176F66F1001B32C1 /* NSData+Base64.h */,
 				66159702176F6732001B32C1 /* NSData+Base64.m */,
 				6606E4EE179DB134004199BC /* FileController.h */,
@@ -645,6 +653,14 @@
 		66A2D90C1836B7FF00785270 /* ui */ = {
 			isa = PBXGroup;
 			children = (
+				66A2D911183A732900785270 /* LoadingView.h */,
+				66A2D912183A732900785270 /* LoadingView.m */,
+				66A2D913183A732900785270 /* UIViewPager.h */,
+				66A2D914183A732900785270 /* UIViewPager.m */,
+				66FF0FF2182AE4420038ECA6 /* LoadingView.h */,
+				66FF0FF3182AE44C0038ECA6 /* LoadingView.m */,
+				66FF0FF9182B04B10038ECA6 /* UIViewPager.h */,
+				66FF0FFA182B04B10038ECA6 /* UIViewPager.m */,
 			);
 			name = ui;
 			sourceTree = "<group>";
@@ -652,6 +668,8 @@
 		66B3C8EA17B15F0C00CC96EE /* chat */ = {
 			isa = PBXGroup;
 			children = (
+				66A2D90D183A730D00785270 /* OurMessageCell.xib */,
+				66A2D90E183A730D00785270 /* TheirMessageCell.xib */,
 				66B3C8EB17B15F2300CC96EE /* ChatController.h */,
 				66B3C8EC17B15F2300CC96EE /* ChatController.mm */,
 				66B3C8EE17B17AC800CC96EE /* ChatDataSource.h */,
@@ -682,8 +700,6 @@
 				665F4E071833238D0083BCE7 /* TestFlightSDK */,
 				665F4DEA1831923C0083BCE7 /* REMenu */,
 				66FF0FFC182D3D920038ECA6 /* Lumberjack */,
-				66FF0FF9182B04B10038ECA6 /* UIViewPager.h */,
-				66FF0FFA182B04B10038ECA6 /* UIViewPager.m */,
 				66FF0FDF18242B6B0038ECA6 /* Toast */,
 				6637107D1813172F009D5195 /* EGOCache */,
 				6654441017F37A3F00F62F7F /* SwipeView */,
@@ -1020,7 +1036,9 @@
 				6604A2D817626B9E0072216A /* MainStoryboard.storyboard in Resources */,
 				66D3B04F182EAB4200B37A6C /* surespot.xcassets in Resources */,
 				6621BB841762704D00BC2850 /* Localizable.strings in Resources */,
+				66A2D90F183A730D00785270 /* OurMessageCell.xib in Resources */,
 				6640766C1822A84C00BFD974 /* HomeCell.xib in Resources */,
+				66A2D910183A730D00785270 /* TheirMessageCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1056,6 +1074,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				664076781822C07C00BFD974 /* Friend.m in Sources */,
+				66A2D915183A732900785270 /* LoadingView.m in Sources */,
 				6604A2CB17626B9E0072216A /* main.m in Sources */,
 				665F4DF81831923C0083BCE7 /* REMenuItem.m in Sources */,
 				66D3B04D182D47DF00B37A6C /* SurespotLogFormatter.m in Sources */,
@@ -1080,6 +1099,7 @@
 				661C2EC31762B125000649E7 /* SurespotIdentity.mm in Sources */,
 				661C2EC81762C3C0000649E7 /* IdentityKeys.mm in Sources */,
 				66FF0FFB182B04B10038ECA6 /* UIViewPager.m in Sources */,
+				66A2D916183A732900785270 /* UIViewPager.m in Sources */,
 				66FF0FE218242B6B0038ECA6 /* Toast+UIView.m in Sources */,
 				661C2ECE1763A214000649E7 /* IdentityController.mm in Sources */,
 				661C2ED11763A254000649E7 /* EncryptionController.mm in Sources */,
