@@ -90,7 +90,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"menu" style:UIBarButtonItemStylePlain target:self action:@selector(showMenuMenu)];
     self.navigationItem.rightBarButtonItem = anotherButton;
     
-    self.navigationItem.title = [@"surespot/" stringByAppendingString:[[IdentityController sharedInstance] getLoggedInUser]];
+    self.navigationItem.title = [[IdentityController sharedInstance] getLoggedInUser];
     
     
     //don't swipe to back stack

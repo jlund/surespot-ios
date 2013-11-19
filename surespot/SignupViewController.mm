@@ -122,5 +122,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return NO;
 }
 
+- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    NSCharacterSet *alphaSet = [NSCharacterSet alphanumericCharacterSet];
+    NSString * newString = [string stringByTrimmingCharactersInSet:alphaSet];
+    if (![newString isEqualToString:@""]) {
+        return NO;
+    }
+    
+    NSUInteger newLength = [textField.text length] + [newString length] - range.length;
+    return (newLength >= 20) ? NO : YES;
+}
+
 
 @end
