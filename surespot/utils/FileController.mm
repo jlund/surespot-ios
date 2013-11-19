@@ -70,23 +70,27 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 +(NSString*)getPublicKeyFilenameForUsername: (NSString *) username version: (NSString *)version {
+    NSString * dir = [self getPublicKeyDirectoryForUsername:username];
+    return [dir stringByAppendingPathComponent:[version stringByAppendingPathExtension:PUBLIC_KEYS_EXTENSION]];
+
+}
++(NSString*)getPublicKeyDirectoryForUsername: (NSString *) username  {
     NSString * dir = [self getDirectoryForUser:[[IdentityController sharedInstance] getLoggedInUser] ];
-    
     NSString * pkdir = [[dir stringByAppendingPathComponent:PUBLIC_KEYS_DIR] stringByAppendingPathComponent:username];
-    
     NSError * error;
     if (![[NSFileManager defaultManager] createDirectoryAtPath:pkdir withIntermediateDirectories:YES attributes:nil error:&error]) {
         DDLogError(@"%@", error.localizedDescription);
     }
     
-    return [pkdir stringByAppendingPathComponent:[version stringByAppendingPathExtension:PUBLIC_KEYS_EXTENSION]];
-
+    return pkdir;
 }
 
+
 +(void) wipeDataForUsername: (NSString *) username friendUsername: (NSString *) friendUsername {
-    //todo delete public keys
-    
-    
+    NSError * error;
+    if (![[NSFileManager defaultManager] removeItemAtPath:[self getPublicKeyDirectoryForUsername:friendUsername] error:&error]) {
+        DDLogError(@"%@", error.localizedDescription);
+    }
     
     NSString * spot = [ChatUtils getSpotUserA:username userB:friendUsername];
     NSString * messageFile = [self getChatDataFilenameForSpot:spot];
