@@ -24,6 +24,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 @interface SignupViewController ()
 @property (atomic, strong) id progressView;
+@property (nonatomic, strong) NSString * lastCheckedUsername;
+@property (nonatomic, assign) NSInteger keyboardHeight;
 @end
 
 @implementation SignupViewController
@@ -36,8 +38,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         self.navigationController.navigationBar.tintColor = [UIUtils surespotBlue];
     }
     _tbUsername.returnKeyType = UIReturnKeyNext;
+    
+    [_tbUsername setRightViewMode: UITextFieldViewModeNever];
+    
     _tbPassword.returnKeyType = UIReturnKeyNext;
     _tbPasswordConfirm.returnKeyType = UIReturnKeyGo;
+    [self registerForKeyboardNotifications];
+    
 }
 
 - (void)viewDidUnload {
@@ -66,7 +73,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     [_tbPasswordConfirm resignFirstResponder];
-    _progressView = [LoadingView loadingViewInView:self.view textKey:@"create_user_progress"];
+    _progressView = [LoadingView loadingViewInView:self.view keyboardHeight:_keyboardHeight textKey:@"create_user_progress"];
     
     dispatch_queue_t q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     
@@ -113,10 +120,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if (textField == _tbUsername) {
-        if (![UIUtils stringIsNilOrEmpty: textField.text]) {
-            [_tbPassword becomeFirstResponder];
-            [_tbUsername resignFirstResponder];
-        }
+//        if (![UIUtils stringIsNilOrEmpty: textField.text]) {
+//            [_tbPassword becomeFirstResponder];
+//            [_tbUsername resignFirstResponder];
+//        }
+        [self checkUsername];
         return NO;
     }
     else {
@@ -144,6 +152,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     if (textField == _tbUsername) {
+        
+        
+        
         NSCharacterSet *alphaSet = [NSCharacterSet alphanumericCharacterSet];
         NSString * newString = [string stringByTrimmingCharactersInSet:alphaSet];
         if (![newString isEqualToString:@""]) {
@@ -151,6 +162,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
         
         NSUInteger newLength = [textField.text length] + [newString length] - range.length;
+        if (newLength == 0) {
+            [_tbUsername setRightViewMode:UITextFieldViewModeNever];
+            _lastCheckedUsername = nil;
+        }
         return (newLength >= 20) ? NO : YES;
     }
     else {
@@ -163,5 +178,106 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return YES;
 }
 
+-(void) checkUsername {
+    NSString * username = self.tbUsername.text;
+    
+    if ([UIUtils stringIsNilOrEmpty:username]) {
+        return;
+    }
+    
+    if ([_lastCheckedUsername isEqualToString: username]) {
+        return;
+    }
+    
+    _lastCheckedUsername = username;
+    _progressView = [LoadingView loadingViewInView:self.view keyboardHeight:_keyboardHeight textKey:@"user_exists_progress"];
+    
+    [[NetworkController sharedInstance] userExists:username successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSString * response = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+        
+        if ([response isEqualToString:@"true"]) {
+            [UIUtils showToastView:self.view key:@"username_exists"];
+            [self setUsernameValidity:NO];
+            [_tbUsername becomeFirstResponder];
+        }
+        else {
+            [self setUsernameValidity:YES];
+            [_tbPassword becomeFirstResponder];
+        }
+        [_progressView removeView];
+    } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
+           [_tbUsername becomeFirstResponder];
+        [UIUtils showToastView:self.view key:@"user_exists_error"];
+    }];
+}
 
+
+-(void) setUsernameValidity: (BOOL) valid {
+    [_tbUsername setRightViewMode:UITextFieldViewModeAlways];
+    if (valid) {
+        _tbUsername.rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_check_buttonless_on"] ];
+    }
+    else {
+        _tbUsername.rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_delete"] ];
+        
+    }
+    
+}
+
+-(void)textFieldDidEndEditing:(UITextField *)textField {
+
+    if (textField == _tbUsername) {
+        [self checkUsername];
+    }
+}
+
+//- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *) event
+//{
+//    
+//    UITouch *touch = [[event allTouches] anyObject];
+//    if ([_tbUsername isFirstResponder] && (_tbUsername != touch.view))
+//    {
+//        [self checkUsername ];
+//    }
+////    
+////    if ([textField2 isFirstResponder] && (textField2 != touch.view))
+////    {
+////        // textField2 lost focus
+////    }
+////    
+////    ...
+//}
+
+
+- (void)registerForKeyboardNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+    
+}
+
+
+// Called when the UIKeyboardDidShowNotification is sent.
+- (void)keyboardWasShown:(NSNotification*)aNotification
+{
+   
+    DDLogVerbose(@"keyboardWasShown");
+
+    
+    NSDictionary* info = [aNotification userInfo];
+    CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    _keyboardHeight = [UIUtils keyboardHeightAdjustedForOrientation:keyboardRect.size];
+}
+
+// Called when the UIKeyboardWillHideNotification is sent
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+{
+    DDLogVerbose(@"keyboardWillBeHidden");
+    _keyboardHeight = 0;
+}
 @end

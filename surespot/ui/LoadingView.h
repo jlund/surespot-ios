@@ -19,7 +19,7 @@
 
 }
 
-+ (id)loadingViewInView:(UIView *)aSuperview textKey: (NSString *) textKey;
++ (id)loadingViewInView:(UIView *)aSuperview keyboardHeight: (CGFloat) height textKey: (NSString *) textKey;
 - (void)removeView;
 
 @end

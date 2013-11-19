@@ -35,10 +35,11 @@
 // returns the constructed view, already added as a subview of the aSuperview
 //	(and hence retained by the superview)
 //
-+ (id)loadingViewInView:(UIView *)aSuperview textKey: (NSString *) textKey
++ (id)loadingViewInView:(UIView *)aSuperview keyboardHeight: (CGFloat) height textKey: (NSString *) textKey
 {
-	LoadingView *loadingView =
-    [[LoadingView alloc] initWithFrame:[aSuperview bounds]];
+    
+    CGRect frame =CGRectMake(0, 0, aSuperview.bounds.size.width, aSuperview.bounds.size.height - height);
+	LoadingView *loadingView =    [[LoadingView alloc] initWithFrame:frame];
 	if (!loadingView)
 	{
 		return nil;
@@ -51,12 +52,12 @@
 	[aSuperview addSubview:loadingView];
     
 	const CGFloat DEFAULT_LABEL_WIDTH = aSuperview.bounds.size.width;
-
+    
     UIView * labelView = [[UIView alloc] initWithFrame:CGRectZero];
     labelView.backgroundColor = [UIColor whiteColor];
     [loadingView addSubview:labelView];
-
-	   
+    
+    
     UIImage * image =[UIImage imageNamed:@"surespot_logo.png"];
     UIImageView * imageView = [[UIImageView alloc] initWithImage: image];
     
@@ -75,9 +76,9 @@
     rotation.repeatCount = HUGE_VALF; //
     [imageView.layer addAnimation:rotation forKey:@"spin"];
     
-  
-
-
+    
+    
+    
     CGRect labelFrame = CGRectMake(0, 0, DEFAULT_LABEL_WIDTH - (imageView.frame.size.width + 50), imageView.frame.size.height);
     
     UILabel *loadingLabel =
@@ -100,25 +101,25 @@
     [loadingLabel sizeToFit];
 	
 	[loadingView addSubview:loadingLabel];
-
+    
     
 	
     CGFloat totalHeight =  MAX(loadingLabel.frame.size.height ,imageView.frame.size.height);
-		
+    
 	CGRect activityIndicatorRect = imageView.frame;
 	activityIndicatorRect.origin.x =floor(0.5 * (loadingView.frame.size.width - DEFAULT_LABEL_WIDTH + 50));
 	activityIndicatorRect.origin.y = floor(0.5 * (loadingView.frame.size.height - totalHeight));
 	imageView.frame = activityIndicatorRect;
     
-   
+    
     labelFrame.origin.x = imageView.frame.origin.x + imageView.frame.size.width + 20;
 	labelFrame.origin.y = floor(0.5 * (loadingView.frame.size.height - totalHeight));
 	loadingLabel.frame = labelFrame;
-
-        CGRect viewFrame = CGRectMake(0, 0, DEFAULT_LABEL_WIDTH, totalHeight + 10);
+    
+    CGRect viewFrame = CGRectMake(0, 0, DEFAULT_LABEL_WIDTH, totalHeight + 10);
     viewFrame.origin.y =(loadingView.frame.size.height - (totalHeight + 10))/2;
     labelView.frame =viewFrame;
-
+    
     
 	
 	// Set up the fade-in animation
@@ -154,28 +155,28 @@
 //
 - (void)drawRect:(CGRect)rect
 {
-//	rect.size.height -= 1;
-//	rect.size.width -= 1;
-//	
-//	const CGFloat RECT_PADDING = 0.0;
-//	rect = CGRectInset(rect, RECT_PADDING, RECT_PADDING);
-//	
-//	const CGFloat ROUND_RECT_CORNER_RADIUS = 0.0;
-//	CGPathRef roundRectPath = NewPathWithRoundRect(rect, ROUND_RECT_CORNER_RADIUS);
-//	
-//	CGContextRef context = UIGraphicsGetCurrentContext();
-//    
-//	const CGFloat BACKGROUND_OPACITY = 0.85;
-//	CGContextSetRGBFillColor(context, 0, 0, 0, BACKGROUND_OPACITY);
-//	CGContextAddPath(context, roundRectPath);
-//	CGContextFillPath(context);
-//    
-//	const CGFloat STROKE_OPACITY = 0.25;
-//	CGContextSetRGBStrokeColor(context, 1, 1, 1, STROKE_OPACITY);
-//	CGContextAddPath(context, roundRectPath);
-//	CGContextStrokePath(context);
-//	
-//	CGPathRelease(roundRectPath);
+    //	rect.size.height -= 1;
+    //	rect.size.width -= 1;
+    //
+    //	const CGFloat RECT_PADDING = 0.0;
+    //	rect = CGRectInset(rect, RECT_PADDING, RECT_PADDING);
+    //
+    //	const CGFloat ROUND_RECT_CORNER_RADIUS = 0.0;
+    //	CGPathRef roundRectPath = NewPathWithRoundRect(rect, ROUND_RECT_CORNER_RADIUS);
+    //
+    //	CGContextRef context = UIGraphicsGetCurrentContext();
+    //
+    //	const CGFloat BACKGROUND_OPACITY = 0.85;
+    //	CGContextSetRGBFillColor(context, 0, 0, 0, BACKGROUND_OPACITY);
+    //	CGContextAddPath(context, roundRectPath);
+    //	CGContextFillPath(context);
+    //
+    //	const CGFloat STROKE_OPACITY = 0.25;
+    //	CGContextSetRGBStrokeColor(context, 1, 1, 1, STROKE_OPACITY);
+    //	CGContextAddPath(context, roundRectPath);
+    //	CGContextStrokePath(context);
+    //	
+    //	CGPathRelease(roundRectPath);
 }
 
 

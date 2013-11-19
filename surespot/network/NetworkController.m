@@ -250,6 +250,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
 }
 
+-(void) userExists: (NSString *) username successBlock: (HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock {
+    NSString * path = [NSString stringWithFormat:@"users/%@/exists", username];
+    NSURLRequest *request = [self requestWithMethod:@"GET" path: path  parameters:nil];
+    AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
+    [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
+    [operation start];
+}
+
 
 
 @end

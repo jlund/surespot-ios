@@ -95,7 +95,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     DDLogVerbose(@"starting login");
     self.navigationItem.rightBarButtonItem.enabled = NO;
     [_textPassword resignFirstResponder];
-    _progressView = [LoadingView loadingViewInView:self.view textKey:@"login_progress"];
+    _progressView = [LoadingView loadingViewInView:self.view keyboardHeight:0 textKey:@"login_progress"];
     
     dispatch_queue_t q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     
@@ -137,6 +137,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
              
              [[IdentityController sharedInstance] userLoggedInWithIdentity:identity];
              [self performSegueWithIdentifier: @"loginToMainSegue" sender: nil ];
+             _textPassword.text = @"";
+             
              [_progressView removeView];
              self.navigationItem.rightBarButtonItem.enabled = YES;
          }

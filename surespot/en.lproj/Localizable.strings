@@ -1,10 +1,3 @@
-/* 
-  Localizable.strings
-  surespot
-
-  Created by Adam on 6/7/13.
-  Copyright (c) 2013 2fours. All rights reserved.
-*/
 "app_name"="surespot";
 "friends"="friends";
 "menu_settings"="settings";
@@ -15,8 +8,8 @@
 "title_activity_friends"="friends";
 "title_activity_notifications"="notifications";
 "hello_world"="Hello world!";
-"export_sd"="Execute Local Storage Backup";
-"import_sd"="restore from local storage";
+"export_sd"="Execute Device Storage Backup.";
+"import_sd"="Restore from Device Storage.";
 "title_activity_chat"="chat";
 "title_activity_image_view"="image view";
 "title_activity_image_select"="image select";
@@ -46,16 +39,12 @@
 "select_image"="select image";
 "capture_image"="capture image";
 "assign_image"="assign image";
-"logout"="logout";
+"logout"="log out";
 "settings"="settings";
-/*"welcome_to_surespot"="<![CDATA["Welcome to surespot! Data sent using this app is <a href="https://en.wikipedia.org/wiki/End-to-end_encryption"="end-to-end</a> encrypted with <a href="https://en.wikipedia.org/wiki/Symmetric-key_algorithm"="symmetric-key</a> encryption (<a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard"="256 bit AES</a>) using keys created with 521 bit <a href="https://en.wikipedia.org/wiki/Elliptic_curve_Diffie-Hellman"="ECDH shared secret derivation</a>."]]>";
-*/
- "no_friends"="No friends...yet. Invite surespot users by entering their username below and touching 'invite'.";
-"help_invite"="Invite surespot users by entering their username and touching 'invite' on the 'home' tab.";
+"no_friends"="No friends...yet. Invite surespot users by entering their username below.";
+"help_invite"="Invite surespot users by entering their username on the home tab.";
 "invite_contacts"="Use the 'invite contacts' menu option to invite users via QR code, email, text message, or other applications.";
 "navigate_between_chat_tabs"="Navigate between tabs by swiping.";
-"help_shortPress"="Touch 'home' to go to the home tab.";
-"help_longPress"="Hold 'home' to close the chat tab.";
 "help_holdmessage"="Hold on a message for message options.";
 "help_holdfriend"="Hold on a friend for friend options.";
 "help_imageZoom"="Zoom images by touching the image.";
@@ -65,46 +54,30 @@
 "key_management"="generate new key pairs...";
 "regenerate_keys"="generate new key pairs";
 "could_not_create_new_keys"="could not create new key pairs";
-"keys_created"="new keys successfully created, please backup the identity (again)";
+"keys_created"="new keys successfully created, please backup the identity";
 "close_tab"="close tab";
 "action_settings"="Settings";
 "no_messages"="no messages";
-"home"="home";
 "delete_message"="delete message";
-"title_activity_external_invite"="ExternalInviteActivity";
-"title_activity_contact_picker"="ContactPickerActivity";
 "block_underline"="<u>block</u>";
 "ignore_underline"="<u>ignore</u>";
 "accept_underline"="<u>accept</u>";
-"title_activity_billing"="BillingActivity";
 "crash_toast_text"="houston we have a problem";
 "crash_dialog_title"="surespot has crashed";
-"crash_dialog_text"="It is with deep shame that we have to confess that an unexpected error has occurred.\n\nPlease help us to fix the issue by clicking OK to send an error report containing no personally identifying information.";
+"crash_dialog_text"="We must confess that an unexpected error has occurred.\n\nPlease help us to fix the issue by touching OK to send an error report containing no personally identifying information.";
 "crash_dialog_comment_prompt"="You can add your comments about the problem below if you like:";
 "crash_dialog_ok_toast"="Thank you!";
-/*
-"external_invite_message"="I'd like to chat with you privately via surespot. Click %s to install the android app and invite me as a friend.";
-"help_backupIdentities1"=""Because surespot uses encryption keys that are never uploaded to our servers, if you lose your phone, or uninstall then re-install the app, or wipe the app's data, you will not be able to login unless you have backed up your identity."";
-"help_backupIdentities2"=""Surespot has both Google Drive and Device Storage based identity backup mechanisms that can be found on the settings menu."";
-
-"help_backup_what"="<![CDATA["This will export a copy of the selected identity encrypted with <a href="http://www.eetimes.com/design/embedded-internet-design/4372428/How-secure-is-AES-against-brute-force-attacks-"="256 bit AES</a> with a key derived from your password through a <a href="https://en.wikipedia.org/wiki/PBKDF2"="PBKDF</a> (Password Based Key Derivation Function)"]]>";
-"help_backup_local"=""For maximum security we recommend using Device Storage backup. Once backed up, the identity file should then be copied from your device to a secure backup location so that it can be restored in the case of app uninstall or 'clear data', a lost or stolen device, or other data loss."";
-"help_backup_drive1"="<![CDATA["If you elect to backup your identity on Google Drive you will be storing a copy of your <a href="https://en.wikipedia.org/wiki/Public-key_cryptography"="private keys</a> on Google Drive servers. Should a third party somehow gain access to the Google Drive servers and attempt to decrypt your identity file by <a href="https://en.wikipedia.org/wiki/Brute-force_attack"="brute force attack</a>, be aware that the <a href="https://en.wikipedia.org/wiki/Password_strength"="strength</a> of your password will ultimately determine their success."]]>";
-"help_backup_drive2"=""Your identities will be stored on Google Drive in the folder 'surespot identity backups'. Identities can be restored from the 'restore identity' settings menu in surespot, and also from within the Google Drive Android app."";
-
-"pwyl_text"="<![CDATA["Surespot is ad and data mining free.<br><br>Servers and storage cost money; your donations ensure that we do not have to charge for surespot.<br><br>We will donate a percentage to the <a href="https://www.eff.org/issues/privacy"="EFF</a> that they may continue to fight for all of our electronic freedoms."]]>";
+"external_invite_message"="I'd like to chat with you privately via surespot. Click %s to install the andrid app and invite me as a friend.";
+"help_backupIdentities1"="Because surespot uses encryption keys that are never uploaded to our servers, if you lose your phone, or uninstall then re-install the app, or wipe the app's data, you will not be able to login unless you have backed up your identity.";
+"help_backupIdentities2"="Surespot can use Google Drive and/or Device Storage for backing up your identity. These options are in the identity management settings.";
+"help_backup_local"="For maximum security we recommend using Device Storage backup. Once backed up, the identity file should then be copied (or moved) from your device to a secure location so that it may be restored in the case of app uninstall or 'clear data', a lost or stolen device, or other data loss.";
+"help_backup_drive2"="Your identities will be stored on Google Drive in the folder 'surespot identity backups'. Identities can be restored from the create user screen or in identity management settings.";
 "help_messageHistory"="Surespot has a 1000 message history. Once you reach 1000 messages your oldest message will be deleted so you will only ever have 1000 (encrypted) messages stored on the server. Of course you can delete any and all of your messages at any time.";
 "title_activity_about"="about surespot";
-"about_about"="<![CDATA["surespot - a 2fours production"]]>";
-"about_website"="<![CDATA["Please visit the surespot website at <a href="https://www.surespot.me"="https://www.surespot.me</a> for more information, including the <a href="https://www.surespot.me/documents/surespot_terms_of_service_5-7-13.html"="terms of service</a>, <a href="https://www.surespot.me/documents/surespot_privacy_policy_5-7-13.html"="privacy policy</a>, and <a href="https://www.surespot.me/documents/threat.html"="data and threat analysis</a>."]]>";
-"about_opensource"="<![CDATA["Surespot is 100% open source and welcomes your participation - view the source code on github at <a href="https://github.com/surespot"="https://github.com/surespot</a>."]]>";
-"about_tech"="<![CDATA["For a more technical overview of how surespot works please click <a href="https://www.surespot.me/documents/how_surespot_works.html"="here</a>."]]>";
-"about_support"="<![CDATA["For questions or support please <a href="https://www.surespot.me/support.html>click here</a> or email <a href="mailto:support@2fours.com"="support@2fours.com</a>.]]>";
-*/
 "notification_title"="surespot";
-"notification_message"="%1$@: new message from %2$@";
-"notification_invite"="%1$@: friend invite from %2$@";
-"notification_invite_accept"="%1$@: %2$@ has accepted your friend invite";
+"notification_message"="%1$s: new message from %2$s";
+"notification_invite"="%1$s: friend invite from %2$s";
+"notification_invite_accept"="%1$s: %2$s has accepted your friend invite";
 "about_version"="version: %s";
 "surespot"="surespot";
 "about_action_bar_right"="about";
@@ -121,14 +94,14 @@
 "unknown"="unknown";
 "login"="log in";
 "login_progress"="logging in";
-"login_check_password"="Could not login, please make sure your password is correct.";
+"login_check_password"="Could not log in, please make sure your password is correct.";
 "login_try_again_later"="Error logging in, please try again later.";
-"login_max_identities_reached"="Sorry, you have already created the maximum number of identities (%d).\n\nIdentities can be deleted from the settings menu after logging in.";
+"login_max_identities_reached"="Sorry, you have already created the maximum number of identities (%d).\n\nIdentities can be deleted in the identity management settings after logging in.";
 "local_cache_cleared"="local cache cleared";
 "qr_pre_username_help"="scanning this QR code will invite";
 "qr_post_username_help"="to be a friend on surespot, installing surespot from the play store if necessary";
 "send"="send";
-"main_action_bar_right"="select recipient";
+"main_action_bar_right"="to";
 "could_not_upload_friend_image"="could not upload friend image";
 "delete_all_confirmation"="are you sure you wish to delete all messages?";
 "delete_all_title"="delete all messages";
@@ -143,37 +116,37 @@
 "could_not_invite"="Could not invite friend, please try again later.";
 "keys"="keys";
 "generating_keys_progress"="generating and uploading new keys";
-"backup_identities_again_keys"="Since your identity keys will change, please backup this identity (again) after the operation completes successfully.";
-"backup_identities_again_password"="Since your identity password will have changed, please backup this identity again after the operation completes successfully.";
+"backup_identities_again_keys"="Since your identity keys will change, please backup this identity after the operation completes successfully.";
+"backup_identities_again_password"="Since your identity password will have changed, please backup this identity after the operation completes successfully.";
 "create_new_keys_for"="create new keys for %s";
 "enter_password_for"="enter surespot password for %s";
-"enter_username_and_password"="Please enter a username and password, or restore an identity from the menu.";
+"enter_username_and_password"="Please enter a username and password, or [restore an identity] from the menu.";
 "usernames_case_sensitive"="Usernames are case sensitive";
-"aware_username_password"="so be aware of this when sharing them with others. The password should be at least 8 characters long and contain funky characters in weird places.";
-"warning_password_reset"="WARNING: There is no password reset functionality in surespot so make sure you remember it!";
-"create_user_progress"="creating identity and generating key pairs";
+"aware_username_password"="so be aware of this when sharing them with others. The password should be at least 8 characters long and contain symbols.";
+"warning_password_reset"="WARNING: There is ABSOLUTELY NO WAY to reset your password or username in surespot so make sure you remember it!";
+"create_user_progress"="creating a user and generating key pairs";
 "create"="create";
 "passwords_do_not_match"="passwords do not match";
 "username_exists"="That username already exists, please choose another.";
-"user_creation_throttled"="too many identity creation attempts, try again later";
-"signup_update"="please update surespot to create a new identity";
-"could_not_create_user"="could not create identity, please try again later";
+"user_creation_throttled"="too many user creation attempts, try again later";
+"signup_update"="please update surespot to create a new user";
+"could_not_create_user"="could not create user, please try again later";
 "pay"="pay";
 "what_you_like"="what you like";
 "billing_could_not_enable"="Could not enable in-app billing.";
 "billing_purchase_error"="Error, could not complete purchase.";
 "billing_paypal_link_email_subject"="surespot pay what you like paypal link";
-"billing_paypal_link_email_body"="Thankyou for paying what you like for surespot! The paypal link is:";
+"billing_paypal_link_email_body"="Thank you for paying what you like for surespot! The paypal link is:";
 "none"="none";
 "pwyl_paypal_send_to_self"="email link to yourself";
 "billing_bitcoin_copied_to_clipboard"="%s copied to clipboard";
 "billing_bitcoin_email_subject"="surespot pay what you like bitcoin address";
-"billing_bitcoin_email_body_address"="Thankyou for paying what you like for surespot! The bitcoin address is: %s";
+"billing_bitcoin_email_body_address"="Thank you for paying what you like for surespot! The bitcoin address is: %s";
 "billing_bitcoin_email_body_qr"="The QR code can be viewed here: %s";
 "could_not_open_bitcoin_wallet"="could not open bitcoin wallet";
 "message_sending"="sending...";
 "message_loading_and_decrypting"="loading and decrypting...";
-"could_not_login_to_server"="could not login to server";
+"could_not_login_to_server"="could not log in to server";
 "could_not_connect_to_server"="could not connect to server";
 "autoinvite_user_exists"="your friend list already contains %s";
 "loading_latest_messages_failed"="loading latest messages failed";
@@ -203,7 +176,7 @@
 "change_password_actionbar_right"="change";
 "change_password_progress"="changing password";
 "could_not_change_password"="could not change password";
-"password_changed"="password changed";
+"password_changed"="password changed, please backup the identity";
 "delete"="delete";
 "delete_identity_progress"="deleting identity";
 "could_not_delete_identity"="could not delete identity";
@@ -218,7 +191,7 @@
 "assign"="assign";
 "could_not_load_image"="could not load image";
 "image"="image";
-"pan_and_zoom"="pan and zoom";
+"pan_and_zoom"="move and zoom";
 "done"="done";
 "message_error_invalid"="error sending message: invalid message";
 "message_error_unauthorized"="error sending message: unauthorized";
@@ -243,15 +216,15 @@
 "select_all"="select all";
 "delete_identity_message_warning"="Deleting an identity will erase all messages that identity has sent. It can not be undone.";
 "identity_colon"="identity:";
-"backup_location_note"="Note: this may or may not be the removable SD card depending on your ROM.";
+"backup_location_note"="Note: this may or may not be the removable SD card depending on your device.";
 "invite_others"="Invite others to communicate with you privately via surespot by sharing an auto-invite link with them.";
 "invite_reassurance"="Your contact information is not stored, uploaded, or used anywhere other than in this capacity.";
 "invite_via_email"="invite via email";
 "invite_via_text_message"="invite via text message";
 "invite_via_other_application"="invite via other application";
-"click_to_select_email_contacts"="Touch 'next' to select email addresses and launch your email app.";
-"invite_text"="Touch 'next' to select phone numbers and launch your sms app. (Please [click here] if contacts fail to populate in your sms app).";
-"touch_invite_button"="Touch 'invite' to select application to invite with, eg. facebook, twitter.";
+"click_to_select_email_contacts"="Press the button to select email addresses and launch your email app.";
+"invite_text"="Press the button to select phone numbers and launch your sms app. (Please [touch here] if contacts fail to populate in your sms app).";
+"touch_invite_button"="Press the button to select application to invite with, eg. facebook, twitter.";
 "phone_number"="phone number";
 "generate_new_keypairs"="Generate new private key pairs for the selected identity and revoke the current pair. Any other devices (ie. lost or stolen phones) will no longer be able to access surespot using the selected identity.";
 "username"="username";
@@ -261,8 +234,8 @@
 "delete_all_messages"="delete all messages";
 "pay_what_you_like"="pay what you like";
 "pref_title_general"="general";
-"pref_title_about_surespot"="about surespot...";
-"pref_title_help"="help...";
+"pref_title_about_surespot"="about surespot";
+"pref_title_help"="help";
 "pref_title_confirmations"="confirmations";
 "pref_title_delete_message"="delete message";
 "pref_title_delete_all_messages"="delete all messages";
@@ -280,13 +253,11 @@
 "pref_summary_delete_identity"="Deleting an identity can not be undone.";
 "pref_summary_regen_keys"="For the paranoid.";
 "pref_summary_alternate_sms_delimiter"="Needs to be enabled on some devices to populate the sms \'to\' field correctly when multiple contacts are selected in invite contacts.";
-"pref_summary_silent_error_reporting"="Silently sends error reports containing no personally identifying information to surespot developers.";
 "pref_summary_message_debug_mode"="Shows more information about messages for debugging purposes.";
 "menu_invite_contacts"="invite contacts";
 "pref_title_delete_identity"="delete identity...";
 "delete_identity"="delete identity";
 "surespot_help"="surespot help";
-"next"="next";
 "backup_drive_button"="Execute Google Drive Backup";
 "could_not_backup_identity_to_google_drive"="Could not backup identity to Google Drive";
 "identity_successfully_backed_up_to_google_drive"="Identity successfully backed up to Google Drive";
@@ -307,9 +278,54 @@
 "last_modified"="last modified";
 "help"="help";
 "menu_import"="import";
-"backup_device"="BACKUP IDENTITY TO DEVICE STORAGE";
-"backup_drive"="BACKUP IDENTITY TO GOOGLE DRIVE";
+"backup_device"="DEVICE STORAGE IDENTITY BACKUP";
+"backup_drive"="GOOGLE DRIVE IDENTITY BACKUP";
 "let_me_select"="let me select";
 "could_not_import_identity_drive_404"="Could not load identity - please make sure you selected the same Google account that you were using in Google Drive.";
 "pick_same_drive_account"="Please pick the same account that you were using in Google Drive:";
 "about"="about...";
+"unauthorized"="unauthorized";
+"verify_key_fingerprints"="view key fingerprints";
+"received"="received";
+"version"="version";
+"public_key_fingerprints"="public key fingerprints";
+"loading"="loading...";
+"device_does_not_support_google_drive"="Device not configured for Google Drive.";
+"login_update"="please update surespot to log in";
+"billing_payment_required_voice"="surepot voice message not purchased";
+"billing_getting_inventory"="getting purchase inventory, please try again in a second";
+"billing_unavailable_message"="you must have a Google account on your device to purchase voice messaging";
+"billing_unavailable_title"="billing unavailable";
+"billing_error"="billing error";
+"pref_billing"="purchases";
+"suppress_voice_purchase"="don't ask me to buy voice messaging (closes tab instead)";
+"voice_messaging_purchase_1"="Add voice messaging to your surespot and make encrypted communication even easier! Simply hold down the microphone button to record and release to send. Because sometimes it is easier to say it than type it";
+"voice_messaging_purchase_button"="touch here to buy for $1.99";
+"voice_message_suppress_purchase_ask"="don't ask me again";
+"pref_suppress_voice_purchase_ask_title"="don't ask me again";
+"pref_suppress_voice_purchase_ask_summary"="stop asking me to purchase voice messaging capability";
+"menu_purchase_voice_messaging"="purchase voice";
+"purchase_voice_title"="voice messaging purchase";
+"user_exists_throttled"="too many checks, try again later";
+"user_exists_error"="error checking for username";
+"user_exists_progress"="checking username";
+"caching_service_notification_title"="surespot";
+"caching_service_notification_message"="caching for maximum performance";
+"voice_help_1"="Hold down the microphone button to record a voice message, release the button to send.";
+"voice_help_2"="To cancel the recording drag away from button and release.";
+"voice_help_3"="Touch on a voice message to play, touch again to stop.";
+"voice_help_4"="New voice messages will play automatically for the open chat tab.";
+"close"="close";
+"no_audio_detected"="no audio detected - not sending voice message";
+
+/*"welcome_to_surespot"="<![CDATA["Welcome to surespot! Data sent using this app is <a href="https://en.wikipedia.org/wiki/End-to-end_encryption"="end-to-end</a> encrypted with <a href="https://en.wikipedia.org/wiki/Symmetric-key_algorithm"="symmetric-key</a> encryption (<a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard"="256 bit AES-GCM</a>) using keys created with 521 bit <a href="https://en.wikipedia.org/wiki/Elliptic_curve_Diffie-Hellman"="ECDH shared secret derivation</a>."]]>"*/
+/*"help_backup_what"="<![CDATA["This will export a copy of the selected identity encrypted with <a href="http://www.eetimes.com/design/embedded-internet-design/4372428/How-secure-is-AES-against-brute-force-attacks-"="256 bit AES-GCM</a> with a key derived from your password through a <a href="https://en.wikipedia.org/wiki/PBKDF2"="PBKDF</a> (Password Based Key Derivation Function)"]]>";*/
+/*"help_backup_drive1"="<![CDATA["If you elect to backup your identity on Google Drive you will be storing a copy of your <a href="https://en.wikipedia.org/wiki/Public-key_cryptography"="private keys</a> on Google Drive servers. Should a third party somehow gain access to the Google Drive servers and attempt to decrypt your identity file by <a href="https://en.wikipedia.org/wiki/Brute-force_attack"="brute force attack</a>, be aware that the <a href="https://en.wikipedia.org/wiki/Password_strength"="strength</a> of your password will ultimately determine their success."]]>";*/
+/*"pwyl_text"="<![CDATA["Surespot is ad and data mining free.<br><br>Servers and storage cost money; your donations ensure that we do not have to charge for surespot.<br><br>We will donate a percentage to the <a href="https://www.eff.org/issues/privacy"="EFF</a> that they may continue to fight for all of our electronic freedoms."]]>";*/
+/*"about_about"="<![CDATA["surespot - a 2fours production"]]>";
+ /*"about_website"="<![CDATA["Please visit the surespot website at <a href="https://www.surespot.me"="https://www.surespot.me</a> for more information, including the <a href="https://www.surespot.me/documents/surespot_terms_of_service.html"="terms of service</a>, <a href="https://www.surespot.me/documents/surespot_privacy_policy.html"="privacy policy</a>, and <a href="https://www.surespot.me/documents/threat.html"="data and threat analysis</a>."]]>";
+ /*"about_opensource"="<![CDATA["Surespot is 100% open source and welcomes your participation - view the source code on github at <a href="https://github.com/surespot"="https://github.com/surespot</a>."]]>";
+ /*"about_tech"="<![CDATA["For a more technical overview of how surespot works please touch <a href="https://www.surespot.me/documents/how_surespot_works.html"="here</a>."]]>";
+ /*"about_support"="<![CDATA["For questions or support please <a href="https://www.surespot.me/support.html>touch here</a> or email <a href="mailto:support@2fours.com"="support@2fours.com</a>.]]>";*/
+/*"help_agreement"="<![CDATA["By touching OK you agree to the surespot <a href="https://www.surespot.me/documents/surespot_terms_of_service.html"="terms of service</a>."]]>"*/;
+/*"voice_upgrade_required"="<![CDATA["<a href="market://details?id=com.twofours.surespot"="You must update surespot to listen to this voice message.</a>"]]>"*/;
