@@ -108,8 +108,17 @@
                                     <outlet property="delegate" destination="VAm-bF-dbx" id="Hfh-Jb-jkl"/>
                                 </connections>
                             </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Confirm Password" minimumFontSize="17" clearButtonMode="whileEditing" id="Oo0-cc-E0J">
+                                <rect key="frame" x="20" y="130" width="280" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES"/>
+                                <connections>
+                                    <outlet property="delegate" destination="VAm-bF-dbx" id="Wgp-4Q-anw"/>
+                                </connections>
+                            </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gmo-KK-DEU">
-                                <rect key="frame" x="94" y="122" width="133" height="30"/>
+                                <rect key="frame" x="94" y="168" width="133" height="30"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                 <state key="normal" title="create identity">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -127,6 +136,7 @@
                     <connections>
                         <outlet property="bCreateIdentity" destination="gmo-KK-DEU" id="yO9-Oj-PUr"/>
                         <outlet property="tbPassword" destination="4qE-be-iiM" id="XO1-5U-3XE"/>
+                        <outlet property="tbPasswordConfirm" destination="Oo0-cc-E0J" id="d7x-O9-Woc"/>
                         <outlet property="tbUsername" destination="oBQ-en-mfr" id="AOE-Pe-kUR"/>
                         <segue destination="tcp-OJ-fTS" kind="push" identifier="signupToMain" id="0Gr-2N-xaD"/>
                     </connections>
@@ -206,7 +216,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="CFG-TY-gjC"/>
         <segue reference="qzP-R7-Qz4"/>
+        <segue reference="0Gr-2N-xaD"/>
     </inferredMetricsTieBreakers>
 </document>

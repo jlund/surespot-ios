@@ -14,4 +14,5 @@
 @property (strong, nonatomic) IBOutlet UITextField *tbPassword;
 - (IBAction)createIdentity:(id)sender;
 
+@property (strong, nonatomic) IBOutlet UITextField *tbPasswordConfirm;
 @end

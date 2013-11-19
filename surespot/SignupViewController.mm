@@ -49,12 +49,22 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (IBAction)createIdentity:(id)sender {
     NSString * username = self.tbUsername.text;
     NSString * password = self.tbPassword.text;
+    NSString * confirmPassword = self.tbPasswordConfirm.text;
     
-    if ([UIUtils stringIsNilOrEmpty:username] || [UIUtils stringIsNilOrEmpty:password]) {
+    
+    if ([UIUtils stringIsNilOrEmpty:username] || [UIUtils stringIsNilOrEmpty:password] || [UIUtils stringIsNilOrEmpty:confirmPassword]) {
         return;
     }
     
-    [_tbPassword resignFirstResponder];
+    if (![confirmPassword isEqualToString:password]) {
+        [UIUtils showToastView:self.view key:@"passwords_do_not_match" duration:1.5];
+        _tbPassword.text = @"";
+        _tbPasswordConfirm.text = @"";
+        [_tbPassword becomeFirstResponder];
+        return;
+    }
+    
+    [_tbPasswordConfirm resignFirstResponder];
     _progressView = [LoadingView loadingViewInView:self.view textKey:@"create_user_progress"];
     
     dispatch_queue_t q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
@@ -111,9 +121,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     else {
         if (textField == _tbPassword) {
             if (![UIUtils stringIsNilOrEmpty: textField.text]) {
+                [_tbPasswordConfirm becomeFirstResponder];
+                [textField resignFirstResponder];
+                return NO;
+            }
+        }
+        else {
+            if (textField == _tbPasswordConfirm) {
                 [textField resignFirstResponder];
                 [self createIdentity:nil];
                 return YES;
+                
             }
         }
     }
@@ -135,7 +153,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         return (newLength >= 20) ? NO : YES;
     }
     else {
-        if (textField == _tbPassword) {
+        if ((textField == _tbPassword) || (textField == _tbPasswordConfirm)) {
             NSUInteger newLength = [textField.text length] + [string length] - range.length;
             return (newLength >= 256) ? NO : YES;
         }
