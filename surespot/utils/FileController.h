@@ -15,4 +15,5 @@
 + (NSData *)gzipDeflate:(NSData *) data;
 + (NSData *)gzipInflate:(NSData *) data;
 +(void) wipeDataForUsername: (NSString *) username friendUsername: (NSString *) friendUsername;
++(NSString*)getPublicKeyFilenameForUsername: (NSString *) username version: (NSString *)version;
 @end

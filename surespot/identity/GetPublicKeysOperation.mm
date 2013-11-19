@@ -9,6 +9,7 @@
 #import "GetPublicKeysOperation.h"
 #import "NetworkController.h"
 #import "EncryptionController.h"
+#import "IdentityController.h"
 #import "DDLog.h"
 
 #ifdef DEBUG
@@ -47,12 +48,27 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _isExecuting = YES;
     [self didChangeValueForKey:@"isExecuting"];
     
+    
+    PublicKeys * keys = [[IdentityController sharedInstance] loadPublicKeysUsername: _username version:  _version];
+    if (keys) {
+        DDLogInfo(@"Loaded public keys from disk for user: %@, version: %@", _username, _version);
+        [self finish:keys];
+        return;
+    }
+    
     [[NetworkController sharedInstance]
      getPublicKeysForUsername: self.username
      andVersion: self.version
      successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
          
          if (JSON) {
+             NSString * version = [JSON objectForKey:@"version"];
+             if (![_version isEqualToString:version]) {
+                 DDLogWarn(@"public key versions do not match");
+                 [self finish: nil];
+             }
+             
+             
              DDLogInfo(@"verifying public keys for %@", _username);
              BOOL verified = [[IdentityController sharedInstance  ] verifyPublicKeys: JSON];
              
@@ -78,6 +94,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                  pk.dsaPubKey = dsaPub;
                  pk.version = _version;
                  pk.lastModified = [NSNumber numberWithLong: [[NSDate date] timeIntervalSince1970] * 1000];
+                 
+                 //save keys to disk
+                 [[IdentityController sharedInstance] savePublicKeys: JSON username: _username version:  _version];
                  
                  DDLogVerbose(@"get public keys calling callback");
                  [self finish:pk];

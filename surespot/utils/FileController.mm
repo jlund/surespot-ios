@@ -21,6 +21,8 @@ NSString * const STATE_DIR = @"state";
 NSString * const HOME_FILENAME = @"home";
 NSString * const STATE_EXTENSION = @"sss";
 NSString * const CHAT_DATA_PREFIX = @"chatdata_";
+NSString * const PUBLIC_KEYS_DIR = @"publickeys";
+NSString * const PUBLIC_KEYS_EXTENSION = @"spk";
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -67,6 +69,20 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return [self getFilename:[CHAT_DATA_PREFIX stringByAppendingString:spot]];
 }
 
++(NSString*)getPublicKeyFilenameForUsername: (NSString *) username version: (NSString *)version {
+    NSString * dir = [self getDirectoryForUser:[[IdentityController sharedInstance] getLoggedInUser] ];
+    
+    NSString * pkdir = [[dir stringByAppendingPathComponent:PUBLIC_KEYS_DIR] stringByAppendingPathComponent:username];
+    
+    NSError * error;
+    if (![[NSFileManager defaultManager] createDirectoryAtPath:pkdir withIntermediateDirectories:YES attributes:nil error:&error]) {
+        DDLogError(@"%@", error.localizedDescription);
+    }
+    
+    return [pkdir stringByAppendingPathComponent:[version stringByAppendingPathExtension:PUBLIC_KEYS_EXTENSION]];
+
+}
+
 +(void) wipeDataForUsername: (NSString *) username friendUsername: (NSString *) friendUsername {
     //todo delete public keys
     
@@ -92,18 +108,25 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 +(NSString *) getFilename: (NSString *) filename forUser: (NSString *) user {
     if (user) {
-        NSString * dir = [[[FileController getAppSupportDir] stringByAppendingPathComponent:STATE_DIR ] stringByAppendingPathComponent:user];
-        NSError * error = nil;
-        if (![[NSFileManager defaultManager] createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:nil error:&error]) {
-            DDLogVerbose(@"%@", error.localizedDescription);
-        }
-        
+        NSString * dir = [self getDirectoryForUser:user];
         return [dir stringByAppendingPathComponent:[filename stringByAppendingPathExtension:STATE_EXTENSION]];
                 
     }
     
     return nil;
 }
+
+
+
++(NSString *) getDirectoryForUser: (NSString *) user {
+    NSString * dir = [[[FileController getAppSupportDir] stringByAppendingPathComponent:STATE_DIR ] stringByAppendingPathComponent:user];
+    NSError * error = nil;
+    if (![[NSFileManager defaultManager] createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:nil error:&error]) {
+        DDLogVerbose(@"%@", error.localizedDescription);
+    }
+    return  dir;
+}
+
 
 
 // http://cocoadev.com/wiki/NSDataCategory

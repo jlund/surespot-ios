@@ -20,7 +20,11 @@
 #import "DDLog.h"
 #import "NSData+Base64.h"
 
+#ifdef DEBUG
+static const int ddLogLevel = LOG_LEVEL_INFO;
+#else
 static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
 
 @interface IdentityController()
 @property  (nonatomic, strong) SurespotIdentity * loggedInIdentity;
@@ -50,7 +54,7 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
     }
     return identity;
     
-  }
+}
 
 -(SurespotIdentity *) loadIdentityUsername: (NSString * ) username password: (NSString *) password {
     
@@ -68,7 +72,7 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
     }
     
     return nil;
-
+    
 }
 
 -(NSData *) encryptIdentity: (SurespotIdentity *) identity withPassword:(NSString *)password {
@@ -197,7 +201,7 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
 
 - (void) userLoggedInWithIdentity: (SurespotIdentity *) identity {
     [self setLoggedInUserIdentity:identity];
-   }
+}
 
 
 
@@ -218,7 +222,7 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
     DDLogVerbose(@"getTheirLatestVersionForUsername");
     
     [[CredentialCachingController sharedInstance] getLatestVersionForUsername: username callback: callback];
-      
+    
     
     
     
@@ -239,15 +243,40 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
     }
     
     BOOL dsaVerify = [EncryptionController
-                     verifyPublicKeySignature: [NSData dataFromBase64String:[keys objectForKey:@"dsaPubSig"]]
-                     data:[keys objectForKey:@"dsaPub"]];
+                      verifyPublicKeySignature: [NSData dataFromBase64String:[keys objectForKey:@"dsaPubSig"]]
+                      data:[keys objectForKey:@"dsaPub"]];
     
     if (!dsaVerify) {
         return NO;
     }
     
     return YES;
- 
 }
+
+-(PublicKeys *) loadPublicKeysUsername: (NSString * ) username version: (NSString *) version {
+    NSString * filename =[FileController getPublicKeyFilenameForUsername: username version: version];
+    NSDictionary * keys = [NSKeyedUnarchiver unarchiveObjectWithFile:filename];
+    if (keys) {
+        ECDHPublicKey dhPub = [EncryptionController recreateDhPublicKey:[keys objectForKey:@"dhPub"]];
+        ECDHPublicKey dsaPub = [EncryptionController recreateDsaPublicKey:[keys objectForKey:@"dsaPub"]];
+        
+        PublicKeys* pk = [[PublicKeys alloc] init];
+        pk.dhPubKey = dhPub;
+        pk.dsaPubKey = dsaPub;
+        pk.version = version;
+        pk.lastModified = [NSNumber numberWithLong: [[NSDate date] timeIntervalSince1970] * 1000];
+        DDLogInfo(@"loaded public keys for username: %@, version: %@ from filename: %@", username,version,filename);
+        return pk;
+    }
+    
+    return nil;
+}
+
+-(void) savePublicKeys: (NSDictionary * ) keys username: (NSString *)username version: (NSString *)version{
+    NSString * filename =[FileController getPublicKeyFilenameForUsername: username version: version];
+    BOOL saved =[NSKeyedArchiver archiveRootObject:keys toFile:filename];
+    DDLogInfo(@"saved public keys for username: %@, version: %@ to filename: %@  with success: %@", username,version,filename, saved?@"YES":@"NO");
+}
+
 
 @end

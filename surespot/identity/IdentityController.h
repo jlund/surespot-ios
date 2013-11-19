@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "SurespotIdentity.h"
 #import "IdentityKeys.h"
+#import "PublicKeys.h"
 
 typedef void (^CallbackBlock) (id  result);
 typedef void (^CallbackStringBlock) (NSString * result);
@@ -31,7 +32,7 @@ typedef void (^CallbackDictionaryBlock) (NSDictionary * result);
 - (void) getTheirLatestVersionForUsername: (NSString *) username callback:(CallbackStringBlock) callback;
 
 -(BOOL) verifyPublicKeys: (NSDictionary *) keys;
-
-
+-(PublicKeys *) loadPublicKeysUsername: (NSString * ) username version: (NSString *) version;
+-(void) savePublicKeys: (NSDictionary * ) keys username: (NSString *)username version: (NSString *)version;
 
 @end
