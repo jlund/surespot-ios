@@ -19,6 +19,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 @interface NetworkController()
 @property (nonatomic, strong) NSString * baseUrl;
+@property (atomic, assign) BOOL loggedOut;
 @end
 
 @implementation NetworkController
@@ -38,8 +39,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(NetworkController*)init
 {
     NSString * baseUrl = serverSecure ?
-        [NSString stringWithFormat: @"https://%@:%d", serverBaseIPAddress, serverPort] :
-        [NSString stringWithFormat: @"http://%@:%d", serverBaseIPAddress, serverPort];
+    [NSString stringWithFormat: @"https://%@:%d", serverBaseIPAddress, serverPort] :
+    [NSString stringWithFormat: @"http://%@:%d", serverBaseIPAddress, serverPort];
     
     //call super init
     self = [super initWithBaseURL:[NSURL URLWithString: baseUrl]];
@@ -47,18 +48,46 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (self != nil) {
         _baseUrl = baseUrl;
         
-        [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
-        [self registerHTTPOperationClass:[AFHTTPRequestOperation class]];
-       
+        //   [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
+        //  [self registerHTTPOperationClass:[AFHTTPRequestOperation class]];
+        
         
         // Accept HTTP Header; see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
         [self setDefaultHeader:@"Accept-Charset" value:@"utf-8"];
         //[self setDefaultHeader:@"Accept" value:@"application/json"];
         
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(HTTPOperationDidFinish:) name:AFNetworkingOperationDidFinishNotification object:nil];
+        
         self.parameterEncoding = AFJSONParameterEncoding;
     }
     
     return self;
+}
+
+
+//handle 401s globally
+- (void)HTTPOperationDidFinish:(NSNotification *)notification {
+    AFHTTPRequestOperation *operation = (AFHTTPRequestOperation *)[notification object];
+    
+    if (![operation isKindOfClass:[AFHTTPRequestOperation class]]) {
+        return;
+    }
+    
+    if ([operation.response statusCode] == 401) {
+        _loggedOut = YES;
+        
+        DDLogInfo(@"path components: %@", operation.request.URL.pathComponents[1]);
+        //ignore on logout
+        if (![operation.request.URL.pathComponents[1] isEqualToString:@"logout"]) {
+            DDLogInfo(@"received 401");
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"unauthorized" object: nil];
+        }
+        else {
+            DDLogInfo(@"logout 401'd");
+        }
+        
+
+    }
 }
 
 -(void) loginWithUsername:(NSString*) username andPassword:(NSString *)password andSignature: (NSString *) signature
@@ -76,19 +105,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     
     AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        
-        //save the cookie
-        NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:_baseUrl]];
-        
-        NSHTTPCookie * surespotCookie;
-        for (NSHTTPCookie *cookie in cookies)
-        {
-            if ([cookie.name isEqualToString:@"connect.sid"]) {
-                surespotCookie = cookie;
-            }
+        BOOL gotCookie = [self extractConnectCookie];
+        if (gotCookie) {
+            successBlock(request, response, JSON);
         }
-        
-        successBlock(request, response, JSON);
+        else {
+            failureBlock(request, response, nil, nil);
+        }
+
         
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
         failureBlock(request, response, error, JSON);
@@ -98,6 +122,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [operation start];
     
 }
+
 
 -(void) addUser: (NSString *) username derivedPassword:  (NSString *)derivedPassword dhKey: (NSString *)encodedDHKey dsaKey: (NSString *)encodedDSAKey signature: (NSString *)signature version: (NSString *) version successBlock:(HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock {
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:username,@"username",derivedPassword,@"password",signature, @"authSig", encodedDHKey, @"dhPub", encodedDSAKey, @"dsaPub", version, @"version", nil];
@@ -113,9 +138,38 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     
     AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
-    [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        BOOL gotCookie = [self extractConnectCookie];
+        if (gotCookie) {
+            successBlock(operation, responseObject);
+        }
+        else {
+            failureBlock(operation, nil);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failureBlock(operation, error);
+    }];
     
     [operation start];
+}
+
+
+-(BOOL) extractConnectCookie {
+    //save the cookie
+    NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:_baseUrl]];
+    
+    NSHTTPCookie * surespotCookie;
+    for (NSHTTPCookie *cookie in cookies)
+    {
+        if ([cookie.name isEqualToString:@"connect.sid"]) {
+            _loggedOut = NO;
+            surespotCookie = cookie;
+            return YES;
+        }
+    }
+    
+    return NO;
+    
 }
 
 -(void) getFriendsSuccessBlock:(JSONSuccessBlock)successBlock failureBlock: (JSONFailureBlock) failureBlock {
@@ -196,14 +250,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) logout {
     //send logout
-    NSURLRequest *request = [self requestWithMethod:@"POST" path:@"logout"  parameters:nil];
-    AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [self deleteCookies];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self deleteCookies];
-    }];
-    [operation start];
+    if (!_loggedOut) {
+        DDLogInfo(@"logout");
+        NSURLRequest *request = [self requestWithMethod:@"POST" path:@"logout"  parameters:nil];
+        AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
+        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [self deleteCookies];
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            [self deleteCookies];
+        }];
+        [operation start];
+    }
     
     
 }

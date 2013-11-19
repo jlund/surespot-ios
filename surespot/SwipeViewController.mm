@@ -104,10 +104,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshHome:) name:@"refreshHome" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushNotification:) name:@"pushNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteFriend:) name:@"deleteFriend" object:nil];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startProgress:) name:@"startProgress" object:nil];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopProgress:) name:@"stopProgress" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unauthorized:) name:@"unauthorized" object:nil];
     
     
     _homeDataSource = [[ChatController sharedInstance] getHomeDataSource];
@@ -1350,6 +1349,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return YES;
 }
 
+
+-(void) unauthorized: (NSNotification *) notification {
+    DDLogInfo(@"unauthorized");
+    [UIUtils showToastView:self.view key:@"unauthorized"];
+    [self logout];
+}
 
 
 @end
