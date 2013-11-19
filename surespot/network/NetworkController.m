@@ -182,7 +182,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) inviteFriend: (NSString *) friendname successBlock: (HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock {
-    NSURLRequest *request = [self requestWithMethod:@"POST" path:[@"invite/" stringByAppendingString:friendname]  parameters:nil];
+    NSString * path = [[NSString stringWithFormat: @"invite/%@",friendname] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSURLRequest *request = [self requestWithMethod:@"POST" path:path parameters:nil];
     AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
     [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
     [operation start];
@@ -190,7 +191,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void) getKeyVersionForUsername:(NSString *)username successBlock:(HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock
 {
-    NSURLRequest *request = [self requestWithMethod:@"GET" path:[@"keyversion/"  stringByAppendingString:username] parameters: nil];
+    NSString * path = [[NSString stringWithFormat: @"keyversion/%@",username] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSURLRequest *request = [self requestWithMethod:@"GET" path:path parameters: nil];
     AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
     [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
     [operation start];
@@ -198,8 +200,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void) getPublicKeysForUsername:(NSString *)username andVersion:(NSString *)version successBlock:(JSONSuccessBlock)successBlock failureBlock:(JSONFailureBlock) failureBlock{
     
-    //todo use formatter
-    NSURLRequest *request = [self requestWithMethod:@"GET" path: [NSString stringWithFormat: @"publickeys/%@/%@",username, version] parameters: nil];
+    NSString * path = [[NSString stringWithFormat: @"publickeys/%@/%@",username, version]  stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] ;
+    NSURLRequest *request = [self requestWithMethod:@"GET" path: path parameters: nil];
     
     AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:successBlock failure: failureBlock];
     
@@ -210,7 +212,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) getMessageDataForUsername:(NSString *)username andMessageId:(NSInteger)messageId andControlId:(NSInteger) controlId successBlock:(JSONSuccessBlock)successBlock failureBlock: (JSONFailureBlock) failureBlock {
     
-    NSString * path = [NSString stringWithFormat:@"messageData/%@/%u/%u", username, messageId, controlId];
+    NSString * path = [[NSString stringWithFormat:@"messageData/%@/%u/%u", username, messageId, controlId]  stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSURLRequest *request = [self requestWithMethod:@"GET" path:path parameters: nil];
     AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:successBlock
                                                                                         failure: failureBlock];
@@ -220,7 +222,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) respondToInviteName:(NSString *) friendname action: (NSString *) action successBlock:(HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock {
-    NSString * path = [NSString stringWithFormat:@"invites/%@/%@", friendname, action];
+    NSString * path = [[NSString stringWithFormat:@"invites/%@/%@", friendname, action] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSURLRequest *request = [self requestWithMethod:@"POST" path:path  parameters:nil];
     AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
     [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
@@ -278,8 +280,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 -(void) deleteFriend:(NSString *) friendname successBlock:(HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock {
-    
-    NSString * path = [NSString stringWithFormat:@"friends/%@", friendname];
+
+    NSString * path = [[NSString stringWithFormat:@"friends/%@", friendname] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSURLRequest *request = [self requestWithMethod:@"DELETE" path:path  parameters:nil];
     AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
     [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
@@ -290,7 +292,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) deleteMessageName:(NSString *) name serverId: (NSInteger) serverid successBlock:(HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock {
     
-    NSString * path = [NSString stringWithFormat:@"messages/%@/%d", name, serverid];
+    NSString * path = [[NSString stringWithFormat:@"messages/%@/%d", name, serverid] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSURLRequest *request = [self requestWithMethod:@"DELETE" path:path  parameters:nil];
     AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
     [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
@@ -300,7 +302,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) deleteMessagesUTAI:(NSInteger) utaiId name: (NSString *) name successBlock:(HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock {
     
-    NSString * path = [NSString stringWithFormat:@"messagesutai/%@/%d", name, utaiId];
+    NSString * path = [[NSString stringWithFormat:@"messagesutai/%@/%d", name, utaiId] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSURLRequest *request = [self requestWithMethod:@"DELETE" path:path  parameters:nil];
     AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
     [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
@@ -309,7 +311,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) userExists: (NSString *) username successBlock: (HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock {
-    NSString * path = [NSString stringWithFormat:@"users/%@/exists", username];
+    NSString * path = [[NSString stringWithFormat:@"users/%@/exists", username] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSURLRequest *request = [self requestWithMethod:@"GET" path: path  parameters:nil];
     AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
     [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];

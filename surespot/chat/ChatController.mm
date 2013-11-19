@@ -631,8 +631,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
 -(void) inviteAction:(NSString *) action forUsername:(NSString *)username{
     DDLogVerbose(@"Invite action: %@, for username: %@", action, username);
     
-    [[NetworkController sharedInstance]
-     respondToInviteName:username action:action
+    [[NetworkController sharedInstance]  respondToInviteName:username action:action
      
      
      successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -653,7 +652,8 @@ static const int MAX_CONNECTION_RETRIES = 16;
      }
      
      failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
-         //TODO notify user
+         DDLogError(@"error responding to invite: %@", Error);
+         [UIUtils showToastKey:@"could_not_respond_to_invite"];
      }];
     
 }
