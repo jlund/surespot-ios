@@ -106,7 +106,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         if (!identity) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [UIUtils showToastView:_userPicker key: @"login_check_password" ];
+                [UIUtils showToastKey: @"login_check_password" ];
                 [_progressView removeView];
                 self.navigationItem.rightBarButtonItem.enabled = YES;
                 
@@ -144,7 +144,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
          }
          failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
              DDLogVerbose(@"response failure: %@",  Error);
-             [UIUtils showToastView:_userPicker key: @"login_try_again_later" duration: 2.0];
+             [UIUtils showToastKey: @"login_try_again_later" duration: 2.0];
              [_progressView removeView];
              self.navigationItem.rightBarButtonItem.enabled = YES;
              

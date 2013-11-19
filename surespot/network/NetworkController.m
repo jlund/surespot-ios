@@ -74,20 +74,21 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     if ([operation.response statusCode] == 401) {
-        _loggedOut = YES;
-        
         DDLogInfo(@"path components: %@", operation.request.URL.pathComponents[1]);
         //ignore on logout
         if (![operation.request.URL.pathComponents[1] isEqualToString:@"logout"]) {
             DDLogInfo(@"received 401");
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"unauthorized" object: nil];
+            [self setUnauthorized];
         }
         else {
             DDLogInfo(@"logout 401'd");
         }
-        
-
     }
+}
+
+-(void) setUnauthorized {
+    _loggedOut = YES;
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"unauthorized" object: nil];
 }
 
 -(void) loginWithUsername:(NSString*) username andPassword:(NSString *)password andSignature: (NSString *) signature
@@ -112,7 +113,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         else {
             failureBlock(request, response, nil, nil);
         }
-
+        
         
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
         failureBlock(request, response, error, JSON);

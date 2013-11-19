@@ -907,7 +907,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
             NSString * loggedInUser = [[IdentityController sharedInstance] getLoggedInUser];
             if ([text isEqualToString:loggedInUser]) {
-                [UIUtils showToastView:self.view key:@"friend_self_error"];
+                [UIUtils showToastKey:@"friend_self_error"];
                 return;
             }
             
@@ -1352,7 +1352,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) unauthorized: (NSNotification *) notification {
     DDLogInfo(@"unauthorized");
-    [UIUtils showToastView:self.view key:@"unauthorized"];
+    [UIUtils showToastKey:@"unauthorized" duration:2];
     [self logout];
 }
 

@@ -123,13 +123,23 @@ static const int MAX_CONNECTION_RETRIES = 16;
 }
 
 - (void) socketIO:(SocketIO *)socket onError:(NSError *)error {
-    DDLogVerbose(@"error %@", error);
+    DDLogInfo(@"error %@", error);
+    id internalError = [error.userInfo objectForKey:NSLocalizedDescriptionKey];
+    if ([internalError isMemberOfClass:[NSError class]])  {
+        DDLogInfo(@"internal error %@", internalError);
+        if ( [internalError code] == 403) {
+            DDLogInfo(@"socket unauthorized");
+            [[NetworkController sharedInstance] setUnauthorized];
+            return;
+        }
+    }
     [self reconnect];
+    
 }
 
 - (void) socketIODidDisconnect:(SocketIO *)socket disconnectedWithError:(NSError *)error {
     
-    DDLogVerbose(@"didDisconnectWithError %@", error);
+    DDLogInfo(@"didDisconnectWithError %@", error);
     if (error) {
         [self connect];
         
@@ -353,7 +363,6 @@ static const int MAX_CONNECTION_RETRIES = 16;
         [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object: nil];
     }];
 }
-
 
 - (HomeDataSource *) getHomeDataSource {
     

@@ -65,7 +65,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     if (![confirmPassword isEqualToString:password]) {
-        [UIUtils showToastView:self.view key:@"passwords_do_not_match" duration:1.5];
+        [UIUtils showToastKey:@"passwords_do_not_match" duration:1.5];
         _tbPassword.text = @"";
         _tbPasswordConfirm.text = @"";
         [_tbPassword becomeFirstResponder];
@@ -109,7 +109,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
          failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
              
              DDLogVerbose(@"signup response failure: %@",  Error);
-             [UIUtils showToastView:[self view] key:@"could_not_create_user"];
+             [UIUtils showToastKey:@"could_not_create_user"];
              [_progressView removeView];
          }
          ];
@@ -196,7 +196,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         NSString * response = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
         
         if ([response isEqualToString:@"true"]) {
-            [UIUtils showToastView:self.view key:@"username_exists"];
+            [UIUtils showToastKey:@"username_exists"];
             [self setUsernameValidity:NO];
             [_tbUsername becomeFirstResponder];
         }
@@ -207,7 +207,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [_progressView removeView];
     } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
            [_tbUsername becomeFirstResponder];
-        [UIUtils showToastView:self.view key:@"user_exists_error"];
+        [UIUtils showToastKey:@"user_exists_error"];
     }];
 }
 

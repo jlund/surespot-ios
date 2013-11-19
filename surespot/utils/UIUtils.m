@@ -44,14 +44,14 @@
     
 }
 
-+(void) showToastView: (UIView *) view key: (NSString *) key {
-    [self showToastView:view key:key duration:1.0];
++(void) showToastKey: (NSString *) key {
+    [self showToastKey:key duration:1.0];
 }
-+(void) showToastView: (UIView *) view key: (NSString *) key duration: (CGFloat) duration {
++(void) showToastKey: (NSString *) key duration: (CGFloat) duration {
     
-    [view makeToast:NSLocalizedString(key, nil)
+    [[[UIApplication sharedApplication] keyWindow]  makeToast:NSLocalizedString(key, nil)
            duration: duration
-           position:@"top"
+           position:@"center"
      ];
 }
 
