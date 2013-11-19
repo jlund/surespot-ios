@@ -184,4 +184,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self loadIdentityNames];
     [_userPicker reloadAllComponents];
 }
+
+
+- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{    
+    NSUInteger newLength = [textField.text length] + [string length] - range.length;
+    return (newLength >= 256) ? NO : YES;
+}
+
+
 @end

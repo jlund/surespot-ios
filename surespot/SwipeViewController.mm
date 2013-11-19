@@ -935,7 +935,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if ([afriend isDeleted]) {
         return;
     }
-
+    
     
     [[ChatController sharedInstance] sendMessage: message toFriendname:friendname];
     
@@ -1320,6 +1320,28 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     DDLogInfo(@"progress count:%d", _progressCount);
 }
+
+
+- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (!_homeDataSource.currentChat) {
+        NSCharacterSet *alphaSet = [NSCharacterSet alphanumericCharacterSet];
+        NSString * newString = [string stringByTrimmingCharactersInSet:alphaSet];
+        if (![newString isEqualToString:@""]) {
+            return NO;
+        }
+        
+        NSUInteger newLength = [textField.text length] + [newString length] - range.length;
+        return (newLength >= 20) ? NO : YES;
+    }
+    else {
+        NSUInteger newLength = [textField.text length] + [string length] - range.length;
+        return (newLength >= 1024) ? NO : YES;
+    }
+    
+    return YES;
+}
+
 
 
 @end

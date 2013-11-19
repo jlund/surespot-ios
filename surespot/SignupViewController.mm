@@ -124,14 +124,24 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    NSCharacterSet *alphaSet = [NSCharacterSet alphanumericCharacterSet];
-    NSString * newString = [string stringByTrimmingCharactersInSet:alphaSet];
-    if (![newString isEqualToString:@""]) {
-        return NO;
+    if (textField == _tbUsername) {
+        NSCharacterSet *alphaSet = [NSCharacterSet alphanumericCharacterSet];
+        NSString * newString = [string stringByTrimmingCharactersInSet:alphaSet];
+        if (![newString isEqualToString:@""]) {
+            return NO;
+        }
+        
+        NSUInteger newLength = [textField.text length] + [newString length] - range.length;
+        return (newLength >= 20) ? NO : YES;
+    }
+    else {
+        if (textField == _tbPassword) {
+            NSUInteger newLength = [textField.text length] + [string length] - range.length;
+            return (newLength >= 256) ? NO : YES;
+        }
     }
     
-    NSUInteger newLength = [textField.text length] + [newString length] - range.length;
-    return (newLength >= 20) ? NO : YES;
+    return YES;
 }
 
 
