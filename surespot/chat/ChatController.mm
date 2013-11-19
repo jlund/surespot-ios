@@ -304,6 +304,10 @@ static const int MAX_CONNECTION_RETRIES = 16;
         }
     }
     
+    
+    DDLogVerbose(@"before network call");
+
+    
     [[NetworkController sharedInstance] getLatestDataSinceUserControlId: _homeDataSource.latestUserControlId spotIds:messageIds successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         
         DDLogVerbose(@"network call complete");

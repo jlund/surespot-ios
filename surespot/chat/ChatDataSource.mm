@@ -220,15 +220,18 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     DDLogInfo(@"saving chat data to disk,filename: %@, spot: %@", filename, spot);
     NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
     
+    [self sort];
+    
     @synchronized (_messages)  {
-        [dict setObject:_messages forKey:@"messages"];
-        //[dict setObject:_username  forKey:@"username"];
+        //only save 50 messages
+        NSInteger count = _messages.count < 50 ? _messages.count : 50;
+        
+        NSArray * messages = [_messages subarrayWithRange:NSMakeRange([_messages count] - count ,count)];
+        [dict setObject:messages forKey:@"messages"];
         [dict setObject:[NSNumber numberWithInteger:_latestControlMessageId] forKey:@"latestControlMessageId"];
-        
-        
         BOOL saved =[NSKeyedArchiver archiveRootObject:dict toFile:filename];
         
-        DDLogVerbose(@"save success?: %@",saved ? @"YES" : @"NO");
+        DDLogInfo(@"saved %d messages for user %@, success?: %@",[messages count],_username, saved ? @"YES" : @"NO");
     }
     
 }
