@@ -103,12 +103,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshMessages:) name:@"refreshMessages" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshHome:) name:@"refreshHome" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushNotification:) name:@"pushNotification" object:nil];
-   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteFriend:) name:@"deleteFriend" object:nil];
-
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteFriend:) name:@"deleteFriend" object:nil];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startProgress:) name:@"startProgress" object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopProgress:) name:@"stopProgress" object:nil];
-
+    
     
     _homeDataSource = [[ChatController sharedInstance] getHomeDataSource];
     
@@ -138,7 +138,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _theButton.backgroundColor = [UIColor whiteColor];
     _theButton.opaque = YES;
     
-    [self updateButtonIcons];
+    [self updateTabChangeUI];
     
     [[ChatController sharedInstance] resume];
     
@@ -454,8 +454,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
     }
     
+    
     //update button
-    [self updateButtonIcons];
+    [self updateTabChangeUI];
+    
     
 }
 
@@ -506,11 +508,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     // Return the number of rows in the section
     if (index == 0) {
         if (![[ChatController sharedInstance] getHomeDataSource]) {
-            DDLogVerbose(@"returning 0 rows");
-            return 0;
+            DDLogVerbose(@"returning 1 rows");
+            return 1;
         }
         
-        return [[[ChatController sharedInstance] getHomeDataSource].friends count];
+        NSInteger count =[[[ChatController sharedInstance] getHomeDataSource].friends count];
+        return count == 0 ? 1 : count;
     }
     else {
         NSInteger chatIndex = index-1;
@@ -524,11 +527,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             }
         }
         if (username) {
-            return  [[ChatController sharedInstance] getDataSourceForFriendname: username].messages.count;
+            NSInteger count = [[ChatController sharedInstance] getDataSourceForFriendname: username].messages.count;
+            return count == 0 ? 1 : count;
         }
     }
     
-    return 0;
+    return 1;
     
 }
 
@@ -548,7 +552,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     
+    
+    
     if (index == 0) {
+        
+        NSInteger count =[[[ChatController sharedInstance] getHomeDataSource].friends count];
+        //if count is 0 we returned 1 for 0 rows so
+        if (count == 0) {
+            return tableView.frame.size.height;
+        }
+        
         Friend * afriend = [[[ChatController sharedInstance] getHomeDataSource].friends objectAtIndex:indexPath.row];
         if ([afriend isInviter] ) {
             return 70;
@@ -566,6 +579,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             NSString * username = aKey;
             NSArray * messages =[[ChatController sharedInstance] getDataSourceForFriendname: username].messages;
+            
+            
+            //if count is 0 we returned 1 for 0 rows so
+            if (messages.count == 0) {
+                return tableView.frame.size.height;
+            }
+            
+            
             if (messages.count > 0 && (indexPath.row < messages.count)) {
                 SurespotMessage * message =[messages objectAtIndex:indexPath.row];
                 UIInterfaceOrientation  orientation = [[UIApplication sharedApplication] statusBarOrientation];
@@ -609,10 +630,25 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         static NSString *CellIdentifier = @"Cell";
         UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         return cell;
+        
     }
     
     
+    
     if (index == 0) {
+        NSInteger count =[[[ChatController sharedInstance] getHomeDataSource].friends count];
+        
+        if (count == 0) {
+            static NSString *CellIdentifier = @"Cell";
+            UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            cell.textLabel.text = @"you have no friends, now fuck off";
+            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+            cell.userInteractionEnabled = NO;
+            return cell;
+        }
+        
+        
+        
         static NSString *CellIdentifier = @"HomeCell";
         HomeCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
         
@@ -670,6 +706,18 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
         NSString * username = aKey;
         NSArray * messages =[[ChatController sharedInstance] getDataSourceForFriendname: username].messages;
+        
+        if (messages.count == 0) {
+            DDLogInfo(@"no chat messages");
+            static NSString *CellIdentifier = @"Cell";
+            UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            cell.textLabel.text = NSLocalizedString(@"no_messages", nil);
+            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+            cell.userInteractionEnabled = NO;
+            return cell;
+        }
+        
+        
         if (messages.count > 0 && indexPath.row < messages.count) {
             
             
@@ -740,6 +788,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         else {
             static NSString *CellIdentifier = @"Cell";
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            cell.userInteractionEnabled = NO;
             return cell;
         }
     }
@@ -857,7 +906,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [[ChatController sharedInstance] inviteUser:[_textField text]];
             //            [_textField resignFirstResponder];
             [_textField setText:nil];
-            [self updateButtonIcons];
+            [self updateTabChangeUI];
         }
         else {
             [self send];
@@ -881,19 +930,31 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [[ChatController sharedInstance] sendMessage: message toFriendname:friendname];
     [_textField setText:nil];
-    [self updateButtonIcons];
+    [self updateTabChangeUI];
 }
 
--(void) updateButtonIcons {
+-(void) updateTabChangeUI {
     if (!_homeDataSource.currentChat) {
         [_theButton setImage:[UIImage imageNamed:@"ic_menu_invite"] forState:UIControlStateNormal];
+        
     }
     else {
-        if ([_textField.text length] > 0) {
-            [_theButton setImage:[UIImage imageNamed:@"ic_menu_send"] forState:UIControlStateNormal];
+
+        
+        
+        Friend *afriend = [_homeDataSource getFriendByName:_homeDataSource.currentChat];
+        if (afriend.isDeleted) {
+            
         }
         else {
-            [_theButton setImage:[UIImage imageNamed:@"ic_menu_home"] forState:UIControlStateNormal];
+            
+            
+            if ([_textField.text length] > 0) {
+                [_theButton setImage:[UIImage imageNamed:@"ic_menu_send"] forState:UIControlStateNormal];
+            }
+            else {
+                [_theButton setImage:[UIImage imageNamed:@"ic_menu_home"] forState:UIControlStateNormal];
+            }
         }
     }
 }
@@ -1126,8 +1187,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (!_menu) {
         _menu = [self createMenuMenu];
         if (_menu) {
-            CGRect rect = CGRectMake(25, 0, self.view.frame.size.width
-                                     - 50, self.view.frame.size.height);
+            CGRect rect = CGRectMake(25, 0, self.view.frame.size.width                   - 50, self.view.frame.size.height);
             
             [_menu showFromRect:rect inView:self.view];
         }
@@ -1156,8 +1216,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
         
         if (_menu) {
-            CGRect rect = CGRectMake(25, 0, self.view.frame.size.width
-                                     - 50, self.view.frame.size.height);
+            CGRect rect = CGRectMake(25, 0, self.view.frame.size.width - 50, self.view.frame.size.height);
             
             [_menu showFromRect:rect inView:self.view];
         }
@@ -1175,7 +1234,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [self closeTabName:name];
     }
     else {
-        //hide text field
+        //todo hide text field
     }
 }
 
@@ -1235,7 +1294,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [_swipeView scrollToPage:0 duration:0.5];
 }
 - (IBAction)textFieldChanged:(id)sender {
-    [self updateButtonIcons];
+    [self updateTabChangeUI];
 }
 
 - (void) startProgress: (NSNotification *) notification {
@@ -1251,7 +1310,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (--_progressCount == 0) {
         [_backImageView.layer removeAllAnimations];
     }
-        DDLogInfo(@"progress count:%d", _progressCount);
+    DDLogInfo(@"progress count:%d", _progressCount);
 }
 
 

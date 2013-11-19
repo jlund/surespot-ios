@@ -32,5 +32,4 @@
 - (IBAction)buttonTouchUpInside:(id)sender;
 @property (strong, nonatomic) IBOutlet UIView *textFieldContainer;
 - (IBAction)textFieldChanged:(id)sender;
-
 @end
