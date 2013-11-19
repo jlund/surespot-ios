@@ -36,7 +36,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         self.navigationController.navigationBar.tintColor = [UIUtils surespotBlue];
     }
     _tbUsername.returnKeyType = UIReturnKeyNext;
-    _tbPassword.returnKeyType = UIReturnKeyGo;
+    _tbPassword.returnKeyType = UIReturnKeyNext;
+    _tbPasswordConfirm.returnKeyType = UIReturnKeyGo;
 }
 
 - (void)viewDidUnload {
