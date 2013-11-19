@@ -901,11 +901,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 - (void) handleTextAction {
+    NSString * text = _textField.text;
     
-    
-    if ([_textField text].length > 0) {
+    if ([text length] > 0) {
         if (!_homeDataSource.currentChat) {
-            [[ChatController sharedInstance] inviteUser:[_textField text]];
+
+            NSString * loggedInUser = [[IdentityController sharedInstance] getLoggedInUser];
+            if ([text isEqualToString:loggedInUser]) {
+                [UIUtils showToastView:self.view key:@"friend_self_error"];
+                return;
+            }
+            
+            
+            [[ChatController sharedInstance] inviteUser:text];
             //            [_textField resignFirstResponder];
             [_textField setText:nil];
             [self updateTabChangeUI];

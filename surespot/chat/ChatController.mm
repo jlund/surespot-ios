@@ -649,7 +649,6 @@ static const int MAX_CONNECTION_RETRIES = 16;
 - (void) inviteUser: (NSString *) username {
     NSString * loggedInUser = [[IdentityController sharedInstance] getLoggedInUser];
     if ([UIUtils stringIsNilOrEmpty:username] || [username isEqualToString:loggedInUser]) {
-        //todo tell user they can't invite themselves
         return;
     }
     
