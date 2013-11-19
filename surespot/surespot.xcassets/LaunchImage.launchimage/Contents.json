@@ -45,14 +45,13 @@
       "idiom" : "ipad",
       "extent" : "full-screen",
       "minimum-system-version" : "7.0",
-      "filename" : "launch_1536x2048-3.png",
       "scale" : "2x"
     },
     {
       "orientation" : "portrait",
       "idiom" : "iphone",
       "extent" : "full-screen",
-      "filename" : "launch_640x960-1.png",
+      "filename" : "launch_320x480.png",
       "scale" : "1x"
     },
     {

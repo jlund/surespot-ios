@@ -21,13 +21,13 @@
     {
       "size" : "57x57",
       "idiom" : "iphone",
-      "filename" : "surespot_app_icon76px-4.png",
+      "filename" : "surespot_app_icon57px.png",
       "scale" : "1x"
     },
     {
       "size" : "57x57",
       "idiom" : "iphone",
-      "filename" : "surespot_app_icon76px-2.png",
+      "filename" : "surespot_app_icon114px.png",
       "scale" : "2x"
     },
     {
@@ -69,31 +69,31 @@
     {
       "size" : "50x50",
       "idiom" : "ipad",
-      "filename" : "surespot_tabbar_logo50px.png",
+      "filename" : "surespot_tabbar_logo100px.png",
       "scale" : "2x"
     },
     {
       "size" : "72x72",
       "idiom" : "ipad",
-      "filename" : "surespot_app_icon76px-6.png",
+      "filename" : "surespot_app_icon72px.png",
       "scale" : "1x"
     },
     {
       "size" : "72x72",
       "idiom" : "ipad",
-      "filename" : "surespot_app_icon76px-3.png",
+      "filename" : "surespot_tabbar_logo144px.png",
       "scale" : "2x"
     },
     {
       "size" : "76x76",
       "idiom" : "ipad",
-      "filename" : "surespot_app_icon76px-5.png",
+      "filename" : "surespot_app_icon76px.png",
       "scale" : "1x"
     },
     {
       "size" : "76x76",
       "idiom" : "ipad",
-      "filename" : "surespot_webclip_logo152px.png",
+      "filename" : "surespot_app_icon152px.png",
       "scale" : "2x"
     }
   ],
