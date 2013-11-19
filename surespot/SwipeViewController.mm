@@ -901,6 +901,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 - (void) handleTextAction {
+    
+    
     if ([_textField text].length > 0) {
         if (!_homeDataSource.currentChat) {
             [[ChatController sharedInstance] inviteUser:[_textField text]];
@@ -919,6 +921,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 - (void) send {
+    
     NSString* message = self.textField.text;
     
     if ([UIUtils stringIsNilOrEmpty:message]) return;
@@ -928,8 +931,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         friendname = [keys objectAtIndex:[_swipeView currentItemIndex] -1];
     }
     
+    Friend * afriend = [[[ChatController sharedInstance] getHomeDataSource] getFriendByName:friendname];
+    if ([afriend isDeleted]) {
+        return;
+    }
+
+    
     [[ChatController sharedInstance] sendMessage: message toFriendname:friendname];
+    
     [_textField setText:nil];
+    
     [self updateTabChangeUI];
 }
 
@@ -939,16 +950,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
     }
     else {
-
-        
-        
         Friend *afriend = [_homeDataSource getFriendByName:_homeDataSource.currentChat];
         if (afriend.isDeleted) {
-            
+            [_theButton setImage:[UIImage imageNamed:@"ic_menu_home"] forState:UIControlStateNormal];
+            _textField.hidden = YES;
         }
         else {
-            
-            
+            _textField.hidden = NO;
             if ([_textField.text length] > 0) {
                 [_theButton setImage:[UIImage imageNamed:@"ic_menu_send"] forState:UIControlStateNormal];
             }
@@ -1234,7 +1242,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [self closeTabName:name];
     }
     else {
-        //todo hide text field
+        [self updateTabChangeUI];
     }
 }
 

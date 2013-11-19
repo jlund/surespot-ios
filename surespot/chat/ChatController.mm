@@ -368,6 +368,9 @@ static const int MAX_CONNECTION_RETRIES = 16;
 {
     if ([UIUtils stringIsNilOrEmpty:friendname]) return;
     
+    Friend * afriend = [_homeDataSource getFriendByName:friendname];
+    if ([afriend isDeleted]) return;
+    
     DDLogVerbose(@"message: %@", message);
     
     NSString * ourLatestVersion = [[IdentityController sharedInstance] getOurLatestVersion];
@@ -730,9 +733,11 @@ static const int MAX_CONNECTION_RETRIES = 16;
         NSString * username = [[IdentityController sharedInstance] getLoggedInUser];
         BOOL iDeleted = [deleter isEqualToString:username];
         NSArray * data = [NSArray arrayWithObjects:theFriend.name, [NSNumber numberWithBool: iDeleted], nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteFriend" object: data];
+        
         
         if (iDeleted) {
+            //fire this first so tab closes and saves data before we delete all the data
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteFriend" object: data];
             
             [_homeDataSource removeFriend:theFriend withRefresh:YES];
             
@@ -754,6 +759,9 @@ static const int MAX_CONNECTION_RETRIES = 16;
             if (cds) {
                 [cds  userDeleted];
             }
+            
+            //fire this last because the friend needs to be deleted to update controls
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteFriend" object: data];
         }
         
     }
