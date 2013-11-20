@@ -1002,33 +1002,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     //Save the tableview content offset
     CGPoint tableViewOffset = [tableView contentOffset];
-    
-    //Turn of animations for the update block
-    //to get the effect of adding rows on top of TableView
-    [UIView setAnimationsEnabled:NO];
-    
-    [tableView beginUpdates];
-    
-    NSMutableArray *rowsInsertIndexPath = [[NSMutableArray alloc] init];
-    
+
+    //compute the height change
     int heightForNewRows = 0;
     
     for (NSInteger i = 0; i < rowCount; i++) {
-        
         NSIndexPath *tempIndexPath = [NSIndexPath indexPathForRow:i inSection:0];
-        [rowsInsertIndexPath addObject:tempIndexPath];
-        
         heightForNewRows += [self tableView:tableView heightForRowAtIndexPath: tempIndexPath];
     }
     
-    [tableView insertRowsAtIndexPaths:rowsInsertIndexPath withRowAnimation:UITableViewRowAnimationNone];
-    
     tableViewOffset.y += heightForNewRows;
-    
-    [tableView endUpdates];
-    
-    [UIView setAnimationsEnabled:YES];
-    
+    [tableView reloadData];
     [tableView setContentOffset:tableViewOffset animated:NO];
 }
 
