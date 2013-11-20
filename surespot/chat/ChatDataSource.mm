@@ -214,10 +214,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
 }
 
--(void) postEarlierRefresh {
+-(void) postEarlierRefreshNewCount: (NSInteger) newCount {
     [self sort];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshEarlierMessages" object:_username ];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshEarlierMessages" object:[NSDictionary dictionaryWithObjectsAndKeys:@"username", _username, @"newRowCount", [NSNumber  numberWithInteger: newCount], nil] ];
     });
 }
 
@@ -315,10 +315,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     for (id jsonMessage in messages) {
         lastMessage = [[SurespotMessage alloc] initWithJSONString:jsonMessage];
         [self addMessage:lastMessage refresh:NO];
+       // if ([_decryptionQueue operationCount] == 0) {
+            [self postEarlierRefreshNewCount:[messages count]] ;
+//        }
     }
-  //  if ([_decryptionQueue operationCount] == 0) {
-        [self postEarlierRefresh];
-  //  }
+    
 
     
 }

@@ -109,7 +109,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startProgress:) name:@"startProgress" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopProgress:) name:@"stopProgress" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unauthorized:) name:@"unauthorized" object:nil];
-  //  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshEarlierMessages:) name:@"refreshEarlierMessages" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshEarlierMessages:) name:@"refreshEarlierMessages" object:nil];
     
     _homeDataSource = [[ChatController sharedInstance] getHomeDataSource];
     
@@ -845,7 +845,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [self addLongPressGestureRecognizer:chatView];
         
         
-        __weak UITableView *weakView = chatView;
+       // __weak UITableView *weakView = chatView;
         
         // setup pull-to-refresh
         [chatView addPullToRefreshWithActionHandler:^{
@@ -855,8 +855,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                         [UIUtils showToastKey:@"all_messages_loaded"];
                     }
                     DDLogInfo(@"loaded %@ earlier messages for user: %@", result, username);
-                    [weakView.pullToRefreshView stopAnimating];
-                    [self updateTableView:weakView withNewRowCount:[result integerValue]];
                 }
                 else {
                     [UIUtils showToastKey:@"loading_earlier_messages_failed"];
@@ -1001,26 +999,29 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
 }
 
-//- (void)refreshEarlierMessages:(NSNotification *)notification {
-//    NSString * username = notification.object;
-//    DDLogInfo(@"username: %@, currentchat: %@", username, _homeDataSource.currentChat);
-//    
-//    if ([username isEqualToString: _homeDataSource.currentChat]) {
-//        
-//        UITableView * tableView;
-//        @synchronized (_chats) {
-//            tableView = [_chats objectForKey:username];
-//            
-//        }
-//        @synchronized (_needsScroll) {
-//            [_needsScroll removeObjectForKey:username];
-//        }
-//        
-//        if (tableView) {
-//            [tableView reloadData];
-//        }
-//    }
-//}
+- (void)refreshEarlierMessages:(NSNotification *)notification {
+    NSString * username = [notification.object objectForKey:@"username"];
+    NSInteger newRowCount = [[notification.object objectForKey:@"newRowCount"] integerValue];
+    
+    DDLogInfo(@"username: %@, currentchat: %@", username, _homeDataSource.currentChat);
+    
+    if ([username isEqualToString: _homeDataSource.currentChat]) {
+        
+        UITableView * tableView;
+        @synchronized (_chats) {
+            tableView = [_chats objectForKey:username];
+            
+        }
+        @synchronized (_needsScroll) {
+            [_needsScroll removeObjectForKey:username];
+        }
+        
+        if (tableView) {
+            [tableView.pullToRefreshView stopAnimating];
+            [self updateTableView:tableView withNewRowCount:newRowCount];
+        }
+    }
+}
 
 -(void) updateTableView: (UITableView *) tableView withNewRowCount : (int) rowCount
 {
