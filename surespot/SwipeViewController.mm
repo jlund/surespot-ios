@@ -109,7 +109,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startProgress:) name:@"startProgress" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopProgress:) name:@"stopProgress" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unauthorized:) name:@"unauthorized" object:nil];
-     
+    
     _homeDataSource = [[ChatController sharedInstance] getHomeDataSource];
     
     //show currently open tab immediately
@@ -441,7 +441,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
         
     }
-    DDLogVerbose(@"swipeview index changed to %d", currPage);
+    DDLogInfo(@"swipeview index changed to %d", currPage);
     [tableview reloadData];
     
     //scroll if we need to
@@ -449,6 +449,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     @synchronized (_needsScroll ) {
         id needsit = [_needsScroll  objectForKey:name];
         if (needsit) {
+            DDLogInfo(@"scrolling %@ to bottom",name);
             [self scrollTableViewToBottom:tableview];
             [_needsScroll removeObjectForKey:name];
         }
@@ -842,7 +843,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [chatView setScrollsToTop:NO];
         [chatView setDirectionalLockEnabled:YES];
         [self addLongPressGestureRecognizer:chatView];
-
+        
         // setup pull-to-refresh
         __weak UITableView *weakView = chatView;
         [chatView addPullToRefreshWithActionHandler:^{
@@ -854,7 +855,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     }
                     
                     DDLogInfo(@"loaded %@ earlier messages for user: %@", result, username);
-
+                    
                     [self updateTableView:weakView withNewRowCount:[result integerValue]];
                     [weakView.pullToRefreshView stopAnimating];
                 }
@@ -1004,8 +1005,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     //Turn of animations for the update block
     //to get the effect of adding rows on top of TableView
     [UIView setAnimationsEnabled:NO];
-
-   [tableView beginUpdates];
+    
+    [tableView beginUpdates];
     
     NSMutableArray *rowsInsertIndexPath = [[NSMutableArray alloc] init];
     
@@ -1018,7 +1019,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         heightForNewRows += [self tableView:tableView heightForRowAtIndexPath: tempIndexPath];
     }
-
+    
     [tableView insertRowsAtIndexPaths:rowsInsertIndexPath withRowAnimation:UITableViewRowAnimationNone];
     
     tableViewOffset.y += heightForNewRows;
@@ -1033,7 +1034,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)refreshMessages:(NSNotification *)notification {
     NSString * username = notification.object;
-    DDLogVerbose(@"username: %@, currentchat: %@", username, _homeDataSource.currentChat);
+    DDLogInfo(@"username: %@, currentchat: %@", username, _homeDataSource.currentChat);
     
     if ([username isEqualToString: _homeDataSource.currentChat]) {
         

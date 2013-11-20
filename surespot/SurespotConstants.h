@@ -17,4 +17,5 @@ extern NSString * const serverBaseIPAddress;
 extern BOOL const serverSecure;
 extern NSInteger const serverPort;
 extern NSString * const serverPublicKeyString;
+extern NSInteger const SAVE_MESSAGE_COUNT;
 @end

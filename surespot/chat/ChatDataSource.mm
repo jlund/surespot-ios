@@ -16,6 +16,7 @@
 #import "DDLog.h"
 #import "UIUtils.h"
 #import "ChatController.h"
+#import "SurespotConstants.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -63,7 +64,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 __weak ChatDataSource * weakSelf = self;
                 [self addMessage:message refresh:NO callback:^(id result) {
                     if ([weakSelf.decryptionQueue operationCount] == 0) {
-                        
+                        DDLogInfo(@"loaded %d messages from disk at: %@", [messages count] ,path);
                         [weakSelf postRefresh];
                     }
                 }];
@@ -77,7 +78,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             
             
-            DDLogInfo(@"loaded %d messages from disk at: %@", [messages count] ,path);
+            
             DDLogVerbose( @"latestMEssageid: %d, latestControlId: %d", _latestMessageId ,_latestControlMessageId);
             
         }
@@ -180,7 +181,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 if (callback) {
                     callback(nil);
                 }
-
+                
             }
         }
         else {
@@ -240,8 +241,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self sort];
     
     @synchronized (_messages)  {
-        //only save 50 messages
-        NSInteger count = _messages.count < 50 ? _messages.count : 50;
+        //only save x messages
+        NSInteger count = _messages.count < SAVE_MESSAGE_COUNT ? _messages.count : SAVE_MESSAGE_COUNT;
         
         NSArray * messages = [_messages subarrayWithRange:NSMakeRange([_messages count] - count ,count)];
         [dict setObject:messages forKey:@"messages"];
