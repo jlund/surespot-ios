@@ -39,7 +39,7 @@
     _controlId = [[dictionary objectForKey:@"id"] integerValue];
     _from = [dictionary objectForKey:@"from"];
     _action = [dictionary objectForKey:@"action"];
-    _data =[dictionary objectForKey:@"data"];
+    _data = [dictionary objectForKey:@"data"];
     _moreData = [dictionary objectForKey:@"moredata"];
     _localId = [dictionary objectForKey:@"localid"];
 }

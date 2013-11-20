@@ -596,7 +596,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
     }
     NSString * user;
     if ([message.action isEqualToString:@"revoke"]) {
-        
+        [[IdentityController sharedInstance] updateLatestVersionForUsername: message.data version: message.moreData];
     }
     else {
         if ([message.action isEqualToString:@"invited"]) {

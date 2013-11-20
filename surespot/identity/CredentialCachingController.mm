@@ -112,4 +112,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
 }
 
+-(void) updateLatestVersionForUsername: (NSString *) username version: (NSString * ) version {
+    if (username && version) {
+        NSString * latestVersion = [_latestVersionsDict objectForKey:username];
+        if (!latestVersion || [version integerValue] > [latestVersion integerValue]) {
+            DDLogInfo(@"updating latest key version to %@ for %@", version, username);
+            [_latestVersionsDict setObject:version forKey:username];
+        }
+    }
+}
+
 @end

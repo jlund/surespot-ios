@@ -278,5 +278,17 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
     DDLogInfo(@"saved public keys for username: %@, version: %@ to filename: %@  with success: %@", username,version,filename, saved?@"YES":@"NO");
 }
 
+-(void) updateLatestVersionForUsername: (NSString *) username version: (NSString * ) version {
+    // see if we are the user that's been revoked
+    // if we have the latest version locally, if we don't then this user has
+    // been revoked from a different device
+    // and should not be used on this device anymore
+    if ([username isEqualToString:[self getLoggedInUser]] && [version integerValue] > [[self getOurLatestVersion] integerValue]) {
+        
+    }
+    else {
+        [[CredentialCachingController sharedInstance] updateLatestVersionForUsername: username version: version];
+    }
+}
 
 @end
