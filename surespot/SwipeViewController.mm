@@ -109,8 +109,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startProgress:) name:@"startProgress" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopProgress:) name:@"stopProgress" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unauthorized:) name:@"unauthorized" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshEarlierMessages:) name:@"refreshEarlierMessages" object:nil];
-    
+     
     _homeDataSource = [[ChatController sharedInstance] getHomeDataSource];
     
     //show currently open tab immediately
@@ -843,29 +842,26 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [chatView setScrollsToTop:NO];
         [chatView setDirectionalLockEnabled:YES];
         [self addLongPressGestureRecognizer:chatView];
-        
-        
-       // __weak UITableView *weakView = chatView;
-        
+
         // setup pull-to-refresh
+        __weak UITableView *weakView = chatView;
         [chatView addPullToRefreshWithActionHandler:^{
+            
             [[ChatController sharedInstance] loadEarlierMessagesForUsername: username callback:^(id result) {
                 if (result) {
                     if ([result integerValue] == 0) {
                         [UIUtils showToastKey:@"all_messages_loaded"];
                     }
                     DDLogInfo(@"loaded %@ earlier messages for user: %@", result, username);
+
+                    [self updateTableView:weakView withNewRowCount:[result integerValue]];
+                    [weakView.pullToRefreshView stopAnimating];
                 }
                 else {
                     [UIUtils showToastKey:@"loading_earlier_messages_failed"];
                 }
             }];
         }];
-        
-        // setup infinite scrolling
-        //        [chatView addInfiniteScrollingWithActionHandler:^{
-        //            [weakSelf insertRowAtBottom];
-        //        }];
         
         //create the data source
         [[ChatController sharedInstance] createDataSourceForFriendname:username availableId: availableId availableControlId:availableControlId];
@@ -999,30 +995,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
 }
 
-- (void)refreshEarlierMessages:(NSNotification *)notification {
-    NSString * username = [notification.object objectForKey:@"username"];
-    NSInteger newRowCount = [[notification.object objectForKey:@"newRowCount"] integerValue];
-    
-    DDLogInfo(@"username: %@, currentchat: %@", username, _homeDataSource.currentChat);
-    
-    if ([username isEqualToString: _homeDataSource.currentChat]) {
-        
-        UITableView * tableView;
-        @synchronized (_chats) {
-            tableView = [_chats objectForKey:username];
-            
-        }
-        @synchronized (_needsScroll) {
-            [_needsScroll removeObjectForKey:username];
-        }
-        
-        if (tableView) {
-            [tableView.pullToRefreshView stopAnimating];
-            [self updateTableView:tableView withNewRowCount:newRowCount];
-        }
-    }
-}
-
 -(void) updateTableView: (UITableView *) tableView withNewRowCount : (int) rowCount
 {
     //Save the tableview content offset
@@ -1031,8 +1003,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     //Turn of animations for the update block
     //to get the effect of adding rows on top of TableView
     [UIView setAnimationsEnabled:NO];
-    
-    [tableView beginUpdates];
+
+   [tableView beginUpdates];
     
     NSMutableArray *rowsInsertIndexPath = [[NSMutableArray alloc] init];
     
@@ -1043,9 +1015,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         NSIndexPath *tempIndexPath = [NSIndexPath indexPathForRow:i inSection:0];
         [rowsInsertIndexPath addObject:tempIndexPath];
         
-        heightForNewRows = heightForNewRows + [self heightForTableView:tableView cellAtIndexPath:tempIndexPath];
+        heightForNewRows += [self tableView:tableView heightForRowAtIndexPath: tempIndexPath];
     }
-    
+
     [tableView insertRowsAtIndexPaths:rowsInsertIndexPath withRowAnimation:UITableViewRowAnimationNone];
     
     tableViewOffset.y += heightForNewRows;
@@ -1055,16 +1027,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [UIView setAnimationsEnabled:YES];
     
     [tableView setContentOffset:tableViewOffset animated:NO];
-}
-
--(int) heightForTableView: (UITableView *) tableView  cellAtIndexPath: (NSIndexPath *) indexPath
-{
-    
-    UITableViewCell *cell =  [tableView cellForRowAtIndexPath:indexPath];
-    
-    int cellHeight   =  cell.frame.size.height;
-    
-    return cellHeight;
 }
 
 

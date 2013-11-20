@@ -60,7 +60,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             //convert messages to SurespotMessage
             for (SurespotMessage * message in messages) {
                 DDLogVerbose(@"adding message");
-                [self addMessage:message refresh:YES];
+                __weak ChatDataSource * weakSelf = self;
+                [self addMessage:message refresh:NO callback:^(id result) {
+                    if ([weakSelf.decryptionQueue operationCount] == 0) {
+                        
+                        [weakSelf postRefresh];
+                    }
+                }];
                 
                 //if the message doesn't have a server id, add it to the resend buffer
                 if (message.serverid <= 0) {
@@ -74,7 +80,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             DDLogInfo(@"loaded %d messages from disk at: %@", [messages count] ,path);
             DDLogVerbose( @"latestMEssageid: %d, latestControlId: %d", _latestMessageId ,_latestControlMessageId);
             
-            [self postRefresh];
         }
         
         if (availableId > _latestMessageId || availableControlId > _latestControlMessageId) {
@@ -96,17 +101,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 
                 [self handleMessages:messageStrings];
                 
-                
-                //                //convert messages to SurespotMessage
-                //                for (NSString * messageString in messageStrings) {
-                //
-                //                    [self addMessage:[[SurespotMessage alloc] initWithJSONString:messageString] refresh:YES];
-                //                }
-                
-                //      [_decryptionQueue waitUntilAllOperationsAreFinished];
-                
-                
-                //  [self postRefresh];
                 DDLogInfo(@"stopProgress");
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object:nil];
                 
@@ -127,8 +121,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return self;
 }
 
+-(void) addMessage:(SurespotMessage *) message refresh:(BOOL) refresh {
+    [self addMessage:message refresh:refresh callback:nil];
+}
 
--(void) addMessage:(SurespotMessage *)message  refresh: (BOOL) refresh {
+-(void) addMessage:(SurespotMessage *)message  refresh: (BOOL) refresh callback: (CallbackBlock) callback {
     @synchronized (_messages)  {
         NSMutableArray * applicableControlMessages  = nil;
         if (message.serverid > 0 && ![UIUtils stringIsNilOrEmpty:message.plainData]) {
@@ -167,6 +164,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                         }
                     }
                     
+                    if (callback) {
+                        callback(nil);
+                    }
+                    
                     
                 }];
                 [_decryptionQueue addOperation:op];
@@ -175,6 +176,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             }
             else {
                 DDLogVerbose(@"added message already decrypted iv: %@", message.iv);
+                
+                if (callback) {
+                    callback(nil);
+                }
+
             }
         }
         else {
@@ -192,6 +198,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 [self handleControlMessage:cm];
             }
         }
+        
+        
     }
     
     if (message.serverid > _latestMessageId) {
@@ -202,7 +210,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (message.serverid == 1) {
         _noEarlierMessages = YES;
     }
-
+    
     
     
     if (refresh) {
@@ -212,13 +220,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     
-}
-
--(void) postEarlierRefreshNewCount: (NSInteger) newCount {
-    [self sort];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshEarlierMessages" object:[NSDictionary dictionaryWithObjectsAndKeys:@"username", _username, @"newRowCount", [NSNumber  numberWithInteger: newCount], nil] ];
-    });
 }
 
 -(void) postRefresh {
@@ -300,27 +301,39 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 -(void) handleMessages: (NSArray *) messages {
-    
+    __weak ChatDataSource* weakSelf =self;
     SurespotMessage * lastMessage;
     for (id jsonMessage in messages) {
         lastMessage = [[SurespotMessage alloc] initWithJSONString:jsonMessage];
-        [self addMessage:lastMessage refresh:YES];
+        [self addMessage:lastMessage refresh:NO callback:^(id result) {
+            if ([weakSelf.decryptionQueue operationCount] == 0) {
+                [weakSelf postRefresh];
+            }
+        }];
     }
     
 }
 
--(void) handleEarlierMessages: (NSArray *) messages {
-    
+-(void) handleEarlierMessages: (NSArray *) messages  callback: (CallbackBlock) callback{
+    __weak ChatDataSource* weakSelf =self;
     SurespotMessage * lastMessage;
     for (id jsonMessage in messages) {
         lastMessage = [[SurespotMessage alloc] initWithJSONString:jsonMessage];
-        [self addMessage:lastMessage refresh:NO];
-       // if ([_decryptionQueue operationCount] == 0) {
-            [self postEarlierRefreshNewCount:[messages count]] ;
-//        }
+        DDLogInfo(@"adding earlier message, id: %d", lastMessage.serverid);
+        [self addMessage:lastMessage refresh:NO callback:^(id result) {
+            if ([weakSelf.decryptionQueue operationCount] == 0) {
+                [weakSelf sort];
+                DDLogInfo(@"all messages added, calling back");
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    callback([NSNumber numberWithLong:[messages count]]);
+                });
+            }
+            
+        }];
     }
     
-
+    
     
 }
 
@@ -429,6 +442,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
 }
 
+-(NSInteger) earliestMessageId {
+    NSInteger earliestMessageId = NSIntegerMax;
+    @synchronized (_messages) {
+        for (int i=0;i<_messages.count;i++) {
+            NSInteger serverId = [[_messages objectAtIndex:i] serverid];
+            if (serverId > 0) {
+                earliestMessageId = serverId;
+                break;
+            }
+        }
+    }
+    return earliestMessageId;
+}
 
 -(void) loadEarlierMessagesCallback: (CallbackBlock) callback {
     
@@ -439,34 +465,27 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     if (!_loadingEarlier) {
         _loadingEarlier = YES;
-        NSInteger earliestMessageId = NSIntegerMax;
-        @synchronized (_messages) {
-            for (int i=0;i<_messages.count;i++) {
-                NSInteger serverId = [[_messages objectAtIndex:i] serverid];
-                if (serverId > 0) {
-                    earliestMessageId = serverId;
-                    break;
-                }
-            }
-        }
         
+        NSInteger earliestMessageId = [self earliestMessageId];
         if (earliestMessageId == 1) {
             _noEarlierMessages = YES;
             callback([NSNumber numberWithInteger:0]);
             return;
         }
         
+        if (earliestMessageId == NSIntegerMax ) {
+            callback([NSNumber numberWithInteger:NSIntegerMax]);
+            return;
+        }
+        
         [[NetworkController sharedInstance] getEarlierMessagesForUsername:_username messageId:earliestMessageId successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
             
-            
             NSArray * messages = JSON;
-            [self handleEarlierMessages:messages];
-            
             if (messages.count == 0) {
                 _noEarlierMessages = YES;
             }
             
-            callback([NSNumber numberWithInteger:[messages count]]);
+            [self handleEarlierMessages:messages callback:callback];
             _loadingEarlier = NO;
         } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
             callback(nil);
