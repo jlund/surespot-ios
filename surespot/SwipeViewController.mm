@@ -977,7 +977,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(void) updateTabChangeUI {
     if (!_homeDataSource.currentChat) {
         [_theButton setImage:[UIImage imageNamed:@"ic_menu_invite"] forState:UIControlStateNormal];
-        
+        _textField.hidden = NO;
+
     }
     else {
         Friend *afriend = [_homeDataSource getFriendByName:_homeDataSource.currentChat];
