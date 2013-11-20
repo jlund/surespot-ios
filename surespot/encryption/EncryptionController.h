@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "IdentityController.h"
-
+#import "SurespotConstants.h"
 
 
 

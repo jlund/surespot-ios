@@ -22,6 +22,8 @@
 #import "LoginViewController.h"
 #import "DDLog.h"
 #import "REMenu.h"
+#import "SVPullToRefresh.h"
+#import "SurespotConstants.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -107,7 +109,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startProgress:) name:@"startProgress" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopProgress:) name:@"stopProgress" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unauthorized:) name:@"unauthorized" object:nil];
-    
+  //  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshEarlierMessages:) name:@"refreshEarlierMessages" object:nil];
     
     _homeDataSource = [[ChatController sharedInstance] getHomeDataSource];
     
@@ -843,6 +845,30 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [self addLongPressGestureRecognizer:chatView];
         
         
+        __weak UITableView *weakView = chatView;
+        
+        // setup pull-to-refresh
+        [chatView addPullToRefreshWithActionHandler:^{
+            [[ChatController sharedInstance] loadEarlierMessagesForUsername: username callback:^(id result) {
+                if (result) {
+                    if ([result integerValue] == 0) {
+                        [UIUtils showToastKey:@"all_messages_loaded"];
+                    }
+                    DDLogInfo(@"loaded %@ earlier messages for user: %@", result, username);
+                    [weakView.pullToRefreshView stopAnimating];
+                    [self updateTableView:weakView withNewRowCount:[result integerValue]];
+                }
+                else {
+                    [UIUtils showToastKey:@"loading_earlier_messages_failed"];
+                }
+            }];
+        }];
+        
+        // setup infinite scrolling
+        //        [chatView addInfiniteScrollingWithActionHandler:^{
+        //            [weakSelf insertRowAtBottom];
+        //        }];
+        
         //create the data source
         [[ChatController sharedInstance] createDataSourceForFriendname:username availableId: availableId availableControlId:availableControlId];
         
@@ -894,6 +920,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [_textField resignFirstResponder];
 }
 
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [self handleTextAction];
     return NO;
@@ -904,7 +931,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     if ([text length] > 0) {
         if (!_homeDataSource.currentChat) {
-
+            
             NSString * loggedInUser = [[IdentityController sharedInstance] getLoggedInUser];
             if ([text isEqualToString:loggedInUser]) {
                 [UIUtils showToastKey:@"friend_self_error"];
@@ -974,6 +1001,72 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
 }
 
+//- (void)refreshEarlierMessages:(NSNotification *)notification {
+//    NSString * username = notification.object;
+//    DDLogInfo(@"username: %@, currentchat: %@", username, _homeDataSource.currentChat);
+//    
+//    if ([username isEqualToString: _homeDataSource.currentChat]) {
+//        
+//        UITableView * tableView;
+//        @synchronized (_chats) {
+//            tableView = [_chats objectForKey:username];
+//            
+//        }
+//        @synchronized (_needsScroll) {
+//            [_needsScroll removeObjectForKey:username];
+//        }
+//        
+//        if (tableView) {
+//            [tableView reloadData];
+//        }
+//    }
+//}
+
+-(void) updateTableView: (UITableView *) tableView withNewRowCount : (int) rowCount
+{
+    //Save the tableview content offset
+    CGPoint tableViewOffset = [tableView contentOffset];
+    
+    //Turn of animations for the update block
+    //to get the effect of adding rows on top of TableView
+    [UIView setAnimationsEnabled:NO];
+    
+    [tableView beginUpdates];
+    
+    NSMutableArray *rowsInsertIndexPath = [[NSMutableArray alloc] init];
+    
+    int heightForNewRows = 0;
+    
+    for (NSInteger i = 0; i < rowCount; i++) {
+        
+        NSIndexPath *tempIndexPath = [NSIndexPath indexPathForRow:i inSection:0];
+        [rowsInsertIndexPath addObject:tempIndexPath];
+        
+        heightForNewRows = heightForNewRows + [self heightForTableView:tableView cellAtIndexPath:tempIndexPath];
+    }
+    
+    [tableView insertRowsAtIndexPaths:rowsInsertIndexPath withRowAnimation:UITableViewRowAnimationNone];
+    
+    tableViewOffset.y += heightForNewRows;
+    
+    [tableView endUpdates];
+    
+    [UIView setAnimationsEnabled:YES];
+    
+    [tableView setContentOffset:tableViewOffset animated:NO];
+}
+
+-(int) heightForTableView: (UITableView *) tableView  cellAtIndexPath: (NSIndexPath *) indexPath
+{
+    
+    UITableViewCell *cell =  [tableView cellForRowAtIndexPath:indexPath];
+    
+    int cellHeight   =  cell.frame.size.height;
+    
+    return cellHeight;
+}
+
+
 - (void)refreshMessages:(NSNotification *)notification {
     NSString * username = notification.object;
     DDLogVerbose(@"username: %@, currentchat: %@", username, _homeDataSource.currentChat);
@@ -992,11 +1085,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         if (tableView) {
             
             
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [tableView reloadData];
-                [self scrollTableViewToBottom:tableView];
-            });
             
+            [tableView reloadData];
+            [self scrollTableViewToBottom:tableView];
             
         }
     }

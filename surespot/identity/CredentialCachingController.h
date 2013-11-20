@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EncryptionController.h"
 #import "PublicKeys.h"
+#import "SurespotConstants.h"
 
 @interface CredentialCachingController : NSObject
 +(CredentialCachingController*)sharedInstance;

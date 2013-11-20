@@ -318,6 +318,10 @@
 "close"="close";
 "no_audio_detected"="no audio detected - not sending voice message";
 
+
+"loading_earlier_messages_failed"="loading earlier messages failed";
+"all_messages_loaded"="all messages loaded";
+
 /*"welcome_to_surespot"="<![CDATA["Welcome to surespot! Data sent using this app is <a href="https://en.wikipedia.org/wiki/End-to-end_encryption"="end-to-end</a> encrypted with <a href="https://en.wikipedia.org/wiki/Symmetric-key_algorithm"="symmetric-key</a> encryption (<a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard"="256 bit AES-GCM</a>) using keys created with 521 bit <a href="https://en.wikipedia.org/wiki/Elliptic_curve_Diffie-Hellman"="ECDH shared secret derivation</a>."]]>"*/
 /*"help_backup_what"="<![CDATA["This will export a copy of the selected identity encrypted with <a href="http://www.eetimes.com/design/embedded-internet-design/4372428/How-secure-is-AES-against-brute-force-attacks-"="256 bit AES-GCM</a> with a key derived from your password through a <a href="https://en.wikipedia.org/wiki/PBKDF2"="PBKDF</a> (Password Based Key Derivation Function)"]]>";*/
 /*"help_backup_drive1"="<![CDATA["If you elect to backup your identity on Google Drive you will be storing a copy of your <a href="https://en.wikipedia.org/wiki/Public-key_cryptography"="private keys</a> on Google Drive servers. Should a third party somehow gain access to the Google Drive servers and attempt to decrypt your identity file by <a href="https://en.wikipedia.org/wiki/Brute-force_attack"="brute force attack</a>, be aware that the <a href="https://en.wikipedia.org/wiki/Password_strength"="strength</a> of your password will ultimately determine their success."]]>";*/

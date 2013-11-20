@@ -20,6 +20,7 @@
 #import "IdentityController.h"
 #import "NSData+Base64.h"
 #import "DDLog.h"
+#import "SurespotConstants.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;

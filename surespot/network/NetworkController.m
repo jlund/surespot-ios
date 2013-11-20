@@ -318,6 +318,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [operation start];
 }
 
+-(void) getEarlierMessagesForUsername: (NSString *) username messageId: (NSInteger) messageId successBlock:(JSONSuccessBlock)successBlock failureBlock: (JSONFailureBlock) failureBlock {
+    
+    NSString * path = [[NSString stringWithFormat:@"messages/%@/before/%d", username, messageId]  stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSURLRequest *request = [self requestWithMethod:@"GET" path:path parameters: nil];
+    AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:successBlock
+                                                                                        failure: failureBlock];
+
+    [operation start];
+}
 
 
 @end

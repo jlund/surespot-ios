@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+typedef void (^CallbackBlock) (id  result);
+typedef void (^CallbackStringBlock) (NSString * result);
+typedef void (^CallbackDictionaryBlock) (NSDictionary * result);
+
 @interface SurespotConstants : NSObject
 extern NSString * const serverBaseIPAddress;
 extern BOOL const serverSecure;

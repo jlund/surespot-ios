@@ -306,7 +306,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
     
     
     DDLogVerbose(@"before network call");
-
+    
     
     [[NetworkController sharedInstance] getLatestDataSinceUserControlId: _homeDataSource.latestUserControlId spotIds:messageIds successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         
@@ -634,27 +634,27 @@ static const int MAX_CONNECTION_RETRIES = 16;
     [[NetworkController sharedInstance]  respondToInviteName:username action:action
      
      
-     successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
-         
-         Friend * afriend = [_homeDataSource getFriendByName:username];
-         [afriend setInviter:NO];
-         
-         if ([action isEqualToString:@"accept"]) {
-             [_homeDataSource setFriend: username] ;
-         }
-         else {
-             if ([action isEqualToString:@"block"]||[action isEqualToString:@"ignore"]) {
-                 if (![afriend isDeleted]) {
-                     [_homeDataSource removeFriend:afriend withRefresh:YES];
-                 }
-             }
-         }
-     }
+                                                successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                    
+                                                    Friend * afriend = [_homeDataSource getFriendByName:username];
+                                                    [afriend setInviter:NO];
+                                                    
+                                                    if ([action isEqualToString:@"accept"]) {
+                                                        [_homeDataSource setFriend: username] ;
+                                                    }
+                                                    else {
+                                                        if ([action isEqualToString:@"block"]||[action isEqualToString:@"ignore"]) {
+                                                            if (![afriend isDeleted]) {
+                                                                [_homeDataSource removeFriend:afriend withRefresh:YES];
+                                                            }
+                                                        }
+                                                    }
+                                                }
      
-     failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
-         DDLogError(@"error responding to invite: %@", Error);
-         [UIUtils showToastKey:@"could_not_respond_to_invite"];
-     }];
+                                                failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
+                                                    DDLogError(@"error responding to invite: %@", Error);
+                                                    [UIUtils showToastKey:@"could_not_respond_to_invite"];
+                                                }];
     
 }
 
@@ -863,13 +863,20 @@ static const int MAX_CONNECTION_RETRIES = 16;
     }
     
     [[NetworkController sharedInstance] deleteMessagesUTAI:lastMessageId name:afriend.name successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if (cds) {
-            [cds deleteAllMessagesUTAI:lastMessageId];
-        }
+        
+        [cds deleteAllMessagesUTAI:lastMessageId];
+        
     } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
         //todo tell user
     }];
     
+    
+}
+
+
+-(void) loadEarlierMessagesForUsername: username callback: (CallbackBlock) callback {
+    ChatDataSource * cds = [self getDataSourceForFriendname:username];
+    [cds loadEarlierMessagesCallback:callback];
     
 }
 

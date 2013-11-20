@@ -10,10 +10,7 @@
 #import "SurespotIdentity.h"
 #import "IdentityKeys.h"
 #import "PublicKeys.h"
-
-typedef void (^CallbackBlock) (id  result);
-typedef void (^CallbackStringBlock) (NSString * result);
-typedef void (^CallbackDictionaryBlock) (NSDictionary * result);
+#import "SurespotConstants.h"
 
 
 @interface IdentityController : NSObject

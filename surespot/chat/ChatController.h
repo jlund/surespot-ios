@@ -13,6 +13,7 @@
 #import "Friend.h"
 #import "FriendDelegate.h"
 #import "SurespotMessage.h"
+#import "SurespotConstants.h"
 
 @interface ChatController : NSObject <SocketIODelegate, FriendDelegate>
 +(ChatController*)sharedInstance;
@@ -33,4 +34,5 @@
 -(void) resume;
 - (void) deleteMessagesForFriend: (Friend *) afriend;
 -(void) enqueueResendMessage: (SurespotMessage * ) message;
+-(void) loadEarlierMessagesForUsername: username callback: (CallbackBlock) callback;
 @end

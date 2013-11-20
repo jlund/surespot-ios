@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "SurespotMessage.h"
 #import "SurespotControlMessage.h"
+#import "SurespotConstants.h"
 
 @interface ChatDataSource : NSObject
 
@@ -29,4 +30,5 @@
 -(void) handleControlMessage: (SurespotControlMessage *) message;
 -(void) deleteAllMessagesUTAI: (NSInteger) messageId;
 -(void) userDeleted;
+-(void) loadEarlierMessagesCallback: (CallbackBlock) callback;
 @end

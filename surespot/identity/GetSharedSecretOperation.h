@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CredentialCachingController.h"
+#import "SurespotConstants.h"
 
 @interface GetSharedSecretOperation : NSOperation
 -(id) initWithCache: (CredentialCachingController *) cache

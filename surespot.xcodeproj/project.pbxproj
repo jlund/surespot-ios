@@ -60,6 +60,8 @@
 		66A2D915183A732900785270 /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D912183A732900785270 /* LoadingView.m */; };
 		66A2D916183A732900785270 /* UIViewPager.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D914183A732900785270 /* UIViewPager.m */; };
 		66A2D919183A7A7F00785270 /* SurespotConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D918183A7A7F00785270 /* SurespotConstants.m */; };
+		66A2D940183C25E800785270 /* UIScrollView+SVInfiniteScrolling.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D932183C25E800785270 /* UIScrollView+SVInfiniteScrolling.m */; };
+		66A2D941183C25E800785270 /* UIScrollView+SVPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D934183C25E800785270 /* UIScrollView+SVPullToRefresh.m */; };
 		66B3C8ED17B15F2300CC96EE /* ChatController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66B3C8EC17B15F2300CC96EE /* ChatController.mm */; };
 		66B3C8F017B17AC800CC96EE /* ChatDataSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66B3C8EF17B17AC800CC96EE /* ChatDataSource.mm */; };
 		66D3B04D182D47DF00B37A6C /* SurespotLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 66D3B04C182D47DF00B37A6C /* SurespotLogFormatter.m */; };
@@ -203,6 +205,11 @@
 		66A2D914183A732900785270 /* UIViewPager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIViewPager.m; path = ui/UIViewPager.m; sourceTree = "<group>"; };
 		66A2D917183A7A7F00785270 /* SurespotConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SurespotConstants.h; sourceTree = "<group>"; };
 		66A2D918183A7A7F00785270 /* SurespotConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SurespotConstants.m; sourceTree = "<group>"; };
+		66A2D930183C25E800785270 /* SVPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVPullToRefresh.h; sourceTree = "<group>"; };
+		66A2D931183C25E800785270 /* UIScrollView+SVInfiniteScrolling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+SVInfiniteScrolling.h"; sourceTree = "<group>"; };
+		66A2D932183C25E800785270 /* UIScrollView+SVInfiniteScrolling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+SVInfiniteScrolling.m"; sourceTree = "<group>"; };
+		66A2D933183C25E800785270 /* UIScrollView+SVPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+SVPullToRefresh.h"; sourceTree = "<group>"; };
+		66A2D934183C25E800785270 /* UIScrollView+SVPullToRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+SVPullToRefresh.m"; sourceTree = "<group>"; };
 		66B3C8EB17B15F2300CC96EE /* ChatController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatController.h; path = chat/ChatController.h; sourceTree = "<group>"; };
 		66B3C8EC17B15F2300CC96EE /* ChatController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = ChatController.mm; path = chat/ChatController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		66B3C8EE17B17AC800CC96EE /* ChatDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatDataSource.h; path = chat/ChatDataSource.h; sourceTree = "<group>"; };
@@ -656,6 +663,19 @@
 			name = ui;
 			sourceTree = "<group>";
 		};
+		66A2D92F183C25E800785270 /* SVPullToRefresh */ = {
+			isa = PBXGroup;
+			children = (
+				66A2D930183C25E800785270 /* SVPullToRefresh.h */,
+				66A2D931183C25E800785270 /* UIScrollView+SVInfiniteScrolling.h */,
+				66A2D932183C25E800785270 /* UIScrollView+SVInfiniteScrolling.m */,
+				66A2D933183C25E800785270 /* UIScrollView+SVPullToRefresh.h */,
+				66A2D934183C25E800785270 /* UIScrollView+SVPullToRefresh.m */,
+			);
+			name = SVPullToRefresh;
+			path = SVPullToRefresh/SVPullToRefresh;
+			sourceTree = "<group>";
+		};
 		66B3C8EA17B15F0C00CC96EE /* chat */ = {
 			isa = PBXGroup;
 			children = (
@@ -686,6 +706,7 @@
 		66E4F517176298CB00596E6B /* libs */ = {
 			isa = PBXGroup;
 			children = (
+				66A2D92F183C25E800785270 /* SVPullToRefresh */,
 				665F4E071833238D0083BCE7 /* TestFlightSDK */,
 				665F4DEA1831923C0083BCE7 /* REMenu */,
 				66FF0FFC182D3D920038ECA6 /* Lumberjack */,
@@ -1069,10 +1090,12 @@
 				6604A2DE17626B9E0072216A /* LoginViewController.mm in Sources */,
 				66E4F5B7176298CB00596E6B /* SocketIO.m in Sources */,
 				66FF1001182D3D920038ECA6 /* DDLog.m in Sources */,
+				66A2D941183C25E800785270 /* UIScrollView+SVPullToRefresh.m in Sources */,
 				665F4DF61831923C0083BCE7 /* REMenu.m in Sources */,
 				663710801813172F009D5195 /* EGOCache.m in Sources */,
 				66E4F5B8176298CB00596E6B /* SocketIOJSONSerialization.m in Sources */,
 				66E4F5B9176298CB00596E6B /* SocketIOPacket.m in Sources */,
+				66A2D940183C25E800785270 /* UIScrollView+SVInfiniteScrolling.m in Sources */,
 				6637108F181424DE009D5195 /* GetSharedSecretOperation.mm in Sources */,
 				66E4F5BA176298CB00596E6B /* SocketIOTransportWebsocket.m in Sources */,
 				6637107C1812EA1D009D5195 /* GenerateSharedSecretOperation.mm in Sources */,
