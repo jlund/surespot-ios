@@ -44,7 +44,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 NSString *const CACHE_IDENTITY_ID = @"_cache_identity";
 NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
-NSString *const IDENTITY_EXTENSION = @".ssi";
+
 
 
 - (SurespotIdentity *) getIdentityWithUsername:(NSString *) username andPassword:(NSString *) password {
@@ -58,7 +58,8 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
 
 -(SurespotIdentity *) loadIdentityUsername: (NSString * ) username password: (NSString *) password {
     
-    NSString *filePath = [[[FileController getAppSupportDir] stringByAppendingPathComponent: username ] stringByAppendingString:IDENTITY_EXTENSION];
+    NSString *filePath = [FileController getIdentityFile:username];
+    
     NSData *myData = [NSData dataWithContentsOfFile:filePath];
     
     if (myData) {
@@ -166,34 +167,27 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
     SurespotIdentity * identity = [[SurespotIdentity alloc] initWithUsername:username andSalt:salt];
     [identity addKeysWithVersion:@"1" withDhPrivKey:[keys dhPrivKey] withDhPubKey:[keys dhPubKey] withDsaPrivKey:[keys dsaPrivKey] withDsaPubKey:[keys dsaPubKey] ];
     
-    NSString * identityDir = [FileController getAppSupportDir];
-    [self saveIdentity:identity toDir:identityDir withPassword:[password stringByAppendingString:CACHE_IDENTITY_ID]];
+    [self saveIdentity:identity  withPassword:[password stringByAppendingString:CACHE_IDENTITY_ID]];
     [self setLoggedInUserIdentity:identity];
 }
 
 
 
-- (NSString *) saveIdentity: (SurespotIdentity *) identity toDir: (NSString *) identityDir withPassword: (NSString *) password {
-    NSString * filename = [[identity username] stringByAppendingString:IDENTITY_EXTENSION];
-    NSString * filePath = [identityDir stringByAppendingPathComponent:filename];
-    
-    
+- (NSString *) saveIdentity: (SurespotIdentity *) identity withPassword: (NSString *) password {
+    NSString * filePath = [FileController getIdentityFile:identity.username];
     NSData * encryptedCompressedIdentityData = [[self encryptIdentity:identity withPassword:password] gzipDeflate];
-    
     [encryptedCompressedIdentityData writeToFile:filePath atomically:TRUE];
     return filePath;
 }
 
 - (NSArray *) getIdentityNames {
-    NSString * identityDir = [FileController getAppSupportDir];
+    NSString * identityDir = [FileController getIdentityDir];
     NSArray * dirfiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:identityDir error:NULL];
     NSMutableArray * identityNames = [[NSMutableArray alloc] init];
     NSString * file;
     for (file in dirfiles) {
-        NSString * extension = [file substringFromIndex:[file length] - [IDENTITY_EXTENSION length]];
-        if ([extension isEqualToString:IDENTITY_EXTENSION]) {
-            NSString * identityName = [file substringToIndex: [file length] - [IDENTITY_EXTENSION length]];
-            [identityNames addObject: identityName ];
+        if ([[file pathExtension] isEqualToString:IDENTITY_EXTENSION]) {
+            [identityNames addObject: [file stringByDeletingPathExtension] ];
         }
     }
     return identityNames;
@@ -284,11 +278,24 @@ NSString *const IDENTITY_EXTENSION = @".ssi";
     // been revoked from a different device
     // and should not be used on this device anymore
     if ([username isEqualToString:[self getLoggedInUser]] && [version integerValue] > [[self getOurLatestVersion] integerValue]) {
+        DDLogInfo(@"user key revoked, deleting data and logging out. username: %@", username);
+        [self deleteIdentityUsername:username];
+      
         
     }
     else {
         [[CredentialCachingController sharedInstance] updateLatestVersionForUsername: username version: version];
     }
+}
+
+-(void) deleteIdentityUsername: (NSString *) username {
+    //make sure we wipe the identity file first so it doesn't show when we return to login screen
+    [FileController wipeIdentityData: username];
+    [[NetworkController sharedInstance] setUnauthorized];
+    [[CredentialCachingController sharedInstance] clearIdentityData:username];
+    
+    //then wipe the messages saved by logging out
+    [FileController wipeIdentityData: username];
 }
 
 @end

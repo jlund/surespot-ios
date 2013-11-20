@@ -1393,7 +1393,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) unauthorized: (NSNotification *) notification {
     DDLogInfo(@"unauthorized");
-    [UIUtils showToastKey:@"unauthorized" duration:2];
+   // [UIUtils showToastKey:@"unauthorized" duration:2];
     [self logout];
 }
 

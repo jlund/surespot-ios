@@ -22,7 +22,9 @@ NSString * const HOME_FILENAME = @"home";
 NSString * const STATE_EXTENSION = @"sss";
 NSString * const CHAT_DATA_PREFIX = @"chatdata_";
 NSString * const PUBLIC_KEYS_DIR = @"publickeys";
+NSString * const IDENTITIES_DIR = @"identities";
 NSString * const PUBLIC_KEYS_EXTENSION = @"spk";
+NSString * const IDENTITY_EXTENSION = @"ssi";
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -104,7 +106,23 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
 }
 
-
++(void) wipeIdentityData: (NSString *) username {
+    //remove identity file
+    NSString * identityFile = [self getIdentityFile:username];
+    
+    DDLogInfo( @"wiping idenity file for username: %@,  path: %@", username,identityFile);
+    //file manager thread safe supposedly
+    NSFileManager * fileMgr = [NSFileManager defaultManager];
+    BOOL wiped = [fileMgr removeItemAtPath:identityFile error:nil];    
+    DDLogInfo(@"wiped: %@", wiped ? @"YES" : @"NO");
+    
+    //wipe data (chats, keys, etc.)
+    NSString * identityDataDir = [self getDirectoryForUser:username];
+    
+    DDLogInfo( @"wiping data for username: %@,  path: %@", username,identityDataDir);
+    wiped = [fileMgr removeItemAtPath:identityDataDir error:nil];
+    DDLogInfo(@"wiped: %@", wiped ? @"YES" : @"NO");
+}
 
 +(NSString *) getFilename: (NSString *) filename {
     return [self getFilename:filename forUser:[[IdentityController sharedInstance] getLoggedInUser]];
@@ -119,7 +137,21 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     return nil;
 }
++(NSString *) getIdentityDir {
+    NSString * basedir = [[self getAppSupportDir] stringByAppendingPathComponent:IDENTITIES_DIR];
+    NSError * error;
+    if (![[NSFileManager defaultManager] createDirectoryAtPath:basedir withIntermediateDirectories:YES attributes:nil error:&error]) {
+        DDLogError(@"%@", error.localizedDescription);
+    }
+    return basedir;
+}
 
+
+
++(NSString *) getIdentityFile: (NSString *) username {
+    NSString * filename = [username stringByAppendingPathExtension:IDENTITY_EXTENSION];
+    return [[self getIdentityDir ] stringByAppendingPathComponent:filename];
+}
 
 
 +(NSString *) getDirectoryForUser: (NSString *) user {

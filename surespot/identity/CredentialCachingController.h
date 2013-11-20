@@ -29,4 +29,7 @@
 - (void) getLatestVersionForUsername: (NSString *) username callback:(CallbackStringBlock) callback;
 -(void) clearUserData: (NSString *) username;
 -(void) updateLatestVersionForUsername: (NSString *) username version: (NSString * ) version;
+
+-(void) logout;
+-(void) clearIdentityData:(NSString *) username;
 @end

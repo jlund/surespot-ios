@@ -86,7 +86,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     [_sharedSecretsDict removeObjectsForKeys:keysToRemove];
-
+    
     //TODO public keys for this user will get removed for all identities
     keysToRemove = [NSMutableArray new];
     //iterate through public keys and delete those that match the passed in user
@@ -102,6 +102,32 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
 }
 
+-(void) logout {
+    if (_loggedInUsername) {
+        [_identitiesDict removeObjectForKey:_loggedInUsername];
+        self.loggedInUsername = nil;
+    }
+}
+
+-(void) clearIdentityData:(NSString *) username {
+    
+    //remove cached shared secrets for the identity
+    //    NSString * sharedSecretKey = [NSString stringWithFormat:@"%@:%@:%@:%@", self.cache.loggedInUsername, self.ourVersion, self.theirUsername, self.theirVersion];
+    
+    NSMutableArray * keysToRemove = [NSMutableArray new];
+    //iterate through shared secret keys and delete those that match the passed in user
+    for (NSString * key in [_sharedSecretsDict allKeys]) {
+        NSArray * keyComponents = [key componentsSeparatedByString:@":"];
+        if ([[keyComponents objectAtIndex:0] isEqualToString:username]) {
+            DDLogInfo(@"removing shared secret for: %@", key);
+            [keysToRemove addObject:key];
+        }
+    }
+    
+    [_sharedSecretsDict removeObjectsForKeys:keysToRemove];
+    
+    
+}
 
 - (void) getLatestVersionForUsername: (NSString *) username callback:(CallbackStringBlock) callback {
     DDLogVerbose(@"getLatestVersionForUsername, queue size: %d", [_keyVersionQueue operationCount] );
