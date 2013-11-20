@@ -852,6 +852,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     if ([result integerValue] == 0) {
                         [UIUtils showToastKey:@"all_messages_loaded"];
                     }
+                    
                     DDLogInfo(@"loaded %@ earlier messages for user: %@", result, username);
 
                     [self updateTableView:weakView withNewRowCount:[result integerValue]];

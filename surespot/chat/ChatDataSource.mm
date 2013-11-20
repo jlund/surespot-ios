@@ -315,6 +315,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) handleEarlierMessages: (NSArray *) messages  callback: (CallbackBlock) callback{
+    if ([messages count] == 0) {
+        callback([NSNumber numberWithLong:0]);
+        _noEarlierMessages = YES;
+        return;
+    }
     __weak ChatDataSource* weakSelf =self;
     SurespotMessage * lastMessage;
     for (id jsonMessage in messages) {
@@ -470,11 +475,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         if (earliestMessageId == 1) {
             _noEarlierMessages = YES;
             callback([NSNumber numberWithInteger:0]);
+            _loadingEarlier = NO;
             return;
         }
         
         if (earliestMessageId == NSIntegerMax ) {
             callback([NSNumber numberWithInteger:NSIntegerMax]);
+            _loadingEarlier = NO;
             return;
         }
         
