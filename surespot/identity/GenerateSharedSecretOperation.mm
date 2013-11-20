@@ -18,30 +18,27 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
 
 @interface GenerateSharedSecretOperation()
-@property (nonatomic, strong) SurespotIdentity * ourIdentity;
-@property (nonatomic, strong) PublicKeys * theirPublicKeys;
+@property (nonatomic, assign) ECDHPrivateKey ourPrivateKey;
+@property (nonatomic, assign) ECDHPublicKey theirPublicKey;
 @end
 
 
 @implementation GenerateSharedSecretOperation
 
--(id) initWithOurIdentity: (SurespotIdentity *) ourIdentity theirPublicKeys: (PublicKeys *) theirPublicKeys  completionCallback:(void(^)(NSData *))  callback {
+-(id) initWithOurPrivateKey: (ECDHPrivateKey) ourPrivateKey theirPublicKey: (ECDHPublicKey) theirPublicKey completionCallback:(void(^)(NSData *)) callback {
     if (self = [super init]) {
         self.callback = callback;
-        self.ourIdentity = ourIdentity;
-        self.theirPublicKeys = theirPublicKeys;
+        self.ourPrivateKey = ourPrivateKey;
+        self.theirPublicKey = theirPublicKey;
     }
     return self;
 }
 
 -(void) main {
     @autoreleasepool {
-        DDLogVerbose(@"getting pub key");
-        ECDHPublicKey pubKey = [self.theirPublicKeys dhPubKey];
         
         //generate shared secret and store it in cache
-        NSData * sharedSecret = [EncryptionController generateSharedSecret:[self.ourIdentity getDhPrivateKey] publicKey:pubKey];
-        
+        NSData * sharedSecret = [EncryptionController generateSharedSecret:_ourPrivateKey  publicKey:_theirPublicKey];
         self.callback(sharedSecret);
     }
 }

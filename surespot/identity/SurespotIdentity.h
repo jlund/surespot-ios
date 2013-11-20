@@ -34,9 +34,9 @@ typedef CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey ECDSAPrivateKey;
 @property (atomic, copy) NSString* salt;
 @property (atomic, strong) NSMutableDictionary* keyPairs;
 
-- (ECDHPublicKey) getDhPublicKey;
-- (ECDHPrivateKey) getDhPrivateKey;
-- (ECDSAPPublicKey) getDsaPublicKey;
+//- (ECDHPublicKey) getDhPublicKey;
+- (ECDHPrivateKey) getDhPrivateKeyForVersion: (NSString *) version;
+//- (ECDSAPPublicKey) getDsaPublicKey;
 - (ECDSAPrivateKey) getDsaPrivateKey;
 
 - (NSDictionary *) getKeys;
