@@ -170,10 +170,20 @@
                                         <rect key="frame" x="0.0" y="10" width="265" height="30"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes"/>
                                         <connections>
                                             <action selector="textFieldChanged:" destination="tcp-OJ-fTS" eventType="editingChanged" id="KHh-xK-iue"/>
                                             <outlet property="delegate" destination="tcp-OJ-fTS" id="JXA-4z-jTj"/>
+                                        </connections>
+                                    </textField>
+                                    <textField clipsSubviews="YES" contentMode="bottom" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="whileEditing" id="jt9-E8-T3k">
+                                        <rect key="frame" x="0.0" y="10" width="265" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                        <connections>
+                                            <action selector="textFieldChanged:" destination="tcp-OJ-fTS" eventType="editingChanged" id="2mF-8e-Nrf"/>
+                                            <outlet property="delegate" destination="tcp-OJ-fTS" id="KmF-y1-gVd"/>
                                         </connections>
                                     </textField>
                                 </subviews>
@@ -197,6 +207,7 @@
                     <navigationItem key="navigationItem" id="kQa-JV-Z16"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
+                        <outlet property="inviteField" destination="jt9-E8-T3k" id="Xwf-6j-8vA"/>
                         <outlet property="swipeView" destination="XCg-uf-vcR" id="Hkv-YP-hj9"/>
                         <outlet property="textField" destination="aRf-OH-qdB" id="FiH-dU-rOR"/>
                         <outlet property="textFieldContainer" destination="Mgi-22-lGU" id="7W7-M6-lr3"/>

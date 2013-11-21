@@ -25,6 +25,7 @@
 @property (nonatomic, strong) UITableView *friendView;
 @property (strong, atomic) NSMutableDictionary *chats;
 @property (strong, nonatomic) IBOutlet UITextField *textField;
+@property (strong, nonatomic) IBOutlet UITextField *inviteField;
 @property (strong, nonatomic) KeyboardState * keyboardState;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *textBottomConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *swipeTopConstraint;

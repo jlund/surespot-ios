@@ -74,6 +74,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     _textField.enablesReturnKeyAutomatically = NO;
+    _inviteField.enablesReturnKeyAutomatically = NO;
     [self registerForKeyboardNotifications];
     
     
@@ -432,6 +433,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (currPage == 0) {
         [[ChatController sharedInstance] setCurrentChat:nil];
         tableview = _friendView;
+        [_textField resignFirstResponder];
+        [_inviteField resignFirstResponder];
+
     }
     else {
         @synchronized (_chats) {
@@ -458,6 +462,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     //update button
     [self updateTabChangeUI];
+    
+    
 }
 
 - (void)swipeView:(SwipeView *)swipeView didSelectItemAtIndex:(NSInteger)index
@@ -688,7 +694,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         else {
             cell.friendStatus.hidden = YES;
         }
-                
+        
         cell.messageNewView.hidden = !afriend.hasNewMessages;
         
         UIView *bgColorView = [[UIView alloc] init];
@@ -913,7 +919,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     Friend * afriend = [_homeDataSource getFriendByName:username];
     
     [self loadChat:username show:YES availableId:[afriend availableMessageId] availableControlId:[afriend availableMessageControlId]];
-    [_textField resignFirstResponder];
+    //   [_textField resignFirstResponder];
 }
 
 
@@ -922,31 +928,51 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return NO;
 }
 
-- (void) handleTextAction {
-    NSString * text = _textField.text;
-    
-    if ([text length] > 0) {
-        if (!_homeDataSource.currentChat) {
+- (BOOL) handleTextAction {
+    if (!_homeDataSource.currentChat) {
+        NSString * text = _inviteField.text;
+        
+        if ([text length] > 0) {
             
             NSString * loggedInUser = [[IdentityController sharedInstance] getLoggedInUser];
             if ([text isEqualToString:loggedInUser]) {
                 [UIUtils showToastKey:@"friend_self_error"];
-                return;
+                return YES;
             }
             
             
             [[ChatController sharedInstance] inviteUser:text];
             //            [_textField resignFirstResponder];
-            [_textField setText:nil];
+            [_inviteField setText:nil];
             [self updateTabChangeUI];
+            return YES;
         }
         else {
-            [self send];
+            [_inviteField resignFirstResponder];
+            [_textField resignFirstResponder];
+            
+            return NO;
         }
+        
     }
     else {
-        [_textField resignFirstResponder];
+        NSString * text = _textField.text;
+        
+        if ([text length] > 0) {
+            
+            [self send];
+            return YES;
+        }
+        
+        else {
+            [_inviteField resignFirstResponder];
+            
+            [_textField resignFirstResponder];
+            return NO;
+        }
     }
+    
+    
 }
 
 
@@ -977,10 +1003,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(void) updateTabChangeUI {
     if (!_homeDataSource.currentChat) {
         [_theButton setImage:[UIImage imageNamed:@"ic_menu_invite"] forState:UIControlStateNormal];
-        _textField.hidden = NO;
-
+        _textField.hidden = YES;
+        _inviteField.hidden = NO;
     }
     else {
+        _inviteField.hidden = YES;
         Friend *afriend = [_homeDataSource getFriendByName:_homeDataSource.currentChat];
         if (afriend.isDeleted) {
             [_theButton setImage:[UIImage imageNamed:@"ic_menu_home"] forState:UIControlStateNormal];
@@ -1002,7 +1029,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     //Save the tableview content offset
     CGPoint tableViewOffset = [tableView contentOffset];
-
+    
     //compute the height change
     int heightForNewRows = 0;
     
@@ -1339,9 +1366,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self performSegueWithIdentifier: @"returnToLogin" sender: self ];
 }
 - (IBAction)buttonTouchUpInside:(id)sender {
-    if (_textField.text.length > 0) {
-        [self handleTextAction];
-    }else {
+    if (![self handleTextAction]) {
         [_swipeView scrollToPage:0 duration:0.5];
     }
     
@@ -1372,7 +1397,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    if (!_homeDataSource.currentChat) {
+    if (textField == _inviteField) {
         NSCharacterSet *alphaSet = [NSCharacterSet alphanumericCharacterSet];
         NSString * newString = [string stringByTrimmingCharactersInSet:alphaSet];
         if (![newString isEqualToString:@""]) {
@@ -1383,8 +1408,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         return (newLength >= 20) ? NO : YES;
     }
     else {
-        NSUInteger newLength = [textField.text length] + [string length] - range.length;
-        return (newLength >= 1024) ? NO : YES;
+        
+        if (textField == _textField){
+            NSUInteger newLength = [textField.text length] + [string length] - range.length;
+            return (newLength >= 1024) ? NO : YES;
+        }
     }
     
     return YES;
@@ -1393,7 +1421,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) unauthorized: (NSNotification *) notification {
     DDLogInfo(@"unauthorized");
-   // [UIUtils showToastKey:@"unauthorized" duration:2];
+    // [UIUtils showToastKey:@"unauthorized" duration:2];
     [self logout];
 }
 
