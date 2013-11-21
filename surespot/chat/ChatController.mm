@@ -195,8 +195,8 @@ static const int MAX_CONNECTION_RETRIES = 16;
                 SurespotErrorMessage * message = [[SurespotErrorMessage alloc] initWithDictionary:[jsonData objectForKey:@"args"][0]];
                 
                 [self handleErrorMessage:message];
-              }
-     
+            }
+            
         }
     }
     
@@ -247,8 +247,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
 
 
 -(void) getData {
-    DDLogInfo(@"startProgress");
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"startProgress" object: nil];
+    [self startProgress];
     
     //if we have no friends and have never received a user control message
     //load friends and latest ids
@@ -261,14 +260,12 @@ static const int MAX_CONNECTION_RETRIES = 16;
                     [self getLatestData];
                 }
                 else {
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object: nil];
+                    [self stopProgress];
                     
                 }
             }
             else {
-                DDLogInfo(@"stopProgress");
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object: nil];
-                
+                [self stopProgress];
             }
             
         }];
@@ -365,12 +362,10 @@ static const int MAX_CONNECTION_RETRIES = 16;
                 [self handleMessages: messages forUsername:friendname];
             }
         }
-        DDLogInfo(@"stopProgress");
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object: nil];
+        [self stopProgress];
         [_homeDataSource postRefresh];
     } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
-        DDLogInfo(@"stopProgress");
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object: nil];
+        [self stopProgress];
         [UIUtils showToastKey:@"loading_latest_messages_failed"];
     }];
 }
@@ -505,7 +500,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
 }
 
 -(void) handleErrorMessage: (SurespotErrorMessage *) errorMessage {
-   __block SurespotMessage * foundMessage = nil;
+    __block SurespotMessage * foundMessage = nil;
     
     [_resendBuffer enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(SurespotMessage * message, NSUInteger idx, BOOL *stop) {
         if([errorMessage.data isEqualToString: message.iv]) {
@@ -517,12 +512,12 @@ static const int MAX_CONNECTION_RETRIES = 16;
     if (foundMessage ) {
         [_resendBuffer removeObject:foundMessage];
         foundMessage.errorStatus = errorMessage.status;
-         ChatDataSource * cds = [self getDataSourceForFriendname:[foundMessage getOtherUser]];
+        ChatDataSource * cds = [self getDataSourceForFriendname:[foundMessage getOtherUser]];
         if (cds) {
             [cds postRefresh];
         }
     }
-
+    
 }
 
 
@@ -706,7 +701,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
 
 -(void) inviteAction:(NSString *) action forUsername:(NSString *)username{
     DDLogVerbose(@"Invite action: %@, for username: %@", action, username);
-    
+    [self startProgress];
     [[NetworkController sharedInstance]  respondToInviteName:username action:action
      
      
@@ -728,6 +723,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
                                                             }
                                                         }
                                                     }
+                                                    [self stopProgress];
                                                 }
      
                                                 failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
@@ -739,6 +735,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
                                                     else {
                                                         [_homeDataSource postRefresh];
                                                     }
+                                                    [self stopProgress];
                                                 }];
     
 }
@@ -750,19 +747,36 @@ static const int MAX_CONNECTION_RETRIES = 16;
         return;
     }
     
+    [self startProgress];
     [[NetworkController sharedInstance]
      inviteFriend:username
      successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
          DDLogVerbose(@"invite friend response: %d",  [operation.response statusCode]);
          
          [_homeDataSource addFriendInvited:username];
+         [self stopProgress];
      }
      failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
          
          DDLogVerbose(@"response failure: %@",  Error);
-         [UIUtils showToastKey:@"could_not_invite"];
          
+         switch (operation.response.statusCode) {
+             case 404:
+                 [UIUtils showToastKey: @"user_does_not_exist"];
+                 break;
+             case 409:
+                 [UIUtils showToastKey: @"you_are_already_friends"];
+                 break;
+             case 403:
+                 [UIUtils showToastKey: @"already_invited"];
+                 break;
+             default:
+                 [UIUtils showToastKey:@"could_not_invite"];
+         }
+         
+         [self stopProgress];
      }];
+    
 }
 
 
@@ -904,10 +918,14 @@ static const int MAX_CONNECTION_RETRIES = 16;
         NSString * username = [[IdentityController sharedInstance] getLoggedInUser];
         NSString * friendname = thefriend.name;
         
+        [self startProgress];
+        
         [[NetworkController sharedInstance] deleteFriend:friendname successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
             [self handleDeleteUser:friendname deleter:username];
+            [self stopProgress];
         } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
             [UIUtils showToastKey:@"could_not_delete_friend"];
+            [self stopProgress];
         }];
     }
 }
@@ -918,9 +936,10 @@ static const int MAX_CONNECTION_RETRIES = 16;
         if (cds) {
             if (message.serverid > 0) {
                 
-                
+                [self startProgress];
                 [[NetworkController sharedInstance] deleteMessageName:[message getOtherUser] serverId:[message serverid] successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
                     [cds deleteMessage: message initiatedByMe: YES];
+                    [self stopProgress];
                 } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
                     
                     
@@ -931,6 +950,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
                     else {
                         [UIUtils showToastKey:@"could_not_delete_message"];
                     }
+                    [self stopProgress];
                 }];
                 
             }
@@ -952,13 +972,15 @@ static const int MAX_CONNECTION_RETRIES = 16;
     else {
         lastMessageId = [afriend lastReceivedMessageId];
     }
-    
+    [self startProgress];
     [[NetworkController sharedInstance] deleteMessagesUTAI:lastMessageId name:afriend.name successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         [cds deleteAllMessagesUTAI:lastMessageId];
+        [self stopProgress];
         
     } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
         [UIUtils showToastKey:@"could_not_delete_messages"];
+        [self stopProgress];
     }];
     
     
@@ -969,6 +991,14 @@ static const int MAX_CONNECTION_RETRIES = 16;
     ChatDataSource * cds = [self getDataSourceForFriendname:username];
     [cds loadEarlierMessagesCallback:callback];
     
+}
+
+-(void) startProgress {
+      [[NSNotificationCenter defaultCenter] postNotificationName:@"startProgress" object: nil];
+}
+
+-(void) stopProgress {
+      [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object: nil];
 }
 
 @end

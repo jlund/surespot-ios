@@ -109,7 +109,24 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
          failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
              
              DDLogVerbose(@"signup response failure: %@",  Error);
-             [UIUtils showToastKey:@"could_not_create_user"];
+             
+             switch (operation.response.statusCode) {
+                 case 429:
+                     [UIUtils showToastKey: @"user_creation_throttled"];
+                     [_tbUsername becomeFirstResponder];
+                     break;
+                 case 409:
+                     [UIUtils showToastKey: @"username_exists"];
+                     [_tbUsername becomeFirstResponder];
+                     break;
+                 case 403:
+                     [UIUtils showToastKey: @"signup_update"];
+                     break;
+                 default:
+                     [UIUtils showToastKey: @"could_not_create_user"];
+             }
+
+             self.navigationItem.rightBarButtonItem.enabled = YES;
              [_progressView removeView];
          }
          ];
@@ -120,10 +137,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if (textField == _tbUsername) {
-//        if (![UIUtils stringIsNilOrEmpty: textField.text]) {
-//            [_tbPassword becomeFirstResponder];
-//            [_tbUsername resignFirstResponder];
-//        }
+        //        if (![UIUtils stringIsNilOrEmpty: textField.text]) {
+        //            [_tbPassword becomeFirstResponder];
+        //            [_tbUsername resignFirstResponder];
+        //        }
         [self checkUsername];
         return NO;
     }
@@ -206,7 +223,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
         [_progressView removeView];
     } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
-           [_tbUsername becomeFirstResponder];
+        [_tbUsername becomeFirstResponder];
         [UIUtils showToastKey:@"user_exists_error"];
     }];
 }
@@ -225,7 +242,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void)textFieldDidEndEditing:(UITextField *)textField {
-
+    
     if (textField == _tbUsername) {
         [self checkUsername];
     }
@@ -233,18 +250,18 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 //- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *) event
 //{
-//    
+//
 //    UITouch *touch = [[event allTouches] anyObject];
 //    if ([_tbUsername isFirstResponder] && (_tbUsername != touch.view))
 //    {
 //        [self checkUsername ];
 //    }
-////    
+////
 ////    if ([textField2 isFirstResponder] && (textField2 != touch.view))
 ////    {
 ////        // textField2 lost focus
 ////    }
-////    
+////
 ////    ...
 //}
 
@@ -265,9 +282,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 // Called when the UIKeyboardDidShowNotification is sent.
 - (void)keyboardWasShown:(NSNotification*)aNotification
 {
-   
+    
     DDLogVerbose(@"keyboardWasShown");
-
+    
     
     NSDictionary* info = [aNotification userInfo];
     CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];

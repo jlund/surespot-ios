@@ -135,6 +135,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
          successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
              DDLogVerbose(@"login response: %d",  [response statusCode]);
              
+             
+             
              [[IdentityController sharedInstance] userLoggedInWithIdentity:identity];
              [self performSegueWithIdentifier: @"loginToMainSegue" sender: nil ];
              _textPassword.text = @"";
@@ -144,7 +146,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
          }
          failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
              DDLogVerbose(@"response failure: %@",  Error);
-             [UIUtils showToastKey: @"login_try_again_later" duration: 2.0];
+             
+             switch (responseObject.statusCode) {
+                 case 401:
+                     [UIUtils showToastKey: @"login_check_password"];
+                     break;
+                 case 403:
+                     [UIUtils showToastKey: @"login_update"];
+                     break;
+                 default:
+                     [UIUtils showToastKey: @"login_try_again_later"];
+             }
+             
+             
              [_progressView removeView];
              self.navigationItem.rightBarButtonItem.enabled = YES;
              
@@ -189,7 +203,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
-{    
+{
     NSUInteger newLength = [textField.text length] + [string length] - range.length;
     return (newLength >= 256) ? NO : YES;
 }
