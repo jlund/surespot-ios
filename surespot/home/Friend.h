@@ -15,9 +15,10 @@
 @property (atomic, strong) NSString * imageUrl;
 @property (atomic, strong) NSString * imageVersion;
 @property (atomic, strong) NSString * imageIv;
-@property (atomic, assign) NSInteger lastViewedMessageId;
+@property (atomic, assign) NSInteger lastReceivedMessageId;
 @property (atomic, assign) NSInteger availableMessageId;
 @property (atomic, assign) NSInteger availableMessageControlId;
+@property (atomic, assign) BOOL hasNewMessages;
 
 -(void) setFriend;
 
@@ -32,5 +33,7 @@
 -(void) setChatActive: (BOOL) set;
 
 -(BOOL) isFriend;
+
+
 
 @end

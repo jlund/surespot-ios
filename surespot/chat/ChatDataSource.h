@@ -19,12 +19,12 @@
 @property (nonatomic, assign) NSInteger latestControlMessageId;
 
 -(ChatDataSource*)initWithUsername:(NSString *) username loggedInUser: (NSString * ) loggedInUser availableId: (NSInteger) availableId availableControlId: (NSInteger) availableControlId;
--(void) addMessage:(SurespotMessage *) message refresh:(BOOL) refresh;
+-(BOOL) addMessage:(SurespotMessage *) message refresh:(BOOL) refresh;
 -(void) postRefresh;
 -(void) deleteMessage: (SurespotMessage *) message initiatedByMe: (BOOL) initiatedByMe;
 -(SurespotMessage *) getMessageById: (NSInteger) serverId;
 -(void) deleteMessageByIv: (NSString *) iv;
--(void) handleMessages: (NSArray *) messages;
+-(BOOL) handleMessages: (NSArray *) messages;
 
 -(void) handleControlMessages: (NSArray *) controlMessages;
 -(void) handleControlMessage: (SurespotControlMessage *) message;

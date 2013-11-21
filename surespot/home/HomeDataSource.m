@@ -53,7 +53,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) loadFriendsCallback: (void(^)(BOOL success)) callback{
-        DDLogInfo(@"startProgress");
+    DDLogInfo(@"startProgress");
     [[NSNotificationCenter defaultCenter] postNotificationName:@"startProgress" object:nil];
     
     [[NetworkController sharedInstance] getFriendsSuccessBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
@@ -68,14 +68,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [self writeToDisk];
         [self postRefresh];
         callback(YES);
-            DDLogInfo(@"stopProgress");
+        DDLogInfo(@"stopProgress");
         [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object:nil];
         
     } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
         DDLogInfo(@"response failure: %@",  Error);
         [self postRefresh];
         callback(NO);
-            DDLogInfo(@"stopProgress");
+        DDLogInfo(@"stopProgress");
         [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object:nil];
     }];
     
@@ -194,14 +194,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(void) setCurrentChat: (NSString *) username {
     if (username) {
         Friend * afriend = [self getFriendByName:username];
-        if (! afriend.isChatActive) {
-            [afriend setChatActive:YES];
-            [self postRefresh];
-        }
+        [afriend setChatActive:YES];
+        afriend.hasNewMessages = NO;
+        [self postRefresh];
     }
     
-    _currentChat = username;
-    
+    _currentChat = username;    
 }
 
 -(void) sort {

@@ -458,8 +458,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     //update button
     [self updateTabChangeUI];
-    
-    
 }
 
 - (void)swipeView:(SwipeView *)swipeView didSelectItemAtIndex:(NSInteger)index
@@ -690,7 +688,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         else {
             cell.friendStatus.hidden = YES;
         }
-        
+                
+        cell.messageNewView.hidden = !afriend.hasNewMessages;
         
         UIView *bgColorView = [[UIView alloc] init];
         bgColorView.backgroundColor = [UIUtils surespotBlue];
@@ -707,6 +706,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
         NSString * username = aKey;
         NSArray * messages =[[ChatController sharedInstance] getDataSourceForFriendname: username].messages;
+        
         
         if (messages.count == 0) {
             DDLogInfo(@"no chat messages");

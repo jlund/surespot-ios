@@ -122,11 +122,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return self;
 }
 
--(void) addMessage:(SurespotMessage *) message refresh:(BOOL) refresh {
-    [self addMessage:message refresh:refresh callback:nil];
+-(BOOL) addMessage:(SurespotMessage *) message refresh:(BOOL) refresh {
+    return [self addMessage:message refresh:refresh callback:nil];
 }
 
--(void) addMessage:(SurespotMessage *)message  refresh: (BOOL) refresh callback: (CallbackBlock) callback {
+-(BOOL) addMessage:(SurespotMessage *)message  refresh: (BOOL) refresh callback: (CallbackBlock) callback {
+    BOOL isNew = NO;
     @synchronized (_messages)  {
         NSMutableArray * applicableControlMessages  = nil;
         if (message.serverid > 0 && ![UIUtils stringIsNilOrEmpty:message.plainData]) {
@@ -138,6 +139,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             for (SurespotControlMessage * cm in controlMessages) {
                 NSInteger messageId = [cm.moreData  integerValue];
                 if (message.serverid == messageId) {
+                    //if we're going to delete the message don't bother adding it
+                    if ([cm.action isEqualToString:@"delete"] ) {
+                                        DDLogVerbose(@"message going to be deleted, marking message as old");
+                        return NO;
+                    }
                     [applicableControlMessages addObject:cm];
                 }
             }
@@ -183,6 +189,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 }
                 
             }
+            
+            if (![ChatUtils isOurMessage:message]) {
+                DDLogVerbose(@"not our message, marking message as new");
+
+                isNew = YES;
+            }
         }
         else {
             DDLogInfo(@"updating message iv: %@", message.iv);
@@ -207,6 +219,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         DDLogVerbose(@"updating latest message id: %d", message.serverid);
         _latestMessageId = message.serverid;
     }
+    else {
+        DDLogVerbose(@"have received before, marking message as old");
+        isNew = NO;
+    }
     
     if (message.serverid == 1) {
         _noEarlierMessages = YES;
@@ -219,6 +235,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [self postRefresh];
         }
     }
+    
+    return isNew;
     
     
 }
@@ -301,18 +319,23 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 
--(void) handleMessages: (NSArray *) messages {
+-(BOOL) handleMessages: (NSArray *) messages {
     __weak ChatDataSource* weakSelf =self;
     SurespotMessage * lastMessage;
+    BOOL areNew = NO;
     for (id jsonMessage in messages) {
         lastMessage = [[SurespotMessage alloc] initWithJSONString:jsonMessage];
-        [self addMessage:lastMessage refresh:NO callback:^(id result) {
+        BOOL isNew = [self addMessage:lastMessage refresh:NO callback:^(id result) {
             if ([weakSelf.decryptionQueue operationCount] == 0) {
                 [weakSelf postRefresh];
             }
         }];
+        if (isNew  ) {
+            areNew = isNew;
+        }
     }
     
+    return areNew;
 }
 
 -(void) handleEarlierMessages: (NSArray *) messages  callback: (CallbackBlock) callback{
@@ -501,5 +524,24 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }];
     }
 }
+
+//-(BOOL) hasNewMessagesSinceId: (NSInteger) lastViewedId {
+//    @synchronized (_messages) {
+//        __block BOOL hasNew = NO;
+//        [_messages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(SurespotMessage * message, NSUInteger idx, BOOL *stop) {
+//            if (![ChatUtils isOurMessage:message]) {
+//                if (message.serverid > lastViewedId) {
+//                    hasNew = YES;
+//                    *stop = YES;
+//                }
+//                
+//                if (message.serverid <= lastViewedId) {
+//                    *stop = YES;
+//                }
+//            }
+//        }];
+//        return hasNew;
+//    }
+//}
 
 @end

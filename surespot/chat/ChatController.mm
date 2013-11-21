@@ -478,7 +478,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
             else {
                 Friend * afriend = [_homeDataSource getFriendByName:otherUser];
                 if (afriend) {
-                    lastMessageId =  afriend.lastViewedMessageId;
+                    lastMessageId =  afriend.lastReceivedMessageId;
                 }
             }
             
@@ -500,32 +500,49 @@ static const int MAX_CONNECTION_RETRIES = 16;
 
 -(void) handleMessage: (SurespotMessage *) message {
     NSString * otherUser = [message getOtherUser];
+    __block BOOL isNew = YES;
     ChatDataSource * dataSource = [self getDataSourceForFriendname:otherUser];
     if (dataSource) {
         
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [dataSource addMessage: message refresh:YES];
+            isNew = [dataSource addMessage: message refresh:YES];
         });
         
     }
     
-    //update available id
+    //update ids
     Friend * afriend = [_homeDataSource getFriendByName:otherUser];
     if (afriend && message.serverid > 0) {
         afriend.availableMessageId = message.serverid;
+        afriend.lastReceivedMessageId = message.serverid;
+        
+        //if the tab is closed or not on chat tab then we might have new messages
+        if (!dataSource || ![_homeDataSource.currentChat isEqualToString: otherUser] ) {
+            afriend.hasNewMessages = isNew;
+        }
+        
+        
+        //ifthe tab's showing then we don't have new messages because we're looking at them
+        if (dataSource && [_homeDataSource.currentChat isEqualToString: otherUser]) {
+            afriend.hasNewMessages = NO;
+        }
+        
+
+        
+        [_homeDataSource postRefresh];
     }
 }
 
 -(void) handleMessages: (NSArray *) messages forUsername: (NSString *) username {
     if (messages && [messages count ] > 0) {
         ChatDataSource * cds = nil;
-        
+        BOOL isNew = YES;
         @synchronized (_chatDataSources) {
             cds = [_chatDataSources objectForKey:username];
         }
         if (cds) {
-            [cds handleMessages: messages];
+            isNew = [cds handleMessages: messages];
         }
         
         Friend * thefriend = [_homeDataSource getFriendByName:username];
@@ -535,9 +552,20 @@ static const int MAX_CONNECTION_RETRIES = 16;
             NSInteger messageId = m.serverid;
             
             thefriend.availableMessageId = messageId;
-            if ([_homeDataSource.currentChat isEqualToString: username]) {
-                thefriend.lastViewedMessageId = messageId;
+            thefriend.lastReceivedMessageId = messageId;
+            
+            //if the tab is closed or not on chat tab then we might have new messages
+            if (!cds || ![_homeDataSource.currentChat isEqualToString: username] ) {
+                thefriend.hasNewMessages = isNew;
             }
+            
+            
+            //if the tab's showing then we don't have new messages because we're looking at them
+            if (cds && [_homeDataSource.currentChat isEqualToString: username]) {
+                thefriend.hasNewMessages = NO;
+            }
+            
+            [_homeDataSource postRefresh];
         }
     }
 }
@@ -781,7 +809,8 @@ static const int MAX_CONNECTION_RETRIES = 16;
 
 - (void) setCurrentChat: (NSString *) username {
     [_homeDataSource setCurrentChat: username];
-    
+  
+    //here is where we would set message read stuff
     
 }
 
@@ -859,7 +888,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
         lastMessageId = [cds latestMessageId];
     }
     else {
-        lastMessageId = [afriend lastViewedMessageId];
+        lastMessageId = [afriend lastReceivedMessageId];
     }
     
     [[NetworkController sharedInstance] deleteMessagesUTAI:lastMessageId name:afriend.name successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {

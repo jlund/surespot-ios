@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "FriendDelegate.h"
+#import "MessageIndicatorNewView.h"
 
 @interface HomeCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UIImageView *friendImage;
@@ -20,4 +21,5 @@
 - (IBAction)inviteAction:(id)sender;
 @property (weak, nonatomic) id <FriendDelegate> friendDelegate;
 @property (strong, nonatomic) NSString * friendName;
+@property (strong, nonatomic) IBOutlet MessageIndicatorNewView * messageNewView;
 @end

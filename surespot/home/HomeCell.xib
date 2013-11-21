@@ -93,6 +93,11 @@
                         <color key="textColor" red="0.20000000000000001" green="0.70980392156862748" blue="0.89803921568627454" alpha="1" colorSpace="deviceRGB"/>
                         <color key="highlightedColor" red="0.20000000000000001" green="0.70980392160000005" blue="0.8980392157" alpha="1" colorSpace="deviceRGB"/>
                     </label>
+                    <view hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" id="oQI-av-i74" customClass="MessageIndicatorNewView">
+                        <rect key="frame" x="286" y="9" width="25" height="25"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </view>
                 </subviews>
             </tableViewCellContentView>
             <connections>
@@ -103,6 +108,7 @@
                 <outlet property="friendLabel" destination="kTf-EF-cp2" id="YO4-ol-nva"/>
                 <outlet property="friendStatus" destination="kfL-8d-kis" id="71W-xM-2Hf"/>
                 <outlet property="ignoreButton" destination="GkS-PY-diP" id="JLn-c8-cii"/>
+                <outlet property="messageNewView" destination="oQI-av-i74" id="GIb-yZ-yay"/>
             </connections>
         </tableViewCell>
     </objects>

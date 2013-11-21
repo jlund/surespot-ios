@@ -66,6 +66,7 @@
 		66B3C8F017B17AC800CC96EE /* ChatDataSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66B3C8EF17B17AC800CC96EE /* ChatDataSource.mm */; };
 		66D3B04D182D47DF00B37A6C /* SurespotLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 66D3B04C182D47DF00B37A6C /* SurespotLogFormatter.m */; };
 		66D3B04F182EAB4200B37A6C /* surespot.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66D3B04E182EAB4200B37A6C /* surespot.xcassets */; };
+		66DC2D53183E513D003CC54B /* MessageIndicatorNewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66DC2D52183E513D003CC54B /* MessageIndicatorNewView.m */; };
 		66E4F5B6176298CB00596E6B /* libcryptopp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E4F5A1176298CB00596E6B /* libcryptopp.a */; };
 		66E4F5B7176298CB00596E6B /* SocketIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5A4176298CB00596E6B /* SocketIO.m */; };
 		66E4F5B8176298CB00596E6B /* SocketIOJSONSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5A6176298CB00596E6B /* SocketIOJSONSerialization.m */; };
@@ -217,6 +218,8 @@
 		66D3B04B182D47DF00B37A6C /* SurespotLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SurespotLogFormatter.h; path = utils/SurespotLogFormatter.h; sourceTree = "<group>"; };
 		66D3B04C182D47DF00B37A6C /* SurespotLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SurespotLogFormatter.m; path = utils/SurespotLogFormatter.m; sourceTree = "<group>"; };
 		66D3B04E182EAB4200B37A6C /* surespot.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = surespot.xcassets; sourceTree = "<group>"; };
+		66DC2D51183E513D003CC54B /* MessageIndicatorNewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageIndicatorNewView.h; path = home/MessageIndicatorNewView.h; sourceTree = "<group>"; };
+		66DC2D52183E513D003CC54B /* MessageIndicatorNewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageIndicatorNewView.m; path = home/MessageIndicatorNewView.m; sourceTree = "<group>"; };
 		66E4F51A176298CB00596E6B /* 3way.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 3way.h; sourceTree = "<group>"; };
 		66E4F51B176298CB00596E6B /* adler32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adler32.h; sourceTree = "<group>"; };
 		66E4F51C176298CB00596E6B /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
@@ -611,6 +614,8 @@
 				664076771822C07C00BFD974 /* Friend.m */,
 				66FF0FE61825416A0038ECA6 /* HomeDataSource.h */,
 				66FF0FE71825416A0038ECA6 /* HomeDataSource.m */,
+				66DC2D51183E513D003CC54B /* MessageIndicatorNewView.h */,
+				66DC2D52183E513D003CC54B /* MessageIndicatorNewView.m */,
 			);
 			name = home;
 			sourceTree = "<group>";
@@ -1107,6 +1112,7 @@
 				66E4F5BE176298CB00596E6B /* SRWebSocket.m in Sources */,
 				6654441617F37BCF00F62F7F /* SwipeViewController.mm in Sources */,
 				661C2EC31762B125000649E7 /* SurespotIdentity.mm in Sources */,
+				66DC2D53183E513D003CC54B /* MessageIndicatorNewView.m in Sources */,
 				661C2EC81762C3C0000649E7 /* IdentityKeys.mm in Sources */,
 				66A2D916183A732900785270 /* UIViewPager.m in Sources */,
 				66FF0FE218242B6B0038ECA6 /* Toast+UIView.m in Sources */,
