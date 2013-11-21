@@ -26,5 +26,6 @@
 +(void) startPulseAnimation: (UIView *) view;
 +(void) stopPulseAnimation: (UIView *) view;
 +(void) showToastMessage: (NSString *) message duration: (CGFloat) duration;
++(NSString *) getMessageErrorText: (NSInteger) errorStatus;
 @end
 

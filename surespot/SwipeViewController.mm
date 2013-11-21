@@ -750,37 +750,45 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 cell.messageSentView.backgroundColor = [UIUtils surespotBlue];
             }
             
-            if (message.serverid <= 0) {
-                cell.messageStatusLabel.text = NSLocalizedString(@"message_sending",nil);
-                cell.messageLabel.text = plainData;
-                
-                if (ours) {
-                    cell.messageSentView.backgroundColor = [UIColor blackColor];
-                }
+            if (message.errorStatus > 0) {
+                NSString * errorText = [UIUtils getMessageErrorText: message.errorStatus];
+                cell.messageStatusLabel.text = errorText;
+                cell.messageSentView.backgroundColor = [UIColor blackColor];
             }
             else {
-                if (ours) {
-                    cell.messageSentView.backgroundColor = [UIColor lightGrayColor];
-                }
                 
-                if (!message.plainData) {
+                if (message.serverid <= 0) {
+                    cell.messageStatusLabel.text = NSLocalizedString(@"message_sending",nil);
+                    cell.messageLabel.text = plainData;
                     
-                    cell.messageStatusLabel.text = NSLocalizedString(@"message_loading_and_decrypting",nil);
-                    cell.messageLabel.text = @"";
-                    
+                    if (ours) {
+                        cell.messageSentView.backgroundColor = [UIColor blackColor];
+                    }
                 }
                 else {
-                    
-                    //   DDLogVerbose(@"setting text for iv: %@ to: %@", [message iv], plainData);
-                    cell.messageLabel.text = plainData;
-                    cell.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
-                    cell.messageStatusLabel.text = [self stringFromDate:[message dateTime]];
-                    
                     if (ours) {
                         cell.messageSentView.backgroundColor = [UIColor lightGrayColor];
                     }
+                    
+                    if (!message.plainData) {
+                        
+                        cell.messageStatusLabel.text = NSLocalizedString(@"message_loading_and_decrypting",nil);
+                        cell.messageLabel.text = @"";
+                        
+                    }
                     else {
-                        cell.messageSentView.backgroundColor = [UIUtils surespotBlue];
+                        
+                        //   DDLogVerbose(@"setting text for iv: %@ to: %@", [message iv], plainData);
+                        cell.messageLabel.text = plainData;
+                        cell.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
+                        cell.messageStatusLabel.text = [self stringFromDate:[message dateTime]];
+                        
+                        if (ours) {
+                            cell.messageSentView.backgroundColor = [UIColor lightGrayColor];
+                        }
+                        else {
+                            cell.messageSentView.backgroundColor = [UIUtils surespotBlue];
+                        }
                     }
                 }
             }

@@ -203,6 +203,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             if (message.serverid > 0) {
                 existingMessage.serverid = message.serverid;
                 existingMessage.dateTime = message.dateTime;
+                existingMessage.errorStatus = 0;
             }
         }
         

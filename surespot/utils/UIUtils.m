@@ -151,4 +151,44 @@
     [view.layer removeAnimationForKey:@"pulse"];
 }
 
++(NSString *) getMessageErrorText: (NSInteger) errorStatus {
+    NSString * statusText = nil;
+    switch (errorStatus) {
+		case 400:
+			statusText = NSLocalizedString(@"message_error_invalid",nil);
+			break;
+		case 402:
+			// if it's voice message they need to have upgraded, otherwise fall through to 403
+			//if (message.getMimeType().equals(SurespotConstants.MimeTypes.M4A)) {
+			//	statusText = context.getString(R.string.billing_payment_required_voice);
+			//	break;
+			//}
+		case 403:
+			statusText =  NSLocalizedString(@"message_error_unauthorized",nil);
+			break;
+		case 404:
+			statusText =  NSLocalizedString(@"message_error_unauthorized",nil);
+			break;
+		case 429:
+			statusText =  NSLocalizedString(@"error_message_throttled",nil);
+			break;
+		case 500:
+        default:
+			
+            //	if (message.getMimeType().equals(SurespotConstants.MimeTypes.TEXT)) {
+            statusText =  NSLocalizedString(@"error_message_generic",nil);
+            //			}
+            //			else {
+            //				if (message.getMimeType().equals(SurespotConstants.MimeTypes.IMAGE) || message.getMimeType().equals(SurespotConstants.MimeTypes.M4A)) {
+            //					statusText = context.getString(R.string.error_message_resend);
+            //				}
+            //			}
+            
+			break;
+    }
+    
+    return statusText;
+}
+
+
 @end

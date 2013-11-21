@@ -21,6 +21,7 @@
 #import "SurespotConstants.h"
 #import "FileController.h"
 #import "CredentialCachingController.h"
+#import "SurespotErrorMessage.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
@@ -188,6 +189,14 @@ static const int MAX_CONNECTION_RETRIES = 16;
             
             [self handleMessage:message];
             [self checkAndSendNextMessage:message];
+        }
+        else {
+            if ([name isEqualToString:@"messageError"]) {
+                SurespotErrorMessage * message = [[SurespotErrorMessage alloc] initWithJSONString:[jsonData objectForKey:@"args"][0]];
+                
+                [self handleErrorMessage:message];
+              }
+     
         }
     }
     
@@ -493,6 +502,27 @@ static const int MAX_CONNECTION_RETRIES = 16;
         
         [self sendMessageOnSocket:jsonString];
     }
+}
+
+-(void) handleErrorMessage: (SurespotErrorMessage *) errorMessage {
+   __block SurespotMessage * foundMessage = nil;
+    
+    [_resendBuffer enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(SurespotMessage * message, NSUInteger idx, BOOL *stop) {
+        if([errorMessage.data isEqualToString: message.iv]) {
+            foundMessage = message;
+            *stop = YES;
+        }
+    }];
+    
+    if (foundMessage ) {
+        [_resendBuffer removeObject:foundMessage];
+        foundMessage.errorStatus = errorMessage.status;
+         ChatDataSource * cds = [self getDataSourceForFriendname:[foundMessage getOtherUser]];
+        if (cds) {
+            [cds postRefresh];
+        }
+    }
+
 }
 
 

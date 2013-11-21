@@ -47,6 +47,7 @@
         _iv = [coder decodeObjectForKey:@"iv"];
         _mimeType = [coder decodeObjectForKey:@"mimeType"];
         _dateTime = [coder decodeObjectForKey:@"datetime"];
+        _errorStatus = [coder decodeIntegerForKey:@"errorStatus"];
     }
     return self;
 }
@@ -113,6 +114,9 @@
     [encoder encodeObject:_mimeType forKey:@"mimeType"];
     if (_dateTime) {
         [encoder encodeObject:_dateTime forKey:@"datetime"];
+    }
+    if (_errorStatus > 0) {
+        [encoder encodeInteger:_errorStatus forKey:@"errorStatus"];
     }
 }
 
