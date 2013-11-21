@@ -147,8 +147,21 @@
 }
 
 - (NSComparisonResult)compare:(Friend  *)other {
-    NSInteger myflags = self.flags  & (CHAT_ACTIVE | MESSAGE_ACTIVITY | INVITER);
-    NSInteger theirflags = other.flags  & (CHAT_ACTIVE | MESSAGE_ACTIVITY | INVITER);
+    NSInteger myflags = self.flags;
+    
+    // for the purposes of sorting we'll add MESSAGE_ACTIVITY to the flags if they have new messages
+    if (self.hasNewMessages) {
+        myflags |= MESSAGE_ACTIVITY;
+    }
+    
+    myflags &= (CHAT_ACTIVE | MESSAGE_ACTIVITY | INVITER);
+    
+    NSInteger theirflags = other.flags;
+    if (other.hasNewMessages) {
+        theirflags |= MESSAGE_ACTIVITY;
+    }
+    
+    theirflags &= (CHAT_ACTIVE | MESSAGE_ACTIVITY | INVITER);
     
     if ((theirflags == myflags) || (theirflags < CHAT_ACTIVE && myflags < CHAT_ACTIVE)) {
         //sort my name
