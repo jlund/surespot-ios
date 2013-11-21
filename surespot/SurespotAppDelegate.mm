@@ -17,7 +17,11 @@
 #import "IdentityController.h"
 #import "UIUtils.h"
 
+#ifdef DEBUG
+static const int ddLogLevel = LOG_LEVEL_INFO;
+#else
 static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
 
 @implementation SurespotAppDelegate
 
@@ -59,46 +63,38 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    DDLogVerbose(@"received remote notification: %@, applicationstate: %d", userInfo, [application applicationState]);
+    DDLogInfo(@"received remote notification: %@, applicationstate: %d", userInfo, [application applicationState]);
     
     //todo download and add the message or just move to tab and tell it to load
     switch ([application applicationState]) {
         case UIApplicationStateActive:
+        {
             //application was running when we received
             //if we're not on the tap, show notification
-            
-            //            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"MyAlertView"
-            //                                                                message:@"Local notification was received"
-            //                                                               delegate:self cancelButtonTitle:@"OK"
-            //                                                      otherButtonTitles:nil];
-            //            [alertView show];
-            
-            //   [notificationData setObject:@"active" forKey:@"applicationState"];
-            if ([[userInfo valueForKeyPath:@"aps.alert.loc-key" ] isEqualToString:@"notification_message"]) {
+            NSString * notificationType =[userInfo valueForKeyPath:@"aps.alert.loc-key" ] ;
+            if ([notificationType isEqualToString:@"notification_message"] ||
+                [notificationType isEqualToString:@"notification_invite"]  ||
+                [notificationType isEqualToString:@"notification_invite_accept"]) {
                 //if we're not logged in as the user add a local notifcation and show a toast
-                //
-                //
-                NSString * to =[ userInfo objectForKey:@"to"];
+                
+                NSArray * locArgs =[userInfo valueForKeyPath:@"aps.alert.loc-args" ] ;
+                NSString * to =[locArgs objectAtIndex:0];
                 if (![to isEqualToString:[[IdentityController sharedInstance] getLoggedInUser]]) {
-                    NSString * from =[ userInfo objectForKey:@"from"];
-                    [UIUtils showToastMessage:[NSString stringWithFormat:NSLocalizedString(@"notification_message", nil), to, from] duration:1];
+                    NSString * from =[locArgs objectAtIndex:1];
+                    [UIUtils showToastMessage:[NSString stringWithFormat:NSLocalizedString(notificationType, nil), to, from] duration:1];
 
-                    
-                    
-                    
-
-                    //
                     UILocalNotification* localNotification = [[UILocalNotification alloc] init];
                     localNotification.fireDate = nil;
-                    localNotification.alertBody = [NSString stringWithFormat: NSLocalizedString(@"notification_message", nil), to, from];
+                    localNotification.alertBody = [NSString stringWithFormat: NSLocalizedString(notificationType, nil), to, from];
                     localNotification.alertAction = NSLocalizedString(@"notification_title", nil);
                     localNotification.soundName = UILocalNotificationDefaultSoundName;
                     [application scheduleLocalNotification:localNotification];
                 }
             }
-            
+        }
             
             break;
+            
         case UIApplicationStateInactive:
         case UIApplicationStateBackground:
             //     [notificationData setObject:@"inactive" forKey:@"applicationState"];
