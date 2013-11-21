@@ -739,7 +739,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
 
 - (void)friendAdded:(NSString *) username
 {
-    DDLogVerbose(@"friendAdded");
+    DDLogInfo(@"friendAdded");
     [_homeDataSource setFriend: username];
     ChatDataSource * cds = [self getDataSourceForFriendname:username];
     if (cds) {

@@ -110,6 +110,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopProgress:) name:@"stopProgress" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unauthorized:) name:@"unauthorized" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newMessage:) name:@"newMessage" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(invite:) name:@"invite" object:nil];
     
     _homeDataSource = [[ChatController sharedInstance] getHomeDataSource];
     
@@ -1415,12 +1416,20 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(void) newMessage: (NSNotification *) notification {
     SurespotMessage * message = notification.object;
     NSString * currentChat =[[ChatController sharedInstance] getCurrentChat];
-    // BOOL loggedInAsTo = [message.to isEqualToString:[[IdentityController sharedInstance] getLoggedInUser] ];
-    
-    
     //show toast if we're not on the tab or home page, and pulse if we're logged in as the user
     if (currentChat && ![message.from isEqualToString: currentChat]) {
         [UIUtils showToastMessage:[NSString stringWithFormat:NSLocalizedString(@"notification_message", nil), message.to, message.from] duration:1];
+        
+        [UIUtils startPulseAnimation:_backImageView];
+    }
+}
+
+-(void) invite: (NSNotification *) notification {
+    Friend * thefriend = notification.object;
+    NSString * currentChat =[[ChatController sharedInstance] getCurrentChat];
+    //show toast if we're not on the tab or home page, and pulse if we're logged in as the user
+    if (currentChat) {
+        [UIUtils showToastMessage:[NSString stringWithFormat:NSLocalizedString(@"notification_invite", nil), [[IdentityController sharedInstance] getLoggedInUser], thefriend.name] duration:1];
         
         [UIUtils startPulseAnimation:_backImageView];
     }

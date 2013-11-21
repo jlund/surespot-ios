@@ -124,6 +124,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     [theFriend setInviter:YES];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"invite" object:theFriend];
+    });
     [self postRefresh];
     
 }
