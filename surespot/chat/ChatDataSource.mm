@@ -110,6 +110,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 DDLogVerbose(@"get messagedata response error: %@",  Error);
                 DDLogInfo(@"stopProgress");
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object:nil];
+                [UIUtils showToastKey:@"loading_latest_messages_failed"];
                 
             }];
         }
@@ -521,6 +522,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
             callback(nil);
             _loadingEarlier = NO;
+            [UIUtils showToastKey:@"loading_earlier_messages_failed"];
         }];
     }
 }

@@ -362,6 +362,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
     } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
         DDLogInfo(@"stopProgress");
         [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object: nil];
+        [UIUtils showToastKey:@"loading_latest_messages_failed"];
     }];
 }
 
@@ -714,6 +715,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
      failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
          
          DDLogVerbose(@"response failure: %@",  Error);
+         [UIUtils showToastKey:@"could_not_invite"];
          
      }];
 }
@@ -856,7 +858,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
         [[NetworkController sharedInstance] deleteFriend:friendname successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
             [self handleDeleteUser:friendname deleter:username];
         } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
-            //todo tell user
+            [UIUtils showToastKey:@"could_not_delete_friend"];
         }];
     }
 }
@@ -878,7 +880,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
                         [cds deleteMessage: message initiatedByMe: YES];
                     }
                     else {
-                        //todo notify user
+                        [UIUtils showToastKey:@"could_not_delete_message"];
                     }
                 }];
                 
@@ -907,7 +909,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
         [cds deleteAllMessagesUTAI:lastMessageId];
         
     } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
-        //todo tell user
+        [UIUtils showToastKey:@"could_not_delete_messages"];
     }];
     
     

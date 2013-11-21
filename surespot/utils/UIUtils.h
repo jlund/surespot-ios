@@ -14,7 +14,6 @@
 + (void) showToastKey: (NSString *) key;
 + (void) showToastKey: (NSString *) key duration: (CGFloat) duration;
 + (CGSize)threadSafeSizeString: (NSString *) string WithFont:(UIFont *)font constrainedToSize:(CGSize)size;
-+ (id) createProgressView: (UIView * )view;
 + (UIColor *) surespotBlue;
 +(UIColor *) surespotTransparentBlue;
 + (void)setAppAppearances;

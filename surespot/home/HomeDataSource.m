@@ -77,6 +77,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         callback(NO);
         DDLogInfo(@"stopProgress");
         [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object:nil];
+        
     }];
     
 }

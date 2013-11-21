@@ -70,16 +70,6 @@
     return rect.size;
 }
 
-+(id) createProgressView: (UIView * )view {
-    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    indicator.frame = CGRectMake(0.0, 0.0, 40.0, 40.0);
-    indicator.center = view.center;
-    [view addSubview:indicator];
-    [indicator bringSubviewToFront:view];
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = TRUE;
-    return indicator;
-}
-
 + (void)setAppAppearances {
     if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
         [[UINavigationBar appearance] setBarTintColor: [self surespotGrey]];
