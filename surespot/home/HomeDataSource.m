@@ -198,6 +198,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (username) {
         Friend * afriend = [self getFriendByName:username];
         [afriend setChatActive:YES];
+        afriend.lastReceivedMessageId = afriend.availableMessageId;
         afriend.hasNewMessages = NO;
         [self postRefresh];
     }
