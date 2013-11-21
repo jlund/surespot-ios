@@ -564,7 +564,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (index == 0) {
         
         NSInteger count =[[[ChatController sharedInstance] getHomeDataSource].friends count];
-        //if count is 0 we returned 1 for 0 rows so
+        //if count is 0 we returned 1 for 0 rows so make the single row take up the whole height
         if (count == 0) {
             return tableView.frame.size.height;
         }
@@ -575,8 +575,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
         else {
             return 44;
-        }
-        
+        }        
     }
     else {
         @synchronized (_chats) {

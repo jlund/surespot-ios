@@ -143,7 +143,7 @@
     theAnimation.repeatCount=HUGE_VALF;
     theAnimation.autoreverses=YES;
     theAnimation.fromValue=[NSNumber numberWithFloat:1.0];
-    theAnimation.toValue=[NSNumber numberWithFloat:0.5];
+    theAnimation.toValue=[NSNumber numberWithFloat:0.33];
     [view.layer addAnimation:theAnimation forKey:@"pulse"];
 }
 

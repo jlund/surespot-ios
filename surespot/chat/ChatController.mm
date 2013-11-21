@@ -358,7 +358,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
         }
         DDLogInfo(@"stopProgress");
         [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object: nil];
-        [_homeDataSource postRefresh];      
+        [_homeDataSource postRefresh];
     } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
         DDLogInfo(@"stopProgress");
         [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object: nil];
@@ -693,13 +693,22 @@ static const int MAX_CONNECTION_RETRIES = 16;
                                                             if (![afriend isDeleted]) {
                                                                 [_homeDataSource removeFriend:afriend withRefresh:YES];
                                                             }
+                                                            else {
+                                                               [_homeDataSource postRefresh];
+                                                            }
                                                         }
                                                     }
                                                 }
      
                                                 failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
                                                     DDLogError(@"error responding to invite: %@", Error);
-                                                    [UIUtils showToastKey:@"could_not_respond_to_invite"];
+                                                    if ([operation.response statusCode] != 404) {
+                                                        
+                                                        [UIUtils showToastKey:@"could_not_respond_to_invite"];
+                                                    }
+                                                    else {
+                                                        [_homeDataSource postRefresh];
+                                                    }
                                                 }];
     
 }

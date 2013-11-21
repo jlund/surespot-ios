@@ -140,6 +140,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) postRefresh {
     [self sort];
+    [self writeToDisk];
     dispatch_async(dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshHome" object:nil];
     });
