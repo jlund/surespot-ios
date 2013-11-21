@@ -111,6 +111,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unauthorized:) name:@"unauthorized" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newMessage:) name:@"newMessage" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(invite:) name:@"invite" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(inviteAccepted:) name:@"inviteAccepted" object:nil];
     
     _homeDataSource = [[ChatController sharedInstance] getHomeDataSource];
     
@@ -576,7 +577,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
         else {
             return 44;
-        }        
+        }
     }
     else {
         @synchronized (_chats) {
@@ -1428,8 +1429,21 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     Friend * thefriend = notification.object;
     NSString * currentChat =[[ChatController sharedInstance] getCurrentChat];
     //show toast if we're not on the tab or home page, and pulse if we're logged in as the user
-    if (currentChat) {
+    if (currentChat
+        ) {
         [UIUtils showToastMessage:[NSString stringWithFormat:NSLocalizedString(@"notification_invite", nil), [[IdentityController sharedInstance] getLoggedInUser], thefriend.name] duration:1];
+        
+        [UIUtils startPulseAnimation:_backImageView];
+    }
+}
+
+
+-(void) inviteAccepted: (NSNotification *) notification {
+    NSString * acceptedBy = notification.object;
+    NSString * currentChat =[[ChatController sharedInstance] getCurrentChat];
+    //show toast if we're not on the tab or home page, and pulse if we're logged in as the user
+    if (currentChat) {
+        [UIUtils showToastMessage:[NSString stringWithFormat:NSLocalizedString(@"notification_invite_accept", nil), [[IdentityController sharedInstance] getLoggedInUser], acceptedBy] duration:1];
         
         [UIUtils startPulseAnimation:_backImageView];
     }

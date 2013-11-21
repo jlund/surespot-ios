@@ -651,7 +651,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
         }
         else {
             if ([message.action isEqualToString:@"added"]) {
-                [self friendAdded:[message data]];
+                [self friendAdded:[message data] acceptedBy: [message moreData]];
             }
             else {
                 if ([message.action isEqualToString:@"invite"]) {
@@ -694,7 +694,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
                                                                 [_homeDataSource removeFriend:afriend withRefresh:YES];
                                                             }
                                                             else {
-                                                               [_homeDataSource postRefresh];
+                                                                [_homeDataSource postRefresh];
                                                             }
                                                         }
                                                     }
@@ -737,14 +737,18 @@ static const int MAX_CONNECTION_RETRIES = 16;
 
 
 
-- (void)friendAdded:(NSString *) username
+- (void)friendAdded:(NSString *) username acceptedBy:(NSString *) byUsername
 {
-    DDLogInfo(@"friendAdded");
+    DDLogInfo(@"friendAdded: %@, by: %@",username, byUsername);
     [_homeDataSource setFriend: username];
-    ChatDataSource * cds = [self getDataSourceForFriendname:username];
-    if (cds) {
-        //set deleted
+    
+    //if i'm not the accepter fire a notification saying such
+    if (![byUsername isEqualToString:[[IdentityController sharedInstance] getLoggedInUser]]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"inviteAccepted" object:byUsername];
+        });
     }
+    
 }
 
 -(void) friendIgnore: (NSString * ) name {
