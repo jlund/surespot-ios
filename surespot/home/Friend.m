@@ -92,6 +92,7 @@
 -(void) setInviter: (BOOL) set {
     if (set) {
         _flags |= INVITER;
+        self.hasNewMessages = NO;
     }
     else {
         _flags &= ~INVITER;
@@ -105,6 +106,7 @@
 -(void) setInvited: (BOOL) set {
     if (set) {
         _flags |= INVITED;
+        self.hasNewMessages = NO;
     }
     else {
         _flags &= ~INVITED;
@@ -117,6 +119,7 @@
 
 -(void) setDeleted {
     int active = _flags & CHAT_ACTIVE;
+    self.hasNewMessages = NO;
     _flags = DELETED | active;
 }
 
