@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @interface SurespotErrorMessage : NSObject
-- (id) initWithJSONString: (NSString *) jsonString;
 - (id) initWithDictionary: (NSDictionary *) dictionary;
 
 @property (nonatomic, assign) NSInteger status;

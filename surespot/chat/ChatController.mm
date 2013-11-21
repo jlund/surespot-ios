@@ -192,7 +192,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
         }
         else {
             if ([name isEqualToString:@"messageError"]) {
-                SurespotErrorMessage * message = [[SurespotErrorMessage alloc] initWithJSONString:[jsonData objectForKey:@"args"][0]];
+                SurespotErrorMessage * message = [[SurespotErrorMessage alloc] initWithDictionary:[jsonData objectForKey:@"args"][0]];
                 
                 [self handleErrorMessage:message];
               }
