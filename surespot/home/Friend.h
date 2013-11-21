@@ -18,7 +18,7 @@
 @property (atomic, assign) NSInteger lastReceivedMessageId;
 @property (atomic, assign) NSInteger availableMessageId;
 @property (atomic, assign) NSInteger availableMessageControlId;
-@property (atomic, assign) BOOL hasNewMessages;
+@property  ( getter = hasNewMessages, setter = setNewMessages:) BOOL hasNewMessages ;
 
 -(void) setFriend;
 

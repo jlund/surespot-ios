@@ -680,19 +680,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             if (afriend.isDeleted) {
                 cell.friendStatus.text = NSLocalizedString(@"friend_status_is_deleted", nil);
             }
-            else {
-                if (afriend.isInvited) {
-                    cell.friendStatus.text = NSLocalizedString(@"friend_status_is_invited", nil);
-                }
-                else {
-                    if (afriend.isInviter) {
-                        cell.friendStatus.text = NSLocalizedString(@"friend_status_is_inviting", nil);
-                    }
-                    else {
-                        cell.friendStatus.text = @"";
-                    }
-                }
+            
+            if (afriend.isInvited) {
+                cell.friendStatus.text = NSLocalizedString(@"friend_status_is_invited", nil);
             }
+            
+            if (afriend.isInviter) {
+                cell.friendStatus.text = NSLocalizedString(@"friend_status_is_inviting", nil);
+            }
+            
+            
         }
         else {
             cell.friendStatus.hidden = YES;

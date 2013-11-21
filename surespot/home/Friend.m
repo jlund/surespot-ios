@@ -15,6 +15,10 @@
 #define INVITED 2
 #define DELETED 1
 
+@interface  Friend()
+@property (nonatomic, assign) BOOL newMessages;
+@end
+
 @implementation Friend
 - (id) initWithJSONString: (NSString *) jsonString {
     
@@ -47,7 +51,7 @@
         _imageUrl = [coder decodeObjectForKey:@"imageUrl"];
         _imageIv = [coder decodeObjectForKey:@"imageIv"];
         _imageVersion = [coder decodeObjectForKey:@"imageVersion"];
-        _hasNewMessages = [coder decodeBoolForKey:@"hasNewMessages"];
+        _newMessages = [coder decodeBoolForKey:@"hasNewMessages"];
     }
     return self;
 }
@@ -64,7 +68,7 @@
 -(void) encodeWithCoder:(NSCoder *)encoder {
     [encoder encodeObject:_name forKey:@"name"];
     [encoder encodeInteger:_flags forKey:@"flags"];
-    [encoder encodeBool:_hasNewMessages forKey:@"hasNewMessages"];
+    [encoder encodeBool:_newMessages forKey:@"hasNewMessages"];
     //  [encoder encodeObject:_imageVersion forKey:@"imageVersion"];
     //  [encoder encodeObject:_imageUrl forKey:@"imageUrl"];
     //  [encoder encodeObject:_imageIv forKey:@"imageIv"];
@@ -92,7 +96,7 @@
 -(void) setInviter: (BOOL) set {
     if (set) {
         _flags |= INVITER;
-        self.hasNewMessages = NO;
+        _newMessages = NO;
     }
     else {
         _flags &= ~INVITER;
@@ -106,7 +110,7 @@
 -(void) setInvited: (BOOL) set {
     if (set) {
         _flags |= INVITED;
-        self.hasNewMessages = NO;
+        _newMessages = NO;
     }
     else {
         _flags &= ~INVITED;
@@ -119,7 +123,7 @@
 
 -(void) setDeleted {
     int active = _flags & CHAT_ACTIVE;
-    self.hasNewMessages = NO;
+    _newMessages = NO;
     _flags = DELETED | active;
 }
 
@@ -136,6 +140,19 @@
     }
 }
 
+
+-(BOOL) hasNewMessages {
+    if (![self isFriend ] || [self isDeleted]) {
+        return NO;
+    }
+    
+    return _newMessages;
+}
+
+-(void) setNewMessages: (BOOL) set {
+    _newMessages = set;
+}
+
 -(BOOL) isFriend {
     return  !self.isInvited && !self.isInviter;
 }
@@ -148,6 +165,7 @@
     
     return [self.name isEqualToString:[other name]];
 }
+
 
 - (NSComparisonResult)compare:(Friend  *)other {
     NSInteger myflags = self.flags;
