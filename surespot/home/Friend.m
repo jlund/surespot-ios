@@ -47,6 +47,7 @@
         _imageUrl = [coder decodeObjectForKey:@"imageUrl"];
         _imageIv = [coder decodeObjectForKey:@"imageIv"];
         _imageVersion = [coder decodeObjectForKey:@"imageVersion"];
+        _hasNewMessages = [coder decodeBoolForKey:@"hasNewMessages"];
     }
     return self;
 }
@@ -63,6 +64,7 @@
 -(void) encodeWithCoder:(NSCoder *)encoder {
     [encoder encodeObject:_name forKey:@"name"];
     [encoder encodeInteger:_flags forKey:@"flags"];
+    [encoder encodeBool:_hasNewMessages forKey:@"hasNewMessages"];
     //  [encoder encodeObject:_imageVersion forKey:@"imageVersion"];
     //  [encoder encodeObject:_imageUrl forKey:@"imageUrl"];
     //  [encoder encodeObject:_imageIv forKey:@"imageIv"];

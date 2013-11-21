@@ -160,6 +160,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     Friend * afriend = [self getFriendByName:friendname];
     if (afriend) {
         afriend.availableMessageId = availableId;
+        if (afriend.availableMessageId > afriend.lastReceivedMessageId) {
+            afriend.hasNewMessages = YES;
+        }
     }
 }
 
