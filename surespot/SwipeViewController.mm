@@ -105,11 +105,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     //listen for  notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshMessages:) name:@"refreshMessages" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshHome:) name:@"refreshHome" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushNotification:) name:@"pushNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteFriend:) name:@"deleteFriend" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startProgress:) name:@"startProgress" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopProgress:) name:@"stopProgress" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unauthorized:) name:@"unauthorized" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newMessage:) name:@"newMessage" object:nil];
     
     _homeDataSource = [[ChatController sharedInstance] getHomeDataSource];
     
@@ -435,7 +435,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         tableview = _friendView;
         [_textField resignFirstResponder];
         [_inviteField resignFirstResponder];
-
+        
     }
     else {
         @synchronized (_chats) {
@@ -463,6 +463,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     //update button
     [self updateTabChangeUI];
     
+    //stop pulsing
+    [UIUtils stopPulseAnimation:_backImageView];
     
 }
 
@@ -1109,20 +1111,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return string;
 }
 
-
-
-- (void)pushNotification:(NSNotification *)notification
-{
-    DDLogVerbose(@"pushNotification");
-    NSDictionary * notificationData = notification.object;
-    
-    NSString * from =[ notificationData objectForKey:@"from"];
-    if (![from isEqualToString:[[ChatController sharedInstance] getCurrentChat]]) {
-        [UIUtils showNotificationToastView:[self view] data:notificationData];
-    }
-    
-}
-
 -(REMenu *) createMenuMenu {
     //menu menu
     
@@ -1389,7 +1377,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) stopProgress: (NSNotification *) notification {
     if (--_progressCount == 0) {
-        [_backImageView.layer removeAllAnimations];
+        [UIUtils stopSpinAnimation:_backImageView];
     }
     DDLogInfo(@"progress count:%d", _progressCount);
 }
@@ -1423,6 +1411,20 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     DDLogInfo(@"unauthorized");
     // [UIUtils showToastKey:@"unauthorized" duration:2];
     [self logout];
+}
+
+-(void) newMessage: (NSNotification *) notification {
+    SurespotMessage * message = notification.object;
+    NSString * currentChat =[[ChatController sharedInstance] getCurrentChat];
+    // BOOL loggedInAsTo = [message.to isEqualToString:[[IdentityController sharedInstance] getLoggedInUser] ];
+    
+    
+    //show toast if we're not on the tab or home page, and pulse if we're logged in as the user
+    if (currentChat && ![message.from isEqualToString: currentChat]) {
+        [UIUtils showToastMessage:[NSString stringWithFormat:NSLocalizedString(@"notification_message", nil), message.to, message.from] duration:1];
+        
+        [UIUtils startPulseAnimation:_backImageView];
+    }
 }
 
 

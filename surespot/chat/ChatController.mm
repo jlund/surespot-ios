@@ -535,6 +535,12 @@ static const int MAX_CONNECTION_RETRIES = 16;
         
         [_homeDataSource postRefresh];
     }
+    
+    //if we have new message let anyone who cares know
+    if (afriend.hasNewMessages) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"newMessage" object: message];
+        
+    }
 }
 
 -(void) handleMessages: (NSArray *) messages forUsername: (NSString *) username {

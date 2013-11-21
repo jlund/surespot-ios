@@ -28,20 +28,14 @@
     return [UIColor colorWithRed:22/255.0f green:22/255.0f blue:22/255.0f alpha:0.5f];
 }
 
-+(void) showNotificationToastView:(UIView *) view  data:(NSDictionary *) notificationData {
-    NSString * type = [notificationData valueForKeyPath:@"aps.alert.loc-key"];
-    if (type && [type isEqualToString:@"notification_message"]) {
-        
-        
-        NSString * to =[ notificationData objectForKey:@"to"];
-        NSString * from =[ notificationData objectForKey:@"from"];
-        [view makeToast:[NSString stringWithFormat:NSLocalizedString(@"notification_message", nil), to, from]
-               duration: 1.0
-               position:@"top"
-         
-         ];
-    }
+
+
++(void) showToastMessage: (NSString *) message duration: (CGFloat) duration {
     
+    [[[UIApplication sharedApplication] keyWindow]  makeToast:message
+                                                     duration: duration
+                                                     position:@"center"
+     ];
 }
 
 +(void) showToastKey: (NSString *) key {
@@ -50,8 +44,8 @@
 +(void) showToastKey: (NSString *) key duration: (CGFloat) duration {
     
     [[[UIApplication sharedApplication] keyWindow]  makeToast:NSLocalizedString(key, nil)
-           duration: duration
-           position:@"center"
+                                                     duration: duration
+                                                     position:@"center"
      ];
 }
 
@@ -104,7 +98,7 @@
     }
 }
 
-+(void) setMessageHeights: (SurespotMessage *)  message size: (CGSize) size { 
++(void) setMessageHeights: (SurespotMessage *)  message size: (CGSize) size {
     NSString * plaintext = message.plainData;
     
     //figure out message height for both orientations
@@ -135,6 +129,26 @@
     rotation.duration = 1.1; // Speed
     rotation.repeatCount = HUGE_VALF; //
     [view.layer addAnimation:rotation forKey:@"spin"];
+}
+
++(void) stopSpinAnimation: (UIView *) view {
+    [view.layer removeAnimationForKey:@"spin"];
+}
+
++(void) startPulseAnimation: (UIView *) view {
+    CABasicAnimation *theAnimation;
+    
+    theAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
+    theAnimation.duration=1.0;
+    theAnimation.repeatCount=HUGE_VALF;
+    theAnimation.autoreverses=YES;
+    theAnimation.fromValue=[NSNumber numberWithFloat:1.0];
+    theAnimation.toValue=[NSNumber numberWithFloat:0.5];
+    [view.layer addAnimation:theAnimation forKey:@"pulse"];
+}
+
++(void) stopPulseAnimation: (UIView *) view {
+    [view.layer removeAnimationForKey:@"pulse"];
 }
 
 @end

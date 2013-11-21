@@ -10,7 +10,6 @@
 #import "SurespotMessage.h"
 
 @interface UIUtils : NSObject
-+ (void) showNotificationToastView:(UIView *) view data:(NSDictionary *) notificationData;
 + (void) showToastKey: (NSString *) key;
 + (void) showToastKey: (NSString *) key duration: (CGFloat) duration;
 + (CGSize)threadSafeSizeString: (NSString *) string WithFont:(UIFont *)font constrainedToSize:(CGSize)size;
@@ -23,4 +22,9 @@
 +(UIColor *) surespotTransparentGrey;
 +(void) setMessageHeights: (SurespotMessage *)  message size: (CGSize) size;
 +(void) startSpinAnimation: (UIView *) view;
++(void) stopSpinAnimation: (UIView *) view;
++(void) startPulseAnimation: (UIView *) view;
++(void) stopPulseAnimation: (UIView *) view;
++(void) showToastMessage: (NSString *) message duration: (CGFloat) duration;
 @end
+
