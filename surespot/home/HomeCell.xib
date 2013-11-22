@@ -94,8 +94,8 @@
                         <color key="highlightedColor" red="0.20000000000000001" green="0.70980392160000005" blue="0.8980392157" alpha="1" colorSpace="deviceRGB"/>
                     </label>
                     <view hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" id="oQI-av-i74" customClass="MessageIndicatorNewView">
-                        <rect key="frame" x="286" y="9" width="25" height="25"/>
-                        <autoresizingMask key="autoresizingMask"/>
+                        <rect key="frame" x="283" y="9" width="25" height="25"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </view>
                 </subviews>
