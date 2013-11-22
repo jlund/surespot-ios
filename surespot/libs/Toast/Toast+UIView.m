@@ -177,7 +177,7 @@ static const NSString * CSToastActivityViewKey  = @"CSToastActivityViewKey";
     if([point isKindOfClass:[NSString class]]) {
         // convert string literals @"top", @"bottom", @"center", or any point wrapped in an NSValue object into a CGPoint
         if([point caseInsensitiveCompare:@"top"] == NSOrderedSame) {
-            return CGPointMake(self.bounds.size.width/2, (toast.frame.size.height / 2) + CSToastVerticalPadding);
+            return CGPointMake(self.bounds.size.width/2, (toast.frame.size.height / 2) + CSToastVerticalPadding + 90);
         } else if([point caseInsensitiveCompare:@"bottom"] == NSOrderedSame) {
             return CGPointMake(self.bounds.size.width/2, (self.bounds.size.height - (toast.frame.size.height / 2)) - CSToastVerticalPadding);
         } else if([point caseInsensitiveCompare:@"center"] == NSOrderedSame) {

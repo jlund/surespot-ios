@@ -32,9 +32,9 @@
 
 +(void) showToastMessage: (NSString *) message duration: (CGFloat) duration {
     
-    [[[UIApplication sharedApplication] keyWindow]  makeToast:message
+    [[[[[UIApplication sharedApplication] keyWindow] rootViewController] view]  makeToast:message
                                                      duration: duration
-                                                     position:@"center"
+                                                     position:@"top"
      ];
 }
 
@@ -43,9 +43,9 @@
 }
 +(void) showToastKey: (NSString *) key duration: (CGFloat) duration {
     
-    [[[UIApplication sharedApplication] keyWindow]  makeToast:NSLocalizedString(key, nil)
+    [[[[[UIApplication sharedApplication] keyWindow] rootViewController] view]  makeToast:NSLocalizedString(key, nil)
                                                      duration: duration
-                                                     position:@"center"
+                                                     position:@"top"
      ];
 }
 
