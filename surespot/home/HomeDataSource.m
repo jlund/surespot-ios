@@ -218,5 +218,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
 }
 
+-(BOOL) hasAnyNewMessages {
+    @synchronized (_friends) {
+      
+        for (Friend * afriend in _friends) {
+            if (afriend.hasNewMessages ) {
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
+  
+  
+}
 
 @end

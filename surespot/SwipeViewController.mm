@@ -449,11 +449,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 [[ChatController sharedInstance] setCurrentChat: [self sortedChats][currPage-1]];
                 _scrollingTo = -1;
                 
-                
-                //todo check if we have any new messages and stop pulsing
+                if (!_homeDataSource.hasAnyNewMessages) {
+                    //stop pulsing
+                    [UIUtils stopPulseAnimation:_backImageView];
+                }
             }
-        }
-        
+        }        
     }
     
     [tableview reloadData];

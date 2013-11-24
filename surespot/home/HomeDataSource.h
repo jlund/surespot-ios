@@ -25,4 +25,5 @@
 -(void) setAvailableMessageControlId: (NSInteger) availableId forFriendname: (NSString *) friendname;
 -(void) writeToDisk ;
 -(void) loadFriendsCallback: (void(^)(BOOL success)) callback;
+-(BOOL) hasAnyNewMessages;
 @end
