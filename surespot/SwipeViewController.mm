@@ -456,7 +456,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         id needsit = [_needsScroll  objectForKey:name];
         if (needsit) {
             DDLogInfo(@"scrolling %@ to bottom",name);
-            [self scrollTableViewToBottom:tableview];
+            //            [self scrollTableViewToBottom:tableview];
+            [self performSelector:@selector(scrollTableViewToBottom:) withObject:tableview afterDelay:0.5];
             [_needsScroll removeObjectForKey:name];
         }
     }
