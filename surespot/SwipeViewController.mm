@@ -42,6 +42,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (strong, readwrite, nonatomic) REMenu *menu;
 @property (atomic, assign) NSInteger progressCount;
 @property (nonatomic, weak) UIView * backImageView;
+@property (atomic, assign) NSInteger scrollingTo;
 @end
 
 @implementation SwipeViewController
@@ -333,6 +334,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) switchToPageIndex:(NSInteger)page {
+    _scrollingTo = page;
     [_swipeView scrollToPage:page duration:0.5f];
 }
 
@@ -426,11 +428,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)swipeViewCurrentItemIndexDidChange:(SwipeView *)swipeView
 {
-    NSInteger currPage =swipeView.currentPage;
-    //update page control page
+    NSInteger currPage = swipeView.currentPage;
+    DDLogInfo(@"swipeview index changed to %d scrolling to: %d", currPage, _scrollingTo);
     
-    //   _pageControl.currentPage = swipeView.currentPage;
-    //  [_swipeView reloadData];
     UITableView * tableview;
     if (currPage == 0) {
         [[ChatController sharedInstance] setCurrentChat:nil];
@@ -438,16 +438,24 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [_textField resignFirstResponder];
         [_inviteField resignFirstResponder];
         
+        //stop pulsing
+        [UIUtils stopPulseAnimation:_backImageView];
+        
     }
     else {
         @synchronized (_chats) {
-            
-            tableview = [self sortedValues][swipeView.currentPage-1];
-            [[ChatController sharedInstance] setCurrentChat: [self sortedChats][currPage-1]];
+            if (_scrollingTo == currPage || _scrollingTo == -1) {
+                tableview = [self sortedValues][swipeView.currentPage-1];
+                [[ChatController sharedInstance] setCurrentChat: [self sortedChats][currPage-1]];
+                _scrollingTo = -1;
+                
+                
+                //todo check if we have any new messages and stop pulsing
+            }
         }
         
     }
-    DDLogInfo(@"swipeview index changed to %d", currPage);
+    
     [tableview reloadData];
     
     //scroll if we need to
@@ -456,7 +464,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         id needsit = [_needsScroll  objectForKey:name];
         if (needsit) {
             DDLogInfo(@"scrolling %@ to bottom",name);
-            //            [self scrollTableViewToBottom:tableview];
             [self performSelector:@selector(scrollTableViewToBottom:) withObject:tableview afterDelay:0.5];
             [_needsScroll removeObjectForKey:name];
         }
@@ -466,8 +473,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     //update button
     [self updateTabChangeUI];
     
-    //stop pulsing
-    [UIUtils stopPulseAnimation:_backImageView];
+    
     
 }
 
@@ -902,6 +908,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [_swipeView updateScrollViewDimensions];
         
         if (show) {
+            _scrollingTo = index;
             [_swipeView scrollToPage:index duration:0.500];
             [[ChatController sharedInstance] setCurrentChat: username];
         }
@@ -917,6 +924,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             }
             
             DDLogVerbose(@"scrolling to index: %d", index);
+            _scrollingTo = index;
             [_swipeView scrollToPage:index duration:0.500];
         }
     }
@@ -1069,12 +1077,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
         
         if (tableView) {
-            
-            
-            
             [tableView reloadData];
-            [self scrollTableViewToBottom:tableView];
-            
+            [self performSelector:@selector(scrollTableViewToBottom:) withObject:tableView afterDelay:0.5];
         }
     }
     else {
@@ -1362,12 +1366,18 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 - (IBAction)buttonTouchUpInside:(id)sender {
     if (![self handleTextAction]) {
-        [_swipeView scrollToPage:0 duration:0.5];
+        [self scrollHome];
     }
     
 }
 - (void) backPressed {
+    [self scrollHome];
+}
+
+-(void) scrollHome {
+    _scrollingTo = 0;
     [_swipeView scrollToPage:0 duration:0.5];
+    
 }
 - (IBAction)textFieldChanged:(id)sender {
     [self updateTabChangeUI];
