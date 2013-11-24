@@ -143,7 +143,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     //if we're going to delete the message don't bother adding it
                     if ([cm.action isEqualToString:@"delete"] ) {
                                         DDLogVerbose(@"message going to be deleted, marking message as old");
-                        return NO;
+                        isNew = NO;
                     }
                     [applicableControlMessages addObject:cm];
                 }
@@ -192,9 +192,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             }
             
             if (![ChatUtils isOurMessage:message]) {
-                DDLogVerbose(@"not our message, marking message as new");
+                DDLogInfo(@"not our message, marking message as new");
 
                 isNew = YES;
+            }
+            else {
+                isNew = NO;
             }
         }
         else {
@@ -237,6 +240,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [self postRefresh];
         }
     }
+    
+    DDLogInfo(@"isNew: %hhd", isNew);
     
     return isNew;
     

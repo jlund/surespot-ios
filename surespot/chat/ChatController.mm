@@ -80,21 +80,6 @@ static const int MAX_CONNECTION_RETRIES = 16;
                                                    object:nil];
         
         Reachability * reach = [Reachability reachabilityForInternetConnection];
-        
-//        reach.reachableBlock = ^(Reachability * reachability)
-//        {
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                blockLabel.text = @"Block Says Reachable";
-//            });
-//        };
-//        
-//        reach.unreachableBlock = ^(Reachability * reachability)
-//        {
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                blockLabel.text = @"Block Says Unreachable";
-//            });
-//        };
-//        
         [reach startNotifier];
     }
     
@@ -107,7 +92,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
     
     if([reach isReachable])
     {
-       DDLogInfo(@"wifi: %hhd, wwan, %hhd",[  reach isReachableViaWiFi], [reach isReachableViaWWAN]);
+        DDLogInfo(@"wifi: %hhd, wwan, %hhd",[  reach isReachableViaWiFi], [reach isReachableViaWWAN]);
         //if we're now on wifi, disconnect and reconnect
         if ([reach isReachableViaWiFi]) {
             [self disconnect];
@@ -117,7 +102,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
     }
     else
     {
-       DDLogInfo( @"Notification Says Unreachable");
+        DDLogInfo( @"Notification Says Unreachable");
     }
 }
 
@@ -569,16 +554,13 @@ static const int MAX_CONNECTION_RETRIES = 16;
 
 -(void) handleMessage: (SurespotMessage *) message {
     NSString * otherUser = [message getOtherUser];
-    __block BOOL isNew = YES;
+    BOOL isNew = YES;
     ChatDataSource * cds = [self getDataSourceForFriendname:otherUser];
     if (cds) {
-        
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            isNew = [cds addMessage: message refresh:YES];
-        });
-        
+        isNew = [cds addMessage: message refresh:YES];
     }
+    
+    DDLogInfo(@"isnew: %hhd", isNew);
     
     //update ids
     Friend * afriend = [_homeDataSource getFriendByName:otherUser];
@@ -606,6 +588,8 @@ static const int MAX_CONNECTION_RETRIES = 16;
         
         [_homeDataSource postRefresh];
     }
+    
+    DDLogInfo(@"hasNewMessages: %hhd", afriend.hasNewMessages);
     
     //if we have new message let anyone who cares know
     if (afriend.hasNewMessages) {
@@ -1040,11 +1024,11 @@ static const int MAX_CONNECTION_RETRIES = 16;
 }
 
 -(void) startProgress {
-      [[NSNotificationCenter defaultCenter] postNotificationName:@"startProgress" object: nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"startProgress" object: nil];
 }
 
 -(void) stopProgress {
-      [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object: nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object: nil];
 }
 
 @end
