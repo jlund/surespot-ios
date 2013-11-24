@@ -44,17 +44,23 @@
             //figure out message height for both orientations
             if (plaintext){
                 [UIUtils setMessageHeights:_message size:_size];
-            }     
+            }
             
             [self finish];
             
         }];
     }
     else {
-        _message.plainData = _message.mimeType;
+        if ([_message.mimeType isEqualToString: @"image/"]) {
+            _message.plainData = @"[image]";
+        }
+        else {
+            if ([_message.mimeType isEqualToString: @"audio/mp4"]) {
+                _message.plainData = @"[voice message]";
+            }
+        }
         [self finish];
     }
-    
 }
 
 - (void)finish
