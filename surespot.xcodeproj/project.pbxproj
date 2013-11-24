@@ -56,6 +56,8 @@
 		665F4E0F183325C50083BCE7 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 665F4E0E183325C50083BCE7 /* AdSupport.framework */; };
 		667EFF8F183EB664002C0406 /* SurespotMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 667EFF8E183EB664002C0406 /* SurespotMessage.m */; };
 		667EFF91183EB692002C0406 /* SurespotErrorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 667EFF90183EB692002C0406 /* SurespotErrorMessage.m */; };
+		667EFF9518425A87002C0406 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 667EFF9418425A87002C0406 /* Reachability.m */; };
+		667EFF9718425D82002C0406 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 667EFF9618425D82002C0406 /* SystemConfiguration.framework */; };
 		66A2D90F183A730D00785270 /* OurMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66A2D90D183A730D00785270 /* OurMessageCell.xib */; };
 		66A2D910183A730D00785270 /* TheirMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66A2D90E183A730D00785270 /* TheirMessageCell.xib */; };
 		66A2D915183A732900785270 /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D912183A732900785270 /* LoadingView.m */; };
@@ -201,6 +203,9 @@
 		667EFF8E183EB664002C0406 /* SurespotMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SurespotMessage.m; path = chat/SurespotMessage.m; sourceTree = "<group>"; };
 		667EFF90183EB692002C0406 /* SurespotErrorMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SurespotErrorMessage.m; path = chat/SurespotErrorMessage.m; sourceTree = "<group>"; };
 		667EFF92183EB7E3002C0406 /* SurespotErrorMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SurespotErrorMessage.h; path = chat/SurespotErrorMessage.h; sourceTree = "<group>"; };
+		667EFF9318425A87002C0406 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		667EFF9418425A87002C0406 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		667EFF9618425D82002C0406 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		66A2D90D183A730D00785270 /* OurMessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OurMessageCell.xib; path = chat/OurMessageCell.xib; sourceTree = "<group>"; };
 		66A2D90E183A730D00785270 /* TheirMessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TheirMessageCell.xib; path = chat/TheirMessageCell.xib; sourceTree = "<group>"; };
 		66A2D911183A732900785270 /* LoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoadingView.h; path = ui/LoadingView.h; sourceTree = "<group>"; };
@@ -422,6 +427,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				667EFF9718425D82002C0406 /* SystemConfiguration.framework in Frameworks */,
 				665F4E0F183325C50083BCE7 /* AdSupport.framework in Frameworks */,
 				665F4E0D183324360083BCE7 /* libTestFlight.a in Frameworks */,
 				66FF0FF6182AE6960038ECA6 /* QuartzCore.framework in Frameworks */,
@@ -472,6 +478,7 @@
 		6604A2BD17626B9E0072216A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				667EFF9618425D82002C0406 /* SystemConfiguration.framework */,
 				665F4E0E183325C50083BCE7 /* AdSupport.framework */,
 				66FF0FF5182AE6960038ECA6 /* QuartzCore.framework */,
 				66E4F5BF17629B4500596E6B /* CFNetwork.framework */,
@@ -716,6 +723,8 @@
 		66E4F517176298CB00596E6B /* libs */ = {
 			isa = PBXGroup;
 			children = (
+				667EFF9318425A87002C0406 /* Reachability.h */,
+				667EFF9418425A87002C0406 /* Reachability.m */,
 				66A2D92F183C25E800785270 /* SVPullToRefresh */,
 				665F4E071833238D0083BCE7 /* TestFlightSDK */,
 				665F4DEA1831923C0083BCE7 /* REMenu */,
@@ -1131,6 +1140,7 @@
 				660EB27A17FE3D7800DBC53C /* KeyboardState.m in Sources */,
 				66EC610E176E494900937467 /* AFJSONRequestOperation.m in Sources */,
 				66EC610F176E494900937467 /* AFNetworkActivityIndicatorManager.m in Sources */,
+				667EFF9518425A87002C0406 /* Reachability.m in Sources */,
 				66FF0FE518242E420038ECA6 /* UIUtils.m in Sources */,
 				66FF1002182D3D920038ECA6 /* DDTTYLogger.m in Sources */,
 				66EC6110176E494900937467 /* AFPropertyListRequestOperation.m in Sources */,

@@ -22,6 +22,7 @@
 #import "FileController.h"
 #import "CredentialCachingController.h"
 #import "SurespotErrorMessage.h"
+#import "Reachability.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
@@ -71,10 +72,55 @@ static const int MAX_CONNECTION_RETRIES = 16;
         _chatDataSources = [NSMutableDictionary new];
         _sendBuffer = [NSMutableArray new];
         _resendBuffer = [NSMutableArray new];
+        
+        //listen for network changes so we can reconnect
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(reachabilityChanged:)
+                                                     name:kReachabilityChangedNotification
+                                                   object:nil];
+        
+        Reachability * reach = [Reachability reachabilityForInternetConnection];
+        
+//        reach.reachableBlock = ^(Reachability * reachability)
+//        {
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                blockLabel.text = @"Block Says Reachable";
+//            });
+//        };
+//        
+//        reach.unreachableBlock = ^(Reachability * reachability)
+//        {
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                blockLabel.text = @"Block Says Unreachable";
+//            });
+//        };
+//        
+        [reach startNotifier];
     }
     
     return self;
 }
+
+-(void)reachabilityChanged:(NSNotification*)note
+{
+    Reachability * reach = [note object];
+    
+    if([reach isReachable])
+    {
+       DDLogInfo(@"wifi: %hhd, wwan, %hhd",[  reach isReachableViaWiFi], [reach isReachableViaWWAN]);
+        //if we're now on wifi, disconnect and reconnect
+        if ([reach isReachableViaWiFi]) {
+            [self disconnect];
+            [self reconnect];
+        }
+        
+    }
+    else
+    {
+       DDLogInfo( @"Notification Says Unreachable");
+    }
+}
+
 
 -(void) disconnect {
     if (_socketIO) {
