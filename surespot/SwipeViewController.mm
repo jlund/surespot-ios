@@ -965,7 +965,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             
             [[ChatController sharedInstance] inviteUser:text];
-            //            [_textField resignFirstResponder];
+            [_inviteField resignFirstResponder];
             [_inviteField setText:nil];
             [self updateTabChangeUI];
             return YES;
