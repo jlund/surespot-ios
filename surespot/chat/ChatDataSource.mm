@@ -533,23 +533,5 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
 }
 
-//-(BOOL) hasNewMessagesSinceId: (NSInteger) lastViewedId {
-//    @synchronized (_messages) {
-//        __block BOOL hasNew = NO;
-//        [_messages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(SurespotMessage * message, NSUInteger idx, BOOL *stop) {
-//            if (![ChatUtils isOurMessage:message]) {
-//                if (message.serverid > lastViewedId) {
-//                    hasNew = YES;
-//                    *stop = YES;
-//                }
-//                
-//                if (message.serverid <= lastViewedId) {
-//                    *stop = YES;
-//                }
-//            }
-//        }];
-//        return hasNew;
-//    }
-//}
 
 @end
