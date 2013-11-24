@@ -445,7 +445,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [tableview reloadData];
         //update button
         [self updateTabChangeUI];
-
+        
     }
     else {
         @synchronized (_chats) {
@@ -659,7 +659,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         if (count == 0) {
             static NSString *CellIdentifier = @"Cell";
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-            cell.textLabel.text = @"you have no friends, now fuck off";
+            cell.textLabel.text = NSLocalizedString(@"welcome_to_surespot", nil);
+            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+            cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
+            cell.textLabel.numberOfLines = 0;
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
             cell.userInteractionEnabled = NO;
             return cell;
