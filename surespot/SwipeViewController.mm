@@ -440,12 +440,18 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         //stop pulsing
         [UIUtils stopPulseAnimation:_backImageView];
-        _scrollingTo = -1;  
+        _scrollingTo = -1;
+        
+        [tableview reloadData];
+        //update button
+        [self updateTabChangeUI];
+
     }
     else {
         @synchronized (_chats) {
             if (_scrollingTo == currPage || _scrollingTo == -1) {
                 tableview = [self sortedValues][swipeView.currentPage-1];
+                
                 [[ChatController sharedInstance] setCurrentChat: [self sortedChats][currPage-1]];
                 _scrollingTo = -1;
                 
@@ -453,29 +459,25 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     //stop pulsing
                     [UIUtils stopPulseAnimation:_backImageView];
                 }
+                
+                [tableview reloadData];
+                
+                //scroll if we need to
+                NSString * name =[self nameForPage:currPage];
+                @synchronized (_needsScroll ) {
+                    id needsit = [_needsScroll  objectForKey:name];
+                    if (needsit) {
+                        DDLogInfo(@"scrolling %@ to bottom",name);
+                        [self performSelector:@selector(scrollTableViewToBottom:) withObject:tableview afterDelay:0.5];
+                        [_needsScroll removeObjectForKey:name];
+                    }
+                }
+                
+                //update button
+                [self updateTabChangeUI];
             }
         }
     }
-    
-    [tableview reloadData];
-    
-    //scroll if we need to
-    NSString * name =[self nameForPage:currPage];
-    @synchronized (_needsScroll ) {
-        id needsit = [_needsScroll  objectForKey:name];
-        if (needsit) {
-            DDLogInfo(@"scrolling %@ to bottom",name);
-            [self performSelector:@selector(scrollTableViewToBottom:) withObject:tableview afterDelay:0.5];
-            [_needsScroll removeObjectForKey:name];
-        }
-    }
-    
-    
-    //update button
-    [self updateTabChangeUI];
-    
-    
-    
 }
 
 - (void)swipeView:(SwipeView *)swipeView didSelectItemAtIndex:(NSInteger)index
