@@ -27,7 +27,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [TestFlight takeOff:@"477c73c2-7b09-4198-a7a8-95b5d3581f91"];
+    [TestFlight takeOff:@"b1b351a8-07ad-4433-8889-701d2775c64d"];
     
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge|UIReturnKeyDefault) ];
     if  (launchOptions) {
