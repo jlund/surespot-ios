@@ -440,7 +440,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         //stop pulsing
         [UIUtils stopPulseAnimation:_backImageView];
-        
+        _scrollingTo = -1;  
     }
     else {
         @synchronized (_chats) {
@@ -454,7 +454,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     [UIUtils stopPulseAnimation:_backImageView];
                 }
             }
-        }        
+        }
     }
     
     [tableview reloadData];
