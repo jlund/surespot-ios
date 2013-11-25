@@ -45,6 +45,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _tbPasswordConfirm.returnKeyType = UIReturnKeyGo;
     [self registerForKeyboardNotifications];
     
+    if ([[[IdentityController sharedInstance] getIdentityNames] count] == 0) {
+        self.navigationItem.hidesBackButton = YES;
+    }
+    
 }
 
 - (void)viewDidUnload {
