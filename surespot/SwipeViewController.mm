@@ -150,6 +150,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pause:) name:UIApplicationDidEnterBackgroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resume:) name:UIApplicationWillEnterForegroundNotification object:nil];
     
+    _scrollingTo = -1;
+    
 }
 
 -(void) pause: (NSNotification *)  notification{
@@ -1168,6 +1170,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     else {
         @synchronized (_needsScroll) {
+            DDLogInfo(@"setting needs scroll for %@", username);
             [_needsScroll setObject:@"yourmama" forKey:username];
         }
     }
