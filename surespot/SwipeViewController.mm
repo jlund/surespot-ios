@@ -205,13 +205,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     DDLogInfo(@"keyboard height before: %f", keyboardHeight);
     
     keyboardState.keyboardHeight = keyboardHeight;
-    
-    NSIndexPath * bottomCell = nil;
-    NSArray * visibleCells = [tableView indexPathsForVisibleRows];
-    if ([visibleCells count ] > 0) {
-        bottomCell = [visibleCells objectAtIndex:[visibleCells count]-1];
-    }
-    
+//    
+//    NSIndexPath * bottomCell = nil;
+//    NSArray * visibleCells = [tableView indexPathsForVisibleRows];
+//    if ([visibleCells count ] > 0) {
+//        bottomCell = [visibleCells objectAtIndex:[visibleCells count]-1];
+//    }
+//    
     
     DDLogInfo(@"after move content insets bottom %f, view height: %f", contentInsets.bottom, tableView.frame.size.height);
     
@@ -225,21 +225,21 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     tableView.scrollIndicatorInsets = scrollInsets;
     
     
-    if (bottomCell) {
-        [self scrollTableViewToCell:tableView indexPath: bottomCell];
-    }
+//    if (bottomCell) {
+//        [self scrollTableViewToCell:tableView indexPath: bottomCell];
+//    }
     
     @synchronized (_chats) {
         for (NSString * key in [_chats allKeys]) {
             UITableView * tableView = [_chats objectForKey:key];
             
-            NSArray * visibleCells = [tableView indexPathsForVisibleRows];
-            if ([visibleCells count ] > 0) {
-                bottomCell = [visibleCells objectAtIndex:[visibleCells count]-1];
-            }
-            else {
-                bottomCell = nil;
-            }
+//            NSArray * visibleCells = [tableView indexPathsForVisibleRows];
+//            if ([visibleCells count ] > 0) {
+//                bottomCell = [visibleCells objectAtIndex:[visibleCells count]-1];
+//            }
+//            else {
+//                bottomCell = nil;
+//            }
             
             tableView.contentInset = contentInsets;
             tableView.scrollIndicatorInsets = scrollInsets;
@@ -247,10 +247,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y + keyboardHeight);
             [tableView setContentOffset:newOffset animated:NO];
             
-            if (bottomCell) {
-                
-                [self scrollTableViewToCell:tableView indexPath: bottomCell];
-            }
+//            if (bottomCell) {
+//                
+//                [self scrollTableViewToCell:tableView indexPath: bottomCell];
+//            }
             
         }
     }
@@ -290,6 +290,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 UITableView * tableView = [_chats objectForKey:key];
                 tableView.scrollIndicatorInsets = self.keyboardState.indicatorInset;
                 tableView.contentInset = self.keyboardState.contentInset;
+                
+//                CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y - _keyboardState.keyboardHeight);
+//                [tableView setContentOffset:newOffset animated:NO];
+
             }
         }
         CGRect buttonFrame = _theButton.frame;
@@ -311,7 +315,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     NSArray * visibleCells = [_friendView indexPathsForVisibleRows];
     if ([visibleCells count ] > 0) {
-        [_bottomIndexPaths setObject:[visibleCells objectAtIndex:[visibleCells count]-1] forKey: @"" ];
+       
+        id indexPath =[visibleCells objectAtIndex:[visibleCells count]-1];
+        DDLogInfo(@"saving index path %@ for home", indexPath );
+        [_bottomIndexPaths setObject: indexPath forKey: @"" ];
+        
     }
     
     //save scroll indices
@@ -324,7 +332,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             NSArray * visibleCells = [tableView indexPathsForVisibleRows];
             
             if ([visibleCells count ] > 0) {
-                [_bottomIndexPaths setObject:[visibleCells objectAtIndex:[visibleCells count]-1] forKey: key ];
+                
+                id indexPath =[visibleCells objectAtIndex:[visibleCells count]-1];
+
+                DDLogInfo(@"saving index path %@ for key %@", indexPath , key);
+
+                [_bottomIndexPaths setObject: indexPath forKey: key ];
                 
             }
         }
@@ -343,14 +356,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             if ([key isEqualToString:@""]) {
                 
                 if (!_homeDataSource.currentChat) {
-                    [self scrollTableViewToCell:_friendView indexPath:[_bottomIndexPaths objectForKey:key]];
+                    id indexPath =[_bottomIndexPaths objectForKey:key];
+                    DDLogInfo(@"Scrolling home view to index %@", indexPath);
+                    [self scrollTableViewToCell:_friendView indexPath: indexPath];
                     [_bottomIndexPaths removeObjectForKey:key ];
                 }
             }
             else {
                 if ([_homeDataSource.currentChat isEqualToString:key]) {
+                    id indexPath =[_bottomIndexPaths objectForKey:key];
+                    DDLogInfo(@"Scrolling %@ view to index %@", key,indexPath);
+
                     UITableView * tableView = [_chats objectForKey:key];
-                    [self scrollTableViewToCell:tableView indexPath:[_bottomIndexPaths objectForKey:key]];
+                    [self scrollTableViewToCell:tableView indexPath:indexPath];
                     
                     [_bottomIndexPaths removeObjectForKey:key ];
                 }
@@ -1166,7 +1184,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 - (void) scrollTableViewToCell: (UITableView *) tableView  indexPath: (NSIndexPath *) indexPath {
-    DDLogVerbose(@"scrolling to cell: %@", indexPath);
+    DDLogInfo(@"scrolling to cell: %@", indexPath);
     // NSIndexPath *scrollIndexPath = [NSIndexPath indexPathForRow:(numRows - 1) inSection:0];
     [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
     
