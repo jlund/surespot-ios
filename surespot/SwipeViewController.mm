@@ -1246,6 +1246,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(REMenu *) createMenu: (NSArray *) menuItems {
     REMenu * menu = [[REMenu alloc] initWithItems:menuItems];
+    menu.itemHeight = 40;
+    menu.backgroundColor = [UIUtils surespotGrey];
     menu.imageOffset = CGSizeMake(10, 0);
     menu.textAlignment = NSTextAlignmentLeft;
     menu.textColor = [UIColor whiteColor];
@@ -1254,7 +1256,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     menu.textShadowOffset = CGSizeZero;
     menu.highlightedTextShadowOffset = CGSizeZero;
     menu.textOffset =CGSizeMake(64,0);
-    menu.font = [UIFont systemFontOfSize:21.0];
+    menu.font = [UIFont systemFontOfSize:18.0];
     menu.cornerRadius = 2;
     
     [menu setCloseCompletionHandler:^{
