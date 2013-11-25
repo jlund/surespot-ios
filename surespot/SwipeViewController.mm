@@ -43,6 +43,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (atomic, assign) NSInteger progressCount;
 @property (nonatomic, weak) UIView * backImageView;
 @property (atomic, assign) NSInteger scrollingTo;
+@property (nonatomic, strong) NSMutableDictionary * bottomIndexPaths;
 @end
 
 @implementation SwipeViewController
@@ -180,98 +181,86 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 // Called when the UIKeyboardDidShowNotification is sent.
-- (void)keyboardWasShown:(NSNotification*)aNotification
-{
-    
-    
-    
+- (void)keyboardWasShown:(NSNotification*)aNotification {
     DDLogInfo(@"keyboardWasShown");
+    UITableView * tableView =(UITableView *)_friendView;
     
-    //if (!_keyboardState) {
-        UITableView * tableView =(UITableView *)_friendView;
-        
-        KeyboardState * keyboardState = [[KeyboardState alloc] init];
-        keyboardState.contentInset = tableView.contentInset;
-        keyboardState.indicatorInset = tableView.scrollIndicatorInsets;
-        
-        
-        UIEdgeInsets contentInsets =  tableView.contentInset;
-        DDLogInfo(@"pre move originy %f,content insets bottom %f, view height: %f", _textFieldContainer.frame.origin.y, contentInsets.bottom, tableView.frame.size.height);
-        
-        NSDictionary* info = [aNotification userInfo];
-        CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-        CGFloat keyboardHeight = [UIUtils keyboardHeightAdjustedForOrientation:keyboardRect.size];
-        
-        CGRect textFieldFrame = _textFieldContainer.frame;
-        textFieldFrame.origin.y -= keyboardHeight;
-        
-        _textFieldContainer.frame = textFieldFrame;
-        
-        DDLogInfo(@"keyboard height before: %f", keyboardHeight);
-        
-        keyboardState.keyboardHeight = keyboardHeight;
-        
-        NSIndexPath * bottomCell = nil;
-        NSArray * visibleCells = [tableView indexPathsForVisibleRows];
-        if ([visibleCells count ] > 0) {
-            bottomCell = [visibleCells objectAtIndex:[visibleCells count]-1];
-        }
-        
-        
-        DDLogInfo(@"after move content insets bottom %f, view height: %f", contentInsets.bottom, tableView.frame.size.height);
-        
-        contentInsets.bottom = keyboardHeight;
-        tableView.contentInset = contentInsets;
-        
-        
-        
-        UIEdgeInsets scrollInsets =tableView.scrollIndicatorInsets;
-        scrollInsets.bottom = keyboardHeight;
-        tableView.scrollIndicatorInsets = scrollInsets;
-        
-        
-        if (bottomCell) {
-            [self scrollTableViewToCell:tableView indexPath: bottomCell];
-        }
+    KeyboardState * keyboardState = [[KeyboardState alloc] init];
+    keyboardState.contentInset = tableView.contentInset;
+    keyboardState.indicatorInset = tableView.scrollIndicatorInsets;
     
-        @synchronized (_chats) {
-            for (NSString * key in [_chats allKeys]) {
-                UITableView * tableView = [_chats objectForKey:key];
-                
-                
-                //  DDLogInfo(@"saving content offset for %@, y: %f", key, tableView.contentOffset.y);
-                //  [keyboardState.offsets setObject:[NSNumber numberWithFloat: tableView.contentOffset.y ] forKey:key];
-                
-                
-                NSArray * visibleCells = [tableView indexPathsForVisibleRows];
-                if ([visibleCells count ] > 0) {
-                    bottomCell = [visibleCells objectAtIndex:[visibleCells count]-1];
-                }
-                else {
-                    bottomCell = nil;
-                }
-                
-                tableView.contentInset = contentInsets;
-                tableView.scrollIndicatorInsets = scrollInsets;
-                
-                CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y + keyboardHeight);
-                [tableView setContentOffset:newOffset animated:NO];
-                
-                if (bottomCell) {
-         
-                    [self scrollTableViewToCell:tableView indexPath: bottomCell];
-                }
-                
+    
+    UIEdgeInsets contentInsets =  tableView.contentInset;
+    DDLogInfo(@"pre move originy %f,content insets bottom %f, view height: %f", _textFieldContainer.frame.origin.y, contentInsets.bottom, tableView.frame.size.height);
+    
+    NSDictionary* info = [aNotification userInfo];
+    CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    CGFloat keyboardHeight = [UIUtils keyboardHeightAdjustedForOrientation:keyboardRect.size];
+    
+    CGRect textFieldFrame = _textFieldContainer.frame;
+    textFieldFrame.origin.y -= keyboardHeight;
+    
+    _textFieldContainer.frame = textFieldFrame;
+    
+    DDLogInfo(@"keyboard height before: %f", keyboardHeight);
+    
+    keyboardState.keyboardHeight = keyboardHeight;
+    
+    NSIndexPath * bottomCell = nil;
+    NSArray * visibleCells = [tableView indexPathsForVisibleRows];
+    if ([visibleCells count ] > 0) {
+        bottomCell = [visibleCells objectAtIndex:[visibleCells count]-1];
+    }
+    
+    
+    DDLogInfo(@"after move content insets bottom %f, view height: %f", contentInsets.bottom, tableView.frame.size.height);
+    
+    contentInsets.bottom = keyboardHeight;
+    tableView.contentInset = contentInsets;
+    
+    
+    
+    UIEdgeInsets scrollInsets =tableView.scrollIndicatorInsets;
+    scrollInsets.bottom = keyboardHeight;
+    tableView.scrollIndicatorInsets = scrollInsets;
+    
+    
+    if (bottomCell) {
+        [self scrollTableViewToCell:tableView indexPath: bottomCell];
+    }
+    
+    @synchronized (_chats) {
+        for (NSString * key in [_chats allKeys]) {
+            UITableView * tableView = [_chats objectForKey:key];
+            
+            NSArray * visibleCells = [tableView indexPathsForVisibleRows];
+            if ([visibleCells count ] > 0) {
+                bottomCell = [visibleCells objectAtIndex:[visibleCells count]-1];
             }
+            else {
+                bottomCell = nil;
+            }
+            
+            tableView.contentInset = contentInsets;
+            tableView.scrollIndicatorInsets = scrollInsets;
+            
+            CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y + keyboardHeight);
+            [tableView setContentOffset:newOffset animated:NO];
+            
+            if (bottomCell) {
+                
+                [self scrollTableViewToCell:tableView indexPath: bottomCell];
+            }
+            
         }
-        
-        
-        CGRect buttonFrame = _theButton.frame;
-        buttonFrame.origin.y -= keyboardHeight;
-        _theButton.frame = buttonFrame;
-        
-        self.keyboardState = keyboardState;
-  //  }
+    }
+    
+    
+    CGRect buttonFrame = _theButton.frame;
+    buttonFrame.origin.y -= keyboardHeight;
+    _theButton.frame = buttonFrame;
+    
+    self.keyboardState = keyboardState;
 }
 
 // Called when the UIKeyboardWillHideNotification is sent
@@ -301,49 +290,73 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 UITableView * tableView = [_chats objectForKey:key];
                 tableView.scrollIndicatorInsets = self.keyboardState.indicatorInset;
                 tableView.contentInset = self.keyboardState.contentInset;
-                //  CGPoint oldOffset = CGPointMake(0, [[self.keyboardState.offsets objectForKey: key] floatValue]);
-                //  DDLogInfo(@"restoring content offset for %@, y: %f", key, oldOffset.y);
-                //                [tableView setContentOffset:  oldOffset animated:YES];
-                //    CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y - self.keyboardState.keyboardHeight);
-                //    [tableView setContentOffset:  newOffset animated:YES];
-                //  [tableView layoutIfNeeded];
             }
         }
         CGRect buttonFrame = _theButton.frame;
         buttonFrame.origin.y += self.keyboardState.keyboardHeight;
         _theButton.frame = buttonFrame;
         
-        // [self.keyboardState.offsets removeAllObjects];
         self.keyboardState = nil;
     }
 }
 
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-    DDLogVerbose(@"will animate, setting table view framewidth/height %f,%f",_swipeView.frame.size.width,_swipeView.frame.size.height);
-    
-    //    _friendView.frame = _swipeView.frame;
-    //       for (UITableView *tableView in [_chats allValues]) {
-    //        tableView.frame=_swipeView.frame;
-    //
-    //    }
-    
-    //   [_swipeView updateLayout];
-    //[_swipeView layOutItemViews];
-    
-}
-
-
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)orientation
                                 duration:(NSTimeInterval)duration
 {
-    DDLogVerbose(@"will rotate");
+    DDLogInfo(@"will rotate");
     _swipeView.suppressScrollEvent = YES;
+    
+    
+    _bottomIndexPaths = [NSMutableDictionary new];
+    
+    NSArray * visibleCells = [_friendView indexPathsForVisibleRows];
+    if ([visibleCells count ] > 0) {
+        [_bottomIndexPaths setObject:[visibleCells objectAtIndex:[visibleCells count]-1] forKey: @"" ];
+    }
+    
+    //save scroll indices
+    
+    @synchronized (_chats) {
+        for (NSString * key in [_chats allKeys]) {
+            
+            UITableView * tableView = [_chats objectForKey:key];
+            
+            NSArray * visibleCells = [tableView indexPathsForVisibleRows];
+            
+            if ([visibleCells count ] > 0) {
+                [_bottomIndexPaths setObject:[visibleCells objectAtIndex:[visibleCells count]-1] forKey: key ];
+                
+            }
+        }
+    }
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromOrientation
 {
-    DDLogVerbose(@"did rotate");
+    DDLogInfo(@"did rotate");
+    
     _swipeView.suppressScrollEvent= NO;
+    
+    //restore scroll indices
+    if (_bottomIndexPaths) {
+        for (id key in [_bottomIndexPaths allKeys]) {
+            if ([key isEqualToString:@""]) {
+                
+                if (!_homeDataSource.currentChat) {
+                    [self scrollTableViewToCell:_friendView indexPath:[_bottomIndexPaths objectForKey:key]];
+                    [_bottomIndexPaths removeObjectForKey:key ];
+                }
+            }
+            else {
+                if ([_homeDataSource.currentChat isEqualToString:key]) {
+                    UITableView * tableView = [_chats objectForKey:key];
+                    [self scrollTableViewToCell:tableView indexPath:[_bottomIndexPaths objectForKey:key]];
+                    
+                    [_bottomIndexPaths removeObjectForKey:key ];
+                }
+            }
+        }
+    }
 }
 
 - (void) swipeViewDidScroll:(SwipeView *)scrollView {
@@ -467,6 +480,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         _scrollingTo = -1;
         
         [tableview reloadData];
+        
+        if (_bottomIndexPaths) {
+            id path = [_bottomIndexPaths objectForKey:@""];
+            if (path) {
+                [self scrollTableViewToCell:_friendView indexPath:path];
+                [_bottomIndexPaths removeObjectForKey:@""];
+            }
+        }
+        
         //update button
         [self updateTabChangeUI];
         
@@ -488,12 +510,27 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 
                 //scroll if we need to
                 NSString * name =[self nameForPage:currPage];
-                @synchronized (_needsScroll ) {
-                    id needsit = [_needsScroll  objectForKey:name];
-                    if (needsit) {
-                        DDLogInfo(@"scrolling %@ to bottom",name);
-                        [self performSelector:@selector(scrollTableViewToBottom:) withObject:tableview afterDelay:0.5];
-                        [_needsScroll removeObjectForKey:name];
+                
+                
+                //if we've got saved scrlol positions
+                if (_bottomIndexPaths) {
+                    id path = [_bottomIndexPaths objectForKey:name];
+                    if (path) {
+                        [self scrollTableViewToCell:tableview indexPath:path];
+                        [_bottomIndexPaths removeObjectForKey:name];
+                    }
+                }
+                else {
+                    
+                    
+                    
+                    @synchronized (_needsScroll ) {
+                        id needsit = [_needsScroll  objectForKey:name];
+                        if (needsit) {
+                            DDLogInfo(@"scrolling %@ to bottom",name);
+                            [self performSelector:@selector(scrollTableViewToBottom:) withObject:tableview afterDelay:0.5];
+                            [_needsScroll removeObjectForKey:name];
+                        }
                     }
                 }
                 
