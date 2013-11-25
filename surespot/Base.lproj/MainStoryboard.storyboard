@@ -155,7 +155,7 @@
                         <subviews>
                             <view clipsSubviews="YES" contentMode="scaleToFill" id="XCg-uf-vcR" customClass="SwipeView">
                                 <rect key="frame" x="0.0" y="30" width="320" height="426"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="dataSource" destination="tcp-OJ-fTS" id="N4g-GQ-De7"/>

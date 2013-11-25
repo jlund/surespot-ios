@@ -185,75 +185,99 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     
     
-    DDLogVerbose(@"keyboardWasShown");
+    DDLogInfo(@"keyboardWasShown");
     
-    
-    UITableView * tableView =(UITableView *)_friendView;
-    
-    KeyboardState * keyboardState = [[KeyboardState alloc] init];
-    keyboardState.contentInset = tableView.contentInset;
-    keyboardState.indicatorInset = tableView.scrollIndicatorInsets;
-    
-    
-    UIEdgeInsets contentInsets =  tableView.contentInset;
-    DDLogVerbose(@"pre move originy %f,content insets bottom %f, view height: %f", _textFieldContainer.frame.origin.y, contentInsets.bottom, tableView.frame.size.height);
-    
-    NSDictionary* info = [aNotification userInfo];
-    CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-    CGFloat keyboardHeight = [UIUtils keyboardHeightAdjustedForOrientation:keyboardRect.size];
-    
-    CGRect textFieldFrame = _textFieldContainer.frame;
-    textFieldFrame.origin.y -= keyboardHeight;
-    
-    _textFieldContainer.frame = textFieldFrame;
-    
-    DDLogVerbose(@"keyboard height before: %f", keyboardHeight);
-    
-    keyboardState.keyboardHeight = keyboardHeight;
-    
-    
-    DDLogVerbose(@"after move content insets bottom %f, view height: %f", contentInsets.bottom, tableView.frame.size.height);
-    
-    contentInsets.bottom = keyboardHeight + 2;
-    tableView.contentInset = contentInsets;
-    
-    
-    
-    UIEdgeInsets scrollInsets =tableView.scrollIndicatorInsets;
-    scrollInsets.bottom = keyboardHeight + 2;
-    tableView.scrollIndicatorInsets = scrollInsets;
-    
-    
-    @synchronized (_chats) {
-        for (NSString * key in [_chats allKeys]) {
-            UITableView * tableView = [_chats objectForKey:key];
-            
-            
-            //  DDLogVerbose(@"saving content offset for %@, y: %f", key, tableView.contentOffset.y);
-            //  [keyboardState.offsets setObject:[NSNumber numberWithFloat: tableView.contentOffset.y ] forKey:key];
-            
-            tableView.contentInset = contentInsets;
-            tableView.scrollIndicatorInsets = scrollInsets;
-            
-            CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y + keyboardHeight);
-            [tableView setContentOffset:newOffset animated:NO];
-            
-            
+    //if (!_keyboardState) {
+        UITableView * tableView =(UITableView *)_friendView;
+        
+        KeyboardState * keyboardState = [[KeyboardState alloc] init];
+        keyboardState.contentInset = tableView.contentInset;
+        keyboardState.indicatorInset = tableView.scrollIndicatorInsets;
+        
+        
+        UIEdgeInsets contentInsets =  tableView.contentInset;
+        DDLogInfo(@"pre move originy %f,content insets bottom %f, view height: %f", _textFieldContainer.frame.origin.y, contentInsets.bottom, tableView.frame.size.height);
+        
+        NSDictionary* info = [aNotification userInfo];
+        CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+        CGFloat keyboardHeight = [UIUtils keyboardHeightAdjustedForOrientation:keyboardRect.size];
+        
+        CGRect textFieldFrame = _textFieldContainer.frame;
+        textFieldFrame.origin.y -= keyboardHeight;
+        
+        _textFieldContainer.frame = textFieldFrame;
+        
+        DDLogInfo(@"keyboard height before: %f", keyboardHeight);
+        
+        keyboardState.keyboardHeight = keyboardHeight;
+        
+        NSIndexPath * bottomCell = nil;
+        NSArray * visibleCells = [tableView indexPathsForVisibleRows];
+        if ([visibleCells count ] > 0) {
+            bottomCell = [visibleCells objectAtIndex:[visibleCells count]-1];
         }
-    }
+        
+        
+        DDLogInfo(@"after move content insets bottom %f, view height: %f", contentInsets.bottom, tableView.frame.size.height);
+        
+        contentInsets.bottom = keyboardHeight;
+        tableView.contentInset = contentInsets;
+        
+        
+        
+        UIEdgeInsets scrollInsets =tableView.scrollIndicatorInsets;
+        scrollInsets.bottom = keyboardHeight;
+        tableView.scrollIndicatorInsets = scrollInsets;
+        
+        
+        if (bottomCell) {
+            [self scrollTableViewToCell:tableView indexPath: bottomCell];
+        }
     
-    
-    CGRect buttonFrame = _theButton.frame;
-    buttonFrame.origin.y -= keyboardHeight;
-    _theButton.frame = buttonFrame;
-    
-    self.keyboardState = keyboardState;
+        @synchronized (_chats) {
+            for (NSString * key in [_chats allKeys]) {
+                UITableView * tableView = [_chats objectForKey:key];
+                
+                
+                //  DDLogInfo(@"saving content offset for %@, y: %f", key, tableView.contentOffset.y);
+                //  [keyboardState.offsets setObject:[NSNumber numberWithFloat: tableView.contentOffset.y ] forKey:key];
+                
+                
+                NSArray * visibleCells = [tableView indexPathsForVisibleRows];
+                if ([visibleCells count ] > 0) {
+                    bottomCell = [visibleCells objectAtIndex:[visibleCells count]-1];
+                }
+                else {
+                    bottomCell = nil;
+                }
+                
+                tableView.contentInset = contentInsets;
+                tableView.scrollIndicatorInsets = scrollInsets;
+                
+                CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y + keyboardHeight);
+                [tableView setContentOffset:newOffset animated:NO];
+                
+                if (bottomCell) {
+         
+                    [self scrollTableViewToCell:tableView indexPath: bottomCell];
+                }
+                
+            }
+        }
+        
+        
+        CGRect buttonFrame = _theButton.frame;
+        buttonFrame.origin.y -= keyboardHeight;
+        _theButton.frame = buttonFrame;
+        
+        self.keyboardState = keyboardState;
+  //  }
 }
 
 // Called when the UIKeyboardWillHideNotification is sent
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification
 {
-    DDLogVerbose(@"keyboardWillBeHidden");
+    DDLogInfo(@"keyboardWillBeHidden");
     [self handleKeyboardHide];
     
 }
@@ -278,7 +302,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 tableView.scrollIndicatorInsets = self.keyboardState.indicatorInset;
                 tableView.contentInset = self.keyboardState.contentInset;
                 //  CGPoint oldOffset = CGPointMake(0, [[self.keyboardState.offsets objectForKey: key] floatValue]);
-                //  DDLogVerbose(@"restoring content offset for %@, y: %f", key, oldOffset.y);
+                //  DDLogInfo(@"restoring content offset for %@, y: %f", key, oldOffset.y);
                 //                [tableView setContentOffset:  oldOffset animated:YES];
                 //    CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y - self.keyboardState.keyboardHeight);
                 //    [tableView setContentOffset:  newOffset animated:YES];
@@ -1101,6 +1125,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         NSIndexPath *scrollIndexPath = [NSIndexPath indexPathForRow:(numRows - 1) inSection:0];
         [tableView scrollToRowAtIndexPath:scrollIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }
+}
+
+
+- (void) scrollTableViewToCell: (UITableView *) tableView  indexPath: (NSIndexPath *) indexPath {
+    DDLogVerbose(@"scrolling to cell: %@", indexPath);
+    // NSIndexPath *scrollIndexPath = [NSIndexPath indexPathForRow:(numRows - 1) inSection:0];
+    [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    
 }
 
 - (void)refreshHome:(NSNotification *)notification
