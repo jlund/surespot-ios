@@ -136,7 +136,9 @@
         [dict setObject:[@([_dateTime timeIntervalSince1970]*1000/1000) stringValue] forKey:@"datetime"];
     }
     
-    [dict setObject:[@(_resendId) stringValue] forKey:@"resendId"];
+    if (_resendId > 0) {
+        [dict setObject:[@(_resendId) stringValue] forKey:@"resendId"];
+    }
     
     return dict;
 }
