@@ -107,6 +107,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         if (!identity) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [UIUtils showToastKey: @"login_check_password" ];
+                [_textPassword becomeFirstResponder];
+                 _textPassword.text = @"";
                 [_progressView removeView];
                 self.navigationItem.rightBarButtonItem.enabled = YES;
                 
@@ -158,7 +160,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                      [UIUtils showToastKey: @"login_try_again_later"];
              }
              
-             
+             _textPassword.text = @"";
+             [_textPassword becomeFirstResponder];
              [_progressView removeView];
              self.navigationItem.rightBarButtonItem.enabled = YES;
              
