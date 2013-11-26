@@ -10,7 +10,7 @@
         <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="73" id="XiP-gw-V9I" customClass="HomeCell">
             <rect key="frame" x="0.0" y="0.0" width="320" height="73"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XiP-gw-V9I" id="UKv-x0-wXU">
+            <tableViewCellContentView key="contentView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XiP-gw-V9I" id="UKv-x0-wXU">
                 <rect key="frame" x="0.0" y="0.0" width="320" height="72"/>
                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                 <subviews>
@@ -18,7 +18,7 @@
                         <rect key="frame" x="5" y="0.0" width="44" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </imageView>
-                    <view contentMode="scaleToFill" id="wS1-7b-2cA">
+                    <view contentMode="scaleToFill" id="wS1-7b-2cA" customClass="FilledRectView">
                         <rect key="frame" x="0.0" y="0.0" width="5" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>

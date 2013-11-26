@@ -70,6 +70,7 @@
 		66D3B04D182D47DF00B37A6C /* SurespotLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 66D3B04C182D47DF00B37A6C /* SurespotLogFormatter.m */; };
 		66D3B04F182EAB4200B37A6C /* surespot.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66D3B04E182EAB4200B37A6C /* surespot.xcassets */; };
 		66DC2D53183E513D003CC54B /* MessageIndicatorNewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66DC2D52183E513D003CC54B /* MessageIndicatorNewView.m */; };
+		66E21D94184545790005D91E /* FilledRectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E21D93184545790005D91E /* FilledRectView.m */; };
 		66E4F5B6176298CB00596E6B /* libcryptopp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E4F5A1176298CB00596E6B /* libcryptopp.a */; };
 		66E4F5B7176298CB00596E6B /* SocketIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5A4176298CB00596E6B /* SocketIO.m */; };
 		66E4F5B8176298CB00596E6B /* SocketIOJSONSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5A6176298CB00596E6B /* SocketIOJSONSerialization.m */; };
@@ -228,6 +229,8 @@
 		66D3B04E182EAB4200B37A6C /* surespot.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = surespot.xcassets; sourceTree = "<group>"; };
 		66DC2D51183E513D003CC54B /* MessageIndicatorNewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageIndicatorNewView.h; path = home/MessageIndicatorNewView.h; sourceTree = "<group>"; };
 		66DC2D52183E513D003CC54B /* MessageIndicatorNewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageIndicatorNewView.m; path = home/MessageIndicatorNewView.m; sourceTree = "<group>"; };
+		66E21D92184545790005D91E /* FilledRectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilledRectView.h; path = chat/FilledRectView.h; sourceTree = "<group>"; };
+		66E21D93184545790005D91E /* FilledRectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilledRectView.m; path = chat/FilledRectView.m; sourceTree = "<group>"; };
 		66E4F51A176298CB00596E6B /* 3way.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 3way.h; sourceTree = "<group>"; };
 		66E4F51B176298CB00596E6B /* adler32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adler32.h; sourceTree = "<group>"; };
 		66E4F51C176298CB00596E6B /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
@@ -716,6 +719,8 @@
 				6640767A1822D52800BFD974 /* SurespotControlMessage.m */,
 				665F4DE2182EB2180083BCE7 /* SurespotButton.h */,
 				665F4DE3182EB2180083BCE7 /* SurespotButton.m */,
+				66E21D92184545790005D91E /* FilledRectView.h */,
+				66E21D93184545790005D91E /* FilledRectView.m */,
 			);
 			name = chat;
 			sourceTree = "<group>";
@@ -1152,6 +1157,7 @@
 				66159703176F6732001B32C1 /* NSData+Base64.m in Sources */,
 				665F4DFC1832E69C0083BCE7 /* GetKeyVersionOperation.mm in Sources */,
 				6606E4ED179D9C3A004199BC /* SignupViewController.mm in Sources */,
+				66E21D94184545790005D91E /* FilledRectView.m in Sources */,
 				66FF0FEE1827FAEE0038ECA6 /* StateController.m in Sources */,
 				6606E4F0179DB134004199BC /* FileController.mm in Sources */,
 				6637108918134295009D5195 /* MessageDecryptionOperation.mm in Sources */,

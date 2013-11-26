@@ -14,6 +14,7 @@
 + (void) showToastKey: (NSString *) key duration: (CGFloat) duration;
 + (CGSize)threadSafeSizeString: (NSString *) string WithFont:(UIFont *)font constrainedToSize:(CGSize)size;
 + (UIColor *) surespotBlue;
++(UIColor *) surespotSelectionBlue;
 +(UIColor *) surespotTransparentBlue;
 + (void)setAppAppearances;
 + (BOOL)stringIsNilOrEmpty:(NSString*)aString;

@@ -10,12 +10,12 @@
         <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="OurMessageView" id="EDl-q9-d0F" customClass="MessageView">
             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EDl-q9-d0F" id="xtF-wm-HWY">
+            <tableViewCellContentView key="contentView" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EDl-q9-d0F" id="xtF-wm-HWY">
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" id="uKg-6b-FVk" userLabel="Message sent view">
-                        <rect key="frame" x="0.0" y="0.0" width="5" height="43"/>
+                    <view contentMode="scaleToFill" id="uKg-6b-FVk" userLabel="Message sent view" customClass="FilledRectView">
+                        <rect key="frame" x="0.0" y="0.0" width="5" height="44"/>
                         <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>

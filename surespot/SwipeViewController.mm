@@ -766,7 +766,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [cell.acceptButton setHidden:!isInviter];
         [cell.blockButton setHidden:!isInviter];
         
-        cell.activeStatus.backgroundColor = [afriend isChatActive] ? [UIUtils surespotBlue] : [UIColor clearColor];
+        cell.activeStatus.hidden = ![afriend isChatActive];
+        cell.activeStatus.foregroundColor = [UIUtils surespotBlue];
         
         if (afriend.isInvited || afriend.isInviter || afriend.isDeleted) {
             cell.friendStatus.hidden = NO;
@@ -795,7 +796,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         cell.messageNewView.hidden = !afriend.hasNewMessages;
         
         UIView *bgColorView = [[UIView alloc] init];
-        bgColorView.backgroundColor = [UIUtils surespotBlue];
+        bgColorView.backgroundColor = [UIUtils surespotSelectionBlue];
         bgColorView.layer.masksToBounds = YES;
         cell.selectedBackgroundView = bgColorView;
         
@@ -844,13 +845,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             MessageView *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
             if (!ours) {
                 
-                cell.messageSentView.backgroundColor = [UIUtils surespotBlue];
+                cell.messageSentView.foregroundColor = [UIUtils surespotBlue];
             }
             
             if (message.errorStatus > 0) {
                 NSString * errorText = [UIUtils getMessageErrorText: message.errorStatus];
                 cell.messageStatusLabel.text = errorText;
-                cell.messageSentView.backgroundColor = [UIColor blackColor];
+                cell.messageSentView.foregroundColor = [UIColor blackColor];
             }
             else {
                 
@@ -859,12 +860,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     cell.messageLabel.text = plainData;
                     
                     if (ours) {
-                        cell.messageSentView.backgroundColor = [UIColor blackColor];
+                        cell.messageSentView.foregroundColor = [UIColor blackColor];
                     }
                 }
                 else {
                     if (ours) {
-                        cell.messageSentView.backgroundColor = [UIColor lightGrayColor];
+                        cell.messageSentView.foregroundColor = [UIColor lightGrayColor];
                     }
                     
                     if (!message.plainData) {
@@ -881,17 +882,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                         cell.messageStatusLabel.text = [self stringFromDate:[message dateTime]];
                         
                         if (ours) {
-                            cell.messageSentView.backgroundColor = [UIColor lightGrayColor];
+                            cell.messageSentView.foregroundColor = [UIColor lightGrayColor];
                         }
                         else {
-                            cell.messageSentView.backgroundColor = [UIUtils surespotBlue];
+                            cell.messageSentView.foregroundColor = [UIUtils surespotBlue];
                         }
                     }
                 }
             }
             
             UIView *bgColorView = [[UIView alloc] init];
-            bgColorView.backgroundColor = [UIUtils surespotBlue];
+            bgColorView.backgroundColor = [UIUtils surespotSelectionBlue];
             bgColorView.layer.masksToBounds = YES;
             cell.selectedBackgroundView = bgColorView;
             
@@ -921,6 +922,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         else {
             [_friendView deselectRowAtIndexPath:[_friendView indexPathForSelectedRow] animated:YES];
         }
+    }
+    else {
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
 
@@ -1251,7 +1255,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }];
     
     [menuItems addObject:logoutItem];
-    
     return [self createMenu: menuItems];
 }
 
@@ -1272,10 +1275,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [menu setCloseCompletionHandler:^{
         _menu = nil;
+        NSString * currentChat =[[ChatController sharedInstance] getCurrentChat];
+        if (currentChat) {
+            id currentTableView =[_chats objectForKey:currentChat];
+            if (currentTableView ) {
+                [currentTableView deselectRowAtIndexPath:[currentTableView indexPathForSelectedRow] animated:YES];
+            }
+        }
+        else {
+            [_friendView deselectRowAtIndexPath:[_friendView indexPathForSelectedRow] animated:YES];
+        }
     }];
     
     return menu;
-    
 }
 
 

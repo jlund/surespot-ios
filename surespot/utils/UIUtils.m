@@ -16,6 +16,10 @@
     return [UIColor colorWithRed:0.2 green:0.71 blue:0.898 alpha:1.0];
 }
 
++(UIColor *) surespotSelectionBlue {
+    return [UIColor colorWithRed:0.2 green:0.71 blue:0.898 alpha:0.9];
+}
+
 +(UIColor *) surespotTransparentBlue {
     return [UIColor colorWithRed:0.2 green:0.71 blue:0.898 alpha:0.5];
 }

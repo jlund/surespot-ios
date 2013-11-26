@@ -24,15 +24,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 @implementation HomeCell
 
--(void) setHighlighted:(BOOL)highlighted animated:(BOOL)animated{
-    if (highlighted) {
-        self.backgroundColor = [UIUtils surespotTransparentBlue];
-    } else {
-        self.backgroundColor = [UIColor whiteColor];
-    }
-    //    self.backgroundColor = [UIColor whiteColor];
-    DDLogVerbose(@"width: %f",self.frame.size.width);
-}
+
 
 - (IBAction)inviteAction:(id)sender {
     NSString * action;

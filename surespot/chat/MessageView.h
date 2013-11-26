@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FilledRectView.h"
 
 @interface MessageView : UITableViewCell
-@property (strong, nonatomic) IBOutlet UIView *messageSentView;
+@property (strong, nonatomic) IBOutlet FilledRectView *messageSentView;
 @property (strong, nonatomic) IBOutlet UILabel *messageStatusLabel;
 @property (strong, nonatomic) IBOutlet UILabel *messageLabel;
 @end
