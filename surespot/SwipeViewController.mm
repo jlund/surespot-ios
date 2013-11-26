@@ -1453,6 +1453,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [[NetworkController sharedInstance] logout];
     [[ChatController sharedInstance] logout];
+    [[IdentityController sharedInstance] logout];
     @synchronized (_chats) {
         [_chats removeAllObjects];
     }

@@ -32,5 +32,5 @@
 -(PublicKeys *) loadPublicKeysUsername: (NSString * ) username version: (NSString *) version;
 -(void) savePublicKeys: (NSDictionary * ) keys username: (NSString *)username version: (NSString *)version;
 -(void) updateLatestVersionForUsername: (NSString *) username version: (NSString * ) version;
-
+-(void) logout;
 @end

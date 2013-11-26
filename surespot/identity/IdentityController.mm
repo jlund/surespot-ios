@@ -208,6 +208,13 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     @synchronized (self) { return self.loggedInIdentity; }
 }
 
+-(void) logout {
+    @synchronized (self) {
+        self.loggedInIdentity = nil;
+        [[CredentialCachingController sharedInstance] logout];
+    }
+}
+
 - (NSString *) getOurLatestVersion {
     return [[self getLoggedInIdentity] latestVersion];
 }
@@ -280,7 +287,7 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     if ([username isEqualToString:[self getLoggedInUser]] && [version integerValue] > [[self getOurLatestVersion] integerValue]) {
         DDLogInfo(@"user key revoked, deleting data and logging out. username: %@", username);
         [self deleteIdentityUsername:username];
-      
+        
         
     }
     else {
