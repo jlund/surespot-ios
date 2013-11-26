@@ -15,7 +15,11 @@
 #import "LoadingView.h"
 #import "DDLog.h"
 
+#ifdef DEBUG
+static const int ddLogLevel = LOG_LEVEL_INFO;
+#else
 static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
 
 @interface LoginViewController ()
 @property (atomic, strong) NSArray * identityNames;
@@ -32,7 +36,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self loadIdentityNames];
     [self registerForKeyboardNotifications];
     self.navigationController.navigationBar.translucent = NO;
-    _textPassword.returnKeyType = UIReturnKeyGo;
+    //  _textPassword.returnKeyType = UIReturnKeyGo;
 }
 
 // Call this method somewhere in your view controller setup code.
@@ -49,37 +53,33 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 // Called when the UIKeyboardDidShowNotification is sent.
-- (void)keyboardWasShown:(NSNotification*)aNotification
-{
+- (void)keyboardWasShown:(NSNotification*)aNotification {
     NSDictionary* info = [aNotification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    NSInteger  kbHeight = [UIUtils keyboardHeightAdjustedForOrientation: [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size];
     
-    CGFloat buttonBot =    _bLogin.frame.origin.y + _bLogin.frame.size.height;
-    CGFloat viewBot = self.view.frame.size.height;
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbHeight, 0.0);
+    _scrollView.contentInset = contentInsets;
+    _scrollView.scrollIndicatorInsets = contentInsets;
     
-    CGFloat kbHeight = [UIUtils keyboardHeightAdjustedForOrientation:kbSize];
-    CGFloat d =  kbHeight - (viewBot - buttonBot);
-    
-    if (d > 0) {
-        _delta = d;
-        CGRect frame = self.view.frame;
-        frame.origin.y -= d;
-        self.view.frame = frame;
-    }
-    else {
-        _delta = 0;
+
+    NSInteger loginButtonBottom =(_bLogin.frame.origin.y + _bLogin.frame.size.height);
+    NSInteger delta = kbHeight -  loginButtonBottom ;
+   // DDLogInfo(@"delta %d loginBottom %d", delta, loginButtonBottom);
+
+    if (delta < 0 ) {
+        
+
+        CGPoint scrollPoint = CGPointMake(0.0, _bLogin.frame.origin.y - kbHeight  - delta);
+      //  DDLogInfo(@"scrollPoint y: %f", scrollPoint.y);
+        [_scrollView setContentOffset:scrollPoint animated:YES];
     }
 }
 
 // Called when the UIKeyboardWillHideNotification is sent
-- (void)keyboardWillBeHidden:(NSNotification*)aNotification
-{
-    if (_delta >0) {
-        
-        CGRect frame = self.view.frame;
-        frame.origin.y += _delta;
-        self.view.frame = frame;
-    }
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification {
+    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+    _scrollView.contentInset = contentInsets;
+    _scrollView.scrollIndicatorInsets = contentInsets;
 }
 
 
@@ -108,7 +108,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             dispatch_async(dispatch_get_main_queue(), ^{
                 [UIUtils showToastKey: @"login_check_password" ];
                 [_textPassword becomeFirstResponder];
-                 _textPassword.text = @"";
+                _textPassword.text = @"";
                 [_progressView removeView];
                 self.navigationItem.rightBarButtonItem.enabled = YES;
                 
@@ -187,6 +187,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [self login: nil];
+    [textField resignFirstResponder];
     return NO;
 }
 

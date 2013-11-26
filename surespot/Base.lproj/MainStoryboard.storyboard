@@ -25,12 +25,12 @@
         <scene sceneID="5">
             <objects>
                 <viewController storyboardIdentifier="loginViewController" id="2" customClass="LoginViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="sVW-VT-uDz">
+                    <scrollView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="88S-Nt-FbA">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="SW9-JJ-OEP">
-                                <rect key="frame" x="91" y="217" width="138" height="46"/>
+                            <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="SW9-JJ-OEP">
+                                <rect key="frame" x="91" y="229" width="138" height="46"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
                                 <inset key="insetFor6xAndEarlier" minX="0.0" minY="-10" maxX="0.0" maxY="10"/>
                                 <state key="normal" title="login">
@@ -40,8 +40,19 @@
                                     <action selector="login:" destination="2" eventType="touchUpInside" id="5nQ-Mi-N0d"/>
                                 </connections>
                             </button>
+                            <textField clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" clearButtonMode="whileEditing" id="JPD-8G-y9p">
+                                <rect key="frame" x="23" y="186" width="274" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
+                                <color key="tintColor" red="0.20000000000000001" green="0.70980392160000005" blue="0.8980392157" alpha="1" colorSpace="deviceRGB"/>
+                                <inset key="insetFor6xAndEarlier" minX="0.0" minY="-10" maxX="0.0" maxY="10"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES"/>
+                                <connections>
+                                    <outlet property="delegate" destination="2" id="ht7-Ps-rfl"/>
+                                </connections>
+                            </textField>
                             <pickerView contentMode="scaleToFill" id="WV1-5E-HKR">
-                                <rect key="frame" x="3" y="0.0" width="314" height="171"/>
+                                <rect key="frame" x="3" y="7" width="314" height="171"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <inset key="insetFor6xAndEarlier" minX="0.0" minY="-11" maxX="0.0" maxY="11"/>
                                 <connections>
@@ -49,19 +60,10 @@
                                     <outlet property="delegate" destination="2" id="yaU-74-A3F"/>
                                 </connections>
                             </pickerView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" clearButtonMode="whileEditing" id="JPD-8G-y9p">
-                                <rect key="frame" x="23" y="179" width="274" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
-                                <inset key="insetFor6xAndEarlier" minX="0.0" minY="-10" maxX="0.0" maxY="10"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
-                                <connections>
-                                    <outlet property="delegate" destination="2" id="ht7-Ps-rfl"/>
-                                </connections>
-                            </textField>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </scrollView>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" id="jSB-cH-bSD">
                         <barButtonItem key="rightBarButtonItem" title="create" id="HsW-Cs-VRw">
@@ -73,6 +75,7 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
                         <outlet property="bLogin" destination="SW9-JJ-OEP" id="URd-kO-Go8"/>
+                        <outlet property="scrollView" destination="88S-Nt-FbA" id="fTD-aX-84D"/>
                         <outlet property="textPassword" destination="JPD-8G-y9p" id="OMQ-Mc-YUx"/>
                         <outlet property="userPicker" destination="WV1-5E-HKR" id="RnN-f6-NzK"/>
                         <segue destination="tcp-OJ-fTS" kind="push" identifier="loginToMainSegue" id="CFG-TY-gjC"/>
@@ -219,6 +222,20 @@
                 <exit id="onN-2k-VwT" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="149" y="204"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="RWq-bj-1fI">
+            <objects>
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="gVZ-qz-OTK" sceneMemberID="viewController">
+                    <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="qp4-ZW-yQP">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <toolbarItems/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hpC-3D-HDn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
