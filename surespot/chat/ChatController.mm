@@ -423,34 +423,38 @@ static const int MAX_CONNECTION_RETRIES = 16;
     NSString * loggedInUser = [[IdentityController sharedInstance] getLoggedInUser];
     NSData * iv = [EncryptionController getIv];
     
+    NSString * b64iv = [iv base64EncodedStringWithSeparateLines:NO];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    
+    [dict setObject:friendname forKey:@"to"];
+    [dict setObject:loggedInUser forKey:@"from"];
+    [dict setObject:ourLatestVersion forKey:@"fromVersion"];
+    [dict setObject:b64iv forKey:@"iv"];
+    [dict setObject:@"text/plain" forKey:@"mimeType"];
+  //  [dict setObject:[NSNumber  numberWithBool:FALSE] forKey:@"shareable"];
+    
+    SurespotMessage * sm =[[SurespotMessage alloc] initWithDictionary: dict];
+    
+    [self enqueueMessage:sm];
+
+    //cache the plain data locally
+    sm.plainData = message;
+    [UIUtils setMessageHeights:sm size:[UIScreen mainScreen].bounds.size];
+    
+    ChatDataSource * dataSource = [self getDataSourceForFriendname: friendname];
+    [dataSource addMessage: sm refresh:NO];
+    [dataSource postRefresh];
+
+
     [[IdentityController sharedInstance] getTheirLatestVersionForUsername:friendname callback:^(NSString * version) {
         
         if (version) {
             
             [EncryptionController symmetricEncryptString: message ourVersion:ourLatestVersion theirUsername:friendname theirVersion:version iv:iv callback:^(NSString * cipherText) {
                 
-                NSString * b64iv = [iv base64EncodedStringWithSeparateLines:NO];
-                NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-                
-                [dict setObject:friendname forKey:@"to"];
-                [dict setObject:loggedInUser forKey:@"from"];
-                [dict setObject:version forKey:@"toVersion"];
-                [dict setObject:ourLatestVersion forKey:@"fromVersion"];
-                [dict setObject:b64iv forKey:@"iv"];
-                [dict setObject:cipherText forKey:@"data"];
-                [dict setObject:@"text/plain" forKey:@"mimeType"];
-                [dict setObject:[NSNumber  numberWithBool:FALSE] forKey:@"shareable"];
-                
-                SurespotMessage * sm =[[SurespotMessage alloc] initWithDictionary: dict];
-                
-                [self enqueueMessage:sm];
+                sm.toVersion = version;
+                sm.data = cipherText;
                 [self sendMessages];
-                //cache the plain data locally
-                sm.plainData = message;
-                [UIUtils setMessageHeights:sm size:[UIScreen mainScreen].bounds.size];
-                
-                ChatDataSource * dataSource = [self getDataSourceForFriendname: friendname];
-                [dataSource addMessage: sm refresh:YES];
             }];
         }
         else {
@@ -461,13 +465,14 @@ static const int MAX_CONNECTION_RETRIES = 16;
 }
 
 -(void) enqueueMessage: (SurespotMessage * ) message {
-    
+    DDLogInfo(@"enqueing message %@", message);
     [_sendBuffer addObject:message];
 }
 
 
 -(void) enqueueResendMessage: (SurespotMessage * ) message {
     if (![_resendBuffer containsObject:message]) {
+        DDLogInfo(@"enqueing resend message %@", message);
         [_resendBuffer addObject:message];
     }
 }
@@ -481,13 +486,24 @@ static const int MAX_CONNECTION_RETRIES = 16;
     NSMutableArray * sendBuffer = _sendBuffer;
     _sendBuffer = [NSMutableArray new];
     
-    [sendBuffer enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [_resendBuffer addObject:obj];
+    [sendBuffer enumerateObjectsUsingBlock:^(SurespotMessage * message, NSUInteger idx, BOOL *stop) {
+        
         
         if (_socketIO) {
-            [_socketIO sendMessage:[obj toJsonString]];
+            if ([self messageReadyToSend:message]) {
+                DDLogInfo(@"sending message %@", message);
+                [self enqueueResendMessage:message];
+                [_socketIO sendMessage:[message toJsonString]];
+            }
+            else {
+                [self enqueueMessage:message];
+            }
         }
     }];
+}
+
+-(BOOL) messageReadyToSend: (SurespotMessage *) message {
+    return message.from && message.to && message.fromVersion && message.iv && message.toVersion && message.data && message.mimeType;
 }
 
 -(void ) checkAndSendNextMessage: (SurespotMessage *) message {
@@ -525,7 +541,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
         NSError *error;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonMessageList options:0 error:&error];
         NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-        
+        DDLogInfo(@"sending resend messages %@", jsonString);
         [self sendMessageOnSocket:jsonString];
     }
 }
