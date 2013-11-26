@@ -254,7 +254,7 @@ int const PBKDF_ROUNDS = 1000;
     if (!validated) {
         DDLogWarn(@"dh private key not validated");
     }
-
+    
     
     return privateKey;
 }
@@ -289,7 +289,7 @@ int const PBKDF_ROUNDS = 1000;
         DDLogWarn(@"dh private key not validated");
     }
     
-    return privateKey;    
+    return privateKey;
 }
 
 + (NSData *) signUsername: (NSString *) username andPassword: (NSData *) password withPrivateKey: (ECDSAPrivateKey) privateKey {
@@ -462,10 +462,16 @@ int const PBKDF_ROUNDS = 1000;
 +(void) symmetricDecryptString: (NSString *) cipherData ourVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion: (NSString *) theirVersion iv: (NSString *) iv callback: (CallbackBlock) callback {
     
     [[CredentialCachingController sharedInstance] getSharedSecretForOurVersion:ourVersion theirUsername:theirUsername theirVersion:theirVersion callback: ^(NSData * secret) {
-        NSData * ivData = [NSData dataFromBase64String:iv];
-        
-        NSString * plainText = [EncryptionController decryptCipher:cipherData usingKey:secret usingIv:ivData];
-        callback(plainText);
+        if (secret) {
+            
+            NSData * ivData = [NSData dataFromBase64String:iv];
+            
+            NSString * plainText = [EncryptionController decryptCipher:cipherData usingKey:secret usingIv:ivData];
+            callback(plainText);
+        }
+        else {
+            callback(nil);
+        }
     }];
     
 }
