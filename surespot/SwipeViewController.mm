@@ -445,6 +445,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [_friendView registerNib:[UINib nibWithNibName:@"HomeCell" bundle:nil] forCellReuseIdentifier:@"HomeCell"];
             _friendView.delegate = self;
             _friendView.dataSource = self;
+            if ([_friendView respondsToSelector:@selector(setSeparatorInset:)]) {
+                [_friendView setSeparatorInset:UIEdgeInsetsZero];
+            }
             
             [self addLongPressGestureRecognizer:_friendView];
         }
@@ -946,6 +949,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [chatView setDataSource: self];
         [chatView setScrollsToTop:NO];
         [chatView setDirectionalLockEnabled:YES];
+        if ([chatView respondsToSelector:@selector(setSeparatorInset:)]) {
+            [chatView setSeparatorInset:UIEdgeInsetsZero];
+        }
         [self addLongPressGestureRecognizer:chatView];
         
         // setup pull-to-refresh
