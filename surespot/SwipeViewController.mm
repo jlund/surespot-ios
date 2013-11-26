@@ -245,7 +245,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y + keyboardHeight);
                     [tableView setContentOffset:newOffset animated:NO];
                     
-                }                
+                }
             }
             
             tableView.contentInset = contentInsets;
@@ -529,20 +529,21 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 
                 //scroll if we need to
                 NSString * name =[self nameForPage:currPage];
-                
+                BOOL scrolledUsingIndexPath = NO;
                 
                 //if we've got saved scrlol positions
                 if (_bottomIndexPaths) {
                     id path = [_bottomIndexPaths objectForKey:name];
                     if (path) {
+                        DDLogInfo(@"scrolling using saved index path for %@",name);
                         [self scrollTableViewToCell:tableview indexPath:path];
                         [_bottomIndexPaths removeObjectForKey:name];
+                        scrolledUsingIndexPath = YES;
                     }
                 }
-                else {
-                    
-                    
-                    
+                
+                
+                if (!scrolledUsingIndexPath) {
                     @synchronized (_needsScroll ) {
                         id needsit = [_needsScroll  objectForKey:name];
                         if (needsit) {
@@ -552,6 +553,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                         }
                     }
                 }
+                
                 
                 //update button
                 [self updateTabChangeUI];
@@ -784,7 +786,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             cell.friendStatus.textAlignment = NSTextAlignmentCenter;
             cell.friendStatus.lineBreakMode = NSLineBreakByWordWrapping;
             cell.friendStatus.numberOfLines = 0;
-
+            
             
         }
         else {
@@ -1551,8 +1553,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     Friend * thefriend = notification.object;
     NSString * currentChat =[[ChatController sharedInstance] getCurrentChat];
     //show toast if we're not on the tab or home page, and pulse if we're logged in as the user
-    if (currentChat
-        ) {
+    if (currentChat) {
         [UIUtils showToastMessage:[NSString stringWithFormat:NSLocalizedString(@"notification_invite", nil), [[IdentityController sharedInstance] getLoggedInUser], thefriend.name] duration:1];
         
         [UIUtils startPulseAnimation:_backImageView];
