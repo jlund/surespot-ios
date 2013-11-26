@@ -1538,7 +1538,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     SurespotMessage * message = notification.object;
     NSString * currentChat =[[ChatController sharedInstance] getCurrentChat];
     //show toast if we're not on the tab or home page, and pulse if we're logged in as the user
-    if (currentChat && ![message.from isEqualToString: currentChat]) {
+    if (currentChat &&
+        ![message.from isEqualToString: currentChat] &&
+        [[[IdentityController sharedInstance] getIdentityNames] containsObject:message.to]) {
         [UIUtils showToastMessage:[NSString stringWithFormat:NSLocalizedString(@"notification_message", nil), message.to, message.from] duration:1];
         
         [UIUtils startPulseAnimation:_backImageView];

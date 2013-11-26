@@ -79,7 +79,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 
                 NSArray * locArgs =[userInfo valueForKeyPath:@"aps.alert.loc-args" ] ;
                 NSString * to =[locArgs objectAtIndex:0];
-                if (![to isEqualToString:[[IdentityController sharedInstance] getLoggedInUser]]) {
+                if (![to isEqualToString:[[IdentityController sharedInstance] getLoggedInUser]] &&
+                    [[[IdentityController sharedInstance] getIdentityNames] containsObject:to]) {
+                    
                     NSString * from =[locArgs objectAtIndex:1];
                     [UIUtils showToastMessage:[NSString stringWithFormat:NSLocalizedString(notificationType, nil), to, from] duration:1];
 
@@ -147,6 +149,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:devToken forKey:@"apnToken"];
+    
+    //todo set token on server
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
