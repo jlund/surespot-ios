@@ -1422,6 +1422,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     else {
         [self updateTabChangeUI];
+        if ([name isEqualToString:_homeDataSource.currentChat]) {
+            [_textField resignFirstResponder];
+        }
     }
 }
 
