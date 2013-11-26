@@ -367,8 +367,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     
                     UITableView * tableView = [_chats objectForKey:key];
                     [self scrollTableViewToCell:tableView indexPath:indexPath];
-                    
-                    [_bottomIndexPaths removeObjectForKey:key ];
+                                    [_bottomIndexPaths removeObjectForKey:key ];
                 }
             }
         }
@@ -1179,6 +1178,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         @synchronized (_needsScroll) {
             DDLogInfo(@"setting needs scroll for %@", username);
             [_needsScroll setObject:@"yourmama" forKey:username];
+            [_bottomIndexPaths removeObjectForKey:username];
         }
     }
 }
