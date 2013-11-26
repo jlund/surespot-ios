@@ -54,8 +54,5 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
-}
 
 @end

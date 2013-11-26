@@ -781,7 +781,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             if (afriend.isInviter) {
                 cell.friendStatus.text = NSLocalizedString(@"friend_status_is_inviting", nil);
             }
-            
+            cell.friendStatus.textAlignment = NSTextAlignmentCenter;
+            cell.friendStatus.lineBreakMode = NSLineBreakByWordWrapping;
+            cell.friendStatus.numberOfLines = 0;
+
             
         }
         else {
