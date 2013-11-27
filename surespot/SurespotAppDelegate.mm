@@ -29,7 +29,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     [TestFlight takeOff:@"b1b351a8-07ad-4433-8889-701d2775c64d"];
     
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge|UIReturnKeyDefault) ];
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound) ];
     if  (launchOptions) {
         DDLogVerbose(@"received launch options: %@", launchOptions);
     }
