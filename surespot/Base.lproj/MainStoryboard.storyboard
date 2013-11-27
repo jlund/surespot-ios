@@ -223,20 +223,6 @@
             </objects>
             <point key="canvasLocation" x="149" y="204"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="RWq-bj-1fI">
-            <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="gVZ-qz-OTK" sceneMemberID="viewController">
-                    <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="qp4-ZW-yQP">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <toolbarItems/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="hpC-3D-HDn" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-        </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
