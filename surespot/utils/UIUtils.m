@@ -10,6 +10,16 @@
 #import "Toast+UIView.h"
 #import "ChatUtils.h"
 
+#import "DDLog.h"
+
+#ifdef DEBUG
+static const int ddLogLevel = LOG_LEVEL_INFO;
+#else
+static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
+
+
+
 @implementation UIUtils
 
 +(UIColor *) surespotBlue {
@@ -37,8 +47,8 @@
 +(void) showToastMessage: (NSString *) message duration: (CGFloat) duration {
     
     [[[[[UIApplication sharedApplication] keyWindow] rootViewController] view]  makeToast:message
-                                                     duration: duration
-                                                     position:@"top"
+                                                                                 duration: duration
+                                                                                 position:@"top"
      ];
 }
 
@@ -48,8 +58,8 @@
 +(void) showToastKey: (NSString *) key duration: (CGFloat) duration {
     
     [[[[[UIApplication sharedApplication] keyWindow] rootViewController] view]  makeToast:NSLocalizedString(key, nil)
-                                                     duration: duration
-                                                     position:@"top"
+                                                                                 duration: duration
+                                                                                 position:@"top"
      ];
 }
 
@@ -107,21 +117,35 @@
     
     //figure out message height for both orientations
     if (plaintext){
-        
-        //BOOL ours = [ChatUtils isOurMessage:message];
+        NSInteger offset = 0;
+        NSInteger heightAdj = 25;
+        BOOL ours = [ChatUtils isOurMessage:message];
+        if (ours) {
+            offset = 40;
+        }
+        else {
+            offset = 90;
+        }
         //http://stackoverflow.com/questions/12744558/uistringdrawing-methods-dont-seem-to-be-thread-safe-in-ios-6
         
         UIFont *cellFont = [UIFont fontWithName:@"Helvetica" size:17.0];
-        CGSize constraintSize = CGSizeMake(size.width -80, MAXFLOAT);
+        CGSize constraintSize = CGSizeMake(size.width - offset, MAXFLOAT);
+        DDLogVerbose(@"computing size for message: %@", plaintext);
         
-
-        CGSize labelSize =       [self threadSafeSizeString:plaintext WithFont:cellFont constrainedToSize:constraintSize];
-        [message setRowPortraitHeight:(int) (labelSize.height + 25 > 44 ? labelSize.height + 25 : 44) ];
+        CGSize labelSize = [self threadSafeSizeString:plaintext WithFont:cellFont constrainedToSize:constraintSize];
         
-        constraintSize = CGSizeMake( size.height - 80 , MAXFLOAT);
+        DDLogVerbose(@"computed portrait width %f, height: %f", labelSize.width, labelSize.height);
         
-        labelSize =      [UIUtils threadSafeSizeString:plaintext WithFont:cellFont constrainedToSize:constraintSize];
-        [message setRowLandscapeHeight:(int) (labelSize.height + 25 > 44 ? labelSize.height + 25 : 44) ];
+        [message setRowPortraitHeight:(int) (labelSize.height + heightAdj > 44 ? labelSize.height + heightAdj : 44) ];
+        
+        constraintSize = CGSizeMake( size.height - offset , MAXFLOAT);
+        
+        labelSize = [UIUtils threadSafeSizeString:plaintext WithFont:cellFont constrainedToSize:constraintSize];
+        
+        DDLogVerbose(@"computed landscape width %f, height: %f", labelSize.width, labelSize.height);
+        [message setRowLandscapeHeight:(int) (labelSize.height + heightAdj > 44 ? labelSize.height + heightAdj: 44) ];
+        
+        DDLogVerbose(@"computed row height portrait %d landscape %d", message.rowPortraitHeight, message.rowLandscapeHeight);
     }
 }
 

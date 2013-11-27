@@ -887,6 +887,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                         else {
                             cell.messageSentView.foregroundColor = [UIUtils surespotBlue];
                         }
+                        
+                        DDLogVerbose(@"message text x position: %f, width: %f", cell.messageLabel.frame.origin.x, cell.messageLabel.frame.size.width);
                     }
                 }
             }
