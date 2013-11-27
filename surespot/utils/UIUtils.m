@@ -109,15 +109,16 @@
     if (plaintext){
         
         //BOOL ours = [ChatUtils isOurMessage:message];
+        //http://stackoverflow.com/questions/12744558/uistringdrawing-methods-dont-seem-to-be-thread-safe-in-ios-6
         
         UIFont *cellFont = [UIFont fontWithName:@"Helvetica" size:17.0];
-        CGSize constraintSize = CGSizeMake(size.width -70, MAXFLOAT);
+        CGSize constraintSize = CGSizeMake(size.width -80, MAXFLOAT);
         
-        //http://stackoverflow.com/questions/12744558/uistringdrawing-methods-dont-seem-to-be-thread-safe-in-ios-6
+
         CGSize labelSize =       [self threadSafeSizeString:plaintext WithFont:cellFont constrainedToSize:constraintSize];
         [message setRowPortraitHeight:(int) (labelSize.height + 25 > 44 ? labelSize.height + 25 : 44) ];
         
-        constraintSize = CGSizeMake(size.height - 70 , MAXFLOAT);
+        constraintSize = CGSizeMake( size.height - 80 , MAXFLOAT);
         
         labelSize =      [UIUtils threadSafeSizeString:plaintext WithFont:cellFont constrainedToSize:constraintSize];
         [message setRowLandscapeHeight:(int) (labelSize.height + 25 > 44 ? labelSize.height + 25 : 44) ];
