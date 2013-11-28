@@ -12,6 +12,8 @@
 #import "FriendDelegate.h"
 #import "Friend.h"
 #import "UIViewPager.h"
+#import "IASKAppSettingsViewController.h"
+
 @interface SwipeViewController : UIViewController
 <
     SwipeViewDelegate,
@@ -19,7 +21,9 @@
     UITableViewDataSource,
     UITableViewDelegate,
     UIActionSheetDelegate,
-    UIViewPagerDelegate
+    UIViewPagerDelegate,
+    IASKSettingsDelegate
+
 >
 @property (nonatomic, strong) IBOutlet SwipeView *swipeView;
 @property (nonatomic, strong) UITableView *friendView;

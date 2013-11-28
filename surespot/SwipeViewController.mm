@@ -24,6 +24,8 @@
 #import "REMenu.h"
 #import "SVPullToRefresh.h"
 #import "SurespotConstants.h"
+#import "IASKAppSettingsViewController.h"
+#import "IASKSettingsReader.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -44,6 +46,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, weak) UIView * backImageView;
 @property (atomic, assign) NSInteger scrollingTo;
 @property (nonatomic, strong) NSMutableDictionary * bottomIndexPaths;
+@property (nonatomic, strong) IASKAppSettingsViewController * appSettingsViewController;
 @end
 
 @implementation SwipeViewController
@@ -151,6 +154,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resume:) name:UIApplicationWillEnterForegroundNotification object:nil];
     
     _scrollingTo = -1;
+    
+    //app settings
+    _appSettingsViewController = [IASKAppSettingsViewController new];
+    _appSettingsViewController.delegate = self;
     
 }
 
@@ -1271,8 +1278,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [self logout];
         
     }];
-    
     [menuItems addObject:logoutItem];
+    
+    REMenuItem * settingsItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"settings", nil) image:[UIImage imageNamed:@"ic_lock_power_off"] highlightedImage:nil action:^(REMenuItem * item){
+        [self showSettings];
+        
+    }];
+    
+    [menuItems addObject:settingsItem];
+
     return [self createMenu: menuItems];
 }
 
@@ -1605,6 +1619,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         [UIUtils startPulseAnimation:_backImageView];
     }
+}
+
+#pragma mark -
+#pragma mark IASKAppSettingsViewControllerDelegate protocol
+- (void)settingsViewControllerDidEnd:(IASKAppSettingsViewController*)sender {
+    //[self dismissModalViewControllerAnimated:YES];
+    
+    // your code here to reconfigure the app for changed settings
+}
+
+-(void) showSettings {
+    self.appSettingsViewController.showDoneButton = NO;
+    [self.navigationController pushViewController:self.appSettingsViewController animated:YES];
 }
 
 

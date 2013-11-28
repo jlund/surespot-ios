@@ -54,6 +54,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [rootViewController setViewControllers:@[[storyboard instantiateViewControllerWithIdentifier:@"loginViewController"]]];
     }
     
+    NSString *appVersionString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    [[NSUserDefaults standardUserDefaults] setObject:appVersionString forKey:@"version_preference"];
+    
+    
+    NSString *appBuildString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+    [[NSUserDefaults standardUserDefaults] setObject:appBuildString forKey:@"build_preference"];
+
+    
     [self.window makeKeyAndVisible];
     
     

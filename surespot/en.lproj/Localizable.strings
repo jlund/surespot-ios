@@ -16,8 +16,6 @@
 "title_activity_identity_management"="identity management";
 "title_activity_settings"="settings";
 "title_activity_export_identity"="backup identity";
-"import_identity_label"="restore identity...";
-"export_identity_label"="backup identity...";
 "delete_identity_user"="delete identity: %@";
 "import_identities"="restore identity...";
 "create_identity_label"="create new identity...";
