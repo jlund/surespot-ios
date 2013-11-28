@@ -45,11 +45,10 @@ int const PBKDF_ROUNDS = 1000;
     return serverPublicKey;
 }
 
-
-+ (NSData *) encryptIdentity:(NSData *) identityData withPassword:(NSString *) password
++ (NSData *) encryptData:(NSData *) data withPassword:(NSString *) password
 {
-    int length = [identityData length];
-    byte * identityBytes = (byte*)[identityData bytes];
+    int length = [data length];
+    byte * identityBytes = (byte*)[data bytes];
     
     //generate iv
     byte ivBytes[IV_LENGTH];
@@ -82,16 +81,16 @@ int const PBKDF_ROUNDS = 1000;
     return returnData;
 }
 
-+ (NSData *) decryptIdentity:(NSData *) identityData withPassword:(NSString *) password
++ (NSData *) decryptData:(NSData *) data withPassword:(NSString *) password
 {
-    // CryptoPP::PKCS5_PBKDF2_HMAC<SHA256> kdf;
-    byte * identityBytes = (byte*)[identityData bytes];
+
+    byte * identityBytes = (byte*)[data bytes];
     
-    int cipherLength = [identityData length] - IV_LENGTH - SALT_LENGTH;
+    int cipherLength = [data length] - IV_LENGTH - SALT_LENGTH;
     byte cipherByte[cipherLength];
     byte ivBytes[IV_LENGTH];
     byte saltBytes[SALT_LENGTH];
-    // byte * passwordBytes = (byte *) [[password dataUsingEncoding:NSUTF8StringEncoding] bytes];
+
     memcpy(ivBytes, identityBytes, IV_LENGTH);
     memcpy(saltBytes, identityBytes + IV_LENGTH, SALT_LENGTH);
     memcpy(cipherByte, identityBytes + IV_LENGTH + SALT_LENGTH, cipherLength);
@@ -129,6 +128,7 @@ int const PBKDF_ROUNDS = 1000;
     
     return jsonData;
 }
+
 
 +(NSData *) getIv {
     byte* iv = new byte[IV_LENGTH];

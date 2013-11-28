@@ -88,8 +88,8 @@ extern int const SALT_LENGTH;
 extern int const AES_KEY_LENGTH;
 
 @interface EncryptionController : NSObject
-+ (NSData *) encryptIdentity:(NSData *) identityData withPassword:(NSString *) password;
-+ (NSData *) decryptIdentity:(NSData *) identityData withPassword:(NSString *) password;
++ (NSData *) encryptData:(NSData *) data withPassword:(NSString *) password;
++ (NSData *) decryptData:(NSData *) data withPassword:(NSString *) password;
 + (ECDHPrivateKey) recreateDhPrivateKey:(NSString *) encodedKey;
 + (ECDSAPrivateKey) recreateDsaPrivateKey:(NSString *) encodedKey;
 + (NSData *) deriveKeyUsingPassword: (NSString *) password andSalt: (NSData *) salt;
