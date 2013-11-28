@@ -10,6 +10,7 @@
 #import "GetSharedSecretOperation.h"
 #import "GetKeyVersionOperation.h"
 #import "NetworkController.h"
+#import "FileController.h"
 #import "DDLog.h"
 
 #ifdef DEBUG
@@ -58,28 +59,31 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
 }
 
-//todo cahe cookie
 -(void) loginIdentity: (SurespotIdentity *) identity {
     self.loggedInIdentity = identity;
     
-    //todo load encrypted shared secrets from disk
-    
-    
+    //load encrypted shared secrets from disk if we have a password in the keychain
+    NSString * password = [[IdentityController sharedInstance] getStoredPasswordForIdentity:identity.username];
+    if (password) {
+        NSDictionary * secrets  =  [FileController loadSharedSecretsForUsername: identity.username withPassword:password];
+        _sharedSecretsDict = [NSMutableDictionary  dictionaryWithDictionary:secrets];
+        DDLogInfo(@"loaded %d encrypted secrets from disk", [_sharedSecretsDict count]);
+    }
 }
 
 -(void) logout {
-    //save encrypted shared secrets to disk
-    
-    NSData * secrets = [NSKeyedArchiver archivedDataWithRootObject:_sharedSecretsDict];
-    
-    
-    
+    //save encrypted shared secrets to disk if we have a password in the keychain for this user
+    NSString * password = [[IdentityController sharedInstance] getStoredPasswordForIdentity:_loggedInIdentity.username];
+    if (password) {
+        [FileController saveSharedSecrets: _sharedSecretsDict forUsername: _loggedInIdentity.username withPassword:password];
+        DDLogInfo(@"saved %d encrypted secrets to disk", [_sharedSecretsDict count]);
+    }
+   
+    [_sharedSecretsDict removeAllObjects];
+    [_publicKeysDict removeAllObjects];
+    [_latestVersionsDict removeAllObjects];
     _loggedInIdentity = nil;
-    
 }
-
-
-
 
 -(void) clearUserData: (NSString *) friendname {
     [_latestVersionsDict removeObjectForKey:friendname];
@@ -116,28 +120,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) clearIdentityData:(NSString *) username {
     if ([username isEqualToString:_loggedInIdentity.username]) {
-    //remove cached shared secrets for the identity
-    //    NSString * sharedSecretKey = [NSString stringWithFormat:@"%@:%@:%@", self.ourVersion, self.theirUsername, self.theirVersion];
-    
-//    NSMutableArray * keysToRemove = [NSMutableArray new];
-//    //iterate through shared secret keys and delete those that match the passed in user
-//    for (NSString * key in [_sharedSecretsDict allKeys]) {
-//        NSArray * keyComponents = [key componentsSeparatedByString:@":"];
-//        if ([[keyComponents objectAtIndex:0] isEqualToString:username]) {
-//            DDLogInfo(@"removing shared secret for: %@", key);
-//            [keysToRemove addObject:key];
-//        }
-//    }
-//    
-//    [_sharedSecretsDict removeObjectsForKeys:keysToRemove];
         [_sharedSecretsDict removeAllObjects];
         [_publicKeysDict removeAllObjects];
         [_latestVersionsDict removeAllObjects];
     }
-    else {
-            //wipe data from disk
-        
-    }
+    
+    //wipe data from disk
+    [FileController deleteSharedSecretsForUsername: username];
     
 }
 

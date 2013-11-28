@@ -113,19 +113,9 @@ int const PBKDF_ROUNDS = 1000;
         DDLogVerbose(@"error decrypting identity: %@", [NSString stringWithUTF8String: e.GetWhat().data()]);
         return nil;
     }
-    
-    
-    //StringSource s(cipherByte, false, new CryptoPP::Redirector(df));
-    
-    // bool b =  df.GetLastResult();
-    
+        
     DDLogVerbose(@"recovered: %s", jsonIdentity.data());
-    
-    //convert json to NSDictionary
-    
-    NSString * jsonNSString =[[NSString alloc] initWithUTF8String:jsonIdentity.data()];
-    NSData * jsonData = [jsonNSString dataUsingEncoding:NSUTF8StringEncoding];
-    
+    NSData * jsonData = [NSData dataWithBytes:jsonIdentity.data() length:jsonIdentity.length()];    
     return jsonData;
 }
 

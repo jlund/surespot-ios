@@ -43,6 +43,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self loadIdentityNames];
     [self registerForKeyboardNotifications];
     self.navigationController.navigationBar.translucent = NO;
+    [self updatePassword:[_identityNames objectAtIndex:[ _userPicker selectedRowInComponent:0]]];
+
     //  _textPassword.returnKeyType = UIReturnKeyGo;
 }
 
@@ -234,7 +236,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(void) updatePassword: (NSString *) username {
     DDLogInfo(@"user changed: %@", username);
     NSString * password = [[IdentityController sharedInstance] getStoredPasswordForIdentity:username];
-    if (![UIUtils stringIsNilOrEmpty:password]) {
+    if (password) {
         _textPassword.text = password;
         [_storePassword setOn:YES animated:NO];
     }

@@ -21,4 +21,7 @@ extern NSString *const IDENTITY_EXTENSION;
 +(void) wipeIdentityData: (NSString *) username;
 +(NSString *) getIdentityDir;
 +(NSString *) getIdentityFile: (NSString *) username;
++(void) saveSharedSecrets:(NSDictionary *) sharedSecretsDict forUsername: (NSString *) username withPassword: (NSString *) password;
++(NSDictionary *) loadSharedSecretsForUsername: (NSString *) username withPassword: (NSString *) password;
++(void) deleteSharedSecretsForUsername:  (NSString *)username;
 @end

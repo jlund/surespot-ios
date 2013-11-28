@@ -13,6 +13,7 @@
 #import "IdentityController.h"
 #import "DDLog.h"
 #import "ChatUtils.h"
+#import "EncryptionController.h"
 
 using CryptoPP::SecByteBlock;
 
@@ -23,8 +24,11 @@ NSString * const STATE_EXTENSION = @"sss";
 NSString * const CHAT_DATA_PREFIX = @"chatdata_";
 NSString * const PUBLIC_KEYS_DIR = @"publickeys";
 NSString * const IDENTITIES_DIR = @"identities";
+
 NSString * const PUBLIC_KEYS_EXTENSION = @"spk";
 NSString * const IDENTITY_EXTENSION = @"ssi";
+NSString * const SECRET_EXTENSION = @"sse";
+NSString * const SECRETS_DIR = @"secrets";
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -146,13 +150,25 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return basedir;
 }
 
-
++(NSString *) getSecretsDir {
+    NSString * basedir = [[self getAppSupportDir] stringByAppendingPathComponent:SECRETS_DIR];
+    NSError * error;
+    if (![[NSFileManager defaultManager] createDirectoryAtPath:basedir withIntermediateDirectories:YES attributes:nil error:&error]) {
+        DDLogError(@"%@", error.localizedDescription);
+    }
+    return basedir;
+}
 
 +(NSString *) getIdentityFile: (NSString *) username {
     NSString * filename = [username stringByAppendingPathExtension:IDENTITY_EXTENSION];
     return [[self getIdentityDir ] stringByAppendingPathComponent:filename];
 }
 
+
++(NSString *) getSecretsFile: (NSString *) username {
+    NSString * filename = [username stringByAppendingPathExtension:SECRET_EXTENSION];
+    return [[self getSecretsDir ] stringByAppendingPathComponent:filename];
+}
 
 +(NSString *) getDirectoryForUser: (NSString *) user {
     NSString * dir = [[[FileController getAppSupportDir] stringByAppendingPathComponent:STATE_DIR ] stringByAppendingPathComponent:user];
@@ -248,6 +264,37 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 	
 	[compressed setLength: strm.total_out];
 	return [NSData dataWithData:compressed];
+}
+
++(NSDictionary *) loadSharedSecretsForUsername: (NSString *) username withPassword: (NSString *) password {
+    NSString * filePath = [self getSecretsFile:username];
+    
+    NSData *data = [NSData dataWithContentsOfFile:filePath];
+    
+    if (data) {
+      
+        //NSError* error = nil;
+        NSData * secrets = [EncryptionController decryptData: data withPassword:password];
+        if (secrets) {
+            return [NSKeyedUnarchiver unarchiveObjectWithData:secrets];
+        }
+    }
+    
+    return nil;
+
+}
+
++(void) saveSharedSecrets:(NSDictionary *) sharedSecretsDict forUsername: (NSString *) username withPassword: (NSString *) password{
+    NSString * filePath = [self getSecretsFile:username];
+    NSData * secretData = [NSKeyedArchiver archivedDataWithRootObject:sharedSecretsDict];
+
+    NSData * encryptedSecretData = [EncryptionController encryptData:secretData withPassword:password];
+    [encryptedSecretData writeToFile:filePath atomically:TRUE];
+}
+
++(void) deleteSharedSecretsForUsername: (NSString *) username; {
+     NSString * filePath = [self getSecretsFile:username];
+    [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
 }
 
 @end

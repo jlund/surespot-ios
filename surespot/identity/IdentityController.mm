@@ -21,6 +21,7 @@
 #import "NSData+Base64.h"
 #import "KeychainItemWrapper.h"
 #import <Security/Security.h>
+#import "UIUtils.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -322,8 +323,13 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
         wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:username accessGroup:nil];
         [_keychainWrappers setObject:wrapper forKey:username];
     }
-    return [wrapper objectForKey:(__bridge id)kSecValueData];
     
+    NSString * password = [wrapper objectForKey:(__bridge id)kSecValueData];
+    if ([UIUtils stringIsNilOrEmpty:password]) {
+        return nil;
+    }
+    
+    return password;    
 }
 
 -(void) storePasswordForIdentity: (NSString *) username password: (NSString *) password {
@@ -345,6 +351,9 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     }
     [wrapper resetKeychainItem];
     [_keychainWrappers removeObjectForKey:username];
+    
+    //remove secrets from disk
+    [FileController deleteSharedSecretsForUsername:username];
 }
 
 
