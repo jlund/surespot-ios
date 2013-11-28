@@ -3,11 +3,12 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "surespot_logo.png"
+      "filename" : "surespot_logo48.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x"
+      "scale" : "2x",
+      "filename" : "surespot_logo96.png"
     }
   ],
   "info" : {
