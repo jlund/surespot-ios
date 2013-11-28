@@ -25,6 +25,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (atomic, strong) NSArray * identityNames;
 @property (atomic, strong) id progressView;
 @property (nonatomic, assign) CGFloat delta;
+@property (nonatomic, assign) CGPoint offset;
 @property (strong, nonatomic) IBOutlet UITextField *textPassword;
 @property (strong, nonatomic) IBOutlet UIPickerView *userPicker;
 
@@ -70,16 +71,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _scrollView.contentInset = contentInsets;
     _scrollView.scrollIndicatorInsets = contentInsets;
     
+    NSInteger totalHeight = self.view.frame.size.height;
+    NSInteger keyboardTop = totalHeight - kbHeight;
+    _offset = _scrollView.contentOffset;
     
     NSInteger loginButtonBottom =(_bLogin.frame.origin.y + _bLogin.frame.size.height);
-    NSInteger delta = kbHeight -  loginButtonBottom ;
-    // DDLogInfo(@"delta %d loginBottom %d", delta, loginButtonBottom);
+    NSInteger delta = keyboardTop - loginButtonBottom;
+   //  DDLogInfo(@"delta %d loginBottom %d keyboardtop: %d", delta, loginButtonBottom, keyboardTop);
     
     if (delta < 0 ) {
         
         
-        CGPoint scrollPoint = CGPointMake(0.0, _bLogin.frame.origin.y - kbHeight  - delta);
-        //  DDLogInfo(@"scrollPoint y: %f", scrollPoint.y);
+        CGPoint scrollPoint = CGPointMake(0.0, -delta);
+       //  DDLogInfo(@"scrollPoint y: %f", scrollPoint.y);
         [_scrollView setContentOffset:scrollPoint animated:YES];
     }
 }
@@ -89,6 +93,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     UIEdgeInsets contentInsets = UIEdgeInsetsZero;
     _scrollView.contentInset = contentInsets;
     _scrollView.scrollIndicatorInsets = contentInsets;
+    [_scrollView setContentOffset:_offset animated:YES];
 }
 
 
