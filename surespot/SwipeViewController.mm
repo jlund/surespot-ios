@@ -367,7 +367,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     
                     UITableView * tableView = [_chats objectForKey:key];
                     [self scrollTableViewToCell:tableView indexPath:indexPath];
-                                    [_bottomIndexPaths removeObjectForKey:key ];
+                    [_bottomIndexPaths removeObjectForKey:key ];
                 }
             }
         }
@@ -490,8 +490,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (currPage == 0) {
         [[ChatController sharedInstance] setCurrentChat:nil];
         tableview = _friendView;
-        [_textField resignFirstResponder];
-        [_inviteField resignFirstResponder];
         
         //stop pulsing
         [UIUtils stopPulseAnimation:_backImageView];
@@ -509,6 +507,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         //update button
         [self updateTabChangeUI];
+        [self updateKeyboardState:YES];
         
     }
     else {
@@ -556,6 +555,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 
                 //update button
                 [self updateTabChangeUI];
+                [self updateKeyboardState:NO];
             }
         }
     }
@@ -1058,7 +1058,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             
             [[ChatController sharedInstance] inviteUser:text];
-            [_inviteField resignFirstResponder];
             [_inviteField setText:nil];
             [self updateTabChangeUI];
             return YES;
@@ -1082,7 +1081,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         else {
             [_inviteField resignFirstResponder];
-            
             [_textField resignFirstResponder];
             return NO;
         }
@@ -1114,6 +1112,24 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [_textField setText:nil];
     
     [self updateTabChangeUI];
+}
+
+
+//if we're going to chat tab from home tab and keyboard is showing
+//become the first esponder so we're not typing in the invite field
+//thinking we're typing in the text field
+-(void) updateKeyboardState: (BOOL) goingHome {
+    if (goingHome) {
+        [_inviteField resignFirstResponder];
+        [_textField resignFirstResponder];
+    }
+    else {
+        if ([_inviteField isFirstResponder]) {
+            [_inviteField resignFirstResponder];
+            
+            [_textField becomeFirstResponder];
+        }
+    }    
 }
 
 -(void) updateTabChangeUI {
