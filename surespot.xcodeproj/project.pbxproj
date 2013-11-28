@@ -105,9 +105,9 @@
 		66E4F5C417629B6400596E6B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E4F5C317629B6400596E6B /* Security.framework */; };
 		66E6536A17B043D2000F81BD /* CredentialCachingController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66E6536917B043D2000F81BD /* CredentialCachingController.mm */; };
 		66E6537017B0583F000F81BD /* PublicKeys.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66E6536F17B0583F000F81BD /* PublicKeys.mm */; };
-		66E70AB51847F98200433D6F /* GTMOAuth2ViewTouch.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66E70AB41847F98200433D6F /* GTMOAuth2ViewTouch.xib */; };
 		66E70AB81847F9E400433D6F /* GTLDrive_Sources.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E70AB71847F9E400433D6F /* GTLDrive_Sources.m */; };
 		66E70AB91847FBE000433D6F /* libGTLTouchStaticLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E70AAC1847F88E00433D6F /* libGTLTouchStaticLib.a */; };
+		66E70ABB18480C1F00433D6F /* GTMOAuth2ViewTouch.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66E70ABA18480C1F00433D6F /* GTMOAuth2ViewTouch.xib */; };
 		66EC610B176E494900937467 /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EC60F9176E494900937467 /* AFHTTPClient.m */; };
 		66EC610C176E494900937467 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EC60FB176E494900937467 /* AFHTTPRequestOperation.m */; };
 		66EC610D176E494900937467 /* AFImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EC60FD176E494900937467 /* AFImageRequestOperation.m */; };
@@ -482,9 +482,9 @@
 		66E6536F17B0583F000F81BD /* PublicKeys.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PublicKeys.mm; path = identity/PublicKeys.mm; sourceTree = "<group>"; };
 		66E70AA21847F88E00433D6F /* GTL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GTL.xcodeproj; path = "../../../libs/ios/google/google-api-objectivec-client-read-only/Source/GTL.xcodeproj"; sourceTree = "<group>"; };
 		66E70AB21847F8E100433D6F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
-		66E70AB41847F98200433D6F /* GTMOAuth2ViewTouch.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = GTMOAuth2ViewTouch.xib; path = "../../libs/ios/google/google-api-objectivec-client-read-only/Source/OAuth2/Touch/GTMOAuth2ViewTouch.xib"; sourceTree = "<group>"; };
 		66E70AB61847F9D900433D6F /* GTLDrive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GTLDrive.h; sourceTree = "<group>"; };
 		66E70AB71847F9E400433D6F /* GTLDrive_Sources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLDrive_Sources.m; sourceTree = "<group>"; };
+		66E70ABA18480C1F00433D6F /* GTMOAuth2ViewTouch.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GTMOAuth2ViewTouch.xib; sourceTree = "<group>"; };
 		66EC60F8176E494900937467 /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
 		66EC60F9176E494900937467 /* AFHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AFHTTPClient.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		66EC60FA176E494900937467 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
@@ -630,7 +630,7 @@
 		6604A2C517626B9E0072216A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				66E70AB41847F98200433D6F /* GTMOAuth2ViewTouch.xib */,
+				66E70ABA18480C1F00433D6F /* GTMOAuth2ViewTouch.xib */,
 				6621BB861762704D00BC2850 /* Localizable.strings */,
 				6604A2C617626B9E0072216A /* surespot-Info.plist */,
 				6604A2C717626B9E0072216A /* InfoPlist.strings */,
@@ -1302,6 +1302,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66E70ABB18480C1F00433D6F /* GTMOAuth2ViewTouch.xib in Resources */,
 				66E21E001847E1220005D91E /* Settings.bundle in Resources */,
 				6604A2C917626B9E0072216A /* InfoPlist.strings in Resources */,
 				6604A2D817626B9E0072216A /* MainStoryboard.storyboard in Resources */,
@@ -1310,7 +1311,6 @@
 				66E21E091847EB670005D91E /* RestoreIdentityViewController.xib in Resources */,
 				66A2D90F183A730D00785270 /* OurMessageCell.xib in Resources */,
 				6640766C1822A84C00BFD974 /* HomeCell.xib in Resources */,
-				66E70AB51847F98200433D6F /* GTMOAuth2ViewTouch.xib in Resources */,
 				66A2D910183A730D00785270 /* TheirMessageCell.xib in Resources */,
 				66E21E0B1847EE2B0005D91E /* BackupIdentityView.xib in Resources */,
 			);
