@@ -30,7 +30,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="SW9-JJ-OEP">
-                                <rect key="frame" x="91" y="258" width="138" height="46"/>
+                                <rect key="frame" x="91" y="280" width="138" height="46"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
                                 <inset key="insetFor6xAndEarlier" minX="0.0" minY="-10" maxX="0.0" maxY="10"/>
                                 <state key="normal" title="login">
@@ -60,17 +60,26 @@
                                     <outlet property="delegate" destination="2" id="yaU-74-A3F"/>
                                 </connections>
                             </pickerView>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="Ovg-Yc-56c">
-                                <rect key="frame" x="248" y="224" width="51" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </switch>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="store password in keychain" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Rqw-SE-Rx5">
-                                <rect key="frame" x="77" y="229" width="167" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <view contentMode="scaleToFill" id="CiP-xm-RW8">
+                                <rect key="frame" x="23" y="234" width="274" height="48"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="store password in keychain" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Rqw-SE-Rx5">
+                                        <rect key="frame" x="13" y="5" width="167" height="21"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <inset key="insetFor6xAndEarlier" minX="0.0" minY="-10" maxX="0.0" maxY="10"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="Ovg-Yc-56c">
+                                        <rect key="frame" x="216" y="0.0" width="51" height="31"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <inset key="insetFor6xAndEarlier" minX="0.0" minY="-10" maxX="0.0" maxY="10"/>
+                                    </switch>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
