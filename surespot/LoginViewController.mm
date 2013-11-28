@@ -45,7 +45,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self registerForKeyboardNotifications];
     self.navigationController.navigationBar.translucent = NO;
     [self updatePassword:[_identityNames objectAtIndex:[ _userPicker selectedRowInComponent:0]]];
-
+    [self.storePassword setTintColor:[UIUtils surespotBlue]];
+    [self.storePassword setOnTintColor:[UIUtils surespotBlue]];
     //  _textPassword.returnKeyType = UIReturnKeyGo;
 }
 
