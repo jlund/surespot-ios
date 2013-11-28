@@ -71,6 +71,7 @@
 		66D3B04F182EAB4200B37A6C /* surespot.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66D3B04E182EAB4200B37A6C /* surespot.xcassets */; };
 		66DC2D53183E513D003CC54B /* MessageIndicatorNewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66DC2D52183E513D003CC54B /* MessageIndicatorNewView.m */; };
 		66E21D94184545790005D91E /* FilledRectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E21D93184545790005D91E /* FilledRectView.m */; };
+		66E21DCA1846A76C0005D91E /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E21DC91846A76C0005D91E /* KeychainItemWrapper.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		66E4F5B6176298CB00596E6B /* libcryptopp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E4F5A1176298CB00596E6B /* libcryptopp.a */; };
 		66E4F5B7176298CB00596E6B /* SocketIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5A4176298CB00596E6B /* SocketIO.m */; };
 		66E4F5B8176298CB00596E6B /* SocketIOJSONSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5A6176298CB00596E6B /* SocketIOJSONSerialization.m */; };
@@ -231,6 +232,8 @@
 		66DC2D52183E513D003CC54B /* MessageIndicatorNewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageIndicatorNewView.m; path = home/MessageIndicatorNewView.m; sourceTree = "<group>"; };
 		66E21D92184545790005D91E /* FilledRectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilledRectView.h; path = chat/FilledRectView.h; sourceTree = "<group>"; };
 		66E21D93184545790005D91E /* FilledRectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilledRectView.m; path = chat/FilledRectView.m; sourceTree = "<group>"; };
+		66E21DC81846A76C0005D91E /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
+		66E21DC91846A76C0005D91E /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
 		66E4F51A176298CB00596E6B /* 3way.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 3way.h; sourceTree = "<group>"; };
 		66E4F51B176298CB00596E6B /* adler32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adler32.h; sourceTree = "<group>"; };
 		66E4F51C176298CB00596E6B /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
@@ -498,6 +501,7 @@
 		6604A2C417626B9E0072216A /* surespot */ = {
 			isa = PBXGroup;
 			children = (
+				66E21DC418467F4B0005D91E /* keychain */,
 				6640766A1822A7E900BFD974 /* home */,
 				66B3C8EA17B15F0C00CC96EE /* chat */,
 				66EC6114176E49C900937467 /* network */,
@@ -723,6 +727,15 @@
 				66E21D93184545790005D91E /* FilledRectView.m */,
 			);
 			name = chat;
+			sourceTree = "<group>";
+		};
+		66E21DC418467F4B0005D91E /* keychain */ = {
+			isa = PBXGroup;
+			children = (
+				66E21DC81846A76C0005D91E /* KeychainItemWrapper.h */,
+				66E21DC91846A76C0005D91E /* KeychainItemWrapper.m */,
+			);
+			name = keychain;
 			sourceTree = "<group>";
 		};
 		66E4F517176298CB00596E6B /* libs */ = {
@@ -1109,6 +1122,7 @@
 				667EFF8F183EB664002C0406 /* SurespotMessage.m in Sources */,
 				66A2D915183A732900785270 /* LoadingView.m in Sources */,
 				6604A2CB17626B9E0072216A /* main.m in Sources */,
+				66E21DCA1846A76C0005D91E /* KeychainItemWrapper.m in Sources */,
 				665F4DF81831923C0083BCE7 /* REMenuItem.m in Sources */,
 				66D3B04D182D47DF00B37A6C /* SurespotLogFormatter.m in Sources */,
 				6604A2CF17626B9E0072216A /* SurespotAppDelegate.mm in Sources */,

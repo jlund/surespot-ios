@@ -19,6 +19,8 @@
 #import "ChatController.h"
 #import "DDLog.h"
 #import "NSData+Base64.h"
+#import "KeychainItemWrapper.h"
+#import <Security/Security.h>
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -28,6 +30,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 @interface IdentityController()
 @property  (nonatomic, strong) SurespotIdentity * loggedInIdentity;
+@property (nonatomic, strong) NSMutableDictionary * keychainWrappers;
 @end
 
 @implementation IdentityController
@@ -37,6 +40,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     static dispatch_once_t oncePredicate;
     dispatch_once(&oncePredicate, ^{
         sharedInstance = [[self alloc] init];
+        sharedInstance.keychainWrappers = [NSMutableDictionary new];
     });
     
     return sharedInstance;
@@ -187,7 +191,8 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     NSString * file;
     for (file in dirfiles) {
         if ([[file pathExtension] isEqualToString:IDENTITY_EXTENSION]) {
-            [identityNames addObject: [file stringByDeletingPathExtension] ];
+            NSString * name =[file stringByDeletingPathExtension] ;
+            [identityNames addObject:name ];
         }
     }
     return identityNames;
@@ -304,5 +309,38 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     //then wipe the messages saved by logging out
     [FileController wipeIdentityData: username];
 }
+
+-(NSString *) getStoredPasswordForIdentity: (NSString *) username {
+    KeychainItemWrapper * wrapper = [_keychainWrappers objectForKey:username];
+    if (!wrapper) {
+        wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:username accessGroup:nil];
+        [_keychainWrappers setObject:wrapper forKey:username];
+    }
+    return [wrapper objectForKey:(__bridge id)kSecValueData];
+    
+}
+
+-(void) storePasswordForIdentity: (NSString *) username password: (NSString *) password {
+    //save password in keychain
+    KeychainItemWrapper * wrapper = [_keychainWrappers objectForKey:username];
+    if (!wrapper) {
+        wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:username accessGroup:nil];
+        [_keychainWrappers setObject:wrapper forKey:username];
+    }
+    
+    [wrapper setObject:password forKey:(__bridge id)kSecValueData];
+    
+}
+
+-(void) clearStoredPasswordForIdentity: (NSString *) username {
+    KeychainItemWrapper * wrapper = [_keychainWrappers objectForKey:username];
+    if (!wrapper) {
+        wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:username accessGroup:nil];
+    }
+    [wrapper resetKeychainItem];
+    [_keychainWrappers removeObjectForKey:username];
+}
+
+
 
 @end

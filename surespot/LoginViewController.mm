@@ -25,6 +25,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (atomic, strong) NSArray * identityNames;
 @property (atomic, strong) id progressView;
 @property (nonatomic, assign) CGFloat delta;
+@property (strong, nonatomic) IBOutlet UITextField *textPassword;
+@property (strong, nonatomic) IBOutlet UIPickerView *userPicker;
+
+- (IBAction)login:(id)sender;
+@property (strong, nonatomic) IBOutlet UIButton *bLogin;
+@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (strong, nonatomic) IBOutlet UISwitch *storePassword;
 @end
 
 @implementation LoginViewController
@@ -61,16 +68,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _scrollView.contentInset = contentInsets;
     _scrollView.scrollIndicatorInsets = contentInsets;
     
-
+    
     NSInteger loginButtonBottom =(_bLogin.frame.origin.y + _bLogin.frame.size.height);
     NSInteger delta = kbHeight -  loginButtonBottom ;
-   // DDLogInfo(@"delta %d loginBottom %d", delta, loginButtonBottom);
-
+    // DDLogInfo(@"delta %d loginBottom %d", delta, loginButtonBottom);
+    
     if (delta < 0 ) {
         
-
+        
         CGPoint scrollPoint = CGPointMake(0.0, _bLogin.frame.origin.y - kbHeight  - delta);
-      //  DDLogInfo(@"scrollPoint y: %f", scrollPoint.y);
+        //  DDLogInfo(@"scrollPoint y: %f", scrollPoint.y);
         [_scrollView setContentOffset:scrollPoint animated:YES];
     }
 }
@@ -137,7 +144,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
          successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
              DDLogVerbose(@"login response: %d",  [response statusCode]);
              
-             
+             if (_storePassword.isOn) {
+                 [[IdentityController sharedInstance] storePasswordForIdentity:username password:password];
+             }
+             else {
+                 [[IdentityController sharedInstance] clearStoredPasswordForIdentity:username];
+             }
              
              [[IdentityController sharedInstance] userLoggedInWithIdentity:identity];
              [self performSegueWithIdentifier: @"loginToMainSegue" sender: nil ];
@@ -203,6 +215,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(IBAction) returnToLogin:(UIStoryboardSegue *) segue {
     [self loadIdentityNames];
     [_userPicker reloadAllComponents];
+    [self updatePassword:[_identityNames objectAtIndex:[ _userPicker selectedRowInComponent:0]]];
 }
 
 
@@ -212,5 +225,24 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return (newLength >= 256) ? NO : YES;
 }
 
+-(void) pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+    NSString * selectedUser = [_identityNames objectAtIndex:row];
+    [self updatePassword:selectedUser];
+    
+  }
+
+-(void) updatePassword: (NSString *) username {
+    DDLogInfo(@"user changed: %@", username);
+    NSString * password = [[IdentityController sharedInstance] getStoredPasswordForIdentity:username];
+    if (![UIUtils stringIsNilOrEmpty:password]) {
+        _textPassword.text = password;
+        [_storePassword setOn:YES animated:NO];
+    }
+    else {
+        _textPassword.text = nil;
+        [_storePassword setOn:NO animated:NO];
+    }
+
+}
 
 @end

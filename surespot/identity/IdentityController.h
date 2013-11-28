@@ -33,4 +33,7 @@
 -(void) savePublicKeys: (NSDictionary * ) keys username: (NSString *)username version: (NSString *)version;
 -(void) updateLatestVersionForUsername: (NSString *) username version: (NSString * ) version;
 -(void) logout;
+-(NSString *) getStoredPasswordForIdentity: (NSString *) username;
+-(void) storePasswordForIdentity: (NSString *) username password: (NSString *) password;
+-(void) clearStoredPasswordForIdentity: (NSString *) username;
 @end
