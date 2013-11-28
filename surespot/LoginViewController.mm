@@ -48,6 +48,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.storePassword setTintColor:[UIUtils surespotBlue]];
     [self.storePassword setOnTintColor:[UIUtils surespotBlue]];
     //  _textPassword.returnKeyType = UIReturnKeyGo;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resume:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    
 }
 
 // Call this method somewhere in your view controller setup code.
@@ -251,6 +254,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [_storePassword setOn:NO animated:NO];
     }
 
+}
+
+
+-(void) resume:(NSNotification *)notification {
+    DDLogInfo(@"resume");
+    [_textPassword resignFirstResponder];
 }
 
 @end
