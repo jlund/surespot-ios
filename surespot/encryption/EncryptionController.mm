@@ -32,7 +32,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 int const IV_LENGTH = 16;
 int const SALT_LENGTH = 16;
 int const AES_KEY_LENGTH = 32;
-int const PBKDF_ROUNDS = 1000;
+int const PBKDF_ROUNDS_LEGACY = 1000;
+int const PBKDF_ROUNDS = 20000;
 
 +(ECDSAPPublicKey) serverPublicKey {
     static ECDSAPPublicKey serverPublicKey;
@@ -45,7 +46,24 @@ int const PBKDF_ROUNDS = 1000;
     return serverPublicKey;
 }
 
-+ (NSData *) encryptData:(NSData *) data withPassword:(NSString *) password
++ (NSData *) encryptIdentity:(NSData *) data withPassword:(NSString *) password {
+    return [self encryptData:data withPassword:password andRounds:PBKDF_ROUNDS_LEGACY];
+}
+
++ (NSData *) decryptIdentity:(NSData *) data withPassword:(NSString *) password {
+    return [self decryptData:data withPassword:password andRounds:PBKDF_ROUNDS_LEGACY];
+}
+
++ (NSData *) encryptData:(NSData *) data withPassword:(NSString *) password {
+    return [self encryptData:data withPassword:password andRounds:PBKDF_ROUNDS];
+}
+
++ (NSData *) decryptData:(NSData *) data withPassword:(NSString *) password  {
+    return [self decryptData:data withPassword:password andRounds:PBKDF_ROUNDS];
+}
+
+
++ (NSData *) encryptData:(NSData *) data withPassword:(NSString *) password andRounds: (NSInteger) rounds
 {
     int length = [data length];
     byte * identityBytes = (byte*)[data bytes];
@@ -55,7 +73,7 @@ int const PBKDF_ROUNDS = 1000;
     rng.GenerateBlock(ivBytes, IV_LENGTH);
     
     //derive password and salt
-    NSDictionary * derived =[self deriveKeyFromPassword:password];
+    NSDictionary * derived =[self deriveKeyFromPassword:password andRounds: rounds];
     
     //encrypt the identity data
     byte * keyBytes = (byte *)[[derived objectForKey:@"key"] bytes];
@@ -81,7 +99,7 @@ int const PBKDF_ROUNDS = 1000;
     return returnData;
 }
 
-+ (NSData *) decryptData:(NSData *) data withPassword:(NSString *) password
++ (NSData *) decryptData:(NSData *) data withPassword:(NSString *) password andRounds: (NSInteger) rounds
 {
 
     byte * identityBytes = (byte*)[data bytes];
@@ -95,9 +113,8 @@ int const PBKDF_ROUNDS = 1000;
     memcpy(saltBytes, identityBytes + IV_LENGTH, SALT_LENGTH);
     memcpy(cipherByte, identityBytes + IV_LENGTH + SALT_LENGTH, cipherLength);
     
-    NSData * key = [self deriveKeyUsingPassword: password andSalt:[NSData dataWithBytes:saltBytes length:SALT_LENGTH]];
-    
-    
+    NSData * key = [self deriveKeyUsingPassword: password andSalt:[NSData dataWithBytes:saltBytes length:SALT_LENGTH] andRounds:rounds];
+        
     GCM<AES>::Decryption d;
     d.SetKeyWithIV((byte *)[key bytes], AES_KEY_LENGTH, ivBytes,IV_LENGTH);
     
@@ -177,17 +194,27 @@ int const PBKDF_ROUNDS = 1000;
 }
 
 +(NSData *) deriveKeyUsingPassword:(NSString *)password andSalt:(NSData *)salt {
+    return [self deriveKeyUsingPassword:password andSalt:salt andRounds:PBKDF_ROUNDS_LEGACY];
+}
+
++(NSData *) deriveKeyUsingPassword:(NSString *)password andSalt:(NSData *)salt andRounds: (NSInteger) rounds {
     
     byte * bytes = new byte[AES_KEY_LENGTH];
     NSData * passwordData = [password dataUsingEncoding:NSUTF8StringEncoding];
     byte * passwordBytes = (byte *) [passwordData bytes];
     
     CryptoPP::PKCS5_PBKDF2_HMAC<SHA256> kdf;
-    kdf.DeriveKey(bytes, AES_KEY_LENGTH, 0, passwordBytes, [passwordData length], (byte *)[salt bytes],  SALT_LENGTH, PBKDF_ROUNDS, 0);
+    kdf.DeriveKey(bytes, AES_KEY_LENGTH, 0, passwordBytes, [passwordData length], (byte *)[salt bytes],  SALT_LENGTH, rounds, 0);
     return [NSData dataWithBytes:bytes length:AES_KEY_LENGTH];
 }
 
 + (NSDictionary *) deriveKeyFromPassword: (NSString *) password {
+    return [self deriveKeyFromPassword:password andRounds:PBKDF_ROUNDS_LEGACY];
+}
+
++ (NSDictionary *) deriveKeyFromPassword: (NSString *) password andRounds: (NSInteger) rounds {
+    
+
     NSMutableDictionary * derived = [[NSMutableDictionary alloc] initWithCapacity:2];
     CryptoPP::SecByteBlock keyBytes(AES_KEY_LENGTH);
     CryptoPP::SecByteBlock saltBytes(SALT_LENGTH);
@@ -199,7 +226,7 @@ int const PBKDF_ROUNDS = 1000;
     CryptoPP::PKCS5_PBKDF2_HMAC<SHA256> kdf;
     NSData * passwordData = [password dataUsingEncoding:NSUTF8StringEncoding];
     
-    kdf.DeriveKey(keyBytes, AES_KEY_LENGTH, 0, (byte *)[passwordData bytes], [passwordData length], saltBytes,  SALT_LENGTH, PBKDF_ROUNDS, 0);
+    kdf.DeriveKey(keyBytes, AES_KEY_LENGTH, 0, (byte *)[passwordData bytes], [passwordData length], saltBytes,  SALT_LENGTH, rounds, 0);
     
     [derived setObject:[NSData dataWithBytes:keyBytes length:AES_KEY_LENGTH] forKey:@"key"];
     return derived;

@@ -86,10 +86,14 @@ typedef CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey ECDSAPublicKey;
 extern int const IV_LENGTH;
 extern int const SALT_LENGTH;
 extern int const AES_KEY_LENGTH;
+extern int const PBKDF_ROUNDS;
 
 @interface EncryptionController : NSObject
 + (NSData *) encryptData:(NSData *) data withPassword:(NSString *) password;
 + (NSData *) decryptData:(NSData *) data withPassword:(NSString *) password;
+
++ (NSData *) encryptIdentity:(NSData *) data withPassword:(NSString *) password;
++ (NSData *) decryptIdentity:(NSData *) data withPassword:(NSString *) password;
 + (ECDHPrivateKey) recreateDhPrivateKey:(NSString *) encodedKey;
 + (ECDSAPrivateKey) recreateDsaPrivateKey:(NSString *) encodedKey;
 + (NSData *) deriveKeyUsingPassword: (NSString *) password andSalt: (NSData *) salt;

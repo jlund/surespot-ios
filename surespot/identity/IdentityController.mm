@@ -75,7 +75,7 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
         //gunzip the identity data
         //NSError* error = nil;
         NSData* unzipped = [myData gzipInflate];
-        NSData * identity = [EncryptionController decryptData: unzipped withPassword:[password stringByAppendingString:CACHE_IDENTITY_ID]];
+        NSData * identity = [EncryptionController decryptIdentity: unzipped withPassword:[password stringByAppendingString:CACHE_IDENTITY_ID]];
         if (identity) {
             return [self decodeIdentityData:identity withUsername:username andPassword:password];
         }
@@ -111,7 +111,7 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     NSError * error;
     NSData * jsonIdentity = [NSJSONSerialization dataWithJSONObject:dic options:kNilOptions error:&error];
     //  NSString * jsonString = [[NSString alloc] initWithData:jsonIdentity encoding:NSUTF8StringEncoding];
-    return [EncryptionController encryptData:jsonIdentity withPassword:password];
+    return [EncryptionController encryptIdentity:jsonIdentity withPassword:password];
     
 }
 
