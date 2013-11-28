@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface RestoreIdentityViewController : UIViewController
+- (IBAction)bLoadIdentities:(id)sender;
 
 @end
