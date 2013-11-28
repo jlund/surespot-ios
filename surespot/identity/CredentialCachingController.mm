@@ -72,17 +72,20 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) logout {
+    [_sharedSecretsDict removeAllObjects];
+    [_publicKeysDict removeAllObjects];
+    [_latestVersionsDict removeAllObjects];
+    _loggedInIdentity = nil;
+}
+
+-(void) saveSharedSecrets {
     //save encrypted shared secrets to disk if we have a password in the keychain for this user
     NSString * password = [[IdentityController sharedInstance] getStoredPasswordForIdentity:_loggedInIdentity.username];
     if (password) {
         [FileController saveSharedSecrets: _sharedSecretsDict forUsername: _loggedInIdentity.username withPassword:password];
         DDLogInfo(@"saved %d encrypted secrets to disk", [_sharedSecretsDict count]);
     }
-   
-    [_sharedSecretsDict removeAllObjects];
-    [_publicKeysDict removeAllObjects];
-    [_latestVersionsDict removeAllObjects];
-    _loggedInIdentity = nil;
+
 }
 
 -(void) clearUserData: (NSString *) friendname {
@@ -148,5 +151,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
     }
 }
+
+
+-(void) cacheSharedSecret: secret forKey: sharedSecretKey {
+    [_sharedSecretsDict setObject:secret forKey:sharedSecretKey];
+    [self saveSharedSecrets];
+}
+
 
 @end

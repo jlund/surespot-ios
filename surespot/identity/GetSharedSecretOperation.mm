@@ -20,6 +20,7 @@
 #import "IdentityController.h"
 #import "DDLog.h"
 #import "SurespotConstants.h"
+#import "FileController.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -98,8 +99,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                               theirPublicKey:[publicKeys dhPubKey]
                                                               completionCallback:^(NSData * secret) {
                 //store shared key in dictionary
-                DDLogVerbose(@"caching shared secret %@ for %@", secret, sharedSecretKey);
-                [self.cache.sharedSecretsDict setObject:secret forKey:sharedSecretKey];
+                [self.cache cacheSharedSecret: secret forKey: sharedSecretKey];
                 [self finish:secret];
             }];
             
@@ -130,8 +130,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                        theirPublicKey:[keys dhPubKey]
                                                                                                        completionCallback:^(NSData * secret) {
                                                          //store shared key in dictionary
-                                                         DDLogVerbose(@"caching shared secret %@ for %@", secret, sharedSecretKey);
-                                                         [self.cache.sharedSecretsDict setObject:secret forKey:sharedSecretKey];
+                                                         DDLogVerbose(@"caching shared secret %@ for %@", secret, sharedSecretKey);                                                                                                          [self.cache cacheSharedSecret: secret forKey: sharedSecretKey];
                                                          [self finish:secret];
                                                      }];
                                                      

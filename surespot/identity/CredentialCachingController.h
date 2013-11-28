@@ -32,4 +32,5 @@
 
 -(void) logout;
 -(void) clearIdentityData:(NSString *) username;
+-(void) cacheSharedSecret: secret forKey: sharedSecretKey;
 @end
