@@ -32,7 +32,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     static dispatch_once_t oncePredicate;
     dispatch_once(&oncePredicate, ^{
         sharedInstance = [[self alloc] init];
-        sharedInstance.identities = [[NSMutableDictionary alloc] init];
         sharedInstance.sharedSecretsDict = [[NSMutableDictionary alloc] init];
         sharedInstance.publicKeysDict = [[NSMutableDictionary alloc] init];
         sharedInstance.latestVersionsDict = [[NSMutableDictionary alloc] init];
@@ -53,7 +52,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     DDLogVerbose(@"getSharedSecretForOurVersion, queue size: %d", [_getSecretQueue operationCount] );
     
-    GetSharedSecretOperation * op = [[GetSharedSecretOperation alloc] initWithCache:self ourUsername:self.loggedInUsername ourVersion:ourVersion theirUsername:theirUsername theirVersion:theirVersion callback:callback];
+    GetSharedSecretOperation * op = [[GetSharedSecretOperation alloc] initWithCache:self ourVersion:ourVersion theirUsername:theirUsername theirVersion:theirVersion callback:callback];
     
     [self.getSecretQueue addOperation:op];
     
@@ -61,25 +60,38 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 //todo cahe cookie
 -(void) loginIdentity: (SurespotIdentity *) identity {
-    self.loggedInUsername = [identity username];
-    [self.identities setObject:identity forKey:self.loggedInUsername];
+    self.loggedInIdentity = identity;
+    
+    //todo load encrypted shared secrets from disk
+    
+    
 }
 
--(SurespotIdentity *) getIdentityWithUsername: (NSString *) username {
-    return [self.identities objectForKey:username];
+-(void) logout {
+    //save encrypted shared secrets to disk
+    
+    NSData * secrets = [NSKeyedArchiver archivedDataWithRootObject:_sharedSecretsDict];
+    
+    
+    
+    _loggedInIdentity = nil;
+    
 }
+
+
+
 
 -(void) clearUserData: (NSString *) friendname {
     [_latestVersionsDict removeObjectForKey:friendname];
     
-    //    NSString * sharedSecretKey = [NSString stringWithFormat:@"%@:%@:%@:%@", self.cache.loggedInUsername, self.ourVersion, self.theirUsername, self.theirVersion];
+    //    NSString * sharedSecretKey = [NSString stringWithFormat:@"%@:%@:%@",self.ourVersion, self.theirUsername, self.theirVersion];
     //      NSString * publicKeysKey = [NSString stringWithFormat:@"%@:%@", self.theirUsername, self.theirVersion];
     
     NSMutableArray * keysToRemove = [NSMutableArray new];
     //iterate through shared secret keys and delete those that match the passed in user
     for (NSString * key in [_sharedSecretsDict allKeys]) {
         NSArray * keyComponents = [key componentsSeparatedByString:@":"];
-        if ([[keyComponents objectAtIndex:0] isEqualToString:_loggedInUsername] && [[keyComponents objectAtIndex:2] isEqualToString:friendname] ) {
+        if ([[keyComponents objectAtIndex:1] isEqualToString:friendname] ) {
             DDLogInfo(@"removing shared secret for: %@", key);
             [keysToRemove addObject:key];
         }
@@ -87,7 +99,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [_sharedSecretsDict removeObjectsForKeys:keysToRemove];
     
-    //TODO public keys for this user will get removed for all identities
     keysToRemove = [NSMutableArray new];
     //iterate through public keys and delete those that match the passed in user
     for (NSString * key in [_publicKeysDict allKeys]) {
@@ -102,30 +113,31 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
 }
 
--(void) logout {
-    if (_loggedInUsername) {
-        [_identitiesDict removeObjectForKey:_loggedInUsername];
-        self.loggedInUsername = nil;
-    }
-}
 
 -(void) clearIdentityData:(NSString *) username {
-    
+    if ([username isEqualToString:_loggedInIdentity.username]) {
     //remove cached shared secrets for the identity
-    //    NSString * sharedSecretKey = [NSString stringWithFormat:@"%@:%@:%@:%@", self.cache.loggedInUsername, self.ourVersion, self.theirUsername, self.theirVersion];
+    //    NSString * sharedSecretKey = [NSString stringWithFormat:@"%@:%@:%@", self.ourVersion, self.theirUsername, self.theirVersion];
     
-    NSMutableArray * keysToRemove = [NSMutableArray new];
-    //iterate through shared secret keys and delete those that match the passed in user
-    for (NSString * key in [_sharedSecretsDict allKeys]) {
-        NSArray * keyComponents = [key componentsSeparatedByString:@":"];
-        if ([[keyComponents objectAtIndex:0] isEqualToString:username]) {
-            DDLogInfo(@"removing shared secret for: %@", key);
-            [keysToRemove addObject:key];
-        }
+//    NSMutableArray * keysToRemove = [NSMutableArray new];
+//    //iterate through shared secret keys and delete those that match the passed in user
+//    for (NSString * key in [_sharedSecretsDict allKeys]) {
+//        NSArray * keyComponents = [key componentsSeparatedByString:@":"];
+//        if ([[keyComponents objectAtIndex:0] isEqualToString:username]) {
+//            DDLogInfo(@"removing shared secret for: %@", key);
+//            [keysToRemove addObject:key];
+//        }
+//    }
+//    
+//    [_sharedSecretsDict removeObjectsForKeys:keysToRemove];
+        [_sharedSecretsDict removeAllObjects];
+        [_publicKeysDict removeAllObjects];
+        [_latestVersionsDict removeAllObjects];
     }
-    
-    [_sharedSecretsDict removeObjectsForKeys:keysToRemove];
-    
+    else {
+            //wipe data from disk
+        
+    }
     
 }
 

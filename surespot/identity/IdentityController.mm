@@ -31,6 +31,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @interface IdentityController()
 @property  (nonatomic, strong) SurespotIdentity * loggedInIdentity;
 @property (nonatomic, strong) NSMutableDictionary * keychainWrappers;
+@property (nonatomic, strong) NSMutableDictionary * identities;
 @end
 
 @implementation IdentityController
@@ -41,6 +42,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     dispatch_once(&oncePredicate, ^{
         sharedInstance = [[self alloc] init];
         sharedInstance.keychainWrappers = [NSMutableDictionary new];
+        sharedInstance.identities = [NSMutableDictionary new];
     });
     
     return sharedInstance;
@@ -52,9 +54,11 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
 
 
 - (SurespotIdentity *) getIdentityWithUsername:(NSString *) username andPassword:(NSString *) password {
-    SurespotIdentity * identity = [[CredentialCachingController sharedInstance] getIdentityWithUsername:username];
+
+    SurespotIdentity * identity = [_identities objectForKey:username];
     if (!identity) {
         identity = [self loadIdentityUsername: (NSString *) username password:password];
+        
     }
     return identity;
     
@@ -304,7 +308,9 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     //make sure we wipe the identity file first so it doesn't show when we return to login screen
     [FileController wipeIdentityData: username];
     [[NetworkController sharedInstance] setUnauthorized];
+  
     [[CredentialCachingController sharedInstance] clearIdentityData:username];
+    
     
     //then wipe the messages saved by logging out
     [FileController wipeIdentityData: username];
