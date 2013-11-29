@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RestoreIdentityViewController : UIViewController
+@interface RestoreIdentityViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
 - (IBAction)bLoadIdentities:(id)sender;
 
 @end

@@ -9,13 +9,24 @@
 #import "RestoreIdentityViewController.h"
 #import "GTLDrive.h"
 #import "GTMOAuth2ViewControllerTouch.h"
+#import "DDLog.h"
+#import "SurespotConstants.h"
+
+#ifdef DEBUG
+static const int ddLogLevel = LOG_LEVEL_INFO;
+#else
+static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
 
 static NSString *const kKeychainItemName = @"Google Drive surespot";
 static NSString *const kClientID = @"428168563991-rsb9bkasjio1lbh9s4rd8tmi189gfqv0.apps.googleusercontent.com";
 static NSString *const kClientSecret = @"fcqLFxhN1OxonKFIoJG3NcJA";
+static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 
 @interface RestoreIdentityViewController ()
-@property (nonatomic, retain) GTLServiceDrive *driveService;
+@property (strong, nonatomic) IBOutlet UITableView *tvDrive;
+@property (nonatomic, strong) GTLServiceDrive *driveService;
+@property (strong) NSMutableArray * driveIdentities;
 @end
 
 @implementation RestoreIdentityViewController
@@ -33,6 +44,10 @@ static NSString *const kClientSecret = @"fcqLFxhN1OxonKFIoJG3NcJA";
 {
     [super viewDidLoad];
 	self.driveService = [[GTLServiceDrive alloc] init];
+    
+    _driveIdentities = [NSMutableArray new];
+    _driveService.shouldFetchNextPages = YES;
+    _driveService.retryEnabled = YES;
     self.driveService.authorizer = [GTMOAuth2ViewControllerTouch authForGoogleFromKeychainForName:kKeychainItemName
                                                                                          clientID:kClientID
                                                                                      clientSecret:kClientSecret];
@@ -121,7 +136,171 @@ static NSString *const kClientSecret = @"fcqLFxhN1OxonKFIoJG3NcJA";
     {
         // Not yet authorized, request authorization and push the login UI onto the navigation stack.
         [self.navigationController pushViewController:[self createAuthController] animated:YES];
+        return;
     }
-
+    
+    [self retrieveIdentityFilesCompletionBlock:^(id identityFiles) {
+        [_driveIdentities removeAllObjects];
+        [_driveIdentities addObjectsFromArray:identityFiles];
+        [_tvDrive reloadData];
+    }];
+    
+    
 }
+
+-(void) ensureDriveIdentityDirectoryCompletionBlock: (CallbackBlock) completionBlock {
+    // The service can be set to automatically fetch all pages of the result. More information
+    // can be found on https://code.google.com/p/google-api-objectivec-client/wiki/Introduction#Result_Pages.
+    
+    
+    GTLQueryDrive *queryFilesList = [GTLQueryDrive queryForChildrenListWithFolderId:@"root"];
+    queryFilesList.q =  [NSString stringWithFormat:@"title='%@' and trashed = false and mimeType='application/vnd.google-apps.folder'", DRIVE_IDENTITY_FOLDER];
+    // queryTicket can be used to track the status of the request.
+    GTLServiceTicket *queryTicket =
+    [_driveService executeQuery:queryFilesList
+              completionHandler:^(GTLServiceTicket *ticket, GTLDriveFileList *files,
+                                  NSError *error) {
+                  if (error == nil) {
+                      if (files.items.count > 0) {
+                          NSString * identityDirId = nil;
+                          
+                          for (id file in files.items) {
+                              identityDirId = [file identifier];
+                              if (identityDirId) break;
+                          }
+                          completionBlock(identityDirId);
+                          return;
+                      }
+                      else {
+                          GTLDriveFile *folderObj = [GTLDriveFile object];
+                          folderObj.title = DRIVE_IDENTITY_FOLDER;
+                          folderObj.mimeType = @"application/vnd.google-apps.folder";
+                          
+                          // To create a folder in a specific parent folder, specify the identifier
+                          // of the parent:
+                          // _resourceId is the identifier from the parent folder
+                          
+                          GTLDriveParentReference *parentRef = [GTLDriveParentReference object];
+                          parentRef.identifier = @"root";
+                          folderObj.parents = [NSArray arrayWithObject:parentRef];
+                          
+                          
+                          GTLQueryDrive *query = [GTLQueryDrive queryForFilesInsertWithObject:folderObj uploadParameters:nil];
+                          
+                          [_driveService executeQuery:query
+                                    completionHandler:^(GTLServiceTicket *ticket, GTLDriveFile *file,
+                                                        NSError *error) {
+                                        NSString * identityDirId = nil;
+                                        if (error == nil) {
+                                            
+                                            if (file) {
+                                                identityDirId = [file identifier];
+                                            }
+                                            
+                                        } else {
+                                            DDLogError(@"An error occurred: %@", error);
+                                            
+                                        }
+                                        completionBlock(identityDirId);
+                                        return;
+                                        
+                                    }];
+                          
+                          
+                      }
+                      
+                      
+                  } else {
+                      DDLogError(@"An error occurred: %@", error);
+                      completionBlock(nil);
+                  }
+              }];
+    
+}
+
+- (void)retrieveIdentityFilesCompletionBlock:(CallbackBlock) callback {
+    [self ensureDriveIdentityDirectoryCompletionBlock:^(NSString * identityDirId) {
+        DDLogInfo(@"got identity folder id %@", identityDirId);
+        
+        if (identityDirId) {
+            GTLQueryDrive *queryFilesList = [GTLQueryDrive queryForChildrenListWithFolderId:identityDirId];
+            queryFilesList.q = @"trashed = false";
+            
+            [_driveService executeQuery:queryFilesList
+                      completionHandler:^(GTLServiceTicket *ticket, GTLDriveFileList *files,
+                                          NSError *error) {
+                          
+                          if (error == nil) {
+                              DDLogInfo(@"retrieved Identity files %@", files.items);
+                              NSMutableArray * identityFiles = [NSMutableArray new];
+                              NSInteger dlCount = [[files items] count];
+                              __block NSInteger completed = 0;
+                              for (GTLDriveChildReference *child in files) {
+                                  
+                                  GTLQuery *query = [GTLQueryDrive queryForFilesGetWithFileId:child.identifier];
+                                  
+                                  // queryTicket can be used to track the status of the request.
+                                  [self.driveService executeQuery:query
+                                                completionHandler:^(GTLServiceTicket *ticket,
+                                                                    GTLDriveFile *file,
+                                                                    NSError *error) {
+                                                    
+                                                    if (!error) {
+                                                        DDLogInfo(@"\nfile name = %@", file.originalFilename);
+                                                        NSMutableDictionary * identityFile = [NSMutableDictionary new];
+                                                        [identityFile setObject:file.originalFilename forKey:@"name"];
+                                                        [identityFile setObject:file.modifiedDate forKey:@"date"];
+                                                        [identityFile setObject:file.downloadUrl forKey:@"url"];
+                                                        
+                                                        [identityFiles addObject:identityFile];
+                                                    }
+                                                    else {
+                                                      DDLogError(@"An error occurred: %@", error);
+                                                    }
+                                                    
+                                                    if (++completed == dlCount) {
+                                                        DDLogInfo(@"file data download complete, files: %@", identityFiles);
+                                                        callback(identityFiles);
+                                                    }
+                                                }];
+                              }
+                              
+                          } else {
+                              DDLogError(@"An error occurred: %@", error);
+                              
+                          }
+                          
+                          
+                          
+                      }];
+            
+        }
+        
+    }];
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return _driveIdentities.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"Cell";
+
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    }
+    
+    NSDictionary *file = [self.driveIdentities objectAtIndex:indexPath.row];
+    cell.textLabel.text = [file objectForKey:@"name"];
+    return cell;
+}
+
 @end
