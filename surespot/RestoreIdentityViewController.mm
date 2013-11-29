@@ -51,24 +51,8 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     _driveIdentities = [NSMutableArray new];
     _driveService.shouldFetchNextPages = YES;
     _driveService.retryEnabled = YES;
-    self.driveService.authorizer = [GTMOAuth2ViewControllerTouch authForGoogleFromKeychainForName:kKeychainItemName
-                                                                                         clientID:kClientID
-                                                                                     clientSecret:kClientSecret];
     
-    
-    
-    if (_driveService.authorizer && [_driveService.authorizer isMemberOfClass:[GTMOAuth2Authentication class]]) {
-            
-        
-    
-        NSString * currentEmail = [[((GTMOAuth2Authentication *) _driveService.authorizer ) parameters] objectForKey:@"email"];
-        
-        _accountLabel.text = currentEmail;
-        [self loadIdentities];
-    }
-    else {
-        _accountLabel.text = NSLocalizedString(@"no_google_account_selected", nil);
-    }
+    [self setAccountFromKeychain];
     
     _bSelect.titleLabel.text = NSLocalizedString(@"select_google_drive_account", nil);
     
@@ -79,6 +63,29 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     [_dateFormatter setTimeStyle:NSDateFormatterShortStyle];
 }
 
+-(void) setAccountFromKeychain {
+    self.driveService.authorizer = [GTMOAuth2ViewControllerTouch authForGoogleFromKeychainForName:kKeychainItemName
+                                                                                         clientID:kClientID
+                                                                                     clientSecret:kClientSecret];
+    
+    
+    
+    if (_driveService.authorizer && [_driveService.authorizer isMemberOfClass:[GTMOAuth2Authentication class]]) {
+        
+        
+        
+        NSString * currentEmail = [[((GTMOAuth2Authentication *) _driveService.authorizer ) parameters] objectForKey:@"email"];
+        
+        _accountLabel.text = currentEmail;
+        [self loadIdentities];
+    }
+    else {
+        _accountLabel.text = NSLocalizedString(@"no_google_account_selected", nil);
+        [_driveIdentities removeAllObjects];
+        [_tvDrive reloadData];
+    }
+
+}
 
 // Helper to check if user is authorized
 - (BOOL)isAuthorized
@@ -108,11 +115,12 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     if (error != nil)
     {
         [self showAlert:@"Authentication Error" message:error.localizedDescription];
-        self.driveService.authorizer = nil;
+        [self setAccountFromKeychain];              
     }
     else
     {
         self.driveService.authorizer = authResult;
+        [self loadIdentities];
     }
 }
 
@@ -156,6 +164,9 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 }
 
 - (IBAction)bLoadIdentities:(id)sender {
+     if ([self isAuthorized]) {
+         _driveService.authorizer = nil;
+     }
     
     [self loadIdentities];
     
