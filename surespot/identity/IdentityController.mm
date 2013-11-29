@@ -55,7 +55,7 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
 
 
 - (SurespotIdentity *) getIdentityWithUsername:(NSString *) username andPassword:(NSString *) password {
-
+    
     SurespotIdentity * identity = [_identities objectForKey:username];
     if (!identity) {
         identity = [self loadIdentityUsername: (NSString *) username password:password];
@@ -195,12 +195,17 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     NSMutableArray * identityNames = [[NSMutableArray alloc] init];
     NSString * file;
     for (file in dirfiles) {
-        if ([[file pathExtension] isEqualToString:IDENTITY_EXTENSION]) {
-            NSString * name =[file stringByDeletingPathExtension] ;
-            [identityNames addObject:name ];
-        }
+        [identityNames addObject:[self identityNameFromFile:file]];
     }
     return identityNames;
+}
+
+- (NSString * ) identityNameFromFile: (NSString *) file {
+    if ([[file pathExtension] isEqualToString:IDENTITY_EXTENSION]) {
+        return[file stringByDeletingPathExtension] ;
+    }
+    
+    return nil;
 }
 
 - (void) userLoggedInWithIdentity: (SurespotIdentity *) identity {
@@ -309,7 +314,7 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     //make sure we wipe the identity file first so it doesn't show when we return to login screen
     [FileController wipeIdentityData: username];
     [[NetworkController sharedInstance] setUnauthorized];
-  
+    
     [[CredentialCachingController sharedInstance] clearIdentityData:username];
     
     
@@ -329,7 +334,7 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
         return nil;
     }
     
-    return password;    
+    return password;
 }
 
 -(void) storePasswordForIdentity: (NSString *) username password: (NSString *) password {

@@ -12,6 +12,7 @@
 #import "DDLog.h"
 #import "SurespotConstants.h"
 #import "IdentityCell.h"
+#import "IdentityController.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -302,7 +303,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     IdentityCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     NSDictionary *file = [self.driveIdentities objectAtIndex:indexPath.row];
-    cell.nameLabel.text = [file objectForKey:@"name"];
+    cell.nameLabel.text = [[IdentityController sharedInstance] identityNameFromFile: [file objectForKey:@"name"]];
     cell.dateLabel.text = [_dateFormatter stringFromDate: [[file objectForKey:@"date"] date]];
     return cell;
 }

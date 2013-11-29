@@ -36,4 +36,5 @@
 -(NSString *) getStoredPasswordForIdentity: (NSString *) username;
 -(void) storePasswordForIdentity: (NSString *) username password: (NSString *) password;
 -(void) clearStoredPasswordForIdentity: (NSString *) username;
+- (NSString * ) identityNameFromFile: (NSString *) file;
 @end
