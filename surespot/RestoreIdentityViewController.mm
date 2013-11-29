@@ -79,15 +79,17 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
         
         
         NSString * currentEmail = [[((GTMOAuth2Authentication *) _driveService.authorizer ) parameters] objectForKey:@"email"];
-        
-        _accountLabel.text = currentEmail;
-        [self loadIdentities];
+        if (currentEmail) {
+            _accountLabel.text = currentEmail;
+            [self loadIdentities];
+            return;
+        }
     }
-    else {
-        _accountLabel.text = NSLocalizedString(@"no_google_account_selected", nil);
-        [_driveIdentities removeAllObjects];
-        [_tvDrive reloadData];
-    }
+
+    _accountLabel.text = NSLocalizedString(@"no_google_account_selected", nil);
+    [_driveIdentities removeAllObjects];
+    [_tvDrive reloadData];
+
     
 }
 
@@ -125,8 +127,10 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     }
     else
     {
-        self.driveService.authorizer = authResult;
-        [self loadIdentities];
+        if (authResult) {
+            self.driveService.authorizer = authResult;
+            [self loadIdentities];
+        }
     }
 }
 
@@ -149,6 +153,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     if (![self isAuthorized])
     {
         // Not yet authorized, request authorization and push the login UI onto the navigation stack.
+        DDLogInfo(@"launching google authorization");
         [self.navigationController pushViewController:[self createAuthController] animated:YES];
         return;
     }
