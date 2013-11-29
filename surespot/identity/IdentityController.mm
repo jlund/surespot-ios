@@ -23,6 +23,7 @@
 #import <Security/Security.h>
 #import "UIUtils.h"
 
+
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
 #else
@@ -361,6 +362,30 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     [FileController deleteSharedSecretsForUsername:username];
 }
 
-
+-(void) importIdentityData: (NSData *) identityData username: (NSString *) username password: (NSString *) password callback: (CallbackBlock) callback {
+    NSData * decryptedIdentity = [EncryptionController decryptIdentity: identityData withPassword:[password stringByAppendingString:EXPORT_IDENTITY_ID]];
+    if (!decryptedIdentity) {
+        callback(nil);
+    }
+    
+    SurespotIdentity * identity = [self decodeIdentityData:decryptedIdentity withUsername:username andPassword:password];
+    NSData * saltBytes = [NSData dataFromBase64String:identity.salt];
+    NSData * derivedPassword = [EncryptionController deriveKeyUsingPassword:password andSalt:saltBytes];    
+    NSData * encodedPassword = [derivedPassword SR_dataByBase64Encoding];
+    
+    NSData * signature = [EncryptionController signUsername:username andPassword: encodedPassword withPrivateKey:[identity getDsaPrivateKey]];
+    NSString * passwordString = [derivedPassword SR_stringByBase64Encoding];
+    NSString * signatureString = [signature SR_stringByBase64Encoding];
+    
+    
+    
+    [[NetworkController sharedInstance] validateUsername:username password:passwordString signature:signatureString successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self saveIdentity:identity withPassword:[password stringByAppendingString:CACHE_IDENTITY_ID]];
+        callback(NSLocalizedString(@"identity_imported_successfully", nil));
+        
+    } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
+        callback(nil);
+    }];
+}
 
 @end

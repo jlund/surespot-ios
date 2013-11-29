@@ -13,6 +13,8 @@
 #import "SurespotConstants.h"
 #import "IdentityCell.h"
 #import "IdentityController.h"
+#import "FileController.h"
+#import "UIUtils.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -84,7 +86,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
         [_driveIdentities removeAllObjects];
         [_tvDrive reloadData];
     }
-
+    
 }
 
 // Helper to check if user is authorized
@@ -115,7 +117,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     if (error != nil)
     {
         [self showAlert:@"Authentication Error" message:error.localizedDescription];
-        [self setAccountFromKeychain];              
+        [self setAccountFromKeychain];
     }
     else
     {
@@ -164,9 +166,9 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 }
 
 - (IBAction)bLoadIdentities:(id)sender {
-     if ([self isAuthorized]) {
-         _driveService.authorizer = nil;
-     }
+    if ([self isAuthorized]) {
+        _driveService.authorizer = nil;
+    }
     
     [self loadIdentities];
     
@@ -185,7 +187,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
         [_driveIdentities addObjectsFromArray:identityFiles];
         [_tvDrive reloadData];
     }];
-
+    
 }
 
 -(void) ensureDriveIdentityDirectoryCompletionBlock: (CallbackBlock) completionBlock {
@@ -288,14 +290,14 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
                                                     if (!error) {
                                                         DDLogInfo(@"\nfile name = %@", file.originalFilename);
                                                         NSMutableDictionary * identityFile = [NSMutableDictionary new];
-                                                        [identityFile setObject:file.originalFilename forKey:@"name"];
+                                                        [identityFile  setObject: [[IdentityController sharedInstance] identityNameFromFile: file.originalFilename] forKey:@"name"];
                                                         [identityFile setObject:file.modifiedDate forKey:@"date"];
                                                         [identityFile setObject:file.downloadUrl forKey:@"url"];
                                                         
                                                         [identityFiles addObject:identityFile];
                                                     }
                                                     else {
-                                                      DDLogError(@"An error occurred: %@", error);
+                                                        DDLogError(@"An error occurred: %@", error);
                                                     }
                                                     
                                                     if (++completed == dlCount) {
@@ -332,13 +334,49 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"IdentityCell";
-
+    
     IdentityCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     NSDictionary *file = [self.driveIdentities objectAtIndex:indexPath.row];
-    cell.nameLabel.text = [[IdentityController sharedInstance] identityNameFromFile: [file objectForKey:@"name"]];
+    cell.nameLabel.text = [file objectForKey:@"name"];
     cell.dateLabel.text = [_dateFormatter stringFromDate: [[file objectForKey:@"date"] date]];
     return cell;
+}
+
+-(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    //todo limit identities to 3
+    
+    
+    NSDictionary * rowData = [_driveIdentities objectAtIndex:indexPath.row];
+    NSString * name = [rowData objectForKey:@"name"];
+    NSString * url = [rowData objectForKey:@"url"];
+    
+    //todo check if already exists
+    //todo create identity placeholder
+    
+    
+    //todo get password
+    NSString * password = [[IdentityController sharedInstance] getStoredPasswordForIdentity:name];
+    if (!password) {
+    }
+    
+    GTMHTTPFetcher *fetcher =
+    [self.driveService.fetcherService fetcherWithURLString:url];
+    
+    [fetcher beginFetchWithCompletionHandler:^(NSData *data, NSError *error) {
+        //  [alert dismissWithClickedButtonIndex:0 animated:YES];
+        if (error == nil) {
+            NSData * identityData = [FileController gunzipIfNecessary:data];
+            [[IdentityController sharedInstance] importIdentityData:identityData username:name password:@"a" callback:^(id result) {
+                if (result) {
+                    [UIUtils showToastMessage:result duration:2];
+                }
+            }];
+        } else {
+            DDLogError(@"An error occurred: %@", error);
+        }
+    }];
+    
 }
 
 @end

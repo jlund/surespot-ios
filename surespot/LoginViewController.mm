@@ -141,11 +141,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         NSData * decodedSalt = [NSData dataFromBase64String: [identity salt]];
         NSData * derivedPassword = [EncryptionController deriveKeyUsingPassword:password andSalt: decodedSalt];
-        NSData * passwordData = [NSData dataWithBytes:[derivedPassword bytes] length:AES_KEY_LENGTH];
-        NSData * encodedPassword = [passwordData SR_dataByBase64Encoding];
+        NSData * encodedPassword = [derivedPassword SR_dataByBase64Encoding];
         
         NSData * signature = [EncryptionController signUsername:username andPassword: encodedPassword withPrivateKey:[identity getDsaPrivateKey]];
-        NSString * passwordString = [passwordData SR_stringByBase64Encoding];
+        NSString * passwordString = [derivedPassword SR_stringByBase64Encoding];
         NSString * signatureString = [signature SR_stringByBase64Encoding];
         
         [[NetworkController sharedInstance]

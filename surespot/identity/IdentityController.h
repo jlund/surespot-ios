@@ -37,4 +37,5 @@
 -(void) storePasswordForIdentity: (NSString *) username password: (NSString *) password;
 -(void) clearStoredPasswordForIdentity: (NSString *) username;
 - (NSString * ) identityNameFromFile: (NSString *) file;
+-(void) importIdentityData: (NSData *) identityData username: (NSString *) username password: (NSString *) password callback: (CallbackBlock) callback;
 @end
