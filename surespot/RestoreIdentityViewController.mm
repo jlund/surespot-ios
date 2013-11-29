@@ -34,6 +34,9 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 @property (strong) NSMutableArray * driveIdentities;
 @property (strong) NSDateFormatter * dateFormatter;
 @property (atomic, strong) id progressView;
+@property (atomic, strong) NSString * name;
+@property (atomic, strong) NSString * url;
+@property (atomic, strong) NSString * password;
 @end
 
 @implementation RestoreIdentityViewController
@@ -170,8 +173,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     
     GTLQueryDrive *queryFilesList = [GTLQueryDrive queryForChildrenListWithFolderId:@"root"];
     queryFilesList.q =  [NSString stringWithFormat:@"title='%@' and trashed = false and mimeType='application/vnd.google-apps.folder'", DRIVE_IDENTITY_FOLDER];
-    // queryTicket can be used to track the status of the request.
-    GTLServiceTicket *queryTicket =
+    
     [_driveService executeQuery:queryFilesList
               completionHandler:^(GTLServiceTicket *ticket, GTLDriveFileList *files,
                                   NSError *error) {
@@ -334,30 +336,49 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     //todo limit identities to 3
-    //todo confirm
-    
-    _progressView = [LoadingView loadingViewInView:self.view keyboardHeight:0 textKey:@"progress_restoring_identity"];
-    
-    
     NSDictionary * rowData = [_driveIdentities objectAtIndex:indexPath.row];
     NSString * name = [rowData objectForKey:@"name"];
     NSString * url = [rowData objectForKey:@"url"];
     
-    //todo get password
-    NSString * password = [[IdentityController sharedInstance] getStoredPasswordForIdentity:name];
-    if (!password) {
+    _password = [[IdentityController sharedInstance] getStoredPasswordForIdentity:name];
+    _name = name;
+    _url = url;
+    
+    if (!_password) {
+        
+        //show alert view to get password
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Password" message:@"Enter your password:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
+        alertView.alertViewStyle = UIAlertViewStyleSecureTextInput;
+        [alertView show];
         
     }
-    
-    if (!password) {
-        return;
+    else {
+        //show alert view to confirm
+        //todo localization
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"are you sure" message:@"are you sure you want to import this identity" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
+        [alertView show];
     }
+}
+
+-(void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        if (alertView.alertViewStyle == UIAlertViewStyleSecureTextInput) {
+            _password = [[alertView textFieldAtIndex:0] text];
+        }
+        
+        if (![UIUtils stringIsNilOrEmpty:_password]) {
+            [self importIdentity:_name url:_url password:_password];
+        }
+    }
+}
+
+-(void) importIdentity: (NSString *) name url: (NSString *) url password: (NSString *) password {
+    _progressView = [LoadingView loadingViewInView:self.view keyboardHeight:0 textKey:@"progress_restoring_identity"];
     
     GTMHTTPFetcher *fetcher =
     [self.driveService.fetcherService fetcherWithURLString:url];
     
     [fetcher beginFetchWithCompletionHandler:^(NSData *data, NSError *error) {
-        //  [alert dismissWithClickedButtonIndex:0 animated:YES];
         if (error == nil) {
             NSData * identityData = [FileController gunzipIfNecessary:data];
             [[IdentityController sharedInstance] importIdentityData:identityData username:name password:password callback:^(id result) {
@@ -367,11 +388,13 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
                 else {
                     [UIUtils showToastKey:@"identity_imported_successfully" duration:2];
                 }
+                _password = nil;
                 [_progressView removeView];
             }];
         } else {
             DDLogError(@"An error occurred: %@", error);
             [UIUtils showToastKey:@"could_not_list_identities_from_google_drive" duration:2];
+            _password = nil;
             [_progressView removeView];
         }
     }];
