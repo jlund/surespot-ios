@@ -54,7 +54,25 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     self.driveService.authorizer = [GTMOAuth2ViewControllerTouch authForGoogleFromKeychainForName:kKeychainItemName
                                                                                          clientID:kClientID
                                                                                      clientSecret:kClientSecret];
-                [_tvDrive registerNib:[UINib nibWithNibName:@"IdentityCell" bundle:nil] forCellReuseIdentifier:@"IdentityCell"];
+    
+    
+    
+    if (_driveService.authorizer && [_driveService.authorizer isMemberOfClass:[GTMOAuth2Authentication class]]) {
+            
+        
+    
+        NSString * currentEmail = [[((GTMOAuth2Authentication *) _driveService.authorizer ) parameters] objectForKey:@"email"];
+        
+        _accountLabel.text = currentEmail;
+        [self loadIdentities];
+    }
+    else {
+        _accountLabel.text = NSLocalizedString(@"no_google_account_selected", nil);
+    }
+    
+    _bSelect.titleLabel.text = NSLocalizedString(@"select_google_drive_account", nil);
+    
+    [_tvDrive registerNib:[UINib nibWithNibName:@"IdentityCell" bundle:nil] forCellReuseIdentifier:@"IdentityCell"];
     
     _dateFormatter = [[NSDateFormatter alloc]init];
     [_dateFormatter setDateStyle:NSDateFormatterShortStyle];
@@ -139,6 +157,11 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 
 - (IBAction)bLoadIdentities:(id)sender {
     
+    [self loadIdentities];
+    
+}
+
+-(void) loadIdentities {
     if (![self isAuthorized])
     {
         // Not yet authorized, request authorization and push the login UI onto the navigation stack.
@@ -151,8 +174,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
         [_driveIdentities addObjectsFromArray:identityFiles];
         [_tvDrive reloadData];
     }];
-    
-    
+
 }
 
 -(void) ensureDriveIdentityDirectoryCompletionBlock: (CallbackBlock) completionBlock {

@@ -10,5 +10,7 @@
 
 @interface RestoreIdentityViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
 - (IBAction)bLoadIdentities:(id)sender;
+@property (strong, nonatomic) IBOutlet UIButton *bSelect;
+@property (strong, nonatomic) IBOutlet UILabel *accountLabel;
 
 @end
