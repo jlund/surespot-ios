@@ -85,11 +85,11 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
             return;
         }
     }
-
+    
     _accountLabel.text = NSLocalizedString(@"no_google_account_selected", nil);
     [_driveIdentities removeAllObjects];
     [_tvDrive reloadData];
-
+    
     
 }
 
@@ -334,6 +334,9 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     //todo limit identities to 3
+    //todo confirm
+    
+    _progressView = [LoadingView loadingViewInView:self.view keyboardHeight:0 textKey:@"progress_restoring_identity"];
     
     
     NSDictionary * rowData = [_driveIdentities objectAtIndex:indexPath.row];
@@ -343,6 +346,11 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     //todo get password
     NSString * password = [[IdentityController sharedInstance] getStoredPasswordForIdentity:name];
     if (!password) {
+        
+    }
+    
+    if (!password) {
+        return;
     }
     
     GTMHTTPFetcher *fetcher =
@@ -352,13 +360,19 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
         //  [alert dismissWithClickedButtonIndex:0 animated:YES];
         if (error == nil) {
             NSData * identityData = [FileController gunzipIfNecessary:data];
-            [[IdentityController sharedInstance] importIdentityData:identityData username:name password:@"a" callback:^(id result) {
+            [[IdentityController sharedInstance] importIdentityData:identityData username:name password:password callback:^(id result) {
                 if (result) {
                     [UIUtils showToastMessage:result duration:2];
                 }
+                else {
+                    [UIUtils showToastKey:@"identity_imported_successfully" duration:2];
+                }
+                [_progressView removeView];
             }];
         } else {
             DDLogError(@"An error occurred: %@", error);
+            [UIUtils showToastKey:@"could_not_list_identities_from_google_drive" duration:2];
+            [_progressView removeView];
         }
     }];
     

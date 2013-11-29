@@ -365,7 +365,8 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
 -(void) importIdentityData: (NSData *) identityData username: (NSString *) username password: (NSString *) password callback: (CallbackBlock) callback {
     NSData * decryptedIdentity = [EncryptionController decryptIdentity: identityData withPassword:[password stringByAppendingString:EXPORT_IDENTITY_ID]];
     if (!decryptedIdentity) {
-        callback(nil);
+        callback([NSString stringWithFormat:NSLocalizedString(@"could_not_restore_identity_name", nil), username]);
+        return;
     }
     
     SurespotIdentity * identity = [self decodeIdentityData:decryptedIdentity withUsername:username andPassword:password];
@@ -386,13 +387,13 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
         switch (operation.response.statusCode) {
             case 403:
-                callback(NSLocalizedString(@"identity_imported_successfully", nil));
+                callback(NSLocalizedString(@"incorrect_password_or_key", nil));
                 break;
             case 404:
                 callback(NSLocalizedString(@"no_such_user", nil));
                 break;
             default:
-                callback(NSLocalizedString(@"identity_imported_successfully", nil));
+                callback([NSString stringWithFormat:NSLocalizedString(@"could_not_restore_identity_name", nil), username]);
                 break;
         }
     }];
