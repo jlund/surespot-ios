@@ -108,6 +108,8 @@
 		66E70AB81847F9E400433D6F /* GTLDrive_Sources.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E70AB71847F9E400433D6F /* GTLDrive_Sources.m */; };
 		66E70AB91847FBE000433D6F /* libGTLTouchStaticLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E70AAC1847F88E00433D6F /* libGTLTouchStaticLib.a */; };
 		66E70ABB18480C1F00433D6F /* GTMOAuth2ViewTouch.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66E70ABA18480C1F00433D6F /* GTMOAuth2ViewTouch.xib */; };
+		66E70ABF184832B700433D6F /* IdentityCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66E70ABE184832B700433D6F /* IdentityCell.xib */; };
+		66E70AC21848331200433D6F /* IdentityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E70AC11848331200433D6F /* IdentityCell.m */; };
 		66EC610B176E494900937467 /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EC60F9176E494900937467 /* AFHTTPClient.m */; };
 		66EC610C176E494900937467 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EC60FB176E494900937467 /* AFHTTPRequestOperation.m */; };
 		66EC610D176E494900937467 /* AFImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EC60FD176E494900937467 /* AFImageRequestOperation.m */; };
@@ -485,6 +487,9 @@
 		66E70AB61847F9D900433D6F /* GTLDrive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GTLDrive.h; sourceTree = "<group>"; };
 		66E70AB71847F9E400433D6F /* GTLDrive_Sources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLDrive_Sources.m; sourceTree = "<group>"; };
 		66E70ABA18480C1F00433D6F /* GTMOAuth2ViewTouch.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GTMOAuth2ViewTouch.xib; sourceTree = "<group>"; };
+		66E70ABE184832B700433D6F /* IdentityCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = IdentityCell.xib; path = backup/IdentityCell.xib; sourceTree = "<group>"; };
+		66E70AC01848331200433D6F /* IdentityCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IdentityCell.h; path = backup/IdentityCell.h; sourceTree = "<group>"; };
+		66E70AC11848331200433D6F /* IdentityCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IdentityCell.m; path = backup/IdentityCell.m; sourceTree = "<group>"; };
 		66EC60F8176E494900937467 /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
 		66EC60F9176E494900937467 /* AFHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AFHTTPClient.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		66EC60FA176E494900937467 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
@@ -907,6 +912,9 @@
 				66E21E051847E7F50005D91E /* RestoreIdentityViewController.h */,
 				66E21E061847E7F50005D91E /* RestoreIdentityViewController.m */,
 				66E21E081847EB670005D91E /* RestoreIdentityViewController.xib */,
+				66E70ABE184832B700433D6F /* IdentityCell.xib */,
+				66E70AC01848331200433D6F /* IdentityCell.h */,
+				66E70AC11848331200433D6F /* IdentityCell.m */,
 			);
 			name = settings;
 			sourceTree = "<group>";
@@ -1305,6 +1313,7 @@
 				66E70ABB18480C1F00433D6F /* GTMOAuth2ViewTouch.xib in Resources */,
 				66E21E001847E1220005D91E /* Settings.bundle in Resources */,
 				6604A2C917626B9E0072216A /* InfoPlist.strings in Resources */,
+				66E70ABF184832B700433D6F /* IdentityCell.xib in Resources */,
 				6604A2D817626B9E0072216A /* MainStoryboard.storyboard in Resources */,
 				66D3B04F182EAB4200B37A6C /* surespot.xcassets in Resources */,
 				6621BB841762704D00BC2850 /* Localizable.strings in Resources */,
@@ -1435,6 +1444,7 @@
 				667EFF91183EB692002C0406 /* SurespotErrorMessage.m in Sources */,
 				6640767B1822D52800BFD974 /* SurespotControlMessage.m in Sources */,
 				66B3C8F017B17AC800CC96EE /* ChatDataSource.mm in Sources */,
+				66E70AC21848331200433D6F /* IdentityCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

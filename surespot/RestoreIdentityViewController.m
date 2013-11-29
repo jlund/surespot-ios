@@ -11,6 +11,7 @@
 #import "GTMOAuth2ViewControllerTouch.h"
 #import "DDLog.h"
 #import "SurespotConstants.h"
+#import "IdentityCell.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -27,6 +28,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 @property (strong, nonatomic) IBOutlet UITableView *tvDrive;
 @property (nonatomic, strong) GTLServiceDrive *driveService;
 @property (strong) NSMutableArray * driveIdentities;
+@property (strong) NSDateFormatter * dateFormatter;
 @end
 
 @implementation RestoreIdentityViewController
@@ -51,7 +53,11 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     self.driveService.authorizer = [GTMOAuth2ViewControllerTouch authForGoogleFromKeychainForName:kKeychainItemName
                                                                                          clientID:kClientID
                                                                                      clientSecret:kClientSecret];
+                [_tvDrive registerNib:[UINib nibWithNibName:@"IdentityCell" bundle:nil] forCellReuseIdentifier:@"IdentityCell"];
     
+    _dateFormatter = [[NSDateFormatter alloc]init];
+    [_dateFormatter setDateStyle:NSDateFormatterShortStyle];
+    [_dateFormatter setTimeStyle:NSDateFormatterShortStyle];
 }
 
 
@@ -291,15 +297,13 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
+    static NSString *CellIdentifier = @"IdentityCell";
 
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    }
+    IdentityCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     NSDictionary *file = [self.driveIdentities objectAtIndex:indexPath.row];
-    cell.textLabel.text = [file objectForKey:@"name"];
+    cell.nameLabel.text = [file objectForKey:@"name"];
+    cell.dateLabel.text = [_dateFormatter stringFromDate: [[file objectForKey:@"date"] date]];
     return cell;
 }
 
