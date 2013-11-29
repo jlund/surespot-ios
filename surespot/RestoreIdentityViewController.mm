@@ -15,6 +15,7 @@
 #import "IdentityController.h"
 #import "FileController.h"
 #import "UIUtils.h"
+#import "LoadingView.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -32,6 +33,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 @property (nonatomic, strong) GTLServiceDrive *driveService;
 @property (strong) NSMutableArray * driveIdentities;
 @property (strong) NSDateFormatter * dateFormatter;
+@property (atomic, strong) id progressView;
 @end
 
 @implementation RestoreIdentityViewController
@@ -116,7 +118,9 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 {
     if (error != nil)
     {
-        [self showAlert:@"Authentication Error" message:error.localizedDescription];
+        if ([error code] != kGTMOAuth2ErrorWindowClosed) {
+            [UIUtils showToastKey:error.localizedDescription];
+        }
         [self setAccountFromKeychain];
     }
     else
@@ -124,39 +128,6 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
         self.driveService.authorizer = authResult;
         [self loadIdentities];
     }
-}
-
-// Helper for showing a wait indicator in a popup
-- (UIAlertView*)showWaitIndicator:(NSString *)title
-{
-    UIAlertView *progressAlert;
-    progressAlert = [[UIAlertView alloc] initWithTitle:title
-                                               message:@"Please wait..."
-                                              delegate:nil
-                                     cancelButtonTitle:nil
-                                     otherButtonTitles:nil];
-    [progressAlert show];
-    
-    UIActivityIndicatorView *activityView;
-    activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    activityView.center = CGPointMake(progressAlert.bounds.size.width / 2,
-                                      progressAlert.bounds.size.height - 45);
-    
-    [progressAlert addSubview:activityView];
-    [activityView startAnimating];
-    return progressAlert;
-}
-
-// Helper for showing an alert
-- (void)showAlert:(NSString *)title message:(NSString *)message
-{
-    UIAlertView *alert;
-    alert = [[UIAlertView alloc] initWithTitle: title
-                                       message: message
-                                      delegate: nil
-                             cancelButtonTitle: @"OK"
-                             otherButtonTitles: nil];
-    [alert show];
 }
 
 - (void)didReceiveMemoryWarning
@@ -191,9 +162,6 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 }
 
 -(void) ensureDriveIdentityDirectoryCompletionBlock: (CallbackBlock) completionBlock {
-    // The service can be set to automatically fetch all pages of the result. More information
-    // can be found on https://code.google.com/p/google-api-objectivec-client/wiki/Introduction#Result_Pages.
-    
     
     GTLQueryDrive *queryFilesList = [GTLQueryDrive queryForChildrenListWithFolderId:@"root"];
     queryFilesList.q =  [NSString stringWithFormat:@"title='%@' and trashed = false and mimeType='application/vnd.google-apps.folder'", DRIVE_IDENTITY_FOLDER];
@@ -261,6 +229,8 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 }
 
 - (void)retrieveIdentityFilesCompletionBlock:(CallbackBlock) callback {
+    _progressView = [LoadingView loadingViewInView:self.view keyboardHeight:0 textKey:@"progress_loading_identities"];
+    
     [self ensureDriveIdentityDirectoryCompletionBlock:^(NSString * identityDirId) {
         DDLogInfo(@"got identity folder id %@", identityDirId);
         
@@ -276,7 +246,12 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
                               DDLogInfo(@"retrieved Identity files %@", files.items);
                               NSMutableArray * identityFiles = [NSMutableArray new];
                               NSInteger dlCount = [[files items] count];
+                              
+                              //todo do this in a queue
+                              NSObject * completionLock = [NSObject new];
                               __block NSInteger completed = 0;
+                              
+                              
                               for (GTLDriveChildReference *child in files) {
                                   
                                   GTLQuery *query = [GTLQueryDrive queryForFilesGetWithFileId:child.identifier];
@@ -300,22 +275,31 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
                                                         DDLogError(@"An error occurred: %@", error);
                                                     }
                                                     
-                                                    if (++completed == dlCount) {
+                                                    @synchronized (completionLock) {
+                                                        completed++;
+                                                    }
+                                                    if (completed == dlCount) {
                                                         DDLogInfo(@"file data download complete, files: %@", identityFiles);
                                                         callback(identityFiles);
+                                                        [_progressView removeView];
                                                     }
+                                                    
+                                                    
                                                 }];
                               }
                               
                           } else {
                               DDLogError(@"An error occurred: %@", error);
-                              
+                              [_progressView removeView];
                           }
                           
                           
                           
                       }];
             
+        }
+        else {//couldn't get identity dir id
+            [_progressView removeView];
         }
         
     }];
@@ -350,10 +334,6 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     NSDictionary * rowData = [_driveIdentities objectAtIndex:indexPath.row];
     NSString * name = [rowData objectForKey:@"name"];
     NSString * url = [rowData objectForKey:@"url"];
-    
-    //todo check if already exists
-    //todo create identity placeholder
-    
     
     //todo get password
     NSString * password = [[IdentityController sharedInstance] getStoredPasswordForIdentity:name];

@@ -370,7 +370,7 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     
     SurespotIdentity * identity = [self decodeIdentityData:decryptedIdentity withUsername:username andPassword:password];
     NSData * saltBytes = [NSData dataFromBase64String:identity.salt];
-    NSData * derivedPassword = [EncryptionController deriveKeyUsingPassword:password andSalt:saltBytes];    
+    NSData * derivedPassword = [EncryptionController deriveKeyUsingPassword:password andSalt:saltBytes];
     NSData * encodedPassword = [derivedPassword SR_dataByBase64Encoding];
     
     NSData * signature = [EncryptionController signUsername:username andPassword: encodedPassword withPrivateKey:[identity getDsaPrivateKey]];
@@ -381,10 +381,20 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     
     [[NetworkController sharedInstance] validateUsername:username password:passwordString signature:signatureString successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
         [self saveIdentity:identity withPassword:[password stringByAppendingString:CACHE_IDENTITY_ID]];
-        callback(NSLocalizedString(@"identity_imported_successfully", nil));
+        callback(nil);
         
     } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
-        callback(nil);
+        switch (operation.response.statusCode) {
+            case 403:
+                callback(NSLocalizedString(@"identity_imported_successfully", nil));
+                break;
+            case 404:
+                callback(NSLocalizedString(@"no_such_user", nil));
+                break;
+            default:
+                callback(NSLocalizedString(@"identity_imported_successfully", nil));
+                break;
+        }
     }];
 }
 
