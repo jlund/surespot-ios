@@ -45,6 +45,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.navigationController.navigationBar.translucent = NO;
     [self.navigationItem setTitle:NSLocalizedString(@"restore", nil)];
     
 	self.driveService = [[GTLServiceDrive alloc] init];
@@ -389,12 +390,17 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
                 }
                 
                 //update stored password
-                if (_storedPassword && ![_storedPassword isEqualToString:password]) {
+                if (![UIUtils stringIsNilOrEmpty:_storedPassword] && ![_storedPassword isEqualToString:password]) {
                     [[IdentityController sharedInstance] storePasswordForIdentity:name password:password];
                 }
                 
                 _storedPassword = nil;
                 [_progressView removeView];
+                
+                //if we now only have 1 identity, go to login view controller
+                if ([[[IdentityController sharedInstance] getIdentityNames] count] == 1) {
+                    [self.navigationController popToRootViewControllerAnimated:YES];
+                }
             }];
         } else {
             DDLogError(@"An error occurred: %@", error);
