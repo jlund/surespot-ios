@@ -18,32 +18,54 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 @interface SurespotIdentity()
 
-@property (atomic, strong) NSMutableDictionary* keyPairs;
-@property (atomic, strong) NSMutableDictionary* jsonKeyPairs;
 
 @end
 
 @implementation SurespotIdentity
 
 
--(id) initWithDictionary: (NSDictionary *) jsonIdentity {
+-(id) initWithDictionary: (NSDictionary *) jsonIdentity validate:(BOOL) validate {
     if (self = [super init]) {
         try {
             self.keyPairs = [[NSMutableDictionary alloc] init];
             self.jsonKeyPairs = [[NSMutableDictionary alloc] init];
             _username = [jsonIdentity objectForKey:@"username"];
             _salt = [jsonIdentity objectForKey:@"salt"];
+            
+            //store the json keys
             NSArray * keys = [jsonIdentity objectForKey:@"keys"];
             for (NSDictionary * key in keys) {
                 
                 NSString * version = [key objectForKey:@"version"];
                 [self addJSONKeysWithVersion:version jsonKeys:key];
-            
             }
             
-            //re-generate latest keys
-            [self getDhPrivateKeyForVersion:_latestVersion];
-            [self getDsaPrivateKey];
+            if (!validate) {
+                //not validating so just re-generate latest keys without validation
+                [self getDhPrivateKeyForVersion:_latestVersion];
+                [self getDsaPrivateKey];
+            }
+            else {
+                //iterate through all keys and re-generate with validation
+                for (NSInteger i=1;i<=[self.latestVersion integerValue];i++) {
+                    NSString * version =[@(i) stringValue];
+                    
+                    //if we have a concrete key encode and save that
+                    IdentityKeys * keys = [[IdentityKeys alloc] init];
+                    keys.version = version;
+                    
+                    if (![self recreateDhKeys:keys forVersion:version validate:YES]) {
+                        return nil;
+                    }
+                    if (![self recreateDsaKeys:keys forVersion:version validate:YES]) {
+                        return nil;
+                    }
+                    
+                    [self.keyPairs setValue: keys forKey: version];
+                    
+                }
+            }
+            
             return self;
             
         } catch (const CryptoPP::Exception& e) {
@@ -63,16 +85,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         self.keyPairs = [[NSMutableDictionary alloc] init];
         self.jsonKeyPairs = [[NSMutableDictionary alloc] init];
         [self.keyPairs setObject:keys forKey:keys.version];
-        
         return self;
     }
     else {
         return nil;
     }
-}
-
-- (NSDictionary *) getKeys {
-    return self.keyPairs;
 }
 
 
@@ -87,7 +104,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
     }
     
-    [self.jsonKeyPairs setValue: jsonKeys forKey: version];
+    [self.jsonKeyPairs setObject:jsonKeys forKey: version];
 }
 
 //- (ECDHPublicKey) getDhPublicKey {
@@ -95,30 +112,33 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 //    return keys.dhPubKey;
 //}
 
-- (ECDHPrivateKey *) getDhPrivateKeyForVersion: (NSString *) version {
+- (ECDHPrivateKey *) getDhPrivateKeyForVersion: (NSString *) version  {
     IdentityKeys * keys = [self.keyPairs objectForKey:version];
     if (!keys) {
         keys = [[IdentityKeys alloc] init];
         keys.version = version;
-        [self.keyPairs setValue: keys forKey: version];        
+        [self.keyPairs setValue: keys forKey: version];
     }
     
-    ECDHPrivateKey * privateKey = keys.dhPrivKey;
-    
+    if (!keys.dhPrivKey) {
+        [self recreateDhKeys: keys forVersion:version validate:NO];
+    }
+    return keys.dhPrivKey;
+}
+
+-(BOOL) recreateDhKeys: (IdentityKeys *) keys forVersion: (NSString *) version validate: (BOOL) validate {
+    DDLogInfo(@"recreating dh keys for username: %@, version: %@ start", _username, version);
+    NSString * dprivDH = [[_jsonKeyPairs objectForKey:version ] objectForKey:@"dhPriv"];
+     ECDHPrivateKey * privateKey = [EncryptionController recreateDhPrivateKey:dprivDH validate:validate];
     if (!privateKey) {
-        //     DDLogInfo(@"recreating keys for username: %@, version: %@ start", _username, version);
-        NSString * dprivDH = [[_jsonKeyPairs objectForKey:version ] objectForKey:@"dhPriv"];
-        ECDHPrivateKey * dhPrivKey = [EncryptionController recreateDhPrivateKey:dprivDH];
-        CryptoPP::DL_PublicKey_EC<ECP> * dhPubKey = new ECDHPublicKey();
-        dhPrivKey->MakePublicKey(*dhPubKey);
-        
-        keys.dhPrivKey = dhPrivKey;
-        keys.dhPubKey = dhPubKey;
-        
-        privateKey = dhPrivKey;
-        
+        return NO;
     }
-    return privateKey;
+    ECDHPublicKey * dhPubKey = new ECDHPublicKey();
+    privateKey->MakePublicKey(*dhPubKey);
+    keys.dhPrivKey = privateKey;
+    keys.dhPubKey = dhPubKey;
+
+    return YES;
 }
 
 //-(ECDSAPPublicKey)getDsaPublicKey {
@@ -135,22 +155,28 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
     }
     
-    ECDSAPrivateKey * privateKey = keys.dsaPrivKey;
-    
-    if (!privateKey) {
-        //     DDLogInfo(@"recreating keys for username: %@, version: %@ start", _username, version);
-        NSString * dprivDSA = [[_jsonKeyPairs objectForKey:self.latestVersion ] objectForKey:@"dsaPriv"];
-        ECDSAPrivateKey * dsaPrivKey = [EncryptionController recreateDsaPrivateKey:dprivDSA];
-        CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey * dsaPubKey = new ECDSAPublicKey();
-        dsaPrivKey->MakePublicKey(*dsaPubKey);
- 
-        keys.dsaPrivKey = dsaPrivKey;
-        keys.dsaPubKey = dsaPubKey;
-        
-        privateKey = dsaPrivKey;
-        
+    if (!keys.dsaPrivKey) {
+        [self recreateDsaKeys:keys forVersion:self.latestVersion validate:NO];
     }
-    return privateKey;
+    
+    return keys.dsaPrivKey;
+}
+
+-(BOOL) recreateDsaKeys: (IdentityKeys *) keys forVersion: (NSString *) version validate: (BOOL) validate {
+    DDLogInfo(@"recreating dsa keys for username: %@, version: %@ start", _username, version);
+    NSString * dprivDsa = [[_jsonKeyPairs objectForKey:version ] objectForKey:@"dsaPriv"];
+    ECDSAPrivateKey * dsaPrivKey =  [EncryptionController recreateDsaPrivateKey:dprivDsa validate:validate];
+    
+    if (!dsaPrivKey) {
+        return NO;
+    }
+    
+    CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey * dsaPubKey = new ECDSAPublicKey();
+    dsaPrivKey->MakePublicKey(*dsaPubKey);
+    keys.dsaPrivKey = dsaPrivKey;
+    keys.dsaPubKey = dsaPubKey;
+    
+    return YES;
 }
 
 

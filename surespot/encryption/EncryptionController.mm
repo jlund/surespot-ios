@@ -258,15 +258,26 @@ int const PBKDF_ROUNDS = 20000;
 }
 
 
-+ (ECDHPrivateKey *) recreateDhPrivateKey:(NSString *) encodedKey {
-    
-    ECDHPrivateKey * privateKey = new ECDHPrivateKey();
-    NSData * decodedKey = [NSData dataFromBase64String: encodedKey];
-    ByteQueue byteQueue;
-    byteQueue.Put((byte *) [decodedKey bytes], [decodedKey length]);
-    DDLogInfo(@"loading key start");
-    privateKey->Load(byteQueue);
-    return privateKey;
++ (ECDHPrivateKey *) recreateDhPrivateKey:(NSString *) encodedKey validate: (BOOL) validate {
+    DDLogInfo(@"validate: %hhd", validate);
+    if (encodedKey) {
+        ECDHPrivateKey * privateKey = new ECDHPrivateKey();
+        NSData * decodedKey = [NSData dataFromBase64String: encodedKey];
+        ByteQueue byteQueue;
+        byteQueue.Put((byte *) [decodedKey bytes], [decodedKey length]);
+        DDLogInfo(@"loading key start");
+        privateKey->Load(byteQueue);
+        
+        if (validate) {
+            if (!privateKey->Validate(rng, 3)) {
+                DDLogWarn(@"dh private key failed validation");
+                return nil;
+            }
+        }
+        
+        return privateKey;
+    }
+    return nil;
 }
 
 + (ECDSAPublicKey *) recreateDsaPublicKey: (NSString *) encodedKey {
@@ -285,14 +296,22 @@ int const PBKDF_ROUNDS = 20000;
 }
 
 
-+ (ECDSAPrivateKey *) recreateDsaPrivateKey:(NSString *) encodedKey {
-    
++ (ECDSAPrivateKey *) recreateDsaPrivateKey:(NSString *) encodedKey validate: (BOOL) validate {
+    DDLogInfo(@"validate: %hhd", validate);
     ECDSAPrivateKey * privateKey = new ECDSAPrivateKey();
     NSData * decodedKey = [ NSData dataFromBase64String:encodedKey];
     ByteQueue byteQueue;
     byteQueue.Put((byte *) [decodedKey bytes], [decodedKey length]);
     DDLogInfo(@"loading key start");
     privateKey->Load(byteQueue);
+    
+    if (validate) {
+        if (!privateKey->Validate(rng, 3)) {
+            DDLogWarn(@"dsa private key failed validation");
+            return nil;
+        }
+    }
+
     DDLogInfo(@"loading key end");
     return privateKey;
 }

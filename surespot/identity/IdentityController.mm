@@ -31,7 +31,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
 
 @interface IdentityController()
-@property  (nonatomic, strong) SurespotIdentity * loggedInIdentity;
+@property (nonatomic, strong) SurespotIdentity * loggedInIdentity;
 @property (nonatomic, strong) NSMutableDictionary * keychainWrappers;
 @property (nonatomic, strong) NSMutableDictionary * identities;
 @end
@@ -78,7 +78,7 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
         NSData* unzipped = [myData gzipInflate];
         NSData * identity = [EncryptionController decryptIdentity: unzipped withPassword:[password stringByAppendingString:CACHE_IDENTITY_ID]];
         if (identity) {
-            return [self decodeIdentityData:identity withUsername:username andPassword:password];
+            return [self decodeIdentityData:identity withUsername:username andPassword:password validate: NO];
         }
     }
     
@@ -90,41 +90,46 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithObjectsAndKeys: [identity username] ,@"username", [identity salt], @"salt" ,nil];
     
     
-    NSDictionary * identityKeys = [identity getKeys];
-    NSMutableArray * encodedKeys = [[NSMutableArray alloc] init];
-    NSEnumerator *enumerator = [identityKeys keyEnumerator];
     
-    id key;
-    while ((key = [enumerator nextObject])) {
-        IdentityKeys *versionedKeys = [identityKeys objectForKey:key];
-        NSDictionary *jsonKeys = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [versionedKeys version] ,@"version",
-                                  [EncryptionController encodeDHPrivateKey: [versionedKeys dhPrivKey]], @"dhPriv" ,
-                                  [EncryptionController encodeDHPublicKey: [versionedKeys dhPubKey]], @"dhPub" ,
-                                  [EncryptionController encodeDSAPrivateKey: [versionedKeys dsaPrivKey]], @"dsaPriv" ,
-                                  [EncryptionController encodeDSAPublicKey: [versionedKeys dsaPubKey]], @"dsaPub" ,
-                                  nil];
+    NSDictionary * identityKeys = [identity keyPairs];
+    NSMutableArray * encodedKeys = [[NSMutableArray alloc] init];
+    for (NSInteger i=1;i<=[identity.latestVersion integerValue];i++) {
+        NSString * version =[@(i) stringValue];
         
-        [encodedKeys addObject:jsonKeys];
+        //if we have a concrete key encode and save that
+        IdentityKeys *versionedKeys = [identityKeys objectForKey:version];
+        if (versionedKeys) {
+            DDLogInfo(@"saving concrete key for version %@", version);
+            NSDictionary *jsonKeys = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      [versionedKeys version] ,@"version",
+                                      [EncryptionController encodeDHPrivateKey: [versionedKeys dhPrivKey]], @"dhPriv" ,
+                                      [EncryptionController encodeDHPublicKey: [versionedKeys dhPubKey]], @"dhPub" ,
+                                      [EncryptionController encodeDSAPrivateKey: [versionedKeys dsaPrivKey]], @"dsaPriv" ,
+                                      [EncryptionController encodeDSAPublicKey: [versionedKeys dsaPubKey]], @"dsaPub" ,
+                                      nil];
+            
+            [encodedKeys addObject:jsonKeys];
+        }
+        //otherwise use json
+        else {
+            DDLogInfo(@"saving json key for version %@", version);
+            [encodedKeys addObject:[[identity jsonKeyPairs] objectForKey:version]];
+        }
     }
     
     [dic setObject:encodedKeys forKey:@"keys"];
     NSError * error;
     NSData * jsonIdentity = [NSJSONSerialization dataWithJSONObject:dic options:kNilOptions error:&error];
-    //  NSString * jsonString = [[NSString alloc] initWithData:jsonIdentity encoding:NSUTF8StringEncoding];
     return [EncryptionController encryptIdentity:jsonIdentity withPassword:password];
     
 }
 
--( SurespotIdentity *) decodeIdentityData: (NSData *) identityData withUsername: (NSString *) username andPassword: (NSString *) password {
-   
-        NSError* error;
-        
-        NSDictionary* dic = [NSJSONSerialization JSONObjectWithData:identityData options:kNilOptions error:&error];
-        return [[SurespotIdentity alloc] initWithDictionary: dic];
-        
-   
+-( SurespotIdentity *) decodeIdentityData: (NSData *) identityData withUsername: (NSString *) username andPassword: (NSString *) password validate: (BOOL) validate {
     
+    NSError* error;
+    
+    NSDictionary* dic = [NSJSONSerialization JSONObjectWithData:identityData options:kNilOptions error:&error];
+    return [[SurespotIdentity alloc] initWithDictionary: dic validate: validate];
 }
 
 -(void) setLoggedInUserIdentity: (SurespotIdentity *) identity {
@@ -203,12 +208,7 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
 
 - (void) getTheirLatestVersionForUsername: (NSString *) username callback:(CallbackStringBlock) callback {
     DDLogVerbose(@"getTheirLatestVersionForUsername");
-    
     [[CredentialCachingController sharedInstance] getLatestVersionForUsername: username callback: callback];
-    
-    
-    
-    
 }
 
 -(void) getSharedSecretForOurVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion:( NSString *) theirVersion callback:(CallbackBlock) callback {
@@ -337,7 +337,12 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
         return;
     }
     
-    SurespotIdentity * identity = [self decodeIdentityData:decryptedIdentity withUsername:username andPassword:password];
+    SurespotIdentity * identity = [self decodeIdentityData:decryptedIdentity withUsername:username andPassword:password validate:YES];
+    if (!identity) {
+        callback([NSString stringWithFormat:NSLocalizedString(@"could_not_restore_identity_name", nil), username]);
+        return;
+    }
+    
     NSData * saltBytes = [NSData dataFromBase64String:identity.salt];
     NSData * derivedPassword = [EncryptionController deriveKeyUsingPassword:password andSalt:saltBytes];
     NSData * encodedPassword = [derivedPassword SR_dataByBase64Encoding];

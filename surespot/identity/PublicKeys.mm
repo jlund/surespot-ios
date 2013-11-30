@@ -10,5 +10,8 @@
 
 
 @implementation PublicKeys
-
+-(void) dealloc {
+    delete _dhPubKey;
+    delete _dsaPubKey;
+}
 @end

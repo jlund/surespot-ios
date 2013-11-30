@@ -13,7 +13,7 @@
 
 
 @interface SurespotIdentity : NSObject
--(id) initWithDictionary: (NSDictionary *) jsonIdentity;
+-(id) initWithDictionary: (NSDictionary *) jsonIdentity validate: (BOOL) validate;
 -(id) initWithUsername:(NSString*)username andSalt:(NSString *)salt keys: (IdentityKeys *) keys;
 
 @property (atomic, copy) NSString* username;
@@ -24,5 +24,7 @@
 //- (ECDSAPPublicKey) getDsaPublicKey;
 - (ECDSAPrivateKey *) getDsaPrivateKey;
 
-- (NSDictionary *) getKeys;
+
+@property (atomic, strong) NSMutableDictionary* keyPairs;
+@property (atomic, strong) NSMutableDictionary* jsonKeyPairs;
 @end

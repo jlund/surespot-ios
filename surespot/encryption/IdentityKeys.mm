@@ -9,5 +9,11 @@
 #import "IdentityKeys.h"
 
 @implementation IdentityKeys
-
+-(void) dealloc {
+    delete _dhPrivKey;
+    delete _dhPubKey;
+    delete _dsaPrivKey;
+    delete _dsaPubKey;
+    
+}
 @end
