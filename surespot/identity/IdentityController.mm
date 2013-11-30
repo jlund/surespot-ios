@@ -117,46 +117,13 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
 }
 
 -( SurespotIdentity *) decodeIdentityData: (NSData *) identityData withUsername: (NSString *) username andPassword: (NSString *) password {
-    try {
+   
         NSError* error;
         
         NSDictionary* dic = [NSJSONSerialization JSONObjectWithData:identityData options:kNilOptions error:&error];
+        return [[SurespotIdentity alloc] initWithDictionary: dic];
         
-        //convert keys from json
-        NSString * username = [dic objectForKey:@"username"];
-        NSString * salt = [dic objectForKey:@"salt"];
-        NSArray * keys = [dic objectForKey:@"keys"];
-        
-        SurespotIdentity * si = [[SurespotIdentity alloc] initWithUsername:username andSalt:salt];
-        
-        //
-        for (NSDictionary * key in keys) {
-            
-            NSString * version = [key objectForKey:@"version"];
-            //    NSString * dpubDH = [key objectForKey:@"dhPub"];
-            NSString * dprivDH = [key objectForKey:@"dhPriv"];
-            //   NSString * dsaPub = [key objectForKey:@"dsaPub"];
-            NSString * dsaPriv = [key objectForKey:@"dsaPriv"];
-            
-            
-            
-            CryptoPP::DL_PrivateKey_EC<ECP>::DL_PrivateKey_EC dhPrivKey = [EncryptionController recreateDhPrivateKey:dprivDH];
-            CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey dsaPrivKey = [EncryptionController recreateDsaPrivateKey:dsaPriv];
-            CryptoPP::DL_PublicKey_EC<ECP> dhPubKey;
-            dhPrivKey.MakePublicKey(dhPubKey);
-            
-            CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey dsaPubKey;
-            dsaPrivKey.MakePublicKey(dsaPubKey);
-            
-            [si addKeysWithVersion:version withDhPrivKey:dhPrivKey withDhPubKey:dhPubKey withDsaPrivKey:dsaPrivKey withDsaPubKey:dsaPubKey];
-        }
-        
-        return si;
-        
-    } catch (const CryptoPP::Exception& e) {
-        // cerr << e.what() << endl;
-    }
-    return nil;
+   
     
 }
 
@@ -174,8 +141,7 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
                             andKeys: (IdentityKeys *) keys {
     
     
-    SurespotIdentity * identity = [[SurespotIdentity alloc] initWithUsername:username andSalt:salt];
-    [identity addKeysWithVersion:@"1" withDhPrivKey:[keys dhPrivKey] withDhPubKey:[keys dhPubKey] withDsaPrivKey:[keys dsaPrivKey] withDsaPubKey:[keys dsaPubKey] ];
+    SurespotIdentity * identity = [[SurespotIdentity alloc] initWithUsername:username andSalt:salt keys:keys];
     
     [self saveIdentity:identity  withPassword:[password stringByAppendingString:CACHE_IDENTITY_ID]];
     [self setLoggedInUserIdentity:identity];
@@ -274,8 +240,8 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     NSString * filename =[FileController getPublicKeyFilenameForUsername: username version: version];
     NSDictionary * keys = [NSKeyedUnarchiver unarchiveObjectWithFile:filename];
     if (keys) {
-        ECDHPublicKey dhPub = [EncryptionController recreateDhPublicKey:[keys objectForKey:@"dhPub"]];
-        ECDHPublicKey dsaPub = [EncryptionController recreateDsaPublicKey:[keys objectForKey:@"dsaPub"]];
+        ECDHPublicKey * dhPub = [EncryptionController recreateDhPublicKey:[keys objectForKey:@"dhPub"]];
+        ECDHPublicKey * dsaPub = [EncryptionController recreateDsaPublicKey:[keys objectForKey:@"dsaPub"]];
         
         PublicKeys* pk = [[PublicKeys alloc] init];
         pk.dhPubKey = dhPub;
@@ -400,5 +366,6 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
         }
     }];
 }
+
 
 @end

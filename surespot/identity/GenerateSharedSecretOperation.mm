@@ -18,14 +18,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
 
 @interface GenerateSharedSecretOperation()
-@property (nonatomic, assign) ECDHPrivateKey ourPrivateKey;
-@property (nonatomic, assign) ECDHPublicKey theirPublicKey;
+@property (nonatomic, assign) ECDHPrivateKey* ourPrivateKey;
+@property (nonatomic, assign) ECDHPublicKey* theirPublicKey;
 @end
 
 
 @implementation GenerateSharedSecretOperation
 
--(id) initWithOurPrivateKey: (ECDHPrivateKey) ourPrivateKey theirPublicKey: (ECDHPublicKey) theirPublicKey completionCallback:(void(^)(NSData *)) callback {
+-(id) initWithOurPrivateKey: (ECDHPrivateKey *) ourPrivateKey theirPublicKey: (ECDHPublicKey *) theirPublicKey completionCallback:(void(^)(NSData *)) callback {
     if (self = [super init]) {
         self.callback = callback;
         self.ourPrivateKey = ourPrivateKey;

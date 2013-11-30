@@ -8,36 +8,21 @@
 
 #import <Foundation/Foundation.h>
 #include "eccrypto.h"
-using CryptoPP::ECP;
-using CryptoPP::ECDH;
-using CryptoPP::DL_Keys_EC;
+#import "IdentityKeys.h"
 
-typedef CryptoPP::DL_PublicKey_EC<ECP> ECDHPublicKey;
-typedef CryptoPP::DL_PrivateKey_EC<ECP> ECDHPrivateKey;
-typedef CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey ECDSAPPublicKey;
-typedef CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey ECDSAPrivateKey;
 
 
 @interface SurespotIdentity : NSObject
-
--(id) initWithUsername:(NSString*)username andSalt:(NSString *)salt;
-
-- (void)
-    addKeysWithVersion:(NSString*)version
-    withDhPrivKey: (CryptoPP::DL_PrivateKey_EC<ECP>::DL_PrivateKey_EC) dhPrivKey
-    withDhPubKey: (CryptoPP::DL_PublicKey_EC<ECP>) dhPubKey
-    withDsaPrivKey: (CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey) dsaPrivKey
-    withDsaPubKey: (CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey) dsaPubKey;
+-(id) initWithDictionary: (NSDictionary *) jsonIdentity;
+-(id) initWithUsername:(NSString*)username andSalt:(NSString *)salt keys: (IdentityKeys *) keys;
 
 @property (atomic, copy) NSString* username;
 @property (atomic, copy) NSString* latestVersion;
 @property (atomic, copy) NSString* salt;
-@property (atomic, strong) NSMutableDictionary* keyPairs;
-
 //- (ECDHPublicKey) getDhPublicKey;
-- (ECDHPrivateKey) getDhPrivateKeyForVersion: (NSString *) version;
+- (ECDHPrivateKey *) getDhPrivateKeyForVersion: (NSString *) version;
 //- (ECDSAPPublicKey) getDsaPublicKey;
-- (ECDSAPrivateKey) getDsaPrivateKey;
+- (ECDSAPrivateKey *) getDsaPrivateKey;
 
 - (NSDictionary *) getKeys;
 @end

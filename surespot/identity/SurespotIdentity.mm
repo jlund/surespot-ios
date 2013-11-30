@@ -7,16 +7,63 @@
 //
 
 #import "SurespotIdentity.h"
-#import "IdentityKeys.h"
+#import "EncryptionController.h"
+#import "DDLog.h"
 
+#ifdef DEBUG
+static const int ddLogLevel = LOG_LEVEL_INFO;
+#else
+static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
+
+@interface SurespotIdentity()
+
+@property (atomic, strong) NSMutableDictionary* keyPairs;
+@property (atomic, strong) NSMutableDictionary* jsonKeyPairs;
+
+@end
 
 @implementation SurespotIdentity
 
--(id) initWithUsername:(NSString *)username andSalt:(NSString *)salt {
+
+-(id) initWithDictionary: (NSDictionary *) jsonIdentity {
+    if (self = [super init]) {
+        try {
+            self.keyPairs = [[NSMutableDictionary alloc] init];
+            self.jsonKeyPairs = [[NSMutableDictionary alloc] init];
+            _username = [jsonIdentity objectForKey:@"username"];
+            _salt = [jsonIdentity objectForKey:@"salt"];
+            NSArray * keys = [jsonIdentity objectForKey:@"keys"];
+            for (NSDictionary * key in keys) {
+                
+                NSString * version = [key objectForKey:@"version"];
+                [self addJSONKeysWithVersion:version jsonKeys:key];
+            
+            }
+            
+            //re-generate latest keys
+            [self getDhPrivateKeyForVersion:_latestVersion];
+            [self getDsaPrivateKey];
+            return self;
+            
+        } catch (const CryptoPP::Exception& e) {
+            // cerr << e.what() << endl;
+        }
+    }
+    return nil;
+    
+}
+
+
+-(id) initWithUsername:(NSString*)username andSalt:(NSString *)salt keys: (IdentityKeys *) keys {
     if (self = [super init]) {
         self.username = username;
         self.salt = salt;
+        self.latestVersion = keys.version;
         self.keyPairs = [[NSMutableDictionary alloc] init];
+        self.jsonKeyPairs = [[NSMutableDictionary alloc] init];
+        [self.keyPairs setObject:keys forKey:keys.version];
+        
         return self;
     }
     else {
@@ -28,12 +75,8 @@
     return self.keyPairs;
 }
 
-- (void)
-addKeysWithVersion:(NSString*)version
-withDhPrivKey: (CryptoPP::DL_PrivateKey_EC<ECP>::DL_PrivateKey_EC) dhPrivKey
-withDhPubKey: (CryptoPP::DL_PublicKey_EC<ECP>) dhPubKey
-withDsaPrivKey: (CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey) dsaPrivKey
-withDsaPubKey: (CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey) dsaPubKey {
+
+- (void) addJSONKeysWithVersion:(NSString*)version jsonKeys: (NSDictionary *) jsonKeys {
     
     if (self.latestVersion == nil) {
         self.latestVersion = version;
@@ -43,16 +86,8 @@ withDsaPubKey: (CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey) dsaPubKey {
             self.latestVersion = version;
         }
     }
-    //self.version = version;
     
-    IdentityKeys * ik = [[IdentityKeys alloc] init];
-    ik.version = version;
-    ik.dhPrivKey = dhPrivKey;
-    ik.dhPubKey = dhPubKey;
-    ik.dsaPrivKey = dsaPrivKey;
-    ik.dsaPubKey = dsaPubKey;
-    
-    [self.keyPairs setValue: ik forKey: version];
+    [self.jsonKeyPairs setValue: jsonKeys forKey: version];
 }
 
 //- (ECDHPublicKey) getDhPublicKey {
@@ -60,9 +95,30 @@ withDsaPubKey: (CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey) dsaPubKey {
 //    return keys.dhPubKey;
 //}
 
-- (ECDHPrivateKey) getDhPrivateKeyForVersion: (NSString *) version {
+- (ECDHPrivateKey *) getDhPrivateKeyForVersion: (NSString *) version {
     IdentityKeys * keys = [self.keyPairs objectForKey:version];
-    return keys.dhPrivKey;
+    if (!keys) {
+        keys = [[IdentityKeys alloc] init];
+        keys.version = version;
+        [self.keyPairs setValue: keys forKey: version];        
+    }
+    
+    ECDHPrivateKey * privateKey = keys.dhPrivKey;
+    
+    if (!privateKey) {
+        //     DDLogInfo(@"recreating keys for username: %@, version: %@ start", _username, version);
+        NSString * dprivDH = [[_jsonKeyPairs objectForKey:version ] objectForKey:@"dhPriv"];
+        ECDHPrivateKey * dhPrivKey = [EncryptionController recreateDhPrivateKey:dprivDH];
+        CryptoPP::DL_PublicKey_EC<ECP> * dhPubKey = new ECDHPublicKey();
+        dhPrivKey->MakePublicKey(*dhPubKey);
+        
+        keys.dhPrivKey = dhPrivKey;
+        keys.dhPubKey = dhPubKey;
+        
+        privateKey = dhPrivKey;
+        
+    }
+    return privateKey;
 }
 
 //-(ECDSAPPublicKey)getDsaPublicKey {
@@ -70,9 +126,31 @@ withDsaPubKey: (CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey) dsaPubKey {
 //    return keys.dsaPubKey;
 //}
 
-- (ECDSAPrivateKey) getDsaPrivateKey {
+- (ECDSAPrivateKey *) getDsaPrivateKey {
     IdentityKeys * keys = [self.keyPairs objectForKey:self.latestVersion];
-    return keys.dsaPrivKey;
+    if (!keys) {
+        keys = [[IdentityKeys alloc] init];
+        keys.version = self.latestVersion;
+        [self.keyPairs setValue: keys forKey: self.latestVersion];
+        
+    }
+    
+    ECDSAPrivateKey * privateKey = keys.dsaPrivKey;
+    
+    if (!privateKey) {
+        //     DDLogInfo(@"recreating keys for username: %@, version: %@ start", _username, version);
+        NSString * dprivDSA = [[_jsonKeyPairs objectForKey:self.latestVersion ] objectForKey:@"dsaPriv"];
+        ECDSAPrivateKey * dsaPrivKey = [EncryptionController recreateDsaPrivateKey:dprivDSA];
+        CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey * dsaPubKey = new ECDSAPublicKey();
+        dsaPrivKey->MakePublicKey(*dsaPubKey);
+ 
+        keys.dsaPrivKey = dsaPrivKey;
+        keys.dsaPubKey = dsaPubKey;
+        
+        privateKey = dsaPrivKey;
+        
+    }
+    return privateKey;
 }
 
 

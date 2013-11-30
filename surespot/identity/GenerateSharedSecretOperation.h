@@ -16,7 +16,7 @@
 @property (nonatomic, strong) void(^callback)(NSData *);
 @property (nonatomic, strong) NSData * sharedSecret;
 
--(id) initWithOurPrivateKey: (ECDHPrivateKey) ourPrivateKey theirPublicKey: (ECDHPublicKey) theirPublicKey completionCallback:(void(^)(NSData *)) callback;
+-(id) initWithOurPrivateKey: (ECDHPrivateKey *) ourPrivateKey theirPublicKey: (ECDHPublicKey *) theirPublicKey completionCallback:(void(^)(NSData *)) callback;
 
 
 @end

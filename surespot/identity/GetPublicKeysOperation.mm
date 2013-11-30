@@ -86,8 +86,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                  NSString * spubDSA = [jsonKeys objectForKey:@"dsaPub"];
                  DDLogVerbose(@"get public keys response: %d, key: %@",  [response statusCode], spubDH);
                  
-                 ECDHPublicKey dhPub = [EncryptionController recreateDhPublicKey:spubDH];
-                 ECDHPublicKey dsaPub = [EncryptionController recreateDsaPublicKey:spubDSA];
+                 ECDHPublicKey * dhPub = [EncryptionController recreateDhPublicKey:spubDH];
+                 ECDHPublicKey * dsaPub = [EncryptionController recreateDsaPublicKey:spubDSA];
                  
                  PublicKeys* pk = [[PublicKeys alloc] init];
                  pk.dhPubKey = dhPub;

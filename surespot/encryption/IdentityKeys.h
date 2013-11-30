@@ -8,16 +8,22 @@
 
 #import <Foundation/Foundation.h>
 #import "eccrypto.h"
+
 using CryptoPP::ECP;
 using CryptoPP::ECDH;
 using CryptoPP::DL_Keys_EC;
 
+typedef CryptoPP::DL_PublicKey_EC<CryptoPP::ECP> ECDHPublicKey;
+typedef CryptoPP::DL_PrivateKey_EC<ECP> ECDHPrivateKey;
+typedef CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey ECDSAPublicKey;
+typedef CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey ECDSAPrivateKey;
+
 @interface IdentityKeys : NSObject
 
 @property (nonatomic, strong) NSString* version;
-@property (nonatomic, assign) CryptoPP::DL_PrivateKey_EC<ECP>::DL_PrivateKey_EC dhPrivKey;
-@property (nonatomic, assign) CryptoPP::DL_PublicKey_EC<ECP> dhPubKey;
-@property (nonatomic, assign) CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey dsaPrivKey;
-@property (nonatomic, assign) CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey dsaPubKey;
+@property (nonatomic, assign) ECDHPrivateKey * dhPrivKey;
+@property (nonatomic, assign) ECDHPublicKey * dhPubKey;
+@property (nonatomic, assign) ECDSAPrivateKey * dsaPrivKey;
+@property (nonatomic, assign) ECDSAPublicKey * dsaPubKey;
 
 @end

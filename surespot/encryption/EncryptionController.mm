@@ -24,7 +24,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
 
 @interface EncryptionController()
-+(ECDSAPPublicKey) serverPublicKey;
++(ECDSAPublicKey *) serverPublicKey;
 @end
 
 @implementation EncryptionController
@@ -35,8 +35,8 @@ int const AES_KEY_LENGTH = 32;
 int const PBKDF_ROUNDS_LEGACY = 1000;
 int const PBKDF_ROUNDS = 20000;
 
-+(ECDSAPPublicKey) serverPublicKey {
-    static ECDSAPPublicKey serverPublicKey;
++(ECDSAPublicKey *) serverPublicKey {
+    static ECDSAPublicKey * serverPublicKey;
     static dispatch_once_t oncePredicate;
     
     dispatch_once(&oncePredicate, ^{
@@ -184,11 +184,11 @@ int const PBKDF_ROUNDS = 20000;
     return plainString;
 }
 
-+(NSData *) generateSharedSecret: (ECDHPrivateKey) privateKey publicKey:(ECDHPublicKey) publicKey {
++(NSData *) generateSharedSecret: (ECDHPrivateKey *) privateKey publicKey:(ECDHPublicKey *) publicKey {
     OID CURVE = secp521r1();
     ECDH < ECP >::Domain dhA( CURVE );
     CryptoPP::SecByteBlock secA(dhA.AgreedValueLength());
-    dhA.Agree(secA, privateKey.GetPrivateExponent(), publicKey.GetPublicElement());
+    dhA.Agree(secA, privateKey->GetPrivateExponent(), publicKey->GetPublicElement());
     NSData * key = [NSData dataWithBytes:secA.data() length:secA.SizeInBytes()];
     return key;
 }
@@ -243,13 +243,13 @@ int const PBKDF_ROUNDS = 20000;
 }
 
 
-+ (ECDHPublicKey) recreateDhPublicKey: (NSString *) encodedKey {
-    ECDHPublicKey publicKey;
++ (ECDHPublicKey *) recreateDhPublicKey: (NSString *) encodedKey {
+    ECDHPublicKey * publicKey = new ECDHPublicKey();
     NSData * decodedKey = [self decodePublicKey:encodedKey];
     ByteQueue byteQueue;
     byteQueue.Put((byte *) [decodedKey bytes], [decodedKey length]);
-    publicKey.Load(byteQueue);
-    bool validated = publicKey.Validate(rng, 3);
+    publicKey->Load(byteQueue);
+    bool validated = publicKey->Validate(rng, 3);
     
     if (!validated) {
         DDLogWarn(@"dh public key not validated");
@@ -258,24 +258,24 @@ int const PBKDF_ROUNDS = 20000;
 }
 
 
-+ (ECDHPrivateKey) recreateDhPrivateKey:(NSString *) encodedKey {
++ (ECDHPrivateKey *) recreateDhPrivateKey:(NSString *) encodedKey {
     
-    ECDHPrivateKey privateKey;
+    ECDHPrivateKey * privateKey = new ECDHPrivateKey();
     NSData * decodedKey = [NSData dataFromBase64String: encodedKey];
     ByteQueue byteQueue;
     byteQueue.Put((byte *) [decodedKey bytes], [decodedKey length]);
     DDLogInfo(@"loading key start");
-    privateKey.Load(byteQueue);
+    privateKey->Load(byteQueue);
     return privateKey;
 }
 
-+ (ECDSAPublicKey) recreateDsaPublicKey: (NSString *) encodedKey {
-    ECDSAPublicKey publicKey;
++ (ECDSAPublicKey *) recreateDsaPublicKey: (NSString *) encodedKey {
+    ECDSAPublicKey * publicKey = new ECDSAPublicKey();
     NSData * decodedKey = [self decodePublicKey:encodedKey];
     ByteQueue byteQueue;
     byteQueue.Put((byte *) [decodedKey bytes], [decodedKey length]);
-    publicKey.Load(byteQueue);
-    bool validated = publicKey.Validate(rng, 3);
+    publicKey->Load(byteQueue);
+    bool validated = publicKey->Validate(rng, 3);
     
     if (!validated) {
         DDLogWarn(@"dsa public key not validated");
@@ -285,20 +285,20 @@ int const PBKDF_ROUNDS = 20000;
 }
 
 
-+ (CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey) recreateDsaPrivateKey:(NSString *) encodedKey {
++ (ECDSAPrivateKey *) recreateDsaPrivateKey:(NSString *) encodedKey {
     
-    CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey privateKey;
+    ECDSAPrivateKey * privateKey = new ECDSAPrivateKey();
     NSData * decodedKey = [ NSData dataFromBase64String:encodedKey];
     ByteQueue byteQueue;
     byteQueue.Put((byte *) [decodedKey bytes], [decodedKey length]);
     DDLogInfo(@"loading key start");
-    privateKey.Load(byteQueue);
+    privateKey->Load(byteQueue);
     DDLogInfo(@"loading key end");
     return privateKey;
 }
 
-+ (NSData *) signUsername: (NSString *) username andPassword: (NSData *) password withPrivateKey: (ECDSAPrivateKey) privateKey {
-    CryptoPP::ECDSA<ECP, SHA256>::Signer signer(privateKey);
++ (NSData *) signUsername: (NSString *) username andPassword: (NSData *) password withPrivateKey: (ECDSAPrivateKey *) privateKey {
+    CryptoPP::ECDSA<ECP, SHA256>::Signer signer(*privateKey);
     NSData * usernameData =[username dataUsingEncoding:NSUTF8StringEncoding];
     
     byte * random = new byte[16];
@@ -322,7 +322,7 @@ int const PBKDF_ROUNDS = 20000;
 }
 
 +(BOOL) verifyPublicKeySignature: (NSData *) signature data: (NSString *) data {
-    CryptoPP::ECDSA<ECP, SHA256>::Verifier verifier( [self serverPublicKey]);
+    CryptoPP::ECDSA<ECP, SHA256>::Verifier verifier(*[self serverPublicKey]);
     NSMutableData * keyData = [NSMutableData dataWithData:[data dataUsingEncoding:NSUTF8StringEncoding ]];
     byte * buffer = new Byte[verifier.SignatureLength()];
     
@@ -345,27 +345,28 @@ int const PBKDF_ROUNDS = 20000;
 }
 
 +(IdentityKeys *) generateKeyPairs {
-    CryptoPP::DL_PrivateKey_EC<ECP>::DL_PrivateKey_EC dhKey;
+    ECDHPrivateKey * dhKey = new ECDHPrivateKey();
     
-    dhKey.Initialize(rng, secp521r1());
-    bool dhvalid = dhKey.Validate(rng, 3);
+    dhKey->Initialize(rng, secp521r1());
+    bool dhvalid = dhKey->Validate(rng, 3);
     
     if (dhvalid) {
-        CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey dsaKey;
+        CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey * dsaKey = new ECDSAPrivateKey();
         
-        dsaKey.Initialize( rng, secp521r1());
-        bool dsaValid = dsaKey.Validate( rng, 3 );
+        dsaKey->Initialize( rng, secp521r1());
+        bool dsaValid = dsaKey->Validate( rng, 3 );
         
         if (dsaValid) {
             IdentityKeys * ik = [[IdentityKeys alloc] init];
+            ik.version = @"1";
             
             ik.dhPrivKey = dhKey;
-            CryptoPP::DL_PublicKey_EC<ECP> dhPubKey;
-            dhKey.MakePublicKey(dhPubKey);
+            ECDHPublicKey * dhPubKey = new ECDHPublicKey();
+            dhKey->MakePublicKey(*dhPubKey);
             ik.dhPubKey = dhPubKey;
             
-            CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey dsaPubKey;
-            dsaKey.MakePublicKey(dsaPubKey);
+            CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey * dsaPubKey = new ECDHPublicKey();
+            dsaKey->MakePublicKey(*dsaPubKey);
             ik.dsaPubKey = dsaPubKey;
             ik.dsaPrivKey = dsaKey;
             return ik;
@@ -375,9 +376,9 @@ int const PBKDF_ROUNDS = 20000;
 }
 
 
-+(NSString *) encodeDHPrivateKey: (ECDHPrivateKey) dhPrivKey {
++(NSString *) encodeDHPrivateKey: (ECDHPrivateKey *) dhPrivKey {
     ByteQueue dhPrivByteQueue;
-    dhPrivKey.Save(dhPrivByteQueue);
+    dhPrivKey->Save(dhPrivByteQueue);
     size_t size = dhPrivByteQueue.TotalBytesRetrievable();
     byte encoded[dhPrivByteQueue.TotalBytesRetrievable()];
     dhPrivByteQueue.Get(encoded, size);
@@ -386,7 +387,7 @@ int const PBKDF_ROUNDS = 20000;
     return [keyData SR_stringByBase64Encoding];
 }
 
-+(NSString *) encodeDHPublicKey: (ECDHPublicKey) dhPubKey {
++(NSString *) encodeDHPublicKey: (ECDHPublicKey *) dhPubKey {
     
     
     ByteQueue byteQueue;
@@ -396,7 +397,7 @@ int const PBKDF_ROUNDS = 20000;
     byte oidBytes[] = {0x30, 0x81, 0x9B, 0x30, 0x10, 0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01, 0x06, 0x05, 0x2B, 0x81, 0x04, 0x00, 0x23, 0x03, 0x81, 0x86, 0x00};
     byteQueue.Put(oidBytes, 25);
     
-    dhPubKey.DEREncodePublicKey(byteQueue);
+    dhPubKey->DEREncodePublicKey(byteQueue);
     
     size_t size = byteQueue.TotalBytesRetrievable();
     
@@ -410,9 +411,9 @@ int const PBKDF_ROUNDS = 20000;
     return [self pemKey:keyData];
 }
 
-+(NSString *) encodeDSAPrivateKey: (ECDSAPrivateKey) dsaPrivKey {
++(NSString *) encodeDSAPrivateKey: (ECDSAPrivateKey *) dsaPrivKey {
     ByteQueue dsaPrivByteQueue;
-    dsaPrivKey.Save(dsaPrivByteQueue);
+    dsaPrivKey->Save(dsaPrivByteQueue);
     size_t size = dsaPrivByteQueue.TotalBytesRetrievable();
     byte encoded[dsaPrivByteQueue.TotalBytesRetrievable()];
     dsaPrivByteQueue.Get(encoded, size);
@@ -421,7 +422,7 @@ int const PBKDF_ROUNDS = 20000;
     return [keyData SR_stringByBase64Encoding];
 }
 
-+(NSString *) encodeDSAPublicKey: (ECDSAPublicKey) dsaPubKey {
++(NSString *) encodeDSAPublicKey: (ECDSAPublicKey *) dsaPubKey {
     ByteQueue byteQueue;
     
     //hard code the asn.1 oids for the curve we're using to the encoded output...don't know why crypto++ doesn't do this
@@ -429,7 +430,7 @@ int const PBKDF_ROUNDS = 20000;
     byte oidBytes[] = {0x30, 0x81, 0x9B, 0x30, 0x10, 0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01, 0x06, 0x05, 0x2B, 0x81, 0x04, 0x00, 0x23, 0x03, 0x81, 0x86, 0x00};
     byteQueue.Put(oidBytes, 25);
     
-    dsaPubKey.DEREncodePublicKey(byteQueue);
+    dsaPubKey->DEREncodePublicKey(byteQueue);
     
     size_t size = byteQueue.TotalBytesRetrievable();
     

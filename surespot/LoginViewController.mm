@@ -17,7 +17,7 @@
 #import "RestoreIdentityViewController.h"
 
 #ifdef DEBUG
-static const int ddLogLevel = LOG_LEVEL_INFO;
+static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 #else
 static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
@@ -123,9 +123,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     dispatch_queue_t q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     
     dispatch_async(q, ^{
-        
-        
-        SurespotIdentity * identity = [[IdentityController sharedInstance] getIdentityWithUsername:username andPassword:password];
+        DDLogVerbose(@"getting identity");
+        SurespotIdentity * identity = [[IdentityController sharedInstance] getIdentityWithUsername:username andPassword:password];    
+        DDLogVerbose(@"got identity");
         
         if (!identity) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -142,7 +142,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         
         
-        // DDLogVerbose(@"loaded salt: %@", [identity salt]);
+        DDLogVerbose(@"creating signature");
         
         NSData * decodedSalt = [NSData dataFromBase64String: [identity salt]];
         NSData * derivedPassword = [EncryptionController deriveKeyUsingPassword:password andSalt: decodedSalt];
@@ -151,7 +151,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         NSData * signature = [EncryptionController signUsername:username andPassword: encodedPassword withPrivateKey:[identity getDsaPrivateKey]];
         NSString * passwordString = [derivedPassword SR_stringByBase64Encoding];
         NSString * signatureString = [signature SR_stringByBase64Encoding];
-        
+
+        DDLogVerbose(@"logging in to server");
         [[NetworkController sharedInstance]
          loginWithUsername:username
          andPassword:passwordString
@@ -228,9 +229,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(IBAction) returnToLogin:(UIStoryboardSegue *) segue {
+    [self refresh];
+}
+
+
+-(void) viewDidAppear:(BOOL)animated {
+    [self refresh];
+}
+
+-(void) refresh {
     [self loadIdentityNames];
     [_userPicker reloadAllComponents];
     [self updatePassword:[_identityNames objectAtIndex:[ _userPicker selectedRowInComponent:0]]];
+    
 }
 
 
