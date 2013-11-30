@@ -36,7 +36,8 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 @property (atomic, strong) id progressView;
 @property (atomic, strong) NSString * name;
 @property (atomic, strong) NSString * url;
-@property (atomic, strong) NSString * password;
+//@property (atomic, strong) NSString * password;
+@property (atomic, strong) NSString * storedPassword;
 @end
 
 @implementation RestoreIdentityViewController
@@ -344,34 +345,35 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     NSString * name = [rowData objectForKey:@"name"];
     NSString * url = [rowData objectForKey:@"url"];
     
-    _password = [[IdentityController sharedInstance] getStoredPasswordForIdentity:name];
+    _storedPassword = [[IdentityController sharedInstance] getStoredPasswordForIdentity:name];
     _name = name;
     _url = url;
     
-    if (!_password) {
+    //if (!_password) {
         
         //show alert view to get password
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Password" message:@"Enter your password:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
         alertView.alertViewStyle = UIAlertViewStyleSecureTextInput;
         [alertView show];
         
-    }
-    else {
-        //show alert view to confirm
-        //todo localization
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"are you sure" message:@"are you sure you want to import this identity" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
-        [alertView show];
-    }
+//    }
+//    else {
+//        //show alert view to confirm
+//        //todo localization
+//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"are you sure" message:@"are you sure you want to import this identity" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
+//        [alertView show];
+//    }
 }
 
 -(void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 1) {
+        NSString * password = nil;
         if (alertView.alertViewStyle == UIAlertViewStyleSecureTextInput) {
-            _password = [[alertView textFieldAtIndex:0] text];
+            password = [[alertView textFieldAtIndex:0] text];
         }
         
-        if (![UIUtils stringIsNilOrEmpty:_password]) {
-            [self importIdentity:_name url:_url password:_password];
+        if (![UIUtils stringIsNilOrEmpty:password]) {
+            [self importIdentity:_name url:_url password:password];
         }
     }
 }
@@ -392,13 +394,19 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
                 else {
                     [UIUtils showToastKey:@"identity_imported_successfully" duration:2];
                 }
-                _password = nil;
+                
+                //update stored password
+                if (_storedPassword && ![_storedPassword isEqualToString:password]) {
+                    [[IdentityController sharedInstance] storePasswordForIdentity:name password:password];
+                }
+                
+                _storedPassword = nil;
                 [_progressView removeView];
             }];
         } else {
             DDLogError(@"An error occurred: %@", error);
             [UIUtils showToastKey:@"could_not_list_identities_from_google_drive" duration:2];
-            _password = nil;
+            _storedPassword = nil;
             [_progressView removeView];
         }
     }];
