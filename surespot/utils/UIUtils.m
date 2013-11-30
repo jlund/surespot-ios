@@ -9,7 +9,6 @@
 #import "UIUtils.h"
 #import "Toast+UIView.h"
 #import "ChatUtils.h"
-
 #import "DDLog.h"
 
 #ifdef DEBUG
@@ -219,5 +218,23 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return statusText;
 }
 
+
++(REMenu *) createMenu: (NSArray *) menuItems closeCompletionHandler: (void (^)(void))completionHandler {
+    REMenu * menu = [[REMenu alloc] initWithItems:menuItems];
+    menu.itemHeight = 40;
+    menu.backgroundColor = [UIUtils surespotGrey];
+    menu.imageOffset = CGSizeMake(10, 0);
+    menu.textAlignment = NSTextAlignmentLeft;
+    menu.textColor = [UIColor whiteColor];
+    menu.highlightedTextColor = [UIColor whiteColor];
+    menu.highlightedBackgroundColor = [UIUtils surespotTransparentBlue];
+    menu.textShadowOffset = CGSizeZero;
+    menu.highlightedTextShadowOffset = CGSizeZero;
+    menu.textOffset =CGSizeMake(64,0);
+    menu.font = [UIFont systemFontOfSize:18.0];
+    menu.cornerRadius = 2;
+    [menu setCloseCompletionHandler:completionHandler];
+    return menu;
+}
 
 @end

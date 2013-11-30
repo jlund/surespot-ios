@@ -14,6 +14,7 @@
 #import "UIUtils.h"
 #import "LoadingView.h"
 #import "DDLog.h"
+#import "RestoreIdentityViewController.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -33,6 +34,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (strong, nonatomic) IBOutlet UIButton *bLogin;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UISwitch *storePassword;
+@property (strong, readwrite, nonatomic) REMenu *menu;
 @end
 
 @implementation LoginViewController
@@ -50,6 +52,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     //  _textPassword.returnKeyType = UIReturnKeyGo;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resume:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    
+    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"menu" style:UIBarButtonItemStylePlain target:self action:@selector(showMenu)];
+    self.navigationItem.rightBarButtonItem = anotherButton;
     
 }
 
@@ -81,13 +86,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     NSInteger loginButtonBottom =(_bLogin.frame.origin.y + _bLogin.frame.size.height);
     NSInteger delta = keyboardTop - loginButtonBottom;
-   //  DDLogInfo(@"delta %d loginBottom %d keyboardtop: %d", delta, loginButtonBottom, keyboardTop);
+    //  DDLogInfo(@"delta %d loginBottom %d keyboardtop: %d", delta, loginButtonBottom, keyboardTop);
     
     if (delta < 0 ) {
         
         
         CGPoint scrollPoint = CGPointMake(0.0, -delta);
-       //  DDLogInfo(@"scrollPoint y: %f", scrollPoint.y);
+        //  DDLogInfo(@"scrollPoint y: %f", scrollPoint.y);
         [_scrollView setContentOffset:scrollPoint animated:YES];
     }
 }
@@ -239,7 +244,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSString * selectedUser = [_identityNames objectAtIndex:row];
     [self updatePassword:selectedUser];
     
-  }
+}
 
 -(void) updatePassword: (NSString *) username {
     DDLogInfo(@"user changed: %@", username);
@@ -252,13 +257,52 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         _textPassword.text = nil;
         [_storePassword setOn:NO animated:NO];
     }
-
+    
 }
 
 
 -(void) resume:(NSNotification *)notification {
     DDLogInfo(@"resume");
     [_textPassword resignFirstResponder];
+}
+
+-(void) showMenu {
+    if (!_menu) {
+        _menu = [self createMenu];
+        if (_menu) {
+            CGRect rect = CGRectMake(25, 0, self.view.frame.size.width - 50, self.view.frame.size.height);
+            [_menu showFromRect:rect inView:self.view];
+        }
+    }
+    else {
+        [_menu close];
+    }
+    
+}
+
+-(REMenu *) createMenu {
+    //menu menu
+    
+    NSMutableArray * menuItems = [NSMutableArray new];
+    
+    REMenuItem * createItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"create_identity_label", nil) image:[UIImage imageNamed:@"ic_menu_add"] highlightedImage:nil action:^(REMenuItem * item){
+        [self performSegueWithIdentifier: @"createSegue" sender: self];
+    }];
+    
+    [menuItems addObject:createItem];
+    
+    REMenuItem * restoreItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"import_identities", nil) image:[UIImage imageNamed:@"ic_menu_archive"] highlightedImage:nil action:^(REMenuItem * item){
+        RestoreIdentityViewController * controller = [[RestoreIdentityViewController alloc] initWithNibName:@"RestoreIdentityViewController" bundle:[NSBundle mainBundle]];
+        [self.navigationController pushViewController:controller animated:YES];
+        
+    }];
+    
+    [menuItems addObject:restoreItem];
+    
+    
+    return [UIUtils createMenu: menuItems closeCompletionHandler:^{
+        _menu = nil;
+    }];
 }
 
 @end

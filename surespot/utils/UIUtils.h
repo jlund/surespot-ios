@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "SurespotMessage.h"
+#import "REMenu.h"
 
 @interface UIUtils : NSObject
 + (void) showToastKey: (NSString *) key;
@@ -28,5 +29,6 @@
 +(void) stopPulseAnimation: (UIView *) view;
 +(void) showToastMessage: (NSString *) message duration: (CGFloat) duration;
 +(NSString *) getMessageErrorText: (NSInteger) errorStatus;
++(REMenu *) createMenu: (NSArray *) menuItems closeCompletionHandler: (void (^)(void))completionHandler;
 @end
 

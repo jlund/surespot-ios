@@ -1136,7 +1136,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             [_textField becomeFirstResponder];
         }
-    }    
+    }
 }
 
 -(void) updateTabChangeUI {
@@ -1280,32 +1280,18 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }];
     [menuItems addObject:logoutItem];
     
-    REMenuItem * settingsItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"settings", nil) image:[UIImage imageNamed:@"ic_lock_power_off"] highlightedImage:nil action:^(REMenuItem * item){
+    REMenuItem * settingsItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"settings", nil) image:[UIImage imageNamed:@"ic_menu_preferences"] highlightedImage:nil action:^(REMenuItem * item){
         [self showSettings];
         
     }];
     
     [menuItems addObject:settingsItem];
-
+    
     return [self createMenu: menuItems];
 }
 
 -(REMenu *) createMenu: (NSArray *) menuItems {
-    REMenu * menu = [[REMenu alloc] initWithItems:menuItems];
-    menu.itemHeight = 40;
-    menu.backgroundColor = [UIUtils surespotGrey];
-    menu.imageOffset = CGSizeMake(10, 0);
-    menu.textAlignment = NSTextAlignmentLeft;
-    menu.textColor = [UIColor whiteColor];
-    menu.highlightedTextColor = [UIColor whiteColor];
-    menu.highlightedBackgroundColor = [UIUtils surespotTransparentBlue];
-    menu.textShadowOffset = CGSizeZero;
-    menu.highlightedTextShadowOffset = CGSizeZero;
-    menu.textOffset =CGSizeMake(64,0);
-    menu.font = [UIFont systemFontOfSize:18.0];
-    menu.cornerRadius = 2;
-    
-    [menu setCloseCompletionHandler:^{
+    return [UIUtils createMenu:menuItems closeCompletionHandler:^{
         _menu = nil;
         NSString * currentChat =[[ChatController sharedInstance] getCurrentChat];
         if (currentChat) {
@@ -1318,8 +1304,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [_friendView deselectRowAtIndexPath:[_friendView indexPathForSelectedRow] animated:YES];
         }
     }];
-    
-    return menu;
 }
 
 
@@ -1369,8 +1353,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }];
     
     [menuItems addObject:deleteItem];
-    
-    
     return [self createMenu: menuItems];
 }
 
@@ -1399,19 +1381,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) deleteMessage: (SurespotMessage *) message {
-    
-    
-    
     if (message) {
         DDLogVerbose(@"taking action for chat iv: %@, plaindata: %@", message.iv, message.plainData);
-        
-        
         [[ChatController sharedInstance] deleteMessage: message];
-        
-        
     }
-    
-    
 }
 
 -(void) showMenuMenu {

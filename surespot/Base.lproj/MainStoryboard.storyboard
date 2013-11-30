@@ -12,10 +12,6 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="0oc-Eq-hkf">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
-                    <connections>
-                        <segue destination="VAm-bF-dbx" kind="push" id="lhN-By-7jG"/>
-                        <segue destination="2" kind="relationship" relationship="rootViewController" id="dhL-rz-oZa"/>
-                    </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Hhc-mu-Ve8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -85,13 +81,7 @@
                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </scrollView>
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationItem key="navigationItem" id="jSB-cH-bSD">
-                        <barButtonItem key="rightBarButtonItem" title="create" id="HsW-Cs-VRw">
-                            <connections>
-                                <segue destination="VAm-bF-dbx" kind="push" id="qzP-R7-Qz4"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="jSB-cH-bSD"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
                         <outlet property="bLogin" destination="SW9-JJ-OEP" id="URd-kO-Go8"/>
@@ -100,6 +90,7 @@
                         <outlet property="textPassword" destination="JPD-8G-y9p" id="OMQ-Mc-YUx"/>
                         <outlet property="userPicker" destination="WV1-5E-HKR" id="RnN-f6-NzK"/>
                         <segue destination="tcp-OJ-fTS" kind="push" identifier="loginToMainSegue" id="CFG-TY-gjC"/>
+                        <segue destination="VAm-bF-dbx" kind="push" identifier="createSegue" id="u16-qe-I58"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4" sceneMemberID="firstResponder"/>
@@ -252,7 +243,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="qzP-R7-Qz4"/>
         <segue reference="CFG-TY-gjC"/>
     </inferredMetricsTieBreakers>
 </document>
