@@ -318,6 +318,8 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     
     [[CredentialCachingController sharedInstance] clearIdentityData:username];
     
+    //remove password from keychain
+    [self clearStoredPasswordForIdentity:username];
     
     //then wipe the messages saved by logging out
     [FileController wipeIdentityData: username];
