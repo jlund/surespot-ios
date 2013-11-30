@@ -38,6 +38,10 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 @property (atomic, strong) NSString * url;
 //@property (atomic, strong) NSString * password;
 @property (atomic, strong) NSString * storedPassword;
+- (IBAction)bLoadIdentities:(id)sender;
+@property (strong, nonatomic) IBOutlet UIButton *bSelect;
+@property (strong, nonatomic) IBOutlet UILabel *accountLabel;
+
 @end
 
 @implementation RestoreIdentityViewController
@@ -55,8 +59,9 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     _driveService.retryEnabled = YES;
     
     [self setAccountFromKeychain];
+    [self loadIdentitiesAuthIfNecessary:NO];
     
-    _bSelect.titleLabel.text = NSLocalizedString(@"select_google_drive_account", nil);
+    //    _bSelect.titleLabel.text = NSLocalizedString(@"select_google_drive_account", nil);
     
     [_tvDrive registerNib:[UINib nibWithNibName:@"IdentityCell" bundle:nil] forCellReuseIdentifier:@"IdentityCell"];
     
@@ -69,26 +74,25 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     self.driveService.authorizer = [GTMOAuth2ViewControllerTouch authForGoogleFromKeychainForName:kKeychainItemName
                                                                                          clientID:kClientID
                                                                                      clientSecret:kClientSecret];
-    
-    
-    
+    [self updateUI];
+}
+
+-(void) updateUI {
     if (_driveService.authorizer && [_driveService.authorizer isMemberOfClass:[GTMOAuth2Authentication class]]) {
-        
-        
-        
         NSString * currentEmail = [[((GTMOAuth2Authentication *) _driveService.authorizer ) parameters] objectForKey:@"email"];
         if (currentEmail) {
             _accountLabel.text = currentEmail;
-            [self loadIdentities];
+            [_bSelect setTitle:@"remove" forState:UIControlStateNormal];
             return;
+            
         }
     }
     
     _accountLabel.text = NSLocalizedString(@"no_google_account_selected", nil);
+    [_bSelect setTitle:NSLocalizedString(@"select", nil) forState:UIControlStateNormal];
+    
     [_driveIdentities removeAllObjects];
     [_tvDrive reloadData];
-    
-    
 }
 
 // Helper to check if user is authorized
@@ -127,7 +131,9 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     {
         if (authResult) {
             self.driveService.authorizer = authResult;
-            [self loadIdentities];
+            [self updateUI];
+            [self loadIdentitiesAuthIfNecessary:NO];
+            
         }
     }
 }
@@ -140,19 +146,23 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 
 - (IBAction)bLoadIdentities:(id)sender {
     if ([self isAuthorized]) {
+        [GTMOAuth2ViewControllerTouch removeAuthFromKeychainForName:kKeychainItemName];
         _driveService.authorizer = nil;
+        [self updateUI];
     }
-    
-    [self loadIdentities];
-    
+    else {
+        [self loadIdentitiesAuthIfNecessary:YES];
+    }
 }
 
--(void) loadIdentities {
+-(void) loadIdentitiesAuthIfNecessary: (BOOL) auth {
     if (![self isAuthorized])
     {
-        // Not yet authorized, request authorization and push the login UI onto the navigation stack.
-        DDLogInfo(@"launching google authorization");
-        [self.navigationController pushViewController:[self createAuthController] animated:YES];
+        if (auth) {
+            // Not yet authorized, request authorization and push the login UI onto the navigation stack.
+            DDLogInfo(@"launching google authorization");
+            [self.navigationController pushViewController:[self createAuthController] animated:YES];
+        }
         return;
     }
     
@@ -246,64 +256,68 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
                           
                           if (error == nil) {
                               DDLogInfo(@"retrieved Identity files %@", files.items);
-                              NSMutableArray * identityFiles = [NSMutableArray new];
                               NSInteger dlCount = [[files items] count];
                               
-                              //todo do this in a queue
-                              NSObject * completionLock = [NSObject new];
-                              __block NSInteger completed = 0;
                               
-                              
-                              for (GTLDriveChildReference *child in files) {
+                              if (dlCount > 0) {
+                                  NSMutableArray * identityFiles = [NSMutableArray new];
+                                  //todo do this in a queue
+                                  NSObject * completionLock = [NSObject new];
+                                  __block NSInteger completed = 0;
                                   
-                                  GTLQuery *query = [GTLQueryDrive queryForFilesGetWithFileId:child.identifier];
-                                  
-                                  // queryTicket can be used to track the status of the request.
-                                  [self.driveService executeQuery:query
-                                                completionHandler:^(GTLServiceTicket *ticket,
-                                                                    GTLDriveFile *file,
-                                                                    NSError *error) {
-                                                    
-                                                    if (!error) {
-                                                        DDLogInfo(@"\nfile name = %@", file.originalFilename);
-                                                        NSMutableDictionary * identityFile = [NSMutableDictionary new];
-                                                        [identityFile  setObject: [[IdentityController sharedInstance] identityNameFromFile: file.originalFilename] forKey:@"name"];
-                                                        [identityFile setObject:file.modifiedDate forKey:@"date"];
-                                                        [identityFile setObject:file.downloadUrl forKey:@"url"];
+                                  for (GTLDriveChildReference *child in files) {
+                                      GTLQuery *query = [GTLQueryDrive queryForFilesGetWithFileId:child.identifier];
+                                      
+                                      // queryTicket can be used to track the status of the request.
+                                      [self.driveService executeQuery:query
+                                                    completionHandler:^(GTLServiceTicket *ticket,
+                                                                        GTLDriveFile *file,
+                                                                        NSError *error) {
                                                         
-                                                        [identityFiles addObject:identityFile];
-                                                    }
-                                                    else {
-                                                        DDLogError(@"An error occurred: %@", error);
-                                                    }
-                                                    
-                                                    @synchronized (completionLock) {
-                                                        completed++;
-                                                    }
-                                                    if (completed == dlCount) {
-                                                        DDLogInfo(@"file data download complete, files: %@", identityFiles);
-                                                        callback(identityFiles);
-                                                        [_progressView removeView];
-                                                    }
-                                                    
-                                                    
-                                                }];
+                                                        if (!error) {
+                                                            DDLogInfo(@"\nfile name = %@", file.originalFilename);
+                                                            NSMutableDictionary * identityFile = [NSMutableDictionary new];
+                                                            [identityFile  setObject: [[IdentityController sharedInstance] identityNameFromFile: file.originalFilename] forKey:@"name"];
+                                                            [identityFile setObject:file.modifiedDate forKey:@"date"];
+                                                            [identityFile setObject:file.downloadUrl forKey:@"url"];
+                                                            [identityFiles addObject:identityFile];
+                                                        }
+                                                        else {
+                                                            DDLogError(@"An error occurred: %@", error);
+                                                        }
+                                                        
+                                                        @synchronized (completionLock) {
+                                                            completed++;
+                                                            
+                                                            if (completed == dlCount) {
+                                                                DDLogInfo(@"file data download complete, files: %@", identityFiles);
+                                                                
+                                                                [_progressView removeView];
+                                                                callback(identityFiles);
+                                                            }
+                                                        }
+                                                        
+                                                        
+                                                    }];
+                                  }
+                              }
+                              else {
+                                  //no identities to download
+                                  [_progressView removeView];
+                                  callback(nil);
                               }
                               
                           } else {
                               DDLogError(@"An error occurred: %@", error);
                               [_progressView removeView];
+                              callback(nil);
                           }
-                          
-                          
-                          
                       }];
-            
         }
         else {//couldn't get identity dir id
             [_progressView removeView];
+            callback(nil);
         }
-        
     }];
 }
 
@@ -344,19 +358,19 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     _url = url;
     
     //if (!_password) {
-        
-        //show alert view to get password
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Password" message:@"Enter your password:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
-        alertView.alertViewStyle = UIAlertViewStyleSecureTextInput;
-        [alertView show];
-        
-//    }
-//    else {
-//        //show alert view to confirm
-//        //todo localization
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"are you sure" message:@"are you sure you want to import this identity" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
-//        [alertView show];
-//    }
+    
+    //show alert view to get password
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Password" message:@"Enter your password:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
+    alertView.alertViewStyle = UIAlertViewStyleSecureTextInput;
+    [alertView show];
+    
+    //    }
+    //    else {
+    //        //show alert view to confirm
+    //        //todo localization
+    //        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"are you sure" message:@"are you sure you want to import this identity" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
+    //        [alertView show];
+    //    }
 }
 
 -(void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
