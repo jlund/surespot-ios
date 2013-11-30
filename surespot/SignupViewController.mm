@@ -14,6 +14,7 @@
 #import "UIUtils.h"
 #import "DDLog.h"
 #import "LoadingView.h"
+#import "RestoreIdentityViewController.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
@@ -26,6 +27,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (atomic, strong) id progressView;
 @property (nonatomic, strong) NSString * lastCheckedUsername;
 @property (nonatomic, assign) NSInteger keyboardHeight;
+@property (strong, readwrite, nonatomic) REMenu *menu;
 @end
 
 @implementation SignupViewController
@@ -48,6 +50,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if ([[[IdentityController sharedInstance] getIdentityNames] count] == 0) {
         self.navigationItem.hidesBackButton = YES;
     }
+    
+    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"menu" style:UIBarButtonItemStylePlain target:self action:@selector(showMenu)];
+    self.navigationItem.rightBarButtonItem = anotherButton;
+
     
 }
 
@@ -301,4 +307,39 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     DDLogVerbose(@"keyboardWillBeHidden");
     _keyboardHeight = 0;
 }
+
+-(void) showMenu {
+    if (!_menu) {
+        _menu = [self createMenu];
+        if (_menu) {
+            CGRect rect = CGRectMake(25, 0, self.view.frame.size.width - 50, self.view.frame.size.height);
+            [_menu showFromRect:rect inView:self.view];
+        }
+    }
+    else {
+        [_menu close];
+    }
+    
+}
+
+-(REMenu *) createMenu {
+    //menu menu
+    
+    NSMutableArray * menuItems = [NSMutableArray new];
+    
+    
+    REMenuItem * restoreItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"import_identities", nil) image:[UIImage imageNamed:@"ic_menu_archive"] highlightedImage:nil action:^(REMenuItem * item){
+        RestoreIdentityViewController * controller = [[RestoreIdentityViewController alloc] initWithNibName:@"RestoreIdentityViewController" bundle:[NSBundle mainBundle]];
+        [self.navigationController pushViewController:controller animated:YES];
+        
+    }];
+    
+    [menuItems addObject:restoreItem];
+    
+    
+    return [UIUtils createMenu: menuItems closeCompletionHandler:^{
+        _menu = nil;
+    }];
+}
+
 @end
