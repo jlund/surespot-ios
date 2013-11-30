@@ -101,20 +101,20 @@ int const PBKDF_ROUNDS = 20000;
 
 + (NSData *) decryptData:(NSData *) data withPassword:(NSString *) password andRounds: (NSInteger) rounds
 {
-
+    
     byte * identityBytes = (byte*)[data bytes];
     
     int cipherLength = [data length] - IV_LENGTH - SALT_LENGTH;
     byte cipherByte[cipherLength];
     byte ivBytes[IV_LENGTH];
     byte saltBytes[SALT_LENGTH];
-
+    
     memcpy(ivBytes, identityBytes, IV_LENGTH);
     memcpy(saltBytes, identityBytes + IV_LENGTH, SALT_LENGTH);
     memcpy(cipherByte, identityBytes + IV_LENGTH + SALT_LENGTH, cipherLength);
     
     NSData * key = [self deriveKeyUsingPassword: password andSalt:[NSData dataWithBytes:saltBytes length:SALT_LENGTH] andRounds:rounds];
-        
+    
     GCM<AES>::Decryption d;
     d.SetKeyWithIV((byte *)[key bytes], AES_KEY_LENGTH, ivBytes,IV_LENGTH);
     
@@ -130,9 +130,9 @@ int const PBKDF_ROUNDS = 20000;
         DDLogVerbose(@"error decrypting identity: %@", [NSString stringWithUTF8String: e.GetWhat().data()]);
         return nil;
     }
-        
+    
     DDLogVerbose(@"recovered: %s", jsonIdentity.data());
-    NSData * jsonData = [NSData dataWithBytes:jsonIdentity.data() length:jsonIdentity.length()];    
+    NSData * jsonData = [NSData dataWithBytes:jsonIdentity.data() length:jsonIdentity.length()];
     return jsonData;
 }
 
@@ -214,7 +214,7 @@ int const PBKDF_ROUNDS = 20000;
 
 + (NSDictionary *) deriveKeyFromPassword: (NSString *) password andRounds: (NSInteger) rounds {
     
-
+    
     NSMutableDictionary * derived = [[NSMutableDictionary alloc] initWithCapacity:2];
     CryptoPP::SecByteBlock keyBytes(AES_KEY_LENGTH);
     CryptoPP::SecByteBlock saltBytes(SALT_LENGTH);
@@ -264,15 +264,8 @@ int const PBKDF_ROUNDS = 20000;
     NSData * decodedKey = [NSData dataFromBase64String: encodedKey];
     ByteQueue byteQueue;
     byteQueue.Put((byte *) [decodedKey bytes], [decodedKey length]);
+    DDLogInfo(@"loading key start");
     privateKey.Load(byteQueue);
-    bool validated = privateKey.Validate(rng, 3);
-    
-    
-    if (!validated) {
-        DDLogWarn(@"dh private key not validated");
-    }
-    
-    
     return privateKey;
 }
 
@@ -298,14 +291,9 @@ int const PBKDF_ROUNDS = 20000;
     NSData * decodedKey = [ NSData dataFromBase64String:encodedKey];
     ByteQueue byteQueue;
     byteQueue.Put((byte *) [decodedKey bytes], [decodedKey length]);
+    DDLogInfo(@"loading key start");
     privateKey.Load(byteQueue);
-    
-    bool validated = privateKey.Validate(rng, 3);
-    
-    if (!validated) {
-        DDLogWarn(@"dh private key not validated");
-    }
-    
+    DDLogInfo(@"loading key end");
     return privateKey;
 }
 
