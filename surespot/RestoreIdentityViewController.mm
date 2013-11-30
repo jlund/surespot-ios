@@ -42,18 +42,11 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 
 @implementation RestoreIdentityViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.navigationItem setTitle:NSLocalizedString(@"restore", nil)];
+    
 	self.driveService = [[GTLServiceDrive alloc] init];
     
     _driveIdentities = [NSMutableArray new];
