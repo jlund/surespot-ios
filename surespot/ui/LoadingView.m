@@ -3,7 +3,7 @@
 //  LoadingView
 //
 
-// Modified by 2fours
+//  heavily Modified by 2fours
 
 //  Created by Matt Gallagher on 12/04/09.
 //  Copyright Matt Gallagher 2009. All rights reserved.
@@ -39,34 +39,37 @@
 {
     
     CGRect frame =CGRectMake(0, 0, aSuperview.bounds.size.width, aSuperview.bounds.size.height - height);
-	LoadingView *loadingView =    [[LoadingView alloc] initWithFrame:frame];
-	if (!loadingView)
+	LoadingView *backgroundView =    [[LoadingView alloc] initWithFrame:frame];
+	if (!backgroundView)
 	{
 		return nil;
 	}
 	
-    loadingView.backgroundColor = [UIUtils surespotTransparentGrey];
-	loadingView.opaque = NO;
-	loadingView.autoresizingMask =
+    backgroundView.backgroundColor = [UIUtils surespotTransparentGrey];
+	backgroundView.opaque = NO;
+	backgroundView.autoresizingMask =
     UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	[aSuperview addSubview:loadingView];
+	[aSuperview addSubview:backgroundView];
     
-	const CGFloat DEFAULT_LABEL_WIDTH = aSuperview.bounds.size.width;
+	const CGFloat DEFAULT_LABEL_WIDTH = [UIUtils screenSizeAdjustedForOrientation].width;
+	const CGFloat sheight = [UIUtils screenSizeAdjustedForOrientation].height;
     
     UIView * labelView = [[UIView alloc] initWithFrame:CGRectZero];
     labelView.backgroundColor = [UIColor whiteColor];
-    [loadingView addSubview:labelView];
+    [backgroundView addSubview:labelView];
     
     
     UIImage * image =[UIImage imageNamed:@"surespot_logo.png"];
     UIImageView * imageView = [[UIImageView alloc] initWithImage: image];
     
-	[loadingView addSubview:imageView];
-    imageView.autoresizingMask =
-    UIViewAutoresizingFlexibleLeftMargin |
-    UIViewAutoresizingFlexibleRightMargin |
-    UIViewAutoresizingFlexibleTopMargin |
-    UIViewAutoresizingFlexibleBottomMargin;
+	[labelView addSubview:imageView];
+    
+    imageView.autoresizingMask  = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingNone | UIViewAutoresizingFlexibleBottomMargin;
+//    imageView.autoresizingMask =
+//    UIViewAutoresizingFlexibleLeftMargin |
+//    UIViewAutoresizingFlexibleRightMargin |
+//    UIViewAutoresizingFlexibleTopMargin |
+//    UIViewAutoresizingFlexibleBottomMargin;
 	
     CABasicAnimation *rotation;
     rotation = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
@@ -79,11 +82,7 @@
     
     
     
-    CGRect labelFrame = CGRectMake(0, 0, DEFAULT_LABEL_WIDTH - (imageView.frame.size.width + 50), imageView.frame.size.height);
-    
-    UILabel *loadingLabel =
-    [[UILabel alloc]
-     initWithFrame:labelFrame];
+    UILabel *loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, DEFAULT_LABEL_WIDTH - imageView.bounds.size.width, 0)];
     
 	loadingLabel.text = NSLocalizedString(textKey, nil);
     loadingLabel.numberOfLines = 0;
@@ -92,32 +91,35 @@
 	loadingLabel.backgroundColor = [UIColor clearColor];
 	loadingLabel.textAlignment = NSTextAlignmentLeft;
 	loadingLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
-	loadingLabel.autoresizingMask =
-    UIViewAutoresizingFlexibleLeftMargin |
-    UIViewAutoresizingFlexibleRightMargin |
-    UIViewAutoresizingFlexibleTopMargin |
-    UIViewAutoresizingFlexibleBottomMargin;
-    
+	loadingLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingNone | UIViewAutoresizingFlexibleBottomMargin;;
+//    |
+//    UIViewAutoresizingFlexibleRightMargin |
+//    UIViewAutoresizingFlexibleTopMargin |
+//    UIViewAutoresizingFlexibleBottomMargin;
+//    
     [loadingLabel sizeToFit];
 	
-	[loadingView addSubview:loadingLabel];
+	[labelView addSubview:loadingLabel];
     
     
 	
     CGFloat totalHeight =  MAX(loadingLabel.frame.size.height ,imageView.frame.size.height);
     
-	CGRect activityIndicatorRect = imageView.frame;
-	activityIndicatorRect.origin.x =floor(0.5 * (loadingView.frame.size.width - DEFAULT_LABEL_WIDTH + 50));
-	activityIndicatorRect.origin.y = floor(0.5 * (loadingView.frame.size.height - totalHeight));
-	imageView.frame = activityIndicatorRect;
+	CGRect imageRect = imageView.frame;
+	imageRect.origin.x = 5;
+	imageRect.origin.y = 0;
+	imageView.frame = imageRect;
     
     
-    labelFrame.origin.x = imageView.frame.origin.x + imageView.frame.size.width + 20;
-	labelFrame.origin.y = floor(0.5 * (loadingView.frame.size.height - totalHeight));
+    CGRect labelFrame =loadingLabel.frame;
+    CGFloat labelOrigin =imageView.frame.origin.x + imageView.frame.size.width + 10;
+    labelFrame.origin.x = labelOrigin;
+	labelFrame.origin.y = 0;
+    labelFrame.size.width = DEFAULT_LABEL_WIDTH - labelOrigin;
 	loadingLabel.frame = labelFrame;
     
     CGRect viewFrame = CGRectMake(0, 0, DEFAULT_LABEL_WIDTH, totalHeight + 10);
-    viewFrame.origin.y =(loadingView.frame.size.height - (totalHeight + 10))/2;
+    viewFrame.origin.y = sheight/2 - totalHeight - 15;
     labelView.frame =viewFrame;
     
     
@@ -127,7 +129,7 @@
 	[animation setType:kCATransitionFade];
 	[[aSuperview layer] addAnimation:animation forKey:@"layerAnimation"];
 	
-	return loadingView;
+	return backgroundView;
 }
 
 //

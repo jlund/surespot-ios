@@ -30,5 +30,6 @@
 +(void) showToastMessage: (NSString *) message duration: (CGFloat) duration;
 +(NSString *) getMessageErrorText: (NSInteger) errorStatus;
 +(REMenu *) createMenu: (NSArray *) menuItems closeCompletionHandler: (void (^)(void))completionHandler;
++(CGSize) screenSizeAdjustedForOrientation;
 @end
 

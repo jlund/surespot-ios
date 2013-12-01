@@ -111,6 +111,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
 }
 
++(CGSize) screenSizeAdjustedForOrientation {
+    CGSize size = [UIScreen mainScreen].bounds.size;
+    UIInterfaceOrientation  orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    
+    if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+        return CGSizeMake(size.height, size.width);
+    }
+    else {
+                return CGSizeMake(size.width, size.height);
+
+    }
+}
+
 +(void) setMessageHeights: (SurespotMessage *)  message size: (CGSize) size {
     NSString * plaintext = message.plainData;
     

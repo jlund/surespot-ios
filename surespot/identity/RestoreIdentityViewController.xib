@@ -36,7 +36,7 @@
                     </connections>
                 </button>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="2uR-Gq-c3n">
-                    <rect key="frame" x="0.0" y="108" width="320" height="308"/>
+                    <rect key="frame" x="0.0" y="108.0001030463644" width="320" height="308"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
