@@ -22,6 +22,7 @@
 #import "KeychainItemWrapper.h"
 #import <Security/Security.h>
 #import "UIUtils.h"
+#import "NSString+Sensitivize.h"
 
 
 #ifdef DEBUG
@@ -157,8 +158,8 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
 - (NSString *) saveIdentity: (SurespotIdentity *) identity withPassword: (NSString *) password {
     NSString * filePath = [FileController getIdentityFile:identity.username];
     NSData * encryptedCompressedIdentityData = [[self encryptIdentity:identity withPassword:password] gzipDeflate];
-    [encryptedCompressedIdentityData writeToFile:filePath atomically:TRUE];
-    return filePath;
+    BOOL written = [encryptedCompressedIdentityData writeToFile:filePath atomically:TRUE];
+    return written ? filePath : nil;
 }
 
 - (NSArray *) getIdentityNames {
@@ -174,7 +175,7 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
 
 - (NSString * ) identityNameFromFile: (NSString *) file {
     if ([[file pathExtension] isEqualToString:IDENTITY_EXTENSION]) {
-        return[file stringByDeletingPathExtension] ;
+        return[[file stringByDeletingPathExtension] caseSensitivize];
     }
     
     return nil;

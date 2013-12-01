@@ -54,6 +54,7 @@
 		665F4DFC1832E69C0083BCE7 /* GetKeyVersionOperation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DFB1832E69C0083BCE7 /* GetKeyVersionOperation.mm */; };
 		665F4E0D183324360083BCE7 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 665F4E081833238D0083BCE7 /* libTestFlight.a */; };
 		665F4E0F183325C50083BCE7 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 665F4E0E183325C50083BCE7 /* AdSupport.framework */; };
+		667550FB184BCB6A00C55AAC /* NSString+Sensitivize.m in Sources */ = {isa = PBXBuildFile; fileRef = 667550FA184BCB6A00C55AAC /* NSString+Sensitivize.m */; };
 		667EFF8F183EB664002C0406 /* SurespotMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 667EFF8E183EB664002C0406 /* SurespotMessage.m */; };
 		667EFF91183EB692002C0406 /* SurespotErrorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 667EFF90183EB692002C0406 /* SurespotErrorMessage.m */; };
 		667EFF9518425A87002C0406 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 667EFF9418425A87002C0406 /* Reachability.m */; };
@@ -255,6 +256,8 @@
 		665F4E0A1833238D0083BCE7 /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+ManualSessions.h"; sourceTree = "<group>"; };
 		665F4E0B1833238D0083BCE7 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		665F4E0E183325C50083BCE7 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		667550F9184BCB6A00C55AAC /* NSString+Sensitivize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Sensitivize.h"; path = "utils/NSString+Sensitivize.h"; sourceTree = "<group>"; };
+		667550FA184BCB6A00C55AAC /* NSString+Sensitivize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Sensitivize.m"; path = "utils/NSString+Sensitivize.m"; sourceTree = "<group>"; };
 		667EFF8E183EB664002C0406 /* SurespotMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SurespotMessage.m; path = chat/SurespotMessage.m; sourceTree = "<group>"; };
 		667EFF90183EB692002C0406 /* SurespotErrorMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SurespotErrorMessage.m; path = chat/SurespotErrorMessage.m; sourceTree = "<group>"; };
 		667EFF92183EB7E3002C0406 /* SurespotErrorMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SurespotErrorMessage.h; path = chat/SurespotErrorMessage.h; sourceTree = "<group>"; };
@@ -678,6 +681,8 @@
 				66FF0FED1827FAEE0038ECA6 /* StateController.m */,
 				66D3B04B182D47DF00B37A6C /* SurespotLogFormatter.h */,
 				66D3B04C182D47DF00B37A6C /* SurespotLogFormatter.m */,
+				667550F9184BCB6A00C55AAC /* NSString+Sensitivize.h */,
+				667550FA184BCB6A00C55AAC /* NSString+Sensitivize.m */,
 			);
 			name = utils;
 			sourceTree = "<group>";
@@ -1389,6 +1394,7 @@
 				66E4F5BD176298CB00596E6B /* NSData+SRB64Additions.m in Sources */,
 				66E4F5BE176298CB00596E6B /* SRWebSocket.m in Sources */,
 				6654441617F37BCF00F62F7F /* SwipeViewController.mm in Sources */,
+				667550FB184BCB6A00C55AAC /* NSString+Sensitivize.m in Sources */,
 				66E70AB81847F9E400433D6F /* GTLDrive_Sources.m in Sources */,
 				661C2EC31762B125000649E7 /* SurespotIdentity.mm in Sources */,
 				66DC2D53183E513D003CC54B /* MessageIndicatorNewView.m in Sources */,

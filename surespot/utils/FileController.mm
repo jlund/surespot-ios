@@ -15,6 +15,7 @@
 #import "ChatUtils.h"
 #import "EncryptionController.h"
 #import "NSData+Gunzip.h"
+#import "NSString+Sensitivize.h"
 
 using CryptoPP::SecByteBlock;
 
@@ -22,7 +23,7 @@ using CryptoPP::SecByteBlock;
 NSString * const STATE_DIR = @"state";
 NSString * const HOME_FILENAME = @"home";
 NSString * const STATE_EXTENSION = @"sss";
-NSString * const CHAT_DATA_PREFIX = @"chatdata_";
+NSString * const CHAT_DATA_PREFIX = @"chatdata-";
 NSString * const PUBLIC_KEYS_DIR = @"publickeys";
 NSString * const IDENTITIES_DIR = @"identities";
 
@@ -82,11 +83,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 +(NSString*)getPublicKeyFilenameForUsername: (NSString *) username version: (NSString *)version {
     NSString * dir = [self getPublicKeyDirectoryForUsername:username];
     return [dir stringByAppendingPathComponent:[version stringByAppendingPathExtension:PUBLIC_KEYS_EXTENSION]];
-
+    
 }
 +(NSString*)getPublicKeyDirectoryForUsername: (NSString *) username  {
     NSString * dir = [self getDirectoryForUser:[[IdentityController sharedInstance] getLoggedInUser] ];
-    NSString * pkdir = [[dir stringByAppendingPathComponent:PUBLIC_KEYS_DIR] stringByAppendingPathComponent:username];
+    NSString * pkdir = [[dir stringByAppendingPathComponent:PUBLIC_KEYS_DIR] stringByAppendingPathComponent:[username caseInsensitivize]];
     NSError * error;
     if (![[NSFileManager defaultManager] createDirectoryAtPath:pkdir withIntermediateDirectories:YES attributes:nil error:&error]) {
         DDLogError(@"%@", error.localizedDescription);
@@ -121,7 +122,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     DDLogInfo( @"wiping idenity file for username: %@,  path: %@", username,identityFile);
     //file manager thread safe supposedly
     NSFileManager * fileMgr = [NSFileManager defaultManager];
-    BOOL wiped = [fileMgr removeItemAtPath:identityFile error:nil];    
+    BOOL wiped = [fileMgr removeItemAtPath:identityFile error:nil];
     DDLogInfo(@"wiped: %@", wiped ? @"YES" : @"NO");
     
     //wipe data (chats, keys, etc.)
@@ -133,14 +134,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 +(NSString *) getFilename: (NSString *) filename {
-    return [self getFilename:filename forUser:[[IdentityController sharedInstance] getLoggedInUser]];
+    return [self getFilename:filename forUser:[[IdentityController sharedInstance] getLoggedInUser] ];
 }
 
 +(NSString *) getFilename: (NSString *) filename forUser: (NSString *) user {
     if (user) {
         NSString * dir = [self getDirectoryForUser:user];
-        return [dir stringByAppendingPathComponent:[filename stringByAppendingPathExtension:STATE_EXTENSION]];
-                
+        return [dir stringByAppendingPathComponent:[[filename caseInsensitivize] stringByAppendingPathExtension:STATE_EXTENSION]];
     }
     
     return nil;
@@ -165,17 +165,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 +(NSString *) getIdentityFile: (NSString *) username {
     NSString * filename = [username stringByAppendingPathExtension:IDENTITY_EXTENSION];
-    return [[self getIdentityDir ] stringByAppendingPathComponent:filename];
+    return [[self getIdentityDir ] stringByAppendingPathComponent:[filename caseInsensitivize]];
 }
 
 
 +(NSString *) getSecretsFile: (NSString *) username {
     NSString * filename = [username stringByAppendingPathExtension:SECRET_EXTENSION];
-    return [[self getSecretsDir ] stringByAppendingPathComponent:filename];
+    return [[self getSecretsDir ] stringByAppendingPathComponent:[filename caseInsensitivize]];
 }
 
 +(NSString *) getDirectoryForUser: (NSString *) user {
-    NSString * dir = [[[FileController getAppSupportDir] stringByAppendingPathComponent:STATE_DIR ] stringByAppendingPathComponent:user];
+    NSString * dir = [[[FileController getAppSupportDir] stringByAppendingPathComponent:STATE_DIR ] stringByAppendingPathComponent:[user caseInsensitivize]];
     NSError * error = nil;
     if (![[NSFileManager defaultManager] createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:nil error:&error]) {
         DDLogVerbose(@"%@", error.localizedDescription);
@@ -189,7 +189,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSData *data = [NSData dataWithContentsOfFile:filePath];
     
     if (data) {
-      
+        
         //NSError* error = nil;
         NSData * secrets = [EncryptionController decryptData: data withPassword:password];
         if (secrets) {
@@ -198,19 +198,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     return nil;
-
+    
 }
 
 +(void) saveSharedSecrets:(NSDictionary *) sharedSecretsDict forUsername: (NSString *) username withPassword: (NSString *) password{
     NSString * filePath = [self getSecretsFile:username];
     NSData * secretData = [NSKeyedArchiver archivedDataWithRootObject:sharedSecretsDict];
-
+    
     NSData * encryptedSecretData = [EncryptionController encryptData:secretData withPassword:password];
     [encryptedSecretData writeToFile:filePath atomically:TRUE];
 }
 
 +(void) deleteSharedSecretsForUsername: (NSString *) username; {
-     NSString * filePath = [self getSecretsFile:username];
+    NSString * filePath = [self getSecretsFile:username];
     [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
 }
 
@@ -230,5 +230,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     return identityBytes;
 }
+
+
 
 @end

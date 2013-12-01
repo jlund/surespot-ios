@@ -31,5 +31,8 @@
 +(NSString *) getMessageErrorText: (NSInteger) errorStatus;
 +(REMenu *) createMenu: (NSArray *) menuItems closeCompletionHandler: (void (^)(void))completionHandler;
 +(CGSize) screenSizeAdjustedForOrientation;
++(NSString *) caseInsensitivize: (NSString *) string;
++(NSString *) caseSensitivize: (NSString *) string;
+
 @end
 
