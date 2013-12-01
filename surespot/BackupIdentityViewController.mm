@@ -301,13 +301,24 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
                   }
                   else {
                       if (dlCount > 1) {
-                          //todo delete all but one
+                          //delete all but one - shouldn't happen but just in case
+                          for (int i=dlCount;i>1;i--) {
+                              GTLQueryDrive *query = [GTLQueryDrive queryForFilesDeleteWithFileId:[[files.items objectAtIndex:i-1] identifier]];
+                              [_driveService executeQuery:query
+                                        completionHandler:^(GTLServiceTicket *ticket, id object,
+                                                            NSError *error) {
+                                            if (error != nil) {
+                                                DDLogError(@"An error occurred: %@", error);
+                                            }
+                                        }];
+                          }
+                          
                           callback([files.items objectAtIndex:0]);
                           return;
                       }
                   }
                   
-                  callback(nil);                
+                  callback(nil);
               }];
 }
 
