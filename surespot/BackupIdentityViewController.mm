@@ -16,6 +16,7 @@
 #import "GTMOAuth2ViewControllerTouch.h"
 #import "FileController.h"
 #import "NSData+Gunzip.h"
+#import "NSString+Sensitivize.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -280,7 +281,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 
 -(void) getIdentityFile: (NSString *) identityDirId name: (NSString *) name callback: (CallbackBlock) callback {
     GTLQueryDrive *queryFilesList = [GTLQueryDrive queryForChildrenListWithFolderId:identityDirId];
-    queryFilesList.q = [NSString stringWithFormat:@"title = '%@' and trashed = false", [name stringByAppendingPathExtension: IDENTITY_EXTENSION]];
+    queryFilesList.q = [NSString stringWithFormat:@"title = '%@' and trashed = false", [[name  caseInsensitivize] stringByAppendingPathExtension: IDENTITY_EXTENSION]];
     
     [_driveService executeQuery:queryFilesList
               completionHandler:^(GTLServiceTicket *ticket, GTLDriveFileList *files,
@@ -375,7 +376,8 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
                         driveFile.parents = @[parentRef];
                         
                         driveFile.mimeType = @"application/octet-stream";
-                        NSString * filename = [name stringByAppendingPathExtension: IDENTITY_EXTENSION];
+                        NSString * caseInsensiveUsername = [name caseInsensitivize];
+                        NSString * filename = [caseInsensiveUsername stringByAppendingPathExtension: IDENTITY_EXTENSION];
                         driveFile.originalFilename = filename;
                         driveFile.title = filename;
                         
