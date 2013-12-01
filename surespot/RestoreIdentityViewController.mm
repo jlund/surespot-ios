@@ -168,7 +168,11 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     
     [self retrieveIdentityFilesCompletionBlock:^(id identityFiles) {
         [_driveIdentities removeAllObjects];
-        [_driveIdentities addObjectsFromArray:identityFiles];
+        [_driveIdentities addObjectsFromArray:[identityFiles sortedArrayUsingComparator:^(id obj1, id obj2) {
+            NSDate *d1 = [obj1 objectForKey:@"date"];
+            NSDate *d2 = [obj2 objectForKey:@"date"];
+            return [d2 compare:d1];
+        }]];
         [_tvDrive reloadData];
     }];
     
@@ -267,7 +271,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
                       }
                       
                       DDLogInfo(@"retrieved Identity files %@", files.items);
-                      NSInteger dlCount = [[files items] count];                      
+                      NSInteger dlCount = [[files items] count];
                       if (dlCount == 0) {
                           //no identities to download
                           [_progressView removeView];
@@ -293,7 +297,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
                                                 DDLogInfo(@"\nfile name = %@", file.originalFilename);
                                                 NSMutableDictionary * identityFile = [NSMutableDictionary new];
                                                 [identityFile  setObject: [[IdentityController sharedInstance] identityNameFromFile: file.originalFilename] forKey:@"name"];
-                                                [identityFile setObject:file.modifiedDate forKey:@"date"];
+                                                [identityFile setObject:[file.modifiedDate date] forKey:@"date"];
                                                 [identityFile setObject:file.downloadUrl forKey:@"url"];
                                                 [identityFiles addObject:identityFile];
                                             }
@@ -340,7 +344,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     
     NSDictionary *file = [self.driveIdentities objectAtIndex:indexPath.row];
     cell.nameLabel.text = [file objectForKey:@"name"];
-    cell.dateLabel.text = [_dateFormatter stringFromDate: [[file objectForKey:@"date"] date]];
+    cell.dateLabel.text = [_dateFormatter stringFromDate: [file objectForKey:@"date"]];
     UIView *bgColorView = [[UIView alloc] init];
     bgColorView.backgroundColor = [UIUtils surespotSelectionBlue];
     bgColorView.layer.masksToBounds = YES;
