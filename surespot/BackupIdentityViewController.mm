@@ -50,7 +50,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.navigationItem setTitle:NSLocalizedString(@"login", nil)];
+    [self.navigationItem setTitle:NSLocalizedString(@"backup", nil)];
     [_bExecute setTitle:NSLocalizedString(@"backup_drive_button", nil) forState:UIControlStateNormal];
     [self loadIdentityNames];
     self.navigationController.navigationBar.translucent = NO;
@@ -278,6 +278,39 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     }
 }
 
+-(void) getIdentityFile: (NSString *) identityDirId name: (NSString *) name callback: (CallbackBlock) callback {
+    GTLQueryDrive *queryFilesList = [GTLQueryDrive queryForChildrenListWithFolderId:identityDirId];
+    queryFilesList.q = [NSString stringWithFormat:@"title = '%@' and trashed = false", [name stringByAppendingPathExtension: IDENTITY_EXTENSION]];
+    
+    [_driveService executeQuery:queryFilesList
+              completionHandler:^(GTLServiceTicket *ticket, GTLDriveFileList *files,
+                                  NSError *error) {
+                  
+                  if (error) {
+                      DDLogError(@"An error occurred: %@", error);
+                      callback(nil);
+                      return;
+                  }
+                  
+                  DDLogInfo(@"retrieved identity files %@", files.items);
+                  NSInteger dlCount = [[files items] count];
+                  
+                  if (dlCount == 1) {
+                      callback([files.items objectAtIndex:0]);
+                      return;
+                  }
+                  else {
+                      if (dlCount > 1) {
+                          //todo delete all but one
+                          callback([files.items objectAtIndex:0]);
+                          return;
+                      }
+                  }
+                  
+                  callback(nil);                
+              }];
+}
+
 -(void) backupIdentity: (NSString *) name password: (NSString *) password {
     _progressView = [LoadingView loadingViewInView:self.view keyboardHeight:0 textKey:@"progress_backup_identity_drive"];
     
@@ -302,34 +335,61 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
                     return;
                 }
                 
+                [self getIdentityFile:identityDirId name:name callback:^(GTLDriveFile * idFile) {
+                    if (idFile) {
+                        GTLUploadParameters *uploadParameters = [GTLUploadParameters
+                                                                 uploadParametersWithData:[identityData gzipDeflate]
+                                                                 MIMEType:@"application/octet-stream"];
+                        
+                        GTLQueryDrive *query = [GTLQueryDrive queryForFilesUpdateWithObject:idFile fileId:idFile.identifier uploadParameters:uploadParameters];
+                        
+                        [self.driveService executeQuery:query
+                                      completionHandler:^(GTLServiceTicket *ticket,
+                                                          GTLDriveFile *updatedFile,
+                                                          NSError *error) {
+                                          if (error == nil) {
+                                              [UIUtils showToastKey:@"identity_successfully_backed_up_to_google_drive"];
+                                          } else {
+                                              [UIUtils showToastKey:@"could_not_backup_identity_to_google_drive"];
+                                          }
+                                          [_progressView removeView];
+                                      }];
+                        
+                        
+                    }
+                    else {
+                        GTLDriveFile *driveFile = [[GTLDriveFile alloc]init] ;
+                        GTLDriveParentReference *parentRef = [GTLDriveParentReference object];
+                        parentRef.identifier = identityDirId;
+                        driveFile.parents = @[parentRef];
+                        
+                        driveFile.mimeType = @"application/octet-stream";
+                        NSString * filename = [name stringByAppendingPathExtension: IDENTITY_EXTENSION];
+                        driveFile.originalFilename = filename;
+                        driveFile.title = filename;
+                        
+                        GTLUploadParameters *uploadParameters = [GTLUploadParameters
+                                                                 uploadParametersWithData:[identityData gzipDeflate]
+                                                                 MIMEType:@"application/octet-stream"];
+                        
+                        GTLQueryDrive *query = [GTLQueryDrive queryForFilesInsertWithObject:driveFile
+                                                                           uploadParameters:uploadParameters];
+                        
+                        [self.driveService executeQuery:query
+                                      completionHandler:^(GTLServiceTicket *ticket,
+                                                          GTLDriveFile *updatedFile,
+                                                          NSError *error) {
+                                          if (error == nil) {
+                                              [UIUtils showToastKey:@"identity_successfully_backed_up_to_google_drive"];
+                                          } else {
+                                              [UIUtils showToastKey:@"could_not_backup_identity_to_google_drive"];
+                                          }
+                                          [_progressView removeView];
+                                      }];
+                        
+                    }
+                }];
                 
-                GTLDriveFile *driveFile = [[GTLDriveFile alloc]init] ;
-                GTLDriveParentReference *parentRef = [GTLDriveParentReference object];
-                parentRef.identifier = identityDirId;
-                driveFile.parents = @[parentRef];
-                driveFile.mimeType = @"application/octet-stream";
-                NSString * filename = [name stringByAppendingPathExtension: IDENTITY_EXTENSION];
-                driveFile.originalFilename = filename;
-                driveFile.title = filename;
-                
-                GTLUploadParameters *uploadParameters = [GTLUploadParameters
-                                                         uploadParametersWithData:[identityData gzipDeflate]
-                                                         MIMEType:@"application/octet-stream"];
-                
-                GTLQueryDrive *query = [GTLQueryDrive queryForFilesInsertWithObject:driveFile
-                                                                   uploadParameters:uploadParameters];
-                
-                [self.driveService executeQuery:query
-                              completionHandler:^(GTLServiceTicket *ticket,
-                                                  GTLDriveFile *updatedFile,
-                                                  NSError *error) {
-                                  if (error == nil) {
-                                      [UIUtils showToastKey:@"identity_successfully_backed_up_to_google_drive"];
-                                  } else {
-                                      [UIUtils showToastKey:@"could_not_backup_identity_to_google_drive"];
-                                  }
-                                  [_progressView removeView];
-                              }];
             }
             
             

@@ -240,8 +240,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(void) refresh {
     [self loadIdentityNames];
     [_userPicker reloadAllComponents];
-    [self updatePassword:[_identityNames objectAtIndex:[ _userPicker selectedRowInComponent:0]]];
-    
+    if ([_identityNames count] > 0) {
+        [self updatePassword:[_identityNames objectAtIndex:[ _userPicker selectedRowInComponent:0]]];
+    }
+    else {
+        _textPassword.text = nil;
+        [_storePassword setOn:NO animated:NO];
+    }    
 }
 
 

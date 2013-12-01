@@ -1489,6 +1489,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [[IdentityController sharedInstance] logout];
     @synchronized (_chats) {
         [_chats removeAllObjects];
+        [_swipeView reloadData];
     }
     [self performSegueWithIdentifier: @"returnToLogin" sender: self ];
 }

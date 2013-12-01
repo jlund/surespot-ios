@@ -337,7 +337,8 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
         return;
     }
     
-    SurespotIdentity * identity = [self decodeIdentityData:decryptedIdentity withUsername:username andPassword:password validate:YES];
+    //get the identity without validating to validate with server where we only need the latest ids
+    SurespotIdentity * identity = [self decodeIdentityData:decryptedIdentity withUsername:username andPassword:password validate:NO];
     if (!identity) {
         callback([NSString stringWithFormat:NSLocalizedString(@"could_not_restore_identity_name", nil), username]);
         return;
@@ -353,9 +354,14 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     
     
     
-    [[NetworkController sharedInstance] validateUsername:username password:passwordString signature:signatureString successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [self saveIdentity:identity withPassword:[password stringByAppendingString:CACHE_IDENTITY_ID]];
-        callback(nil);
+    [[NetworkController sharedInstance] validateUsername:username
+                                                password:passwordString
+                                               signature:signatureString
+                                            successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                //regenerate the identity with full validation for saving
+                                                SurespotIdentity * validatedIdentity = [self decodeIdentityData:decryptedIdentity withUsername:username andPassword:password validate:YES];
+                                                [self saveIdentity:validatedIdentity withPassword:[password stringByAppendingString:CACHE_IDENTITY_ID]];
+                                                callback(nil);
         
     } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
         switch (operation.response.statusCode) {
