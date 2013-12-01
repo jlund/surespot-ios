@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 typedef void (^CallbackBlock) (id  result);
+typedef void (^CallbackErrorBlock) (NSString * error, id  result);
 typedef void (^CallbackStringBlock) (NSString * result);
 typedef void (^CallbackDictionaryBlock) (NSDictionary * result);
 

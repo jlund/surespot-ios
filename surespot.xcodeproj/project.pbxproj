@@ -88,10 +88,10 @@
 		66E21DF91847D7F90005D91E /* IASKTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E21DEB1847D7F90005D91E /* IASKTextField.m */; };
 		66E21DFB1847D8A10005D91E /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E21DFA1847D8A10005D91E /* MessageUI.framework */; };
 		66E21E001847E1220005D91E /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 66E21DFF1847E1220005D91E /* Settings.bundle */; };
-		66E21E041847E7E40005D91E /* BackupIdentityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E21E031847E7E40005D91E /* BackupIdentityViewController.m */; };
+		66E21E041847E7E40005D91E /* BackupIdentityViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66E21E031847E7E40005D91E /* BackupIdentityViewController.mm */; };
 		66E21E071847E7F50005D91E /* RestoreIdentityViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66E21E061847E7F50005D91E /* RestoreIdentityViewController.mm */; };
 		66E21E091847EB670005D91E /* RestoreIdentityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66E21E081847EB670005D91E /* RestoreIdentityViewController.xib */; };
-		66E21E0B1847EE2B0005D91E /* BackupIdentityView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66E21E0A1847EE2B0005D91E /* BackupIdentityView.xib */; };
+		66E21E0B1847EE2B0005D91E /* BackupIdentityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66E21E0A1847EE2B0005D91E /* BackupIdentityViewController.xib */; };
 		66E4F5B6176298CB00596E6B /* libcryptopp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E4F5A1176298CB00596E6B /* libcryptopp.a */; };
 		66E4F5B7176298CB00596E6B /* SocketIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5A4176298CB00596E6B /* SocketIO.m */; };
 		66E4F5B8176298CB00596E6B /* SocketIOJSONSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5A6176298CB00596E6B /* SocketIOJSONSerialization.m */; };
@@ -319,11 +319,11 @@
 		66E21DFA1847D8A10005D91E /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		66E21DFF1847E1220005D91E /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		66E21E021847E7E40005D91E /* BackupIdentityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackupIdentityViewController.h; sourceTree = "<group>"; };
-		66E21E031847E7E40005D91E /* BackupIdentityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackupIdentityViewController.m; sourceTree = "<group>"; };
+		66E21E031847E7E40005D91E /* BackupIdentityViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BackupIdentityViewController.mm; sourceTree = "<group>"; };
 		66E21E051847E7F50005D91E /* RestoreIdentityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RestoreIdentityViewController.h; sourceTree = "<group>"; };
 		66E21E061847E7F50005D91E /* RestoreIdentityViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RestoreIdentityViewController.mm; sourceTree = "<group>"; };
 		66E21E081847EB670005D91E /* RestoreIdentityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RestoreIdentityViewController.xib; path = identity/RestoreIdentityViewController.xib; sourceTree = "<group>"; };
-		66E21E0A1847EE2B0005D91E /* BackupIdentityView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BackupIdentityView.xib; path = identity/BackupIdentityView.xib; sourceTree = "<group>"; };
+		66E21E0A1847EE2B0005D91E /* BackupIdentityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BackupIdentityViewController.xib; path = identity/BackupIdentityViewController.xib; sourceTree = "<group>"; };
 		66E4F51A176298CB00596E6B /* 3way.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 3way.h; sourceTree = "<group>"; };
 		66E4F51B176298CB00596E6B /* adler32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adler32.h; sourceTree = "<group>"; };
 		66E4F51C176298CB00596E6B /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
@@ -907,8 +907,8 @@
 			isa = PBXGroup;
 			children = (
 				66E21E021847E7E40005D91E /* BackupIdentityViewController.h */,
-				66E21E031847E7E40005D91E /* BackupIdentityViewController.m */,
-				66E21E0A1847EE2B0005D91E /* BackupIdentityView.xib */,
+				66E21E031847E7E40005D91E /* BackupIdentityViewController.mm */,
+				66E21E0A1847EE2B0005D91E /* BackupIdentityViewController.xib */,
 				66E21E051847E7F50005D91E /* RestoreIdentityViewController.h */,
 				66E21E061847E7F50005D91E /* RestoreIdentityViewController.mm */,
 				66E21E081847EB670005D91E /* RestoreIdentityViewController.xib */,
@@ -1321,7 +1321,7 @@
 				66A2D90F183A730D00785270 /* OurMessageCell.xib in Resources */,
 				6640766C1822A84C00BFD974 /* HomeCell.xib in Resources */,
 				66A2D910183A730D00785270 /* TheirMessageCell.xib in Resources */,
-				66E21E0B1847EE2B0005D91E /* BackupIdentityView.xib in Resources */,
+				66E21E0B1847EE2B0005D91E /* BackupIdentityViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1422,7 +1422,7 @@
 				66EC6113176E494900937467 /* UIImageView+AFNetworking.m in Sources */,
 				66EC6117176E49F800937467 /* NetworkController.m in Sources */,
 				66159703176F6732001B32C1 /* NSData+Base64.m in Sources */,
-				66E21E041847E7E40005D91E /* BackupIdentityViewController.m in Sources */,
+				66E21E041847E7E40005D91E /* BackupIdentityViewController.mm in Sources */,
 				665F4DFC1832E69C0083BCE7 /* GetKeyVersionOperation.mm in Sources */,
 				6606E4ED179D9C3A004199BC /* SignupViewController.mm in Sources */,
 				66E21DF41847D7F90005D91E /* IASKPSSliderSpecifierViewCell.m in Sources */,

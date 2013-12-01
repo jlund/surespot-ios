@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface FileController : NSObject
 extern NSString *const IDENTITY_EXTENSION;
 
+@interface FileController : NSObject
 +(NSString *) getHomeFilename;
 +(NSString *) getChatDataFilenameForSpot: (NSString *) spot;
 + (NSString*) getAppSupportDir;

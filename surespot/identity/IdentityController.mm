@@ -372,5 +372,39 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     }];
 }
 
+-(void) exportIdentityDataForUsername: (NSString *) username password: (NSString *) password callback: (CallbackErrorBlock) callback {
+    SurespotIdentity * identity = [self getIdentityWithUsername:username andPassword:password];
+    if (!identity) {
+        callback(NSLocalizedString(@"could_not_backup_identity_to_google_drive", nil), nil);
+        return;
+    }
+
+    NSData * saltBytes = [NSData dataFromBase64String:identity.salt];
+    NSData * derivedPassword = [EncryptionController deriveKeyUsingPassword:password andSalt:saltBytes];
+    NSData * encodedPassword = [derivedPassword SR_dataByBase64Encoding];
+    
+    NSData * signature = [EncryptionController signUsername:username andPassword: encodedPassword withPrivateKey:[identity getDsaPrivateKey]];
+    NSString * passwordString = [derivedPassword SR_stringByBase64Encoding];
+    NSString * signatureString = [signature SR_stringByBase64Encoding];
+    
+    
+    
+    [[NetworkController sharedInstance] validateUsername:username password:passwordString signature:signatureString successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {                
+        callback(nil, [self encryptIdentity:identity withPassword:[password stringByAppendingString:EXPORT_IDENTITY_ID]]);
+        
+    } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
+        switch (operation.response.statusCode) {
+            case 403:
+            case 404:
+                callback(NSLocalizedString(@"incorrect_password_or_key", nil), nil);
+                break;
+            default:
+                callback([NSString stringWithFormat:NSLocalizedString(@"could_not_backup_identity_to_google_drive", nil), username], nil);
+                break;
+        }
+    }];
+}
+
+
 
 @end
