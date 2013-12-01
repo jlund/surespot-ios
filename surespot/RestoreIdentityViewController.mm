@@ -41,6 +41,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 - (IBAction)bLoadIdentities:(id)sender;
 @property (strong, nonatomic) IBOutlet UIButton *bSelect;
 @property (strong, nonatomic) IBOutlet UILabel *accountLabel;
+@property (strong, nonatomic) IBOutlet UILabel *labelGoogleDriveBackup;
 
 @end
 
@@ -60,14 +61,14 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     
     [self setAccountFromKeychain];
     [self loadIdentitiesAuthIfNecessary:NO];
-    
-    //    _bSelect.titleLabel.text = NSLocalizedString(@"select_google_drive_account", nil);
-    
+         
     [_tvDrive registerNib:[UINib nibWithNibName:@"IdentityCell" bundle:nil] forCellReuseIdentifier:@"IdentityCell"];
     
     _dateFormatter = [[NSDateFormatter alloc]init];
     [_dateFormatter setDateStyle:NSDateFormatterShortStyle];
     [_dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+    
+    _labelGoogleDriveBackup.text = NSLocalizedString(@"restore_drive", nil);
 }
 
 -(void) setAccountFromKeychain {
