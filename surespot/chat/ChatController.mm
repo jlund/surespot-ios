@@ -319,6 +319,10 @@ static const int MAX_CONNECTION_RETRIES = 16;
             }
         }
     }
+    
+    //move messages from send queue to resend queue
+    [_resendBuffer addObjectsFromArray:_sendBuffer];
+    [_sendBuffer removeAllObjects];
 }
 
 -(void) getLatestData {
@@ -431,12 +435,10 @@ static const int MAX_CONNECTION_RETRIES = 16;
     [dict setObject:ourLatestVersion forKey:@"fromVersion"];
     [dict setObject:b64iv forKey:@"iv"];
     [dict setObject:@"text/plain" forKey:@"mimeType"];
-  //  [dict setObject:[NSNumber  numberWithBool:FALSE] forKey:@"shareable"];
+    //  [dict setObject:[NSNumber  numberWithBool:FALSE] forKey:@"shareable"];
     
     SurespotMessage * sm =[[SurespotMessage alloc] initWithDictionary: dict];
     
-    [self enqueueMessage:sm];
-
     //cache the plain data locally
     sm.plainData = message;
     [UIUtils setMessageHeights:sm size:[UIScreen mainScreen].bounds.size];
@@ -444,21 +446,39 @@ static const int MAX_CONNECTION_RETRIES = 16;
     ChatDataSource * dataSource = [self getDataSourceForFriendname: friendname];
     [dataSource addMessage: sm refresh:NO];
     [dataSource postRefresh];
-
-
-    [[IdentityController sharedInstance] getTheirLatestVersionForUsername:friendname callback:^(NSString * version) {
+    
+    
+    [[IdentityController sharedInstance] getTheirLatestVersionForUsername:[sm to] callback:^(NSString * version) {
         
         if (version) {
             
-            [EncryptionController symmetricEncryptString: message ourVersion:ourLatestVersion theirUsername:friendname theirVersion:version iv:iv callback:^(NSString * cipherText) {
+            [EncryptionController symmetricEncryptString: [sm plainData] ourVersion:[sm fromVersion] theirUsername:[sm to] theirVersion:version iv:iv callback:^(NSString * cipherText) {
                 
-                sm.toVersion = version;
-                sm.data = cipherText;
-                [self sendMessages];
+                if (cipherText) {
+                    sm.toVersion = version;
+                    sm.data = cipherText;
+                    [self enqueueMessage:sm];
+                    [self sendMessages];
+                    [dataSource postRefresh];
+                    
+                }
+                else {
+                    //todo retry later
+                    //                            [self enqueueResendMessage:message];
+                    //for now mark as errored
+                    DDLogInfo(@"could not encrypt message, setting error status to 500");
+                    sm.errorStatus = 500;
+                    [dataSource postRefresh];
+                }
             }];
         }
         else {
-            //todo tell user we can't send
+            //todo retry later
+            //  [self enqueueResendMessage:message];
+            DDLogInfo(@"could not get latest version, setting error status to 500");
+            sm.errorStatus = 500;
+            [dataSource postRefresh];
+            
         }
     }];
     
@@ -484,26 +504,16 @@ static const int MAX_CONNECTION_RETRIES = 16;
 
 -(void) sendMessages {
     NSMutableArray * sendBuffer = _sendBuffer;
-    _sendBuffer = [NSMutableArray new];
-    
+    _sendBuffer = [NSMutableArray new];    
     [sendBuffer enumerateObjectsUsingBlock:^(SurespotMessage * message, NSUInteger idx, BOOL *stop) {
         
         
         if (_socketIO) {
-            if ([self messageReadyToSend:message]) {
-                DDLogInfo(@"sending message %@", message);
-                [self enqueueResendMessage:message];
-                [_socketIO sendMessage:[message toJsonString]];
-            }
-            else {
-                [self enqueueMessage:message];
-            }
+            DDLogInfo(@"sending message %@", message);
+            [self enqueueResendMessage:message];
+            [_socketIO sendMessage:[message toJsonString]];
         }
     }];
-}
-
--(BOOL) messageReadyToSend: (SurespotMessage *) message {
-    return message.from && message.to && message.fromVersion && message.iv && message.toVersion && message.data && message.mimeType;
 }
 
 -(void ) checkAndSendNextMessage: (SurespotMessage *) message {
@@ -518,22 +528,27 @@ static const int MAX_CONNECTION_RETRIES = 16;
     [resendBuffer enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         
         if ([obj serverid] <= 0) {
-            NSString * otherUser = [obj getOtherUser];
-            NSInteger lastMessageId = 0;
-            ChatDataSource * cds = [_chatDataSources objectForKey:otherUser];
-            if (cds) {
-                lastMessageId = [cds latestMessageId];
-            }
-            else {
-                Friend * afriend = [_homeDataSource getFriendByName:otherUser];
-                if (afriend) {
-                    lastMessageId =  afriend.lastReceivedMessageId;
-                }
-            }
             
-            [obj setResendId:lastMessageId];
-            [_resendBuffer addObject:obj];
-            [jsonMessageList addObject:[obj toNSDictionary]];
+            
+            if ([obj readyToSend]) {
+                //see if we have plain text, re-encrypt and send
+                NSString * otherUser = [obj getOtherUser];
+                NSInteger lastMessageId = 0;
+                ChatDataSource * cds = [_chatDataSources objectForKey:otherUser];
+                if (cds) {
+                    lastMessageId = [cds latestMessageId];
+                }
+                else {
+                    Friend * afriend = [_homeDataSource getFriendByName:otherUser];
+                    if (afriend) {
+                        lastMessageId =  afriend.lastReceivedMessageId;
+                    }
+                }
+                
+                [obj setResendId:lastMessageId];
+                [_resendBuffer addObject:obj];
+                [jsonMessageList addObject:[obj toNSDictionary]];
+            }
         }
     }];
     

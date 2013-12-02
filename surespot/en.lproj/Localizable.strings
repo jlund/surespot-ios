@@ -159,7 +159,7 @@
 "image_saved_to_gallery"="image saved to gallery";
 "error_saving_image_to_gallery"="error saving image to gallery";
 "delete_message_confirmation_title"="are you sure you wish to delete this message?";
-"message_error_decrypting_message"="ERROR DECRYPTING MESSAGE";
+"message_error_decrypting_message"="error decrypting message";
 "could_not_respond_to_invite"="Could not respond to invite, please try again later.";
 "friend_status_is_deleted"="is deleted";
 "friend_status_is_invited"="is invited";

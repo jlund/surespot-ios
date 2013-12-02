@@ -153,5 +153,8 @@
     
 }
 
+-(BOOL) readyToSend {
+    return self.from && self.to && self.fromVersion && self.iv && self.toVersion && self.data && self.mimeType;
+}
 
 @end

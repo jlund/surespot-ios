@@ -37,4 +37,5 @@
 - (NSString *) getOurVersion;
 - (NSString * ) toJsonString;
 - (NSMutableDictionary * ) toNSDictionary;
+- (BOOL) readyToSend;
 @end

@@ -98,10 +98,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                               initWithOurPrivateKey:[identity getDhPrivateKeyForVersion:_ourVersion]
                                                               theirPublicKey:[publicKeys dhPubKey]
                                                               completionCallback:^(NSData * secret) {
-                //store shared key in dictionary
-                [self.cache cacheSharedSecret: secret forKey: sharedSecretKey];
-                [self finish:secret];
-            }];
+                                                                  //store shared key in dictionary
+                                                                  [self.cache cacheSharedSecret: secret forKey: sharedSecretKey];
+                                                                  [self finish:secret];
+                                                              }];
             
             [self.cache.genSecretQueue addOperation:sharedSecretOp];
         }
@@ -129,13 +129,21 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                        initWithOurPrivateKey:[identity getDhPrivateKeyForVersion:_ourVersion]
                                                                                                        theirPublicKey:[keys dhPubKey]
                                                                                                        completionCallback:^(NSData * secret) {
-                                                         //store shared key in dictionary
-                                                         DDLogVerbose(@"caching shared secret %@ for %@", secret, sharedSecretKey);                                                                                                          [self.cache cacheSharedSecret: secret forKey: sharedSecretKey];
-                                                         [self finish:secret];
-                                                     }];
+                                                                                                           //store shared key in dictionary
+                                                                                                           DDLogVerbose(@"caching shared secret %@ for %@", secret, sharedSecretKey);                                                                                                          [self.cache cacheSharedSecret: secret forKey: sharedSecretKey];
+                                                                                                           [self finish:secret];
+                                                                                                       }];
                                                      
                                                      [self.cache.genSecretQueue addOperation:sharedSecretOp];
-                                                 }}];
+                                                 }
+                                                 else {
+                                                     //failed to get keys, return nill
+                                                     DDLogVerbose(@"could not get public key for %@", publicKeysKey );
+                                                     [self finish:nil];
+                                                 }
+                                                 
+                                                 
+                                             }];
             
             [self.cache.publicKeyQueue addOperation:pkOp];
         }

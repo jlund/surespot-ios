@@ -857,6 +857,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 cell.messageSentView.foregroundColor = [UIUtils surespotBlue];
             }
             
+            cell.messageLabel.text = plainData;
+            cell.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
+            DDLogVerbose(@"message text x position: %f, width: %f", cell.messageLabel.frame.origin.x, cell.messageLabel.frame.size.width);
+            
             if (message.errorStatus > 0) {
                 NSString * errorText = [UIUtils getMessageErrorText: message.errorStatus];
                 cell.messageStatusLabel.text = errorText;
@@ -866,7 +870,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 
                 if (message.serverid <= 0) {
                     cell.messageStatusLabel.text = NSLocalizedString(@"message_sending",nil);
-                    cell.messageLabel.text = plainData;
                     
                     if (ours) {
                         cell.messageSentView.foregroundColor = [UIColor blackColor];
@@ -878,16 +881,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     }
                     
                     if (!message.plainData) {
-                        
                         cell.messageStatusLabel.text = NSLocalizedString(@"message_loading_and_decrypting",nil);
-                        cell.messageLabel.text = @"";
-                        
                     }
                     else {
                         
                         //   DDLogVerbose(@"setting text for iv: %@ to: %@", [message iv], plainData);
-                        cell.messageLabel.text = plainData;
-                        cell.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
                         cell.messageStatusLabel.text = [self stringFromDate:[message dateTime]];
                         
                         if (ours) {
@@ -896,8 +894,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                         else {
                             cell.messageSentView.foregroundColor = [UIUtils surespotBlue];
                         }
-                        
-                        DDLogVerbose(@"message text x position: %f, width: %f", cell.messageLabel.frame.origin.x, cell.messageLabel.frame.size.width);
                     }
                 }
             }
@@ -979,18 +975,21 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             [[ChatController sharedInstance] loadEarlierMessagesForUsername: username callback:^(id result) {
                 if (result) {
-                    if ([result integerValue] == 0) {
+                    NSInteger resultValue = [result integerValue];
+                    if (resultValue == 0 || resultValue == NSIntegerMax) {
                         [UIUtils showToastKey:@"all_messages_loaded"];
                     }
-                    
-                    DDLogInfo(@"loaded %@ earlier messages for user: %@", result, username);
-                    
-                    [self updateTableView:weakView withNewRowCount:[result integerValue]];
-                    [weakView.pullToRefreshView stopAnimating];
+                    else {
+                        DDLogInfo(@"loaded %@ earlier messages for user: %@", result, username);
+                        [self updateTableView:weakView withNewRowCount:[result integerValue]];
+                    }                    
                 }
                 else {
                     [UIUtils showToastKey:@"loading_earlier_messages_failed"];
                 }
+                
+                [weakView.pullToRefreshView stopAnimating];
+
             }];
         }];
         
@@ -1263,20 +1262,20 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     if (_homeDataSource.currentChat) {
         
-     
-            REMenuItem * captureImageItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_capture_image", nil) image:[UIImage imageNamed:@"ic_menu_end_conversation"] highlightedImage:nil action:^(REMenuItem * item){
-                
-                //dependency injection would be nice
-                if (!_imageDelegate) {
-                    _imageDelegate = [ImageDelegate new];
-                }
-                
-                [ImageDelegate startCameraControllerFromViewController:self usingDelegate:_imageDelegate];
-            }];
-            [menuItems addObject:captureImageItem];
+        
+        REMenuItem * captureImageItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_capture_image", nil) image:[UIImage imageNamed:@"ic_menu_end_conversation"] highlightedImage:nil action:^(REMenuItem * item){
+            
+            //dependency injection would be nice
+            if (!_imageDelegate) {
+                _imageDelegate = [ImageDelegate new];
+            }
+            
+            [ImageDelegate startCameraControllerFromViewController:self usingDelegate:_imageDelegate];
+        }];
+        [menuItems addObject:captureImageItem];
         
         
-
+        
         
         REMenuItem * closeTabItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_close_tab", nil) image:[UIImage imageNamed:@"ic_menu_end_conversation"] highlightedImage:nil action:^(REMenuItem * item){
             [self closeTab];
@@ -1508,7 +1507,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [_chats removeAllObjects];
         [_swipeView reloadData];
     }
-
+    
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 

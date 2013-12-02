@@ -212,10 +212,6 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     [[CredentialCachingController sharedInstance] getLatestVersionForUsername: username callback: callback];
 }
 
--(void) getSharedSecretForOurVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion:( NSString *) theirVersion callback:(CallbackBlock) callback {
-    [[CredentialCachingController sharedInstance] getSharedSecretForOurVersion:ourVersion theirUsername:theirUsername theirVersion:theirVersion callback:callback];
-}
-
 -(BOOL) verifyPublicKeys: (NSDictionary *) keys {
     
     BOOL dhVerify = [EncryptionController

@@ -27,7 +27,6 @@
 - (SurespotIdentity *) loggedInIdentity;
 - (NSString *) getOurLatestVersion;
 - (void) getTheirLatestVersionForUsername: (NSString *) username callback:(CallbackStringBlock) callback;
-
 -(BOOL) verifyPublicKeys: (NSDictionary *) keys;
 -(PublicKeys *) loadPublicKeysUsername: (NSString * ) username version: (NSString *) version;
 -(void) savePublicKeys: (NSDictionary * ) keys username: (NSString *)username version: (NSString *)version;

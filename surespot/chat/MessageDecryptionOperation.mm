@@ -36,19 +36,27 @@
     
     
     if ([_message.mimeType isEqualToString: @"text/plain"]) {
-        
-        [EncryptionController symmetricDecryptString:[_message data] ourVersion:[_message getOurVersion] theirUsername:[_message getOtherUser] theirVersion:[_message getTheirVersion]  iv:[_message iv]  callback:^(NSString * plaintext){
+        if ([_message data]) {
             
-            _message.plainData = plaintext;
-            
-            //figure out message height for both orientations
-            if (plaintext){
+            [EncryptionController symmetricDecryptString:[_message data] ourVersion:[_message getOurVersion] theirUsername:[_message getOtherUser] theirVersion:[_message getTheirVersion]  iv:[_message iv]  callback:^(NSString * plaintext){
+                
+                //figure out message height for both orientations
+                if (plaintext){
+                    _message.plainData = plaintext;
+                }
+                else {
+                    //todo more granular error messages
+                    _message.plainData = NSLocalizedString(@"message_error_decrypting_message",nil);
+                }
+                
                 [UIUtils setMessageHeights:_message size:_size];
-            }
-            
+                [self finish];
+                
+            }];
+        }
+        else {
             [self finish];
-            
-        }];
+        }
     }
     else {
         if ([_message.mimeType isEqualToString: @"image/"]) {
