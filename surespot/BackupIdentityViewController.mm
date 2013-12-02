@@ -256,13 +256,15 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 
 
 - (IBAction)execute:(id)sender {
-    NSString * name = [_identityNames objectAtIndex:[_userPicker selectedRowInComponent:0]];
-    _name = name;
-    
-    //show alert view to get password
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:NSLocalizedString(@"backup_identity", nil), name] message:[NSString stringWithFormat:NSLocalizedString(@"enter_password_for", nil), name] delegate:self cancelButtonTitle:NSLocalizedString(@"cancel", nil) otherButtonTitles:NSLocalizedString(@"ok", nil), nil];
-    alertView.alertViewStyle = UIAlertViewStyleSecureTextInput;
-    [alertView show];
+    if ([self isAuthorized]) {
+        NSString * name = [_identityNames objectAtIndex:[_userPicker selectedRowInComponent:0]];
+        _name = name;
+        
+        //show alert view to get password
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:NSLocalizedString(@"backup_identity", nil), name] message:[NSString stringWithFormat:NSLocalizedString(@"enter_password_for", nil), name] delegate:self cancelButtonTitle:NSLocalizedString(@"cancel", nil) otherButtonTitles:NSLocalizedString(@"ok", nil), nil];
+        alertView.alertViewStyle = UIAlertViewStyleSecureTextInput;
+        [alertView show];
+    }
     
 }
 
