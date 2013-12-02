@@ -1491,8 +1491,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [_chats removeAllObjects];
         [_swipeView reloadData];
     }
-    [self performSegueWithIdentifier: @"returnToLogin" sender: self ];
+
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
+
 - (IBAction)buttonTouchUpInside:(id)sender {
     if (![self handleTextAction]) {
         [self scrollHome];

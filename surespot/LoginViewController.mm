@@ -228,11 +228,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _identityNames = [[IdentityController sharedInstance] getIdentityNames];
 }
 
--(IBAction) returnToLogin:(UIStoryboardSegue *) segue {
-    [self refresh];
-}
-
-
 -(void) viewDidAppear:(BOOL)animated {
     [self refresh];
 }

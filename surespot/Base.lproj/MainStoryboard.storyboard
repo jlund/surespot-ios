@@ -227,11 +227,9 @@
                         <outlet property="textField" destination="aRf-OH-qdB" id="FiH-dU-rOR"/>
                         <outlet property="textFieldContainer" destination="Mgi-22-lGU" id="7W7-M6-lr3"/>
                         <outlet property="theButton" destination="byV-5h-Uzr" id="Fk8-y9-s2y"/>
-                        <segue destination="onN-2k-VwT" kind="unwind" identifier="returnToLogin" unwindAction="returnToLogin:" id="Awy-8C-GBS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s1j-Zl-x1y" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="onN-2k-VwT" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="149" y="204"/>
         </scene>
@@ -243,6 +241,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="CFG-TY-gjC"/>
+        <segue reference="0Gr-2N-xaD"/>
     </inferredMetricsTieBreakers>
 </document>
