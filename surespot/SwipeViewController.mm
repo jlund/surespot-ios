@@ -26,6 +26,7 @@
 #import "SurespotConstants.h"
 #import "IASKAppSettingsViewController.h"
 #import "IASKSettingsReader.h"
+#import "ImageDelegate.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -47,6 +48,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (atomic, assign) NSInteger scrollingTo;
 @property (nonatomic, strong) NSMutableDictionary * bottomIndexPaths;
 @property (nonatomic, strong) IASKAppSettingsViewController * appSettingsViewController;
+@property (nonatomic, strong) ImageDelegate * imageDelegate;
 @end
 
 @implementation SwipeViewController
@@ -1260,6 +1262,21 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSMutableArray * menuItems = [NSMutableArray new];
     
     if (_homeDataSource.currentChat) {
+        
+     
+            REMenuItem * captureImageItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_capture_image", nil) image:[UIImage imageNamed:@"ic_menu_end_conversation"] highlightedImage:nil action:^(REMenuItem * item){
+                
+                //dependency injection would be nice
+                if (!_imageDelegate) {
+                    _imageDelegate = [ImageDelegate new];
+                }
+                
+                [ImageDelegate startCameraControllerFromViewController:self usingDelegate:_imageDelegate];
+            }];
+            [menuItems addObject:captureImageItem];
+        
+        
+
         
         REMenuItem * closeTabItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_close_tab", nil) image:[UIImage imageNamed:@"ic_menu_end_conversation"] highlightedImage:nil action:^(REMenuItem * item){
             [self closeTab];
