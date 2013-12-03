@@ -40,20 +40,10 @@
         
         // Save the new image (original or edited) to the Camera Roll
         UIImageWriteToSavedPhotosAlbum (imageToSave, nil, nil , nil);
+        
+        
     }
     
-    // Handle a movie capture
-    if (CFStringCompare ((CFStringRef) mediaType, kUTTypeMovie, 0)
-        == kCFCompareEqualTo) {
-        
-        NSString *moviePath = [[info objectForKey:
-                                UIImagePickerControllerMediaURL] path];
-        
-        if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum (moviePath)) {
-            UISaveVideoAtPathToSavedPhotosAlbum (
-                                                 moviePath, nil, nil, nil);
-        }
-    }
     
     [[picker presentingViewController] dismissViewControllerAnimated: YES completion:nil];
     

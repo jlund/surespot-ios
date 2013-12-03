@@ -1263,7 +1263,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (_homeDataSource.currentChat) {
         
         
-        REMenuItem * captureImageItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_capture_image", nil) image:[UIImage imageNamed:@"ic_menu_end_conversation"] highlightedImage:nil action:^(REMenuItem * item){
+        REMenuItem * captureImageItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"capture_image", nil) image:[UIImage imageNamed:@"ic_menu_camera"] highlightedImage:nil action:^(REMenuItem * item){
             
             //dependency injection would be nice
             if (!_imageDelegate) {
