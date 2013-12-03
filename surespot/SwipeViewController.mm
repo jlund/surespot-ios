@@ -1261,25 +1261,25 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSMutableArray * menuItems = [NSMutableArray new];
     
     if (_homeDataSource.currentChat) {
-        NSString * theirUsername = _homeDataSource.currentChat;
-        
-        REMenuItem * captureImageItem = [[REMenuItem alloc]
-                                         initWithTitle:NSLocalizedString(@"capture_image", nil)
-                                         image:[UIImage imageNamed:@"ic_menu_camera"]
-                                         highlightedImage:nil
-                                         action:^(REMenuItem * item){
-                                             
-                                             _imageDelegate = [[ImageDelegate alloc]
-                                                               initWithUsername:[[IdentityController sharedInstance] getLoggedInUser]
-                                                               ourVersion:[[IdentityController sharedInstance] getOurLatestVersion]
-                                                               theirUsername:theirUsername];
-                                             [ImageDelegate startCameraControllerFromViewController:self usingDelegate:_imageDelegate];
-                                             
-                                             
-                                         }];
-        [menuItems addObject:captureImageItem];
-        
-        
+//        NSString * theirUsername = _homeDataSource.currentChat;
+//        
+//        REMenuItem * captureImageItem = [[REMenuItem alloc]
+//                                         initWithTitle:NSLocalizedString(@"capture_image", nil)
+//                                         image:[UIImage imageNamed:@"ic_menu_camera"]
+//                                         highlightedImage:nil
+//                                         action:^(REMenuItem * item){
+//                                             
+//                                             _imageDelegate = [[ImageDelegate alloc]
+//                                                               initWithUsername:[[IdentityController sharedInstance] getLoggedInUser]
+//                                                               ourVersion:[[IdentityController sharedInstance] getOurLatestVersion]
+//                                                               theirUsername:theirUsername];
+//                                             [ImageDelegate startCameraControllerFromViewController:self usingDelegate:_imageDelegate];
+//                                             
+//                                             
+//                                         }];
+//        [menuItems addObject:captureImageItem];
+//        
+//        
         
         
         REMenuItem * closeTabItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_close_tab", nil) image:[UIImage imageNamed:@"ic_menu_end_conversation"] highlightedImage:nil action:^(REMenuItem * item){
