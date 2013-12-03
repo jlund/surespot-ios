@@ -108,7 +108,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
          dhKey: encodedDHKey
          dsaKey: encodedDSAKey
          signature: signature
-         version: @"ios is my bitch"
          successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
              DDLogVerbose(@"signup response: %d",  [operation.response statusCode]);
              [[IdentityController sharedInstance] createIdentityWithUsername:username andPassword:password andSalt:salt andKeys:keys];
