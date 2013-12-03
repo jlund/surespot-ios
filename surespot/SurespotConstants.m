@@ -24,5 +24,5 @@
 #endif
 
 NSInteger const SAVE_MESSAGE_COUNT = 50;
-
+NSString * const MIME_TYPE_IMAGE = @"image/";
 @end

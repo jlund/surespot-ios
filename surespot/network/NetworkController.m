@@ -280,7 +280,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 -(void) deleteFriend:(NSString *) friendname successBlock:(HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock {
-
+    
     NSString * path = [[NSString stringWithFormat:@"friends/%@", friendname] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSURLRequest *request = [self requestWithMethod:@"DELETE" path:path  parameters:nil];
     AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
@@ -324,7 +324,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSURLRequest *request = [self requestWithMethod:@"GET" path:path parameters: nil];
     AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:successBlock
                                                                                         failure: failureBlock];
-
+    
     [operation start];
 }
 
@@ -337,4 +337,39 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [operation start];
 }
 
+-(void) postFileStreamData: (NSData *) data
+                ourVersion: (NSString *) ourVersion
+             theirUsername: (NSString *) theirUsername
+              theirVersion: (NSString *) theirVersion
+                    fileid: (NSString *) fileid
+                  mimeType: (NSString *) mimeType
+              successBlock:(HTTPSuccessBlock) successBlock
+              failureBlock: (HTTPFailureBlock) failureBlock
+{
+    NSString * path = [[NSString stringWithFormat:@"images/%@/%@/%@", ourVersion, theirUsername, theirVersion] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSMutableURLRequest *request
+    = [self multipartFormRequestWithMethod:@"POST"
+                                      path: path
+                                parameters:nil
+                 constructingBodyWithBlock: ^(id <AFMultipartFormData>formData) {
+                     
+                     [formData appendPartWithFileData:data
+                                                 name:@"image"
+                                             fileName:fileid mimeType:mimeType];
+                     
+                 }];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    // if you want progress updates as it's uploading, uncomment the following:
+    //
+    // [operation setUploadProgressBlock:^(NSUInteger bytesWritten,
+    // long long totalBytesWritten,
+    // long long totalBytesExpectedToWrite) {
+    //     NSLog(@"Sent %lld of %lld bytes", totalBytesWritten, totalBytesExpectedToWrite);
+    // }];
+    
+    [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
+    [operation start];
+}
 @end

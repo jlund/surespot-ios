@@ -55,8 +55,9 @@
 		665F4E0D183324360083BCE7 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 665F4E081833238D0083BCE7 /* libTestFlight.a */; };
 		665F4E0F183325C50083BCE7 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 665F4E0E183325C50083BCE7 /* AdSupport.framework */; };
 		667550FB184BCB6A00C55AAC /* NSString+Sensitivize.m in Sources */ = {isa = PBXBuildFile; fileRef = 667550FA184BCB6A00C55AAC /* NSString+Sensitivize.m */; };
-		667550FF184C544B00C55AAC /* ImageDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 667550FE184C544B00C55AAC /* ImageDelegate.m */; };
+		667550FF184C544B00C55AAC /* ImageDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 667550FE184C544B00C55AAC /* ImageDelegate.mm */; };
 		66755100184C55E900C55AAC /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E70AB21847F8E100433D6F /* MobileCoreServices.framework */; };
+		66755103184C5E3E00C55AAC /* UIImage+Scale.m in Sources */ = {isa = PBXBuildFile; fileRef = 66755102184C5E3E00C55AAC /* UIImage+Scale.m */; };
 		667EFF8F183EB664002C0406 /* SurespotMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 667EFF8E183EB664002C0406 /* SurespotMessage.m */; };
 		667EFF91183EB692002C0406 /* SurespotErrorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 667EFF90183EB692002C0406 /* SurespotErrorMessage.m */; };
 		667EFF9518425A87002C0406 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 667EFF9418425A87002C0406 /* Reachability.m */; };
@@ -261,7 +262,9 @@
 		667550F9184BCB6A00C55AAC /* NSString+Sensitivize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Sensitivize.h"; path = "utils/NSString+Sensitivize.h"; sourceTree = "<group>"; };
 		667550FA184BCB6A00C55AAC /* NSString+Sensitivize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Sensitivize.m"; path = "utils/NSString+Sensitivize.m"; sourceTree = "<group>"; };
 		667550FD184C544B00C55AAC /* ImageDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageDelegate.h; path = images/ImageDelegate.h; sourceTree = "<group>"; };
-		667550FE184C544B00C55AAC /* ImageDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ImageDelegate.m; path = images/ImageDelegate.m; sourceTree = "<group>"; };
+		667550FE184C544B00C55AAC /* ImageDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ImageDelegate.mm; path = images/ImageDelegate.mm; sourceTree = "<group>"; };
+		66755101184C5E3E00C55AAC /* UIImage+Scale.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Scale.h"; path = "images/UIImage+Scale.h"; sourceTree = "<group>"; };
+		66755102184C5E3E00C55AAC /* UIImage+Scale.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Scale.m"; path = "images/UIImage+Scale.m"; sourceTree = "<group>"; };
 		667EFF8E183EB664002C0406 /* SurespotMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SurespotMessage.m; path = chat/SurespotMessage.m; sourceTree = "<group>"; };
 		667EFF90183EB692002C0406 /* SurespotErrorMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SurespotErrorMessage.m; path = chat/SurespotErrorMessage.m; sourceTree = "<group>"; };
 		667EFF92183EB7E3002C0406 /* SurespotErrorMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SurespotErrorMessage.h; path = chat/SurespotErrorMessage.h; sourceTree = "<group>"; };
@@ -794,7 +797,9 @@
 			isa = PBXGroup;
 			children = (
 				667550FD184C544B00C55AAC /* ImageDelegate.h */,
-				667550FE184C544B00C55AAC /* ImageDelegate.m */,
+				667550FE184C544B00C55AAC /* ImageDelegate.mm */,
+				66755101184C5E3E00C55AAC /* UIImage+Scale.h */,
+				66755102184C5E3E00C55AAC /* UIImage+Scale.m */,
 			);
 			name = images;
 			sourceTree = "<group>";
@@ -1382,6 +1387,7 @@
 				6604A2CB17626B9E0072216A /* main.m in Sources */,
 				66E21DCA1846A76C0005D91E /* KeychainItemWrapper.m in Sources */,
 				665F4DF81831923C0083BCE7 /* REMenuItem.m in Sources */,
+				66755103184C5E3E00C55AAC /* UIImage+Scale.m in Sources */,
 				66E21DEF1847D7F90005D91E /* IASKSettingsReader.m in Sources */,
 				66E21DF31847D7F90005D91E /* IASKSpecifier.m in Sources */,
 				66D3B04D182D47DF00B37A6C /* SurespotLogFormatter.m in Sources */,
@@ -1446,7 +1452,7 @@
 				66E21E041847E7E40005D91E /* BackupIdentityViewController.mm in Sources */,
 				665F4DFC1832E69C0083BCE7 /* GetKeyVersionOperation.mm in Sources */,
 				6606E4ED179D9C3A004199BC /* SignupViewController.mm in Sources */,
-				667550FF184C544B00C55AAC /* ImageDelegate.m in Sources */,
+				667550FF184C544B00C55AAC /* ImageDelegate.mm in Sources */,
 				66E21DF41847D7F90005D91E /* IASKPSSliderSpecifierViewCell.m in Sources */,
 				66E21D94184545790005D91E /* FilledRectView.m in Sources */,
 				66FF0FEE1827FAEE0038ECA6 /* StateController.m in Sources */,

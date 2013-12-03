@@ -448,6 +448,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
     [dataSource postRefresh];
     
     
+    //todo execute in background
     [[IdentityController sharedInstance] getTheirLatestVersionForUsername:[sm to] callback:^(NSString * version) {
         
         if (version) {

@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 
 @interface ImageDelegate : NSObject<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+- (id) initWithUsername: (NSString *) username
+             ourVersion:(NSString *) ourVersion
+          theirUsername:(NSString *) theirUsername;
 +(BOOL) startCameraControllerFromViewController: (UIViewController*) controller
                                   usingDelegate: (id <UIImagePickerControllerDelegate,
                                                   UINavigationControllerDelegate>) delegate;

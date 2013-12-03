@@ -982,14 +982,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     else {
                         DDLogInfo(@"loaded %@ earlier messages for user: %@", result, username);
                         [self updateTableView:weakView withNewRowCount:[result integerValue]];
-                    }                    
+                    }
                 }
                 else {
                     [UIUtils showToastKey:@"loading_earlier_messages_failed"];
                 }
                 
                 [weakView.pullToRefreshView stopAnimating];
-
+                
             }];
         }];
         
@@ -1261,17 +1261,22 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSMutableArray * menuItems = [NSMutableArray new];
     
     if (_homeDataSource.currentChat) {
+        NSString * theirUsername = _homeDataSource.currentChat;
         
-        
-        REMenuItem * captureImageItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"capture_image", nil) image:[UIImage imageNamed:@"ic_menu_camera"] highlightedImage:nil action:^(REMenuItem * item){
-            
-            //dependency injection would be nice
-            if (!_imageDelegate) {
-                _imageDelegate = [ImageDelegate new];
-            }
-            
-            [ImageDelegate startCameraControllerFromViewController:self usingDelegate:_imageDelegate];
-        }];
+        REMenuItem * captureImageItem = [[REMenuItem alloc]
+                                         initWithTitle:NSLocalizedString(@"capture_image", nil)
+                                         image:[UIImage imageNamed:@"ic_menu_camera"]
+                                         highlightedImage:nil
+                                         action:^(REMenuItem * item){
+                                             
+                                             _imageDelegate = [[ImageDelegate alloc]
+                                                               initWithUsername:[[IdentityController sharedInstance] getLoggedInUser]
+                                                               ourVersion:[[IdentityController sharedInstance] getOurLatestVersion]
+                                                               theirUsername:theirUsername];
+                                             [ImageDelegate startCameraControllerFromViewController:self usingDelegate:_imageDelegate];
+                                             
+                                             
+                                         }];
         [menuItems addObject:captureImageItem];
         
         

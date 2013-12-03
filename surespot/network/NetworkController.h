@@ -37,5 +37,13 @@ typedef void (^HTTPFailureBlock) (AFHTTPRequestOperation *operation , NSError *e
 -(void) setUnauthorized;
 -(void) getEarlierMessagesForUsername: (NSString *) username messageId: (NSInteger) messageId successBlock:(JSONSuccessBlock)successBlock failureBlock: (JSONFailureBlock) failureBlock;
 -(void) validateUsername: (NSString *) username password: (NSString *) password signature: (NSString *) signature successBlock:(HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock;
+-(void) postFileStreamData: (NSData *) data
+                ourVersion: (NSString *) ourVersion
+             theirUsername: (NSString *) theirUsername
+              theirVersion: (NSString *) theirVersion
+                    fileid: (NSString *) fileid
+                  mimeType: (NSString *) mimeType
+              successBlock:(HTTPSuccessBlock) successBlock
+              failureBlock: (HTTPFailureBlock) failureBlock;
 
 @end

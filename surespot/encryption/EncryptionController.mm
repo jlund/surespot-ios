@@ -159,6 +159,21 @@ int const PBKDF_ROUNDS = 20000;
     return [NSData dataWithBytes:encrypted.data() length:encrypted.length()];
 }
 
++(NSData *) encryptData: (NSData *) data usingKey: (NSData *) key usingIv: (NSData *) iv {
+    GCM<AES>::Encryption e;
+    e.SetKeyWithIV((byte *)[key bytes], AES_KEY_LENGTH, (byte *)[iv bytes],IV_LENGTH);
+    
+    
+    string encrypted;
+    CryptoPP::AuthenticatedEncryptionFilter ef (e, new StringSink(encrypted));
+    
+    
+    ef.Put(reinterpret_cast<const unsigned char *>([data bytes]), [data length]);
+    ef.MessageEnd();
+    
+    return [NSData dataWithBytes:encrypted.data() length:encrypted.length()];
+}
+
 +(NSString *) decryptCipher: (NSString *) cipher usingKey: (NSData *) key usingIv: (NSData *) iv {
     GCM<AES>::Decryption d;
     UInt8 * keyBytes = (UInt8 *)[key bytes];
@@ -489,6 +504,20 @@ int const PBKDF_ROUNDS = 20000;
     
 }
 
++(void) symmetricEncryptData: (NSData *) data ourVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion: (NSString *) theirVersion iv: (NSData *) iv callback: (CallbackBlock) callback {
+    
+    [[CredentialCachingController sharedInstance] getSharedSecretForOurVersion:ourVersion theirUsername:theirUsername theirVersion:theirVersion callback: ^(NSData * secret) {
+        if (secret) {
+            NSData * cipherData = [EncryptionController encryptData:data usingKey:secret usingIv:iv];
+            callback(cipherData);
+        }
+        else {
+            callback(nil);
+        }
+    }];
+    
+}
+
 +(void) symmetricDecryptString: (NSString *) cipherData ourVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion: (NSString *) theirVersion iv: (NSString *) iv callback: (CallbackBlock) callback {
     
     [[CredentialCachingController sharedInstance] getSharedSecretForOurVersion:ourVersion theirUsername:theirUsername theirVersion:theirVersion callback: ^(NSData * secret) {
@@ -503,6 +532,8 @@ int const PBKDF_ROUNDS = 20000;
     }];
     
 }
+
+
 
 
 @end

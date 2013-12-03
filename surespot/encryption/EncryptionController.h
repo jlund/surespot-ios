@@ -113,4 +113,5 @@ extern int const PBKDF_ROUNDS;
 +(void) symmetricDecryptString: (NSString *) cipherData ourVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion: (NSString *) theirVersion iv: (NSString *) iv callback: (CallbackBlock) callback;
 
 +(BOOL) verifyPublicKeySignature: (NSData *) signature data: (NSData *) data;
++(void) symmetricEncryptData: (NSData *) data ourVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion: (NSString *) theirVersion iv: (NSData *) iv callback: (CallbackBlock) callback;
 @end

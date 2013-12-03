@@ -19,4 +19,5 @@ extern BOOL const serverSecure;
 extern NSInteger const serverPort;
 extern NSString * const serverPublicKeyString;
 extern NSInteger const SAVE_MESSAGE_COUNT;
+extern NSString * const MIME_TYPE_IMAGE;
 @end
