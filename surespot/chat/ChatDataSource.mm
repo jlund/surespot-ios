@@ -69,16 +69,18 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     }
                 }];
                 
-                //if the message doesn't have a server id, add it to the resend buffer
-                if (message.serverid <= 0) {
-                    [[ChatController sharedInstance] enqueueResendMessage: message];
+                //if the message isn't sendable, set it to errored
+                if (![message readyToSend ]) {
+                    message.errorStatus = 500;
                 }
-                
+                else {
+                    //if the message doesn't have a server id, add it to the resend buffer
+                    if (message.serverid <= 0) {
+                        [[ChatController sharedInstance] enqueueResendMessage: message];
+                    }
+                }
             }
-            
-            
-            
-            
+
             DDLogVerbose( @"latestMEssageid: %d, latestControlId: %d", _latestMessageId ,_latestControlMessageId);
             
         }
@@ -95,9 +97,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 NSArray * controlMessageStrings =[((NSDictionary *) JSON) objectForKey:@"controlMessages"];
                 
                 [self handleControlMessages:controlMessageStrings];
-                
-                
-                
+
                 NSArray * messageStrings =[((NSDictionary *) JSON) objectForKey:@"messages"];
                 
                 [self handleMessages:messageStrings];
@@ -142,7 +142,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 if (message.serverid == messageId) {
                     //if we're going to delete the message don't bother adding it
                     if ([cm.action isEqualToString:@"delete"] ) {
-                                        DDLogVerbose(@"message going to be deleted, marking message as old");
+                        DDLogVerbose(@"message going to be deleted, marking message as old");
                         isNew = NO;
                     }
                     [applicableControlMessages addObject:cm];
@@ -193,7 +193,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             if (![ChatUtils isOurMessage:message]) {
                 DDLogInfo(@"not our message, marking message as new");
-
+                
                 isNew = YES;
             }
             else {
