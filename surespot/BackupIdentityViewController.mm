@@ -362,9 +362,9 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
                                                           GTLDriveFile *updatedFile,
                                                           NSError *error) {
                                           if (error == nil) {
-                                              [UIUtils showToastKey:@"identity_successfully_backed_up_to_google_drive"];
+                                              [UIUtils showToastKey:@"identity_successfully_backed_up_to_google_drive" duration:2];
                                           } else {
-                                              [UIUtils showToastKey:@"could_not_backup_identity_to_google_drive"];
+                                              [UIUtils showToastKey:@"could_not_backup_identity_to_google_drive" duration:2];
                                           }
                                           [_progressView removeView];
                                       }];
@@ -395,9 +395,9 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
                                                           GTLDriveFile *updatedFile,
                                                           NSError *error) {
                                           if (error == nil) {
-                                              [UIUtils showToastKey:@"identity_successfully_backed_up_to_google_drive"];
+                                              [UIUtils showToastKey:@"identity_successfully_backed_up_to_google_drive" duration:2];
                                           } else {
-                                              [UIUtils showToastKey:@"could_not_backup_identity_to_google_drive"];
+                                              [UIUtils showToastKey:@"could_not_backup_identity_to_google_drive" duration:2];
                                           }
                                           [_progressView removeView];
                                       }];
