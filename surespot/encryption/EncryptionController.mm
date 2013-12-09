@@ -15,7 +15,7 @@
 #import "filters.h"
 
 using CryptoPP::BitBucket;
-static CryptoPP::AutoSeededRandomPool rng;
+static CryptoPP::AutoSeededRandomPool randomRng(true, 32);
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -70,7 +70,7 @@ int const PBKDF_ROUNDS = 20000;
     
     //generate iv
     byte ivBytes[IV_LENGTH];
-    rng.GenerateBlock(ivBytes, IV_LENGTH);
+    randomRng.GenerateBlock(ivBytes, IV_LENGTH);
     
     //derive password and salt
     NSDictionary * derived =[self deriveKeyFromPassword:password andRounds: rounds];
@@ -139,7 +139,7 @@ int const PBKDF_ROUNDS = 20000;
 
 +(NSData *) getIv {
     byte* iv = new byte[IV_LENGTH];
-    rng.GenerateBlock(iv, IV_LENGTH);
+    randomRng.GenerateBlock(iv, IV_LENGTH);
     return [NSData dataWithBytes:iv length:IV_LENGTH];
 }
 
@@ -234,7 +234,7 @@ int const PBKDF_ROUNDS = 20000;
     CryptoPP::SecByteBlock keyBytes(AES_KEY_LENGTH);
     CryptoPP::SecByteBlock saltBytes(SALT_LENGTH);
     
-    rng.GenerateBlock(saltBytes, SALT_LENGTH);
+    randomRng.GenerateBlock(saltBytes, SALT_LENGTH);
     
     [derived setObject:[NSData dataWithBytes:saltBytes length:SALT_LENGTH] forKey:@"salt"];
     
@@ -264,7 +264,7 @@ int const PBKDF_ROUNDS = 20000;
     ByteQueue byteQueue;
     byteQueue.Put((byte *) [decodedKey bytes], [decodedKey length]);
     publicKey->Load(byteQueue);
-    bool validated = publicKey->Validate(rng, 3);
+    bool validated = publicKey->Validate(randomRng, 3);
     
     if (!validated) {
         DDLogWarn(@"dh public key not validated");
@@ -284,7 +284,7 @@ int const PBKDF_ROUNDS = 20000;
         privateKey->Load(byteQueue);
         
         if (validate) {
-            if (!privateKey->Validate(rng, 3)) {
+            if (!privateKey->Validate(randomRng, 3)) {
                 DDLogWarn(@"dh private key failed validation");
                 return nil;
             }
@@ -301,7 +301,7 @@ int const PBKDF_ROUNDS = 20000;
     ByteQueue byteQueue;
     byteQueue.Put((byte *) [decodedKey bytes], [decodedKey length]);
     publicKey->Load(byteQueue);
-    bool validated = publicKey->Validate(rng, 3);
+    bool validated = publicKey->Validate(randomRng, 3);
     
     if (!validated) {
         DDLogWarn(@"dsa public key not validated");
@@ -321,7 +321,7 @@ int const PBKDF_ROUNDS = 20000;
     privateKey->Load(byteQueue);
     
     if (validate) {
-        if (!privateKey->Validate(rng, 3)) {
+        if (!privateKey->Validate(randomRng, 3)) {
             DDLogWarn(@"dsa private key failed validation");
             return nil;
         }
@@ -336,7 +336,7 @@ int const PBKDF_ROUNDS = 20000;
     NSData * usernameData =[username dataUsingEncoding:NSUTF8StringEncoding];
     
     byte * random = new byte[16];
-    rng.GenerateBlock(random,16);
+    randomRng.GenerateBlock(random,16);
     
     NSMutableData *concatData = [NSMutableData dataWithData: usernameData];
     [concatData appendData:password];
@@ -344,7 +344,7 @@ int const PBKDF_ROUNDS = 20000;
     int sigLength = signer.MaxSignatureLength();
     
     byte * signature = new byte[sigLength];
-    int sigLen = signer.SignMessage(rng, (byte *)[concatData bytes], concatData.length, signature);
+    int sigLen = signer.SignMessage(randomRng, (byte *)[concatData bytes], concatData.length, signature);
     
     byte * buffer = new Byte[1000];
     int put = CryptoPP::DSAConvertSignatureFormat(buffer, 1000, CryptoPP::DSASignatureFormat::DSA_DER, signature, sigLen, CryptoPP::DSASignatureFormat::DSA_P1363);
@@ -381,14 +381,14 @@ int const PBKDF_ROUNDS = 20000;
 +(IdentityKeys *) generateKeyPairs {
     ECDHPrivateKey * dhKey = new ECDHPrivateKey();
     
-    dhKey->Initialize(rng, secp521r1());
-    bool dhvalid = dhKey->Validate(rng, 3);
+    dhKey->Initialize(randomRng, secp521r1());
+    bool dhvalid = dhKey->Validate(randomRng, 3);
     
     if (dhvalid) {
         CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PrivateKey * dsaKey = new ECDSAPrivateKey();
         
-        dsaKey->Initialize( rng, secp521r1());
-        bool dsaValid = dsaKey->Validate( rng, 3 );
+        dsaKey->Initialize( randomRng, secp521r1());
+        bool dsaValid = dsaKey->Validate( randomRng, 3 );
         
         if (dsaValid) {
             IdentityKeys * ik = [[IdentityKeys alloc] init];

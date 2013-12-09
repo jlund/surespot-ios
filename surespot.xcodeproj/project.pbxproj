@@ -34,6 +34,9 @@
 		66755100184C55E900C55AAC /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E70AB21847F8E100433D6F /* MobileCoreServices.framework */; };
 		667EFF9518425A87002C0406 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 667EFF9418425A87002C0406 /* Reachability.m */; };
 		667EFF9718425D82002C0406 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 667EFF9618425D82002C0406 /* SystemConfiguration.framework */; };
+		6686623D18565AD5001491B1 /* LoginViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6686623818565AD5001491B1 /* LoginViewController.mm */; };
+		6686623E18565AD5001491B1 /* SignupViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6686623A18565AD5001491B1 /* SignupViewController.mm */; };
+		6686623F18565AD5001491B1 /* SwipeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6686623C18565AD5001491B1 /* SwipeViewController.mm */; };
 		66A2D919183A7A7F00785270 /* SurespotConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D918183A7A7F00785270 /* SurespotConstants.m */; };
 		66A2D940183C25E800785270 /* UIScrollView+SVInfiniteScrolling.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D932183C25E800785270 /* UIScrollView+SVInfiniteScrolling.m */; };
 		66A2D941183C25E800785270 /* UIScrollView+SVPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D934183C25E800785270 /* UIScrollView+SVPullToRefresh.m */; };
@@ -91,9 +94,6 @@
 		66EBE0C51855C97100F2452D /* SurespotErrorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBDF1D1855C96F00F2452D /* SurespotErrorMessage.m */; };
 		66EBE0C61855C97100F2452D /* SurespotMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBDF1F1855C96F00F2452D /* SurespotMessage.m */; };
 		66EBE0C71855C97100F2452D /* TheirMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66EBDF201855C96F00F2452D /* TheirMessageCell.xib */; };
-		66EBE0C81855C97100F2452D /* LoginViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66EBDF231855C96F00F2452D /* LoginViewController.mm */; };
-		66EBE0C91855C97100F2452D /* SignupViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66EBDF251855C96F00F2452D /* SignupViewController.mm */; };
-		66EBE0CA1855C97100F2452D /* SwipeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66EBDF271855C96F00F2452D /* SwipeViewController.mm */; };
 		66EBE0CB1855C97100F2452D /* KeyboardState.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBDF2A1855C96F00F2452D /* KeyboardState.m */; };
 		66EBE0CC1855C97100F2452D /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBDF2C1855C96F00F2452D /* LoadingView.m */; };
 		66EBE0CD1855C97100F2452D /* UIViewPager.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBDF2E1855C96F00F2452D /* UIViewPager.m */; };
@@ -219,6 +219,12 @@
 		667EFF9318425A87002C0406 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		667EFF9418425A87002C0406 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		667EFF9618425D82002C0406 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		6686623718565AD5001491B1 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		6686623818565AD5001491B1 /* LoginViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LoginViewController.mm; sourceTree = "<group>"; };
+		6686623918565AD5001491B1 /* SignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignupViewController.h; sourceTree = "<group>"; };
+		6686623A18565AD5001491B1 /* SignupViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SignupViewController.mm; sourceTree = "<group>"; };
+		6686623B18565AD5001491B1 /* SwipeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeViewController.h; sourceTree = "<group>"; };
+		6686623C18565AD5001491B1 /* SwipeViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SwipeViewController.mm; sourceTree = "<group>"; };
 		66A2D917183A7A7F00785270 /* SurespotConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SurespotConstants.h; sourceTree = "<group>"; };
 		66A2D918183A7A7F00785270 /* SurespotConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SurespotConstants.m; sourceTree = "<group>"; };
 		66A2D930183C25E800785270 /* SVPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVPullToRefresh.h; sourceTree = "<group>"; };
@@ -460,12 +466,6 @@
 		66EBDF1E1855C96F00F2452D /* SurespotMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SurespotMessage.h; sourceTree = "<group>"; };
 		66EBDF1F1855C96F00F2452D /* SurespotMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SurespotMessage.m; sourceTree = "<group>"; };
 		66EBDF201855C96F00F2452D /* TheirMessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TheirMessageCell.xib; sourceTree = "<group>"; };
-		66EBDF221855C96F00F2452D /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
-		66EBDF231855C96F00F2452D /* LoginViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LoginViewController.mm; sourceTree = "<group>"; };
-		66EBDF241855C96F00F2452D /* SignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignupViewController.h; sourceTree = "<group>"; };
-		66EBDF251855C96F00F2452D /* SignupViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SignupViewController.mm; sourceTree = "<group>"; };
-		66EBDF261855C96F00F2452D /* SwipeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeViewController.h; sourceTree = "<group>"; };
-		66EBDF271855C96F00F2452D /* SwipeViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SwipeViewController.mm; sourceTree = "<group>"; };
 		66EBDF291855C96F00F2452D /* KeyboardState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardState.h; sourceTree = "<group>"; };
 		66EBDF2A1855C96F00F2452D /* KeyboardState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyboardState.m; sourceTree = "<group>"; };
 		66EBDF2B1855C96F00F2452D /* LoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingView.h; sourceTree = "<group>"; };
@@ -633,7 +633,6 @@
 				66EBE0A21855C97100F2452D /* home */,
 				66EBDEF31855C96F00F2452D /* identity */,
 				66EBDF381855C96F00F2452D /* images */,
-				66E4F517176298CB00596E6B /* libs */,
 				6604A2D617626B9E0072216A /* MainStoryboard.storyboard */,
 				66EBDF3D1855C96F00F2452D /* network */,
 				6604A2C517626B9E0072216A /* Supporting Files */,
@@ -646,6 +645,7 @@
 				66EBE0951855C97100F2452D /* utils */,
 				66EBDF211855C96F00F2452D /* viewcontrollers */,
 				66D3B04E182EAB4200B37A6C /* surespot.xcassets */,
+				66E4F517176298CB00596E6B /* libs */,
 			);
 			path = surespot;
 			sourceTree = "<group>";
@@ -1085,12 +1085,12 @@
 		66EBDF211855C96F00F2452D /* viewcontrollers */ = {
 			isa = PBXGroup;
 			children = (
-				66EBDF221855C96F00F2452D /* LoginViewController.h */,
-				66EBDF231855C96F00F2452D /* LoginViewController.mm */,
-				66EBDF241855C96F00F2452D /* SignupViewController.h */,
-				66EBDF251855C96F00F2452D /* SignupViewController.mm */,
-				66EBDF261855C96F00F2452D /* SwipeViewController.h */,
-				66EBDF271855C96F00F2452D /* SwipeViewController.mm */,
+				6686623718565AD5001491B1 /* LoginViewController.h */,
+				6686623818565AD5001491B1 /* LoginViewController.mm */,
+				6686623918565AD5001491B1 /* SignupViewController.h */,
+				6686623A18565AD5001491B1 /* SignupViewController.mm */,
+				6686623B18565AD5001491B1 /* SwipeViewController.h */,
+				6686623C18565AD5001491B1 /* SwipeViewController.mm */,
 			);
 			path = viewcontrollers;
 			sourceTree = "<group>";
@@ -1429,7 +1429,9 @@
 				66EBE0BA1855C97100F2452D /* SurespotIdentity.mm in Sources */,
 				66EBE0BB1855C97100F2452D /* ChatController.mm in Sources */,
 				66EBE13F1855C97100F2452D /* HomeDataSource.m in Sources */,
+				6686623F18565AD5001491B1 /* SwipeViewController.mm in Sources */,
 				66EBE13C1855C97100F2452D /* Friend.m in Sources */,
+				6686623E18565AD5001491B1 /* SignupViewController.mm in Sources */,
 				66EBE13B1855C97100F2452D /* UIUtils.m in Sources */,
 				66E21DEF1847D7F90005D91E /* IASKSettingsReader.m in Sources */,
 				66EBE0D91855C97100F2452D /* EncryptionController.mm in Sources */,
@@ -1449,7 +1451,6 @@
 				66EBE0D01855C97100F2452D /* IdentityCell.m in Sources */,
 				66E21DF91847D7F90005D91E /* IASKTextField.m in Sources */,
 				66EBE13A1855C97100F2452D /* SurespotLogFormatter.m in Sources */,
-				66EBE0C91855C97100F2452D /* SignupViewController.mm in Sources */,
 				663710801813172F009D5195 /* EGOCache.m in Sources */,
 				66E4F5B8176298CB00596E6B /* SocketIOJSONSerialization.m in Sources */,
 				66E4F5B9176298CB00596E6B /* SocketIOPacket.m in Sources */,
@@ -1495,7 +1496,6 @@
 				66EBE0B11855C97100F2452D /* CredentialCachingController.mm in Sources */,
 				66EC6110176E494900937467 /* AFPropertyListRequestOperation.m in Sources */,
 				66E21DF81847D7F90005D91E /* IASKSwitch.m in Sources */,
-				66EBE0CA1855C97100F2452D /* SwipeViewController.mm in Sources */,
 				66EC6111176E494900937467 /* AFURLConnectionOperation.m in Sources */,
 				66EC6112176E494900937467 /* AFXMLRequestOperation.m in Sources */,
 				66EBE0CD1855C97100F2452D /* UIViewPager.m in Sources */,
@@ -1510,7 +1510,7 @@
 				66EBE1401855C97100F2452D /* MessageIndicatorNewView.m in Sources */,
 				66EBE0CC1855C97100F2452D /* LoadingView.m in Sources */,
 				66E21DF41847D7F90005D91E /* IASKPSSliderSpecifierViewCell.m in Sources */,
-				66EBE0C81855C97100F2452D /* LoginViewController.mm in Sources */,
+				6686623D18565AD5001491B1 /* LoginViewController.mm in Sources */,
 				6654441317F37A3F00F62F7F /* SwipeView.m in Sources */,
 				66EBE0BD1855C97100F2452D /* ChatUtils.mm in Sources */,
 				66EBE0D41855C97100F2452D /* UIImage+Scale.m in Sources */,
