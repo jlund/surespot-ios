@@ -110,7 +110,6 @@
 		66EBE0D81855C97100F2452D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 66EBDF461855C96F00F2452D /* Localizable.strings */; };
 		66EBE0D91855C97100F2452D /* EncryptionController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66EBDF4A1855C96F00F2452D /* EncryptionController.mm */; };
 		66EBE0DA1855C97100F2452D /* IdentityKeys.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66EBDF4C1855C96F00F2452D /* IdentityKeys.mm */; };
-		66EBE1351855C97100F2452D /* surespot.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66EBE0941855C97100F2452D /* surespot.xcassets */; };
 		66EBE1361855C97100F2452D /* FileController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE0971855C97100F2452D /* FileController.mm */; };
 		66EBE1371855C97100F2452D /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE0991855C97100F2452D /* NSData+Base64.m */; };
 		66EBE1381855C97100F2452D /* NSString+Sensitivize.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE09B1855C97100F2452D /* NSString+Sensitivize.m */; };
@@ -1312,7 +1311,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = Surespot;
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = 2fours;
 			};
 			buildConfigurationList = 6604A2B617626B9E0072216A /* Build configuration list for PBXProject "surespot" */;
@@ -1388,7 +1387,6 @@
 				66EBE0D61855C97100F2452D /* MainStoryboard.storyboard in Resources */,
 				66EBE0D11855C97100F2452D /* IdentityCell.xib in Resources */,
 				6621BB841762704D00BC2850 /* Localizable.strings in Resources */,
-				66EBE1351855C97100F2452D /* surespot.xcassets in Resources */,
 				66EBE0C21855C97100F2452D /* OurMessageCell.xib in Resources */,
 				66EBE0B91855C97100F2452D /* RestoreIdentityViewController.xib in Resources */,
 				66EBE0C71855C97100F2452D /* TheirMessageCell.xib in Resources */,
@@ -1679,10 +1677,9 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\\\"$(SRCROOT)/surespot\\\"",
-					"\\\"$(SRCROOT)/surespot/libs/cryptopp/lib\\\"",
+					"$(SRCROOT)/surespot/",
+					"$(SRCROOT)/surespot/libs/cryptopp/lib/",
 					/Users/adam/dev/surespot/ios/surespot/libs/TestFlightSDK,
-					/Users/adam/dev/surespot/ios/surespot/libs/cryptopp/lib,
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
@@ -1713,10 +1710,9 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\\\"$(SRCROOT)/surespot\\\"",
-					"\\\"$(SRCROOT)/surespot/libs/cryptopp/lib\\\"",
+					"$(SRCROOT)/surespot/",
+					"$(SRCROOT)/surespot/libs/cryptopp/lib/",
 					/Users/adam/dev/surespot/ios/surespot/libs/TestFlightSDK,
-					/Users/adam/dev/surespot/ios/surespot/libs/cryptopp/lib,
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
