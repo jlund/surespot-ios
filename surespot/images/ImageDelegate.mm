@@ -89,10 +89,10 @@
 //                //encrypt
                 [EncryptionController
                  symmetricEncryptData:imageData
-                 ourVersion:_ourVersion theirUsername:_theirUsername theirVersion:version iv:iv callback:^(id result) {
+                 ourVersion:_ourVersion theirUsername:_theirUsername theirVersion:version iv:iv callback:^(id encryptedImageData) {
 //                     //upload
                      [[NetworkController sharedInstance]
-                      postFileStreamData:imageData
+                      postFileStreamData:encryptedImageData
                       ourVersion:_ourVersion
                       theirUsername:_theirUsername
                       theirVersion:version
