@@ -416,7 +416,7 @@
 		66E70AB21847F8E100433D6F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		66E70AB61847F9D900433D6F /* GTLDrive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GTLDrive.h; sourceTree = "<group>"; };
 		66E70AB71847F9E400433D6F /* GTLDrive_Sources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLDrive_Sources.m; sourceTree = "<group>"; };
-		66EBDEF41855C96F00F2452D /* BackupIdentityView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BackupIdentityView.xib; sourceTree = "<group>"; };
+		66EBDEF41855C96F00F2452D /* BackupIdentityView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BackupIdentityView.xib; path = ../identity/BackupIdentityView.xib; sourceTree = "<group>"; };
 		66EBDEF51855C96F00F2452D /* CredentialCachingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CredentialCachingController.h; sourceTree = "<group>"; };
 		66EBDEF61855C96F00F2452D /* CredentialCachingController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CredentialCachingController.mm; sourceTree = "<group>"; };
 		66EBDEF71855C96F00F2452D /* GenerateSharedSecretOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenerateSharedSecretOperation.h; sourceTree = "<group>"; };
@@ -433,7 +433,7 @@
 		66EBDF021855C96F00F2452D /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
 		66EBDF031855C96F00F2452D /* PublicKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicKeys.h; sourceTree = "<group>"; };
 		66EBDF041855C96F00F2452D /* PublicKeys.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PublicKeys.mm; sourceTree = "<group>"; };
-		66EBDF051855C96F00F2452D /* RestoreIdentityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RestoreIdentityViewController.xib; sourceTree = "<group>"; };
+		66EBDF051855C96F00F2452D /* RestoreIdentityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RestoreIdentityViewController.xib; path = ../identity/RestoreIdentityViewController.xib; sourceTree = "<group>"; };
 		66EBDF061855C96F00F2452D /* SurespotIdentity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SurespotIdentity.h; sourceTree = "<group>"; };
 		66EBDF071855C96F00F2452D /* SurespotIdentity.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SurespotIdentity.mm; sourceTree = "<group>"; };
 		66EBDF091855C96F00F2452D /* ChatController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatController.h; sourceTree = "<group>"; };
@@ -1029,7 +1029,6 @@
 		66EBDEF31855C96F00F2452D /* identity */ = {
 			isa = PBXGroup;
 			children = (
-				66EBDEF41855C96F00F2452D /* BackupIdentityView.xib */,
 				66EBDEF51855C96F00F2452D /* CredentialCachingController.h */,
 				66EBDEF61855C96F00F2452D /* CredentialCachingController.mm */,
 				66EBDEF71855C96F00F2452D /* GenerateSharedSecretOperation.h */,
@@ -1046,7 +1045,6 @@
 				66EBDF021855C96F00F2452D /* KeychainItemWrapper.m */,
 				66EBDF031855C96F00F2452D /* PublicKeys.h */,
 				66EBDF041855C96F00F2452D /* PublicKeys.mm */,
-				66EBDF051855C96F00F2452D /* RestoreIdentityViewController.xib */,
 				66EBDF061855C96F00F2452D /* SurespotIdentity.h */,
 				66EBDF071855C96F00F2452D /* SurespotIdentity.mm */,
 			);
@@ -1113,12 +1111,14 @@
 		66EBDF2F1855C96F00F2452D /* backup */ = {
 			isa = PBXGroup;
 			children = (
+				66EBDEF41855C96F00F2452D /* BackupIdentityView.xib */,
 				66EBDF301855C96F00F2452D /* BackupIdentityViewController.h */,
 				66EBDF311855C96F00F2452D /* BackupIdentityViewController.mm */,
 				66EBDF321855C96F00F2452D /* GTMOAuth2ViewTouch.xib */,
 				66EBDF331855C96F00F2452D /* IdentityCell.h */,
 				66EBDF341855C96F00F2452D /* IdentityCell.m */,
 				66EBDF351855C96F00F2452D /* IdentityCell.xib */,
+				66EBDF051855C96F00F2452D /* RestoreIdentityViewController.xib */,
 				66EBDF361855C96F00F2452D /* RestoreIdentityViewController.h */,
 				66EBDF371855C96F00F2452D /* RestoreIdentityViewController.mm */,
 			);
