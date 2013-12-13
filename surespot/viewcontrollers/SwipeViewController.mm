@@ -905,13 +905,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             if ([message.mimeType isEqualToString:MIME_TYPE_TEXT]) {
                 cell.messageLabel.hidden = NO;
-                cell.imageView.hidden = YES;
+                cell.uiImageView.hidden = YES;
             }
             else {
                 if ([message.mimeType isEqualToString:MIME_TYPE_IMAGE]) {
                     cell.messageLabel.hidden = YES;
-                    cell.imageView.hidden = NO;
-                    [cell.imageView setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"surespot_logo"]];
+                    cell.uiImageView.hidden = NO;
+                    [cell.uiImageView setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"surespot_logo"]];
                     
 //                    if (ours) {
 //                        CGRectMake(56, 20, <#CGFloat width#>, <#CGFloat height#>)
@@ -919,12 +919,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 //                    else {
 //                        
 //                    }
-                    DDLogInfo(@"imageView: %@", cell.imageView);
+                    DDLogInfo(@"imageView: %@", cell.uiImageView);
                 }
                 else {
                     if ([message.mimeType isEqualToString:MIME_TYPE_M4A]) {
                         cell.messageLabel.hidden = YES;
-                        cell.imageView.hidden = NO;
+                        cell.uiImageView.hidden = NO;
                     }
                 }
             }
