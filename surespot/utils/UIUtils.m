@@ -119,12 +119,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         return CGSizeMake(size.height, size.width);
     }
     else {
-                return CGSizeMake(size.width, size.height);
-
+        return CGSizeMake(size.width, size.height);
+        
     }
 }
 
-+(void) setMessageHeights: (SurespotMessage *)  message size: (CGSize) size {
++(void) setTextMessageHeights: (SurespotMessage *)  message size: (CGSize) size {
     NSString * plaintext = message.plainData;
     
     //figure out message height for both orientations
@@ -159,6 +159,28 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         DDLogVerbose(@"computed row height portrait %d landscape %d", message.rowPortraitHeight, message.rowLandscapeHeight);
     }
+}
+
++(void) setImageMessageHeights: (SurespotMessage *)  message size: (CGSize) size {
+    
+    
+    //figure out message height for both orientations
+    
+    NSInteger offset = 0;
+    NSInteger heightAdj = 25;
+    BOOL ours = [ChatUtils isOurMessage:message];
+    if (ours) {
+        offset = 40;
+    }
+    else {
+        offset = 90;
+    }
+    
+    [message setRowPortraitHeight: 200];// (int) (labelSize.height + heightAdj > 44 ? labelSize.height + heightAdj : 44) ];
+    [message setRowLandscapeHeight: 200];//(int) (labelSize.height + heightAdj > 44 ? labelSize.height + heightAdj: 44) ];
+    
+    DDLogInfo(@"setting image row height portrait %d landscape %d", message.rowPortraitHeight, message.rowLandscapeHeight);
+    
 }
 
 

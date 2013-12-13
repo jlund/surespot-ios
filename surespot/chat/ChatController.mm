@@ -441,7 +441,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
     
     //cache the plain data locally
     sm.plainData = message;
-    [UIUtils setMessageHeights:sm size:[UIScreen mainScreen].bounds.size];
+    [UIUtils setTextMessageHeights:sm size:[UIScreen mainScreen].bounds.size];
     
     ChatDataSource * dataSource = [self getDataSourceForFriendname: friendname];
     [dataSource addMessage: sm refresh:NO];

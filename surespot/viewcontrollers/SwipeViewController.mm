@@ -27,6 +27,7 @@
 #import "IASKAppSettingsViewController.h"
 #import "IASKSettingsReader.h"
 #import "ImageDelegate.h"
+#import "UIImageView+WebCache.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -859,6 +860,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             cell.messageLabel.text = plainData;
             cell.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
+            UIView *bgColorView = [[UIView alloc] init];
+            bgColorView.backgroundColor = [UIUtils surespotSelectionBlue];
+            bgColorView.layer.masksToBounds = YES;
+            cell.selectedBackgroundView = bgColorView;
             DDLogVerbose(@"message text x position: %f, width: %f", cell.messageLabel.frame.origin.x, cell.messageLabel.frame.size.width);
             
             if (message.errorStatus > 0) {
@@ -898,10 +903,32 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 }
             }
             
-            UIView *bgColorView = [[UIView alloc] init];
-            bgColorView.backgroundColor = [UIUtils surespotSelectionBlue];
-            bgColorView.layer.masksToBounds = YES;
-            cell.selectedBackgroundView = bgColorView;
+            if ([message.mimeType isEqualToString:MIME_TYPE_TEXT]) {
+                cell.messageLabel.hidden = NO;
+                cell.imageView.hidden = YES;
+            }
+            else {
+                if ([message.mimeType isEqualToString:MIME_TYPE_IMAGE]) {
+                    cell.messageLabel.hidden = YES;
+                    cell.imageView.hidden = NO;
+                    [cell.imageView setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"surespot_logo"]];
+                    
+//                    if (ours) {
+//                        CGRectMake(56, 20, <#CGFloat width#>, <#CGFloat height#>)
+//                    }
+//                    else {
+//                        
+//                    }
+                    DDLogInfo(@"imageView: %@", cell.imageView);
+                }
+                else {
+                    if ([message.mimeType isEqualToString:MIME_TYPE_M4A]) {
+                        cell.messageLabel.hidden = YES;
+                        cell.imageView.hidden = NO;
+                    }
+                }
+            }
+            
             
             return cell;
         }

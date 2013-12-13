@@ -32,9 +32,14 @@
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <imageView userInteractionEnabled="NO" alpha="0.5499999999999996" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Lhg-4j-1Cy">
+                        <rect key="frame" x="5" y="14" width="315" height="200"/>
+                        <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
+                    </imageView>
                 </subviews>
             </tableViewCellContentView>
             <connections>
+                <outlet property="imageView" destination="Lhg-4j-1Cy" id="NLa-PV-ZwD"/>
                 <outlet property="messageLabel" destination="6hK-2i-BEE" id="CJB-pv-4Nv"/>
                 <outlet property="messageSentView" destination="uKg-6b-FVk" id="HOU-Cd-2l5"/>
                 <outlet property="messageStatusLabel" destination="OG5-dM-jkO" id="seN-Lh-alm"/>

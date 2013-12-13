@@ -22,7 +22,8 @@
 +(CGFloat) keyboardHeightAdjustedForOrientation: (CGSize) size;
 +(UIColor *) surespotGrey;
 +(UIColor *) surespotTransparentGrey;
-+(void) setMessageHeights: (SurespotMessage *)  message size: (CGSize) size;
++(void) setTextMessageHeights: (SurespotMessage *)  message size: (CGSize) size;
++(void) setImageMessageHeights: (SurespotMessage *)  message size: (CGSize) size;
 +(void) startSpinAnimation: (UIView *) view;
 +(void) stopSpinAnimation: (UIView *) view;
 +(void) startPulseAnimation: (UIView *) view;

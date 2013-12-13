@@ -35,7 +35,7 @@
     [self didChangeValueForKey:@"isExecuting"];
     
     
-    if ([_message.mimeType isEqualToString: @"text/plain"]) {
+    if ([_message.mimeType isEqualToString: MIME_TYPE_TEXT]) {
         if ([_message data]) {
             
             [EncryptionController symmetricDecryptString:[_message data] ourVersion:[_message getOurVersion] theirUsername:[_message getOtherUser] theirVersion:[_message getTheirVersion]  iv:[_message iv]  callback:^(NSString * plaintext){
@@ -49,7 +49,7 @@
                     _message.plainData = NSLocalizedString(@"message_error_decrypting_message",nil);
                 }
                 
-                [UIUtils setMessageHeights:_message size:_size];
+                [UIUtils setTextMessageHeights:_message size:_size];
                 [self finish];
                 
             }];
@@ -59,11 +59,11 @@
         }
     }
     else {
-        if ([_message.mimeType isEqualToString: @"image/"]) {
-            _message.plainData = @"[image]";
+        if ([_message.mimeType isEqualToString: MIME_TYPE_IMAGE]) {
+            [UIUtils setImageMessageHeights:_message size:_size];
         }
         else {
-            if ([_message.mimeType isEqualToString: @"audio/mp4"]) {
+            if ([_message.mimeType isEqualToString: MIME_TYPE_M4A]) {
                 _message.plainData = @"[voice message]";
             }
         }

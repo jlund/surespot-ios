@@ -12,5 +12,6 @@
 @interface MessageView : UITableViewCell
 @property (strong, nonatomic) IBOutlet FilledRectView *messageSentView;
 @property (strong, nonatomic) IBOutlet UILabel *messageStatusLabel;
+@property (strong, nonatomic) IBOutlet UIImageView *imageView;
 @property (strong, nonatomic) IBOutlet UILabel *messageLabel;
 @end
