@@ -27,7 +27,7 @@
 #import "IASKAppSettingsViewController.h"
 #import "IASKSettingsReader.h"
 #import "ImageDelegate.h"
-#import "UIImageView+WebCache.h"
+#import "MessageView+WebImageCache.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -881,6 +881,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     }
                 }
                 else {
+                    if (!message.formattedDate) {
+                        message.formattedDate = [self stringFromDate:[message dateTime]];
+                    }
+                    
                     if (ours) {
                         cell.messageSentView.foregroundColor = [UIColor lightGrayColor];
                     }
@@ -891,7 +895,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     else {
                         
                         //   DDLogVerbose(@"setting text for iv: %@ to: %@", [message iv], plainData);
-                        cell.messageStatusLabel.text = [self stringFromDate:[message dateTime]];
+                        
+                        cell.messageStatusLabel.text = message.formattedDate;
                         
                         if (ours) {
                             cell.messageSentView.foregroundColor = [UIColor lightGrayColor];
@@ -911,11 +916,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 if ([message.mimeType isEqualToString:MIME_TYPE_IMAGE]) {
                     cell.messageLabel.hidden = YES;
                     cell.uiImageView.hidden = NO;
-                    [cell.uiImageView setImageWithURL:[NSURL URLWithString:message.data]
-                                           ourVersion:[message getOurVersion]
-                                        theirUsername:[message getOtherUser ]
-                                         theirVersion:[message getTheirVersion]
-                                                   iv:message.iv];
+                    [cell setImageWithMessage:message placeholderImage:nil progress:^(NSUInteger receivedSize, long long expectedSize) {
+                        
+                    } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+                                                  if (error) {
+                                                           
+                                                       }
+                                                   }
+                     ];
                     
 //                    if (ours) {
 //                        CGRectMake(56, 20, <#CGFloat width#>, <#CGFloat height#>)

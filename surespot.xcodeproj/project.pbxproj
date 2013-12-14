@@ -49,7 +49,7 @@
 		6686626C185B6A2E001491B1 /* UIImage+GIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 6686625B185B6A2E001491B1 /* UIImage+GIF.m */; };
 		6686626D185B6A2E001491B1 /* UIImage+MultiFormat.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6686625D185B6A2E001491B1 /* UIImage+MultiFormat.mm */; };
 		6686626E185B6A2E001491B1 /* UIImage+WebP.m in Sources */ = {isa = PBXBuildFile; fileRef = 6686625F185B6A2E001491B1 /* UIImage+WebP.m */; };
-		6686626F185B6A2E001491B1 /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 66866261185B6A2E001491B1 /* UIImageView+WebCache.m */; };
+		6686626F185B6A2E001491B1 /* MessageView+WebImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 66866261185B6A2E001491B1 /* MessageView+WebImageCache.m */; };
 		66866271185B86FD001491B1 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66866270185B86FD001491B1 /* ImageIO.framework */; };
 		66866273185B87F2001491B1 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66866272185B87F2001491B1 /* MapKit.framework */; };
 		66A2D919183A7A7F00785270 /* SurespotConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D918183A7A7F00785270 /* SurespotConstants.m */; };
@@ -265,8 +265,8 @@
 		6686625D185B6A2E001491B1 /* UIImage+MultiFormat.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "UIImage+MultiFormat.mm"; sourceTree = "<group>"; };
 		6686625E185B6A2E001491B1 /* UIImage+WebP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+WebP.h"; sourceTree = "<group>"; };
 		6686625F185B6A2E001491B1 /* UIImage+WebP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+WebP.m"; sourceTree = "<group>"; };
-		66866260185B6A2E001491B1 /* UIImageView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+WebCache.h"; sourceTree = "<group>"; };
-		66866261185B6A2E001491B1 /* UIImageView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+WebCache.m"; sourceTree = "<group>"; };
+		66866260185B6A2E001491B1 /* MessageView+WebImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MessageView+WebImageCache.h"; sourceTree = "<group>"; };
+		66866261185B6A2E001491B1 /* MessageView+WebImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MessageView+WebImageCache.m"; sourceTree = "<group>"; };
 		66866270185B86FD001491B1 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		66866272185B87F2001491B1 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		66A2D917183A7A7F00785270 /* SurespotConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SurespotConstants.h; sourceTree = "<group>"; };
@@ -804,8 +804,8 @@
 				6686625D185B6A2E001491B1 /* UIImage+MultiFormat.mm */,
 				6686625E185B6A2E001491B1 /* UIImage+WebP.h */,
 				6686625F185B6A2E001491B1 /* UIImage+WebP.m */,
-				66866260185B6A2E001491B1 /* UIImageView+WebCache.h */,
-				66866261185B6A2E001491B1 /* UIImageView+WebCache.m */,
+				66866260185B6A2E001491B1 /* MessageView+WebImageCache.h */,
+				66866261185B6A2E001491B1 /* MessageView+WebImageCache.m */,
 			);
 			path = SDWebImage;
 			sourceTree = "<group>";
@@ -1605,7 +1605,7 @@
 				6686623D18565AD5001491B1 /* LoginViewController.mm in Sources */,
 				66866267185B6A2E001491B1 /* SDWebImageDownloader.m in Sources */,
 				6654441317F37A3F00F62F7F /* SwipeView.m in Sources */,
-				6686626F185B6A2E001491B1 /* UIImageView+WebCache.m in Sources */,
+				6686626F185B6A2E001491B1 /* MessageView+WebImageCache.m in Sources */,
 				66EBE0BD1855C97100F2452D /* ChatUtils.mm in Sources */,
 				6686626B185B6A2E001491B1 /* UIButton+WebCache.m in Sources */,
 				66866262185B6A2E001491B1 /* MKAnnotationView+WebCache.m in Sources */,

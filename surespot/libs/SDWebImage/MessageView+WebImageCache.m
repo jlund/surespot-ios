@@ -6,74 +6,37 @@
  * file that was distributed with this source code.
  */
 
-#import "UIImageView+WebCache.h"
+#import "MessageView+WebImageCache.h"
 #import "objc/runtime.h"
+#import "MessageView.h"
 
 static char operationKey;
 static char operationArrayKey;
 
-@implementation UIImageView (WebCache)
+@implementation MessageView (WebCache)
 
-//- (void)setImageWithURL:(NSURL *)url
-//{
-//    [self setImageWithURL:url placeholderImage:nil options:0 progress:nil completed:nil];
-//}
 
-- (void)setImageWithURL:(NSURL *)url
-             ourVersion: (NSString *) ourVersion
-          theirUsername: (NSString *) theirUsername
-           theirVersion: (NSString *) theirVersion
-                     iv: (NSString *) iv
 
-{
-    [self setImageWithURL:url placeholderImage:nil ourVersion:ourVersion theirUsername:theirUsername theirVersion:theirVersion iv:iv options:0 progress:nil completed:nil];
-}
-
-//- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder
-//{
-//    [self setImageWithURL:url placeholderImage:placeholder options:0 progress:nil completed:nil];
-//}
-//
-//- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(SDWebImageOptions)options
-//{
-//    [self setImageWithURL:url placeholderImage:placeholder options:options progress:nil completed:nil];
-//}
-//
-//- (void)setImageWithURL:(NSURL *)url completed:(SDWebImageCompletedBlock)completedBlock
-//{
-//    [self setImageWithURL:url placeholderImage:nil options:0 progress:nil completed:completedBlock];
-//}
-//
-//- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder completed:(SDWebImageCompletedBlock)completedBlock
-//{
-//    [self setImageWithURL:url placeholderImage:placeholder options:0 progress:nil completed:completedBlock];
-//}
-//
-//- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(SDWebImageOptions)options completed:(SDWebImageCompletedBlock)completedBlock
-//{
-//    [self setImageWithURL:url placeholderImage:placeholder options:options progress:nil completed:completedBlock];
-//}
-
-- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder
-             ourVersion: (NSString *) ourversion
-          theirUsername: (NSString *) theirUsername
-           theirVersion: (NSString *) theirVersion
-                     iv: (NSString *) iv
-                options:(SDWebImageOptions)options progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletedBlock)completedBlock
+- (void)setImageWithMessage:(SurespotMessage *) message
+           placeholderImage:(UIImage *)placeholder
+                 progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletedBlock)completedBlock
 {
     [self cancelCurrentImageLoad];
 
-    self.image = placeholder;
+    self.uiImageView.image = placeholder;
+    
+    NSURL * url = [NSURL URLWithString:message.data];
     
     if (url)
     {
-        __weak UIImageView *wself = self;
+        __weak MessageView *wself = self;
         id<SDWebImageOperation> operation = [SDWebImageManager.sharedManager downloadWithURL:url
-                                                                                  ourVersion: ourversion
-                                                                               theirUsername: theirUsername
-                                                                                theirVersion: theirVersion
-                                                                                          iv: iv
-                                                                                     options:options progress:progressBlock completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished)
+                                                                                  ourVersion: [message getOurVersion]
+                                                                               theirUsername: [message getOtherUser]
+                                                                                theirVersion: [message getTheirVersion]
+                                                                                          iv: [message iv]
+                                                                                     options: 0
+                                                                                    progress:progressBlock completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished)
         {
             if (!wself) return;
             dispatch_main_sync_safe(^
@@ -81,8 +44,13 @@ static char operationArrayKey;
                 if (!wself) return;
                 if (image)
                 {
-                    wself.image = image;
+                    wself.uiImageView.image = image;
+                    wself.messageStatusLabel.text = message.formattedDate;
                     [wself setNeedsLayout];
+                }
+                else {
+                    wself.messageStatusLabel.text = NSLocalizedString(@"message_error_generic", nil);
+                    
                 }
                 if (completedBlock && finished)
                 {

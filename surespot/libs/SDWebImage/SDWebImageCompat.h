@@ -52,3 +52,13 @@ FOUNDATION_EXPORT inline UIImage *SDScaledImageForKey(NSString *key, UIImage *im
     {\
         dispatch_sync(dispatch_get_main_queue(), block);\
     }
+
+#define dispatch_main_async_safe(block)\
+    if ([NSThread isMainThread])\
+    {\
+        block();\
+    }\
+        else\
+    {\
+        dispatch_async(dispatch_get_main_queue(), block);\
+    }

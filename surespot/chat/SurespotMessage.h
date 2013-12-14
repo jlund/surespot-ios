@@ -24,6 +24,8 @@
 @property (nonatomic, strong) NSString * plainData;
 @property (nonatomic, strong) NSDate * dateTime;
 @property (nonatomic, assign) NSInteger errorStatus;
+@property (nonatomic, strong) NSString * formattedDate;
+
 
 @property (atomic, assign) NSInteger resendId;
 @property (atomic, assign, getter=isLoading) BOOL loading;
