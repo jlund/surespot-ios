@@ -28,6 +28,7 @@
 #import "IASKSettingsReader.h"
 #import "ImageDelegate.h"
 #import "MessageView+WebImageCache.h"
+#import "SurespotPhoto.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -50,6 +51,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) NSMutableDictionary * bottomIndexPaths;
 @property (nonatomic, strong) IASKAppSettingsViewController * appSettingsViewController;
 @property (nonatomic, strong) ImageDelegate * imageDelegate;
+@property (nonatomic, strong) SurespotMessage * imageMessage;
 @end
 
 @implementation SwipeViewController
@@ -970,6 +972,29 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
     }
     else {
+        // if it's an image, open it in image viewer
+        ChatDataSource * cds = [[ChatController sharedInstance] getDataSourceForFriendname:[[ChatController sharedInstance] getCurrentChat]];
+        if (cds) {
+            SurespotMessage * message = [cds.messages objectAtIndex:indexPath.row];
+            if ([message.mimeType isEqualToString: MIME_TYPE_IMAGE]) {
+                // Create array of `MWPhoto` objects
+                _imageMessage = message;
+                // Create & present browser
+                MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
+                // Set options
+                browser.displayActionButton = NO; // Show action button to allow sharing, copying, etc (defaults to YES)
+                browser.displayNavArrows = NO; // Whether to display left and right nav arrows on toolbar (defaults to NO)
+                browser.zoomPhotosToFill = YES; // Images that almost fill the screen will be initially zoomed to fill (defaults to YES)
+//                [browser setCurrentPhotoIndex:1]; // Example: allows second image to be presented first
+                browser.wantsFullScreenLayout = YES; // iOS 5 & 6 only: Decide if you want the photo browser full screen, i.e. whether the status bar is affected (defaults to YES)
+                // Present
+                [self.navigationController pushViewController:browser animated:YES];
+                
+                // Manipulate!
+//                [browser showPreviousPhotoAnimated:YES];
+  //              [browser showNextPhotoAnimated:YES];
+            }
+        }
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
@@ -1672,6 +1697,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
 }
 
+
 #pragma mark -
 #pragma mark IASKAppSettingsViewControllerDelegate protocol
 - (void)settingsViewControllerDidEnd:(IASKAppSettingsViewController*)sender {
@@ -1685,5 +1711,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.navigationController pushViewController:self.appSettingsViewController animated:YES];
 }
 
+
+- (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser {
+    return 1;
+}
+
+- (SurespotPhoto *)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index {
+    if (index == 0 && _imageMessage)
+        return [[SurespotPhoto alloc] initWithURL:[NSURL URLWithString:_imageMessage.data] encryptionParams:[[EncryptionParams alloc] initWithOurUsername:nil ourVersion:[_imageMessage getOurVersion] theirUsername: [_imageMessage getOtherUser] theirVersion:[_imageMessage getTheirVersion] iv:_imageMessage.iv]];
+    return nil;
+}
 
 @end

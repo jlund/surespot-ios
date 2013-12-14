@@ -13,6 +13,7 @@
 #import "Friend.h"
 #import "UIViewPager.h"
 #import "IASKAppSettingsViewController.h"
+#import "MWPhotoBrowser.h"
 
 @interface SwipeViewController : UIViewController
 <
@@ -22,7 +23,8 @@
     UITableViewDelegate,
     UIActionSheetDelegate,
     UIViewPagerDelegate,
-    IASKSettingsDelegate
+    IASKSettingsDelegate,
+    MWPhotoBrowserDelegate
 
 >
 @property (nonatomic, strong) IBOutlet SwipeView *swipeView;
