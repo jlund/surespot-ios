@@ -919,18 +919,18 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     [cell setImageWithMessage:message placeholderImage:nil progress:^(NSUInteger receivedSize, long long expectedSize) {
                         
                     } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
-                                                  if (error) {
-                                                           
-                                                       }
-                                                   }
+                        if (error) {
+                            
+                        }
+                    }
                      ];
                     
-//                    if (ours) {
-//                        CGRectMake(56, 20, <#CGFloat width#>, <#CGFloat height#>)
-//                    }
-//                    else {
-//                        
-//                    }
+                    //                    if (ours) {
+                    //                        CGRectMake(56, 20, <#CGFloat width#>, <#CGFloat height#>)
+                    //                    }
+                    //                    else {
+                    //
+                    //                    }
                     DDLogInfo(@"imageView: %@", cell.uiImageView);
                 }
                 else {
@@ -1302,6 +1302,23 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (_homeDataSource.currentChat) {
         NSString * theirUsername = _homeDataSource.currentChat;
         
+        REMenuItem * selectImageItem = [[REMenuItem alloc]
+                                        initWithTitle:NSLocalizedString(@"select_image", nil)
+                                        image:[UIImage imageNamed:@"ic_menu_gallery"]
+                                        highlightedImage:nil
+                                        action:^(REMenuItem * item){
+                                            
+                                            _imageDelegate = [[ImageDelegate alloc]
+                                                              initWithUsername:[[IdentityController sharedInstance] getLoggedInUser]
+                                                              ourVersion:[[IdentityController sharedInstance] getOurLatestVersion]
+                                                              theirUsername:theirUsername];
+                                            [ImageDelegate startImageSelectControllerFromViewController:self usingDelegate:_imageDelegate];
+                                            
+                                            
+                                        }];
+        [menuItems addObject:selectImageItem];
+        
+        
         REMenuItem * captureImageItem = [[REMenuItem alloc]
                                          initWithTitle:NSLocalizedString(@"capture_image", nil)
                                          image:[UIImage imageNamed:@"ic_menu_camera"]
@@ -1317,6 +1334,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                              
                                          }];
         [menuItems addObject:captureImageItem];
+        
         
         REMenuItem * closeTabItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_close_tab", nil) image:[UIImage imageNamed:@"ic_menu_end_conversation"] highlightedImage:nil action:^(REMenuItem * item){
             [self closeTab];

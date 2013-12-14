@@ -15,4 +15,7 @@
 +(BOOL) startCameraControllerFromViewController: (UIViewController*) controller
                                   usingDelegate: (id <UIImagePickerControllerDelegate,
                                                   UINavigationControllerDelegate>) delegate;
++(BOOL) startImageSelectControllerFromViewController: (UIViewController*) controller
+                                       usingDelegate: (id <UIImagePickerControllerDelegate,
+                                                       UINavigationControllerDelegate>) delegate;
 @end

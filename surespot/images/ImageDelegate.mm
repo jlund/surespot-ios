@@ -147,6 +147,32 @@
     return YES;
 }
 
++(BOOL) startImageSelectControllerFromViewController: (UIViewController*) controller
+                                  usingDelegate: (id <UIImagePickerControllerDelegate,
+                                                  UINavigationControllerDelegate>) delegate {
+    
+    if (([UIImagePickerController isSourceTypeAvailable:
+          UIImagePickerControllerSourceTypeSavedPhotosAlbum] == NO)
+        || (delegate == nil)
+        || (controller == nil))
+        return NO;
+    
+    
+    UIImagePickerController *cameraUI = [[UIImagePickerController alloc] init];
+    cameraUI.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+    cameraUI.mediaTypes = [[NSArray alloc] initWithObjects: (NSString *) kUTTypeImage, nil];
+    
+    // Hides the controls for moving & scaling pictures, or for
+    // trimming movies. To instead show the controls, use YES.
+    cameraUI.allowsEditing = NO;
+    cameraUI.delegate = delegate;
+    
+    //cameraUI
+    
+    [controller presentViewController: cameraUI animated: YES completion:nil];
+    return YES;
+}
+
 
 +(UIImage *) scaleImage: (UIImage *) image {
     CGSize newSize = CGSizeMake(100, 100);
