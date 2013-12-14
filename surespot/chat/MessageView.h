@@ -15,4 +15,5 @@
 @property (strong, nonatomic) IBOutlet UILabel *messageStatusLabel;
 @property (strong, nonatomic) IBOutlet UIImageViewAligned *uiImageView;
 @property (strong, nonatomic) IBOutlet UILabel *messageLabel;
+@property (strong, nonatomic) IBOutlet UIImageView *shareableView;
 @end

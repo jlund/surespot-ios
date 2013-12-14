@@ -47,6 +47,7 @@
         _iv = [coder decodeObjectForKey:@"iv"];
         _mimeType = [coder decodeObjectForKey:@"mimeType"];
         _dateTime = [coder decodeObjectForKey:@"datetime"];
+        _shareable = [coder decodeBoolForKey:@"shareable"];
         _errorStatus = [coder decodeIntegerForKey:@"errorStatus"];
     }
     return self;
@@ -60,6 +61,7 @@
     _data =[dictionary objectForKey:@"data"];
     _iv = [dictionary objectForKey:@"iv"];
     _mimeType = [dictionary objectForKey:@"mimeType"];
+    _shareable = [[dictionary objectForKey:@"shareable"] boolValue];
     
     id dateTime = [dictionary objectForKey:@"datetime"];
     if (dateTime) {
@@ -112,6 +114,7 @@
     [encoder encodeObject:_data forKey:@"data"];
     [encoder encodeObject:_iv forKey:@"iv"];
     [encoder encodeObject:_mimeType forKey:@"mimeType"];
+    [encoder encodeBool:_shareable forKey:@"shareable"];
     if (_dateTime) {
         [encoder encodeObject:_dateTime forKey:@"datetime"];
     }
@@ -132,6 +135,7 @@
     [dict setObject:_data forKey:@"data"];
     [dict setObject:_iv forKey:@"iv"];
     [dict setObject:_mimeType forKey:@"mimeType"];
+    [dict setObject:[NSNumber numberWithBool:_shareable] forKey:@"shareable"];
     if (_dateTime) {
         [dict setObject:[@([_dateTime timeIntervalSince1970]*1000/1000) stringValue] forKey:@"datetime"];
     }

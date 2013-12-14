@@ -27,11 +27,12 @@
 @property (nonatomic, strong) NSString * formattedDate;
 
 
-@property (atomic, assign) NSInteger resendId;
+@property (nonatomic, assign) NSInteger resendId;
 @property (atomic, assign, getter=isLoading) BOOL loading;
 @property (atomic, assign, getter=isLoaded) BOOL loaded;
-@property (atomic, assign) NSInteger rowPortraitHeight;
-@property (atomic, assign) NSInteger rowLandscapeHeight;
+@property (nonatomic, assign) NSInteger rowPortraitHeight;
+@property (nonatomic, assign) NSInteger rowLandscapeHeight;
+@property (nonatomic, assign) BOOL shareable;
 
 
 - (NSString *) getOtherUser;

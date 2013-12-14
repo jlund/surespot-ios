@@ -913,28 +913,35 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             if ([message.mimeType isEqualToString:MIME_TYPE_TEXT]) {
                 cell.messageLabel.hidden = NO;
                 cell.uiImageView.hidden = YES;
+                cell.shareableView.hidden = YES;
             }
             else {
                 if ([message.mimeType isEqualToString:MIME_TYPE_IMAGE]) {
+                    cell.shareableView.hidden = NO;
                     cell.messageLabel.hidden = YES;
                     cell.uiImageView.hidden = NO;
                     cell.uiImageView.alignTop = YES;
                     cell.uiImageView.alignLeft = YES;
-                    [cell setImageWithMessage:message placeholderImage:nil progress:^(NSUInteger receivedSize, long long expectedSize) {
-                        
-                    } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
-                        if (error) {
-                            
-                        }
+                    
+                    if (message.shareable) {
+                        cell.shareableView.image = [UIImage imageNamed:@"ic_partial_secure"];
                     }
+                    else {
+                        cell.shareableView.image = [UIImage imageNamed:@"ic_secure"];
+                    }
+                    
+                    [cell setImageWithMessage:message
+                             placeholderImage:nil
+                                     progress:^(NSUInteger receivedSize, long long expectedSize) {
+                                         
+                                     }
+                                    completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+                                        if (error) {
+                                            
+                                        }
+                                    }
                      ];
                     
-                    //                    if (ours) {
-                    //                        CGRectMake(56, 20, <#CGFloat width#>, <#CGFloat height#>)
-                    //                    }
-                    //                    else {
-                    //
-                    //                    }
                     DDLogInfo(@"imageView: %@", cell.uiImageView);
                 }
                 else {
@@ -988,7 +995,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 browser.displayNavArrows = NO; // Whether to display left and right nav arrows on toolbar (defaults to NO)
                 browser.zoomPhotosToFill = YES; // Images that almost fill the screen will be initially zoomed to fill (defaults to YES)
                 browser.wantsFullScreenLayout = NO; // iOS 5 & 6 only: Decide if you want the photo browser full screen, i.e. whether the status bar is affected (defaults to YES)
-
+                
                 // Present
                 [self.navigationController pushViewController:browser animated:YES];
             }
