@@ -176,8 +176,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         offset = 90;
     }
     
-    [message setRowPortraitHeight: 200];// (int) (labelSize.height + heightAdj > 44 ? labelSize.height + heightAdj : 44) ];
-    [message setRowLandscapeHeight: 200];//(int) (labelSize.height + heightAdj > 44 ? labelSize.height + heightAdj: 44) ];
+    [message setRowPortraitHeight: 250];// (int) (labelSize.height + heightAdj > 44 ? labelSize.height + heightAdj : 44) ];
+    [message setRowLandscapeHeight: 250];//(int) (labelSize.height + heightAdj > 44 ? labelSize.height + heightAdj: 44) ];
     
     DDLogInfo(@"setting image row height portrait %d landscape %d", message.rowPortraitHeight, message.rowLandscapeHeight);
     

@@ -11,5 +11,5 @@
 @interface UIImage (MultiFormat)
 
 + (UIImage *)sd_imageWithData:(NSData *)data;
-
++ (UIImage *)sd_imageWithEncryptedData:(NSData *)data key: (NSData *) key iv: (NSString *) iv;
 @end

@@ -114,7 +114,12 @@ static NSString *const kCompletedCallbackKey = @"completed";
     return _downloadQueue.maxConcurrentOperationCount;
 }
 
-- (id<SDWebImageOperation>)downloadImageWithURL:(NSURL *)url options:(SDWebImageDownloaderOptions)options progress:(void (^)(NSUInteger, long long))progressBlock completed:(void (^)(UIImage *, NSData *, NSError *, BOOL))completedBlock
+- (id<SDWebImageOperation>)downloadImageWithURL:(NSURL *)url
+                                     ourVersion: (NSString *) ourversion
+                                  theirUsername: (NSString *) theirUsername
+                                   theirVersion: (NSString *) theirVersion
+                                             iv: (NSString *) iv
+                                        options:(SDWebImageDownloaderOptions)options progress:(void (^)(NSUInteger, long long))progressBlock completed:(void (^)(UIImage *, NSData *, NSError *, BOOL))completedBlock
 {
     __block SDWebImageDownloaderOperation *operation;
     __weak SDWebImageDownloader *wself = self;
@@ -133,7 +138,12 @@ static NSString *const kCompletedCallbackKey = @"completed";
         {
             request.allHTTPHeaderFields = wself.HTTPHeaders;
         }
-        operation = [SDWebImageDownloaderOperation.alloc initWithRequest:request options:options progress:^(NSUInteger receivedSize, long long expectedSize)
+        operation = [SDWebImageDownloaderOperation.alloc initWithRequest:request
+                                                              ourVersion: ourversion
+                                                           theirUsername: theirUsername
+                                                            theirVersion: theirVersion
+                                                                      iv: iv
+                                                                 options:options progress:^(NSUInteger receivedSize, long long expectedSize)
         {
             if (!wself) return;
             SDWebImageDownloader *sself = wself;

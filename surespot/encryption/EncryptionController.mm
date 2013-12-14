@@ -175,6 +175,17 @@ int const PBKDF_ROUNDS = 20000;
 }
 
 +(NSString *) decryptCipher: (NSString *) cipher usingKey: (NSData *) key usingIv: (NSData *) iv {
+    NSData * cipherData = [NSData dataFromBase64String:cipher];
+    NSData * decryptedData = [self decryptData:cipherData usingKey:key usingIv:iv];
+    NSString * plainString =[[NSString alloc] initWithData:decryptedData encoding:NSUTF8StringEncoding];
+    
+    if (plainString == nil) {
+        return NSLocalizedString(@"message_error_decrypting_message", nil);
+    }
+    return plainString;
+}
+
++(NSData *) decryptData: (NSData *) data usingKey: (NSData *) key usingIv: (NSData *) iv {
     GCM<AES>::Decryption d;
     UInt8 * keyBytes = (UInt8 *)[key bytes];
     d.SetKeyWithIV(keyBytes, AES_KEY_LENGTH, (byte *)[iv bytes],IV_LENGTH);
@@ -183,20 +194,19 @@ int const PBKDF_ROUNDS = 20000;
     string decrypted;
     CryptoPP::AuthenticatedDecryptionFilter df (d, new StringSink(decrypted));
     
-    NSData * cipherData = [NSData dataFromBase64String:cipher];
-    byte * cipherByte = (byte *)[cipherData bytes];
-    df.Put(cipherByte, cipherData.length);
+    byte * cipherByte = (byte *)[data bytes];
+    df.Put(cipherByte, data.length);
     try {
         df.MessageEnd();
     }
     catch (CryptoPP::HashVerificationFilter::HashVerificationFailed e) {
         DDLogError(@"error decrypting, e: %s", e.GetWhat().data());
-        return NSLocalizedString(@"message_error_decrypting_message", nil);
+        return nil;
     }
     
     
-    NSString * plainString =[[NSString alloc] initWithUTF8String:decrypted.data()];
-    return plainString;
+    return [NSData dataWithBytes:decrypted.data() length:decrypted.length()];
+    
 }
 
 +(NSData *) generateSharedSecret: (ECDHPrivateKey *) privateKey publicKey:(ECDHPublicKey *) publicKey {
@@ -326,7 +336,7 @@ int const PBKDF_ROUNDS = 20000;
             return nil;
         }
     }
-
+    
     DDLogInfo(@"loading key end");
     return privateKey;
 }
@@ -521,7 +531,7 @@ int const PBKDF_ROUNDS = 20000;
 +(void) symmetricDecryptString: (NSString *) cipherData ourVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion: (NSString *) theirVersion iv: (NSString *) iv callback: (CallbackBlock) callback {
     
     [[CredentialCachingController sharedInstance] getSharedSecretForOurVersion:ourVersion theirUsername:theirUsername theirVersion:theirVersion callback: ^(NSData * secret) {
-        if (secret) {            
+        if (secret) {
             NSData * ivData = [NSData dataFromBase64String:iv];
             NSString * plainText = [EncryptionController decryptCipher:cipherData usingKey:secret usingIv:ivData];
             callback(plainText);
@@ -532,6 +542,19 @@ int const PBKDF_ROUNDS = 20000;
     }];
     
 }
+
++(NSData *) symmetricDecryptData: (NSData *) cipherData key: (NSData *) key iv: (NSString *) iv {
+    
+    
+    if (key) {
+        NSData * ivData = [NSData dataFromBase64String:iv];
+        return [self decryptData:cipherData usingKey:key usingIv:ivData];
+    }
+    
+    return nil;
+    
+}
+
 
 
 

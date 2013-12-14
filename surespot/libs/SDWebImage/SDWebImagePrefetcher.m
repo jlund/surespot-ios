@@ -56,7 +56,12 @@
 {
     if (index >= self.prefetchURLs.count) return;
     self.requestedCount++;
-    [self.manager downloadWithURL:self.prefetchURLs[index] options:self.options progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished)
+    [self.manager downloadWithURL:self.prefetchURLs[index]
+                       ourVersion: ourversion
+                    theirUsername: theirUsername
+                     theirVersion: theirVersion
+                               iv: iv
+                          options:self.options progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished)
     {
         if (!finished) return;
         self.finishedCount++;

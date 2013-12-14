@@ -173,6 +173,10 @@ SDWebImageManager *manager = [SDWebImageManager sharedManager];
  * @return Returns a cancellable NSOperation
  */
 - (id<SDWebImageOperation>)downloadWithURL:(NSURL *)url
+                                ourVersion: (NSString *) ourversion
+                             theirUsername: (NSString *) theirUsername
+                              theirVersion: (NSString *) theirVersion
+                                        iv: (NSString *) iv
                                    options:(SDWebImageOptions)options
                                   progress:(SDWebImageDownloaderProgressBlock)progressBlock
                                  completed:(SDWebImageCompletedWithFinishedBlock)completedBlock;

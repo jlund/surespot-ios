@@ -16,6 +16,10 @@
 @property (assign, nonatomic, readonly) SDWebImageDownloaderOptions options;
 
 - (id)initWithRequest:(NSURLRequest *)request
+           ourVersion: (NSString *) ourversion
+        theirUsername: (NSString *) theirUsername
+         theirVersion: (NSString *) theirVersion
+                   iv: (NSString *) iv
               options:(SDWebImageDownloaderOptions)options
              progress:(SDWebImageDownloaderProgressBlock)progressBlock
             completed:(SDWebImageDownloaderCompletedBlock)completedBlock

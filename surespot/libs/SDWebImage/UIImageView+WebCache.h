@@ -116,7 +116,7 @@
  *                       is nil and the second parameter may contain an NSError. The third parameter is a Boolean
  *                       indicating if the image was retrived from the local cache of from the network.
  */
-- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(SDWebImageOptions)options completed:(SDWebImageCompletedBlock)completedBlock;
+//- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(SDWebImageOptions)options completed:(SDWebImageCompletedBlock)completedBlock;
 
 /**
  * Set the imageView `image` with an `url`, placeholder and custom options.
@@ -132,14 +132,20 @@
  *                       is nil and the second parameter may contain an NSError. The third parameter is a Boolean
  *                       indicating if the image was retrived from the local cache of from the network.
  */
-- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(SDWebImageOptions)options progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletedBlock)completedBlock;
+//- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(SDWebImageOptions)options progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletedBlock)completedBlock;
+
+- (void)setImageWithURL:(NSURL *)url
+             ourVersion: (NSString *) ourVersion
+          theirUsername: (NSString *) theirUsername
+           theirVersion: (NSString *) theirVersion
+                     iv: (NSString *) iv;
 
 /**
  * Download an array of images and starts them in an animation loop
  *
  *@param arrayOfURLs An array of NSURL
  */
--(void)setAnimationImagesWithURLs:(NSArray *)arrayOfURLs;
+//-(void)setAnimationImagesWithURLs:(NSArray *)arrayOfURLs;
 
 /**
  * Cancel the current download

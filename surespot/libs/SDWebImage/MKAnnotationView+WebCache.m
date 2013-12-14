@@ -38,7 +38,12 @@ static char operationKey;
     [self setImageWithURL:url placeholderImage:placeholder options:0 completed:completedBlock];
 }
 
-- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(SDWebImageOptions)options completed:(SDWebImageCompletedBlock)completedBlock
+- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder
+             ourVersion: (NSString *) ourversion
+          theirUsername: (NSString *) theirUsername
+           theirVersion: (NSString *) theirVersion
+                     iv: (NSString *) iv
+                options:(SDWebImageOptions)options completed:(SDWebImageCompletedBlock)completedBlock
 {
     [self cancelCurrentImageLoad];
 
@@ -47,7 +52,12 @@ static char operationKey;
     if (url)
     {
         __weak MKAnnotationView *wself = self;
-        id<SDWebImageOperation> operation = [SDWebImageManager.sharedManager downloadWithURL:url options:options progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished)
+        id<SDWebImageOperation> operation = [SDWebImageManager.sharedManager downloadWithURL:url
+                                                                                  ourVersion: ourversion
+                                                                               theirUsername: theirUsername
+                                                                                theirVersion: theirVersion
+                                                                                          iv: iv
+                                                                                     options:options progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished)
         {
             if (!wself) return;
             dispatch_main_sync_safe(^

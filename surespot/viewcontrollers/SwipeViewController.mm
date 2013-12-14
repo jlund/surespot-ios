@@ -911,7 +911,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 if ([message.mimeType isEqualToString:MIME_TYPE_IMAGE]) {
                     cell.messageLabel.hidden = YES;
                     cell.uiImageView.hidden = NO;
-                    [cell.uiImageView setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"surespot_logo"]];
+                    [cell.uiImageView setImageWithURL:[NSURL URLWithString:message.data]
+                                           ourVersion:[message getOurVersion]
+                                        theirUsername:[message getOtherUser ]
+                                         theirVersion:[message getTheirVersion]
+                                                   iv:message.iv];
                     
 //                    if (ours) {
 //                        CGRectMake(56, 20, <#CGFloat width#>, <#CGFloat height#>)

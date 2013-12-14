@@ -72,7 +72,12 @@
     return [self.imageCache diskImageExistsWithKey:key];
 }
 
-- (id<SDWebImageOperation>)downloadWithURL:(NSURL *)url options:(SDWebImageOptions)options progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletedWithFinishedBlock)completedBlock
+- (id<SDWebImageOperation>)downloadWithURL:(NSURL *)url
+                                ourVersion: (NSString *) ourversion
+                             theirUsername: (NSString *) theirUsername
+                              theirVersion: (NSString *) theirVersion
+                                        iv: (NSString *) iv
+                                   options:(SDWebImageOptions)options progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletedWithFinishedBlock)completedBlock
 {    
     // Invoking this method without a completedBlock is pointless
     NSParameterAssert(completedBlock);
@@ -154,7 +159,12 @@
                 // ignore image read from NSURLCache if image if cached but force refreshing
                 downloaderOptions |= SDWebImageDownloaderIgnoreCachedResponse;
             }
-            id<SDWebImageOperation> subOperation = [self.imageDownloader downloadImageWithURL:url options:downloaderOptions progress:progressBlock completed:^(UIImage *downloadedImage, NSData *data, NSError *error, BOOL finished)
+            id<SDWebImageOperation> subOperation = [self.imageDownloader downloadImageWithURL:url
+                                                                                   ourVersion: ourversion
+                                                                                theirUsername: theirUsername
+                                                                                 theirVersion: theirVersion
+                                                                                           iv: iv
+                                                                                      options:downloaderOptions progress:progressBlock completed:^(UIImage *downloadedImage, NSData *data, NSError *error, BOOL finished)
             {                
                 if (weakOperation.isCancelled)
                 {

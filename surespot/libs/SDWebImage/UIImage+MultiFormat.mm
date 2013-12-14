@@ -8,6 +8,7 @@
 
 #import "UIImage+MultiFormat.h"
 #import "UIImage+GIF.h"
+#import "EncryptionController.h"
 
 #ifdef SD_WEBP
 #import "UIImage+WebP.h"
@@ -37,5 +38,32 @@
 
     return image;
 }
+
++ (UIImage *)sd_imageWithEncryptedData:(NSData *)data key: (NSData *) key iv: (NSString *) iv;
+{
+    NSData * decrypted = [EncryptionController symmetricDecryptData: data key: key iv: iv];
+    
+    
+    UIImage *image;
+    
+    if ([decrypted sd_isGIF])
+    {
+        image = [UIImage sd_animatedGIFWithData:data];
+    }
+    else
+    {
+        image = [[UIImage alloc] initWithData:decrypted];
+    }
+    
+#ifdef SD_WEBP
+    if (!image) // TODO: detect webp signature
+    {
+        image = [UIImage sd_imageWithWebPData:data];
+    }
+#endif
+    
+    return image;
+}
+
 
 @end
