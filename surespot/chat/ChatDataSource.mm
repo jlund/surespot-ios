@@ -417,6 +417,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     }
                 }
             }
+            else {
+                if ([[message action] isEqualToString:@"shareable"] || [[message action] isEqualToString:@"notshareable"]) {
+                               NSInteger messageId = [[message moreData] integerValue];
+                    SurespotMessage * dMessage = [self getMessageById: messageId];
+                    
+                    if (dMessage) {
+                        [dMessage setShareable:[message.action isEqualToString:@"shareable"] ? YES : NO];
+                        [self postRefresh];
+                    }
+                }
+            }
         }
     }
     
