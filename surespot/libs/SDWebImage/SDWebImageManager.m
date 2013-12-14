@@ -9,6 +9,13 @@
 #import "SDWebImageManager.h"
 #import "UIImage+GIF.h"
 #import <objc/message.h>
+#import "DDLog.h"
+
+#ifdef DEBUG
+static const int ddLogLevel = LOG_LEVEL_INFO;
+#else
+static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
 
 @interface SDWebImageCombinedOperation : NSObject <SDWebImageOperation>
 
@@ -145,6 +152,7 @@
                 {
                     // If image was found in the cache bug SDWebImageRefreshCached is provided, notify about the cached image
                     // AND try to re-download it in order to let a chance to NSURLCache to refresh it from server.
+                                 DDLogInfo(@"using cached image for key: %@", key);
                     completedBlock(image, nil, cacheType, YES);
                 });
             }

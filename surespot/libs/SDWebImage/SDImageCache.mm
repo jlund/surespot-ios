@@ -13,6 +13,13 @@
 #import <mach/mach.h>
 #import <mach/mach_host.h>
 #import "CredentialCachingController.h"
+#import "DDLog.h"
+
+#ifdef DEBUG
+static const int ddLogLevel = LOG_LEVEL_INFO;
+#else
+static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
 
 static const NSInteger kDefaultCacheMaxCacheAge = 60 * 60 * 24 * 7; // 1 week
 // PNG signature bytes and data (below)
@@ -169,6 +176,7 @@ BOOL ImageDataHasPNGPreffix(NSData *data)
         return;
     }
     
+    DDLogInfo(@"storing image in memory cache at key: %@", key);
     [self.memCache setObject:image forKey:key cost:image.size.height * image.size.width * image.scale];
     
     if (toDisk)
@@ -185,7 +193,9 @@ BOOL ImageDataHasPNGPreffix(NSData *data)
                                    [fileManager createDirectoryAtPath:_diskCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
                                }
                                
-                               [fileManager createFileAtPath:[self defaultCachePathForKey:key] contents:imageData attributes:nil];
+                               NSString * path = [self defaultCachePathForKey:key];
+                               [fileManager createFileAtPath:path contents:imageData attributes:nil];
+                               DDLogInfo(@"storing encrypted image data to disk at %@ for key: %@", path,  key);
                            }
                        });
     }
@@ -205,6 +215,7 @@ BOOL ImageDataHasPNGPreffix(NSData *data)
 
 - (UIImage *)imageFromMemoryCacheForKey:(NSString *)key
 {
+    
     return [self.memCache objectForKey:key];
 }
 
@@ -214,6 +225,7 @@ BOOL ImageDataHasPNGPreffix(NSData *data)
     UIImage *image = [self imageFromMemoryCacheForKey:key];
     if (image)
     {
+        DDLogInfo(@"using image from memory cache for key: %@", key);
         return image;
     }
     
@@ -221,6 +233,7 @@ BOOL ImageDataHasPNGPreffix(NSData *data)
     UIImage *diskImage = [self diskImageForCacheKey:key encryptionKey:encryptionKey iv:iv];
     if (diskImage)
     {
+        DDLogInfo(@"using image from disk cache for key: %@", key);
         CGFloat cost = diskImage.size.height * diskImage.size.width * diskImage.scale;
         [self.memCache setObject:diskImage forKey:key cost:cost];
     }
@@ -290,6 +303,7 @@ BOOL ImageDataHasPNGPreffix(NSData *data)
     UIImage *image = [self imageFromMemoryCacheForKey:key];
     if (image)
     {
+        DDLogInfo(@"using image from memory cache for key: %@", key);
         doneBlock(image, SDImageCacheTypeMemory);
         return nil;
     }
@@ -314,6 +328,7 @@ BOOL ImageDataHasPNGPreffix(NSData *data)
                                
                                if (diskImage)
                                {
+                                   DDLogInfo(@"using image from disk cache and setting memory cache for key: %@", key);
                                    CGFloat cost = diskImage.size.height * diskImage.size.width * diskImage.scale;
                                    [self.memCache setObject:diskImage forKey:key cost:cost];
                                }
