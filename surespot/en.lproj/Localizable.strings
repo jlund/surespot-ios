@@ -189,7 +189,7 @@
 "assign"="assign";
 "could_not_load_image"="could not load image";
 "image"="image";
-"pan_and_zoom"="move and zoom";
+"pan_and_zoom"="pan and zoom";
 "done"="done";
 "message_error_invalid"="error sending message: invalid message";
 "message_error_unauthorized"="error sending message: unauthorized";
