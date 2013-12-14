@@ -30,7 +30,7 @@
     
     CGFloat newHeight = oldHeight * scaleFactor;
     CGFloat newWidth = oldWidth * scaleFactor;
-    CGSize newSize = CGSizeMake(newWidth, newHeight);
+    CGSize newSize = CGSizeMake(floor(newWidth), floor(newHeight));
     
     return [self imageScaledToSize:newSize];
 }
