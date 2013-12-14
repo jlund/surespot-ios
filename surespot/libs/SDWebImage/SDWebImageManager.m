@@ -120,7 +120,12 @@
     }
     NSString *key = [self cacheKeyForURL:url];
 
-    operation.cacheOperation = [self.imageCache queryDiskCacheForKey:key done:^(UIImage *image, SDImageCacheType cacheType)
+    operation.cacheOperation = [self.imageCache queryDiskCacheForKey:key
+                                                          ourVersion:ourversion
+                                                       theirUsername:theirUsername
+                                                        theirVersion:theirVersion
+                                                                  iv:iv
+                                                                done:^(UIImage *image, SDImageCacheType cacheType)
     {
         if (operation.isCancelled)
         {
@@ -197,24 +202,6 @@
                         // Image refresh hit the NSURLCache cache, do not call the completion block
                     }
                     // NOTE: We don't call transformDownloadedImage delegate method on animated images as most transformation code would mangle it
-                    else if (downloadedImage && !downloadedImage.images && [self.delegate respondsToSelector:@selector(imageManager:transformDownloadedImage:withURL:)])
-                    {
-                        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^
-                        {
-                            UIImage *transformedImage = [self.delegate imageManager:self transformDownloadedImage:downloadedImage withURL:url];
-
-                            dispatch_main_sync_safe(^
-                            {
-                                completedBlock(transformedImage, nil, SDImageCacheTypeNone, finished);
-                            });
-
-                            if (transformedImage && finished)
-                            {
-                                BOOL imageWasTransformed = ![transformedImage isEqual:downloadedImage];
-                                [self.imageCache storeImage:transformedImage recalculateFromImage:imageWasTransformed imageData:data forKey:key toDisk:cacheOnDisk];
-                            }
-                        });
-                    }
                     else
                     {
                         dispatch_main_sync_safe(^
@@ -224,7 +211,7 @@
 
                         if (downloadedImage && finished)
                         {
-                            [self.imageCache storeImage:downloadedImage recalculateFromImage:NO imageData:data forKey:key toDisk:cacheOnDisk];
+                            [self.imageCache storeImage:downloadedImage imageData:data forKey:key toDisk:cacheOnDisk];
                         }
                     }
                 }

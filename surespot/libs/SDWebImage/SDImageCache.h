@@ -69,22 +69,6 @@ typedef enum SDImageCacheType SDImageCacheType;
  */
 - (void)addReadOnlyCachePath:(NSString *)path;
 
-/**
- * Store an image into memory and disk cache at the given key.
- *
- * @param image The image to store
- * @param key The unique image cache key, usually it's image absolute URL
- */
-- (void)storeImage:(UIImage *)image forKey:(NSString *)key;
-
-/**
- * Store an image into memory and optionally disk cache at the given key.
- *
- * @param image The image to store
- * @param key The unique image cache key, usually it's image absolute URL
- * @param toDisk Store the image to disk cache if YES
- */
-- (void)storeImage:(UIImage *)image forKey:(NSString *)key toDisk:(BOOL)toDisk;
 
 /**
  * Store an image into memory and optionally disk cache at the given key.
@@ -97,28 +81,27 @@ typedef enum SDImageCacheType SDImageCacheType;
  * @param key The unique image cache key, usually it's image absolute URL
  * @param toDisk Store the image to disk cache if YES
  */
-- (void)storeImage:(UIImage *)image recalculateFromImage:(BOOL)recalculate imageData:(NSData *)imageData forKey:(NSString *)key toDisk:(BOOL)toDisk;
+- (void)storeImage:(UIImage *)image imageData:(NSData *)imageData forKey:(NSString *)key toDisk:(BOOL)toDisk;
 
 /**
  * Query the disk cache asynchronously.
  *
  * @param key The unique key used to store the wanted image
  */
-- (NSOperation *)queryDiskCacheForKey:(NSString *)key done:(void (^)(UIImage *image, SDImageCacheType cacheType))doneBlock;
+//- (NSOperation *)queryDiskCacheForKey:(NSString *)key done:(void (^)(UIImage *image, SDImageCacheType cacheType))doneBlock;
 
+- (NSOperation *)queryDiskCacheForKey:(NSString *)key
+                           ourVersion: (NSString *) ourversion
+                        theirUsername: (NSString *) theirUsername
+                         theirVersion: (NSString *) theirVersion
+                                   iv: (NSString *) iv
+                                 done:(void (^)(UIImage *image, SDImageCacheType cacheType))doneBlock;
 /**
  * Query the memory cache synchronously.
  *
  * @param key The unique key used to store the wanted image
  */
 - (UIImage *)imageFromMemoryCacheForKey:(NSString *)key;
-
-/**
- * Query the disk cache synchronously after checking the memory cache.
- *
- * @param key The unique key used to store the wanted image
- */
-- (UIImage *)imageFromDiskCacheForKey:(NSString *)key;
 
 /**
  * Remove the image from memory and disk cache synchronously

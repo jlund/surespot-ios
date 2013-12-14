@@ -356,7 +356,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 }
                 
                 if (CGSizeEqualToSize(image.size, CGSizeZero))
-                {
+                {        
                     completionBlock(nil, nil, [NSError errorWithDomain:@"SDWebImageErrorDomain" code:0 userInfo:@{NSLocalizedDescriptionKey: @"Downloaded image has 0 pixels"}], YES);
                 }
                 else
