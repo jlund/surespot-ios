@@ -543,6 +543,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }];
     }
 }
-
+-(void) setMessageId: (NSInteger) serverid shareable: (BOOL) shareable {
+    SurespotMessage * message = [self getMessageById:serverid];
+    if (message) {
+        message.shareable = shareable;
+        [self postRefresh];
+    }
+}
 
 @end

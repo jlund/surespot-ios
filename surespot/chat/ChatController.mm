@@ -505,7 +505,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
 
 -(void) sendMessages {
     NSMutableArray * sendBuffer = _sendBuffer;
-    _sendBuffer = [NSMutableArray new];    
+    _sendBuffer = [NSMutableArray new];
     [sendBuffer enumerateObjectsUsingBlock:^(SurespotMessage * message, NSUInteger idx, BOOL *stop) {
         
         
@@ -1062,5 +1062,26 @@ static const int MAX_CONNECTION_RETRIES = 16;
 -(void) stopProgress {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object: nil];
 }
+
+-(void) toggleMessageShareable: (SurespotMessage *) message {
+    if (message) {
+        ChatDataSource * cds = [_chatDataSources objectForKey:[message getOtherUser]];
+        if (cds) {
+            if (message.serverid > 0) {
+                
+                [self startProgress];
+                [[NetworkController sharedInstance] setMessageShareable:[message getOtherUser] serverId:[message serverid] shareable:!message.shareable successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
+                    [cds setMessageId: message.serverid shareable: [[[NSString alloc] initWithData: responseObject encoding:NSUTF8StringEncoding] isEqualToString:@"shareable"] ? YES : NO];
+                    [self stopProgress];
+                } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
+                    [UIUtils showToastKey:@"could_not_set_message_lock_state"];
+                    [self stopProgress];
+                }];
+                
+            }
+        }
+    }
+}
+
 
 @end

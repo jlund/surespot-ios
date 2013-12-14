@@ -31,4 +31,5 @@
 -(void) deleteAllMessagesUTAI: (NSInteger) messageId;
 -(void) userDeleted;
 -(void) loadEarlierMessagesCallback: (CallbackBlock) callback;
+-(void) setMessageId: (NSInteger) serverid shareable: (BOOL) shareable;
 @end

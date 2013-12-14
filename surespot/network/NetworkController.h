@@ -46,4 +46,10 @@ typedef void (^HTTPFailureBlock) (AFHTTPRequestOperation *operation , NSError *e
               successBlock:(HTTPSuccessBlock) successBlock
               failureBlock: (HTTPFailureBlock) failureBlock;
 
+-(void) setMessageShareable:(NSString *) name
+                   serverId: (NSInteger) serverid
+                  shareable: (BOOL) shareable
+               successBlock:(HTTPSuccessBlock)successBlock
+               failureBlock: (HTTPFailureBlock) failureBlock;
+
 @end

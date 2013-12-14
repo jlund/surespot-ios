@@ -35,4 +35,5 @@
 - (void) deleteMessagesForFriend: (Friend *) afriend;
 -(void) enqueueResendMessage: (SurespotMessage * ) message;
 -(void) loadEarlierMessagesForUsername: username callback: (CallbackBlock) callback;
+-(void) toggleMessageShareable: (SurespotMessage *) message;
 @end

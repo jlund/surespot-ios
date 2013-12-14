@@ -395,4 +395,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
     [operation start];
 }
+
+-(void) setMessageShareable:(NSString *) name
+                   serverId: (NSInteger) serverid
+                  shareable: (BOOL) shareable
+               successBlock:(HTTPSuccessBlock)successBlock
+               failureBlock: (HTTPFailureBlock) failureBlock {
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:(shareable ? @"true" : @"false"),@"shareable", nil];
+    NSString * path = [[NSString stringWithFormat:@"messages/%@/%d/shareable", name, serverid] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSURLRequest *request = [self requestWithMethod:@"PUT" path:path  parameters:params];
+    AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
+    [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
+    [operation start];
+    
+}
 @end

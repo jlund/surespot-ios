@@ -1444,12 +1444,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(REMenu *) createChatMenuMessage: (SurespotMessage *) message {
-    //home menu
-    
     
     NSMutableArray * menuItems = [NSMutableArray new];
     
-    //chat menu
+    //can always delete
     REMenuItem * deleteItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_delete_message", nil) image:[UIImage imageNamed:@"ic_menu_delete"] highlightedImage:nil action:^(REMenuItem * item){
         
         
@@ -1458,8 +1456,41 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }];
     
     [menuItems addObject:deleteItem];
+    
+    if ([message.mimeType isEqualToString:MIME_TYPE_IMAGE]) {
+        //images might be able to save to the gallery
+        //can always delete
+        UIImage * image = nil;
+        NSString * title = nil;
+        if (!message.shareable) {
+            title = NSLocalizedString(@"menu_unlock", nil);
+            image = [UIImage imageNamed:@"ic_partial_secure"];
+        }
+        else {
+            title = NSLocalizedString(@"menu_lock", nil);
+            image = [UIImage imageNamed:@"ic_secure"];
+        }
+        
+        REMenuItem * shareItem = [[REMenuItem alloc] initWithTitle:title image:image highlightedImage:nil action:^(REMenuItem * item){
+            [[ChatController sharedInstance] toggleMessageShareable:message];
+            
+        }];
+        
+        [menuItems addObject:shareItem];
+    }
+    
+    else {
+        if ([message.mimeType isEqualToString:MIME_TYPE_M4A]) {
+            
+        }
+    }
+    
+    
     return [self createMenu: menuItems];
+    
 }
+
+
 
 
 -(void)tableLongPress:(UILongPressGestureRecognizer *)gestureRecognizer
