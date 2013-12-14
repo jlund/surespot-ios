@@ -267,7 +267,8 @@ BOOL ImageDataHasPNGPreffix(NSData *data)
     NSData *data = [self diskImageDataBySearchingAllPathsForKey:cacheKey];
     if (data)
     {
-        UIImage *image = [self scaledImageForKey:cacheKey image:[UIImage sd_imageWithEncryptedData:data key:encryptionKey iv:iv]];
+//        UIImage *image = [self scaledImageForKey:cacheKey image:[UIImage sd_imageWithEncryptedData:data key:encryptionKey iv:iv]];
+        UIImage *image = [UIImage sd_imageWithEncryptedData:data key:encryptionKey iv:iv];
         image = [UIImage decodedImageWithImage:image];
         return image;
     }

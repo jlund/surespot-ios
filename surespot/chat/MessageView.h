@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "FilledRectView.h"
+#import "UIImageViewAligned.h"
 
 @interface MessageView : UITableViewCell
 @property (strong, nonatomic) IBOutlet FilledRectView *messageSentView;
 @property (strong, nonatomic) IBOutlet UILabel *messageStatusLabel;
-@property (strong, nonatomic) IBOutlet UIImageView *uiImageView;
+@property (strong, nonatomic) IBOutlet UIImageViewAligned *uiImageView;
 @property (strong, nonatomic) IBOutlet UILabel *messageLabel;
 @end

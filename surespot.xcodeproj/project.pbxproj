@@ -34,6 +34,7 @@
 		6646AE26185CADC700CBACDE /* MWPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6646AE0A185CADC700CBACDE /* MWPhotoBrowser.bundle */; };
 		6646AE2C185CB08200CBACDE /* SurespotPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 6646AE2B185CB08200CBACDE /* SurespotPhoto.m */; };
 		6646AE2F185CB2EF00CBACDE /* EncryptionParams.m in Sources */ = {isa = PBXBuildFile; fileRef = 6646AE2E185CB2EF00CBACDE /* EncryptionParams.m */; };
+		6646AE33185CBCA800CBACDE /* UIImageViewAligned.m in Sources */ = {isa = PBXBuildFile; fileRef = 6646AE32185CBCA800CBACDE /* UIImageViewAligned.m */; };
 		6654441317F37A3F00F62F7F /* SwipeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6654441217F37A3F00F62F7F /* SwipeView.m */; };
 		665F4DF51831923C0083BCE7 /* RECommonFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DEC1831923C0083BCE7 /* RECommonFunctions.m */; };
 		665F4DF61831923C0083BCE7 /* REMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DEE1831923C0083BCE7 /* REMenu.m */; };
@@ -247,6 +248,8 @@
 		6646AE2B185CB08200CBACDE /* SurespotPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SurespotPhoto.m; sourceTree = "<group>"; };
 		6646AE2D185CB2EF00CBACDE /* EncryptionParams.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncryptionParams.h; sourceTree = "<group>"; };
 		6646AE2E185CB2EF00CBACDE /* EncryptionParams.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncryptionParams.m; sourceTree = "<group>"; };
+		6646AE31185CBCA800CBACDE /* UIImageViewAligned.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageViewAligned.h; sourceTree = "<group>"; };
+		6646AE32185CBCA800CBACDE /* UIImageViewAligned.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImageViewAligned.m; sourceTree = "<group>"; };
 		6654441117F37A3F00F62F7F /* SwipeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeView.h; sourceTree = "<group>"; };
 		6654441217F37A3F00F62F7F /* SwipeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SwipeView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		665F4DEB1831923C0083BCE7 /* RECommonFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RECommonFunctions.h; sourceTree = "<group>"; };
@@ -830,6 +833,15 @@
 			path = MBProgressHUD;
 			sourceTree = "<group>";
 		};
+		6646AE30185CBCA800CBACDE /* UIImageViewAligned */ = {
+			isa = PBXGroup;
+			children = (
+				6646AE31185CBCA800CBACDE /* UIImageViewAligned.h */,
+				6646AE32185CBCA800CBACDE /* UIImageViewAligned.m */,
+			);
+			path = UIImageViewAligned;
+			sourceTree = "<group>";
+		};
 		6654441017F37A3F00F62F7F /* SwipeView */ = {
 			isa = PBXGroup;
 			children = (
@@ -977,6 +989,7 @@
 		66E4F517176298CB00596E6B /* libs */ = {
 			isa = PBXGroup;
 			children = (
+				6646AE30185CBCA800CBACDE /* UIImageViewAligned */,
 				6646ADD2185CADC700CBACDE /* MWPhotoBrowser */,
 				66866244185B6A2E001491B1 /* SDWebImage */,
 				66E70AA21847F88E00433D6F /* GTL.xcodeproj */,
@@ -1648,6 +1661,7 @@
 				66EBE0B51855C97100F2452D /* GetSharedSecretOperation.mm in Sources */,
 				66EBE0BE1855C97100F2452D /* FilledRectView.m in Sources */,
 				66E4F5BA176298CB00596E6B /* SocketIOTransportWebsocket.m in Sources */,
+				6646AE33185CBCA800CBACDE /* UIImageViewAligned.m in Sources */,
 				66EBE0C51855C97100F2452D /* SurespotErrorMessage.m in Sources */,
 				66A2D919183A7A7F00785270 /* SurespotConstants.m in Sources */,
 				66E21DF21847D7F90005D91E /* IASKSettingsStoreUserDefaults.m in Sources */,

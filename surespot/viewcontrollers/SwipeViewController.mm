@@ -918,6 +918,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 if ([message.mimeType isEqualToString:MIME_TYPE_IMAGE]) {
                     cell.messageLabel.hidden = YES;
                     cell.uiImageView.hidden = NO;
+                    cell.uiImageView.alignTop = YES;
+                    cell.uiImageView.alignLeft = YES;
                     [cell setImageWithMessage:message placeholderImage:nil progress:^(NSUInteger receivedSize, long long expectedSize) {
                         
                     } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
