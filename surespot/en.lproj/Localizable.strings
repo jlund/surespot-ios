@@ -319,6 +319,7 @@
 
 "loading_earlier_messages_failed"="loading earlier messages failed";
 "all_messages_loaded"="all messages loaded";
+"save_to_photos"="save to photos";
 
 
 "welcome_to_surespot"="Welcome to surespot! Data sent using this app is encrypted with symmetric-key encryption (256 bit AES-GCM) using keys created with 521 bit ECDH shared secret derivation.\n\nNo friends...yet. Invite surespot users by entering their username below.";

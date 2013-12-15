@@ -30,6 +30,7 @@
 #import "MessageView+WebImageCache.h"
 #import "SurespotPhoto.h"
 
+
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
 #else
@@ -1444,8 +1445,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(REMenu *) createChatMenuMessage: (SurespotMessage *) message {
-    
+    BOOL ours = [ChatUtils isOurMessage:message];
     NSMutableArray * menuItems = [NSMutableArray new];
+    
     
     //can always delete
     REMenuItem * deleteItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_delete_message", nil) image:[UIImage imageNamed:@"ic_menu_delete"] highlightedImage:nil action:^(REMenuItem * item){
@@ -1457,26 +1459,46 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [menuItems addObject:deleteItem];
     
+    
     if ([message.mimeType isEqualToString:MIME_TYPE_IMAGE]) {
-        //images might be able to save to the gallery
-        //can always delete
-        UIImage * image = nil;
-        NSString * title = nil;
-        if (!message.shareable) {
-            title = NSLocalizedString(@"menu_unlock", nil);
-            image = [UIImage imageNamed:@"ic_partial_secure"];
-        }
-        else {
-            title = NSLocalizedString(@"menu_lock", nil);
-            image = [UIImage imageNamed:@"ic_secure"];
-        }
         
-        REMenuItem * shareItem = [[REMenuItem alloc] initWithTitle:title image:image highlightedImage:nil action:^(REMenuItem * item){
-            [[ChatController sharedInstance] toggleMessageShareable:message];
+        
+        
+        
+        
+        //allow saving to gallery if it's unlocked, or it's ours
+        
+        REMenuItem * saveItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"save_to_photos", nil) image:[UIImage imageNamed:@"ic_menu_save"] highlightedImage:nil action:^(REMenuItem * item){
             
         }];
         
-        [menuItems addObject:shareItem];
+        
+        [saveItem setTitleEnabled: ours || message.shareable];
+        [menuItems addObject:saveItem];
+        
+        
+        
+        
+        //if i'ts our message and ti's been sent we can change lock status
+        if (message.serverid > 0 && ours) {
+            UIImage * image = nil;
+            NSString * title = nil;
+            if (!message.shareable) {
+                title = NSLocalizedString(@"menu_unlock", nil);
+                image = [UIImage imageNamed:@"ic_partial_secure"];
+            }
+            else {
+                title = NSLocalizedString(@"menu_lock", nil);
+                image = [UIImage imageNamed:@"ic_secure"];
+            }
+            
+            REMenuItem * shareItem = [[REMenuItem alloc] initWithTitle:title image:image highlightedImage:nil action:^(REMenuItem * item){
+                [[ChatController sharedInstance] toggleMessageShareable:message];
+                
+            }];
+            
+            [menuItems addObject:shareItem];
+        }
     }
     
     else {

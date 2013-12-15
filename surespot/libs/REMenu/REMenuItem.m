@@ -104,4 +104,8 @@
     self.itemView.imageView.highlightedImage = higlightedImage;
 }
 
+-(void) setTitleEnabled: (BOOL) enabled {
+    [self.itemView.titleLabel setEnabled:enabled];
+}
+
 @end
