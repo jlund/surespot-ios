@@ -19,6 +19,8 @@
 		6604A2E817626B9E0072216A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A2C017626B9E0072216A /* Foundation.framework */; };
 		6604A2F017626B9E0072216A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6604A2EE17626B9E0072216A /* InfoPlist.strings */; };
 		6604A2F317626B9E0072216A /* surespotTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6604A2F217626B9E0072216A /* surespotTests.m */; };
+		6614EEB8185F59F700A65CDE /* ALAssetsLibrary+CustomPhotoAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = 6614EEB7185F59F700A65CDE /* ALAssetsLibrary+CustomPhotoAlbum.m */; };
+		6614EEBF185F5BBF00A65CDE /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6614EEBE185F5BBF00A65CDE /* AssetsLibrary.framework */; };
 		661C2ED31763CB57000649E7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 661C2ED21763CB56000649E7 /* libz.dylib */; };
 		661C2ED61763D4B9000649E7 /* NSData+Gunzip.m in Sources */ = {isa = PBXBuildFile; fileRef = 661C2ED51763D4B9000649E7 /* NSData+Gunzip.m */; };
 		6621BB841762704D00BC2850 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6621BB861762704D00BC2850 /* Localizable.strings */; };
@@ -219,6 +221,9 @@
 		6604A2EF17626B9E0072216A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6604A2F117626B9E0072216A /* surespotTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = surespotTests.h; sourceTree = "<group>"; };
 		6604A2F217626B9E0072216A /* surespotTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = surespotTests.m; sourceTree = "<group>"; };
+		6614EEB7185F59F700A65CDE /* ALAssetsLibrary+CustomPhotoAlbum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALAssetsLibrary+CustomPhotoAlbum.m"; sourceTree = "<group>"; };
+		6614EEBD185F5A0200A65CDE /* ALAssetsLibrary+CustomPhotoAlbum.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ALAssetsLibrary+CustomPhotoAlbum.h"; sourceTree = "<group>"; };
+		6614EEBE185F5BBF00A65CDE /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		661C2ED21763CB56000649E7 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		661C2ED41763D493000649E7 /* NSData+Gunzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Gunzip.h"; sourceTree = "<group>"; };
 		661C2ED51763D4B9000649E7 /* NSData+Gunzip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Gunzip.m"; sourceTree = "<group>"; };
@@ -631,6 +636,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6614EEBF185F5BBF00A65CDE /* AssetsLibrary.framework in Frameworks */,
 				66866273185B87F2001491B1 /* MapKit.framework in Frameworks */,
 				66866271185B86FD001491B1 /* ImageIO.framework in Frameworks */,
 				66755100184C55E900C55AAC /* MobileCoreServices.framework in Frameworks */,
@@ -687,6 +693,7 @@
 		6604A2BD17626B9E0072216A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6614EEBE185F5BBF00A65CDE /* AssetsLibrary.framework */,
 				66866272185B87F2001491B1 /* MapKit.framework */,
 				66866270185B86FD001491B1 /* ImageIO.framework */,
 				66E70AB21847F8E100433D6F /* MobileCoreServices.framework */,
@@ -1316,6 +1323,8 @@
 		66EBDF381855C96F00F2452D /* images */ = {
 			isa = PBXGroup;
 			children = (
+				6614EEBD185F5A0200A65CDE /* ALAssetsLibrary+CustomPhotoAlbum.h */,
+				6614EEB7185F59F700A65CDE /* ALAssetsLibrary+CustomPhotoAlbum.m */,
 				66EBDF391855C96F00F2452D /* ImageDelegate.h */,
 				66EBDF3A1855C96F00F2452D /* ImageDelegate.mm */,
 				66EBDF3B1855C96F00F2452D /* UIImage+Scale.h */,
@@ -1653,6 +1662,7 @@
 				66E21DF91847D7F90005D91E /* IASKTextField.m in Sources */,
 				66EBE13A1855C97100F2452D /* SurespotLogFormatter.m in Sources */,
 				663710801813172F009D5195 /* EGOCache.m in Sources */,
+				6614EEB8185F59F700A65CDE /* ALAssetsLibrary+CustomPhotoAlbum.m in Sources */,
 				66E4F5B8176298CB00596E6B /* SocketIOJSONSerialization.m in Sources */,
 				66E4F5B9176298CB00596E6B /* SocketIOPacket.m in Sources */,
 				66EBE0CB1855C97100F2452D /* KeyboardState.m in Sources */,

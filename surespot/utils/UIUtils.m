@@ -267,7 +267,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     menu.highlightedTextShadowOffset = CGSizeZero;
     menu.textOffset =CGSizeMake(64,0);
     menu.font = [UIFont systemFontOfSize:18.0];
-    menu.cornerRadius = 2;
+    menu.cornerRadius = 4;
     [menu setCloseCompletionHandler:completionHandler];
     return menu;
 }

@@ -78,7 +78,7 @@
             if (version) {
                 
                 // Save the new image (original or edited) to the Camera Roll
-                UIImageWriteToSavedPhotosAlbum (imageToSave, nil, nil , nil);
+            //    UIImageWriteToSavedPhotosAlbum (imageToSave, nil, nil , nil);
                 
                 //compress encrypt and upload the image
                 UIImage * scaledImage = [imageToSave imageScaledToMaxWidth:400 maxHeight:400];

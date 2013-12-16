@@ -29,6 +29,8 @@
 #import "ImageDelegate.h"
 #import "MessageView+WebImageCache.h"
 #import "SurespotPhoto.h"
+#import <AssetsLibrary/AssetsLibrary.h>
+#import "ALAssetsLibrary+CustomPhotoAlbum.h"
 
 
 #ifdef DEBUG
@@ -53,6 +55,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) IASKAppSettingsViewController * appSettingsViewController;
 @property (nonatomic, strong) ImageDelegate * imageDelegate;
 @property (nonatomic, strong) SurespotMessage * imageMessage;
+@property (atomic, strong) ALAssetsLibrary * assetLibrary;
 @end
 
 @implementation SwipeViewController
@@ -62,6 +65,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     DDLogVerbose(@"swipeviewdidload %@", self);
     [super viewDidLoad];
+    
+    _assetLibrary = [ALAssetsLibrary new];
     
     _needsScroll = [NSMutableDictionary new];
     
@@ -1467,14 +1472,41 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         
         //allow saving to gallery if it's unlocked, or it's ours
-        
-        REMenuItem * saveItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"save_to_photos", nil) image:[UIImage imageNamed:@"ic_menu_save"] highlightedImage:nil action:^(REMenuItem * item){
+        if (ours || message.shareable) {
+            REMenuItem * saveItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"save_to_photos", nil) image:[UIImage imageNamed:@"ic_menu_save"] highlightedImage:nil action:^(REMenuItem * item){
+                if (ours || message.shareable) {
+                    [SDWebImageManager.sharedManager downloadWithURL: [NSURL URLWithString:message.data]
+                                                          ourVersion: [message getOurVersion]
+                                                       theirUsername: [message getOtherUser]
+                                                        theirVersion: [message getTheirVersion]
+                                                                  iv: [message iv]
+                                                             options: (SDWebImageOptions) 0
+                                                            progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished)
+                     {
+                         if (error) {
+                             [UIUtils showToastKey:@"error_saving_image_to_photos"];
+                         }
+                         else {
+                             [_assetLibrary saveImage:image toAlbum:@"surespot" withCompletionBlock:^(NSError *error) {
+                                 if (error) {
+                                     [UIUtils showToastKey:@"error_saving_image_to_photos" duration:2];
+                                 }
+                                 else {
+                                     [UIUtils showToastKey:@"image_saved_to_photos"];
+                                 }
+                             }];
+                         }
+                     }];
+                }
+                else {
+                    [UIUtils showToastKey:@"error_saving_image_to_photos_locked" duration:2];
+                }
+            }];
             
-        }];
-        
-        
-        [saveItem setTitleEnabled: ours || message.shareable];
-        [menuItems addObject:saveItem];
+            
+            
+            [menuItems addObject:saveItem];
+        }
         
         
         
