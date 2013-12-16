@@ -1454,20 +1454,30 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSMutableArray * menuItems = [NSMutableArray new];
     
     
-    //can always delete
-    REMenuItem * deleteItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_delete_message", nil) image:[UIImage imageNamed:@"ic_menu_delete"] highlightedImage:nil action:^(REMenuItem * item){
-        
-        
-        [self deleteMessage: message];
-        
-    }];
-    
-    [menuItems addObject:deleteItem];
-    
     
     if ([message.mimeType isEqualToString:MIME_TYPE_IMAGE]) {
         
-        
+        //if i'ts our message and ti's been sent we can change lock status
+        if (message.serverid > 0 && ours) {
+            UIImage * image = nil;
+            NSString * title = nil;
+            if (!message.shareable) {
+                title = NSLocalizedString(@"menu_unlock", nil);
+                image = [UIImage imageNamed:@"ic_partial_secure"];
+            }
+            else {
+                title = NSLocalizedString(@"menu_lock", nil);
+                image = [UIImage imageNamed:@"ic_secure"];
+            }
+            
+            REMenuItem * shareItem = [[REMenuItem alloc] initWithTitle:title image:image highlightedImage:nil action:^(REMenuItem * item){
+                [[ChatController sharedInstance] toggleMessageShareable:message];
+                
+            }];
+            
+            [menuItems addObject:shareItem];
+        }
+
         
         
         
@@ -1511,27 +1521,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         
         
-        //if i'ts our message and ti's been sent we can change lock status
-        if (message.serverid > 0 && ours) {
-            UIImage * image = nil;
-            NSString * title = nil;
-            if (!message.shareable) {
-                title = NSLocalizedString(@"menu_unlock", nil);
-                image = [UIImage imageNamed:@"ic_partial_secure"];
-            }
-            else {
-                title = NSLocalizedString(@"menu_lock", nil);
-                image = [UIImage imageNamed:@"ic_secure"];
-            }
-            
-            REMenuItem * shareItem = [[REMenuItem alloc] initWithTitle:title image:image highlightedImage:nil action:^(REMenuItem * item){
-                [[ChatController sharedInstance] toggleMessageShareable:message];
-                
-            }];
-            
-            [menuItems addObject:shareItem];
-        }
-    }
+      }
     
     else {
         if ([message.mimeType isEqualToString:MIME_TYPE_M4A]) {
@@ -1539,6 +1529,18 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
     }
     
+    
+    
+    //can always delete
+    REMenuItem * deleteItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_delete_message", nil) image:[UIImage imageNamed:@"ic_menu_delete"] highlightedImage:nil action:^(REMenuItem * item){
+        
+        
+        [self deleteMessage: message];
+        
+    }];
+    
+    [menuItems addObject:deleteItem];
+
     
     return [self createMenu: menuItems];
     
