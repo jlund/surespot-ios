@@ -14,6 +14,9 @@
 #import "UIViewPager.h"
 #import "IASKAppSettingsViewController.h"
 #import "MWPhotoBrowser.h"
+#import <AssetsLibrary/AssetsLibrary.h>
+#import "ALAssetsLibrary+CustomPhotoAlbum.h"
+
 
 @interface SwipeViewController : UIViewController
 <
@@ -39,4 +42,5 @@
 - (IBAction)buttonTouchUpInside:(id)sender;
 @property (strong, nonatomic) IBOutlet UIView *textFieldContainer;
 - (IBAction)textFieldChanged:(id)sender;
+@property (atomic, strong) ALAssetsLibrary * assetLibrary;
 @end

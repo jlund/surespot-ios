@@ -23,4 +23,5 @@ extern NSString *const IDENTITY_EXTENSION;
 +(NSDictionary *) loadSharedSecretsForUsername: (NSString *) username withPassword: (NSString *) password;
 +(void) deleteSharedSecretsForUsername:  (NSString *)username;
 +(NSData *) gunzipIfNecessary: (NSData *) identityBytes;
++(NSString *) getUploadsDir;
 @end

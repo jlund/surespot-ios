@@ -152,5 +152,6 @@ typedef enum SDImageCacheType SDImageCacheType;
  * Check if image exists in cache already
  */
 - (BOOL)diskImageExistsWithKey:(NSString *)key;
+- (NSData *)diskImageDataBySearchingAllPathsForKey:(NSString *)key;
 
 @end

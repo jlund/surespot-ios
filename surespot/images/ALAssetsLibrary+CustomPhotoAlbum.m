@@ -17,7 +17,7 @@
                               
                           //error handling
                           if (error!=nil) {
-                              completionBlock(error);
+                              completionBlock(error, nil);
                               return;
                           }
 
@@ -51,9 +51,11 @@
                                           [group addAsset: asset];
                                           
                                           //run the completion block
-                                          completionBlock(nil);
+                                          completionBlock(nil, assetURL);
                                           
-                                      } failureBlock: completionBlock];
+                                      } failureBlock:^(NSError *error) {
+                                          completionBlock(error, nil);
+                                      }];
 
                                 //album was found, bail out of the method
                                 return;
@@ -76,17 +78,24 @@
                                                                             [group addAsset: asset];
                                                                             
                                                                             //call the completion block
-                                                                            completionBlock(nil);
+                                                                            completionBlock(nil, assetURL);
 
-                                                                        } failureBlock: completionBlock];
+                                                                        } failureBlock:^(NSError *error) {
+                                                                            completionBlock(error, nil);
+                                                                        } ];
                                                           
-                                                      } failureBlock: completionBlock];
+                                                      } failureBlock:^(NSError *error) {
+                                                          completionBlock(error, nil);
+                                                      }];
 
                                 //should be the last iteration anyway, but just in case
                                 return;
                             }
                             
-                        } failureBlock: completionBlock];
+                        } failureBlock: ^(NSError *error) {
+                            completionBlock(error, nil);
+                        }];
+
     
 }
 

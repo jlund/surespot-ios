@@ -369,6 +369,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
               successBlock:(HTTPSuccessBlock) successBlock
               failureBlock: (HTTPFailureBlock) failureBlock
 {
+    DDLogInfo(@"postFileStream, fileid: %@", fileid);
     NSString * path = [[NSString stringWithFormat:@"images/%@/%@/%@", ourVersion, theirUsername, theirVersion] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSMutableURLRequest *request
     = [self multipartFormRequestWithMethod:@"POST"

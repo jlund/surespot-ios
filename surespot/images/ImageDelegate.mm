@@ -13,6 +13,21 @@
 #import "NetworkController.h"
 #import "SurespotConstants.h"
 #import "IdentityController.h"
+#import <AssetsLibrary/AssetsLibrary.h>
+#import "ALAssetsLibrary+CustomPhotoAlbum.h"
+#import "SwipeViewController.h"
+#import "SurespotMessage.h"
+#import "FileController.h"
+#import "ChatController.h"
+#import "NSData+Base64.h"
+#import "SDWebImageManager.h"
+#import "DDLog.h"
+
+#ifdef DEBUG
+static const int ddLogLevel = LOG_LEVEL_INFO;
+#else
+static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
 
 @interface ImageDelegate()
 @property (nonatomic, strong) NSString * username;
@@ -73,52 +88,98 @@
         }
         
         
+        // Save the new image (original or edited) to the Camera Roll
+        // todo store the asset library ref somewhere else
+        
+        //        [[((SwipeViewController *) [picker presentingViewController]) assetLibrary] saveImage:imageToSave toAlbum:@"surespot" withCompletionBlock:^(NSError *error, NSURL * url) {
+        //            if (error) {
+        //
+        //
+        //            }
+        //
+        //            else {
+        
+        
         
         [[IdentityController sharedInstance] getTheirLatestVersionForUsername:_theirUsername callback:^(NSString *version) {
             if (version) {
-                
-                // Save the new image (original or edited) to the Camera Roll
-            //    UIImageWriteToSavedPhotosAlbum (imageToSave, nil, nil , nil);
-                
                 //compress encrypt and upload the image
                 UIImage * scaledImage = [imageToSave imageScaledToMaxWidth:400 maxHeight:400];
-                
                 NSData * imageData = UIImageJPEGRepresentation(scaledImage, 0.5);
                 NSData * iv = [EncryptionController getIv];
                 
-//                //encrypt
-                [EncryptionController
-                 symmetricEncryptData:imageData
-                 ourVersion:_ourVersion theirUsername:_theirUsername theirVersion:version iv:iv callback:^(id encryptedImageData) {
-//                     //upload
-                     [[NetworkController sharedInstance]
-                      postFileStreamData:encryptedImageData
-                      ourVersion:_ourVersion
-                      theirUsername:_theirUsername
-                      theirVersion:version
-                      fileid:[iv SR_stringByBase64Encoding]
-                      mimeType:MIME_TYPE_IMAGE
-                      successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
-                          
-                      } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
-                          
-                      }];
-                     
-                 }];
+                //encrypt
+                [EncryptionController symmetricEncryptData:imageData
+                                                ourVersion:_ourVersion
+                                             theirUsername:_theirUsername
+                                              theirVersion:version
+                                                        iv:iv
+                                                  callback:^(NSData * encryptedImageData) {
+                                                      if (encryptedImageData) {
+                                                          //create message
+                                                          SurespotMessage * message = [SurespotMessage new];
+                                                          message.from = _username;
+                                                          message.fromVersion = _ourVersion;
+                                                          message.to = _theirUsername;
+                                                          message.toVersion = version;
+                                                          message.mimeType = MIME_TYPE_IMAGE;
+                                                          message.iv = [iv base64EncodedStringWithSeparateLines:NO];
+                                                          
+                                                          //save encrypted image to file
+                                                          NSString * guid = [[NSUUID new] UUIDString];
+                                                          NSString * filename = [[FileController getUploadsDir] stringByAppendingPathComponent:[@"image_" stringByAppendingString:guid]];
+                                                          [encryptedImageData writeToFile:filename atomically:YES];
+                                                          NSString * localUrl = [[NSURL fileURLWithPath:filename] absoluteString];
+                                                          message.data = localUrl;
+                                                          
+                                                          DDLogInfo(@"adding local image to cache %@", localUrl);
+                                                          [[[SDWebImageManager sharedManager] imageCache] storeImage:scaledImage imageData:encryptedImageData forKey:localUrl toDisk:YES];
+                                                          DDLogInfo(@"deleting temp image %@", localUrl);
+                                                          
+                                                          [[NSFileManager defaultManager] removeItemAtPath:filename error:nil];
+                                                          DDLogInfo(@"file exists %@: %@", filename, [[NSFileManager defaultManager] fileExistsAtPath:filename] ? @"YES" : @"NO" );
+                                                          
+                                                          //add message locally before we upload it
+                                                          [[[ChatController sharedInstance] getDataSourceForFriendname:_theirUsername] addMessage:message refresh:YES];
+                                                          
+                                                          
+                                                          
+                                                          
+                                                          //upload image to server
+                                                          DDLogInfo(@"uploading image %@ to server", localUrl);
+                                                          [[NetworkController sharedInstance] postFileStreamData:encryptedImageData
+                                                                                                      ourVersion:_ourVersion
+                                                                                                   theirUsername:_theirUsername
+                                                                                                    theirVersion:version
+                                                                                                          fileid:[iv SR_stringByBase64Encoding]
+                                                                                                        mimeType:MIME_TYPE_IMAGE
+                                                                                                    successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                                                                        DDLogInfo(@"uploaded image %@ to server successfully", localUrl);
+                                                                                                        
+                                                                                                        
+                                                                                                    } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                                                                        DDLogInfo(@"uploaded image %@ to server failed", localUrl);
+                                                                                                        //todo set error status
+                                                                                                    }];
+                                                      }
+                                                      else {
+                                                          //errror
+                                                      }
+                                                  }];
                 
             }
             else {
                 //TODO error message
             }
             
+            
+            
         }];
+        //      }
+        
+        //    }];
+        
     }
-    
-    
-    
-    
-    
-    
 }
 
 +(BOOL) startCameraControllerFromViewController: (UIViewController*) controller
@@ -148,8 +209,8 @@
 }
 
 +(BOOL) startImageSelectControllerFromViewController: (UIViewController*) controller
-                                  usingDelegate: (id <UIImagePickerControllerDelegate,
-                                                  UINavigationControllerDelegate>) delegate {
+                                       usingDelegate: (id <UIImagePickerControllerDelegate,
+                                                       UINavigationControllerDelegate>) delegate {
     
     if (([UIImagePickerController isSourceTypeAvailable:
           UIImagePickerControllerSourceTypeSavedPhotosAlbum] == NO)

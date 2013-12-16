@@ -110,6 +110,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.connection = [NSURLConnection.alloc initWithRequest:self.request delegate:self startImmediately:NO];
     
     [self.connection start];
+    DDLogInfo(@"downloading image: %@", [self.request.URL absoluteString]);
     
     if (self.connection)
     {

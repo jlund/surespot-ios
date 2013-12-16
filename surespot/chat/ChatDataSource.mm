@@ -17,6 +17,7 @@
 #import "UIUtils.h"
 #import "ChatController.h"
 #import "SurespotConstants.h"
+#import "SDWebImageManager.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -80,7 +81,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     }
                 }
             }
-
+            
             DDLogVerbose( @"latestMEssageid: %d, latestControlId: %d", _latestMessageId ,_latestControlMessageId);
             
         }
@@ -97,7 +98,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 NSArray * controlMessageStrings =[((NSDictionary *) JSON) objectForKey:@"controlMessages"];
                 
                 [self handleControlMessages:controlMessageStrings];
-
+                
                 NSArray * messageStrings =[((NSDictionary *) JSON) objectForKey:@"messages"];
                 
                 [self handleMessages:messageStrings];
@@ -207,6 +208,27 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 existingMessage.serverid = message.serverid;
                 existingMessage.dateTime = message.dateTime;
                 existingMessage.errorStatus = 0;
+                
+                
+                
+                if (![existingMessage.data isEqualToString:message.data]) {
+                    //update cache to avoid downloading image we just sent and save on web traffic
+                    if ([existingMessage.data hasPrefix:@"file://"] && [[existingMessage.data lastPathComponent] hasPrefix:@"image_"]) {
+                        //get cached image datas
+                        UIImage * image = [[[SDWebImageManager sharedManager] imageCache] imageFromMemoryCacheForKey:existingMessage.data];
+                        NSData * encryptedImageData = [[[SDWebImageManager sharedManager] imageCache] diskImageDataBySearchingAllPathsForKey:existingMessage.data];
+                        
+                        //save data for new remote key
+                        [[[SDWebImageManager sharedManager] imageCache] storeImage:image imageData:encryptedImageData forKey:message.data toDisk:YES];
+                        
+                        //remove now defunct cached local data
+                        [[[SDWebImageManager sharedManager] imageCache] removeImageForKey:existingMessage.data fromDisk:YES];
+                        
+                        DDLogInfo(@"key exists for %@: %@", existingMessage.data, [[[SDWebImageManager sharedManager] imageCache] diskImageExistsWithKey:existingMessage.data] ? @"YES" : @"NO" );
+                    }
+                    
+                    existingMessage.data = message.data;
+                }
             }
         }
         
@@ -419,7 +441,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             }
             else {
                 if ([[message action] isEqualToString:@"shareable"] || [[message action] isEqualToString:@"notshareable"]) {
-                               NSInteger messageId = [[message moreData] integerValue];
+                    NSInteger messageId = [[message moreData] integerValue];
                     SurespotMessage * dMessage = [self getMessageById: messageId];
                     
                     if (dMessage) {

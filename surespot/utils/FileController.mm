@@ -26,6 +26,7 @@ NSString * const STATE_EXTENSION = @"sss";
 NSString * const CHAT_DATA_PREFIX = @"chatdata-";
 NSString * const PUBLIC_KEYS_DIR = @"publickeys";
 NSString * const IDENTITIES_DIR = @"identities";
+NSString * const UPLOADS_DIR = @"uploads";
 
 NSString * const PUBLIC_KEYS_EXTENSION = @"spk";
 NSString * const IDENTITY_EXTENSION = @"ssi";
@@ -147,6 +148,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 +(NSString *) getIdentityDir {
     NSString * basedir = [[self getAppSupportDir] stringByAppendingPathComponent:IDENTITIES_DIR];
+    NSError * error;
+    if (![[NSFileManager defaultManager] createDirectoryAtPath:basedir withIntermediateDirectories:YES attributes:nil error:&error]) {
+        DDLogError(@"%@", error.localizedDescription);
+    }
+    return basedir;
+}
+
++(NSString *) getUploadsDir {
+    NSString * basedir = [[self getAppSupportDir] stringByAppendingPathComponent:UPLOADS_DIR];
     NSError * error;
     if (![[NSFileManager defaultManager] createDirectoryAtPath:basedir withIntermediateDirectories:YES attributes:nil error:&error]) {
         DDLogError(@"%@", error.localizedDescription);

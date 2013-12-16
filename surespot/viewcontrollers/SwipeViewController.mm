@@ -29,8 +29,6 @@
 #import "ImageDelegate.h"
 #import "MessageView+WebImageCache.h"
 #import "SurespotPhoto.h"
-#import <AssetsLibrary/AssetsLibrary.h>
-#import "ALAssetsLibrary+CustomPhotoAlbum.h"
 
 
 #ifdef DEBUG
@@ -55,7 +53,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) IASKAppSettingsViewController * appSettingsViewController;
 @property (nonatomic, strong) ImageDelegate * imageDelegate;
 @property (nonatomic, strong) SurespotMessage * imageMessage;
-@property (atomic, strong) ALAssetsLibrary * assetLibrary;
+
 @end
 
 @implementation SwipeViewController
@@ -1463,11 +1461,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             NSString * title = nil;
             if (!message.shareable) {
                 title = NSLocalizedString(@"menu_unlock", nil);
-                image = [UIImage imageNamed:@"ic_partial_secure"];
+                image = [UIImage imageNamed:@"ic_menu_partial_secure"];
             }
             else {
                 title = NSLocalizedString(@"menu_lock", nil);
-                image = [UIImage imageNamed:@"ic_secure"];
+                image = [UIImage imageNamed:@"ic_menu_secure"];
             }
             
             REMenuItem * shareItem = [[REMenuItem alloc] initWithTitle:title image:image highlightedImage:nil action:^(REMenuItem * item){
@@ -1497,7 +1495,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                              [UIUtils showToastKey:@"error_saving_image_to_photos"];
                          }
                          else {
-                             [_assetLibrary saveImage:image toAlbum:@"surespot" withCompletionBlock:^(NSError *error) {
+                             [_assetLibrary saveImage:image toAlbum:@"surespot" withCompletionBlock:^(NSError *error, NSURL * url) {
                                  if (error) {
                                      [UIUtils showToastKey:@"error_saving_image_to_photos" duration:2];
                                  }
