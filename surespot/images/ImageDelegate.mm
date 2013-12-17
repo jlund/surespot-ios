@@ -35,6 +35,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) NSString * ourVersion;
 @property (nonatomic, assign) BOOL sourceIsCamera;
 @property (nonatomic, weak) ALAssetsLibrary * assetsLibrary;
+@property (nonatomic, weak) UIViewController* controller;
 @end
 
 
@@ -173,8 +174,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                         mimeType:MIME_TYPE_IMAGE
                                                                                                     successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                                                                         DDLogInfo(@"uploaded image %@ to server successfully", key);
-                                                                                                      
-
+                                                                                                        
+                                                                                                        
                                                                                                         
                                                                                                     } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
                                                                                                         DDLogInfo(@"uploaded image %@ to server failed, statuscode: %d", key, operation.response.statusCode);
@@ -229,8 +230,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 +(BOOL) startImageSelectControllerFromViewController: (UIViewController*) controller
-                                       usingDelegate: (id <UIImagePickerControllerDelegate,
-                                                       UINavigationControllerDelegate>) delegate {
+                                       usingDelegate: (ImageDelegate *) delegate {
     
     if (([UIImagePickerController isSourceTypeAvailable:
           UIImagePickerControllerSourceTypeSavedPhotosAlbum] == NO)
@@ -240,17 +240,27 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     
     UIImagePickerController *cameraUI = [[UIImagePickerController alloc] init];
-    cameraUI.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+    cameraUI.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     cameraUI.mediaTypes = [[NSArray alloc] initWithObjects: (NSString *) kUTTypeImage, nil];
     
     // Hides the controls for moving & scaling pictures, or for
     // trimming movies. To instead show the controls, use YES.
     cameraUI.allowsEditing = NO;
     cameraUI.delegate = delegate;
-    
+    delegate.controller = controller;
     //cameraUI
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        [delegate setPopover: [[UIPopoverController alloc] initWithContentViewController:cameraUI]];
+        delegate.popover.delegate = delegate;
+        
+        CGFloat x =controller.view.bounds.size.width;
+        CGFloat y =controller.view.bounds.size.height;
+        DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
+        [delegate.popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:delegate.controller.view permittedArrowDirections:UIPopoverArrowDirectionLeft animated:YES];
+    } else {
+        [controller presentViewController: cameraUI animated: YES completion:nil];
+    }
     
-    [controller presentViewController: cameraUI animated: YES completion:nil];
     return YES;
 }
 
@@ -264,6 +274,21 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return newImage;
 }
 
+- (void)orientationChanged
+{
+    // if the popover is showing, adjust its position after the re-orientation by presenting it again:
+    if (self.popover != nil)  // if the popover is showing (replace with your own test if you wish)
+    {
+        CGFloat x =self.controller.view.bounds.size.width;
+        CGFloat y =self.controller.view.bounds.size.height;
+        DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
+        
+        [self.popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:self.controller.view permittedArrowDirections:UIPopoverArrowDirectionLeft animated:YES];
+    }
+}
 
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
+    self.popover = nil;
+}
 
 @end

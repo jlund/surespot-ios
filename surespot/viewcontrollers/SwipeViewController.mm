@@ -388,6 +388,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             }
         }
     }
+        
+    [_imageDelegate orientationChanged];
 }
 
 - (void) swipeViewDidScroll:(SwipeView *)scrollView {
