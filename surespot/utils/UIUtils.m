@@ -11,6 +11,7 @@
 #import "ChatUtils.h"
 #import "DDLog.h"
 #import "SurespotConstants.h"
+#import "SurespotAppDelegate.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -46,9 +47,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 +(void) showToastMessage: (NSString *) message duration: (CGFloat) duration {
     
-    [[[[[UIApplication sharedApplication] keyWindow] rootViewController] view]  makeToast:message
-                                                                                 duration: duration
-                                                                                 position:@"top"
+    [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).toastWindow  makeToast:message
+                                                                                         duration: duration
+                                                                                         position:@"top"
      ];
 }
 
@@ -57,9 +58,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 +(void) showToastKey: (NSString *) key duration: (CGFloat) duration {
     
-    [[[[[UIApplication sharedApplication] keyWindow] rootViewController] view]  makeToast:NSLocalizedString(key, nil)
-                                                                                 duration: duration
-                                                                                 position:@"top"
+    [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).toastWindow  makeToast:NSLocalizedString(key, nil)
+                                                                                         duration: duration
+                                                                                         position:@"top"
      ];
 }
 

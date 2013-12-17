@@ -251,6 +251,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
         DDLogInfo(@"got identity folder id %@", identityDirId);
         
         if (!identityDirId) {
+            [UIUtils showToastKey:@"could_not_list_identities_from_google_drive" duration:2];
             [_progressView removeView];
             callback(nil);
             return;
@@ -265,7 +266,9 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
                       
                       if (error) {
                           DDLogError(@"An error occurred: %@", error);
+                          [UIUtils showToastKey:@"could_not_list_identities_from_google_drive" duration:2];
                           [_progressView removeView];
+                          
                           callback(nil);
                           return;
                       }

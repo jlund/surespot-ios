@@ -64,7 +64,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [self.window makeKeyAndVisible];
     
-    
+   _toastWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    [_toastWindow setWindowLevel:UIWindowLevelAlert+1];
+    _toastWindow.hidden = NO;
+    _toastWindow.userInteractionEnabled = NO;
+
     
     
     return YES;
