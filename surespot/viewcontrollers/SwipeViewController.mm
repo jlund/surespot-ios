@@ -1520,9 +1520,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
         
         //allow saving to gallery if it's unlocked, or it's ours
-        if (message.shareable) {
+        if (message.shareable && !ours) {
             REMenuItem * saveItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"save_to_photos", nil) image:[UIImage imageNamed:@"ic_menu_save"] highlightedImage:nil action:^(REMenuItem * item){
-                if (message.shareable) {
+                if (message.shareable && !ours) {
                     [SDWebImageManager.sharedManager downloadWithURL: [NSURL URLWithString:message.data]
                                                           ourVersion: [message getOurVersion]
                                                        theirUsername: [message getOtherUser]
