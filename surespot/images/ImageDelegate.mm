@@ -67,7 +67,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 // For responding to the user tapping Cancel.
 - (void) imagePickerControllerDidCancel: (UIImagePickerController *) picker {
     
-    [[picker parentViewController] dismissViewControllerAnimated: YES completion:nil];
+    [_controller dismissViewControllerAnimated: YES completion:nil];
 }
 
 // For responding to the user accepting a newly-captured picture or movie
@@ -204,8 +204,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 +(BOOL) startCameraControllerFromViewController: (UIViewController*) controller
-                                  usingDelegate: (id <UIImagePickerControllerDelegate,
-                                                  UINavigationControllerDelegate>) delegate {
+                                  usingDelegate: (ImageDelegate *) delegate {
     
     if (([UIImagePickerController isSourceTypeAvailable:
           UIImagePickerControllerSourceTypeCamera] == NO)
@@ -225,6 +224,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     //cameraUI
     
+    delegate.controller = controller;
     [controller presentViewController: cameraUI animated: YES completion:nil];
     return YES;
 }
@@ -289,6 +289,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
     self.popover = nil;
+   // self.controller = nil;
+  //  self.assetsLibrary = nil;
 }
 
 @end
