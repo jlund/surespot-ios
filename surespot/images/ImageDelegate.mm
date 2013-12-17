@@ -101,7 +101,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [_assetsLibrary saveImage:imageToSave toAlbum:@"surespot" withCompletionBlock:^(NSError *error, NSURL * url) {
                 _assetsLibrary = nil;
                 if (error) {
-                    
+                    [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_image", nil) duration:2];
                     return;
                     
                 }
@@ -121,7 +121,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) uploadImage: (UIImage *) image {
-    if (!image) return;
+    if (!image) {
+        [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_image", nil) duration:2];
+        return;
+    }
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         
@@ -170,8 +173,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                         mimeType:MIME_TYPE_IMAGE
                                                                                                     successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                                                                         DDLogInfo(@"uploaded image %@ to server successfully", key);
-                                                                                                        
-                                                                                                        
                                                                                                     } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
                                                                                                         DDLogInfo(@"uploaded image %@ to server failed, statuscode: %d", key, operation.response.statusCode);
                                                                                                         
@@ -186,23 +187,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                     }];
                                                       }
                                                       else {
-                                                          //error
+                                                          [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_image", nil) duration:2];
                                                       }
                                                   }];
                 
             }
             else {
-                //TODO error message
+                [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_image", nil) duration:2];
             }
-            
-            
-            
         }];
-        //      }
-        
-        //    }];
     });
-    
 }
 
 +(BOOL) startCameraControllerFromViewController: (UIViewController*) controller
