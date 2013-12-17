@@ -173,6 +173,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                         mimeType:MIME_TYPE_IMAGE
                                                                                                     successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                                                                         DDLogInfo(@"uploaded image %@ to server successfully", key);
+                                                                                                      
+
+                                                                                                        
                                                                                                     } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
                                                                                                         DDLogInfo(@"uploaded image %@ to server failed, statuscode: %d", key, operation.response.statusCode);
                                                                                                         
