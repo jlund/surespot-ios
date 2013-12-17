@@ -324,7 +324,7 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     [_keychainWrappers removeObjectForKey:username];
     
     //remove secrets from disk
-    [FileController deleteSharedSecretsForUsername:username];
+    [FileController deleteDataForUsername:username];
 }
 
 -(void) importIdentityData: (NSData *) identityData username: (NSString *) username password: (NSString *) password callback: (CallbackBlock) callback {

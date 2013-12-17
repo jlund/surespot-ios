@@ -69,6 +69,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         _sharedSecretsDict = [NSMutableDictionary  dictionaryWithDictionary:secrets];
         DDLogInfo(@"loaded %d encrypted secrets from disk", [_sharedSecretsDict count]);
     }
+    
+    _latestVersionsDict = [NSMutableDictionary dictionaryWithDictionary:[FileController loadLatestVersionsForUsername:identity.username]];
+    DDLogInfo(@"loaded %d latest versions from disk", [_latestVersionsDict count]);
 }
 
 -(void) logout {
@@ -85,7 +88,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [FileController saveSharedSecrets: _sharedSecretsDict forUsername: _loggedInIdentity.username withPassword:password];
         DDLogInfo(@"saved %d encrypted secrets to disk", [_sharedSecretsDict count]);
     }
+    
+}
 
+-(void) saveLatestVersions {
+    
+    [FileController saveLatestVersions: _latestVersionsDict forUsername: _loggedInIdentity.username];
+    DDLogInfo(@"saved %d latest versions to disk", [_latestVersionsDict count]);
+    
+    
 }
 
 -(void) clearUserData: (NSString *) friendname {
@@ -118,6 +129,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [_publicKeysDict removeObjectsForKeys:keysToRemove];
     
+    [self saveSharedSecrets];
+    [self saveLatestVersions];
+    
 }
 
 
@@ -129,7 +143,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     //wipe data from disk
-    [FileController deleteSharedSecretsForUsername: username];
+    [FileController deleteDataForUsername:username];
     
 }
 
@@ -148,6 +162,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         if (!latestVersion || [version integerValue] > [latestVersion integerValue]) {
             DDLogInfo(@"updating latest key version to %@ for %@", version, username);
             [_latestVersionsDict setObject:version forKey:username];
+            [self saveLatestVersions];
         }
     }
 }

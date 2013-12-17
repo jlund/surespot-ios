@@ -60,6 +60,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
              DDLogVerbose(@"caching key version: %@ for username: %@", responseObjectS, _username);
              
              [_cache.latestVersionsDict setObject:responseObjectS forKey:_username];
+             [_cache saveLatestVersions];
              [self finish:responseObjectS];
              
          }

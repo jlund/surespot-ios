@@ -22,6 +22,7 @@
 #import "NSData+Base64.h"
 #import "SDWebImageManager.h"
 #import "DDLog.h"
+#import "UIUtils.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -140,10 +141,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                           DDLogInfo(@"file exists %@: %@", filename, [[NSFileManager defaultManager] fileExistsAtPath:filename] ? @"YES" : @"NO" );
                                                           
                                                           //add message locally before we upload it
-                                                          [[[ChatController sharedInstance] getDataSourceForFriendname:_theirUsername] addMessage:message refresh:YES];
-                                                          
-                                                          
-                                                          
+                                                          ChatDataSource * cds = [[ChatController sharedInstance] getDataSourceForFriendname:_theirUsername];
+                                                          [cds addMessage:message refresh:YES];
                                                           
                                                           //upload image to server
                                                           DDLogInfo(@"uploading image %@ to server", localUrl);
@@ -158,8 +157,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                         
                                                                                                         
                                                                                                     } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                                                                                        DDLogInfo(@"uploaded image %@ to server failed", localUrl);
-                                                                                                        //todo set error status
+                                                                                                        DDLogInfo(@"uploaded image %@ to server failed, statuscode: %d", localUrl, operation.response.statusCode);
+                                                                                                        
+                                                                                                        if (operation.response.statusCode == 402) {
+                                                                                                            message.errorStatus = 402;
+                                                                                                        }
+                                                                                                        else {
+                                                                                                            message.errorStatus = 500;
+                                                                                                        }
+                                                                                                        
+                                                                                                        [cds postRefresh];
                                                                                                     }];
                                                       }
                                                       else {

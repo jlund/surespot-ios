@@ -180,6 +180,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
              switch (responseObject.statusCode) {
                  case 401:
                      [UIUtils showToastKey: @"login_check_password"];
+                     _textPassword.text = @"";
                      break;
                  case 403:
                      [UIUtils showToastKey: @"login_update"];
@@ -188,7 +189,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                      [UIUtils showToastKey: @"login_try_again_later"];
              }
              
-             _textPassword.text = @"";
              [_textPassword becomeFirstResponder];
              [_progressView removeView];
              self.navigationItem.rightBarButtonItem.enabled = YES;

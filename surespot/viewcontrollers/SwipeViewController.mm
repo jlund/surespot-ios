@@ -873,13 +873,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             DDLogVerbose(@"message text x position: %f, width: %f", cell.messageLabel.frame.origin.x, cell.messageLabel.frame.size.width);
             
             if (message.errorStatus > 0) {
+                
                 NSString * errorText = [UIUtils getMessageErrorText: message.errorStatus];
-                cell.messageStatusLabel.text = errorText;
+                DDLogInfo(@"setting error status %@", errorText);
+                [cell.messageStatusLabel setText: errorText];
                 cell.messageSentView.foregroundColor = [UIColor blackColor];
             }
             else {
                 
                 if (message.serverid <= 0) {
+                    DDLogInfo(@"setting message sending");
                     cell.messageStatusLabel.text = NSLocalizedString(@"message_sending",nil);
                     
                     if (ours) {
@@ -896,12 +899,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     }
                     
                     if (!message.plainData) {
+                        DDLogInfo(@"setting message loading");
                         cell.messageStatusLabel.text = NSLocalizedString(@"message_loading_and_decrypting",nil);
                     }
                     else {
                         
                         //   DDLogVerbose(@"setting text for iv: %@ to: %@", [message iv], plainData);
-                        
+                        DDLogInfo(@"setting message date");
                         cell.messageStatusLabel.text = message.formattedDate;
                         
                         if (ours) {
@@ -956,7 +960,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 }
             }
             
-            
+            DDLogInfo(@"returning cell, status text %@", cell.messageStatusLabel.text);
             return cell;
         }
         else {
@@ -1475,7 +1479,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             [menuItems addObject:shareItem];
         }
-
+        
         
         
         
@@ -1519,7 +1523,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         
         
-      }
+    }
     
     else {
         if ([message.mimeType isEqualToString:MIME_TYPE_M4A]) {
@@ -1538,7 +1542,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }];
     
     [menuItems addObject:deleteItem];
-
+    
     
     return [self createMenu: menuItems];
     

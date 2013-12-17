@@ -31,7 +31,9 @@ NSString * const UPLOADS_DIR = @"uploads";
 NSString * const PUBLIC_KEYS_EXTENSION = @"spk";
 NSString * const IDENTITY_EXTENSION = @"ssi";
 NSString * const SECRET_EXTENSION = @"sse";
+NSString * const LATEST_VERSIONS_EXTENSION = @"ssv";
 NSString * const SECRETS_DIR = @"secrets";
+NSString * const LATEST_VERSIONS_DIR = @"latestVersions";
 
 NSInteger const GZIP_MAGIC_1 = 0x1f;
 NSInteger const GZIP_MAGIC_2 = 0x8b;
@@ -120,7 +122,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     //remove identity file
     NSString * identityFile = [self getIdentityFile:username];
     
-    DDLogInfo( @"wiping idenity file for username: %@,  path: %@", username,identityFile);
+    DDLogInfo( @"wiping identity file for username: %@,  path: %@", username,identityFile);
     //file manager thread safe supposedly
     NSFileManager * fileMgr = [NSFileManager defaultManager];
     BOOL wiped = [fileMgr removeItemAtPath:identityFile error:nil];
@@ -173,15 +175,28 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return basedir;
 }
 
-+(NSString *) getIdentityFile: (NSString *) username {
-    NSString * filename = [username stringByAppendingPathExtension:IDENTITY_EXTENSION];
-    return [[self getIdentityDir ] stringByAppendingPathComponent:[filename caseInsensitivize]];
++(NSString *) getLatestVersionsDir {
+    NSString * basedir = [[self getAppSupportDir] stringByAppendingPathComponent:LATEST_VERSIONS_DIR];
+    NSError * error;
+    if (![[NSFileManager defaultManager] createDirectoryAtPath:basedir withIntermediateDirectories:YES attributes:nil error:&error]) {
+        DDLogError(@"%@", error.localizedDescription);
+    }
+    return basedir;
 }
 
++(NSString *) getIdentityFile: (NSString *) username {
+    NSString * filename = [[username caseInsensitivize] stringByAppendingPathExtension:IDENTITY_EXTENSION];
+    return [[self getIdentityDir ] stringByAppendingPathComponent:filename];
+}
 
 +(NSString *) getSecretsFile: (NSString *) username {
-    NSString * filename = [username stringByAppendingPathExtension:SECRET_EXTENSION];
-    return [[self getSecretsDir ] stringByAppendingPathComponent:[filename caseInsensitivize]];
+    NSString * filename = [[username caseInsensitivize] stringByAppendingPathExtension:SECRET_EXTENSION];
+    return [[self getSecretsDir ] stringByAppendingPathComponent:filename];
+}
+
++(NSString *) getLatestVersionsFile: (NSString *) username {
+    NSString * filename = [[username caseInsensitivize] stringByAppendingPathExtension:LATEST_VERSIONS_EXTENSION];
+    return [[self getLatestVersionsDir ] stringByAppendingPathComponent:filename];
 }
 
 +(NSString *) getDirectoryForUser: (NSString *) user {
@@ -219,9 +234,33 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [encryptedSecretData writeToFile:filePath atomically:TRUE];
 }
 
-+(void) deleteSharedSecretsForUsername: (NSString *) username; {
++(void) saveLatestVersions:(NSDictionary *) latestVersionsDict forUsername: (NSString *) username {
+    NSString * filePath = [self getLatestVersionsFile:username];
+    NSData * latestVersions = [NSKeyedArchiver archivedDataWithRootObject:latestVersionsDict];
+    [latestVersions writeToFile:filePath atomically:TRUE];
+}
+
++(NSDictionary *) loadLatestVersionsForUsername: (NSString *) username {
+    NSString * filePath = [self getLatestVersionsFile:username];
+    
+    NSData *data = [NSData dataWithContentsOfFile:filePath];
+    
+    if (data) {
+        
+        return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        
+    }
+    
+    return nil;
+    
+}
+
++(void) deleteDataForUsername: (NSString *) username; {
     NSString * filePath = [self getSecretsFile:username];
     [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+    filePath = [self getLatestVersionsFile:username];
+    [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+
 }
 
 +(BOOL) isGzipCompressed: (NSData *) data {

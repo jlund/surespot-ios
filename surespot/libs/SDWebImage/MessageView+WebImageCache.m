@@ -45,13 +45,17 @@ static char operationArrayKey;
                 if (image)
                 {
                     wself.uiImageView.image = image;
-                    wself.messageStatusLabel.text = message.formattedDate;
-                    [wself setNeedsLayout];
+                    if (message.formattedDate) {
+                        wself.messageStatusLabel.text = message.formattedDate;
+                    }
+
                 }
                 else {
                     wself.messageStatusLabel.text = NSLocalizedString(@"message_error_generic", nil);
                     
                 }
+                
+                [wself setNeedsLayout];
                 if (completedBlock && finished)
                 {
                     completedBlock(image, error, cacheType);
