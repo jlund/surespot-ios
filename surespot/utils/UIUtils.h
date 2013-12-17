@@ -29,7 +29,7 @@
 +(void) startPulseAnimation: (UIView *) view;
 +(void) stopPulseAnimation: (UIView *) view;
 +(void) showToastMessage: (NSString *) message duration: (CGFloat) duration;
-+(NSString *) getMessageErrorText: (NSInteger) errorStatus;
++(NSString *) getMessageErrorText: (NSInteger) errorStatus mimeType: (NSString *) mimeType;
 +(REMenu *) createMenu: (NSArray *) menuItems closeCompletionHandler: (void (^)(void))completionHandler;
 +(CGSize) screenSizeAdjustedForOrientation;
 @end

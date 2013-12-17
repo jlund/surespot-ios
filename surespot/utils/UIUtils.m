@@ -10,6 +10,7 @@
 #import "Toast+UIView.h"
 #import "ChatUtils.h"
 #import "DDLog.h"
+#import "SurespotConstants.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -214,7 +215,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [view.layer removeAnimationForKey:@"pulse"];
 }
 
-+(NSString *) getMessageErrorText: (NSInteger) errorStatus {
++(NSString *) getMessageErrorText: (NSInteger) errorStatus mimeType: (NSString *) mimeType {
     NSString * statusText = nil;
     switch (errorStatus) {
 		case 400:
@@ -237,15 +238,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 			break;
 		case 500:
         default:
-			
-            //	if (message.getMimeType().equals(SurespotConstants.MimeTypes.TEXT)) {
-            statusText =  NSLocalizedString(@"error_message_generic",nil);
-            //			}
-            //			else {
-            //				if (message.getMimeType().equals(SurespotConstants.MimeTypes.IMAGE) || message.getMimeType().equals(SurespotConstants.MimeTypes.M4A)) {
-            //					statusText = context.getString(R.string.error_message_resend);
-            //				}
-            //			}
+			if ([mimeType isEqualToString:MIME_TYPE_TEXT]) {
+                statusText =  NSLocalizedString(@"error_message_generic",nil);
+            }
+            else {
+                if([mimeType isEqualToString:MIME_TYPE_IMAGE] || [mimeType isEqualToString:MIME_TYPE_M4A]) {
+                    statusText = NSLocalizedString(@"error_message_resend",nil);
+                }
+            }
             
 			break;
     }

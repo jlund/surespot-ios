@@ -874,7 +874,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             if (message.errorStatus > 0) {
                 
-                NSString * errorText = [UIUtils getMessageErrorText: message.errorStatus];
+                NSString * errorText = [UIUtils getMessageErrorText: message.errorStatus mimeType:message.mimeType];
                 DDLogInfo(@"setting error status %@", errorText);
                 [cell.messageStatusLabel setText: errorText];
                 cell.messageSentView.foregroundColor = [UIColor blackColor];
