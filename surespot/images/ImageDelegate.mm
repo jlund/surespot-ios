@@ -146,27 +146,18 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                       message.toVersion = version;
                                                       message.mimeType = MIME_TYPE_IMAGE;
                                                       message.iv = [iv base64EncodedStringWithSeparateLines:NO];
+                                                      NSString * key = [@"imageKey_" stringByAppendingString: message.iv];
+                                                      message.data = key;
                                                       
-                                                      //save encrypted image to file
-                                                      NSString * guid = [[NSUUID new] UUIDString];
-                                                      NSString * filename = [[FileController getUploadsDir] stringByAppendingPathComponent:[@"image_" stringByAppendingString:guid]];
-                                                      [encryptedImageData writeToFile:filename atomically:YES];
-                                                      NSString * localUrl = [[NSURL fileURLWithPath:filename] absoluteString];
-                                                      message.data = localUrl;
-                                                      
-                                                      DDLogInfo(@"adding local image to cache %@", localUrl);
-                                                      [[[SDWebImageManager sharedManager] imageCache] storeImage:scaledImage imageData:encryptedImageData forKey:localUrl toDisk:YES];
-                                                      DDLogInfo(@"deleting temp image %@", localUrl);
-                                                      
-                                                      [[NSFileManager defaultManager] removeItemAtPath:filename error:nil];
-                                                      DDLogInfo(@"file exists %@: %@", filename, [[NSFileManager defaultManager] fileExistsAtPath:filename] ? @"YES" : @"NO" );
+                                                      DDLogInfo(@"adding local image to cache %@", key);
+                                                      [[[SDWebImageManager sharedManager] imageCache] storeImage:scaledImage imageData:encryptedImageData forKey:key toDisk:YES];
                                                       
                                                       //add message locally before we upload it
                                                       ChatDataSource * cds = [[ChatController sharedInstance] getDataSourceForFriendname:_theirUsername];
                                                       [cds addMessage:message refresh:YES];
                                                       
                                                       //upload image to server
-                                                      DDLogInfo(@"uploading image %@ to server", localUrl);
+                                                      DDLogInfo(@"uploading image %@ to server", key);
                                                       [[NetworkController sharedInstance] postFileStreamData:encryptedImageData
                                                                                                   ourVersion:_ourVersion
                                                                                                theirUsername:_theirUsername
@@ -174,11 +165,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                       fileid:[iv SR_stringByBase64Encoding]
                                                                                                     mimeType:MIME_TYPE_IMAGE
                                                                                                 successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                                                                                    DDLogInfo(@"uploaded image %@ to server successfully", localUrl);
+                                                                                                    DDLogInfo(@"uploaded image %@ to server successfully", key);
                                                                                                     
                                                                                                     
                                                                                                 } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                                                                                    DDLogInfo(@"uploaded image %@ to server failed, statuscode: %d", localUrl, operation.response.statusCode);
+                                                                                                    DDLogInfo(@"uploaded image %@ to server failed, statuscode: %d", key, operation.response.statusCode);
                                                                                                     
                                                                                                     if (operation.response.statusCode == 402) {
                                                                                                         message.errorStatus = 402;
@@ -191,7 +182,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                 }];
                                                   }
                                                   else {
-                                                      //errror
+                                                      //error
                                                   }
                                               }];
             

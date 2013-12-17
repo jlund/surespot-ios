@@ -23,6 +23,7 @@
 #import "CredentialCachingController.h"
 #import "SurespotErrorMessage.h"
 #import "Reachability.h"
+#import "SDWebImageManager.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
@@ -1083,5 +1084,38 @@ static const int MAX_CONNECTION_RETRIES = 16;
     }
 }
 
+-(void) resendFileMessage: (SurespotMessage *) message {
+    if ([[message data] hasPrefix:@"imageKey_"]) {
+        
+        DDLogInfo(@"resending image %@ to server", message.data);
+        NSData * data = [[[SDWebImageManager sharedManager] imageCache] diskImageDataBySearchingAllPathsForKey:message.data];
+        if (data) {
+            [self startProgress];
+            [[NetworkController sharedInstance] postFileStreamData: data
+                                                        ourVersion:[message getOurVersion]
+                                                     theirUsername:[message getOtherUser]
+                                                      theirVersion:[message getTheirVersion]
+                                                            fileid:message.iv
+                                                          mimeType:MIME_TYPE_IMAGE
+                                                      successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                          DDLogInfo(@"resent image %@ to server successfully", message.data);
+                                                          [self stopProgress];
+                                                          
+                                                      } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                          DDLogInfo(@"resend image %@ to server failed, statuscode: %d", message.data, operation.response.statusCode);
+                                                          
+                                                          if (operation.response.statusCode == 402) {
+                                                              message.errorStatus = 402;
+                                                          }
+                                                          else {
+                                                              message.errorStatus = 500;
+                                                          }
+                                                          
+                                                          [self stopProgress];
+
+                                                      }];
+        }
+    }
+}
 
 @end

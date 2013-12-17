@@ -213,7 +213,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 
                 if (![existingMessage.data isEqualToString:message.data]) {
                     //update cache to avoid downloading image we just sent and save on web traffic
-                    if ([existingMessage.data hasPrefix:@"file://"] && [[existingMessage.data lastPathComponent] hasPrefix:@"image_"]) {
+                    if ([existingMessage.data hasPrefix:@"imageKey_"]) {
                         //get cached image datas
                         UIImage * image = [[[SDWebImageManager sharedManager] imageCache] imageFromMemoryCacheForKey:existingMessage.data];
                         NSData * encryptedImageData = [[[SDWebImageManager sharedManager] imageCache] diskImageDataBySearchingAllPathsForKey:existingMessage.data];

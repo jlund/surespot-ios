@@ -1457,10 +1457,21 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(REMenu *) createChatMenuMessage: (SurespotMessage *) message {
     BOOL ours = [ChatUtils isOurMessage:message];
     NSMutableArray * menuItems = [NSMutableArray new];
-    
-    
-    
+
     if ([message.mimeType isEqualToString:MIME_TYPE_IMAGE]) {
+        if (message.errorStatus > 0 && ours) {
+            UIImage * image = nil;
+            NSString * title = nil;
+            
+            title = NSLocalizedString(@"menu_resend_message", nil);
+            image = [UIImage imageNamed:@"ic_menu_send"];
+            
+            REMenuItem * resendItem = [[REMenuItem alloc] initWithTitle:title image:image highlightedImage:nil action:^(REMenuItem * item){
+                [[ChatController sharedInstance] resendFileMessage:message];                
+            }];
+            
+            [menuItems addObject:resendItem];
+        }
         
         //if i'ts our message and ti's been sent we can change lock status
         if (message.serverid > 0 && ours) {
@@ -1482,9 +1493,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             [menuItems addObject:shareItem];
         }
-        
-        
-        
         
         //allow saving to gallery if it's unlocked, or it's ours
         if (message.shareable) {
@@ -1517,15 +1525,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     [UIUtils showToastKey:@"error_saving_image_to_photos_locked" duration:2];
                 }
             }];
-            
-            
-            
             [menuItems addObject:saveItem];
         }
-        
-        
-        
-        
     }
     
     else {

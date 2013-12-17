@@ -36,4 +36,5 @@
 -(void) enqueueResendMessage: (SurespotMessage * ) message;
 -(void) loadEarlierMessagesForUsername: username callback: (CallbackBlock) callback;
 -(void) toggleMessageShareable: (SurespotMessage *) message;
+-(void) resendFileMessage: (SurespotMessage *) message;
 @end
