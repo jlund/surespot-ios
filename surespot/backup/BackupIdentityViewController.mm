@@ -130,7 +130,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 - (GTMOAuth2ViewControllerTouch *)createAuthController
 {
     GTMOAuth2ViewControllerTouch *authController;
-    authController = [[GTMOAuth2ViewControllerTouch alloc] initWithScope:kGTLAuthScopeDriveFile
+    authController = [[GTMOAuth2ViewControllerTouch alloc] initWithScope:kGTLAuthScopeDrive
                                                                 clientID:kClientID
                                                             clientSecret:kClientSecret
                                                         keychainItemName:kKeychainItemName
