@@ -922,6 +922,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 cell.messageLabel.hidden = NO;
                 cell.uiImageView.hidden = YES;
                 cell.shareableView.hidden = YES;
+                CGRect messageStatusFrame = cell.messageStatusLabel.frame;
+                if (ours) {
+                    messageStatusFrame.origin.x = 13;
+                }
+                else {
+                    messageStatusFrame.origin.x = 63;
+                }
+                cell.messageStatusLabel.frame = messageStatusFrame;
             }
             else {
                 if ([message.mimeType isEqualToString:MIME_TYPE_IMAGE]) {
@@ -930,6 +938,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     cell.uiImageView.hidden = NO;
                     cell.uiImageView.alignTop = YES;
                     cell.uiImageView.alignLeft = YES;
+                    CGRect messageStatusFrame = cell.messageStatusLabel.frame;
+                    if (ours) {
+                        messageStatusFrame.origin.x = 22;
+                    }
+                    else {
+                        messageStatusFrame.origin.x = 72;
+                    }
+
+                    cell.messageStatusLabel.frame = messageStatusFrame;
                     
                     if (message.shareable) {
                         cell.shareableView.image = [UIImage imageNamed:@"ic_partial_secure"];
@@ -954,6 +971,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 }
                 else {
                     if ([message.mimeType isEqualToString:MIME_TYPE_M4A]) {
+                        CGRect messageStatusFrame = cell.messageStatusLabel.frame;
+                        if (ours) {
+                            messageStatusFrame.origin.x = 13;
+                        }
+                        else {
+                            messageStatusFrame.origin.x = 63;
+                        }
+                        cell.messageStatusLabel.frame = messageStatusFrame;
                         cell.messageLabel.hidden = YES;
                         cell.uiImageView.hidden = NO;
                     }
