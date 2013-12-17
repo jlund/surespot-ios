@@ -388,7 +388,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             }
         }
     }
-        
+    
     [_imageDelegate orientationChanged];
 }
 
@@ -947,7 +947,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     else {
                         messageStatusFrame.origin.x = 72;
                     }
-
+                    
                     cell.messageStatusLabel.frame = messageStatusFrame;
                     
                     if (message.shareable) {
@@ -1446,6 +1446,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         else {
             [_friendView deselectRowAtIndexPath:[_friendView indexPathForSelectedRow] animated:YES];
         }
+        _swipeView.userInteractionEnabled = YES;
     }];
 }
 
@@ -1484,7 +1485,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(REMenu *) createChatMenuMessage: (SurespotMessage *) message {
     BOOL ours = [ChatUtils isOurMessage:message];
     NSMutableArray * menuItems = [NSMutableArray new];
-
+    
     if ([message.mimeType isEqualToString:MIME_TYPE_IMAGE]) {
         if (message.errorStatus > 0 && ours) {
             UIImage * image = nil;
@@ -1494,7 +1495,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             image = [UIImage imageNamed:@"ic_menu_send"];
             
             REMenuItem * resendItem = [[REMenuItem alloc] initWithTitle:title image:image highlightedImage:nil action:^(REMenuItem * item){
-                [[ChatController sharedInstance] resendFileMessage:message];                
+                [[ChatController sharedInstance] resendFileMessage:message];
             }];
             
             [menuItems addObject:resendItem];
@@ -1619,12 +1620,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [_textField resignFirstResponder];
             [_inviteField resignFirstResponder];
             CGFloat width = self.view.frame.size.width;
-            CGRect rect = CGRectMake((width-260)/2, 0, 260, self.view.frame.size.height);            
+            CGRect rect = CGRectMake((width-260)/2, 0, 260, self.view.frame.size.height);
             [_menu showFromRect:rect inView:self.view];
+            _swipeView.userInteractionEnabled = NO;
         }
     }
     else {
         [_menu close];
+       
     }
     
 }
@@ -1650,11 +1653,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
         
         if (_menu) {
-            CGRect rect = CGRectMake(25, 0, self.view.frame.size.width - 50, self.view.frame.size.height);
-            
+            CGFloat width = self.view.frame.size.width;
+            CGRect rect = CGRectMake((width-260)/2, 0, 260, self.view.frame.size.height);
+            _swipeView.userInteractionEnabled = NO;
             [_menu showFromRect:rect inView:self.view];
         }
     }
+    else {
+        
+        [_menu close];
+    }
+    
 }
 
 - (void)deleteFriend:(NSNotification *)notification
