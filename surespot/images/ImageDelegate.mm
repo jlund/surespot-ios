@@ -123,80 +123,85 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(void) uploadImage: (UIImage *) image {
     if (!image) return;
     
-    [[IdentityController sharedInstance] getTheirLatestVersionForUsername:_theirUsername callback:^(NSString *version) {
-        if (version) {
-            //compress encrypt and upload the image
-            UIImage * scaledImage = [image imageScaledToMaxWidth:400 maxHeight:400];
-            NSData * imageData = UIImageJPEGRepresentation(scaledImage, 0.5);
-            NSData * iv = [EncryptionController getIv];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        
+        [[IdentityController sharedInstance] getTheirLatestVersionForUsername:_theirUsername callback:^(NSString *version) {
+            if (version) {
+                //compress encrypt and upload the image
+                UIImage * scaledImage = [image imageScaledToMaxWidth:400 maxHeight:400];
+                NSData * imageData = UIImageJPEGRepresentation(scaledImage, 0.5);
+                NSData * iv = [EncryptionController getIv];
+                
+                //encrypt
+                [EncryptionController symmetricEncryptData:imageData
+                                                ourVersion:_ourVersion
+                                             theirUsername:_theirUsername
+                                              theirVersion:version
+                                                        iv:iv
+                                                  callback:^(NSData * encryptedImageData) {
+                                                      if (encryptedImageData) {
+                                                          //create message
+                                                          SurespotMessage * message = [SurespotMessage new];
+                                                          message.from = _username;
+                                                          message.fromVersion = _ourVersion;
+                                                          message.to = _theirUsername;
+                                                          message.toVersion = version;
+                                                          message.mimeType = MIME_TYPE_IMAGE;
+                                                          message.iv = [iv base64EncodedStringWithSeparateLines:NO];
+                                                          NSString * key = [@"imageKey_" stringByAppendingString: message.iv];
+                                                          message.data = key;
+                                                          
+                                                          DDLogInfo(@"adding local image to cache %@", key);
+                                                          [[[SDWebImageManager sharedManager] imageCache] storeImage:scaledImage imageData:encryptedImageData forKey:key toDisk:YES];
+                                                          
+                                                          //add message locally before we upload it
+                                                          ChatDataSource * cds = [[ChatController sharedInstance] getDataSourceForFriendname:_theirUsername];
+                                                          if (cds) {
+                                                              [cds addMessage:message refresh:YES];
+                                                          }
+                                                          
+                                                          //upload image to server
+                                                          DDLogInfo(@"uploading image %@ to server", key);
+                                                          [[NetworkController sharedInstance] postFileStreamData:encryptedImageData
+                                                                                                      ourVersion:_ourVersion
+                                                                                                   theirUsername:_theirUsername
+                                                                                                    theirVersion:version
+                                                                                                          fileid:[iv SR_stringByBase64Encoding]
+                                                                                                        mimeType:MIME_TYPE_IMAGE
+                                                                                                    successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                                                                        DDLogInfo(@"uploaded image %@ to server successfully", key);
+                                                                                                        
+                                                                                                        
+                                                                                                    } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                                                                        DDLogInfo(@"uploaded image %@ to server failed, statuscode: %d", key, operation.response.statusCode);
+                                                                                                        
+                                                                                                        if (operation.response.statusCode == 402) {
+                                                                                                            message.errorStatus = 402;
+                                                                                                        }
+                                                                                                        else {
+                                                                                                            message.errorStatus = 500;
+                                                                                                        }
+                                                                                                        
+                                                                                                        [cds postRefresh];
+                                                                                                    }];
+                                                      }
+                                                      else {
+                                                          //error
+                                                      }
+                                                  }];
+                
+            }
+            else {
+                //TODO error message
+            }
             
-            //encrypt
-            [EncryptionController symmetricEncryptData:imageData
-                                            ourVersion:_ourVersion
-                                         theirUsername:_theirUsername
-                                          theirVersion:version
-                                                    iv:iv
-                                              callback:^(NSData * encryptedImageData) {
-                                                  if (encryptedImageData) {
-                                                      //create message
-                                                      SurespotMessage * message = [SurespotMessage new];
-                                                      message.from = _username;
-                                                      message.fromVersion = _ourVersion;
-                                                      message.to = _theirUsername;
-                                                      message.toVersion = version;
-                                                      message.mimeType = MIME_TYPE_IMAGE;
-                                                      message.iv = [iv base64EncodedStringWithSeparateLines:NO];
-                                                      NSString * key = [@"imageKey_" stringByAppendingString: message.iv];
-                                                      message.data = key;
-                                                      
-                                                      DDLogInfo(@"adding local image to cache %@", key);
-                                                      [[[SDWebImageManager sharedManager] imageCache] storeImage:scaledImage imageData:encryptedImageData forKey:key toDisk:YES];
-                                                      
-                                                      //add message locally before we upload it
-                                                      ChatDataSource * cds = [[ChatController sharedInstance] getDataSourceForFriendname:_theirUsername];
-                                                      [cds addMessage:message refresh:YES];
-                                                      
-                                                      //upload image to server
-                                                      DDLogInfo(@"uploading image %@ to server", key);
-                                                      [[NetworkController sharedInstance] postFileStreamData:encryptedImageData
-                                                                                                  ourVersion:_ourVersion
-                                                                                               theirUsername:_theirUsername
-                                                                                                theirVersion:version
-                                                                                                      fileid:[iv SR_stringByBase64Encoding]
-                                                                                                    mimeType:MIME_TYPE_IMAGE
-                                                                                                successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                                                                                    DDLogInfo(@"uploaded image %@ to server successfully", key);
-                                                                                                    
-                                                                                                    
-                                                                                                } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                                                                                    DDLogInfo(@"uploaded image %@ to server failed, statuscode: %d", key, operation.response.statusCode);
-                                                                                                    
-                                                                                                    if (operation.response.statusCode == 402) {
-                                                                                                        message.errorStatus = 402;
-                                                                                                    }
-                                                                                                    else {
-                                                                                                        message.errorStatus = 500;
-                                                                                                    }
-                                                                                                    
-                                                                                                    [cds postRefresh];
-                                                                                                }];
-                                                  }
-                                                  else {
-                                                      //error
-                                                  }
-                                              }];
             
-        }
-        else {
-            //TODO error message
-        }
+            
+        }];
+        //      }
         
-        
-        
-    }];
-    //      }
-    
-    //    }];
+        //    }];
+    });
     
 }
 
