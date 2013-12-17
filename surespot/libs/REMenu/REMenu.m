@@ -112,7 +112,7 @@
     self.containerView = ({
         REMenuContainerView *view = [[REMenuContainerView alloc] init];
         view.clipsToBounds = YES;
-        view.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    view.autoresizingMask =UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         
         if (self.backgroundView) {
             self.backgroundView.alpha = 0;

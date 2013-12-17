@@ -1616,7 +1616,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (!_menu) {
         _menu = [self createMenuMenu];
         if (_menu) {
-            CGRect rect = CGRectMake(25, 0, self.view.frame.size.width                   - 50, self.view.frame.size.height);
+            [_textField resignFirstResponder];
+            [_inviteField resignFirstResponder];
+            CGFloat width = self.view.frame.size.width;
+            CGRect rect = CGRectMake((width-260)/2, 0, 260, self.view.frame.size.height);            
             [_menu showFromRect:rect inView:self.view];
         }
     }
