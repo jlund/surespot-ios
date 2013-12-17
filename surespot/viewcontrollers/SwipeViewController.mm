@@ -1349,7 +1349,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                             _imageDelegate = [[ImageDelegate alloc]
                                                               initWithUsername:[[IdentityController sharedInstance] getLoggedInUser]
                                                               ourVersion:[[IdentityController sharedInstance] getOurLatestVersion]
-                                                              theirUsername:theirUsername];
+                                                              theirUsername:theirUsername
+                                                              assetLibrary:_assetLibrary sourceIsCamera:NO];
+                                            
                                             [ImageDelegate startImageSelectControllerFromViewController:self usingDelegate:_imageDelegate];
                                             
                                             
@@ -1366,7 +1368,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                              _imageDelegate = [[ImageDelegate alloc]
                                                                initWithUsername:[[IdentityController sharedInstance] getLoggedInUser]
                                                                ourVersion:[[IdentityController sharedInstance] getOurLatestVersion]
-                                                               theirUsername:theirUsername];
+                                                               theirUsername:theirUsername
+                                                               assetLibrary:_assetLibrary sourceIsCamera:YES];
                                              [ImageDelegate startCameraControllerFromViewController:self usingDelegate:_imageDelegate];
                                              
                                              
@@ -1484,9 +1487,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         
         //allow saving to gallery if it's unlocked, or it's ours
-        if (ours || message.shareable) {
+        if (message.shareable) {
             REMenuItem * saveItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"save_to_photos", nil) image:[UIImage imageNamed:@"ic_menu_save"] highlightedImage:nil action:^(REMenuItem * item){
-                if (ours || message.shareable) {
+                if (message.shareable) {
                     [SDWebImageManager.sharedManager downloadWithURL: [NSURL URLWithString:message.data]
                                                           ourVersion: [message getOurVersion]
                                                        theirUsername: [message getOtherUser]

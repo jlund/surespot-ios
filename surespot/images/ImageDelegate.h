@@ -7,11 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AssetsLibrary/AssetsLibrary.h>
 
 @interface ImageDelegate : NSObject<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+
 - (id) initWithUsername: (NSString *) username
              ourVersion:(NSString *) ourVersion
-          theirUsername:(NSString *) theirUsername;
+          theirUsername:(NSString *) theirUsername
+           assetLibrary: (ALAssetsLibrary *) library
+         sourceIsCamera: (BOOL) sourceIsCamera;
+
 +(BOOL) startCameraControllerFromViewController: (UIViewController*) controller
                                   usingDelegate: (id <UIImagePickerControllerDelegate,
                                                   UINavigationControllerDelegate>) delegate;
