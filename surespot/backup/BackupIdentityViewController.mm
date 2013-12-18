@@ -130,7 +130,9 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 - (GTMOAuth2ViewControllerTouch *)createAuthController
 {
     GTMOAuth2ViewControllerTouch *authController;
-    authController = [[GTMOAuth2ViewControllerTouch alloc] initWithScope:kGTLAuthScopeDrive
+    //http://stackoverflow.com/questions/13693617/error-500-when-performing-a-query-with-drive-file-scope
+    authController = [[GTMOAuth2ViewControllerTouch alloc] initWithScope:[[kGTLAuthScopeDriveFile stringByAppendingString:@" "] stringByAppendingString: kGTLAuthScopeDriveMetadataReadonly]
+
                                                                 clientID:kClientID
                                                             clientSecret:kClientSecret
                                                         keychainItemName:kKeychainItemName
