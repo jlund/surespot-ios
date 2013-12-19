@@ -60,18 +60,52 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     NSString *appBuildString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
     [[NSUserDefaults standardUserDefaults] setObject:appBuildString forKey:@"build_preference"];
-
+    
     
     [self.window makeKeyAndVisible];
     
-   _toastWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    _toastWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     [_toastWindow setWindowLevel:UIWindowLevelAlert+1];
     _toastWindow.hidden = NO;
     _toastWindow.userInteractionEnabled = NO;
-
+    
     
     
     return YES;
+}
+
+//launch from smart banner or url
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    if (!url) {  return NO; }
+    
+    [self setUrl:url];
+    return YES;
+    
+}
+
+
+
+-(void) setUrl: (NSURL*) url {
+    DDLogInfo(@"set url %@", url);
+    
+    if ([url.scheme isEqualToString:@"surespot"]) {
+        if ([[url host] isEqualToString:@"autoinvite"]) {
+            NSString * username = [[url path] substringFromIndex:1];
+            
+            
+            if (username) {
+                DDLogInfo(@"adding autoinvite for %@",  username);
+                //get autoinvite users
+                
+                
+                NSMutableArray * autoinvites  = [NSMutableArray arrayWithArray: [[NSUserDefaults standardUserDefaults] stringArrayForKey: @"autoinvites"]];
+                [autoinvites addObject: username];
+                [[NSUserDefaults standardUserDefaults] setObject: autoinvites forKey: @"autoinvites"];
+                //fire event
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"autoinvites" object:nil ];
+            }
+        }
+    }
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
@@ -96,7 +130,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     
                     NSString * from =[locArgs objectAtIndex:1];
                     [UIUtils showToastMessage:[NSString stringWithFormat:NSLocalizedString(notificationType, nil), to, from] duration:1];
-
+                    
                     UILocalNotification* localNotification = [[UILocalNotification alloc] init];
                     localNotification.fireDate = nil;
                     localNotification.alertBody = [NSString stringWithFormat: NSLocalizedString(notificationType, nil), to, from];

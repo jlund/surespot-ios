@@ -51,7 +51,6 @@
 		6686623D18565AD5001491B1 /* LoginViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6686623818565AD5001491B1 /* LoginViewController.mm */; };
 		6686623E18565AD5001491B1 /* SignupViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6686623A18565AD5001491B1 /* SignupViewController.mm */; };
 		6686623F18565AD5001491B1 /* SwipeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6686623C18565AD5001491B1 /* SwipeViewController.mm */; };
-		66866262185B6A2E001491B1 /* MKAnnotationView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 66866246185B6A2E001491B1 /* MKAnnotationView+WebCache.m */; };
 		66866263185B6A2E001491B1 /* NSData+GIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 66866248185B6A2E001491B1 /* NSData+GIF.m */; };
 		66866264185B6A2E001491B1 /* SDImageCache.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6686624A185B6A2E001491B1 /* SDImageCache.mm */; };
 		66866265185B6A2E001491B1 /* SDWebImageCompat.m in Sources */ = {isa = PBXBuildFile; fileRef = 6686624C185B6A2E001491B1 /* SDWebImageCompat.m */; };
@@ -65,7 +64,6 @@
 		6686626E185B6A2E001491B1 /* UIImage+WebP.m in Sources */ = {isa = PBXBuildFile; fileRef = 6686625F185B6A2E001491B1 /* UIImage+WebP.m */; };
 		6686626F185B6A2E001491B1 /* MessageView+WebImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 66866261185B6A2E001491B1 /* MessageView+WebImageCache.m */; };
 		66866271185B86FD001491B1 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66866270185B86FD001491B1 /* ImageIO.framework */; };
-		66866273185B87F2001491B1 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66866272185B87F2001491B1 /* MapKit.framework */; };
 		66A2D919183A7A7F00785270 /* SurespotConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D918183A7A7F00785270 /* SurespotConstants.m */; };
 		66A2D940183C25E800785270 /* UIScrollView+SVInfiniteScrolling.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D932183C25E800785270 /* UIScrollView+SVInfiniteScrolling.m */; };
 		66A2D941183C25E800785270 /* UIScrollView+SVPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D934183C25E800785270 /* UIScrollView+SVPullToRefresh.m */; };
@@ -281,8 +279,6 @@
 		6686623A18565AD5001491B1 /* SignupViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SignupViewController.mm; sourceTree = "<group>"; };
 		6686623B18565AD5001491B1 /* SwipeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeViewController.h; sourceTree = "<group>"; };
 		6686623C18565AD5001491B1 /* SwipeViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SwipeViewController.mm; sourceTree = "<group>"; };
-		66866245185B6A2E001491B1 /* MKAnnotationView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKAnnotationView+WebCache.h"; sourceTree = "<group>"; };
-		66866246185B6A2E001491B1 /* MKAnnotationView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKAnnotationView+WebCache.m"; sourceTree = "<group>"; };
 		66866247185B6A2E001491B1 /* NSData+GIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+GIF.h"; sourceTree = "<group>"; };
 		66866248185B6A2E001491B1 /* NSData+GIF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+GIF.m"; sourceTree = "<group>"; };
 		66866249185B6A2E001491B1 /* SDImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDImageCache.h; sourceTree = "<group>"; };
@@ -309,7 +305,6 @@
 		66866260185B6A2E001491B1 /* MessageView+WebImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MessageView+WebImageCache.h"; sourceTree = "<group>"; };
 		66866261185B6A2E001491B1 /* MessageView+WebImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MessageView+WebImageCache.m"; sourceTree = "<group>"; };
 		66866270185B86FD001491B1 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
-		66866272185B87F2001491B1 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		66A2D917183A7A7F00785270 /* SurespotConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SurespotConstants.h; sourceTree = "<group>"; };
 		66A2D918183A7A7F00785270 /* SurespotConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SurespotConstants.m; sourceTree = "<group>"; };
 		66A2D930183C25E800785270 /* SVPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVPullToRefresh.h; sourceTree = "<group>"; };
@@ -637,7 +632,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6614EEBF185F5BBF00A65CDE /* AssetsLibrary.framework in Frameworks */,
-				66866273185B87F2001491B1 /* MapKit.framework in Frameworks */,
 				66866271185B86FD001491B1 /* ImageIO.framework in Frameworks */,
 				66755100184C55E900C55AAC /* MobileCoreServices.framework in Frameworks */,
 				66E70AB91847FBE000433D6F /* libGTLTouchStaticLib.a in Frameworks */,
@@ -694,7 +688,6 @@
 			isa = PBXGroup;
 			children = (
 				6614EEBE185F5BBF00A65CDE /* AssetsLibrary.framework */,
-				66866272185B87F2001491B1 /* MapKit.framework */,
 				66866270185B86FD001491B1 /* ImageIO.framework */,
 				66E70AB21847F8E100433D6F /* MobileCoreServices.framework */,
 				66E21DFA1847D8A10005D91E /* MessageUI.framework */,
@@ -726,7 +719,6 @@
 				66EBDF381855C96F00F2452D /* images */,
 				6604A2D617626B9E0072216A /* MainStoryboard.storyboard */,
 				66EBDF3D1855C96F00F2452D /* network */,
-				6604A2C517626B9E0072216A /* Supporting Files */,
 				66EBE0941855C97100F2452D /* surespot.xcassets */,
 				6604A2CD17626B9E0072216A /* SurespotAppDelegate.h */,
 				6604A2CE17626B9E0072216A /* SurespotAppDelegate.mm */,
@@ -736,6 +728,7 @@
 				66EBE0951855C97100F2452D /* utils */,
 				66EBDF211855C96F00F2452D /* viewcontrollers */,
 				66D3B04E182EAB4200B37A6C /* surespot.xcassets */,
+				6604A2C517626B9E0072216A /* Supporting Files */,
 				66E4F517176298CB00596E6B /* libs */,
 			);
 			path = surespot;
@@ -889,8 +882,6 @@
 		66866244185B6A2E001491B1 /* SDWebImage */ = {
 			isa = PBXGroup;
 			children = (
-				66866245185B6A2E001491B1 /* MKAnnotationView+WebCache.h */,
-				66866246185B6A2E001491B1 /* MKAnnotationView+WebCache.m */,
 				66866247185B6A2E001491B1 /* NSData+GIF.h */,
 				66866248185B6A2E001491B1 /* NSData+GIF.m */,
 				66866249185B6A2E001491B1 /* SDImageCache.h */,
@@ -1514,6 +1505,15 @@
 				CLASSPREFIX = Surespot;
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = 2fours;
+				TargetAttributes = {
+					6604A2BA17626B9E0072216A = {
+						SystemCapabilities = {
+							com.apple.iOS = {
+								enabled = 0;
+							};
+						};
+					};
+				};
 			};
 			buildConfigurationList = 6604A2B617626B9E0072216A /* Build configuration list for PBXProject "surespot" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1738,7 +1738,6 @@
 				6686626F185B6A2E001491B1 /* MessageView+WebImageCache.m in Sources */,
 				66EBE0BD1855C97100F2452D /* ChatUtils.mm in Sources */,
 				6686626B185B6A2E001491B1 /* UIButton+WebCache.m in Sources */,
-				66866262185B6A2E001491B1 /* MKAnnotationView+WebCache.m in Sources */,
 				66EBE0D41855C97100F2452D /* UIImage+Scale.m in Sources */,
 				665F4DF91831923C0083BCE7 /* REMenuItemView.m in Sources */,
 				66EBE0C61855C97100F2452D /* SurespotMessage.m in Sources */,

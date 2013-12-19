@@ -82,6 +82,8 @@ static const int MAX_CONNECTION_RETRIES = 16;
         
         Reachability * reach = [Reachability reachabilityForInternetConnection];
         [reach startNotifier];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAutoinvitesNotification:) name:@"autoinvides" object:nil];
     }
     
     return self;
@@ -141,6 +143,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
 
 
 
+
 - (void) socketIODidConnect:(SocketIO *)socket {
     DDLogVerbose(@"didConnect()");
     // [[NSNotificationCenter defaultCenter] postNotificationName:@"socketConnected" object:nil ];
@@ -152,7 +155,6 @@ static const int MAX_CONNECTION_RETRIES = 16;
     //send unsent messages
     [self resendMessages];
     [self getData];
-    
 }
 
 - (void) socketIO:(SocketIO *)socket onError:(NSError *)error {
@@ -292,8 +294,8 @@ static const int MAX_CONNECTION_RETRIES = 16;
                     [self getLatestData];
                 }
                 else {
+                    [self handleAutoinvites];
                     [self stopProgress];
-                    
                 }
             }
             else {
@@ -398,6 +400,10 @@ static const int MAX_CONNECTION_RETRIES = 16;
                 [self handleMessages: messages forUsername:friendname];
             }
         }
+        
+        //handle autoinvites
+        [self handleAutoinvites];
+        
         [self stopProgress];
         [_homeDataSource postRefresh];
     } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
@@ -1112,9 +1118,35 @@ static const int MAX_CONNECTION_RETRIES = 16;
                                                           }
                                                           
                                                           [self stopProgress];
-
+                                                          
                                                       }];
         }
+    }
+}
+
+-(void) handleAutoinvitesNotification: (NSNotification *) notification {
+    [self handleAutoinvites];
+}
+
+-(void) handleAutoinvites {
+    
+    NSMutableArray * autoinvites  = [NSMutableArray arrayWithArray: [[NSUserDefaults standardUserDefaults] stringArrayForKey: @"autoinvites"]];
+    if ([autoinvites count] > 0) {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey: @"autoinvites"];
+        NSMutableString * exists = [NSMutableString new];
+        for (NSString * username in autoinvites) {
+            if (![_homeDataSource getFriendByName:username]) {
+                [self inviteUser:username];
+            }
+            else {
+                [exists appendString: [username stringByAppendingString:@" "]];
+            }
+        }
+        
+        if ([exists length] > 0) {
+            [UIUtils showToastKey:[NSString stringWithFormat: NSLocalizedString(@"autoinvite_user_exists", nil), exists] duration:2];
+        }
+        
     }
 }
 
