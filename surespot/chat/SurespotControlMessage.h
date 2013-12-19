@@ -14,8 +14,7 @@
 @property (nonatomic, strong) NSString * type;
 @property (nonatomic, strong) NSString * action;
 @property (nonatomic, strong) NSString * data;
-@property (nonatomic, strong) NSString * moreData;
+@property (nonatomic, strong) id moreData;
 @property (nonatomic, assign) NSInteger controlId;
-@property (nonatomic, strong) NSString * localId;
 @property (nonatomic, strong) NSString * from;
 @end

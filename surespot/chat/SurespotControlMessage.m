@@ -41,7 +41,6 @@
     _action = [dictionary objectForKey:@"action"];
     _data = [dictionary objectForKey:@"data"];
     _moreData = [dictionary objectForKey:@"moredata"];
-    _localId = [dictionary objectForKey:@"localid"];
 }
 
 //-(BOOL) isEqual:(id)other {

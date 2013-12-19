@@ -265,7 +265,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                   }
                                                                                                   else {
                                                                                                       DDLogInfo(@"uploading friend image to server succeeded but there is no response object, wtf?");
-                                                                                                      
+                                                                                                      [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_friend_image", nil) duration:2];
+                                                                                                  }
+                                                                                                  
+                                                                                                  if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+                                                                                                      [_popover dismissPopoverAnimated:YES];
                                                                                                   }
                                                                                                   
                                                                                                   
@@ -273,10 +277,18 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                   DDLogInfo(@"uploading friend image %@ to server failed, statuscode: %d", key, operation.response.statusCode);
                                                                                                   [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_friend_image", nil) duration:2];
                                                                                                   
+                                                                                                  if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+                                                                                                      [_popover dismissPopoverAnimated:YES];
+                                                                                                  }
+
                                                                                               }];
                                               }
                                               else {
                                                   [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_friend_image", nil) duration:2];
+                                                  if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+                                                      [_popover dismissPopoverAnimated:YES];
+                                                  }
+
                                               }
                                           }];
         
@@ -363,7 +375,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     // Hides the controls for moving & scaling pictures, or for
     // trimming movies. To instead show the controls, use YES.
-    cameraUI.allowsEditing = NO;
+    cameraUI.allowsEditing = YES;
     cameraUI.delegate = delegate;
     delegate.controller = controller;
     delegate.friendImage = YES;

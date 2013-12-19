@@ -761,6 +761,13 @@ static const int MAX_CONNECTION_RETRIES = 16;
                             [self friendDelete: message ];
                             
                         }
+                        else {
+                            if ([message.action isEqualToString:@"friendImage"]) {
+                                [self handleFriendImage: message ];
+                                
+                            }
+                        }
+                        
                     }
                 }
             }
@@ -949,6 +956,14 @@ static const int MAX_CONNECTION_RETRIES = 16;
             [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteFriend" object: data];
         }
         
+    }
+}
+
+- (void)handleFriendImage: (SurespotControlMessage *) message  {
+    Friend * theFriend = [_homeDataSource getFriendByName:message.data];
+    
+    if (theFriend) {
+        [self setFriendImageUrl:[message.moreData objectForKey:@"url"] forFriendname: message.data version:[message.moreData objectForKey:@"version"] iv:[message.moreData objectForKey:@"iv"]];
     }
 }
 
