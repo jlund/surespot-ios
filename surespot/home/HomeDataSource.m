@@ -10,6 +10,7 @@
 #import "NetworkController.h"
 #import "FileController.h"
 #import "DDLog.h"
+#import "SDWebImageManager.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -232,5 +233,22 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
   
   
 }
+
+-(void) setFriendImageUrl: (NSString *) url forFriendname: (NSString *) name version: version iv: iv {
+    Friend * afriend = [self getFriendByName:name];
+    if (afriend) {
+        NSString * oldUrl = [afriend imageUrl];
+        if (oldUrl) {
+            [[[SDWebImageManager sharedManager] imageCache] removeImageForKey:oldUrl fromDisk:YES];
+        }
+        
+        [afriend setImageUrl:url];
+        [afriend setImageVersion:version];
+        [afriend setImageIv:iv];
+        
+        [self postRefresh];
+    }
+}
+
 
 @end

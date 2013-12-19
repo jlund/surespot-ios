@@ -52,9 +52,9 @@
         _availableMessageId = [coder decodeIntegerForKey:@"availableMessageId"];
         _availableMessageControlId =[coder decodeIntegerForKey:@"availableMessageControlId"];
         _lastReceivedMessageId = [coder decodeIntegerForKey:@"lastReceivedMessageId"];
-        //_imageUrl = [coder decodeObjectForKey:@"imageUrl"];
-        //    _imageIv = [coder decodeObjectForKey:@"imageIv"];
-        //   _imageVersion = [coder decodeObjectForKey:@"imageVersion"];
+        _imageUrl = [coder decodeObjectForKey:@"imageUrl"];
+        _imageIv = [coder decodeObjectForKey:@"imageIv"];
+        _imageVersion = [coder decodeObjectForKey:@"imageVersion"];
     }
     return self;
 }
@@ -75,9 +75,9 @@
     [encoder encodeInteger:_availableMessageId forKey:@"availableMessageId"];
     [encoder encodeInteger:_availableMessageControlId forKey:@"availableMessageControlId"];
     [encoder encodeInteger:_lastReceivedMessageId  forKey:@"lastReceivedMessageId"];
-    //  [encoder encodeObject:_imageVersion forKey:@"imageVersion"];
-    //  [encoder encodeObject:_imageUrl forKey:@"imageUrl"];
-    //  [encoder encodeObject:_imageIv forKey:@"imageIv"];
+    [encoder encodeObject:_imageVersion forKey:@"imageVersion"];
+    [encoder encodeObject:_imageUrl forKey:@"imageUrl"];
+    [encoder encodeObject:_imageIv forKey:@"imageIv"];
 }
 
 -(void) setFriend {

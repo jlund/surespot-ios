@@ -29,6 +29,7 @@
 #import "ImageDelegate.h"
 #import "MessageView+WebImageCache.h"
 #import "SurespotPhoto.h"
+#import "HomeCell+WebImageCache.h"
 
 
 #ifdef DEBUG
@@ -818,6 +819,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         bgColorView.layer.masksToBounds = YES;
         cell.selectedBackgroundView = bgColorView;
         
+        if (afriend.imageUrl) {
+            EncryptionParams * ep = [[EncryptionParams alloc] initWithOurUsername:[[IdentityController sharedInstance] getLoggedInUser]
+                                                                       ourVersion:afriend.imageVersion
+                                                                    theirUsername:afriend.name
+                                                                     theirVersion:afriend.imageVersion
+                                                                               iv:afriend.imageIv];
+            [cell setImageUrl:afriend.imageUrl withEncryptionParams: ep placeholderImage: nil progress:^(NSUInteger receivedSize, long long expectedSize) {
+                
+            } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+                
+            }];
+        }
+        
         return cell;
     }
     else {
@@ -1473,6 +1487,26 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }];
     [menuItems addObject:deleteAllHomeItem];
     
+    REMenuItem * selectImageItem = [[REMenuItem alloc]
+                                    initWithTitle:NSLocalizedString(@"menu_assign_image", nil)
+                                    image:[UIImage imageNamed:@"ic_menu_gallery"]
+                                    highlightedImage:nil
+                                    action:^(REMenuItem * item){
+                                        
+                                        _imageDelegate = [[ImageDelegate alloc]
+                                                          initWithUsername:[[IdentityController sharedInstance] getLoggedInUser]
+                                                          ourVersion:[[IdentityController sharedInstance] getOurLatestVersion]
+                                                          theirUsername:thefriend.name
+                                                          assetLibrary:nil sourceIsCamera:NO];
+                                        
+                                        [ImageDelegate startFriendImageSelectControllerFromViewController:self usingDelegate:_imageDelegate];
+                                        
+                                        
+                                    }];
+    [menuItems addObject:selectImageItem];
+    
+    
+    
     REMenuItem * deleteFriendItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_delete_friend", nil) image:[UIImage imageNamed:@"ic_menu_delete"] highlightedImage:nil action:^(REMenuItem * item){
         [[ChatController sharedInstance] deleteFriend: thefriend];
     }];
@@ -1627,7 +1661,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     else {
         [_menu close];
-       
+        
     }
     
 }

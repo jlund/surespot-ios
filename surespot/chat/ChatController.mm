@@ -1150,4 +1150,8 @@ static const int MAX_CONNECTION_RETRIES = 16;
     }
 }
 
+-(void) setFriendImageUrl: (NSString *) url forFriendname: (NSString *) name version: version iv: iv {
+    [_homeDataSource setFriendImageUrl:url forFriendname:name version:version iv:iv];
+}
+
 @end

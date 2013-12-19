@@ -397,6 +397,41 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [operation start];
 }
 
+-(void) postFriendStreamData: (NSData *) data
+                  ourVersion: (NSString *) ourVersion
+               theirUsername: (NSString *) theirUsername
+                          iv: (NSString *) iv
+                successBlock:(HTTPSuccessBlock) successBlock
+                failureBlock: (HTTPFailureBlock) failureBlock
+{
+    DDLogInfo(@"postFriendFileStream, iv: %@", iv);
+    NSString * path = [[NSString stringWithFormat:@"images/%@/%@", theirUsername, ourVersion] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSMutableURLRequest *request
+    = [self multipartFormRequestWithMethod:@"POST"
+                                      path: path
+                                parameters:nil
+                 constructingBodyWithBlock: ^(id <AFMultipartFormData>formData) {
+                     
+                     [formData appendPartWithFileData:data
+                                                 name:@"image"
+                                             fileName:iv mimeType:MIME_TYPE_IMAGE];
+                     
+                 }];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    // if you want progress updates as it's uploading, uncomment the following:
+    //
+    // [operation setUploadProgressBlock:^(NSUInteger bytesWritten,
+    // long long totalBytesWritten,
+    // long long totalBytesExpectedToWrite) {
+    //     NSLog(@"Sent %lld of %lld bytes", totalBytesWritten, totalBytesExpectedToWrite);
+    // }];
+    
+    [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
+    [operation start];
+}
+
 -(void) setMessageShareable:(NSString *) name
                    serverId: (NSInteger) serverid
                   shareable: (BOOL) shareable

@@ -72,6 +72,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     _latestVersionsDict = [NSMutableDictionary dictionaryWithDictionary:[FileController loadLatestVersionsForUsername:identity.username]];
     DDLogInfo(@"loaded %d latest versions from disk", [_latestVersionsDict count]);
+    
+    //add all the public keys for this identity to the cache    
+    for (IdentityKeys * keys in [identity.keyPairs allValues]) {
+        NSString * publicKeysKey = [NSString stringWithFormat:@"%@:%@", identity.username,  keys.version];
+        PublicKeys * publicKeys = [[PublicKeys alloc] init];
+        publicKeys.dhPubKey = keys.dhPubKey;
+        publicKeys.dsaPubKey = keys.dsaPubKey;
+        [_publicKeysDict setObject:publicKeys forKey:publicKeysKey];
+    }
 }
 
 -(void) logout {

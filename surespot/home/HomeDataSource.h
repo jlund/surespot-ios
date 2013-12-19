@@ -26,4 +26,5 @@
 -(void) writeToDisk ;
 -(void) loadFriendsCallback: (void(^)(BOOL success)) callback;
 -(BOOL) hasAnyNewMessages;
+-(void) setFriendImageUrl: (NSString *) url forFriendname: (NSString *) name version: version iv: iv;
 @end

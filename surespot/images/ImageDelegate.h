@@ -22,5 +22,9 @@
                                   usingDelegate: (ImageDelegate *) delegate;
 +(BOOL) startImageSelectControllerFromViewController: (UIViewController*) controller
                                        usingDelegate: (ImageDelegate *) delegate;
++(BOOL) startFriendImageSelectControllerFromViewController: (UIViewController*) controller
+                                             usingDelegate: (ImageDelegate *) delegate;
 - (void)orientationChanged;
+@property (nonatomic, assign) BOOL friendImage;
+
 @end

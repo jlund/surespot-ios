@@ -218,13 +218,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                         UIImage * image = [[[SDWebImageManager sharedManager] imageCache] imageFromMemoryCacheForKey:existingMessage.data];
                         NSData * encryptedImageData = [[[SDWebImageManager sharedManager] imageCache] diskImageDataBySearchingAllPathsForKey:existingMessage.data];
                         
-                        //save data for new remote key
-                        [[[SDWebImageManager sharedManager] imageCache] storeImage:image imageData:encryptedImageData forKey:message.data toDisk:YES];
-                        
-                        //remove now defunct cached local data
-                        [[[SDWebImageManager sharedManager] imageCache] removeImageForKey:existingMessage.data fromDisk:YES];
-                        
-                        DDLogInfo(@"key exists for %@: %@", existingMessage.data, [[[SDWebImageManager sharedManager] imageCache] diskImageExistsWithKey:existingMessage.data] ? @"YES" : @"NO" );
+                        if (image && encryptedImageData) {
+                            //save data for new remote key
+                            [[[SDWebImageManager sharedManager] imageCache] storeImage:image imageData:encryptedImageData forKey:message.data toDisk:YES];
+                            
+                            //remove now defunct cached local data
+                            [[[SDWebImageManager sharedManager] imageCache] removeImageForKey:existingMessage.data fromDisk:YES];
+                            
+                            DDLogInfo(@"key exists for %@: %@", existingMessage.data, [[[SDWebImageManager sharedManager] imageCache] diskImageExistsWithKey:existingMessage.data] ? @"YES" : @"NO" );
+                        }
                     }
                     
                     existingMessage.data = message.data;

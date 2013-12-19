@@ -52,4 +52,11 @@ typedef void (^HTTPFailureBlock) (AFHTTPRequestOperation *operation , NSError *e
                successBlock:(HTTPSuccessBlock)successBlock
                failureBlock: (HTTPFailureBlock) failureBlock;
 
+-(void) postFriendStreamData: (NSData *) data
+                  ourVersion: (NSString *) ourVersion
+               theirUsername: (NSString *) theirUsername
+                          iv: (NSString *) iv
+                successBlock:(HTTPSuccessBlock) successBlock
+                failureBlock: (HTTPFailureBlock) failureBlock;
+
 @end
