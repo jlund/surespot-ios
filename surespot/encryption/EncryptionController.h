@@ -115,4 +115,7 @@ extern int const PBKDF_ROUNDS;
 +(BOOL) verifyPublicKeySignature: (NSData *) signature data: (NSData *) data;
 +(void) symmetricEncryptData: (NSData *) data ourVersion: (NSString *) ourVersion theirUsername: (NSString *) theirUsername theirVersion: (NSString *) theirVersion iv: (NSData *) iv callback: (CallbackBlock) callback;
 +(NSData *) symmetricDecryptData: (NSData *) cipherData key: (NSData *) key iv: (NSString *) iv;
++(ECDHPublicKey *) createPublicDHFromPrivKey: (ECDHPrivateKey *) privateKey;
++(ECDSAPublicKey *) createPublicDSAFromPrivKey: (ECDSAPrivateKey *) privateKey;
+
 @end

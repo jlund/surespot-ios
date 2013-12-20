@@ -556,6 +556,17 @@ int const PBKDF_ROUNDS = 20000;
 }
 
 
++(ECDHPublicKey *) createPublicDHFromPrivKey: (ECDHPrivateKey *) privateKey {
+    ECDHPublicKey * dhPubKey = new ECDHPublicKey();
+    privateKey->MakePublicKey(*dhPubKey);
+    return dhPubKey;
+}
+
++(ECDSAPublicKey *) createPublicDSAFromPrivKey: (ECDSAPrivateKey *) privateKey {
+    CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey * dsaPubKey = new ECDSAPublicKey();
+    privateKey->MakePublicKey(*dsaPubKey);
+    return dsaPubKey;
+}
 
 
 

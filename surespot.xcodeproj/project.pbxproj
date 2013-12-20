@@ -574,8 +574,8 @@
 		66EBDF471855C96F00F2452D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
 		66EBDF491855C96F00F2452D /* EncryptionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncryptionController.h; sourceTree = "<group>"; };
 		66EBDF4A1855C96F00F2452D /* EncryptionController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EncryptionController.mm; sourceTree = "<group>"; };
-		66EBDF4B1855C96F00F2452D /* IdentityKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdentityKeys.h; sourceTree = "<group>"; };
-		66EBDF4C1855C96F00F2452D /* IdentityKeys.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IdentityKeys.mm; sourceTree = "<group>"; };
+		66EBDF4B1855C96F00F2452D /* IdentityKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IdentityKeys.h; path = ../encryption/IdentityKeys.h; sourceTree = "<group>"; };
+		66EBDF4C1855C96F00F2452D /* IdentityKeys.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = IdentityKeys.mm; path = ../encryption/IdentityKeys.mm; sourceTree = "<group>"; };
 		66EBE0941855C97100F2452D /* surespot.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = surespot.xcassets; sourceTree = "<group>"; };
 		66EBE0961855C97100F2452D /* FileController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileController.h; sourceTree = "<group>"; };
 		66EBE0971855C97100F2452D /* FileController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FileController.mm; sourceTree = "<group>"; };
@@ -1220,6 +1220,8 @@
 		66EBDEF31855C96F00F2452D /* identity */ = {
 			isa = PBXGroup;
 			children = (
+				66EBDF4B1855C96F00F2452D /* IdentityKeys.h */,
+				66EBDF4C1855C96F00F2452D /* IdentityKeys.mm */,
 				66EBDEF51855C96F00F2452D /* CredentialCachingController.h */,
 				66EBDEF61855C96F00F2452D /* CredentialCachingController.mm */,
 				66EBDEF71855C96F00F2452D /* GenerateSharedSecretOperation.h */,
@@ -1362,8 +1364,6 @@
 			children = (
 				66EBDF491855C96F00F2452D /* EncryptionController.h */,
 				66EBDF4A1855C96F00F2452D /* EncryptionController.mm */,
-				66EBDF4B1855C96F00F2452D /* IdentityKeys.h */,
-				66EBDF4C1855C96F00F2452D /* IdentityKeys.mm */,
 				6646AE2D185CB2EF00CBACDE /* EncryptionParams.h */,
 				6646AE2E185CB2EF00CBACDE /* EncryptionParams.m */,
 			);

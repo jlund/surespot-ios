@@ -73,13 +73,24 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _latestVersionsDict = [NSMutableDictionary dictionaryWithDictionary:[FileController loadLatestVersionsForUsername:identity.username]];
     DDLogInfo(@"loaded %d latest versions from disk", [_latestVersionsDict count]);
     
-    //add all the public keys for this identity to the cache    
+    //add all the public keys for this identity to the cache
     for (IdentityKeys * keys in [identity.keyPairs allValues]) {
         NSString * publicKeysKey = [NSString stringWithFormat:@"%@:%@", identity.username,  keys.version];
         PublicKeys * publicKeys = [[PublicKeys alloc] init];
-        publicKeys.dhPubKey = keys.dhPubKey;
-        publicKeys.dsaPubKey = keys.dsaPubKey;
+        
+        //make copy of public keys
+        // ECDHPublicKey * dhPub = new ECDHPublicKey();
+        //  ECDSAPublicKey * dsaPub = new ECDSAPublicKey();
+        //  BOOL gotDHCopy = keys.dhPubKey->GetThisObject(dhPub);
+        //  BOOL gotDSACopy = keys.dsaPubKey->GetThisObject(dsaPub);
+        //  if (gotDHCopy && gotDSACopy) {
+  //      publicKeys.dhPubKey =  dhPub;
+//        publicKeys.dsaPubKey = dsaPub;
+        
+        publicKeys.dhPubKey = [EncryptionController createPublicDHFromPrivKey:keys.dhPrivKey];
+        publicKeys.dsaPubKey = [EncryptionController createPublicDSAFromPrivKey:keys.dsaPrivKey];
         [_publicKeysDict setObject:publicKeys forKey:publicKeysKey];
+        // }
     }
 }
 

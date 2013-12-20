@@ -133,10 +133,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (!privateKey) {
         return NO;
     }
-    ECDHPublicKey * dhPubKey = new ECDHPublicKey();
-    privateKey->MakePublicKey(*dhPubKey);
+   
     keys.dhPrivKey = privateKey;
-    keys.dhPubKey = dhPubKey;
+    keys.dhPubKey = [EncryptionController createPublicDHFromPrivKey:privateKey];
 
     return YES;
 }
@@ -171,15 +170,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         return NO;
     }
     
-    CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey * dsaPubKey = new ECDSAPublicKey();
-    dsaPrivKey->MakePublicKey(*dsaPubKey);
     keys.dsaPrivKey = dsaPrivKey;
-    keys.dsaPubKey = dsaPubKey;
+    keys.dsaPubKey = [EncryptionController createPublicDSAFromPrivKey:dsaPrivKey];
     
     return YES;
 }
-
-
 
 
 
