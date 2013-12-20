@@ -446,4 +446,68 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [operation start];
     
 }
+
+-(void) getKeyTokenForUsername:(NSString*) username andPassword:(NSString *)password andSignature: (NSString *) signature
+                  successBlock:(JSONSuccessBlock)successBlock failureBlock: (JSONFailureBlock) failureBlock
+{
+    
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                   username,@"username",
+                                   password,@"password",
+                                   signature, @"authSig",
+                                   nil];
+    
+    
+    NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"keytoken" parameters: params];
+    
+    
+    AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:successBlock failure:failureBlock];
+    [operation setSuccessCallbackQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+    [operation start];
+    
+}
+
+
+-(void) updateKeysForUsername:(NSString *) username
+                     password:(NSString *) password
+                  publicKeyDH:(NSString *) pkDH
+                 publicKeyDSA:(NSString *) pkDSA
+                      authSig:(NSString *) authSig
+                     tokenSig:(NSString *) tokenSig
+                   keyVersion:(NSString *) keyversion
+                 successBlock:(HTTPSuccessBlock) successBlock
+                 failureBlock:(HTTPFailureBlock) failureBlock
+{
+    
+    NSString *appVersionString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    NSString *appBuildString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+    NSString *versionString = [NSString stringWithFormat:@"%@:%@", appVersionString, appBuildString];
+    
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                   username,@"username",
+                                   password,@"password",
+                                   pkDH, @"dhPub",
+                                   pkDSA, @"dsaPub",
+                                   authSig, @"authSig",
+                                   tokenSig, @"tokenSig",
+                                   keyversion, @"keyVersion",
+                                   versionString, @"version",
+                                   @"ios", @"platform", nil];
+    
+    //add apnToken if we have one
+    NSData *  apnToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"apnToken"];
+    if (apnToken) {
+        [params setObject:[ChatUtils hexFromData:apnToken] forKey:@"apnToken"];
+    }
+
+    NSURLRequest *request = [self requestWithMethod:@"POST" path:@"keys"  parameters:params];
+    AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
+    [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
+    [operation setSuccessCallbackQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+    [operation start];
+
+    
+}
 @end

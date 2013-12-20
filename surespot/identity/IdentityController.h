@@ -38,4 +38,10 @@
 - (NSString * ) identityNameFromFile: (NSString *) file;
 -(void) importIdentityData: (NSData *) identityData username: (NSString *) username password: (NSString *) password callback: (CallbackBlock) callback;
 -(void) exportIdentityDataForUsername: (NSString *) username password: (NSString *) password callback: (CallbackErrorBlock) callback;
+-(void) rollKeysForUsername: (NSString *) username
+                   password: (NSString *) password
+                 keyVersion: (NSString *)  keyVersion
+                       keys: (IdentityKeys *) keys;
+-(void) setExpectedKeyVersionForUsername: (NSString *) username version: (NSString *) version;
+-(void) removeExpectedKeyVersionForUsername: (NSString *) username;
 @end

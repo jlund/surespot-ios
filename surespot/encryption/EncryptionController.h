@@ -99,6 +99,7 @@ extern int const PBKDF_ROUNDS;
 + (NSData *) deriveKeyUsingPassword: (NSString *) password andSalt: (NSData *) salt;
 + (NSDictionary *) deriveKeyFromPassword: (NSString *) password;
 + (NSData *) signUsername: (NSString *) username andPassword: (NSData *) password withPrivateKey: (ECDSAPrivateKey *) privateKey;
++ (NSData *) signData1: (NSData *) data1 data2: (NSData *) data2 withPrivateKey: (ECDSAPrivateKey *) privateKey;
 + (NSData *) getIv;
 + (NSData *) encryptPlain: (NSString *) plain usingKey: (NSData *) key usingIv: (NSData *) iv;
 + (NSData *) generateSharedSecret: (ECDHPrivateKey *) privateKey publicKey:(ECDHPublicKey *) publicKey;

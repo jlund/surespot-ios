@@ -35,6 +35,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) SurespotIdentity * loggedInIdentity;
 @property (nonatomic, strong) NSMutableDictionary * keychainWrappers;
 @property (nonatomic, strong) NSMutableDictionary * identities;
+@property (nonatomic, strong) NSMutableDictionary * expectedVersions;
 @end
 
 @implementation IdentityController
@@ -46,6 +47,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         sharedInstance = [[self alloc] init];
         sharedInstance.keychainWrappers = [NSMutableDictionary new];
         sharedInstance.identities = [NSMutableDictionary new];
+        sharedInstance.expectedVersions = [NSMutableDictionary new];
     });
     
     return sharedInstance;
@@ -129,7 +131,7 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     
     NSError* error;
     
-    NSDictionary* dic = [NSJSONSerialization JSONObjectWithData:identityData options:kNilOptions error:&error];
+    NSDictionary* dic = [NSJSONSerialization JSONObjectWithData:identityData options:NSJSONReadingMutableContainers error:&error];
     return [[SurespotIdentity alloc] initWithDictionary: dic validate: validate];
 }
 
@@ -258,16 +260,19 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     DDLogInfo(@"saved public keys for username: %@, version: %@ to filename: %@  with success: %@", username,version,filename, saved?@"YES":@"NO");
 }
 
+//we don't want to delete ourselves if we're in the process of generating new keys
+-(void) setExpectedKeyVersionForUsername: (NSString *) username version: (NSString *) version {
+    [_expectedVersions setObject:version forKey:username];
+}
+
 -(void) updateLatestVersionForUsername: (NSString *) username version: (NSString * ) version {
     // see if we are the user that's been revoked
     // if we have the latest version locally, if we don't then this user has
     // been revoked from a different device
     // and should not be used on this device anymore
-    if ([username isEqualToString:[self getLoggedInUser]] && [version integerValue] > [[self getOurLatestVersion] integerValue]) {
+    if ([username isEqualToString:[self getLoggedInUser]] && [version integerValue] > [[self getOurLatestVersion] integerValue] && ![[_expectedVersions objectForKey:username] isEqualToString:version]) {
         DDLogInfo(@"user key revoked, deleting data and logging out. username: %@", username);
         [self deleteIdentityUsername:username];
-        
-        
     }
     else {
         [[CredentialCachingController sharedInstance] updateLatestVersionForUsername: username version: version];
@@ -359,20 +364,20 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
                                                 SurespotIdentity * validatedIdentity = [self decodeIdentityData:decryptedIdentity withUsername:username andPassword:password validate:YES];
                                                 [self saveIdentity:validatedIdentity withPassword:[password stringByAppendingString:CACHE_IDENTITY_ID]];
                                                 callback(nil);
-        
-    } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
-        switch (operation.response.statusCode) {
-            case 403:
-                callback(NSLocalizedString(@"incorrect_password_or_key", nil));
-                break;
-            case 404:
-                callback(NSLocalizedString(@"no_such_user", nil));
-                break;
-            default:
-                callback([NSString stringWithFormat:NSLocalizedString(@"could_not_restore_identity_name", nil), username]);
-                break;
-        }
-    }];
+                                                
+                                            } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                switch (operation.response.statusCode) {
+                                                    case 403:
+                                                        callback(NSLocalizedString(@"incorrect_password_or_key", nil));
+                                                        break;
+                                                    case 404:
+                                                        callback(NSLocalizedString(@"no_such_user", nil));
+                                                        break;
+                                                    default:
+                                                        callback([NSString stringWithFormat:NSLocalizedString(@"could_not_restore_identity_name", nil), username]);
+                                                        break;
+                                                }
+                                            }];
 }
 
 -(void) exportIdentityDataForUsername: (NSString *) username password: (NSString *) password callback: (CallbackErrorBlock) callback {
@@ -381,7 +386,7 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
         callback(NSLocalizedString(@"could_not_backup_identity_to_google_drive", nil), nil);
         return;
     }
-
+    
     NSData * saltBytes = [NSData dataFromBase64String:identity.salt];
     NSData * derivedPassword = [EncryptionController deriveKeyUsingPassword:password andSalt:saltBytes];
     NSData * encodedPassword = [derivedPassword SR_dataByBase64Encoding];
@@ -392,7 +397,7 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     
     
     
-    [[NetworkController sharedInstance] validateUsername:username password:passwordString signature:signatureString successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {                
+    [[NetworkController sharedInstance] validateUsername:username password:passwordString signature:signatureString successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
         callback(nil, [self encryptIdentity:identity withPassword:[password stringByAppendingString:EXPORT_IDENTITY_ID]]);
         
     } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -408,6 +413,25 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     }];
 }
 
+-(void) removeExpectedKeyVersionForUsername: (NSString *) username {
+    [_expectedVersions removeObjectForKey:username];
+}
 
+-(void) rollKeysForUsername: (NSString *) username
+                   password: (NSString *) password
+                 keyVersion: (NSString *)  keyVersion
+                       keys: (IdentityKeys *) keys {
+    
+    SurespotIdentity * identity = [self getIdentityWithUsername:username andPassword:password];
+    [identity addKeysWithVersion:keyVersion keys:keys];
+    [self saveIdentity:identity withPassword:[password stringByAppendingString:CACHE_IDENTITY_ID]];
+    
+    if ([username isEqualToString:[self getLoggedInUser]]) {
+        _loggedInIdentity = identity;
+        [[CredentialCachingController sharedInstance] loginIdentity: identity];
+    }
+    
+    [self removeExpectedKeyVersionForUsername:username];
+}
 
 @end

@@ -344,12 +344,17 @@ int const PBKDF_ROUNDS = 20000;
 + (NSData *) signUsername: (NSString *) username andPassword: (NSData *) password withPrivateKey: (ECDSAPrivateKey *) privateKey {
     CryptoPP::ECDSA<ECP, SHA256>::Signer signer(*privateKey);
     NSData * usernameData =[username dataUsingEncoding:NSUTF8StringEncoding];
+    return [self signData1:usernameData data2:password withPrivateKey:privateKey];
+}
+
++ (NSData *) signData1: (NSData *) data1 data2: (NSData *) data2 withPrivateKey: (ECDSAPrivateKey *) privateKey {
+    CryptoPP::ECDSA<ECP, SHA256>::Signer signer(*privateKey);
     
     byte * random = new byte[16];
     randomRng.GenerateBlock(random,16);
     
-    NSMutableData *concatData = [NSMutableData dataWithData: usernameData];
-    [concatData appendData:password];
+    NSMutableData *concatData = [NSMutableData dataWithData: data1];
+    [concatData appendData:data2];
     [concatData appendBytes:random length:16];
     int sigLength = signer.MaxSignatureLength();
     

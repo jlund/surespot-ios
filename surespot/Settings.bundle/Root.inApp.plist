@@ -56,6 +56,17 @@
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
+        <dict>
+			<key>IASKViewControllerClass</key>
+			<string>GenerateKeysViewController</string>
+			<key>IASKViewControllerSelector</key>
+			<string>init</string>
+			<key>Title</key>
+			<string>key_management</string>
+			<key>Type</key>
+			<string>PSChildPaneSpecifier</string>
+		</dict>
+
 	</array>
 	<key>StringsTable</key>
 	<string>Root</string>

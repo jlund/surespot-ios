@@ -40,7 +40,7 @@ static char operationArrayKey;
                                                                                     progress:progressBlock completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished)
                                              {
                                                  if (!wself) return;
-                                                 dispatch_main_sync_safe(^
+                                                 dispatch_main_async_safe(^
                                                                          {
                                                                              if (!wself) return;
                                                                              if (image)

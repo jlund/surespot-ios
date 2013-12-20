@@ -135,7 +135,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         [[IdentityController sharedInstance] getTheirLatestVersionForUsername:_theirUsername callback:^(NSString *version) {
             if (version) {
@@ -219,7 +219,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         return;
     }
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         //compress encrypt and upload the image
         UIImage * scaledImage = [image imageScaledToMaxWidth:100 maxHeight:100];
         NSData * imageData = UIImageJPEGRepresentation(scaledImage, 0.5);

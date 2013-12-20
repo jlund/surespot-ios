@@ -93,7 +93,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 
-- (void) addJSONKeysWithVersion:(NSString*)version jsonKeys: (NSDictionary *) jsonKeys {
+- (void) addJSONKeysWithVersion:(NSString*)version jsonKeys: (NSMutableDictionary *) jsonKeys {
     
     if (self.latestVersion == nil) {
         self.latestVersion = version;
@@ -104,7 +104,25 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
     }
     
+    //make sure version matches
+    [jsonKeys setObject:version forKey:@"version"];
     [self.jsonKeyPairs setObject:jsonKeys forKey: version];
+}
+
+- (void) addKeysWithVersion:(NSString*)version keys: (IdentityKeys *) keys {
+    
+    if (self.latestVersion == nil) {
+        self.latestVersion = version;
+    }
+    else {
+        if ([self.latestVersion integerValue] < [version integerValue]) {
+            self.latestVersion = version;
+        }
+    }
+    
+    //make sure version matches
+    keys.version = version;
+    [self.keyPairs setObject:keys forKey: version];
 }
 
 //- (ECDHPublicKey) getDhPublicKey {

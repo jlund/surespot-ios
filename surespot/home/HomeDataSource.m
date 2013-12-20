@@ -246,6 +246,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [afriend setImageVersion:version];
         [afriend setImageIv:iv];
         
+        [self writeToDisk];
+        
         [self postRefresh];
     }
 }

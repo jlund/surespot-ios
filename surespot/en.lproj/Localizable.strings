@@ -49,7 +49,6 @@
 "incorrect_password_or_key"="incorrect password or key";
 "no_such_user"="no such user";
 "roll_keys"="generate new key pairs";
-"key_management"="generate new key pairs...";
 "regenerate_keys"="generate new key pairs";
 "could_not_create_new_keys"="could not create new key pairs";
 "keys_created"="new keys successfully created, please backup the identity";

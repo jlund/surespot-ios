@@ -965,6 +965,8 @@ static const int MAX_CONNECTION_RETRIES = 16;
     if (theFriend) {
         [self setFriendImageUrl:[message.moreData objectForKey:@"url"] forFriendname: message.data version:[message.moreData objectForKey:@"version"] iv:[message.moreData objectForKey:@"iv"]];
     }
+    
+    
 }
 
 - (void) setCurrentChat: (NSString *) username {

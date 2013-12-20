@@ -59,4 +59,17 @@ typedef void (^HTTPFailureBlock) (AFHTTPRequestOperation *operation , NSError *e
                 successBlock:(HTTPSuccessBlock) successBlock
                 failureBlock: (HTTPFailureBlock) failureBlock;
 
+-(void) getKeyTokenForUsername:(NSString*) username andPassword:(NSString *)password andSignature: (NSString *) signature
+                  successBlock:(JSONSuccessBlock)successBlock failureBlock: (JSONFailureBlock) failureBlock;
+
+-(void) updateKeysForUsername:(NSString *) username
+                     password:(NSString *) password
+                  publicKeyDH:(NSString *) pkDH
+                 publicKeyDSA:(NSString *) pkDSA
+                      authSig:(NSString *) authSig
+                     tokenSig:(NSString *) tokenSig
+                   keyVersion:(NSString *) keyversion
+                 successBlock:(HTTPSuccessBlock) successBlock
+                 failureBlock:(HTTPFailureBlock) failureBlock;
+
 @end

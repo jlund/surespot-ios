@@ -27,4 +27,5 @@
 
 @property (atomic, strong) NSMutableDictionary* keyPairs;
 @property (atomic, strong) NSMutableDictionary* jsonKeyPairs;
+- (void) addKeysWithVersion:(NSString*)version keys: (IdentityKeys *) keys;
 @end
