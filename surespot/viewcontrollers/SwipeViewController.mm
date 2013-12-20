@@ -831,6 +831,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 
             }];
         }
+        else {
+            [cell setFriendImage:nil];
+        }
         
         return cell;
     }
