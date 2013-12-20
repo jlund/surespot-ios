@@ -29,7 +29,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 @interface GenerateKeysViewController ()
-@property (strong, nonatomic) IBOutlet UILabel *pickerLabel;
+@property (strong, nonatomic) IBOutlet UILabel *label1;
+@property (strong, nonatomic) IBOutlet UILabel *label2;
 @property (atomic, strong) NSArray * identityNames;
 @property (strong, nonatomic) IBOutlet UIPickerView *userPicker;
 @property (strong, nonatomic) IBOutlet UIButton *bExecute;
@@ -49,7 +50,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [_bExecute setTitle:NSLocalizedString(@"regenerate_keys", nil) forState:UIControlStateNormal];
     [self loadIdentityNames];
     self.navigationController.navigationBar.translucent = NO;
-    
+
+    _label1.text = NSLocalizedString(@"generate_new_keypairs", nil);
+    _label2.text = NSLocalizedString(@"backup_identities_again_keys", nil);
+    _label2.textColor = [UIColor redColor];
     
     
 }
