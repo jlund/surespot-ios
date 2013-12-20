@@ -58,7 +58,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _assetsLibrary = library;
     _sourceIsCamera = sourceIsCamera;
     
-    
     return self;
 }
 
@@ -66,7 +65,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 // For responding to the user tapping Cancel.
 - (void) imagePickerControllerDidCancel: (UIImagePickerController *) picker {
-    
     [_controller dismissViewControllerAnimated: YES completion:nil];
 }
 
@@ -95,6 +93,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             imageToSave = originalImage;
         }
         
+        [self startProgress];
         
         // Save the new image (original or edited) to the Camera Roll if we took it with the camera
         if (_sourceIsCamera) {
@@ -102,6 +101,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [_assetsLibrary saveImage:imageToSave toAlbum:@"surespot" withCompletionBlock:^(NSError *error, NSURL * url) {
                 _assetsLibrary = nil;
                 if (error) {
+                    [self stopProgress];
                     [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_image", nil) duration:2];
                     return;
                     
@@ -128,9 +128,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) uploadImage: (UIImage *) image {
     if (!image) {
+        [self stopProgress];
         [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_image", nil) duration:2];
         return;
     }
+    
+    
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         
@@ -179,12 +182,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                         mimeType:MIME_TYPE_IMAGE
                                                                                                     successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                                                                         DDLogInfo(@"uploaded image %@ to server successfully", key);
-                                                                                                        
-                                                                                                        
-                                                                                                        
+                                                                                                        [self stopProgress];
                                                                                                     } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
                                                                                                         DDLogInfo(@"uploaded image %@ to server failed, statuscode: %d", key, operation.response.statusCode);
-                                                                                                        
+                                                                                                        [self stopProgress];
                                                                                                         if (operation.response.statusCode == 402) {
                                                                                                             message.errorStatus = 402;
                                                                                                         }
@@ -196,7 +197,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                     }];
                                                       }
                                                       else {
+                                                          [self stopProgress];
                                                           [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_image", nil) duration:2];
+                                                          
                                                       }
                                                   }];
                 
@@ -211,6 +214,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) uploadFriendImage: (UIImage *) image {
     if (!image) {
+        [self stopProgress];
         [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_friend_image", nil) duration:2];
         return;
     }
@@ -243,6 +247,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                              theirUsername:_theirUsername
                                                                                                         iv:[iv SR_stringByBase64Encoding]
                                                                                               successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                                                                  [self stopProgress];
                                                                                                   if (responseObject) {
                                                                                                       NSString * url = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
                                                                                                       DDLogInfo(@"uploaded friend image %@ to server successfully", key);
@@ -274,26 +279,23 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                   
                                                                                                   
                                                                                               } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                                                                  [self stopProgress];
                                                                                                   DDLogInfo(@"uploading friend image %@ to server failed, statuscode: %d", key, operation.response.statusCode);
                                                                                                   [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_friend_image", nil) duration:2];
                                                                                                   
                                                                                                   if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
                                                                                                       [_popover dismissPopoverAnimated:YES];
-                                                                                                  }
-
+                                                                                                  }                                                                                                                                                                                                    
                                                                                               }];
                                               }
                                               else {
+                                                  [self stopProgress];
                                                   [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_friend_image", nil) duration:2];
                                                   if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
                                                       [_popover dismissPopoverAnimated:YES];
                                                   }
-
                                               }
                                           }];
-        
-        
-        
     });
 }
 
@@ -420,8 +422,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
     self.popover = nil;
-    // self.controller = nil;
-    //  self.assetsLibrary = nil;
+}
+
+-(void) startProgress {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"startProgress" object: nil];
+}
+
+-(void) stopProgress {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object: nil];
 }
 
 @end
