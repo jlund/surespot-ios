@@ -34,7 +34,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             //store the json keys
             NSArray * keys = [jsonIdentity objectForKey:@"keys"];
-            for (NSDictionary * key in keys) {
+            for (NSMutableDictionary * key in keys) {
                 
                 NSString * version = [key objectForKey:@"version"];
                 [self addJSONKeysWithVersion:version jsonKeys:key];

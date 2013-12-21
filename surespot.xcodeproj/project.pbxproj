@@ -30,6 +30,8 @@
 		661F469F1864C0BE004A71B0 /* BackupIdentityViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 661F469C1864C0BE004A71B0 /* BackupIdentityViewController.mm */; };
 		661F46A31865E063004A71B0 /* DeleteIdentityViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 661F46A01865E063004A71B0 /* DeleteIdentityViewController.mm */; };
 		661F46A41865E063004A71B0 /* DeleteIdentityView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 661F46A21865E063004A71B0 /* DeleteIdentityView.xib */; };
+		661F46A81865EDC3004A71B0 /* ChangePasswordView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 661F46A51865EDC3004A71B0 /* ChangePasswordView.xib */; };
+		661F46A91865EDC3004A71B0 /* ChangePasswordViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 661F46A71865EDC3004A71B0 /* ChangePasswordViewController.mm */; };
 		6621BB841762704D00BC2850 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6621BB861762704D00BC2850 /* Localizable.strings */; };
 		663710801813172F009D5195 /* EGOCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 6637107F1813172F009D5195 /* EGOCache.m */; };
 		6646AE0E185CADC700CBACDE /* MWCaptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6646ADD5185CADC700CBACDE /* MWCaptionView.m */; };
@@ -240,6 +242,9 @@
 		661F46A01865E063004A71B0 /* DeleteIdentityViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DeleteIdentityViewController.mm; sourceTree = "<group>"; };
 		661F46A11865E063004A71B0 /* DeleteIdentityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeleteIdentityViewController.h; sourceTree = "<group>"; };
 		661F46A21865E063004A71B0 /* DeleteIdentityView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DeleteIdentityView.xib; sourceTree = "<group>"; };
+		661F46A51865EDC3004A71B0 /* ChangePasswordView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChangePasswordView.xib; sourceTree = "<group>"; };
+		661F46A61865EDC3004A71B0 /* ChangePasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangePasswordViewController.h; sourceTree = "<group>"; };
+		661F46A71865EDC3004A71B0 /* ChangePasswordViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ChangePasswordViewController.mm; sourceTree = "<group>"; };
 		6621BB7D17626EE800BC2850 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		6621BB851762704D00BC2850 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6637107E1813172F009D5195 /* EGOCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOCache.h; sourceTree = "<group>"; };
@@ -583,7 +588,6 @@
 		66EBDF4A1855C96F00F2452D /* EncryptionController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EncryptionController.mm; sourceTree = "<group>"; };
 		66EBDF4B1855C96F00F2452D /* IdentityKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IdentityKeys.h; path = ../encryption/IdentityKeys.h; sourceTree = "<group>"; };
 		66EBDF4C1855C96F00F2452D /* IdentityKeys.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = IdentityKeys.mm; path = ../encryption/IdentityKeys.mm; sourceTree = "<group>"; };
-		66EBE0941855C97100F2452D /* surespot.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = surespot.xcassets; sourceTree = "<group>"; };
 		66EBE0961855C97100F2452D /* FileController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileController.h; sourceTree = "<group>"; };
 		66EBE0971855C97100F2452D /* FileController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FileController.mm; sourceTree = "<group>"; };
 		66EBE0981855C97100F2452D /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
@@ -727,16 +731,15 @@
 				66EBE0A21855C97100F2452D /* home */,
 				66EBDEF31855C96F00F2452D /* identity */,
 				66EBDF381855C96F00F2452D /* images */,
-				6604A2D617626B9E0072216A /* MainStoryboard.storyboard */,
 				66EBDF3D1855C96F00F2452D /* network */,
-				66EBE0941855C97100F2452D /* surespot.xcassets */,
+				66EBDF281855C96F00F2452D /* ui */,
+				66EBE0951855C97100F2452D /* utils */,
+				66EBDF211855C96F00F2452D /* viewcontrollers */,
 				6604A2CD17626B9E0072216A /* SurespotAppDelegate.h */,
 				6604A2CE17626B9E0072216A /* SurespotAppDelegate.mm */,
 				66A2D917183A7A7F00785270 /* SurespotConstants.h */,
 				66A2D918183A7A7F00785270 /* SurespotConstants.m */,
-				66EBDF281855C96F00F2452D /* ui */,
-				66EBE0951855C97100F2452D /* utils */,
-				66EBDF211855C96F00F2452D /* viewcontrollers */,
+				6604A2D617626B9E0072216A /* MainStoryboard.storyboard */,
 				66D3B04E182EAB4200B37A6C /* surespot.xcassets */,
 				6604A2C517626B9E0072216A /* Supporting Files */,
 				66E4F517176298CB00596E6B /* libs */,
@@ -1225,6 +1228,9 @@
 		66EBDEF31855C96F00F2452D /* identity */ = {
 			isa = PBXGroup;
 			children = (
+				661F46A51865EDC3004A71B0 /* ChangePasswordView.xib */,
+				661F46A61865EDC3004A71B0 /* ChangePasswordViewController.h */,
+				661F46A71865EDC3004A71B0 /* ChangePasswordViewController.mm */,
 				661F46A01865E063004A71B0 /* DeleteIdentityViewController.mm */,
 				661F46A11865E063004A71B0 /* DeleteIdentityViewController.h */,
 				661F46A21865E063004A71B0 /* DeleteIdentityView.xib */,
@@ -1611,6 +1617,7 @@
 				66EBE0C71855C97100F2452D /* TheirMessageCell.xib in Resources */,
 				661F46A41865E063004A71B0 /* DeleteIdentityView.xib in Resources */,
 				661F469A1864C0B2004A71B0 /* GenerateKeysView.xib in Resources */,
+				661F46A81865EDC3004A71B0 /* ChangePasswordView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1657,6 +1664,7 @@
 				66EBE13C1855C97100F2452D /* Friend.m in Sources */,
 				6686623E18565AD5001491B1 /* SignupViewController.mm in Sources */,
 				66EBE13B1855C97100F2452D /* UIUtils.m in Sources */,
+				661F46A91865EDC3004A71B0 /* ChangePasswordViewController.mm in Sources */,
 				66E21DEF1847D7F90005D91E /* IASKSettingsReader.m in Sources */,
 				661F469F1864C0BE004A71B0 /* BackupIdentityViewController.mm in Sources */,
 				66EBE0D91855C97100F2452D /* EncryptionController.mm in Sources */,

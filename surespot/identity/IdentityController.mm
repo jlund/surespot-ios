@@ -434,4 +434,13 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     [self removeExpectedKeyVersionForUsername:username];
 }
 
+-(void) updatePasswordForUsername: (NSString *) username currentPassword: (NSString *) currentPassword newPassword: (NSString *) newPassword newSalt: (NSString *) newSalt {
+    SurespotIdentity * identity = [self getIdentityWithUsername:username andPassword:currentPassword];
+    identity.salt = newSalt;
+    [self saveIdentity:identity withPassword:[newPassword stringByAppendingString:CACHE_IDENTITY_ID]];
+    if ([self getStoredPasswordForIdentity:username]) {
+        [self storePasswordForIdentity:username password:newPassword];
+    }
+}
+
 @end

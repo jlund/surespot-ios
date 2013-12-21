@@ -581,8 +581,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) changePasswordForUsername:(NSString *) username
-              password:(NSString *) password
-              password:(NSString *) newPassword
+              oldPassword:(NSString *) password
+              newPassword:(NSString *) newPassword
                authSig:(NSString *) authSig
               tokenSig:(NSString *) tokenSig
             keyVersion:(NSString *) keyversion
@@ -595,11 +595,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                    authSig, @"authSig",
                                    tokenSig, @"tokenSig",
                                    keyversion, @"keyVersion",
-                                   password, @"newPassword",
+                                   newPassword, @"newPassword",
                                    nil];
     
     
-    NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"/users/password" parameters: params];
+    NSMutableURLRequest *request = [self requestWithMethod:@"PUT" path:@"users/password" parameters: params];
     AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
     [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
     [operation setSuccessCallbackQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
