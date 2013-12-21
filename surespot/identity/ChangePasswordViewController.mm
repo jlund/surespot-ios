@@ -39,9 +39,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (strong, nonatomic) IBOutlet UITextField *shinyNewPassword;
 @property (strong, nonatomic) IBOutlet UITextField *confirmPassword;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
-@property (strong, nonatomic) IBOutlet UIView *contentView;
 @property (atomic, strong) NSString * name;
-@property (nonatomic, strong) UIView * activeView;
 @end
 
 
@@ -65,7 +63,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [_shinyNewPassword setPlaceholder: NSLocalizedString(@"new_password",nil)];
     [_confirmPassword setPlaceholder: NSLocalizedString(@"confirm_password",nil)];
     
-    _scrollView.contentSize = _contentView.frame.size;
+    _scrollView.contentSize = self.view.frame.size;
     
     [self registerForKeyboardNotifications];
     
@@ -75,22 +73,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (BOOL)textFieldShouldReturn:(UITextField *)theTextField {
     if (theTextField == self.currentPassword) {
         [_shinyNewPassword becomeFirstResponder];
-        _activeView = _shinyNewPassword;
-        
     }
     else {
         
         if (theTextField == self.shinyNewPassword) {
             [_confirmPassword becomeFirstResponder];
-            _activeView = _confirmPassword;
-            
         }
         else {
             if (theTextField == self.confirmPassword) {
-                
+                [theTextField resignFirstResponder];
                 [self changePassword];
             }
-            
         }
     }
     return YES;
@@ -138,15 +131,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _scrollView.scrollIndicatorInsets = contentInsets;
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    _activeView = textField;
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    _activeView = nil;
-}
+//- (void)textFieldDidBeginEditing:(UITextField *)textField
+//{
+//    _activeView = textField;
+//}
+//
+//- (void)textFieldDidEndEditing:(UITextField *)textField
+//{
+//    _activeView = nil;
+//}
 
 
 -(void) loadIdentityNames {
@@ -206,7 +199,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     
-    [_activeView resignFirstResponder];
+    [_currentPassword resignFirstResponder];
+    [_shinyNewPassword resignFirstResponder];
+    [_confirmPassword resignFirstResponder];
     _progressView = [LoadingView showViewKey:@"change_password_progress"];
     
     SurespotIdentity * identity = [[IdentityController sharedInstance] getIdentityWithUsername:username andPassword:password];
