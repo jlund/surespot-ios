@@ -36,6 +36,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (strong, nonatomic) IBOutlet UIButton *bExecute;
 @property (atomic, strong) id progressView;
 @property (atomic, strong) NSString * name;
+@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (atomic, strong) NSString * url;
 @end
 
@@ -55,7 +56,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _label2.text = NSLocalizedString(@"backup_identities_again_keys", nil);
     _label2.textColor = [UIColor redColor];
     
-    
+    _scrollView.contentSize = self.view.frame.size;
 }
 
 -(void) loadIdentityNames {
