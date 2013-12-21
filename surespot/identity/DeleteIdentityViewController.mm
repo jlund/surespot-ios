@@ -35,6 +35,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (strong, nonatomic) IBOutlet UIButton *bExecute;
 @property (atomic, strong) id progressView;
 @property (atomic, strong) NSString * name;
+@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (atomic, strong) NSString * url;
 @end
 
@@ -52,7 +53,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     _label1.text = NSLocalizedString(@"delete_identity_message_warning", nil);
     
-    
+    _scrollView.contentSize = self.view.frame.size;
 }
 
 -(void) loadIdentityNames {
