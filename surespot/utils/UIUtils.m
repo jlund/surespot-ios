@@ -49,7 +49,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).toastWindow  makeToast:message
                                                                                          duration: duration
-                                                                                         position:@"top"
+                                                                                         position:@"center"
      ];
 }
 
@@ -60,7 +60,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).toastWindow  makeToast:NSLocalizedString(key, nil)
                                                                                          duration: duration
-                                                                                         position:@"top"
+                                                                                         position:@"center"
      ];
 }
 
