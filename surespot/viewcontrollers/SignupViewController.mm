@@ -83,7 +83,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     [_tbPasswordConfirm resignFirstResponder];
-    _progressView = [LoadingView loadingViewInView:self.view keyboardHeight:_keyboardHeight textKey:@"create_user_progress"];
+    _progressView = [LoadingView showViewKey:@"create_user_progress"];
     
     dispatch_queue_t q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     
@@ -216,7 +216,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     _lastCheckedUsername = username;
-    _progressView = [LoadingView loadingViewInView:self.view keyboardHeight:_keyboardHeight textKey:@"user_exists_progress"];
+    _progressView = [LoadingView showViewKey:@"user_exists_progress"];
     
     [[NetworkController sharedInstance] userExists:username successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSString * response = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];

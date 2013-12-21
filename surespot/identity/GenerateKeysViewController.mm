@@ -115,7 +115,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) rollKeysForUsername: (NSString *) username password: (NSString *) password {
-    _progressView = [LoadingView loadingViewInView:self.view keyboardHeight:0 textKey:@"generating_keys_progress"];
+    _progressView = [LoadingView showViewKey:@"generating_keys_progress"];
     SurespotIdentity * identity = [[IdentityController sharedInstance] getIdentityWithUsername:username andPassword:password];
     if (!identity) {
         [_progressView removeView];

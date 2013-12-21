@@ -328,7 +328,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 }
 
 -(void) backupIdentity: (NSString *) name password: (NSString *) password {
-       _progressView = [LoadingView loadingViewInView:self.view keyboardHeight:0 textKey:@"progress_backup_identity_drive"];
+       _progressView = [LoadingView showViewKey:@"progress_backup_identity_drive"];
     
     [self ensureDriveIdentityDirectoryCompletionBlock:^(NSString * identityDirId) {
         if (!identityDirId) {

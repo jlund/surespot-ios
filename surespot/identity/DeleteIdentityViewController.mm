@@ -112,7 +112,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) deleteIdentityForUsername: (NSString *) username password: (NSString *) password {
-    _progressView = [LoadingView loadingViewInView:self.view keyboardHeight:0 textKey:@"delete_identity_progress"];
+    _progressView = [LoadingView showViewKey:@"delete_identity_progress"];
     SurespotIdentity * identity = [[IdentityController sharedInstance] getIdentityWithUsername:username andPassword:password];
     if (!identity) {
         [_progressView removeView];

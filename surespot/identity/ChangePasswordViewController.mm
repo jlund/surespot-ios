@@ -200,8 +200,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     
     [_activeView resignFirstResponder];
-    _progressView = [LoadingView loadingViewInView: ((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).toastWindow
-                                    keyboardHeight:0 textKey:@"change_password_progress"];
+    _progressView = [LoadingView showViewKey:@"change_password_progress"];
     
     SurespotIdentity * identity = [[IdentityController sharedInstance] getIdentityWithUsername:username andPassword:password];
     if (!identity) {

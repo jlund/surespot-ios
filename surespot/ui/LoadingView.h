@@ -15,11 +15,8 @@
 #import <UIKit/UIKit.h>
 
 @interface LoadingView : UIView
-{
 
-}
-
-+ (id)loadingViewInView:(UIView *)aSuperview keyboardHeight: (CGFloat) height textKey: (NSString *) textKey;
++ (id)showViewKey: (NSString *) textKey;
 - (void)removeView;
 
 @end

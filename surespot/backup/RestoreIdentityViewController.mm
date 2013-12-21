@@ -246,7 +246,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 }
 
 - (void)retrieveIdentityFilesCompletionBlock:(CallbackBlock) callback {
-    _progressView = [LoadingView loadingViewInView:self.view keyboardHeight:0 textKey:@"progress_loading_identities"];
+    _progressView = [LoadingView showViewKey:@"progress_loading_identities"];
     
     [self ensureDriveIdentityDirectoryCompletionBlock:^(NSString * identityDirId) {
         DDLogInfo(@"got identity folder id %@", identityDirId);
@@ -396,7 +396,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 }
 
 -(void) importIdentity: (NSString *) name url: (NSString *) url password: (NSString *) password {
-    _progressView = [LoadingView loadingViewInView:self.view keyboardHeight:0 textKey:@"progress_restoring_identity"];
+    _progressView = [LoadingView showViewKey:@"progress_restoring_identity"];
     
     GTMHTTPFetcher *fetcher =
     [self.driveService.fetcherService fetcherWithURLString:url];
