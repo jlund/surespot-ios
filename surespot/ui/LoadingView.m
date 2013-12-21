@@ -40,6 +40,7 @@
 {
     
     UIView * aSuperview = ((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView;
+    aSuperview.userInteractionEnabled = YES;
     CGRect frame =CGRectMake(0, 0, aSuperview.bounds.size.width, aSuperview.bounds.size.height);
 	LoadingView *backgroundView =    [[LoadingView alloc] initWithFrame:frame];
 	if (!backgroundView)
@@ -134,6 +135,7 @@
 - (void)removeView
 {
 	UIView *aSuperview = [self superview];
+    aSuperview.userInteractionEnabled = NO;
 	[super removeFromSuperview];
     
 	// Set up the animation
