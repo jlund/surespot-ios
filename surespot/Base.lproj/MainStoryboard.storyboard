@@ -21,7 +21,7 @@
         <scene sceneID="5">
             <objects>
                 <viewController storyboardIdentifier="loginViewController" id="2" customClass="LoginViewController" sceneMemberID="viewController">
-                    <scrollView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="88S-Nt-FbA">
+                    <scrollView key="view" clipsSubviews="YES" contentMode="scaleToFill" id="88S-Nt-FbA">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>

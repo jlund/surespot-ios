@@ -41,7 +41,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UIView *contentView;
 @property (atomic, strong) NSString * name;
-@property (nonatomic, assign) NSInteger keyboardHeight;
 @property (nonatomic, strong) UIView * activeView;
 @end
 
@@ -114,32 +113,40 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)keyboardWasShown:(NSNotification*)aNotification
 {
     NSDictionary* info = [aNotification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    NSInteger  kbHeight = [UIUtils keyboardHeightAdjustedForOrientation: [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size];
     
-    _keyboardHeight = kbSize.height;
     
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbHeight, 0.0);
     _scrollView.contentInset = contentInsets;
     _scrollView.scrollIndicatorInsets = contentInsets;
     
     // If active text field is hidden by keyboard, scroll it so it's visible
     // Your app might not need or want this behavior.
     CGRect aRect = self.view.frame;
-    aRect.size.height -= kbSize.height;
+    aRect.size.height -= kbHeight;
     if (!CGRectContainsPoint(aRect, _bExecute.frame.origin) ) {
-        [self.scrollView scrollRectToVisible:_bExecute.frame animated:YES];
+        [_scrollView setContentOffset:CGPointMake(0.0, (_bExecute.frame.origin.y + _bExecute.frame.size.height + 5) -kbHeight) animated:YES];
     }
-}
+
+ }
 
 // Called when the UIKeyboardWillHideNotification is sent
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification
 {
-    _keyboardHeight = 0;
     UIEdgeInsets contentInsets = UIEdgeInsetsZero;
     _scrollView.contentInset = contentInsets;
     _scrollView.scrollIndicatorInsets = contentInsets;
 }
 
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    _activeView = textField;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    _activeView = nil;
+}
 
 
 -(void) loadIdentityNames {
@@ -228,7 +235,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                            NSData * newPasswordData = [derived objectForKey:@"key"];
                                                            NSData * encodedNewPassword = [newPasswordData SR_dataByBase64Encoding];
                                                            NSString * newPasswordString = [newPasswordData SR_stringByBase64Encoding];
-                                                           NSData * tokenSignature = [EncryptionController signData1:[NSData dataFromBase64String:passwordToken] data2:encodedNewPassword withPrivateKey:[identity getDsaPrivateKey]];                                                           
+                                                           NSData * tokenSignature = [EncryptionController signData1:[NSData dataFromBase64String:passwordToken] data2:encodedNewPassword withPrivateKey:[identity getDsaPrivateKey]];
                                                            NSString * tokenSignatureString = [tokenSignature SR_stringByBase64Encoding];
                                                            
                                                            [[NetworkController sharedInstance] changePasswordForUsername:username
