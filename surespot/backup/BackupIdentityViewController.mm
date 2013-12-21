@@ -36,6 +36,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) GTLServiceDrive *driveService;
 @property (atomic, strong) id progressView;
 @property (atomic, strong) NSString * name;
+@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (atomic, strong) NSString * url;
 @end
 
@@ -63,6 +64,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     [self setAccountFromKeychain];
     
     _labelGoogleDriveBackup.text = NSLocalizedString(@"backup_drive", nil);
+    _scrollView.contentSize = self.view.frame.size;
     
     
 }
