@@ -825,14 +825,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                     theirUsername:afriend.name
                                                                      theirVersion:afriend.imageVersion
                                                                                iv:afriend.imageIv];
-            [cell setImageUrl:afriend.imageUrl withEncryptionParams: ep placeholderImage: nil progress:^(NSUInteger receivedSize, long long expectedSize) {
+            [cell setImageUrl:afriend.imageUrl withEncryptionParams: ep placeholderImage:  [UIImage imageNamed:@"surespot_logo"] progress:^(NSUInteger receivedSize, long long expectedSize) {
                 
             } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
                 
             }];
         }
         else {
-            [cell setFriendImage:nil];
+            cell.friendImage.image = [UIImage imageNamed:@"surespot_logo"];
+            [cell.friendImage setAlpha:.5];
         }
         
         return cell;

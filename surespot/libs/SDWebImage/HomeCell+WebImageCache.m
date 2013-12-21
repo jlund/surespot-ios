@@ -25,6 +25,8 @@ static char operationArrayKey;
     [self cancelCurrentImageLoad];
     
     self.friendImage.image = placeholder;
+    [self.friendImage setAlpha:0.5];
+    
     
     NSURL * nsurl = [NSURL URLWithString:url];
     
