@@ -103,6 +103,15 @@
     return self;
 }
 
+-(void) showSensiblyInView:(UIView *)view {
+
+    CGFloat fwidth = view.frame.size.width;
+    //todo dynamically based on width
+    NSInteger width = 260;//fwidth < 400 ? 260 : fwidth /2;
+    CGRect rect = CGRectMake((fwidth-width)/2, 0, width, view.frame.size.height);
+    [self showFromRect:rect inView:view];
+}
+
 - (void)showFromRect:(CGRect)rect inView:(UIView *)view
 {
     self.isOpen = YES;

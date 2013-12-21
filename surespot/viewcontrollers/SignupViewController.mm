@@ -311,8 +311,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (!_menu) {
         _menu = [self createMenu];
         if (_menu) {
-            CGRect rect = CGRectMake(25, 0, self.view.frame.size.width - 50, self.view.frame.size.height);
-            [_menu showFromRect:rect inView:self.view];
+            [_menu showSensiblyInView:self.view];
         }
     }
     else {
