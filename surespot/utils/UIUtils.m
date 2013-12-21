@@ -47,7 +47,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 +(void) showToastMessage: (NSString *) message duration: (CGFloat) duration {
     
-    [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).toastWindow  makeToast:message
+    [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView  makeToast:message
                                                                                          duration: duration
                                                                                          position:@"center"
      ];
@@ -58,7 +58,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 +(void) showToastKey: (NSString *) key duration: (CGFloat) duration {
     
-    [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).toastWindow  makeToast:NSLocalizedString(key, nil)
+    [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView  makeToast:NSLocalizedString(key, nil)
                                                                                          duration: duration
                                                                                          position:@"center"
      ];
@@ -115,6 +115,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 +(CGSize) screenSizeAdjustedForOrientation {
     CGSize size = [UIScreen mainScreen].bounds.size;
+    UIInterfaceOrientation  orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    
+    if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+        return CGSizeMake(size.height, size.width);
+    }
+    else {
+        return CGSizeMake(size.width, size.height);
+        
+    }
+}
+
+
++(CGSize) sizeAdjustedForOrientation: (CGSize) size {
     UIInterfaceOrientation  orientation = [[UIApplication sharedApplication] statusBarOrientation];
     
     if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {

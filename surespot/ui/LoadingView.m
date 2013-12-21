@@ -20,7 +20,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIUtils.h"
 #import "SurespotAppDelegate.h"
-
+#import "AGWindowView.h"
 
 @implementation LoadingView
 
@@ -39,7 +39,7 @@
 + (id) showViewKey: (NSString *) textKey
 {
     
-    UIView * aSuperview = ((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).toastWindow;
+    UIView * aSuperview = ((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView;
     CGRect frame =CGRectMake(0, 0, aSuperview.bounds.size.width, aSuperview.bounds.size.height);
 	LoadingView *backgroundView =    [[LoadingView alloc] initWithFrame:frame];
 	if (!backgroundView)

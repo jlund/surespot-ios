@@ -16,6 +16,7 @@
 #import "TestFlight.h"
 #import "IdentityController.h"
 #import "UIUtils.h"
+#import "AGWindowView.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -63,14 +64,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     
     [self.window makeKeyAndVisible];
-    
-    _toastWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    [_toastWindow setWindowLevel:UIWindowLevelAlert+1];
-    _toastWindow.hidden = NO;
-    _toastWindow.userInteractionEnabled = NO;
-    
-    
-    
+
+    _overlayView = [[AGWindowView alloc] initAndAddToKeyWindow];
+    _overlayView.supportedInterfaceOrientations = AGInterfaceOrientationMaskAll;
+    _overlayView.userInteractionEnabled = NO;
+        
     return YES;
 }
 

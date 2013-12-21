@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AGWindowView.h"
 
 @interface SurespotAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-@property (strong, nonatomic) UIWindow *toastWindow;
+@property (strong, nonatomic) AGWindowView * overlayView;
 @end

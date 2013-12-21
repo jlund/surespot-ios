@@ -72,6 +72,7 @@
 		6686626E185B6A2E001491B1 /* UIImage+WebP.m in Sources */ = {isa = PBXBuildFile; fileRef = 6686625F185B6A2E001491B1 /* UIImage+WebP.m */; };
 		6686626F185B6A2E001491B1 /* HomeCell+WebImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 66866261185B6A2E001491B1 /* HomeCell+WebImageCache.m */; };
 		66866271185B86FD001491B1 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66866270185B86FD001491B1 /* ImageIO.framework */; };
+		6698585118663157003624DA /* AGWindowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6698584E18663157003624DA /* AGWindowView.m */; };
 		66A2D919183A7A7F00785270 /* SurespotConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D918183A7A7F00785270 /* SurespotConstants.m */; };
 		66A2D940183C25E800785270 /* UIScrollView+SVInfiniteScrolling.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D932183C25E800785270 /* UIScrollView+SVInfiniteScrolling.m */; };
 		66A2D941183C25E800785270 /* UIScrollView+SVPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D934183C25E800785270 /* UIScrollView+SVPullToRefresh.m */; };
@@ -323,6 +324,9 @@
 		66866260185B6A2E001491B1 /* HomeCell+WebImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HomeCell+WebImageCache.h"; sourceTree = "<group>"; };
 		66866261185B6A2E001491B1 /* HomeCell+WebImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HomeCell+WebImageCache.m"; sourceTree = "<group>"; };
 		66866270185B86FD001491B1 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		6698584D18663157003624DA /* AGWindowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGWindowView.h; sourceTree = "<group>"; };
+		6698584E18663157003624DA /* AGWindowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGWindowView.m; sourceTree = "<group>"; };
+		6698584F18663157003624DA /* AGWindowViewDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGWindowViewDefines.h; sourceTree = "<group>"; };
 		66A2D917183A7A7F00785270 /* SurespotConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SurespotConstants.h; sourceTree = "<group>"; };
 		66A2D918183A7A7F00785270 /* SurespotConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SurespotConstants.m; sourceTree = "<group>"; };
 		66A2D930183C25E800785270 /* SVPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVPullToRefresh.h; sourceTree = "<group>"; };
@@ -924,6 +928,16 @@
 			path = SDWebImage;
 			sourceTree = "<group>";
 		};
+		6698584218663105003624DA /* AGWindowView */ = {
+			isa = PBXGroup;
+			children = (
+				6698584D18663157003624DA /* AGWindowView.h */,
+				6698584E18663157003624DA /* AGWindowView.m */,
+				6698584F18663157003624DA /* AGWindowViewDefines.h */,
+			);
+			name = AGWindowView;
+			sourceTree = "<group>";
+		};
 		66A2D92F183C25E800785270 /* SVPullToRefresh */ = {
 			isa = PBXGroup;
 			children = (
@@ -1000,6 +1014,7 @@
 		66E4F517176298CB00596E6B /* libs */ = {
 			isa = PBXGroup;
 			children = (
+				6698584218663105003624DA /* AGWindowView */,
 				6646AE30185CBCA800CBACDE /* UIImageViewAligned */,
 				6646ADD2185CADC700CBACDE /* MWPhotoBrowser */,
 				66866244185B6A2E001491B1 /* SDWebImage */,
@@ -1672,6 +1687,7 @@
 				66E21DF31847D7F90005D91E /* IASKSpecifier.m in Sources */,
 				6604A2CF17626B9E0072216A /* SurespotAppDelegate.mm in Sources */,
 				66EBE1411855C97100F2452D /* SurespotCache.m in Sources */,
+				6698585118663157003624DA /* AGWindowView.m in Sources */,
 				66EBE0C31855C97100F2452D /* SurespotButton.m in Sources */,
 				66E4F5B7176298CB00596E6B /* SocketIO.m in Sources */,
 				66EBE0C11855C97100F2452D /* MessageView.m in Sources */,

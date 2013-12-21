@@ -32,5 +32,6 @@
 +(NSString *) getMessageErrorText: (NSInteger) errorStatus mimeType: (NSString *) mimeType;
 +(REMenu *) createMenu: (NSArray *) menuItems closeCompletionHandler: (void (^)(void))completionHandler;
 +(CGSize) screenSizeAdjustedForOrientation;
++(CGSize) sizeAdjustedForOrientation: (CGSize) size;
 @end
 
