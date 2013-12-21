@@ -58,6 +58,16 @@
 		</dict>
         <dict>
 			<key>IASKViewControllerClass</key>
+			<string>DeleteIdentityViewController</string>
+			<key>IASKViewControllerSelector</key>
+			<string>init</string>
+			<key>Title</key>
+			<string>pref_title_delete_identity</string>
+			<key>Type</key>
+			<string>PSChildPaneSpecifier</string>
+		</dict>
+        <dict>
+			<key>IASKViewControllerClass</key>
 			<string>GenerateKeysViewController</string>
 			<key>IASKViewControllerSelector</key>
 			<string>init</string>

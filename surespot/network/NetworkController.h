@@ -72,4 +72,19 @@ typedef void (^HTTPFailureBlock) (AFHTTPRequestOperation *operation , NSError *e
                  successBlock:(HTTPSuccessBlock) successBlock
                  failureBlock:(HTTPFailureBlock) failureBlock;
 
+-(void) getDeleteTokenForUsername:(NSString*) username andPassword:(NSString *)password andSignature: (NSString *) signature
+                  successBlock:(HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock;
+
+-(void) deleteUsername:(NSString *) username
+              password:(NSString *) password
+               authSig:(NSString *) authSig
+              tokenSig:(NSString *) tokenSig
+            keyVersion:(NSString *) keyversion
+          successBlock:(HTTPSuccessBlock) successBlock
+          failureBlock:(HTTPFailureBlock) failureBlock;
+
+-(void) getPasswordTokenForUsername:(NSString*) username andPassword:(NSString *)password andSignature: (NSString *) signature
+                    successBlock:(HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock;
+-(void) changePasswordForUsername:(NSString *) username;
+
 @end

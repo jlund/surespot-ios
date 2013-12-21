@@ -44,4 +44,5 @@
                        keys: (IdentityKeys *) keys;
 -(void) setExpectedKeyVersionForUsername: (NSString *) username version: (NSString *) version;
 -(void) removeExpectedKeyVersionForUsername: (NSString *) username;
+-(void) deleteIdentityUsername: (NSString *) username;
 @end

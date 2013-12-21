@@ -510,4 +510,102 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
     
 }
+
+-(void) getDeleteTokenForUsername:(NSString*) username andPassword:(NSString *)password andSignature: (NSString *) signature
+                  successBlock:(HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock {
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                   username,@"username",
+                                   password,@"password",
+                                   signature, @"authSig",
+                                   nil];
+    
+    
+    NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"deletetoken" parameters: params];
+    AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
+    [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
+    [operation setSuccessCallbackQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+    [operation start];
+
+    
+
+    
+}
+
+-(void) deleteUsername:(NSString *) username
+              password:(NSString *) password
+               authSig:(NSString *) authSig
+              tokenSig:(NSString *) tokenSig
+            keyVersion:(NSString *) keyversion
+          successBlock:(HTTPSuccessBlock) successBlock
+          failureBlock:(HTTPFailureBlock) failureBlock {
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                   username,@"username",
+                                   password,@"password",
+                                   authSig, @"authSig",
+                                   tokenSig, @"tokenSig",
+                                   keyversion, @"keyVersion",
+                                   nil];
+    
+    
+    NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"/users/delete" parameters: params];
+    AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
+    [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
+    [operation setSuccessCallbackQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+    [operation start];
+
+    
+}
+
+
+-(void) getPasswordTokenForUsername:(NSString*) username andPassword:(NSString *)password andSignature: (NSString *) signature
+                  successBlock:(HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock {
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                   username,@"username",
+                                   password,@"password",
+                                   signature, @"authSig",
+                                   nil];
+    
+    
+    NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"passwordtoken" parameters: params];
+    AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
+    [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
+    [operation setSuccessCallbackQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+    [operation start];
+    
+    
+    
+    
+}
+
+-(void) changePasswordForUsername:(NSString *) username
+              password:(NSString *) password
+              password:(NSString *) newPassword
+               authSig:(NSString *) authSig
+              tokenSig:(NSString *) tokenSig
+            keyVersion:(NSString *) keyversion
+          successBlock:(HTTPSuccessBlock) successBlock
+          failureBlock:(HTTPFailureBlock) failureBlock {
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                   username,@"username",
+                                   password,@"password",
+                                   authSig, @"authSig",
+                                   tokenSig, @"tokenSig",
+                                   keyversion, @"keyVersion",
+                                   password, @"newPassword",
+                                   nil];
+    
+    
+    NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"/users/password" parameters: params];
+    AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
+    [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
+    [operation setSuccessCallbackQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+    [operation start];
+    
+    
+}
+
 @end

@@ -28,6 +28,8 @@
 		661F469A1864C0B2004A71B0 /* GenerateKeysView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 661F46991864C0B2004A71B0 /* GenerateKeysView.xib */; };
 		661F469E1864C0BE004A71B0 /* BackupIdentityView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 661F469B1864C0BE004A71B0 /* BackupIdentityView.xib */; };
 		661F469F1864C0BE004A71B0 /* BackupIdentityViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 661F469C1864C0BE004A71B0 /* BackupIdentityViewController.mm */; };
+		661F46A31865E063004A71B0 /* DeleteIdentityViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 661F46A01865E063004A71B0 /* DeleteIdentityViewController.mm */; };
+		661F46A41865E063004A71B0 /* DeleteIdentityView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 661F46A21865E063004A71B0 /* DeleteIdentityView.xib */; };
 		6621BB841762704D00BC2850 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6621BB861762704D00BC2850 /* Localizable.strings */; };
 		663710801813172F009D5195 /* EGOCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 6637107F1813172F009D5195 /* EGOCache.m */; };
 		6646AE0E185CADC700CBACDE /* MWCaptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6646ADD5185CADC700CBACDE /* MWCaptionView.m */; };
@@ -235,6 +237,9 @@
 		661F469B1864C0BE004A71B0 /* BackupIdentityView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BackupIdentityView.xib; sourceTree = "<group>"; };
 		661F469C1864C0BE004A71B0 /* BackupIdentityViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BackupIdentityViewController.mm; sourceTree = "<group>"; };
 		661F469D1864C0BE004A71B0 /* BackupIdentityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackupIdentityViewController.h; sourceTree = "<group>"; };
+		661F46A01865E063004A71B0 /* DeleteIdentityViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DeleteIdentityViewController.mm; sourceTree = "<group>"; };
+		661F46A11865E063004A71B0 /* DeleteIdentityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeleteIdentityViewController.h; sourceTree = "<group>"; };
+		661F46A21865E063004A71B0 /* DeleteIdentityView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DeleteIdentityView.xib; sourceTree = "<group>"; };
 		6621BB7D17626EE800BC2850 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		6621BB851762704D00BC2850 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6637107E1813172F009D5195 /* EGOCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOCache.h; sourceTree = "<group>"; };
@@ -1220,6 +1225,9 @@
 		66EBDEF31855C96F00F2452D /* identity */ = {
 			isa = PBXGroup;
 			children = (
+				661F46A01865E063004A71B0 /* DeleteIdentityViewController.mm */,
+				661F46A11865E063004A71B0 /* DeleteIdentityViewController.h */,
+				661F46A21865E063004A71B0 /* DeleteIdentityView.xib */,
 				661F46991864C0B2004A71B0 /* GenerateKeysView.xib */,
 				661F46961864C0A4004A71B0 /* GenerateKeysViewController.h */,
 				661F46971864C0A4004A71B0 /* GenerateKeysViewController.mm */,
@@ -1601,6 +1609,7 @@
 				6646AE16185CADC700CBACDE /* README.mdown in Resources */,
 				66EBE0B91855C97100F2452D /* RestoreIdentityViewController.xib in Resources */,
 				66EBE0C71855C97100F2452D /* TheirMessageCell.xib in Resources */,
+				661F46A41865E063004A71B0 /* DeleteIdentityView.xib in Resources */,
 				661F469A1864C0B2004A71B0 /* GenerateKeysView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1643,6 +1652,7 @@
 				66EBE0BB1855C97100F2452D /* ChatController.mm in Sources */,
 				66EBE13F1855C97100F2452D /* HomeDataSource.m in Sources */,
 				6686623F18565AD5001491B1 /* SwipeViewController.mm in Sources */,
+				661F46A31865E063004A71B0 /* DeleteIdentityViewController.mm in Sources */,
 				6646AE15185CADC700CBACDE /* MBProgressHUD.m in Sources */,
 				66EBE13C1855C97100F2452D /* Friend.m in Sources */,
 				6686623E18565AD5001491B1 /* SignupViewController.mm in Sources */,

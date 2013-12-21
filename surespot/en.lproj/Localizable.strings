@@ -252,7 +252,6 @@
 "pref_summary_alternate_sms_delimiter"="Needs to be enabled on some devices to populate the sms \'to\' field correctly when multiple contacts are selected in invite contacts.";
 "pref_summary_message_debug_mode"="Shows more information about messages for debugging purposes.";
 "menu_invite_contacts"="invite contacts";
-"pref_title_delete_identity"="delete identity...";
 "delete_identity"="delete identity";
 "surespot_help"="surespot help";
 "backup_drive_button"="Execute Google Drive Backup";
