@@ -222,15 +222,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 - (void) getPublicKeysForUsername:(NSString *)username andVersion:(NSString *)version successBlock:(JSONSuccessBlock)successBlock failureBlock:(JSONFailureBlock) failureBlock{
-    
-    NSString * path = [[NSString stringWithFormat: @"publickeys/%@/%@",username, version]  stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] ;
-    NSURLRequest *request = [self requestWithMethod:@"GET" path: path parameters: nil];
+    NSURLRequest *request = [self buildPublicKeyRequestForUsername:username version:version];
     
     AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:successBlock failure: failureBlock];
     
     //dont't need this on main thread
     [operation setSuccessCallbackQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)];
     [operation start];
+}
+
+-(NSURLRequest *) buildPublicKeyRequestForUsername: (NSString *) username version: (NSString *) version {
+    NSString * path = [[NSString stringWithFormat: @"publickeys/%@/%@",username, version]  stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] ;
+    NSURLRequest *request = [self requestWithMethod:@"GET" path: path parameters: nil];
+    return request;
 }
 
 -(void) getMessageDataForUsername:(NSString *)username andMessageId:(NSInteger)messageId andControlId:(NSInteger) controlId successBlock:(JSONSuccessBlock)successBlock failureBlock: (JSONFailureBlock) failureBlock {
@@ -605,7 +609,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [operation setSuccessCallbackQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
     [operation start];
     
-    
+}
+
+-(void) deleteFromCache: (NSURLRequest *) request {
+    [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
 }
 
 @end

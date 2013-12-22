@@ -234,6 +234,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
         [_tbUsername becomeFirstResponder];
         [UIUtils showToastKey:@"user_exists_error"];
+        [_progressView removeView];
+        _lastCheckedUsername = nil;
     }];
 }
 

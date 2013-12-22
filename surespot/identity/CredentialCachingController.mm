@@ -152,6 +152,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) clearIdentityData:(NSString *) username {
     if ([username isEqualToString:_loggedInIdentity.username]) {
+        DDLogInfo(@"purging cached identity data from RAM for: %@",  username);
         [_sharedSecretsDict removeAllObjects];
         [_publicKeysDict removeAllObjects];
         [_latestVersionsDict removeAllObjects];

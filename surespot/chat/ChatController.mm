@@ -928,21 +928,29 @@ static const int MAX_CONNECTION_RETRIES = 16;
         
         
         if (iDeleted) {
-            //fire this first so tab closes and saves data before we delete all the data
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteFriend" object: data];
-            
-            [_homeDataSource removeFriend:theFriend withRefresh:YES];
-            
-            //wipe user state
-            [FileController wipeDataForUsername:username friendUsername:deleted];
-            
-            //clear cached user data
-            [[CredentialCachingController sharedInstance] clearUserData: deleted];
-            
-            
-            //clear http cache
-            
-            
+            //get latest version
+            [[CredentialCachingController sharedInstance] getLatestVersionForUsername:deleted callback:^(NSString *version) {
+                
+                //fire this first so tab closes and saves data before we delete all the data
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteFriend" object: data];
+                
+                
+                [_homeDataSource removeFriend:theFriend withRefresh:YES];
+                
+                //wipe user state
+                [FileController wipeDataForUsername:username friendUsername:deleted];
+                
+                //clear cached user data
+                [[CredentialCachingController sharedInstance] clearUserData: deleted];
+                
+                
+                //clear http cache
+                NSInteger maxVersion = [version integerValue];
+                for (NSInteger i=1;i<=maxVersion;i++) {
+                    NSURLRequest * request = [[NetworkController sharedInstance] buildPublicKeyRequestForUsername:deleted version: [@(i) stringValue]];
+                    [[NetworkController sharedInstance] deleteFromCache: request];
+                }
+            }];
         }
         else {
             [theFriend setDeleted];

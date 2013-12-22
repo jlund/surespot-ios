@@ -95,4 +95,6 @@ typedef void (^HTTPFailureBlock) (AFHTTPRequestOperation *operation , NSError *e
                      successBlock:(HTTPSuccessBlock) successBlock
                      failureBlock:(HTTPFailureBlock) failureBlock;
 
+-(void) deleteFromCache: (NSURLRequest *) request;
+-(NSURLRequest *) buildPublicKeyRequestForUsername: (NSString *) username version: (NSString *) version;
 @end

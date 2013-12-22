@@ -113,7 +113,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     //file manager thread safe supposedly
     NSFileManager * fileMgr = [NSFileManager defaultManager];
     BOOL wiped = [fileMgr removeItemAtPath:messageFile error:nil];
-    
+
     DDLogInfo(@"wiped: %@", wiped ? @"YES" : @"NO");
     
 }

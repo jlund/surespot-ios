@@ -41,7 +41,7 @@
             [EncryptionController symmetricDecryptString:[_message data] ourVersion:[_message getOurVersion] theirUsername:[_message getOtherUser] theirVersion:[_message getTheirVersion]  iv:[_message iv]  callback:^(NSString * plaintext){
                 
                 //figure out message height for both orientations
-                if (plaintext){
+                if (![UIUtils stringIsNilOrEmpty:plaintext]){
                     _message.plainData = plaintext;
                 }
                 else {
