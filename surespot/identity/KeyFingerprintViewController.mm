@@ -121,7 +121,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 - (NSInteger) theirCount {
-        return ( _theirFingerprints.count < _theirLatestVersion ? _theirLatestVersion :_theirFingerprints.count);
+    return ( _theirFingerprints.count < _theirLatestVersion ? _theirLatestVersion :_theirFingerprints.count);
 }
 
 
@@ -152,6 +152,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [fl setItemSize:CGSizeMake(20, 18)];
         UICollectionView * collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, 160, 140) collectionViewLayout:fl];
         [collectionView setBackgroundColor:[UIColor whiteColor]];
+        [collectionView setOpaque:YES];
         collectionView.dataSource = [cellData objectForKey:@"dh"];
         [collectionView registerClass:[KeyFingerprintCollectionCell class] forCellWithReuseIdentifier:@"KeyFingerprintCollectionCell"];
         //
@@ -166,12 +167,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [[cell.dsaView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
         collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0,0, 160, 140) collectionViewLayout:fl];
         [collectionView setBackgroundColor:[UIColor whiteColor]];
-        
+        [collectionView setOpaque:YES];
         collectionView.dataSource = [cellData objectForKey:@"dsa"];
         [collectionView registerClass:[KeyFingerprintCollectionCell class] forCellWithReuseIdentifier:@"KeyFingerprintCollectionCell"];
         [cell.dsaView addSubview:collectionView];
         
-        
+        [cell setOpaque:YES];
+        [cell setUserInteractionEnabled:NO];
         return cell;
     }
     else {

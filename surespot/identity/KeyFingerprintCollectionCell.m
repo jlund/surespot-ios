@@ -20,6 +20,8 @@
     [self.contentView addSubview:self.label];
     
     self.backgroundColor = [UIColor whiteColor];
+    self.opaque = YES;
+    self.userInteractionEnabled = NO;
     
     return self;
 }
