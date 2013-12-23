@@ -12,6 +12,7 @@
 #import "NetworkController.h"
 #import "FileController.h"
 #import "DDLog.h"
+#import "GetPublicKeysOperation.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -73,7 +74,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _latestVersionsDict = [NSMutableDictionary dictionaryWithDictionary:[FileController loadLatestVersionsForUsername:identity.username]];
     DDLogInfo(@"loaded %d latest versions from disk", [_latestVersionsDict count]);
     
-
+    
     
     //add all the public keys for this identity to the cache
     for (IdentityKeys * keys in [identity.keyPairs allValues]) {

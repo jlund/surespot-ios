@@ -30,6 +30,7 @@
 #import "MessageView+WebImageCache.h"
 #import "SurespotPhoto.h"
 #import "HomeCell+WebImageCache.h"
+#import "KeyFingerprintViewController.h"
 
 
 #ifdef DEBUG
@@ -1490,6 +1491,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
     }];
     [menuItems addObject:deleteAllHomeItem];
+
+    
+    REMenuItem * fingerprintsItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"verify_key_fingerprints", nil) image:nil highlightedImage:nil action:^(REMenuItem * item){
+    [self.navigationController pushViewController:[[KeyFingerprintViewController alloc] initWithNibName:@"KeyFingerprintView" username:thefriend.name] animated:YES];
+        
+    }];
+    [menuItems addObject:fingerprintsItem];
     
     REMenuItem * selectImageItem = [[REMenuItem alloc]
                                     initWithTitle:NSLocalizedString(@"menu_assign_image", nil)

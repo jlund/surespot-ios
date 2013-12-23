@@ -23,6 +23,13 @@
 		6614EEBF185F5BBF00A65CDE /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6614EEBE185F5BBF00A65CDE /* AssetsLibrary.framework */; };
 		661C2ED31763CB57000649E7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 661C2ED21763CB56000649E7 /* libz.dylib */; };
 		661C2ED61763D4B9000649E7 /* NSData+Gunzip.m in Sources */ = {isa = PBXBuildFile; fileRef = 661C2ED51763D4B9000649E7 /* NSData+Gunzip.m */; };
+		661F3B7E186898B9003C7AE3 /* KeyFingerprintView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 661F3B7D186898B9003C7AE3 /* KeyFingerprintView.xib */; };
+		661F3B8118689A19003C7AE3 /* KeyFingerprintViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 661F3B8018689A19003C7AE3 /* KeyFingerprintViewController.mm */; };
+		661F3B8618689D78003C7AE3 /* KeyFingerprintCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 661F3B8518689D78003C7AE3 /* KeyFingerprintCell.m */; };
+		661F3B8818689DDF003C7AE3 /* KeyFingerprintCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 661F3B8718689DDF003C7AE3 /* KeyFingerprintCell.xib */; };
+		661F3B8E1868C3C9003C7AE3 /* KeyFingerprint.m in Sources */ = {isa = PBXBuildFile; fileRef = 661F3B8D1868C3C9003C7AE3 /* KeyFingerprint.m */; };
+		661F3B911868D160003C7AE3 /* KeyFingerprintCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 661F3B901868D160003C7AE3 /* KeyFingerprintCollectionCell.m */; };
+		661F3B941868ECFE003C7AE3 /* KeyFingerprintLoadingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 661F3B931868ECFE003C7AE3 /* KeyFingerprintLoadingCell.m */; };
 		661F4695186375F0004A71B0 /* MessageView+WebImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 661F4694186375F0004A71B0 /* MessageView+WebImageCache.m */; };
 		661F46981864C0A4004A71B0 /* GenerateKeysViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 661F46971864C0A4004A71B0 /* GenerateKeysViewController.mm */; };
 		661F469A1864C0B2004A71B0 /* GenerateKeysView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 661F46991864C0B2004A71B0 /* GenerateKeysView.xib */; };
@@ -232,6 +239,18 @@
 		661C2ED21763CB56000649E7 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		661C2ED41763D493000649E7 /* NSData+Gunzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Gunzip.h"; sourceTree = "<group>"; };
 		661C2ED51763D4B9000649E7 /* NSData+Gunzip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Gunzip.m"; sourceTree = "<group>"; };
+		661F3B7D186898B9003C7AE3 /* KeyFingerprintView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyFingerprintView.xib; sourceTree = "<group>"; };
+		661F3B7F18689A19003C7AE3 /* KeyFingerprintViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyFingerprintViewController.h; sourceTree = "<group>"; };
+		661F3B8018689A19003C7AE3 /* KeyFingerprintViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = KeyFingerprintViewController.mm; sourceTree = "<group>"; };
+		661F3B8418689D78003C7AE3 /* KeyFingerprintCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyFingerprintCell.h; sourceTree = "<group>"; };
+		661F3B8518689D78003C7AE3 /* KeyFingerprintCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyFingerprintCell.m; sourceTree = "<group>"; };
+		661F3B8718689DDF003C7AE3 /* KeyFingerprintCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyFingerprintCell.xib; sourceTree = "<group>"; };
+		661F3B8C1868C3C9003C7AE3 /* KeyFingerprint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyFingerprint.h; sourceTree = "<group>"; };
+		661F3B8D1868C3C9003C7AE3 /* KeyFingerprint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyFingerprint.m; sourceTree = "<group>"; };
+		661F3B8F1868D160003C7AE3 /* KeyFingerprintCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyFingerprintCollectionCell.h; sourceTree = "<group>"; };
+		661F3B901868D160003C7AE3 /* KeyFingerprintCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyFingerprintCollectionCell.m; sourceTree = "<group>"; };
+		661F3B921868ECFE003C7AE3 /* KeyFingerprintLoadingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyFingerprintLoadingCell.h; sourceTree = "<group>"; };
+		661F3B931868ECFE003C7AE3 /* KeyFingerprintLoadingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyFingerprintLoadingCell.m; sourceTree = "<group>"; };
 		661F4693186375F0004A71B0 /* MessageView+WebImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MessageView+WebImageCache.h"; sourceTree = "<group>"; };
 		661F4694186375F0004A71B0 /* MessageView+WebImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MessageView+WebImageCache.m"; sourceTree = "<group>"; };
 		661F46961864C0A4004A71B0 /* GenerateKeysViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenerateKeysViewController.h; sourceTree = "<group>"; };
@@ -1272,6 +1291,18 @@
 				66EBDF041855C96F00F2452D /* PublicKeys.mm */,
 				66EBDF061855C96F00F2452D /* SurespotIdentity.h */,
 				66EBDF071855C96F00F2452D /* SurespotIdentity.mm */,
+				661F3B7D186898B9003C7AE3 /* KeyFingerprintView.xib */,
+				661F3B7F18689A19003C7AE3 /* KeyFingerprintViewController.h */,
+				661F3B8018689A19003C7AE3 /* KeyFingerprintViewController.mm */,
+				661F3B8418689D78003C7AE3 /* KeyFingerprintCell.h */,
+				661F3B8518689D78003C7AE3 /* KeyFingerprintCell.m */,
+				661F3B8718689DDF003C7AE3 /* KeyFingerprintCell.xib */,
+				661F3B8C1868C3C9003C7AE3 /* KeyFingerprint.h */,
+				661F3B8D1868C3C9003C7AE3 /* KeyFingerprint.m */,
+				661F3B8F1868D160003C7AE3 /* KeyFingerprintCollectionCell.h */,
+				661F3B901868D160003C7AE3 /* KeyFingerprintCollectionCell.m */,
+				661F3B921868ECFE003C7AE3 /* KeyFingerprintLoadingCell.h */,
+				661F3B931868ECFE003C7AE3 /* KeyFingerprintLoadingCell.m */,
 			);
 			path = identity;
 			sourceTree = "<group>";
@@ -1629,7 +1660,9 @@
 				6621BB841762704D00BC2850 /* Localizable.strings in Resources */,
 				6646AE16185CADC700CBACDE /* README.mdown in Resources */,
 				66EBE0B91855C97100F2452D /* RestoreIdentityViewController.xib in Resources */,
+				661F3B7E186898B9003C7AE3 /* KeyFingerprintView.xib in Resources */,
 				66EBE0C71855C97100F2452D /* TheirMessageCell.xib in Resources */,
+				661F3B8818689DDF003C7AE3 /* KeyFingerprintCell.xib in Resources */,
 				661F46A41865E063004A71B0 /* DeleteIdentityView.xib in Resources */,
 				661F469A1864C0B2004A71B0 /* GenerateKeysView.xib in Resources */,
 				661F46A81865EDC3004A71B0 /* ChangePasswordView.xib in Resources */,
@@ -1670,6 +1703,7 @@
 				6604A2CB17626B9E0072216A /* main.m in Sources */,
 				6646AE13185CADC700CBACDE /* MWZoomingScrollView.m in Sources */,
 				665F4DF81831923C0083BCE7 /* REMenuItem.m in Sources */,
+				661F3B941868ECFE003C7AE3 /* KeyFingerprintLoadingCell.m in Sources */,
 				66EBE0BA1855C97100F2452D /* SurespotIdentity.mm in Sources */,
 				66EBE0BB1855C97100F2452D /* ChatController.mm in Sources */,
 				66EBE13F1855C97100F2452D /* HomeDataSource.m in Sources */,
@@ -1715,6 +1749,7 @@
 				66EBE0B51855C97100F2452D /* GetSharedSecretOperation.mm in Sources */,
 				66EBE0BE1855C97100F2452D /* FilledRectView.m in Sources */,
 				66E4F5BA176298CB00596E6B /* SocketIOTransportWebsocket.m in Sources */,
+				661F3B8118689A19003C7AE3 /* KeyFingerprintViewController.mm in Sources */,
 				6646AE33185CBCA800CBACDE /* UIImageViewAligned.m in Sources */,
 				66EBE0C51855C97100F2452D /* SurespotErrorMessage.m in Sources */,
 				661F4695186375F0004A71B0 /* MessageView+WebImageCache.m in Sources */,
@@ -1732,6 +1767,7 @@
 				66866263185B6A2E001491B1 /* NSData+GIF.m in Sources */,
 				66EBE13D1855C97100F2452D /* HomeCell.m in Sources */,
 				66E4F5BE176298CB00596E6B /* SRWebSocket.m in Sources */,
+				661F3B911868D160003C7AE3 /* KeyFingerprintCollectionCell.m in Sources */,
 				6686626D185B6A2E001491B1 /* UIImage+MultiFormat.mm in Sources */,
 				66EBE0C01855C97100F2452D /* MessageProcessor.mm in Sources */,
 				66E70AB81847F9E400433D6F /* GTLDrive_Sources.m in Sources */,
@@ -1778,11 +1814,13 @@
 				66EBE0CC1855C97100F2452D /* LoadingView.m in Sources */,
 				66E21DF41847D7F90005D91E /* IASKPSSliderSpecifierViewCell.m in Sources */,
 				6686623D18565AD5001491B1 /* LoginViewController.mm in Sources */,
+				661F3B8618689D78003C7AE3 /* KeyFingerprintCell.m in Sources */,
 				66866267185B6A2E001491B1 /* SDWebImageDownloader.m in Sources */,
 				6654441317F37A3F00F62F7F /* SwipeView.m in Sources */,
 				6686626F185B6A2E001491B1 /* HomeCell+WebImageCache.m in Sources */,
 				66EBE0BD1855C97100F2452D /* ChatUtils.mm in Sources */,
 				66EBE0D41855C97100F2452D /* UIImage+Scale.m in Sources */,
+				661F3B8E1868C3C9003C7AE3 /* KeyFingerprint.m in Sources */,
 				665F4DF91831923C0083BCE7 /* REMenuItemView.m in Sources */,
 				66EBE0C61855C97100F2452D /* SurespotMessage.m in Sources */,
 				66EBE0B31855C97100F2452D /* GetKeyVersionOperation.mm in Sources */,

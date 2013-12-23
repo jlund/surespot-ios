@@ -86,7 +86,6 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     }
     
     return nil;
-    
 }
 
 -(NSData *) encryptIdentity: (SurespotIdentity *) identity withPassword:(NSString *)password {

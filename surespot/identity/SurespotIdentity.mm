@@ -147,14 +147,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(BOOL) recreateDhKeys: (IdentityKeys *) keys forVersion: (NSString *) version validate: (BOOL) validate {
     DDLogInfo(@"recreating dh keys for username: %@, version: %@ start", _username, version);
     NSString * dprivDH = [[_jsonKeyPairs objectForKey:version ] objectForKey:@"dhPriv"];
-     ECDHPrivateKey * privateKey = [EncryptionController recreateDhPrivateKey:dprivDH validate:validate];
+    ECDHPrivateKey * privateKey = [EncryptionController recreateDhPrivateKey:dprivDH validate:validate];
     if (!privateKey) {
         return NO;
     }
-   
+    
     keys.dhPrivKey = privateKey;
     keys.dhPubKey = [EncryptionController createPublicDHFromPrivKey:privateKey];
-
+    
     return YES;
 }
 
@@ -194,7 +194,21 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return YES;
 }
 
-
+//used for key validation
+-(void) recreateMissingKeys {
+    //iterate through all keys and re-generate with validation
+    for (NSInteger i=1;i<[self.latestVersion integerValue];i++) {
+        NSString * version =[@(i) stringValue];
+        
+        //if we have a concrete key encode and save that
+        IdentityKeys * keys = [[IdentityKeys alloc] init];
+        keys.version = version;
+        
+        [self recreateDhKeys:keys forVersion:version validate:NO];
+        [self recreateDsaKeys:keys forVersion:version validate:NO];        
+        [self.keyPairs setValue: keys forKey: version];
+    }
+}
 
 
 

@@ -118,5 +118,7 @@ extern int const PBKDF_ROUNDS;
 +(NSData *) symmetricDecryptData: (NSData *) cipherData key: (NSData *) key iv: (NSString *) iv;
 +(ECDHPublicKey *) createPublicDHFromPrivKey: (ECDHPrivateKey *) privateKey;
 +(ECDSAPublicKey *) createPublicDSAFromPrivKey: (ECDSAPrivateKey *) privateKey;
-
++(NSData *) encodeDSAPublicKeyData: (ECDSAPublicKey *) dsaPubKey;
++(NSData *) encodeDHPublicKeyData: (ECDHPublicKey *) dhPubKey;
++(NSString *) md5: (NSData *) data;
 @end

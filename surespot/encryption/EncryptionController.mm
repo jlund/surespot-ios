@@ -13,6 +13,7 @@
 #import "SurespotConstants.h"
 #import "cryptlib.h"
 #import "filters.h"
+#import <CommonCrypto/CommonDigest.h>
 
 using CryptoPP::BitBucket;
 static CryptoPP::AutoSeededRandomPool randomRng(true, 32);
@@ -437,6 +438,10 @@ int const PBKDF_ROUNDS = 20000;
 }
 
 +(NSString *) encodeDHPublicKey: (ECDHPublicKey *) dhPubKey {
+     return [self pemKey:[self encodeDHPublicKeyData:dhPubKey]];
+}
+
++(NSData *) encodeDHPublicKeyData: (ECDHPublicKey *) dhPubKey {
     
     
     ByteQueue byteQueue;
@@ -455,9 +460,9 @@ int const PBKDF_ROUNDS = 20000;
     //size_t size =
     byteQueue.Get(encoded, size);
     
-    NSData * keyData = [NSData dataWithBytes:encoded length:size];
+    return [NSData dataWithBytes:encoded length:size];
     
-    return [self pemKey:keyData];
+
 }
 
 +(NSString *) encodeDSAPrivateKey: (ECDSAPrivateKey *) dsaPrivKey {
@@ -471,7 +476,7 @@ int const PBKDF_ROUNDS = 20000;
     return [keyData SR_stringByBase64Encoding];
 }
 
-+(NSString *) encodeDSAPublicKey: (ECDSAPublicKey *) dsaPubKey {
++(NSData *) encodeDSAPublicKeyData: (ECDSAPublicKey *) dsaPubKey {
     ByteQueue byteQueue;
     
     //hard code the asn.1 oids for the curve we're using to the encoded output...don't know why crypto++ doesn't do this
@@ -488,10 +493,12 @@ int const PBKDF_ROUNDS = 20000;
     //size_t size =
     byteQueue.Get(encoded, size);
     
-    NSData * keyData = [NSData dataWithBytes:encoded length:size];
-    
-    return [self pemKey:keyData];
-    
+    return [NSData dataWithBytes:encoded length:size];
+  
+}
+
++(NSString *) encodeDSAPublicKey: (ECDSAPublicKey *) dsaPubKey {
+    return [self pemKey:[self encodeDSAPublicKeyData:dsaPubKey]];
 }
 
 
@@ -574,5 +581,16 @@ int const PBKDF_ROUNDS = 20000;
 }
 
 
-
++(NSString *) md5: (NSData *) data {
+    uint8_t digest[CC_MD5_DIGEST_LENGTH];
+    CC_MD5(data.bytes, data.length, digest);
+    
+    
+    NSMutableString* output = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
+    
+    for(int i = 0; i < CC_MD5_DIGEST_LENGTH; i++)
+        [output appendFormat:@"%02x", digest[i]];
+    
+    return output;
+}
 @end
