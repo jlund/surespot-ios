@@ -18,6 +18,8 @@
 #import "KeyFingerprint.h"
 #import "KeyFingerprintCollectionCell.h"
 #import "KeyFingerprintLoadingCell.h"
+#import "NetworkController.h"
+#import "UIUtils.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
@@ -32,6 +34,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (strong, nonatomic) NSMutableDictionary * theirFingerprints;
 @property (strong, nonatomic) NSOperationQueue * queue;
 @property (assign, nonatomic) BOOL meFirst;
+@property (assign, nonatomic) NSInteger theirLatestVersion;
 @end
 
 @implementation KeyFingerprintViewController
@@ -41,6 +44,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (self) {
         _username = username;
         _queue = [NSOperationQueue new];
+        _theirLatestVersion = 1;
         
         
     }
@@ -105,17 +109,20 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     switch (section) {
-        case 0:            
-            return _meFirst ? [[[[IdentityController sharedInstance] loggedInIdentity] latestVersion] integerValue] : _theirFingerprints.count;
+        case 0:
+            return _meFirst ? [[[[IdentityController sharedInstance] loggedInIdentity] latestVersion] integerValue] : [self theirCount];
             break;
         case 1:
-            return _meFirst ? _theirFingerprints.count :  [[[[IdentityController sharedInstance] loggedInIdentity] latestVersion] integerValue];
+            return _meFirst ? [self theirCount] :  [[[[IdentityController sharedInstance] loggedInIdentity] latestVersion] integerValue];
             break;
         default:
             return 0;
     }
 }
 
+- (NSInteger) theirCount {
+        return ( _theirFingerprints.count < _theirLatestVersion ? _theirLatestVersion :_theirFingerprints.count);
+}
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -168,7 +175,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         return cell;
     }
     else {
-        UITableViewCell * cell =      [_tableView dequeueReusableCellWithIdentifier:@"KeyFingerprintLoadingCell"];
+        UITableViewCell * cell = [_tableView dequeueReusableCellWithIdentifier:@"KeyFingerprintLoadingCell"];
         return cell;
     }
     
@@ -176,51 +183,58 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 -(void) addAllPublicKeysForUsername: (NSString *) username toDictionary: (NSMutableDictionary *) dictionary {
-    [[CredentialCachingController sharedInstance] getLatestVersionForUsername:username callback:^(NSString * latestVersion) {
-        if (latestVersion) {
-            NSInteger maxVersion = [latestVersion integerValue];
-            
-            for (int ver=1;ver<= maxVersion;ver++) {
-                NSString * version = [@(ver) stringValue];
-                
-                //get public keys out of dictionary
-                NSString * publicKeysKey = [NSString stringWithFormat:@"%@:%@", username, version];
-                PublicKeys * publicKeys = [[[CredentialCachingController sharedInstance] publicKeysDict] objectForKey:publicKeysKey];
-                
-                if (!publicKeys) {
-                    DDLogVerbose(@"public keys not cached for %@", publicKeysKey );
-                    
-                    //get the public keys we need
-                    GetPublicKeysOperation * pkOp = [[GetPublicKeysOperation alloc] initWithUsername:username version:version completionCallback:
-                                                     ^(PublicKeys * keys) {
-                                                         if (keys) {
-                                                             [dictionary setObject:[self createDictionaryForPublicKeys:keys] forKey:version];
-                                                             dispatch_async(dispatch_get_main_queue(), ^{
-                                                                 [_tableView reloadData];
-                                                             });
-                                                         }
-                                                         else {
-                                                             //failed to get keys
-                                                             DDLogVerbose(@"could not get public key for %@", publicKeysKey );
-                                                             
-                                                         }
-                                                         
-                                                         
-                                                     }];
-                    
-                    [_queue addOperation:pkOp];
-                    
-                    
-                }
-                else {
-                    [dictionary setObject:[self createDictionaryForPublicKeys:publicKeys] forKey:version];
-                    [_tableView reloadData];
-                }
-            }
-        }
-        
-        
-    }];
+    [[NetworkController sharedInstance] getKeyVersionForUsername:username
+                                                    successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                        NSString * latestVersion = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+                                                        if ([latestVersion length] > 0) {
+                                                            _theirLatestVersion = [latestVersion integerValue];
+                                                            [_tableView reloadData];
+                                                            
+                                                            for (int ver=1;ver<= _theirLatestVersion;ver++) {
+                                                                NSString * version = [@(ver) stringValue];
+                                                                
+                                                                //get public keys out of dictionary
+                                                                NSString * publicKeysKey = [NSString stringWithFormat:@"%@:%@", username, version];
+                                                                PublicKeys * publicKeys = [[[CredentialCachingController sharedInstance] publicKeysDict] objectForKey:publicKeysKey];
+                                                                
+                                                                if (!publicKeys) {
+                                                                    DDLogVerbose(@"public keys not cached for %@", publicKeysKey );
+                                                                    
+                                                                    //get the public keys we need
+                                                                    GetPublicKeysOperation * pkOp = [[GetPublicKeysOperation alloc] initWithUsername:username version:version completionCallback:
+                                                                                                     ^(PublicKeys * keys) {
+                                                                                                         if (keys) {
+                                                                                                             [dictionary setObject:[self createDictionaryForPublicKeys:keys] forKey:version];
+                                                                                                             dispatch_async(dispatch_get_main_queue(), ^{
+                                                                                                                 [_tableView reloadData];
+                                                                                                             });
+                                                                                                         }
+                                                                                                         else {
+                                                                                                             //failed to get keys
+                                                                                                             DDLogVerbose(@"could not get public key for %@", publicKeysKey );
+                                                                                                             
+                                                                                                         }
+                                                                                                         
+                                                                                                         
+                                                                                                     }];
+                                                                    
+                                                                    [_queue addOperation:pkOp];
+                                                                    
+                                                                    
+                                                                }
+                                                                else {
+                                                                    [dictionary setObject:[self createDictionaryForPublicKeys:publicKeys] forKey:version];
+                                                                    [_tableView reloadData];
+                                                                }
+                                                            }
+                                                        }
+                                                        
+                                                    } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                        [UIUtils showToastKey:@"could_not_load_public_keys"];
+                                                    }
+     
+     
+     ];
 }
 
 -(NSDictionary *) createDictionaryForPublicKeys: (PublicKeys *) keys {
