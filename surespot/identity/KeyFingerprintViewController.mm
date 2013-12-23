@@ -86,8 +86,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             NSString * md5dsa = [EncryptionController md5:dsaData];
             [dict setObject:[[KeyFingerprint alloc] initWithFingerprintData:md5dsa forTitle:@"DSA"] forKey:@"dsa"];
             
-            
-            [_myFingerprints setObject:dict forKey:version];
+            //reverse order
+            [_myFingerprints setObject:dict forKey:[@([identity.latestVersion integerValue]-([version integerValue]-1)) stringValue]];
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -204,7 +204,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                     GetPublicKeysOperation * pkOp = [[GetPublicKeysOperation alloc] initWithUsername:username version:version completionCallback:
                                                                                                      ^(PublicKeys * keys) {
                                                                                                          if (keys) {
-                                                                                                             [dictionary setObject:[self createDictionaryForPublicKeys:keys] forKey:version];
+                                                                                                             //reverse the order
+                                                                                                             [dictionary setObject:[self createDictionaryForPublicKeys:keys] forKey:[@(_theirLatestVersion-(ver-1)) stringValue]];
                                                                                                              dispatch_async(dispatch_get_main_queue(), ^{
                                                                                                                  [_tableView reloadData];
                                                                                                              });
