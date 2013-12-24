@@ -30,21 +30,5 @@
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="KeyFingerprintLoadingCell" id="dOk-2L-pD2" customClass="KeyFingerprintLoadingCell">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="110"/>
-            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-            <tableViewCellContentView key="contentView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dOk-2L-pD2" id="onh-Cl-XmG">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="109"/>
-                <autoresizingMask key="autoresizingMask"/>
-                <subviews>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="loading..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8mE-TC-BGg">
-                        <rect key="frame" x="101" y="44" width="118" height="21"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="highlightedColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    </label>
-                </subviews>
-            </tableViewCellContentView>
-        </tableViewCell>
     </objects>
 </document>

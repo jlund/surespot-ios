@@ -9,7 +9,6 @@
 #import "KeyFingerprintLoadingCell.h"
 
 @interface KeyFingerprintLoadingCell()
-@property (strong, nonatomic) IBOutlet UILabel *keyFingerprintLoadingLabel;
 @end
 
 @implementation KeyFingerprintLoadingCell
@@ -18,7 +17,7 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        _keyFingerprintLoadingLabel.text = NSLocalizedString(@"loading", nil);
+    
 
     }
     return self;

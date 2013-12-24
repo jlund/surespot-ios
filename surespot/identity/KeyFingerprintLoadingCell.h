@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface KeyFingerprintLoadingCell : UITableViewCell
-
+@property (strong, nonatomic) IBOutlet UILabel *keyFingerprintLoadingLabel;
 @end

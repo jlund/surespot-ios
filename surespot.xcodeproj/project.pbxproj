@@ -83,6 +83,7 @@
 		66A2D919183A7A7F00785270 /* SurespotConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D918183A7A7F00785270 /* SurespotConstants.m */; };
 		66A2D940183C25E800785270 /* UIScrollView+SVInfiniteScrolling.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D932183C25E800785270 /* UIScrollView+SVInfiniteScrolling.m */; };
 		66A2D941183C25E800785270 /* UIScrollView+SVPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D934183C25E800785270 /* UIScrollView+SVPullToRefresh.m */; };
+		66AC20AB18690CBD004E58E1 /* KeyFingerprintLoadingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66AC20AA18690CBD004E58E1 /* KeyFingerprintLoadingView.xib */; };
 		66D3B04F182EAB4200B37A6C /* surespot.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66D3B04E182EAB4200B37A6C /* surespot.xcassets */; };
 		66E21DEC1847D7F90005D91E /* IASKAppSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E21DCE1847D7F90005D91E /* IASKAppSettingsViewController.m */; };
 		66E21DED1847D7F90005D91E /* IASKAppSettingsWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E21DD01847D7F90005D91E /* IASKAppSettingsWebViewController.m */; };
@@ -353,6 +354,7 @@
 		66A2D932183C25E800785270 /* UIScrollView+SVInfiniteScrolling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+SVInfiniteScrolling.m"; sourceTree = "<group>"; };
 		66A2D933183C25E800785270 /* UIScrollView+SVPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+SVPullToRefresh.h"; sourceTree = "<group>"; };
 		66A2D934183C25E800785270 /* UIScrollView+SVPullToRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+SVPullToRefresh.m"; sourceTree = "<group>"; };
+		66AC20AA18690CBD004E58E1 /* KeyFingerprintLoadingView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyFingerprintLoadingView.xib; sourceTree = "<group>"; };
 		66D3B04E182EAB4200B37A6C /* surespot.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = surespot.xcassets; sourceTree = "<group>"; };
 		66E21DCD1847D7F90005D91E /* IASKAppSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IASKAppSettingsViewController.h; sourceTree = "<group>"; };
 		66E21DCE1847D7F90005D91E /* IASKAppSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IASKAppSettingsViewController.m; sourceTree = "<group>"; };
@@ -1303,6 +1305,7 @@
 				661F3B901868D160003C7AE3 /* KeyFingerprintCollectionCell.m */,
 				661F3B921868ECFE003C7AE3 /* KeyFingerprintLoadingCell.h */,
 				661F3B931868ECFE003C7AE3 /* KeyFingerprintLoadingCell.m */,
+				66AC20AA18690CBD004E58E1 /* KeyFingerprintLoadingView.xib */,
 			);
 			path = identity;
 			sourceTree = "<group>";
@@ -1664,6 +1667,7 @@
 				66EBE0C71855C97100F2452D /* TheirMessageCell.xib in Resources */,
 				661F3B8818689DDF003C7AE3 /* KeyFingerprintCell.xib in Resources */,
 				661F46A41865E063004A71B0 /* DeleteIdentityView.xib in Resources */,
+				66AC20AB18690CBD004E58E1 /* KeyFingerprintLoadingView.xib in Resources */,
 				661F469A1864C0B2004A71B0 /* GenerateKeysView.xib in Resources */,
 				661F46A81865EDC3004A71B0 /* ChangePasswordView.xib in Resources */,
 			);

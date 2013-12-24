@@ -66,7 +66,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.navigationItem.title = NSLocalizedString(@"public_key_fingerprints", nil);
     
     [_tableView registerNib:[UINib nibWithNibName:@"KeyFingerprintCell" bundle:nil] forCellReuseIdentifier:@"KeyFingerprintCell"];
-    [_tableView registerClass:[KeyFingerprintLoadingCell class] forCellReuseIdentifier:@"KeyFingerprintLoadingCell"];
+    [_tableView registerNib:[UINib nibWithNibName:@"KeyFingerprintLoadingView" bundle:nil] forCellReuseIdentifier:@"KeyFingerprintLoadingCell"];
+    //    [_tableView registerClass:[KeyFingerprintLoadingCell class] forCellReuseIdentifier:@"KeyFingerprintLoadingCell"];
     
     _tableView.rowHeight = 110;
     
@@ -187,7 +188,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         return cell;
     }
     else {
-        UITableViewCell * cell = [_tableView dequeueReusableCellWithIdentifier:@"KeyFingerprintLoadingCell"];
+        KeyFingerprintLoadingCell * cell = [_tableView dequeueReusableCellWithIdentifier:@"KeyFingerprintLoadingCell"];
+        cell.keyFingerprintLoadingLabel.text= NSLocalizedString(@"loading", nil);
         return cell;
     }
     
@@ -202,7 +204,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                             _theirLatestVersion = [latestVersion integerValue];
                                                             [_tableView reloadData];
                                                             
-                                                            for (int ver=1;ver<= _theirLatestVersion;ver++) {
+                                                            for (int ver=_theirLatestVersion;ver>0;ver--) {
                                                                 NSString * version = [@(ver) stringValue];
                                                                 
                                                                 //get public keys out of dictionary
