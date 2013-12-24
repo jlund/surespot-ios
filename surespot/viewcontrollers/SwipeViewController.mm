@@ -1504,7 +1504,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     CGFloat x = self.view.bounds.size.width;
                     CGFloat y =self.view.bounds.size.height;
                     DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
-                    [_popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:self.view permittedArrowDirections:UIPopoverArrowDirectionLeft animated:YES];
+                    [_popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:self.view permittedArrowDirections:0 animated:YES];
+                    [_popover setPopoverContentSize:CGSizeMake(320, y/2) animated:YES];
                 } else {
                     
                     
