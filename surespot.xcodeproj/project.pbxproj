@@ -82,6 +82,8 @@
 		668D24F4186A24D90096D155 /* DataMatrix.mm in Sources */ = {isa = PBXBuildFile; fileRef = 668D24EF186A24D90096D155 /* DataMatrix.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		668D24F5186A24D90096D155 /* QR_Encode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 668D24F0186A24D90096D155 /* QR_Encode.cpp */; };
 		668D24F6186A24D90096D155 /* QREncoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 668D24F3186A24D90096D155 /* QREncoder.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		668D24FF186A36520096D155 /* QRInviteView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 668D24FE186A36520096D155 /* QRInviteView.xib */; };
+		668D2502186A373A0096D155 /* QRInviteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 668D2501186A373A0096D155 /* QRInviteViewController.mm */; };
 		6698585118663157003624DA /* AGWindowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6698584E18663157003624DA /* AGWindowView.m */; };
 		66A2D919183A7A7F00785270 /* SurespotConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D918183A7A7F00785270 /* SurespotConstants.m */; };
 		66A2D940183C25E800785270 /* UIScrollView+SVInfiniteScrolling.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D932183C25E800785270 /* UIScrollView+SVInfiniteScrolling.m */; };
@@ -159,7 +161,7 @@
 		66EBE1381855C97100F2452D /* NSString+Sensitivize.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE09B1855C97100F2452D /* NSString+Sensitivize.m */; };
 		66EBE1391855C97100F2452D /* StateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE09D1855C97100F2452D /* StateController.m */; };
 		66EBE13A1855C97100F2452D /* SurespotLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE09F1855C97100F2452D /* SurespotLogFormatter.m */; };
-		66EBE13B1855C97100F2452D /* UIUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE0A11855C97100F2452D /* UIUtils.mm */; };
+		66EBE13B1855C97100F2452D /* UIUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE0A11855C97100F2452D /* UIUtils.m */; };
 		66EBE13C1855C97100F2452D /* Friend.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE0A41855C97100F2452D /* Friend.m */; };
 		66EBE13D1855C97100F2452D /* HomeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE0A71855C97100F2452D /* HomeCell.m */; };
 		66EBE13E1855C97100F2452D /* HomeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66EBE0A81855C97100F2452D /* HomeCell.xib */; };
@@ -353,6 +355,9 @@
 		668D24F1186A24D90096D155 /* QR_Encode.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; path = QR_Encode.h; sourceTree = "<group>"; };
 		668D24F2186A24D90096D155 /* QREncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QREncoder.h; sourceTree = "<group>"; };
 		668D24F3186A24D90096D155 /* QREncoder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = QREncoder.mm; sourceTree = "<group>"; };
+		668D24FE186A36520096D155 /* QRInviteView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = QRInviteView.xib; path = qr/QRInviteView.xib; sourceTree = "<group>"; };
+		668D2500186A373A0096D155 /* QRInviteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QRInviteViewController.h; path = qr/QRInviteViewController.h; sourceTree = "<group>"; };
+		668D2501186A373A0096D155 /* QRInviteViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = QRInviteViewController.mm; path = qr/QRInviteViewController.mm; sourceTree = "<group>"; };
 		6698584D18663157003624DA /* AGWindowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGWindowView.h; sourceTree = "<group>"; };
 		6698584E18663157003624DA /* AGWindowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGWindowView.m; sourceTree = "<group>"; };
 		6698584F18663157003624DA /* AGWindowViewDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGWindowViewDefines.h; sourceTree = "<group>"; };
@@ -633,7 +638,7 @@
 		66EBE09E1855C97100F2452D /* SurespotLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SurespotLogFormatter.h; sourceTree = "<group>"; };
 		66EBE09F1855C97100F2452D /* SurespotLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SurespotLogFormatter.m; sourceTree = "<group>"; };
 		66EBE0A01855C97100F2452D /* UIUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIUtils.h; sourceTree = "<group>"; };
-		66EBE0A11855C97100F2452D /* UIUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UIUtils.mm; sourceTree = "<group>"; };
+		66EBE0A11855C97100F2452D /* UIUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIUtils.m; sourceTree = "<group>"; };
 		66EBE0A31855C97100F2452D /* Friend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Friend.h; sourceTree = "<group>"; };
 		66EBE0A41855C97100F2452D /* Friend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Friend.m; sourceTree = "<group>"; };
 		66EBE0A51855C97100F2452D /* FriendDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendDelegate.h; sourceTree = "<group>"; };
@@ -756,6 +761,7 @@
 		6604A2C417626B9E0072216A /* surespot */ = {
 			isa = PBXGroup;
 			children = (
+				668D24F9186A36250096D155 /* qr */,
 				66EBDF2F1855C96F00F2452D /* backup */,
 				66EBDF401855C96F00F2452D /* Base.lproj */,
 				66EBE0AD1855C97100F2452D /* cache */,
@@ -969,6 +975,16 @@
 				668D24F3186A24D90096D155 /* QREncoder.mm */,
 			);
 			path = qr;
+			sourceTree = "<group>";
+		};
+		668D24F9186A36250096D155 /* qr */ = {
+			isa = PBXGroup;
+			children = (
+				668D24FE186A36520096D155 /* QRInviteView.xib */,
+				668D2500186A373A0096D155 /* QRInviteViewController.h */,
+				668D2501186A373A0096D155 /* QRInviteViewController.mm */,
+			);
+			name = qr;
 			sourceTree = "<group>";
 		};
 		6698584218663105003624DA /* AGWindowView */ = {
@@ -1473,7 +1489,7 @@
 				66EBE09E1855C97100F2452D /* SurespotLogFormatter.h */,
 				66EBE09F1855C97100F2452D /* SurespotLogFormatter.m */,
 				66EBE0A01855C97100F2452D /* UIUtils.h */,
-				66EBE0A11855C97100F2452D /* UIUtils.mm */,
+				66EBE0A11855C97100F2452D /* UIUtils.m */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -1676,6 +1692,7 @@
 				6604A2C917626B9E0072216A /* InfoPlist.strings in Resources */,
 				66EBE0D81855C97100F2452D /* Localizable.strings in Resources */,
 				66F831FF185B9EB500ADD2F1 /* OurMessageCell.xib in Resources */,
+				668D24FF186A36520096D155 /* QRInviteView.xib in Resources */,
 				66EBE0D71855C97100F2452D /* InfoPlist.strings in Resources */,
 				6646AE26185CADC700CBACDE /* MWPhotoBrowser.bundle in Resources */,
 				66EBE13E1855C97100F2452D /* HomeCell.xib in Resources */,
@@ -1740,7 +1757,7 @@
 				6646AE15185CADC700CBACDE /* MBProgressHUD.m in Sources */,
 				66EBE13C1855C97100F2452D /* Friend.m in Sources */,
 				6686623E18565AD5001491B1 /* SignupViewController.mm in Sources */,
-				66EBE13B1855C97100F2452D /* UIUtils.mm in Sources */,
+				66EBE13B1855C97100F2452D /* UIUtils.m in Sources */,
 				661F46A91865EDC3004A71B0 /* ChangePasswordViewController.mm in Sources */,
 				66E21DEF1847D7F90005D91E /* IASKSettingsReader.m in Sources */,
 				661F469F1864C0BE004A71B0 /* BackupIdentityViewController.mm in Sources */,
@@ -1806,6 +1823,7 @@
 				6646AE0E185CADC700CBACDE /* MWCaptionView.m in Sources */,
 				668D24F4186A24D90096D155 /* DataMatrix.mm in Sources */,
 				661C2ED61763D4B9000649E7 /* NSData+Gunzip.m in Sources */,
+				668D2502186A373A0096D155 /* QRInviteViewController.mm in Sources */,
 				66866266185B6A2E001491B1 /* SDWebImageDecoder.m in Sources */,
 				66866264185B6A2E001491B1 /* SDImageCache.mm in Sources */,
 				66EBE0D51855C97100F2452D /* NetworkController.m in Sources */,

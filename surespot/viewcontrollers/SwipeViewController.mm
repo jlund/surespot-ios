@@ -31,6 +31,7 @@
 #import "SurespotPhoto.h"
 #import "HomeCell+WebImageCache.h"
 #import "KeyFingerprintViewController.h"
+#import "QRInviteViewController.h"
 
 
 #ifdef DEBUG
@@ -1073,7 +1074,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(NSArray *) sortedChats {
     id locale = [NSLocale currentLocale];
     return [[_chats allKeys] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-
+        
         static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSNumericSearch | NSWidthInsensitiveSearch | NSForcedOrderingSearch;
         NSRange string1Range = NSMakeRange(0, ((NSString *)obj1).length);
         return [obj1 compare:obj2 options:comparisonOptions range:string1Range locale:locale];
@@ -1210,9 +1211,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             return YES;
         }
         else {
-            [_inviteField resignFirstResponder];
-            [_textField resignFirstResponder];
-            
+            [self resignAllResponders];
             return NO;
         }
         
@@ -1227,8 +1226,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
         
         else {
-            [_inviteField resignFirstResponder];
-            [_textField resignFirstResponder];
+            [self resignAllResponders];
             return NO;
         }
     }
@@ -1267,8 +1265,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 //thinking we're typing in the text field
 -(void) updateKeyboardState: (BOOL) goingHome {
     if (goingHome) {
-        [_inviteField resignFirstResponder];
-        [_textField resignFirstResponder];
+        [self resignAllResponders];
     }
     else {
         if ([_inviteField isFirstResponder]) {
@@ -1697,8 +1694,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (!_menu) {
         _menu = [self createMenuMenu];
         if (_menu) {
-            [_textField resignFirstResponder];
-            [_inviteField resignFirstResponder];
+            [self resignAllResponders];
             [_menu showSensiblyInView:self.view];
             _swipeView.userInteractionEnabled = NO;
         }
@@ -1939,8 +1935,24 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.popover = nil;
 }
 - (IBAction)qrTouch:(id)sender {
-    [UIUtils showQRInvite:[[IdentityController sharedInstance] getLoggedInUser]];
+    QRInviteViewController * controller = [[QRInviteViewController alloc] initWithNibName:@"QRInviteView" username: [[IdentityController sharedInstance] getLoggedInUser]];
     
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        _popover = [[UIPopoverController alloc] initWithContentViewController:controller];
+        _popover.delegate = self;
+        CGFloat x = self.view.bounds.size.width;
+        CGFloat y =self.view.bounds.size.height;
+        DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
+        [_popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:self.view permittedArrowDirections:0 animated:YES];
+        [_popover setPopoverContentSize:CGSizeMake(320, 480) animated:YES];
+    } else {
+        [self.navigationController pushViewController:controller animated:YES];
+    }
+}
+
+-(void) resignAllResponders {
+    [_textField resignFirstResponder];
+    [_inviteField resignFirstResponder];
 }
 
 

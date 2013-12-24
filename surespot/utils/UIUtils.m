@@ -12,7 +12,6 @@
 #import "DDLog.h"
 #import "SurespotConstants.h"
 #import "SurespotAppDelegate.h"
-#import "QREncoder.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -286,42 +285,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     menu.bounce = NO;
     [menu setCloseCompletionHandler:completionHandler];
     return menu;
-}
-
-
-+(void) showQRInvite: (NSString *) username {
-    UIView * parentView = ((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView;
-    //the qrcode is square. now we make it 250 pixels wide
-    int qrcodeImageDimension = 250;
-    
-    //the string can be very long
-    NSString* aVeryLongURL = @"http://thelongestlistofthelongeststuffatthelongestdomainnameatlonglast.com/";
-    
-    //first encode the string into a matrix of bools, TRUE for black dot and FALSE for white. Let the encoder decide the error correction level and version
-    DataMatrix* qrMatrix = [QREncoder encodeWithECLevel:QR_ECLEVEL_AUTO version:QR_VERSION_AUTO string:aVeryLongURL];
-    
-    //then render the matrix
-    UIImage* qrcodeImage = [QREncoder renderDataMatrix:qrMatrix imageDimension:qrcodeImageDimension];
-    
-    //put the image into the view
-    UIImageView* qrcodeImageView = [[UIImageView alloc] initWithImage:qrcodeImage];
-    CGRect parentFrame = parentView.frame;
-//    CGRect tabBarFrame = self.tabBarController.tabBar.frame;
-    
-    //center the image
-    CGFloat x = (parentFrame.size.width - qrcodeImageDimension) / 2.0;
-    CGFloat y = (parentFrame.size.height - qrcodeImageDimension) / 2.0;
-    CGRect qrcodeImageViewFrame = CGRectMake(x, y, qrcodeImageDimension, qrcodeImageDimension);
-    [qrcodeImageView setFrame:qrcodeImageViewFrame];
-    
-    //and that's it!
-    [parentView addSubview:qrcodeImageView];
-//    [qrcodeImageView release];
-    
-//    [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView  makeToast:message
-//                                                                                         duration: duration
-//                                                                                         position:@"center"
-//     ];
 }
 
 @end

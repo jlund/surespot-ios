@@ -33,6 +33,5 @@
 +(REMenu *) createMenu: (NSArray *) menuItems closeCompletionHandler: (void (^)(void))completionHandler;
 +(CGSize) screenSizeAdjustedForOrientation;
 +(CGSize) sizeAdjustedForOrientation: (CGSize) size;
-+(void) showQRInvite: (NSString *) username;
 @end
 
