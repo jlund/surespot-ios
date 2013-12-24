@@ -13,6 +13,7 @@
 @property (strong, nonatomic) IBOutlet UITextView *inviteBlurb;
 @property (strong, nonatomic) IBOutlet UIImageView *inviteImage;
 @property (strong, nonatomic) NSString * username;
+@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @end
 
 @implementation QRInviteViewController
@@ -30,6 +31,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.navigationItem.title = @"qr";
+    
     NSString * preString = NSLocalizedString(@"qr_pre_username_help", nil);
     NSString * inviteText = [NSString stringWithFormat:@"%@ %@ %@", preString, _username, NSLocalizedString(@"qr_post_username_help", nil)];
     
@@ -40,13 +44,7 @@
     [_inviteBlurb setFont:[UIFont systemFontOfSize:17]];
     [_inviteBlurb setTextAlignment:NSTextAlignmentCenter];
     [_inviteImage setImage:[self generateQRInviteImage:_username]];
-    
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    _scrollView.contentSize = self.view.frame.size;
 }
 
 -(UIImage *) generateQRInviteImage: (NSString *) username {
