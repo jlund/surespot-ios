@@ -393,6 +393,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     [_imageDelegate orientationChanged];
+    
+    // if the popover is showing, adjust its position after the re-orientation by presenting it again:
+    if (self.popover != nil)
+    {
+        CGFloat x =self.view.bounds.size.width;
+        CGFloat y =self.view.bounds.size.height;
+        DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
+        
+        [self.popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:self.view permittedArrowDirections:0 animated:YES];
+    }
+
 }
 
 - (void) swipeViewDidScroll:(SwipeView *)scrollView {
@@ -1500,12 +1511,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 //cameraUI
                 if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
                     _popover = [[UIPopoverController alloc] initWithContentViewController:[[KeyFingerprintViewController alloc]                                                                                                            initWithNibName:@"KeyFingerprintView" username:thefriend.name]];
-
+                    _popover.delegate = self;
                     CGFloat x = self.view.bounds.size.width;
                     CGFloat y =self.view.bounds.size.height;
                     DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
                     [_popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:self.view permittedArrowDirections:0 animated:YES];
-                    [_popover setPopoverContentSize:CGSizeMake(320, y/2) animated:YES];
+                    [_popover setPopoverContentSize:CGSizeMake(320, 480) animated:YES];
                 } else {
                     
                     
@@ -1920,4 +1931,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return nil;
 }
 
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
+    self.popover = nil;
+}
 @end

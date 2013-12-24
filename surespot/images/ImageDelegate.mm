@@ -353,7 +353,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         CGFloat x =controller.view.bounds.size.width;
         CGFloat y =controller.view.bounds.size.height;
         DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
-        [delegate.popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:delegate.controller.view permittedArrowDirections:UIPopoverArrowDirectionLeft animated:YES];
+        [delegate.popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:delegate.controller.view permittedArrowDirections:0 animated:YES];
     } else {
         [controller presentViewController: cameraUI animated: YES completion:nil];
     }
@@ -389,7 +389,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         CGFloat x =controller.view.bounds.size.width;
         CGFloat y =controller.view.bounds.size.height;
         DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
-        [delegate.popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:delegate.controller.view permittedArrowDirections:UIPopoverArrowDirectionLeft animated:YES];
+        [delegate.popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:delegate.controller.view permittedArrowDirections:0 animated:YES];
     } else {
         [controller presentViewController: cameraUI animated: YES completion:nil];
     }
@@ -416,7 +416,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         CGFloat y =self.controller.view.bounds.size.height;
         DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
         
-        [self.popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:self.controller.view permittedArrowDirections:UIPopoverArrowDirectionLeft animated:YES];
+        [self.popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:self.controller.view permittedArrowDirections:0 animated:YES];
     }
 }
 

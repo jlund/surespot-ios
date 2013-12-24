@@ -27,8 +27,8 @@
     UIActionSheetDelegate,
     UIViewPagerDelegate,
     IASKSettingsDelegate,
-    MWPhotoBrowserDelegate
-
+    MWPhotoBrowserDelegate,
+    UIPopoverControllerDelegate
 >
 @property (nonatomic, strong) IBOutlet SwipeView *swipeView;
 @property (nonatomic, strong) UITableView *friendView;
