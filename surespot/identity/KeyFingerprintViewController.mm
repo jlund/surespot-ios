@@ -78,8 +78,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSNumericSearch | NSWidthInsensitiveSearch | NSForcedOrderingSearch;
     NSRange string1Range = NSMakeRange(0, ((NSString *)_username).length);
     _meFirst = [_username compare:identity.username options:comparisonOptions range:string1Range locale:[NSLocale currentLocale]] > 0 ? YES : NO;
-
-
+    
+    
     //todo handle no identity
     
     _myFingerprints = [NSMutableDictionary new];
@@ -102,7 +102,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [dict setObject:[[KeyFingerprint alloc] initWithFingerprintData:md5dsa forTitle:@"DSA"] forKey:@"dsa"];
             
             //reverse order
-            [_myFingerprints setObject:dict forKey:[@([identity.latestVersion integerValue]-([version integerValue]-1)) stringValue]];
+            [_myFingerprints setObject:dict forKey:[@([identity.latestVersion integerValue]-[version integerValue]) stringValue]];
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -143,7 +143,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     BOOL useMyData = (_meFirst && indexPath.section == 0) || (!_meFirst && indexPath.section == 1);
-    NSDictionary * cellData = useMyData ?[ _myFingerprints objectForKey:[@(indexPath.row + 1) stringValue] ] : [ _theirFingerprints objectForKey:[@(indexPath.row + 1) stringValue] ];
+    NSDictionary * cellData = useMyData ?[ _myFingerprints objectForKey:[@(indexPath.row) stringValue] ] : [ _theirFingerprints objectForKey:[@(indexPath.row) stringValue] ];
     
     if (cellData) {
         KeyFingerprintCell *cell = [_tableView dequeueReusableCellWithIdentifier:@"KeyFingerprintCell"];
@@ -223,7 +223,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                      ^(PublicKeys * keys) {
                                                                                                          if (keys) {
                                                                                                              //reverse the order
-                                                                                                             [dictionary setObject:[self createDictionaryForPublicKeys:keys] forKey:[@(_theirLatestVersion-(ver-1)) stringValue]];
+                                                                                                             [dictionary setObject:[self createDictionaryForPublicKeys:keys] forKey:[@(_theirLatestVersion-ver) stringValue]];
                                                                                                              dispatch_async(dispatch_get_main_queue(), ^{
                                                                                                                  [_tableView reloadData];
                                                                                                              });
