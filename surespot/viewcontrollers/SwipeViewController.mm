@@ -1477,52 +1477,57 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSMutableArray * menuItems = [NSMutableArray new];
     
     
-    if ([thefriend isChatActive]) {
-        REMenuItem * closeTabHomeItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_close_tab", nil) image:[UIImage imageNamed:@"ic_menu_end_conversation"] highlightedImage:nil action:^(REMenuItem * item){
-            [self closeTabName: thefriend.name];
+    if ([thefriend isFriend]) {
+        if ([thefriend isChatActive]) {
+            REMenuItem * closeTabHomeItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_close_tab", nil) image:[UIImage imageNamed:@"ic_menu_end_conversation"] highlightedImage:nil action:^(REMenuItem * item){
+                [self closeTabName: thefriend.name];
+            }];
+            [menuItems addObject:closeTabHomeItem];
+        }
+        
+        
+        REMenuItem * deleteAllHomeItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_delete_all_messages", nil) image:[UIImage imageNamed:@"ic_menu_delete"] highlightedImage:nil action:^(REMenuItem * item){
+            [[ChatController sharedInstance] deleteMessagesForFriend: thefriend];
+            
+            
         }];
-        [menuItems addObject:closeTabHomeItem];
+        [menuItems addObject:deleteAllHomeItem];
+        
+        
+        if (![thefriend isDeleted]) {
+            REMenuItem * fingerprintsItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"verify_key_fingerprints", nil) image:nil highlightedImage:nil action:^(REMenuItem * item){
+                [self.navigationController pushViewController:[[KeyFingerprintViewController alloc] initWithNibName:@"KeyFingerprintView" username:thefriend.name] animated:YES];
+                
+            }];
+            [menuItems addObject:fingerprintsItem];
+            
+            REMenuItem * selectImageItem = [[REMenuItem alloc]
+                                            initWithTitle:NSLocalizedString(@"menu_assign_image", nil)
+                                            image:[UIImage imageNamed:@"ic_menu_gallery"]
+                                            highlightedImage:nil
+                                            action:^(REMenuItem * item){
+                                                
+                                                _imageDelegate = [[ImageDelegate alloc]
+                                                                  initWithUsername:[[IdentityController sharedInstance] getLoggedInUser]
+                                                                  ourVersion:[[IdentityController sharedInstance] getOurLatestVersion]
+                                                                  theirUsername:thefriend.name
+                                                                  assetLibrary:nil sourceIsCamera:NO];
+                                                
+                                                [ImageDelegate startFriendImageSelectControllerFromViewController:self usingDelegate:_imageDelegate];
+                                                
+                                                
+                                            }];
+            [menuItems addObject:selectImageItem];
+        }
     }
     
-    
-    REMenuItem * deleteAllHomeItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_delete_all_messages", nil) image:[UIImage imageNamed:@"ic_menu_delete"] highlightedImage:nil action:^(REMenuItem * item){
-        [[ChatController sharedInstance] deleteMessagesForFriend: thefriend];
+    if (![thefriend isInviter]) {
         
-        
-    }];
-    [menuItems addObject:deleteAllHomeItem];
-
-    
-    REMenuItem * fingerprintsItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"verify_key_fingerprints", nil) image:nil highlightedImage:nil action:^(REMenuItem * item){
-    [self.navigationController pushViewController:[[KeyFingerprintViewController alloc] initWithNibName:@"KeyFingerprintView" username:thefriend.name] animated:YES];
-        
-    }];
-    [menuItems addObject:fingerprintsItem];
-    
-    REMenuItem * selectImageItem = [[REMenuItem alloc]
-                                    initWithTitle:NSLocalizedString(@"menu_assign_image", nil)
-                                    image:[UIImage imageNamed:@"ic_menu_gallery"]
-                                    highlightedImage:nil
-                                    action:^(REMenuItem * item){
-                                        
-                                        _imageDelegate = [[ImageDelegate alloc]
-                                                          initWithUsername:[[IdentityController sharedInstance] getLoggedInUser]
-                                                          ourVersion:[[IdentityController sharedInstance] getOurLatestVersion]
-                                                          theirUsername:thefriend.name
-                                                          assetLibrary:nil sourceIsCamera:NO];
-                                        
-                                        [ImageDelegate startFriendImageSelectControllerFromViewController:self usingDelegate:_imageDelegate];
-                                        
-                                        
-                                    }];
-    [menuItems addObject:selectImageItem];
-    
-    
-    
-    REMenuItem * deleteFriendItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_delete_friend", nil) image:[UIImage imageNamed:@"ic_menu_delete"] highlightedImage:nil action:^(REMenuItem * item){
-        [[ChatController sharedInstance] deleteFriend: thefriend];
-    }];
-    [menuItems addObject:deleteFriendItem];
+        REMenuItem * deleteFriendItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_delete_friend", nil) image:[UIImage imageNamed:@"ic_menu_delete"] highlightedImage:nil action:^(REMenuItem * item){
+            [[ChatController sharedInstance] deleteFriend: thefriend];
+        }];
+        [menuItems addObject:deleteFriendItem];
+    }
     
     
     return [self createMenu: menuItems];
