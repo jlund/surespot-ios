@@ -17,7 +17,6 @@
 
 @interface  Friend()
 @property (nonatomic, assign) BOOL newMessages;
-@property (nonatomic, strong) NSLocale * locale;
 @end
 
 @implementation Friend
@@ -29,7 +28,6 @@
     
     NSDictionary * friendData = [NSJSONSerialization JSONObjectWithData:[jsonString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
     
-    self.locale = [NSLocale currentLocale];
     [self parseDictionary:friendData];
     return self;
 }
@@ -39,8 +37,6 @@
     // Call superclass's initializer
     self = [super init];
     if( !self ) return nil;
-    self.locale = [NSLocale currentLocale];
-    
     [self parseDictionary:dictionary];
     return self;
 }
@@ -58,7 +54,6 @@
         _imageIv = [coder decodeObjectForKey:@"imageIv"];
         _imageVersion = [coder decodeObjectForKey:@"imageVersion"];
     }
-    self.locale = [NSLocale currentLocale];
     return self;
 }
 
@@ -194,10 +189,8 @@
     theirflags &= (CHAT_ACTIVE | MESSAGE_ACTIVITY | INVITER);
     
     if ((theirflags == myflags) || (theirflags < CHAT_ACTIVE && myflags < CHAT_ACTIVE)) {
-        //sort my name
-        static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSNumericSearch | NSWidthInsensitiveSearch | NSForcedOrderingSearch;
-        NSRange string1Range = NSMakeRange(0, ((NSString *)self.name).length);
-        return [self.name compare:other.name options:comparisonOptions range:string1Range locale:_locale];
+        //sort by name
+        return [self.name compare:other.name options:NSCaseInsensitiveSearch ];
     }
     else {
         //sort by flag value

@@ -1071,12 +1071,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(NSArray *) sortedChats {
-    id locale = [NSLocale currentLocale];
     return [[_chats allKeys] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-
-        static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSNumericSearch | NSWidthInsensitiveSearch | NSForcedOrderingSearch;
-        NSRange string1Range = NSMakeRange(0, ((NSString *)obj1).length);
-        return [obj1 compare:obj2 options:comparisonOptions range:string1Range locale:locale];
+        return [obj1 compare:obj2 options:NSCaseInsensitiveSearch];
     }];
 }
 

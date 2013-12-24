@@ -75,9 +75,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     SurespotIdentity * identity = [[IdentityController sharedInstance] loggedInIdentity];
     
     //sort by name
-    static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSNumericSearch | NSWidthInsensitiveSearch | NSForcedOrderingSearch;
-    NSRange string1Range = NSMakeRange(0, ((NSString *)_username).length);
-    _meFirst = [_username compare:identity.username options:comparisonOptions range:string1Range locale:[NSLocale currentLocale]] > 0 ? YES : NO;
+ 
+    _meFirst = [_username compare:identity.username options:NSCaseInsensitiveSearch] > 0 ? YES : NO;
     
     
     //todo handle no identity
