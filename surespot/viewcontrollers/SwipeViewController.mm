@@ -55,6 +55,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) IASKAppSettingsViewController * appSettingsViewController;
 @property (nonatomic, strong) ImageDelegate * imageDelegate;
 @property (nonatomic, strong) SurespotMessage * imageMessage;
+@property (nonatomic, strong) UIPopoverController * popover;
 
 @end
 
@@ -1496,7 +1497,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         if (![thefriend isDeleted]) {
             REMenuItem * fingerprintsItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"verify_key_fingerprints", nil) image:nil highlightedImage:nil action:^(REMenuItem * item){
-                [self.navigationController pushViewController:[[KeyFingerprintViewController alloc] initWithNibName:@"KeyFingerprintView" username:thefriend.name] animated:YES];
+                //cameraUI
+                if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+                    _popover = [[UIPopoverController alloc] initWithContentViewController:[[KeyFingerprintViewController alloc]                                                                                                            initWithNibName:@"KeyFingerprintView" username:thefriend.name]];
+
+                    CGFloat x = self.view.bounds.size.width;
+                    CGFloat y =self.view.bounds.size.height;
+                    DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
+                    [_popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:self.view permittedArrowDirections:UIPopoverArrowDirectionLeft animated:YES];
+                } else {
+                    
+                    
+                    [self.navigationController pushViewController:[[KeyFingerprintViewController alloc] initWithNibName:@"KeyFingerprintView" username:thefriend.name] animated:YES];
+                }
                 
             }];
             [menuItems addObject:fingerprintsItem];
