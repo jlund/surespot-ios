@@ -96,7 +96,7 @@
 "login_max_identities_reached"="Sorry, you have already created the maximum number of identities (%d).\n\nIdentities can be deleted in the identity management settings after logging in.";
 "local_cache_cleared"="local cache cleared";
 "qr_pre_username_help"="scanning this QR code will invite";
-"qr_post_username_help"="to be a friend on surespot, installing surespot from the play store if necessary";
+"qr_post_username_help"="to be a friend on surespot";
 "send"="send";
 "main_action_bar_right"="to";
 "could_not_upload_friend_image"="could not upload friend image";
