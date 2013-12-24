@@ -1507,7 +1507,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         
         if (![thefriend isDeleted]) {
-            REMenuItem * fingerprintsItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"verify_key_fingerprints", nil) image:nil highlightedImage:nil action:^(REMenuItem * item){
+            REMenuItem * fingerprintsItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"verify_key_fingerprints", nil) image:[UIImage imageNamed:@"fingerprint_zoom"] highlightedImage:nil action:^(REMenuItem * item){
                 //cameraUI
                 if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
                     _popover = [[UIPopoverController alloc] initWithContentViewController:[[KeyFingerprintViewController alloc]                                                                                                            initWithNibName:@"KeyFingerprintView" username:thefriend.name]];
