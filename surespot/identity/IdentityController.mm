@@ -171,7 +171,15 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     for (file in dirfiles) {
         [identityNames addObject:[self identityNameFromFile:file]];
     }
-    return identityNames;
+    
+    id locale = [NSLocale currentLocale];
+    return [identityNames sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        
+        static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSNumericSearch | NSWidthInsensitiveSearch | NSForcedOrderingSearch;
+        NSRange string1Range = NSMakeRange(0, ((NSString *)obj1).length);
+        return [obj1 compare:obj2 options:comparisonOptions range:string1Range locale:locale];
+    }];
+        
 }
 
 - (NSString * ) identityNameFromFile: (NSString *) file {

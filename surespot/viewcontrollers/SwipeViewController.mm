@@ -403,7 +403,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         [self.popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:self.view permittedArrowDirections:0 animated:YES];
     }
-
+    
 }
 
 - (void) swipeViewDidScroll:(SwipeView *)scrollView {
@@ -1071,8 +1071,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(NSArray *) sortedChats {
+    id locale = [NSLocale currentLocale];
     return [[_chats allKeys] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        return [obj1 compare:obj2];
+
+        static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSNumericSearch | NSWidthInsensitiveSearch | NSForcedOrderingSearch;
+        NSRange string1Range = NSMakeRange(0, ((NSString *)obj1).length);
+        return [obj1 compare:obj2 options:comparisonOptions range:string1Range locale:locale];
     }];
 }
 

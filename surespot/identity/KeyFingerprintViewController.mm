@@ -67,7 +67,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [_tableView registerNib:[UINib nibWithNibName:@"KeyFingerprintCell" bundle:nil] forCellReuseIdentifier:@"KeyFingerprintCell"];
     [_tableView registerNib:[UINib nibWithNibName:@"KeyFingerprintLoadingView" bundle:nil] forCellReuseIdentifier:@"KeyFingerprintLoadingCell"];
-    //    [_tableView registerClass:[KeyFingerprintLoadingCell class] forCellReuseIdentifier:@"KeyFingerprintLoadingCell"];
     
     _tableView.rowHeight = 110;
     
@@ -75,7 +74,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     //generate fingerprints
     SurespotIdentity * identity = [[IdentityController sharedInstance] loggedInIdentity];
     
-    _meFirst = [_username compare: identity.username options:NSNumericSearch] > 0 ? YES : NO;
+    //sort by name
+    static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSNumericSearch | NSWidthInsensitiveSearch | NSForcedOrderingSearch;
+    NSRange string1Range = NSMakeRange(0, ((NSString *)_username).length);
+    _meFirst = [_username compare:identity.username options:comparisonOptions range:string1Range locale:[NSLocale currentLocale]] > 0 ? YES : NO;
+
+
     //todo handle no identity
     
     _myFingerprints = [NSMutableDictionary new];
