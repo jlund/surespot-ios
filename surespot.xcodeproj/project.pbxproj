@@ -79,6 +79,9 @@
 		6686626E185B6A2E001491B1 /* UIImage+WebP.m in Sources */ = {isa = PBXBuildFile; fileRef = 6686625F185B6A2E001491B1 /* UIImage+WebP.m */; };
 		6686626F185B6A2E001491B1 /* HomeCell+WebImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 66866261185B6A2E001491B1 /* HomeCell+WebImageCache.m */; };
 		66866271185B86FD001491B1 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66866270185B86FD001491B1 /* ImageIO.framework */; };
+		668D24F4186A24D90096D155 /* DataMatrix.mm in Sources */ = {isa = PBXBuildFile; fileRef = 668D24EF186A24D90096D155 /* DataMatrix.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		668D24F5186A24D90096D155 /* QR_Encode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 668D24F0186A24D90096D155 /* QR_Encode.cpp */; };
+		668D24F6186A24D90096D155 /* QREncoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 668D24F3186A24D90096D155 /* QREncoder.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6698585118663157003624DA /* AGWindowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6698584E18663157003624DA /* AGWindowView.m */; };
 		66A2D919183A7A7F00785270 /* SurespotConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D918183A7A7F00785270 /* SurespotConstants.m */; };
 		66A2D940183C25E800785270 /* UIScrollView+SVInfiniteScrolling.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D932183C25E800785270 /* UIScrollView+SVInfiniteScrolling.m */; };
@@ -156,7 +159,7 @@
 		66EBE1381855C97100F2452D /* NSString+Sensitivize.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE09B1855C97100F2452D /* NSString+Sensitivize.m */; };
 		66EBE1391855C97100F2452D /* StateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE09D1855C97100F2452D /* StateController.m */; };
 		66EBE13A1855C97100F2452D /* SurespotLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE09F1855C97100F2452D /* SurespotLogFormatter.m */; };
-		66EBE13B1855C97100F2452D /* UIUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE0A11855C97100F2452D /* UIUtils.m */; };
+		66EBE13B1855C97100F2452D /* UIUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE0A11855C97100F2452D /* UIUtils.mm */; };
 		66EBE13C1855C97100F2452D /* Friend.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE0A41855C97100F2452D /* Friend.m */; };
 		66EBE13D1855C97100F2452D /* HomeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE0A71855C97100F2452D /* HomeCell.m */; };
 		66EBE13E1855C97100F2452D /* HomeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66EBE0A81855C97100F2452D /* HomeCell.xib */; };
@@ -344,6 +347,12 @@
 		66866260185B6A2E001491B1 /* HomeCell+WebImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HomeCell+WebImageCache.h"; sourceTree = "<group>"; };
 		66866261185B6A2E001491B1 /* HomeCell+WebImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HomeCell+WebImageCache.m"; sourceTree = "<group>"; };
 		66866270185B86FD001491B1 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		668D24EE186A24D90096D155 /* DataMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataMatrix.h; sourceTree = "<group>"; };
+		668D24EF186A24D90096D155 /* DataMatrix.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DataMatrix.mm; sourceTree = "<group>"; };
+		668D24F0186A24D90096D155 /* QR_Encode.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = QR_Encode.cpp; sourceTree = "<group>"; };
+		668D24F1186A24D90096D155 /* QR_Encode.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; path = QR_Encode.h; sourceTree = "<group>"; };
+		668D24F2186A24D90096D155 /* QREncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QREncoder.h; sourceTree = "<group>"; };
+		668D24F3186A24D90096D155 /* QREncoder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = QREncoder.mm; sourceTree = "<group>"; };
 		6698584D18663157003624DA /* AGWindowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGWindowView.h; sourceTree = "<group>"; };
 		6698584E18663157003624DA /* AGWindowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGWindowView.m; sourceTree = "<group>"; };
 		6698584F18663157003624DA /* AGWindowViewDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGWindowViewDefines.h; sourceTree = "<group>"; };
@@ -624,7 +633,7 @@
 		66EBE09E1855C97100F2452D /* SurespotLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SurespotLogFormatter.h; sourceTree = "<group>"; };
 		66EBE09F1855C97100F2452D /* SurespotLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SurespotLogFormatter.m; sourceTree = "<group>"; };
 		66EBE0A01855C97100F2452D /* UIUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIUtils.h; sourceTree = "<group>"; };
-		66EBE0A11855C97100F2452D /* UIUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIUtils.m; sourceTree = "<group>"; };
+		66EBE0A11855C97100F2452D /* UIUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UIUtils.mm; sourceTree = "<group>"; };
 		66EBE0A31855C97100F2452D /* Friend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Friend.h; sourceTree = "<group>"; };
 		66EBE0A41855C97100F2452D /* Friend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Friend.m; sourceTree = "<group>"; };
 		66EBE0A51855C97100F2452D /* FriendDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendDelegate.h; sourceTree = "<group>"; };
@@ -670,6 +679,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6604A2C317626B9E0072216A /* CoreGraphics.framework in Frameworks */,
 				6614EEBF185F5BBF00A65CDE /* AssetsLibrary.framework in Frameworks */,
 				66866271185B86FD001491B1 /* ImageIO.framework in Frameworks */,
 				66755100184C55E900C55AAC /* MobileCoreServices.framework in Frameworks */,
@@ -682,7 +692,6 @@
 				661C2ED31763CB57000649E7 /* libz.dylib in Frameworks */,
 				66E4F5C417629B6400596E6B /* Security.framework in Frameworks */,
 				66E4F5C217629B5C00596E6B /* libicucore.dylib in Frameworks */,
-				6604A2C317626B9E0072216A /* CoreGraphics.framework in Frameworks */,
 				66E4F5C017629B4500596E6B /* CFNetwork.framework in Frameworks */,
 				6604A2BF17626B9E0072216A /* UIKit.framework in Frameworks */,
 				6604A2C117626B9E0072216A /* Foundation.framework in Frameworks */,
@@ -949,6 +958,19 @@
 			path = SDWebImage;
 			sourceTree = "<group>";
 		};
+		668D24ED186A24D90096D155 /* qr */ = {
+			isa = PBXGroup;
+			children = (
+				668D24EE186A24D90096D155 /* DataMatrix.h */,
+				668D24EF186A24D90096D155 /* DataMatrix.mm */,
+				668D24F0186A24D90096D155 /* QR_Encode.cpp */,
+				668D24F1186A24D90096D155 /* QR_Encode.h */,
+				668D24F2186A24D90096D155 /* QREncoder.h */,
+				668D24F3186A24D90096D155 /* QREncoder.mm */,
+			);
+			path = qr;
+			sourceTree = "<group>";
+		};
 		6698584218663105003624DA /* AGWindowView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1035,6 +1057,7 @@
 		66E4F517176298CB00596E6B /* libs */ = {
 			isa = PBXGroup;
 			children = (
+				668D24ED186A24D90096D155 /* qr */,
 				6698584218663105003624DA /* AGWindowView */,
 				6646AE30185CBCA800CBACDE /* UIImageViewAligned */,
 				6646ADD2185CADC700CBACDE /* MWPhotoBrowser */,
@@ -1450,7 +1473,7 @@
 				66EBE09E1855C97100F2452D /* SurespotLogFormatter.h */,
 				66EBE09F1855C97100F2452D /* SurespotLogFormatter.m */,
 				66EBE0A01855C97100F2452D /* UIUtils.h */,
-				66EBE0A11855C97100F2452D /* UIUtils.m */,
+				66EBE0A11855C97100F2452D /* UIUtils.mm */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -1708,6 +1731,7 @@
 				6646AE13185CADC700CBACDE /* MWZoomingScrollView.m in Sources */,
 				665F4DF81831923C0083BCE7 /* REMenuItem.m in Sources */,
 				661F3B941868ECFE003C7AE3 /* KeyFingerprintLoadingCell.m in Sources */,
+				66866263185B6A2E001491B1 /* NSData+GIF.m in Sources */,
 				66EBE0BA1855C97100F2452D /* SurespotIdentity.mm in Sources */,
 				66EBE0BB1855C97100F2452D /* ChatController.mm in Sources */,
 				66EBE13F1855C97100F2452D /* HomeDataSource.m in Sources */,
@@ -1716,7 +1740,7 @@
 				6646AE15185CADC700CBACDE /* MBProgressHUD.m in Sources */,
 				66EBE13C1855C97100F2452D /* Friend.m in Sources */,
 				6686623E18565AD5001491B1 /* SignupViewController.mm in Sources */,
-				66EBE13B1855C97100F2452D /* UIUtils.m in Sources */,
+				66EBE13B1855C97100F2452D /* UIUtils.mm in Sources */,
 				661F46A91865EDC3004A71B0 /* ChangePasswordViewController.mm in Sources */,
 				66E21DEF1847D7F90005D91E /* IASKSettingsReader.m in Sources */,
 				661F469F1864C0BE004A71B0 /* BackupIdentityViewController.mm in Sources */,
@@ -1768,7 +1792,6 @@
 				6646AE11185CADC700CBACDE /* MWTapDetectingImageView.m in Sources */,
 				66E4F5BD176298CB00596E6B /* NSData+SRB64Additions.m in Sources */,
 				66866268185B6A2E001491B1 /* SDWebImageDownloaderOperation.mm in Sources */,
-				66866263185B6A2E001491B1 /* NSData+GIF.m in Sources */,
 				66EBE13D1855C97100F2452D /* HomeCell.m in Sources */,
 				66E4F5BE176298CB00596E6B /* SRWebSocket.m in Sources */,
 				661F3B911868D160003C7AE3 /* KeyFingerprintCollectionCell.m in Sources */,
@@ -1777,9 +1800,11 @@
 				66E70AB81847F9E400433D6F /* GTLDrive_Sources.m in Sources */,
 				6686626E185B6A2E001491B1 /* UIImage+WebP.m in Sources */,
 				66E21DED1847D7F90005D91E /* IASKAppSettingsWebViewController.m in Sources */,
+				668D24F5186A24D90096D155 /* QR_Encode.cpp in Sources */,
 				66FF0FE218242B6B0038ECA6 /* Toast+UIView.m in Sources */,
 				66EBE0B71855C97100F2452D /* KeychainItemWrapper.m in Sources */,
 				6646AE0E185CADC700CBACDE /* MWCaptionView.m in Sources */,
+				668D24F4186A24D90096D155 /* DataMatrix.mm in Sources */,
 				661C2ED61763D4B9000649E7 /* NSData+Gunzip.m in Sources */,
 				66866266185B6A2E001491B1 /* SDWebImageDecoder.m in Sources */,
 				66866264185B6A2E001491B1 /* SDImageCache.mm in Sources */,
@@ -1821,6 +1846,7 @@
 				661F3B8618689D78003C7AE3 /* KeyFingerprintCell.m in Sources */,
 				66866267185B6A2E001491B1 /* SDWebImageDownloader.m in Sources */,
 				6654441317F37A3F00F62F7F /* SwipeView.m in Sources */,
+				668D24F6186A24D90096D155 /* QREncoder.mm in Sources */,
 				6686626F185B6A2E001491B1 /* HomeCell+WebImageCache.m in Sources */,
 				66EBE0BD1855C97100F2452D /* ChatUtils.mm in Sources */,
 				66EBE0D41855C97100F2452D /* UIImage+Scale.m in Sources */,
@@ -1982,6 +2008,7 @@
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Adam Patacchiola (9BS43Z57N5)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Adam Patacchiola (9BS43Z57N5)";
+				GCC_INPUT_FILETYPE = automatic;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "surespot/surespot-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -2002,7 +2029,7 @@
 				PROVISIONING_PROFILE = "69D63018-5110-41AF-818D-0E4F117CB0DF";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "69D63018-5110-41AF-818D-0E4F117CB0DF";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = "/Users/adam/dev/surespot/libs/ios/google/google-api-objectivec-client-read-only/source/**";
+				USER_HEADER_SEARCH_PATHS = "/Users/adam/dev/surespot/libs/ios/google/google-api-objectivec-client-read-only/source/** /Users/adam/dev/surespot/libs/ios/github/src/QR-Code-Encoder-for-Objective-C/QRCodeEncoderObjectiveCAtGithub";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -2015,6 +2042,7 @@
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: 2fours llc (5Q2RFG746M)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: 2fours llc (5Q2RFG746M)";
+				GCC_INPUT_FILETYPE = automatic;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "surespot/surespot-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -2035,7 +2063,7 @@
 				PROVISIONING_PROFILE = "8FA7C24B-7F55-4273-83CB-B13FD91FB0F4";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8FA7C24B-7F55-4273-83CB-B13FD91FB0F4";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = "/Users/adam/dev/surespot/libs/ios/google/google-api-objectivec-client-read-only/source/**";
+				USER_HEADER_SEARCH_PATHS = "/Users/adam/dev/surespot/libs/ios/google/google-api-objectivec-client-read-only/source/** /Users/adam/dev/surespot/libs/ios/github/src/QR-Code-Encoder-for-Objective-C/QRCodeEncoderObjectiveCAtGithub";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

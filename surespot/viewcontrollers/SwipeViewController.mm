@@ -1938,4 +1938,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
     self.popover = nil;
 }
+- (IBAction)qrTouch:(id)sender {
+    [UIUtils showQRInvite:[[IdentityController sharedInstance] getLoggedInUser]];
+    
+}
+
+
 @end
