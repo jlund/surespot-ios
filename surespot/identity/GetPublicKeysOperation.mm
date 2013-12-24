@@ -93,7 +93,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                  pk.dhPubKey = dhPub;
                  pk.dsaPubKey = dsaPub;
                  pk.version = _version;
-                 pk.lastModified = [NSNumber numberWithLong: [[NSDate date] timeIntervalSince1970] * 1000];
+                 pk.lastModified = [NSDate date];
                  
                  //save keys to disk
                  [[IdentityController sharedInstance] savePublicKeys: JSON username: _username version:  _version];

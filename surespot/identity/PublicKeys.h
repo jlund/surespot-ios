@@ -17,6 +17,6 @@ using CryptoPP::DL_Keys_EC;
 @property (nonatomic, strong) NSString* version;
 @property (nonatomic, assign) CryptoPP::DL_PublicKey_EC<ECP> * dhPubKey;
 @property (nonatomic, assign) CryptoPP::ECDSA<ECP, CryptoPP::SHA256>::PublicKey * dsaPubKey;
-@property (nonatomic, strong) NSNumber * lastModified;
+@property (nonatomic, strong) NSDate * lastModified;
 
 @end

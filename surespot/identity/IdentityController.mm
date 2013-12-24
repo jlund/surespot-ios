@@ -245,7 +245,11 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
         pk.dhPubKey = dhPub;
         pk.dsaPubKey = dsaPub;
         pk.version = version;
-        pk.lastModified = [NSNumber numberWithLong: [[NSDate date] timeIntervalSince1970] * 1000];
+        
+        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:filename error:nil];        
+        NSDate *date = [attributes fileModificationDate];
+    
+        pk.lastModified = date;
         DDLogInfo(@"loaded public keys for username: %@, version: %@ from filename: %@", username,version,filename);
         return pk;
     }

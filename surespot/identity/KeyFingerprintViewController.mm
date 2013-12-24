@@ -35,6 +35,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (strong, nonatomic) NSOperationQueue * queue;
 @property (assign, nonatomic) BOOL meFirst;
 @property (assign, nonatomic) NSInteger theirLatestVersion;
+@property (nonatomic, strong) dispatch_queue_t dateFormatQueue;
+@property (nonatomic, strong) NSDateFormatter * dateFormatter;
 @end
 
 @implementation KeyFingerprintViewController
@@ -45,6 +47,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         _username = username;
         _queue = [NSOperationQueue new];
         _theirLatestVersion = 1;
+        _dateFormatQueue = dispatch_queue_create("date format queue fp", NULL);
+        _dateFormatter = [[NSDateFormatter alloc]init];
+        [_dateFormatter setDateStyle:NSDateFormatterShortStyle];
+        [_dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+        
+        
         
         
     }
@@ -54,6 +62,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.navigationItem.title = NSLocalizedString(@"public_key_fingerprints", nil);
     
     [_tableView registerNib:[UINib nibWithNibName:@"KeyFingerprintCell" bundle:nil] forCellReuseIdentifier:@"KeyFingerprintCell"];
     [_tableView registerClass:[KeyFingerprintLoadingCell class] forCellReuseIdentifier:@"KeyFingerprintLoadingCell"];
@@ -133,7 +143,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (cellData) {
         KeyFingerprintCell *cell = [_tableView dequeueReusableCellWithIdentifier:@"KeyFingerprintCell"];
         //todo public key verified date
-        BOOL hideTime = YES;//(_meFirst && indexPath.section == 0) || (!_meFirst && indexPath.section == 1);
+        BOOL hideTime = (_meFirst && indexPath.section == 0) || (!_meFirst && indexPath.section == 1);
         cell.timeLabel.hidden = hideTime;
         cell.timeValue.hidden = hideTime;
         
@@ -254,12 +264,24 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     NSString * md5dsa = [EncryptionController md5:dsaData];
     [dict setObject:[[KeyFingerprint alloc] initWithFingerprintData:md5dsa forTitle:@"DSA"] forKey:@"dsa"];
+    
+    [dict setObject:[self stringFromDate: keys.lastModified] forKey:@"lastVerified"];
     return dict;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     BOOL useMyData = (_meFirst && section == 0) || (!_meFirst && section == 1);
     return useMyData ? [[IdentityController sharedInstance] getLoggedInUser] : _username;
+}
+
+
+- (NSString *)stringFromDate:(NSDate *)date
+{
+    __block NSString *string = nil;
+    dispatch_sync(_dateFormatQueue, ^{
+        string = [_dateFormatter stringFromDate:date ];
+    });
+    return string;
 }
 
 
