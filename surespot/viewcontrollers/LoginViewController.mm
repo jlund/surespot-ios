@@ -278,7 +278,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) showMenu {
+    
     if (!_menu) {
+        [_textPassword resignFirstResponder];
         _menu = [self createMenu];
         if (_menu) {
             [_menu showSensiblyInView:self.view];
