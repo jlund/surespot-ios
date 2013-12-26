@@ -1,0 +1,3 @@
+[submodule "surespot/libs/Submodules/ShareKit"]
+	path = surespot/libs/Submodules/ShareKit
+	url = git://github.com/ShareKit/ShareKit.git
