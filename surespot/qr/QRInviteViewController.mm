@@ -8,6 +8,7 @@
 
 #import "QRInviteViewController.h"
 #import "QREncoder.h"
+#import "SurespotConstants.h"
 
 @interface QRInviteViewController ()
 @property (strong, nonatomic) IBOutlet UITextView *inviteBlurb;
@@ -49,7 +50,10 @@
 
 -(UIImage *) generateQRInviteImage: (NSString *) username {
     int qrcodeImageDimension = 250;
-    NSString* inviteUrl = [NSString stringWithFormat:@"%@%@%@", @"http://192.168.10.68:8080/autoinvite/", username, @"/qr_ios"];
+    NSString * baseUrl = serverSecure ?
+    [NSString stringWithFormat: @"https://%@:%d", serverBaseIPAddress, serverPort] :
+    [NSString stringWithFormat: @"http://%@:%d", serverBaseIPAddress, serverPort];
+    NSString* inviteUrl = [NSString stringWithFormat:@"%@%@%@%@", baseUrl, @"/autoinvite/", username, @"/qr_ios"];
     
     //first encode the string into a matrix of bools, TRUE for black dot and FALSE for white. Let the encoder decide the error correction level and version
     DataMatrix* qrMatrix = [QREncoder encodeWithECLevel:QR_ECLEVEL_Q version:QR_VERSION_AUTO string:inviteUrl];
