@@ -51,7 +51,7 @@
 -(UIImage *) generateQRInviteImage: (NSString *) username {
     int qrcodeImageDimension = 250;
     NSString * baseUrl = serverSecure ?
-    [NSString stringWithFormat: @"https://%@:%d", serverBaseIPAddress, serverPort] :
+    [NSString stringWithFormat: @"https://%@", serverBaseIPAddress] :
     [NSString stringWithFormat: @"http://%@:%d", serverBaseIPAddress, serverPort];
     NSString* inviteUrl = [NSString stringWithFormat:@"%@%@%@%@", baseUrl, @"/autoinvite/", username, @"/qr_ios"];
     
