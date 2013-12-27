@@ -32,6 +32,7 @@
 #import "HomeCell+WebImageCache.h"
 #import "KeyFingerprintViewController.h"
 #import "QRInviteViewController.h"
+#import "ShareKit.h"
 
 
 #ifdef DEBUG
@@ -1436,6 +1437,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [self closeTab];
         }];
         
+        
+        
         [menuItems addObject:closeTabItem];
         
         REMenuItem * deleteAllItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_delete_all_messages", nil) image:[UIImage imageNamed:@"ic_menu_delete"] highlightedImage:nil action:^(REMenuItem * item){
@@ -1445,6 +1448,26 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         [menuItems addObject:deleteAllItem];
     }
+    
+    
+    
+    
+    REMenuItem * shareItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"share_invite_link", nil) image:[UIImage imageNamed:@"blue_heart"] highlightedImage:nil action:^(REMenuItem * menuitem){
+        NSString * inviteUrl = [NSString stringWithFormat:@"%@%@%@", @"https://server.surespot.me/autoinvite/", [[IdentityController sharedInstance] getLoggedInUser], @"/ios"];
+        NSURL *url = [NSURL URLWithString:inviteUrl];
+        SHKItem *item = [SHKItem URL:url title:
+                         //[NSString stringWithFormat:NSLocalizedString(@"external_invite_message", nil), inviteUrl]
+                         @"invite me on surespot" 
+                         contentType:SHKURLContentTypeWebpage];
+        
+        SHKActionSheet* actionSheet = [SHKActionSheet actionSheetForItem:item];
+        [SHK setRootViewController:self];
+        
+        [actionSheet showInView:self.view];
+        
+    }];
+    [menuItems addObject:shareItem];
+    
     REMenuItem * logoutItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"logout", nil) image:[UIImage imageNamed:@"ic_lock_power_off"] highlightedImage:nil action:^(REMenuItem * item){
         [self logout];
         

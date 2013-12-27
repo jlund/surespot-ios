@@ -17,6 +17,10 @@
 #import "IdentityController.h"
 #import "UIUtils.h"
 #import "AGWindowView.h"
+#import "SurespotSHKConfigurator.h"
+#import "SHKConfiguration.h"
+#import "SHKGooglePlus.h"
+#import "SHKFacebook.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -35,9 +39,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         DDLogVerbose(@"received launch options: %@", launchOptions);
     }
     
+    DefaultSHKConfigurator *configurator = [[SurespotSHKConfigurator alloc] init];
+    [SHKConfiguration sharedInstanceWithConfigurator:configurator];
+    
     [DDLog addLogger:[DDTTYLogger sharedInstance]];
     [[DDTTYLogger sharedInstance]setLogFormatter: [SurespotLogFormatter new]];
     [UIUtils setAppAppearances];
+    
+    
     
     //show create if we don't have any identities, otherwise login
     
@@ -64,11 +73,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     
     [self.window makeKeyAndVisible];
-
+    
     _overlayView = [[AGWindowView alloc] initAndAddToKeyWindow];
     _overlayView.supportedInterfaceOrientations = AGInterfaceOrientationMaskAll;
     _overlayView.userInteractionEnabled = NO;
-        
+    
     return YES;
 }
 
@@ -76,15 +85,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     if (!url) {  return NO; }
     
-    [self setUrl:url];
-    return YES;
     
-}
-
-
-
--(void) setUrl: (NSURL*) url {
-    DDLogInfo(@"set url %@", url);
+    DDLogInfo(@"url %@", url);
     
     if ([url.scheme isEqualToString:@"surespot"]) {
         if ([[url host] isEqualToString:@"autoinvite"]) {
@@ -104,6 +106,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             }
         }
     }
+    else
+        if ([url.scheme hasPrefix:[NSString stringWithFormat:@"fb%@", SHKCONFIG(facebookAppId)]]) {
+            return [SHKFacebook handleOpenURL:url];
+        } else if ([url.scheme isEqualToString:@"com.twofours.surespot"]) {
+            return [SHKGooglePlus handleURL:url sourceApplication:sourceApplication annotation:annotation];
+        }
+
+
+    return YES;
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
@@ -180,13 +191,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    [SHKFacebook handleDidBecomeActive];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-    DDLogVerbose(@"application will terminate");
+    [SHKFacebook handleWillTerminate];
 }
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {

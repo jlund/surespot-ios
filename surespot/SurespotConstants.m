@@ -27,4 +27,19 @@ NSInteger const SAVE_MESSAGE_COUNT = 50;
 NSString * const MIME_TYPE_IMAGE = @"image/";
 NSString * const MIME_TYPE_TEXT = @"text/plain";
 NSString * const MIME_TYPE_M4A = @"audio/mp4";
+
+NSString * const FACEBOOK_APP_ID = @"";
+
+NSString * const GOOGLE_PLUS_CLIENT_ID = @"";
+
+NSString * const TUMBLR_CONSUMER_KEY = @"";
+NSString * const TUMBLR_SECRET = @"";
+NSString * const TUMBLR_CALLBACK_URL = @"";
+
+NSString *const GOOGLE_DRIVE_CLIENT_ID = @"";
+NSString *const GOOGLE_DRIVE_CLIENT_SECRET = @"";
+
+
+
+
 @end

@@ -22,4 +22,18 @@ extern NSInteger const SAVE_MESSAGE_COUNT;
 extern NSString * const MIME_TYPE_IMAGE;
 extern NSString * const MIME_TYPE_TEXT;
 extern NSString * const MIME_TYPE_M4A;
+
+
+extern NSString * const FACEBOOK_APP_ID;
+
+extern NSString* const GOOGLE_PLUS_CLIENT_ID;
+
+extern NSString * const TUMBLR_CONSUMER_KEY;
+extern NSString * const TUMBLR_SECRET;
+extern NSString * const TUMBLR_CALLBACK_URL;
+
+
+extern NSString *const GOOGLE_DRIVE_CLIENT_ID;
+extern NSString *const GOOGLE_DRIVE_CLIENT_SECRET;
+
 @end

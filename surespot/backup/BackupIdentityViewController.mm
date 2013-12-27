@@ -42,8 +42,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 static NSString *const kKeychainItemName = @"Google Drive surespot";
-static NSString *const kClientID = @"428168563991-rsb9bkasjio1lbh9s4rd8tmi189gfqv0.apps.googleusercontent.com";
-static NSString *const kClientSecret = @"fcqLFxhN1OxonKFIoJG3NcJA";
 static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 
 
@@ -102,8 +100,8 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 
 -(void) setAccountFromKeychain {
     self.driveService.authorizer = [GTMOAuth2ViewControllerTouch authForGoogleFromKeychainForName:kKeychainItemName
-                                                                                         clientID:kClientID
-                                                                                     clientSecret:kClientSecret];
+                                                                                         clientID:GOOGLE_DRIVE_CLIENT_ID
+                                                                                     clientSecret:GOOGLE_DRIVE_CLIENT_SECRET];
     [self updateUI];
 }
 
@@ -135,8 +133,8 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     //http://stackoverflow.com/questions/13693617/error-500-when-performing-a-query-with-drive-file-scope
     authController = [[GTMOAuth2ViewControllerTouch alloc] initWithScope:[[kGTLAuthScopeDriveFile stringByAppendingString:@" "] stringByAppendingString: kGTLAuthScopeDriveMetadataReadonly]
 
-                                                                clientID:kClientID
-                                                            clientSecret:kClientSecret
+                                                                clientID:GOOGLE_DRIVE_CLIENT_ID
+                                                            clientSecret:GOOGLE_DRIVE_CLIENT_SECRET
                                                         keychainItemName:kKeychainItemName
                                                                 delegate:self
                                                         finishedSelector:@selector(viewController:finishedWithAuth:error:)];

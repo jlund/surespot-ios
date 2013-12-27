@@ -321,6 +321,8 @@
 "error_saving_image_to_photos"="error saving image to photos";
 "error_saving_image_to_photos_locked"="can't save the image as it is locked";
 "could_not_load_public_keys"="could not load public keys";
+"share_invite_link"="share invite link";
+"Share"="share link using";
 
 
 
