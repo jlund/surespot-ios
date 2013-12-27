@@ -37,6 +37,8 @@ NSString * const TUMBLR_CALLBACK_URL = @"";
 NSString *const GOOGLE_CLIENT_ID = @"";
 NSString *const GOOGLE_CLIENT_SECRET = @"";
 
+NSString * const BITLY_TOKEN = @"";
+
 
 
 

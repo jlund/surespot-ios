@@ -1449,22 +1449,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [menuItems addObject:deleteAllItem];
     }
     
-    
-    
-    
     REMenuItem * shareItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"share_invite_link", nil) image:[UIImage imageNamed:@"blue_heart"] highlightedImage:nil action:^(REMenuItem * menuitem){
         NSString * inviteUrl = [NSString stringWithFormat:@"%@%@%@", @"https://server.surespot.me/autoinvite/", [[IdentityController sharedInstance] getLoggedInUser], @"/ios"];
-        NSURL *url = [NSURL URLWithString:inviteUrl];
-        SHKItem *item = [SHKItem URL:url title:
-                         //[NSString stringWithFormat:NSLocalizedString(@"external_invite_message", nil), inviteUrl]
-                         @"invite me on surespot" 
-                         contentType:SHKURLContentTypeWebpage];
         
-        SHKActionSheet* actionSheet = [SHKActionSheet actionSheetForItem:item];
-        [SHK setRootViewController:self];
-        
-        [actionSheet showInView:self.view];
-        
+        [[NetworkController sharedInstance] getShortUrl:inviteUrl callback:^(id shortUrl) {
+            NSString * text = [NSString stringWithFormat:NSLocalizedString(@"external_invite_message", nil), shortUrl];
+            
+            SHKItem *item = [SHKItem text: text];
+            
+            SHKActionSheet* actionSheet = [SHKActionSheet actionSheetForItem:item];
+            [SHK setRootViewController:self];
+            
+            [actionSheet showInView:self.view];
+        }];        
     }];
     [menuItems addObject:shareItem];
     
@@ -1537,7 +1534,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
                     [_popover setPopoverContentSize:CGSizeMake(320, 480) animated:YES];
                     [_popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:self.view permittedArrowDirections:0 animated:YES];
-
+                    
                 } else {
                     
                     

@@ -194,7 +194,7 @@
     return [NSArray arrayWithObjects:@"SHKMail",@"SHKFacebook", @"SHKCopy", nil];
 }
 - (NSArray*)defaultFavoriteTextSharers {
-    return [NSArray arrayWithObjects:@"SHKMail",@"SHKTwitter",@"SHKFacebook", nil];
+    return [NSArray arrayWithObjects:@"SHKCopy", @"SHKMail", @"SHKTextMessage", @"SHKTwitter",@"SHKFacebook", @"SHKGooglePlus", @"SHKTumblr", nil];
 }
 
 //ShareKit will remember last used sharers for each particular mime type.

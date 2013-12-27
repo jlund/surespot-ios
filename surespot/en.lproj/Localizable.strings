@@ -64,7 +64,7 @@
 "crash_dialog_text"="We must confess that an unexpected error has occurred.\n\nPlease help us to fix the issue by touching OK to send an error report containing no personally identifying information.";
 "crash_dialog_comment_prompt"="You can add your comments about the problem below if you like:";
 "crash_dialog_ok_toast"="Thank you!";
-"external_invite_message"="I'd like to chat with you privately via surespot. Click %@ to install the andrid app and invite me as a friend.";
+"external_invite_message"="I'd like to chat with you privately via surespot. Click %@ to invite me as a friend / install the app.";
 "help_backupIdentities1"="Because surespot uses encryption keys that are never uploaded to our servers, if you lose your phone, or uninstall then re-install the app, or wipe the app's data, you will not be able to login unless you have backed up your identity.";
 "help_backupIdentities2"="Surespot can use Google Drive and/or Device Storage for backing up your identity. These options are in the identity management settings.";
 "help_backup_local"="For maximum security we recommend using Device Storage backup. Once backed up, the identity file should then be copied (or moved) from your device to a secure location so that it may be restored in the case of app uninstall or 'clear data', a lost or stolen device, or other data loss.";

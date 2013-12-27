@@ -34,4 +34,6 @@ extern NSString * const TUMBLR_CALLBACK_URL;
 extern NSString *const GOOGLE_CLIENT_ID;
 extern NSString *const GOOGLE_CLIENT_SECRET;
 
+extern NSString * const BITLY_TOKEN;
+
 @end

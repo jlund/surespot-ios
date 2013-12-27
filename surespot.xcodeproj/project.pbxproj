@@ -800,6 +800,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6674FF77186CB95700B8E77B /* Social.framework in Frameworks */,
 				66DAB61B186CDB51006C262F /* libCopy.a in Frameworks */,
 				66DAB61C186CDB51006C262F /* libEmail.a in Frameworks */,
 				66DAB61D186CDB51006C262F /* libFacebook.a in Frameworks */,
@@ -819,7 +820,6 @@
 				6648B1E9186CB9D9007037B1 /* CoreText.framework in Frameworks */,
 				6648B1E5186CB9BF007037B1 /* MediaPlayer.framework in Frameworks */,
 				6674FF79186CB96A00B8E77B /* libsqlite3.dylib in Frameworks */,
-				6674FF77186CB95700B8E77B /* Social.framework in Frameworks */,
 				6674FF75186CB94500B8E77B /* Accounts.framework in Frameworks */,
 				6674FF73186CB92200B8E77B /* AVFoundation.framework in Frameworks */,
 				6674FF71186CB91300B8E77B /* CoreMedia.framework in Frameworks */,

@@ -9,7 +9,6 @@
 #import "NetworkController.h"
 #import "ChatUtils.h"
 #import "DDLog.h"
-#import "SurespotConstants.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -613,6 +612,24 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) deleteFromCache: (NSURLRequest *) request {
     [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
+}
+
+
+
+
+-(void) getShortUrl:(NSString*) longUrl callback: (CallbackBlock) callback
+{
+    NSString * path = [[NSString stringWithFormat:@"https://api-ssl.bitly.com/v3/shorten?access_token=%@&longUrl=%@", BITLY_TOKEN, longUrl] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSMutableURLRequest *request = [self requestWithMethod:@"GET" path:nil parameters: nil];
+    [request setURL:  [NSURL URLWithString:path]];
+    
+    
+    AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+        callback([JSON valueForKeyPath:@"data.url"]);
+    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+        callback(longUrl);
+    }];
+    [operation start];    
 }
 
 @end

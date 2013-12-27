@@ -7,7 +7,8 @@
 //
 
 #import "AFHTTPClient.h"
-#import"AFNetworking.h"
+#import "AFNetworking.h"
+#import "SurespotConstants.h"
 
 typedef void (^JSONResponseBlock) (NSDictionary* json);
 typedef void (^JSONSuccessBlock) (NSURLRequest *request, NSHTTPURLResponse *response, id JSON);
@@ -97,4 +98,6 @@ typedef void (^HTTPFailureBlock) (AFHTTPRequestOperation *operation , NSError *e
 
 -(void) deleteFromCache: (NSURLRequest *) request;
 -(NSURLRequest *) buildPublicKeyRequestForUsername: (NSString *) username version: (NSString *) version;
+
+-(void) getShortUrl:(NSString*) longUrl callback: (CallbackBlock) callback;
 @end
