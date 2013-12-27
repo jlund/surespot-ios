@@ -106,7 +106,7 @@
  register the bundle ID of your application.
  */
 - (NSString*)googlePlusClientId {
-    return GOOGLE_PLUS_CLIENT_ID;
+    return GOOGLE_CLIENT_ID;
 }
 
 

@@ -916,8 +916,6 @@
 		6604A2C417626B9E0072216A /* surespot */ = {
 			isa = PBXGroup;
 			children = (
-				6648B1EC186CBA81007037B1 /* SurespotSHKConfigurator.h */,
-				6648B1ED186CBA81007037B1 /* SurespotSHKConfigurator.m */,
 				66EBDF2F1855C96F00F2452D /* backup */,
 				66EBDF401855C96F00F2452D /* Base.lproj */,
 				66EBE0AD1855C97100F2452D /* cache */,
@@ -936,6 +934,8 @@
 				6604A2CE17626B9E0072216A /* SurespotAppDelegate.mm */,
 				66A2D917183A7A7F00785270 /* SurespotConstants.h */,
 				66A2D918183A7A7F00785270 /* SurespotConstants.m */,
+				6648B1EC186CBA81007037B1 /* SurespotSHKConfigurator.h */,
+				6648B1ED186CBA81007037B1 /* SurespotSHKConfigurator.m */,
 				6604A2D617626B9E0072216A /* MainStoryboard.storyboard */,
 				66D3B04E182EAB4200B37A6C /* surespot.xcassets */,
 				6604A2C517626B9E0072216A /* Supporting Files */,

@@ -30,14 +30,12 @@ NSString * const MIME_TYPE_M4A = @"audio/mp4";
 
 NSString * const FACEBOOK_APP_ID = @"";
 
-NSString * const GOOGLE_PLUS_CLIENT_ID = @"";
-
 NSString * const TUMBLR_CONSUMER_KEY = @"";
 NSString * const TUMBLR_SECRET = @"";
 NSString * const TUMBLR_CALLBACK_URL = @"";
 
-NSString *const GOOGLE_DRIVE_CLIENT_ID = @"";
-NSString *const GOOGLE_DRIVE_CLIENT_SECRET = @"";
+NSString *const GOOGLE_CLIENT_ID = @"";
+NSString *const GOOGLE_CLIENT_SECRET = @"";
 
 
 
