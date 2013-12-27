@@ -119,6 +119,7 @@
 		66DAB625186CDB51006C262F /* libTumblr.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66DAB5ED186CBD6B006C262F /* libTumblr.a */; };
 		66DAB626186CDB51006C262F /* libTwitter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66DAB5EF186CBD6B006C262F /* libTwitter.a */; };
 		66DAB62A186D0461006C262F /* SurespotSHKSharers.plist in Resources */ = {isa = PBXBuildFile; fileRef = 66DAB629186D0461006C262F /* SurespotSHKSharers.plist */; };
+		66DAB62E186DEEFC006C262F /* VoiceDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66DAB62D186DEEFC006C262F /* VoiceDelegate.mm */; };
 		66E21DEC1847D7F90005D91E /* IASKAppSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E21DCE1847D7F90005D91E /* IASKAppSettingsViewController.m */; };
 		66E21DED1847D7F90005D91E /* IASKAppSettingsWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E21DD01847D7F90005D91E /* IASKAppSettingsWebViewController.m */; };
 		66E21DEE1847D7F90005D91E /* IASKSpecifierValuesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E21DD21847D7F90005D91E /* IASKSpecifierValuesViewController.m */; };
@@ -487,6 +488,8 @@
 		66DAB617186CBF59006C262F /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		66DAB619186CC18E006C262F /* GoogleOpenSource.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleOpenSource.framework; path = surespot/libs/Submodules/ShareKit/Frameworks/GoogleOpenSource.framework; sourceTree = "<group>"; };
 		66DAB629186D0461006C262F /* SurespotSHKSharers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SurespotSHKSharers.plist; sourceTree = "<group>"; };
+		66DAB62C186DEEFC006C262F /* VoiceDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VoiceDelegate.h; path = voice/VoiceDelegate.h; sourceTree = "<group>"; };
+		66DAB62D186DEEFC006C262F /* VoiceDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = VoiceDelegate.mm; path = voice/VoiceDelegate.mm; sourceTree = "<group>"; };
 		66E21DCD1847D7F90005D91E /* IASKAppSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IASKAppSettingsViewController.h; sourceTree = "<group>"; };
 		66E21DCE1847D7F90005D91E /* IASKAppSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IASKAppSettingsViewController.m; sourceTree = "<group>"; };
 		66E21DCF1847D7F90005D91E /* IASKAppSettingsWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IASKAppSettingsWebViewController.h; sourceTree = "<group>"; };
@@ -916,6 +919,7 @@
 		6604A2C417626B9E0072216A /* surespot */ = {
 			isa = PBXGroup;
 			children = (
+				66DAB62B186DEEDC006C262F /* voice */,
 				66EBDF2F1855C96F00F2452D /* backup */,
 				66EBDF401855C96F00F2452D /* Base.lproj */,
 				66EBE0AD1855C97100F2452D /* cache */,
@@ -1186,6 +1190,15 @@
 				66DAB605186CBD6B006C262F /* Static Library Tests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		66DAB62B186DEEDC006C262F /* voice */ = {
+			isa = PBXGroup;
+			children = (
+				66DAB62C186DEEFC006C262F /* VoiceDelegate.h */,
+				66DAB62D186DEEFC006C262F /* VoiceDelegate.mm */,
+			);
+			name = voice;
 			sourceTree = "<group>";
 		};
 		66E21DCB1847D7F90005D91E /* InAppSettingsKit */ = {
@@ -2020,6 +2033,7 @@
 				66EBE13A1855C97100F2452D /* SurespotLogFormatter.m in Sources */,
 				663710801813172F009D5195 /* EGOCache.m in Sources */,
 				6614EEB8185F59F700A65CDE /* ALAssetsLibrary+CustomPhotoAlbum.m in Sources */,
+				66DAB62E186DEEFC006C262F /* VoiceDelegate.mm in Sources */,
 				66E4F5B8176298CB00596E6B /* SocketIOJSONSerialization.m in Sources */,
 				66E4F5B9176298CB00596E6B /* SocketIOPacket.m in Sources */,
 				66EBE0CB1855C97100F2452D /* KeyboardState.m in Sources */,

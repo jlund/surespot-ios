@@ -28,16 +28,16 @@ NSString * const MIME_TYPE_IMAGE = @"image/";
 NSString * const MIME_TYPE_TEXT = @"text/plain";
 NSString * const MIME_TYPE_M4A = @"audio/mp4";
 
-NSString * const FACEBOOK_APP_ID = @"";
+NSString * const FACEBOOK_APP_ID = @"585893814798693";
 
-NSString * const TUMBLR_CONSUMER_KEY = @"";
-NSString * const TUMBLR_SECRET = @"";
-NSString * const TUMBLR_CALLBACK_URL = @"";
+NSString * const TUMBLR_CONSUMER_KEY = @"odlgStMAIPzomPy0uaymdh9uggO5pF31Sv25ZBvXR3HDEwfs7s";
+NSString * const TUMBLR_SECRET = @"rEB7QNBpycr5OZQdIdT4lQQ3ZowyoGIuoWtvgMC2IIePTkFFIA";
+NSString * const TUMBLR_CALLBACK_URL = @"https://tumblr.surespot.me";
 
-NSString *const GOOGLE_CLIENT_ID = @"";
-NSString *const GOOGLE_CLIENT_SECRET = @"";
+NSString *const GOOGLE_CLIENT_ID = @"428168563991-kjkqs31gov2lmgh05ajbhcpi7bkpuop7.apps.googleusercontent.com";
+NSString *const GOOGLE_CLIENT_SECRET = @"1H_GukkECmZb8ElXEmEGuWh8";
 
-NSString * const BITLY_TOKEN = @"";
+NSString * const BITLY_TOKEN = @"4d80112e45e7c6c32d055e2ea9e0ceb87c593374";
 
 
 

@@ -33,7 +33,7 @@
 #import "KeyFingerprintViewController.h"
 #import "QRInviteViewController.h"
 #import "ShareKit.h"
-
+#import "VoiceDelegate.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -58,6 +58,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) ImageDelegate * imageDelegate;
 @property (nonatomic, strong) SurespotMessage * imageMessage;
 @property (nonatomic, strong) UIPopoverController * popover;
+@property (nonatomic, strong) VoiceDelegate * voiceDelegate;
 
 @end
 
@@ -159,6 +160,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _theButton.layer.borderWidth = 3.0f;
     _theButton.backgroundColor = [UIColor whiteColor];
     _theButton.opaque = YES;
+    [_theButton addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(buttonLongPress:)]];
     
     [self updateTabChangeUI];
     
@@ -172,6 +174,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     //app settings
     _appSettingsViewController = [IASKAppSettingsViewController new];
     _appSettingsViewController.delegate = self;
+    
     
 }
 
@@ -1461,7 +1464,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [SHK setRootViewController:self];
             
             [actionSheet showInView:self.view];
-        }];        
+        }];
     }];
     [menuItems addObject:shareItem];
     
@@ -1821,10 +1824,44 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
+-(void)buttonLongPress:(UILongPressGestureRecognizer *)gestureRecognizer
+{
+    DDLogInfo(@"state %d", gestureRecognizer.state);
+    NSString * currentChat =[[ChatController sharedInstance] getCurrentChat];
+    
+    if (currentChat) {
+        CGPoint p = [gestureRecognizer locationInView:_theButton];
+        
+        switch (gestureRecognizer.state) {
+            case UIGestureRecognizerStateBegan:
+                [self ensureVoiceDelegate];
+                [_voiceDelegate startRecordingUsername: currentChat];
+                break;
+            case UIGestureRecognizerStateEnded:
+                [_voiceDelegate stopRecordingSend: YES];
+                break;
+            default:
+                break;
+        }
+        
+    }
+    
+}
+
+-(void) ensureVoiceDelegate {
+    if (!_voiceDelegate) {
+        _voiceDelegate = [[VoiceDelegate alloc] initWithUsername:[[IdentityController sharedInstance] getLoggedInUser] ourVersion:[[IdentityController sharedInstance] getOurLatestVersion ]];
+        
+        [_voiceDelegate prepareRecording];
+    }
+}
+
+
 - (IBAction)buttonTouchUpInside:(id)sender {
     if (![self handleTextAction]) {
         [self scrollHome];
     }
+    
     
 }
 - (void) backPressed {
