@@ -64,7 +64,7 @@
         }
         else {
             if ([_message.mimeType isEqualToString: MIME_TYPE_M4A]) {
-                _message.plainData = @"[voice message]";
+                [UIUtils setVoiceMessageHeights:_message size:_size];
             }
         }
         [self finish];

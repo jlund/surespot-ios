@@ -960,6 +960,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 cell.messageLabel.hidden = NO;
                 cell.uiImageView.hidden = YES;
                 cell.shareableView.hidden = YES;
+                cell.audioIcon.hidden = YES;
+                cell.audioSlider.hidden = YES;
                 CGRect messageStatusFrame = cell.messageStatusLabel.frame;
                 if (ours) {
                     messageStatusFrame.origin.x = 13;
@@ -968,6 +970,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     messageStatusFrame.origin.x = 63;
                 }
                 cell.messageStatusLabel.frame = messageStatusFrame;
+                
             }
             else {
                 if ([message.mimeType isEqualToString:MIME_TYPE_IMAGE]) {
@@ -976,6 +979,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     cell.uiImageView.hidden = NO;
                     cell.uiImageView.alignTop = YES;
                     cell.uiImageView.alignLeft = YES;
+                    cell.audioIcon.hidden = YES;
+                    cell.audioSlider.hidden = YES;
+
                     CGRect messageStatusFrame = cell.messageStatusLabel.frame;
                     if (ours) {
                         messageStatusFrame.origin.x = 22;
@@ -1010,16 +1016,21 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     if ([message.mimeType isEqualToString:MIME_TYPE_M4A]) {
                         CGRect messageStatusFrame = cell.messageStatusLabel.frame;
                         if (ours) {
+                            [cell.audioIcon setImage: [UIImage imageNamed:@"ic_media_play"]];
                             messageStatusFrame.origin.x = 13;
                         }
                         else {
+                                                        [cell.audioIcon setImage: [UIImage imageNamed:@"ic_media_play"]];
                             messageStatusFrame.origin.x = 63;
                         }
                         cell.messageStatusLabel.frame = messageStatusFrame;
+                        cell.shareableView.hidden = YES;
                         cell.messageLabel.hidden = YES;
-                        cell.uiImageView.hidden = NO;
-                        
-                        [cell setMessage:message                                 
+                        cell.uiImageView.hidden = YES;
+                        cell.audioIcon.hidden = NO;
+                        cell.audioSlider.hidden = NO;
+
+                        [cell setMessage:message
                                          progress:^(NSUInteger receivedSize, long long expectedSize) {
                                              
                                          }

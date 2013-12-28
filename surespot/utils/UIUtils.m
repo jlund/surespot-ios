@@ -178,25 +178,20 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 +(void) setImageMessageHeights: (SurespotMessage *)  message size: (CGSize) size {
     
-    
-    //figure out message height for both orientations
-    
-    NSInteger offset = 0;
-    NSInteger heightAdj = 25;
-    BOOL ours = [ChatUtils isOurMessage:message];
-    if (ours) {
-        offset = 40;
-    }
-    else {
-        offset = 90;
-    }
-    
-    [message setRowPortraitHeight: 224];// (int) (labelSize.height + heightAdj > 44 ? labelSize.height + heightAdj : 44) ];
-    [message setRowLandscapeHeight: 224];//(int) (labelSize.height + heightAdj > 44 ? labelSize.height + heightAdj: 44) ];
-    
+    [message setRowPortraitHeight: 224];
+    [message setRowLandscapeHeight: 224];
     DDLogInfo(@"setting image row height portrait %d landscape %d", message.rowPortraitHeight, message.rowLandscapeHeight);
     
 }
+
+
++(void) setVoiceMessageHeights: (SurespotMessage *)  message size: (CGSize) size {
+    [message setRowPortraitHeight: 64];
+    [message setRowLandscapeHeight: 64];
+    DDLogInfo(@"setting voice row height portrait %d landscape %d", message.rowPortraitHeight, message.rowLandscapeHeight);
+    
+}
+
 
 
 +(void) startSpinAnimation: (UIView *) view {

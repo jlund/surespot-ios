@@ -40,9 +40,19 @@
                         <rect key="frame" x="5" y="4" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="vyW-1A-6Uu">
+                        <rect key="frame" x="13" y="27" width="25" height="27"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    </imageView>
+                    <slider opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" id="DA8-9Y-Who">
+                        <rect key="frame" x="44" y="24" width="268" height="34"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    </slider>
                 </subviews>
             </tableViewCellContentView>
             <connections>
+                <outlet property="audioIcon" destination="vyW-1A-6Uu" id="LiU-4R-gtv"/>
+                <outlet property="audioSlider" destination="DA8-9Y-Who" id="fD8-Jm-AQ0"/>
                 <outlet property="messageLabel" destination="6hK-2i-BEE" id="CJB-pv-4Nv"/>
                 <outlet property="messageSentView" destination="uKg-6b-FVk" id="HOU-Cd-2l5"/>
                 <outlet property="messageStatusLabel" destination="OG5-dM-jkO" id="seN-Lh-alm"/>
