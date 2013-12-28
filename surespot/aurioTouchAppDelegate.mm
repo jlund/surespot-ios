@@ -1,50 +1,67 @@
-//
-//  VoiceDelegate.m
-//  surespot
-//
-//  Created by Adam on 12/27/13.
-//  Copyright (c) 2013 2fours. All rights reserved.
-//
+/*
+ 
+     File: aurioTouchAppDelegate.mm
+ Abstract: n/a
+  Version: 1.0
+ 
+ Disclaimer: IMPORTANT:  This Apple software is supplied to you by Apple
+ Inc. ("Apple") in consideration of your agreement to the following
+ terms, and your use, installation, modification or redistribution of
+ this Apple software constitutes acceptance of these terms.  If you do
+ not agree with these terms, please do not use, install, modify or
+ redistribute this Apple software.
+ 
+ In consideration of your agreement to abide by the following terms, and
+ subject to these terms, Apple grants you a personal, non-exclusive
+ license, under Apple's copyrights in this original Apple software (the
+ "Apple Software"), to use, reproduce, modify and redistribute the Apple
+ Software, with or without modifications, in source and/or binary forms;
+ provided that if you redistribute the Apple Software in its entirety and
+ without modifications, you must retain this notice and the following
+ text and disclaimers in all such redistributions of the Apple Software.
+ Neither the name, trademarks, service marks or logos of Apple Inc. may
+ be used to endorse or promote products derived from the Apple Software
+ without specific prior written permission from Apple.  Except as
+ expressly stated in this notice, no other rights or licenses, express or
+ implied, are granted by Apple herein, including but not limited to any
+ patent rights that may be infringed by your derivative works or by other
+ works in which the Apple Software may be incorporated.
+ 
+ The Apple Software is provided by Apple on an "AS IS" basis.  APPLE
+ MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION
+ THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE, REGARDING THE APPLE SOFTWARE OR ITS USE AND
+ OPERATION ALONE OR IN COMBINATION WITH YOUR PRODUCTS.
+ 
+ IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL
+ OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION,
+ MODIFICATION AND/OR DISTRIBUTION OF THE APPLE SOFTWARE, HOWEVER CAUSED
+ AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE),
+ STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN ADVISED OF THE
+ POSSIBILITY OF SUCH DAMAGE.
+ 
+ Copyright (C) 2011 Apple Inc. All Rights Reserved.
+ 
+ 
+ */
 
-#import "VoiceDelegate.h"
-#import "DDLog.h"
-#import "IdentityController.h"
-#import "EncryptionController.h"
-#import "UIUtils.h"
-#import "NSData+Base64.h"
-#import "ChatController.h"
-#import "ChatDataSource.h"
-#import "NetworkController.h"
+#import "aurioTouchAppDelegate.h"
 #import "AudioUnit/AudioUnit.h"
 #import "CAXException.h"
-#import "SurespotAppDelegate.h"
 
-#ifdef DEBUG
-static const int ddLogLevel = LOG_LEVEL_INFO;
-#else
-static const int ddLogLevel = LOG_LEVEL_OFF;
-#endif
+@implementation aurioTouchAppDelegate
 
-
-
-@interface VoiceDelegate()
-@property (nonatomic, strong) NSString * username;
-@property (nonatomic, strong) NSString * theirUsername;
-@property (nonatomic, strong) NSString * ourVersion;
-@property (nonatomic, strong) AVAudioRecorder *recorder;
-@property (nonatomic, strong) AVAudioPlayer *player;
-@end
-
-@implementation VoiceDelegate
 // value, a, r, g, b
 GLfloat colorLevels[] = {
-    0., 1., 0., 0., 0.,
-    .333, 1., .7, 0., 0.,
-    .667, 1., 0., 0., 1.,
-    1., 1., 0., 1., 1.,
+    0., 1., 0., 0., 0., 
+    .333, 1., .7, 0., 0., 
+    .667, 1., 0., 0., 1., 
+    1., 1., 0., 1., 1., 
 };
 
-//@synthesize window;
+@synthesize window;
 @synthesize view;
 
 @synthesize rioUnit;
@@ -54,184 +71,6 @@ GLfloat colorLevels[] = {
 @synthesize fftBufferManager;
 @synthesize mute;
 @synthesize inputProc;
-
-
-
-
-- (id) initWithUsername: (NSString *) username
-             ourVersion:(NSString *) ourVersion
-
-
-{
-    // Call superclass's initializer
-    self = [super init];
-    if( !self ) return nil;
-    _username = username;
-    _ourVersion = ourVersion;
-    return self;
-}
-
--(void) prepareRecording {
-    
-    NSArray *pathComponents = [NSArray arrayWithObjects:
-                               [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject],
-                               @"MyAudioMemo.m4a",
-                               nil];
-    NSURL *outputFileURL = [NSURL fileURLWithPathComponents:pathComponents];
-    
-    // Setup audio session
-    AVAudioSession *session = [AVAudioSession sharedInstance];
-    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
-    
-    // Define the recorder setting
-    NSMutableDictionary *recordSetting = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                          [NSNumber numberWithInt:kAudioFormatMPEG4AAC] , AVFormatIDKey,
-                                          [NSNumber numberWithInteger: 12000], AVEncoderBitRateKey,
-                                          [NSNumber numberWithFloat: 12000],AVSampleRateKey,
-                                          [NSNumber numberWithInt:1],AVNumberOfChannelsKey, nil];
-    
-    // Initiate and prepare the recorder
-    _recorder = [[AVAudioRecorder alloc] initWithURL:outputFileURL settings:recordSetting error:nil];
-    _recorder.delegate = self;
-    _recorder.meteringEnabled = YES;
-    [_recorder prepareToRecord];
-    
-    [self initScope];
-}
-
--(void) startRecordingUsername: (NSString *) username {
-    DDLogInfo(@"start recording");
-    if (_player.playing) {
-        [_player stop];
-    }
-    
-    if (!_recorder.recording) {
-        _theirUsername = username;
-        //AVAudioSession *session = [AVAudioSession sharedInstance];
-      //  [session setActive:YES error:nil];
-        
-        // Start recording
-   //     [_recorder record];
-        //  [recordPauseButton setTitle:@"Pause" forState:UIControlStateNormal];
-        
-        	AudioSessionSetActive(true);
-        
-    }
-}
-
--(void) stopRecordingSend: (BOOL) send {
-    DDLogInfo(@"stop recording");
-    if (_recorder.recording) {
-        [_recorder stop];
-        
-        
-        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-        [audioSession setActive:NO error:nil];
-        
-        _player = [[AVAudioPlayer alloc] initWithContentsOfURL:_recorder.url error:nil];
-        [_player setDelegate:self];
-        [_player play];
-        
-
-        
-        if (send) {
-            [self uploadVoiceUrl:_recorder.url];
-        }
-        
-        else {
-            //todo delete file
-        }
-        
-
-    }
-}
-
-
--(void) uploadVoiceUrl: (NSURL *) url {
-    //    if (!image) {
-    //        [self stopProgress];
-    //        [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_image", nil) duration:2];
-    //        return;
-    //    }
-    //
-    
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        [[IdentityController sharedInstance] getTheirLatestVersionForUsername:_theirUsername callback:^(NSString *version) {
-            if (version) {
-                //encrypt and upload the voice data
-                NSData * voiceData = [NSData dataWithContentsOfURL: url];
-                NSData * iv = [EncryptionController getIv];
-                
-                //encrypt
-                [EncryptionController symmetricEncryptData:voiceData
-                                                ourVersion:_ourVersion
-                                             theirUsername:_theirUsername
-                                              theirVersion:version
-                                                        iv:iv
-                                                  callback:^(NSData * encryptedImageData) {
-                                                      if (encryptedImageData) {
-                                                          //create message
-                                                          SurespotMessage * message = [SurespotMessage new];
-                                                          message.from = _username;
-                                                          message.fromVersion = _ourVersion;
-                                                          message.to = _theirUsername;
-                                                          message.toVersion = version;
-                                                          message.mimeType = MIME_TYPE_M4A;
-                                                          message.iv = [iv base64EncodedStringWithSeparateLines:NO];
-                                                    //      NSString * key = [@"voiceKey_" stringByAppendingString: message.iv];
-                                                      //    message.data = key;
-                                                          
-//                                                          DDLogInfo(@"adding local image to cache %@", key);
-//                                                          [[[SDWebImageManager sharedManager] imageCache] storeImage:scaledImage imageData:encryptedImageData forKey:key toDisk:YES];
-                                                          
-                                                          //add message locally before we upload it
-                                                          ChatDataSource * cds = [[ChatController sharedInstance] getDataSourceForFriendname:_theirUsername];
-                                                          if (cds) {
-                                                              [cds addMessage:message refresh:YES];
-                                                          }
-                                                          
-                                                          //upload image to server
-                                                     //     DDLogInfo(@"uploading image %@ to server", key);
-                                                          [[NetworkController sharedInstance] postFileStreamData:encryptedImageData
-                                                                                                      ourVersion:_ourVersion
-                                                                                                   theirUsername:_theirUsername
-                                                                                                    theirVersion:version
-                                                                                                          fileid:[iv SR_stringByBase64Encoding]
-                                                                                                        mimeType:MIME_TYPE_M4A
-                                                                                                    successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                                                                                      //  DDLogInfo(@"uploaded voice %@ to server successfully", key);
-                                                                                                        //[self stopProgress];
-                                                                                                    } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                                                                                    //    DDLogInfo(@"uploaded voice %@ to server failed, statuscode: %d", key, operation.response.statusCode);
-                                                                                                      //  [self stopProgress];
-                                                                                                        if (operation.response.statusCode == 402) {
-                                                                                                            message.errorStatus = 402;
-                                                                                                        }
-                                                                                                        else {
-                                                                                                            message.errorStatus = 500;
-                                                                                                        }
-                                                                                                        
-                                                                                                        [cds postRefresh];
-                                                                                                    }];
-                                                      }
-                                                      else {
-                                                        //  [self stopProgress];
-                                                          [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_image", nil) duration:2];
-                                                          
-                                                      }
-                                                  }];
-                
-            }
-            else {
-                [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_image", nil) duration:2];
-            }
-        }];
-    });
-}
-
-
 
 #pragma mark-
 
@@ -284,7 +123,7 @@ void rioInterruptionListener(void *inClientData, UInt32 inInterruption)
     try {
         printf("Session interrupted! --- %s ---", inInterruption == kAudioSessionBeginInterruption ? "Begin Interruption" : "End Interruption");
         
-        VoiceDelegate *THIS = (__bridge VoiceDelegate*)inClientData;
+        aurioTouchAppDelegate *THIS = (aurioTouchAppDelegate*)inClientData;
         
         if (inInterruption == kAudioSessionEndInterruption) {
             // make sure we are again the active session
@@ -308,11 +147,11 @@ void propListener(	void *                  inClientData,
                   UInt32                  inDataSize,
                   const void *            inData)
 {
-	VoiceDelegate *THIS = (__bridge VoiceDelegate*)inClientData;
+	aurioTouchAppDelegate *THIS = (aurioTouchAppDelegate*)inClientData;
 	if (inID == kAudioSessionProperty_AudioRouteChange)
 	{
 		try {
-            UInt32 isAudioInputAvailable;
+            UInt32 isAudioInputAvailable; 
             UInt32 size = sizeof(isAudioInputAvailable);
             XThrowIfError(AudioSessionGetProperty(kAudioSessionProperty_AudioInputAvailable, &size, &isAudioInputAvailable), "couldn't get AudioSession AudioInputAvailable property value");
             
@@ -352,11 +191,11 @@ void propListener(	void *                  inClientData,
 			size = sizeof(CFStringRef);
 			XThrowIfError(AudioSessionGetProperty(kAudioSessionProperty_AudioRoute, &size, &newRoute), "couldn't get new audio route");
 			if (newRoute)
-			{
+			{	
 				CFShow(newRoute);
 				if (CFStringCompare(newRoute, CFSTR("Headset"), NULL) == kCFCompareEqualTo) // headset plugged in
 				{
-					colorLevels[0] = .3;
+					colorLevels[0] = .3;				
 					colorLevels[5] = .5;
 				}
 				else if (CFStringCompare(newRoute, CFSTR("Receiver"), NULL) == kCFCompareEqualTo) // headset plugged in
@@ -366,7 +205,7 @@ void propListener(	void *                  inClientData,
 					colorLevels[10] = .667;
 					colorLevels[15] = 1.0;
 					
-				}
+				}			
 				else
 				{
 					colorLevels[0] = 0;
@@ -387,14 +226,14 @@ void propListener(	void *                  inClientData,
 #pragma mark -RIO Render Callback
 
 static OSStatus	PerformThru(
-							void						*inRefCon,
-							AudioUnitRenderActionFlags 	*ioActionFlags,
-							const AudioTimeStamp 		*inTimeStamp,
-							UInt32 						inBusNumber,
-							UInt32 						inNumberFrames,
+							void						*inRefCon, 
+							AudioUnitRenderActionFlags 	*ioActionFlags, 
+							const AudioTimeStamp 		*inTimeStamp, 
+							UInt32 						inBusNumber, 
+							UInt32 						inNumberFrames, 
 							AudioBufferList 			*ioData)
 {
-	VoiceDelegate *THIS = (__bridge VoiceDelegate *)inRefCon;
+	aurioTouchAppDelegate *THIS = (aurioTouchAppDelegate *)inRefCon;
 	OSStatus err = AudioUnitRender(THIS->rioUnit, ioActionFlags, inTimeStamp, 1, inNumberFrames, ioData);
 	if (err) { printf("PerformThru: error %d\n", (int)err); return err; }
 	
@@ -449,7 +288,7 @@ static OSStatus	PerformThru(
 		if (THIS->fftBufferManager == NULL) return noErr;
 		
 		if (THIS->fftBufferManager->NeedsNewAudioData())
-			THIS->fftBufferManager->GrabAudioData(ioData);
+			THIS->fftBufferManager->GrabAudioData(ioData); 
 	}
 	if (THIS->mute == YES) { SilenceData(ioData); }
 	
@@ -458,12 +297,10 @@ static OSStatus	PerformThru(
 
 #pragma mark-
 
-- (void)initScope
-{
-
-    
+- (void)applicationDidFinishLaunching:(UIApplication *)application
+{	
 	// Turn off the idle timer, since this app doesn't rely on constant touch input
-	[UIApplication sharedApplication].idleTimerDisabled = YES;
+	application.idleTimerDisabled = YES;
 	
 	// mute should be on at launch
 	self.mute = YES;
@@ -472,20 +309,20 @@ static OSStatus	PerformThru(
 	// Initialize our remote i/o unit
 	
 	inputProc.inputProc = PerformThru;
-	inputProc.inputProcRefCon = (__bridge void *) self;
+	inputProc.inputProcRefCon = self;
     
-	//CFURLRef url = NULL;
-	try {
-//		url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, CFStringRef([[NSBundle mainBundle] pathForResource:@"button_press" ofType:@"caf"]), kCFURLPOSIXPathStyle, false);
-//		XThrowIfError(AudioServicesCreateSystemSoundID(url, &buttonPressSound), "couldn't create button tap alert sound");
-//		CFRelease(url);
+	CFURLRef url = NULL;
+	try {	
+		url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, CFStringRef([[NSBundle mainBundle] pathForResource:@"button_press" ofType:@"caf"]), kCFURLPOSIXPathStyle, false);
+		XThrowIfError(AudioServicesCreateSystemSoundID(url, &buttonPressSound), "couldn't create button tap alert sound");
+		CFRelease(url);
 		
 		// Initialize and configure the audio session
-		XThrowIfError(AudioSessionInitialize(NULL, NULL, rioInterruptionListener, (__bridge void *) self), "couldn't initialize audio session");
+		XThrowIfError(AudioSessionInitialize(NULL, NULL, rioInterruptionListener, self), "couldn't initialize audio session");
         
 		UInt32 audioCategory = kAudioSessionCategory_PlayAndRecord;
 		XThrowIfError(AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(audioCategory), &audioCategory), "couldn't set audio category");
-		XThrowIfError(AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, propListener, (__bridge  void *) self), "couldn't set property listener");
+		XThrowIfError(AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, propListener, self), "couldn't set property listener");
         
 		Float32 preferredBufferSize = .005;
 		XThrowIfError(AudioSessionSetProperty(kAudioSessionProperty_PreferredHardwareIOBufferDuration, sizeof(preferredBufferSize), &preferredBufferSize), "couldn't set i/o buffer duration");
@@ -542,7 +379,7 @@ static OSStatus	PerformThru(
             free(drawABL);
             drawABL = NULL;
         }
-	//	if (url) CFRelease(url);
+		if (url) CFRelease(url);
 	}
 	catch (...) {
 		fprintf(stderr, "An unknown error occurred\n");
@@ -555,12 +392,9 @@ static OSStatus	PerformThru(
             free(drawABL);
             drawABL = NULL;
         }
-	//	if (url) CFRelease(url);
+		if (url) CFRelease(url);
 	}
 	
-    
-    view = [[EAGLView alloc] initWithFrame: CGRectMake(0, 100, 320, 200) ];
-    [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView addSubview:view];
 	// Set ourself as the delegate for the EAGLView so that we get drawing and touch events
 	view.delegate = self;
 	
@@ -612,7 +446,8 @@ static OSStatus	PerformThru(
 	
 	// Add the text view as a subview of the overlay BG
 	[sampleSizeOverlay addSubview:sampleSizeText];
-
+	// Text view was retained by the above line, so we can release it now
+	[sampleSizeText release];
 	
 	// We don't add sampleSizeOverlay to our main view yet. We just hang on to it for now, and add it when we
 	// need to display it, i.e. when a user starts a pinch/zoom.
@@ -643,7 +478,7 @@ static OSStatus	PerformThru(
 
 
 - (void)dealloc
-{
+{	
 	delete[] dcFilter;
 	delete fftBufferManager;
     if (drawABL)
@@ -653,10 +488,12 @@ static OSStatus	PerformThru(
         free(drawABL);
         drawABL = NULL;
     }
-
+	[view release];
+	[window release];
 	
 	free(oscilLine);
-
+    
+	[super dealloc];
 }
 
 
@@ -687,7 +524,7 @@ static OSStatus	PerformThru(
 	
 	// Allocated memory needed for the bitmap context
 	spriteData = (GLubyte *) calloc(texH, texW * 4);
-	// Uses the bitmatp creation function provided by the Core Graphics framework.
+	// Uses the bitmatp creation function provided by the Core Graphics framework. 
 	spriteContext = CGBitmapContextCreate(spriteData, texW, texH, 8, texW * 4, CGImageGetColorSpace(img), kCGImageAlphaPremultipliedLast);
 	
 	// Translate and scale the context to draw the image upside-down (conflict in flipped-ness between GL textures and CG contexts)
@@ -701,7 +538,7 @@ static OSStatus	PerformThru(
 	
 	// Use OpenGL ES to generate a name for the texture.
 	glGenTextures(1, texName);
-	// Bind the texture name.
+	// Bind the texture name. 
 	glBindTexture(GL_TEXTURE_2D, *texName);
 	// Speidfy a 2D texture image, provideing the a pointer to the image data in memory
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texW, texH, 0, GL_RGBA, GL_UNSIGNED_BYTE, spriteData);
@@ -722,27 +559,27 @@ static OSStatus	PerformThru(
 
 - (void)setupViewForOscilloscope
 {
-	//CGImageRef img;
+	CGImageRef img;
 	
 	// Load our GL textures
 	
-//	img = [UIImage imageNamed:@"oscilloscope.png"].CGImage;
-//	[self createGLTexture:&bgTexture fromCGImage:img];
-//	
-//	img = [UIImage imageNamed:@"fft_off.png"].CGImage;
-//	[self createGLTexture:&fftOffTexture fromCGImage:img];
-//	
-//	img = [UIImage imageNamed:@"fft_on.png"].CGImage;
-//	[self createGLTexture:&fftOnTexture fromCGImage:img];
-//	
-//	img = [UIImage imageNamed:@"mute_off.png"].CGImage;
-//	[self createGLTexture:&muteOffTexture fromCGImage:img];
-//	
-//	img = [UIImage imageNamed:@"mute_on.png"].CGImage;
-//	[self createGLTexture:&muteOnTexture fromCGImage:img];
-//    
-//	img = [UIImage imageNamed:@"sonogram.png"].CGImage;
-//	[self createGLTexture:&sonoTexture fromCGImage:img];
+	img = [UIImage imageNamed:@"oscilloscope.png"].CGImage;
+	[self createGLTexture:&bgTexture fromCGImage:img];
+	
+	img = [UIImage imageNamed:@"fft_off.png"].CGImage;
+	[self createGLTexture:&fftOffTexture fromCGImage:img];
+	
+	img = [UIImage imageNamed:@"fft_on.png"].CGImage;
+	[self createGLTexture:&fftOnTexture fromCGImage:img];
+	
+	img = [UIImage imageNamed:@"mute_off.png"].CGImage;
+	[self createGLTexture:&muteOffTexture fromCGImage:img];
+	
+	img = [UIImage imageNamed:@"mute_on.png"].CGImage;
+	[self createGLTexture:&muteOnTexture fromCGImage:img];
+    
+	img = [UIImage imageNamed:@"sonogram.png"].CGImage;
+	[self createGLTexture:&sonoTexture fromCGImage:img];
     
 	initted_oscilloscope = YES;
 }
@@ -767,8 +604,8 @@ static OSStatus	PerformThru(
 	
 	spectrumRect = CGRectMake(10., 10., 460., 300.);
 	
-	// The bit buffer for the texture needs to be 512 pixels, because OpenGL textures are powers of
-	// two in either dimensions. Our texture is drawing a strip of 300 vertical pixels on the screen,
+	// The bit buffer for the texture needs to be 512 pixels, because OpenGL textures are powers of 
+	// two in either dimensions. Our texture is drawing a strip of 300 vertical pixels on the screen, 
 	// so we need to step up to 512 (the nearest power of 2 greater than 300).
 	texBitBuffer = (UInt32 *)(malloc(sizeof(UInt32) * 512));
 	
@@ -776,7 +613,7 @@ static OSStatus	PerformThru(
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);	
 	
 	NSUInteger texCount = ceil(CGRectGetWidth(spectrumRect) / (CGFloat)SPECTRUM_BAR_WIDTH);
 	GLuint *texNames;
@@ -831,7 +668,7 @@ static OSStatus	PerformThru(
 	
 	glPushMatrix();
 	
-	glTranslatef(0., 320., 0.);
+	glTranslatef(0., 480., 0.);
 	glRotatef(-90., 0., 0., 1.);
 	
 	
@@ -843,7 +680,7 @@ static OSStatus	PerformThru(
 		// Draw our background oscilloscope screen
 		const GLfloat vertices[] = {
 			0., 0.,
-			512., 0.,
+			512., 0., 
 			0.,  512.,
 			512.,  512.,
 		};
@@ -867,7 +704,7 @@ static OSStatus	PerformThru(
 		// Draw our buttons
 		const GLfloat vertices[] = {
 			0., 0.,
-			112, 0.,
+			112, 0., 
 			0.,  64,
 			112,  64,
 		};
@@ -899,49 +736,49 @@ static OSStatus	PerformThru(
 	
 	
 	
-//	if (displayMode == aurioTouchDisplayModeOscilloscopeFFT)
-//	{
-//		if (fftBufferManager->HasNewAudioData())
-//		{
-//			if (fftBufferManager->ComputeFFT(l_fftData))
-//				[self setFFTData:l_fftData length:fftBufferManager->GetNumberFrames() / 2];
-//			else
-//				hasNewFFTData = NO;
-//		}
-//        
-//		if (hasNewFFTData)
-//		{
-//            
-//			int y, maxY;
-//			maxY = drawBufferLen;
-//			for (y=0; y<maxY; y++)
-//			{
-//				CGFloat yFract = (CGFloat)y / (CGFloat)(maxY - 1);
-//				CGFloat fftIdx = yFract * ((CGFloat)fftLength);
-//				
-//				double fftIdx_i, fftIdx_f;
-//				fftIdx_f = modf(fftIdx, &fftIdx_i);
-//				
-//				SInt8 fft_l, fft_r;
-//				CGFloat fft_l_fl, fft_r_fl;
-//				CGFloat interpVal;
-//				
-//				fft_l = (fftData[(int)fftIdx_i] & 0xFF000000) >> 24;
-//				fft_r = (fftData[(int)fftIdx_i + 1] & 0xFF000000) >> 24;
-//				fft_l_fl = (CGFloat)(fft_l + 80) / 64.;
-//				fft_r_fl = (CGFloat)(fft_r + 80) / 64.;
-//				interpVal = fft_l_fl * (1. - fftIdx_f) + fft_r_fl * fftIdx_f;
-//				
-//				interpVal = CLAMP(0., interpVal, 1.);
-//                
-//				drawBuffers[0][y] = (interpVal * 120);
-//				
-//			}
-//			cycleOscilloscopeLines();
-//			
-//		}
-//		
-//	}
+	if (displayMode == aurioTouchDisplayModeOscilloscopeFFT)
+	{			
+		if (fftBufferManager->HasNewAudioData())
+		{
+			if (fftBufferManager->ComputeFFT(l_fftData))
+				[self setFFTData:l_fftData length:fftBufferManager->GetNumberFrames() / 2];
+			else
+				hasNewFFTData = NO;
+		}
+        
+		if (hasNewFFTData)
+		{
+            
+			int y, maxY;
+			maxY = drawBufferLen;
+			for (y=0; y<maxY; y++)
+			{
+				CGFloat yFract = (CGFloat)y / (CGFloat)(maxY - 1);
+				CGFloat fftIdx = yFract * ((CGFloat)fftLength);
+				
+				double fftIdx_i, fftIdx_f;
+				fftIdx_f = modf(fftIdx, &fftIdx_i);
+				
+				SInt8 fft_l, fft_r;
+				CGFloat fft_l_fl, fft_r_fl;
+				CGFloat interpVal;
+				
+				fft_l = (fftData[(int)fftIdx_i] & 0xFF000000) >> 24;
+				fft_r = (fftData[(int)fftIdx_i + 1] & 0xFF000000) >> 24;
+				fft_l_fl = (CGFloat)(fft_l + 80) / 64.;
+				fft_r_fl = (CGFloat)(fft_r + 80) / 64.;
+				interpVal = fft_l_fl * (1. - fftIdx_f) + fft_r_fl * fftIdx_f;
+				
+				interpVal = CLAMP(0., interpVal, 1.);
+                
+				drawBuffers[0][y] = (interpVal * 120);
+				
+			}
+			cycleOscilloscopeLines();
+			
+		}
+		
+	}
 	
 	
 	
@@ -988,9 +825,9 @@ static OSStatus	PerformThru(
 		
 		// If we're drawing the newest line, draw it in solid green. Otherwise, draw it in a faded green.
 		if (drawBuffer_i == 0)
-			glColor4f(0., 0., 1., 1.);
+			glColor4f(0., 1., 0., 1.);
 		else
-			glColor4f(0., 0., 1., (.24 * (1. - ((GLfloat)drawBuffer_i / (GLfloat)kNumDrawBuffers))));
+			glColor4f(0., 1., 0., (.24 * (1. - ((GLfloat)drawBuffer_i / (GLfloat)kNumDrawBuffers))));
 		
 		// Set up vertex pointer,
 		glVertexPointer(2, GL_FLOAT, 0, oscilLine);
@@ -1020,7 +857,7 @@ static OSStatus	PerformThru(
 			firstTex->texName = thisTex->nextTex->texName;
 			free(thisTex->nextTex);
 			thisTex->nextTex = NULL;
-		}
+		} 
 		thisTex = thisTex->nextTex;
 	} while (thisTex);
 }
@@ -1066,7 +903,7 @@ static OSStatus	PerformThru(
 			if ( (*thisLevel <= interpVal) && (*nextLevel >= interpVal) )
 			{
 				double fract = (interpVal - *thisLevel) / (*nextLevel - *thisLevel);
-				newPx =
+				newPx = 
 				((UInt8)(255. * linearInterp(thisLevel[1], nextLevel[1], fract)) << 24)
 				|
 				((UInt8)(255. * linearInterp(thisLevel[2], nextLevel[2], fract)) << 16)
@@ -1121,23 +958,23 @@ static OSStatus	PerformThru(
 	glTranslatef(spectrumRect.origin.x + spectrumRect.size.width, spectrumRect.origin.y, 0.);
 	
 	GLfloat quadCoords[] = {
-		0., 0.,
-		SPECTRUM_BAR_WIDTH, 0.,
-		0., 512.,
-		SPECTRUM_BAR_WIDTH, 512.,
+		0., 0., 
+		SPECTRUM_BAR_WIDTH, 0., 
+		0., 512., 
+		SPECTRUM_BAR_WIDTH, 512., 
 	};
 	
 	GLshort texCoords[] = {
-		0, 0,
-		1, 0,
+		0, 0, 
+		1, 0, 
 		0, 1,
-		1, 1,
+		1, 1, 
 	};
 	
 	glVertexPointer(2, GL_FLOAT, 0, quadCoords);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glTexCoordPointer(2, GL_SHORT, 0, texCoords);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);	
 	
 	glColor4f(1., 1., 1., 1.);
 	
@@ -1251,9 +1088,5 @@ static OSStatus	PerformThru(
 		}
 	}
 }
-
-
-
-
 
 @end
