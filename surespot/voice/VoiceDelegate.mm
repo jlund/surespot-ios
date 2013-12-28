@@ -18,6 +18,8 @@
 #import "AudioUnit/AudioUnit.h"
 #import "CAXException.h"
 #import "SurespotAppDelegate.h"
+#import "SurespotMessage.h"
+#import "SDWebImageManager.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -86,6 +88,20 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self initScope];
 }
 
+-(void) playVoiceMessage: (SurespotMessage *) message {
+    if (_player.playing) {
+        [_player stop];
+    }
+    
+    [[SDWebImageManager sharedManager] downloadWithURL:[NSURL URLWithString: message.data] mimeType:message.mimeType ourVersion:[message getOurVersion] theirUsername:[message getOtherUser] theirVersion:[message getTheirVersion] iv:message.iv options: (SDWebImageOptions) 0 progress:nil completed:^(id data, NSString *mimeType, NSError *error, SDImageCacheType cacheType, BOOL finished) {
+        
+        
+        _player = [[AVAudioPlayer alloc] initWithData: data error:nil];
+        [_player setDelegate:self];
+        [_player play];
+    }];
+}
+
 -(void) startRecordingUsername: (NSString *) username {
     DDLogInfo(@"start recording");
     if (_player.playing) {
@@ -112,11 +128,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
         [audioSession setActive:NO error:nil];
-//        
-//        _player = [[AVAudioPlayer alloc] initWithContentsOfURL:_recorder.url error:nil];
-//        [_player setDelegate:self];
-//        [_player play];
-//        
         
         
         if (send) {

@@ -20,6 +20,8 @@
 #import "aurio_helper.h"
 #import "CAStreamBasicDescription.h"
 
+#import "SurespotMessage.h"
+
 
 #ifndef CLAMP
 #define CLAMP(min,x,max) (x < min ? min : (x > max ? max : x))
@@ -75,6 +77,8 @@ inline double linearInterp(double valA, double valB, double fract)
 - (id) initWithUsername: (NSString *) username
              ourVersion:(NSString *) ourVersion;
 
+
+-(void) playVoiceMessage: (SurespotMessage *) message;
 -(void) prepareRecording;
 -(void) startRecordingUsername: (NSString *) username;
 -(void) stopRecordingSend: (BOOL) send;

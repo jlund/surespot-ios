@@ -1092,6 +1092,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 // Present
                 [self.navigationController pushViewController:browser animated:YES];
             }
+            else {
+                if ([message.mimeType isEqualToString: MIME_TYPE_M4A]) {
+                    [self ensureVoiceDelegate];
+                    [_voiceDelegate playVoiceMessage: message];
+                }
+            }
         }
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
