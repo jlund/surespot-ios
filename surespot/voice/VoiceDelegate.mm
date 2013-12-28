@@ -112,11 +112,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
         [audioSession setActive:NO error:nil];
-        
-        _player = [[AVAudioPlayer alloc] initWithContentsOfURL:_recorder.url error:nil];
-        [_player setDelegate:self];
-        [_player play];
-        
+//        
+//        _player = [[AVAudioPlayer alloc] initWithContentsOfURL:_recorder.url error:nil];
+//        [_player setDelegate:self];
+//        [_player play];
+//        
         
         
         if (send) {
@@ -482,19 +482,6 @@ static OSStatus	PerformThru(
     //	[view startAnimation];
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-	//start animation now that we're in the foreground
-    view.applicationResignedActive = NO;
-	[view startAnimation];
-	AudioSessionSetActive(true);
-}
-
-- (void)applicationWillResignActive:(UIApplication *)application {
-	//stop animation before going into background
-    view.applicationResignedActive = YES;
-    [view stopAnimation];
-}
-
 - (void)applicationDidEnterBackground:(UIApplication *)application {
 }
 
@@ -518,12 +505,6 @@ static OSStatus	PerformThru(
 	free(oscilLine);
     
 }
-
-
-
-
-
-
 
 - (void)clearTextures
 {
