@@ -69,9 +69,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                nil];
     NSURL *outputFileURL = [NSURL fileURLWithPathComponents:pathComponents];
     
-    // Setup audio session
-    AVAudioSession *session = [AVAudioSession sharedInstance];
-    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
     
     // Define the recorder setting
     NSMutableDictionary *recordSetting = [NSMutableDictionary dictionaryWithObjectsAndKeys:
@@ -81,10 +78,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                           [NSNumber numberWithInt:1],AVNumberOfChannelsKey, nil];
     
     // Initiate and prepare the recorder
-    //    _recorder = [[AVAudioRecorder alloc] initWithURL:outputFileURL settings:recordSetting error:nil];
-    //    _recorder.delegate = self;
-    //    _recorder.meteringEnabled = YES;
-    //    [_recorder prepareToRecord];
+    _recorder = [[AVAudioRecorder alloc] initWithURL:outputFileURL settings:recordSetting error:nil];
+    _recorder.delegate = self;
+    _recorder.meteringEnabled = YES;
+    [_recorder prepareToRecord];
     
     [self initScope];
 }
@@ -97,15 +94,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     if (!_recorder.recording) {
         _theirUsername = username;
-        //AVAudioSession *session = [AVAudioSession sharedInstance];
-        //  [session setActive:YES error:nil];
-        
-        // Start recording
-        //     [_recorder record];
-        //  [recordPauseButton setTitle:@"Pause" forState:UIControlStateNormal];
-        
-        AudioSessionSetActive(true);
-        
+        [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView addSubview:view];
+        [view startAnimation];
+        [_recorder record];
     }
 }
 
@@ -113,6 +104,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     DDLogInfo(@"stop recording");
     if (_recorder.recording) {
         [_recorder stop];
+        
+        [view stopAnimation];
+        [view removeFromSuperview];
+        
         
         
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
@@ -131,6 +126,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         else {
             //todo delete file
         }
+        
         
         
     }
@@ -225,40 +221,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 #pragma mark-
 
-CGPathRef CreateRoundedRectPath(CGRect RECT, CGFloat cornerRadius)
-{
-	CGMutablePathRef		path;
-	path = CGPathCreateMutable();
-	
-	double		maxRad = MAX(CGRectGetHeight(RECT) / 2., CGRectGetWidth(RECT) / 2.);
-	
-	if (cornerRadius > maxRad) cornerRadius = maxRad;
-	
-	CGPoint		bl, tl, tr, br;
-	
-	bl = tl = tr = br = RECT.origin;
-	tl.y += RECT.size.height;
-	tr.y += RECT.size.height;
-	tr.x += RECT.size.width;
-	br.x += RECT.size.width;
-	
-	CGPathMoveToPoint(path, NULL, bl.x + cornerRadius, bl.y);
-	CGPathAddArcToPoint(path, NULL, bl.x, bl.y, bl.x, bl.y + cornerRadius, cornerRadius);
-	CGPathAddLineToPoint(path, NULL, tl.x, tl.y - cornerRadius);
-	CGPathAddArcToPoint(path, NULL, tl.x, tl.y, tl.x + cornerRadius, tl.y, cornerRadius);
-	CGPathAddLineToPoint(path, NULL, tr.x - cornerRadius, tr.y);
-	CGPathAddArcToPoint(path, NULL, tr.x, tr.y, tr.x, tr.y - cornerRadius, cornerRadius);
-	CGPathAddLineToPoint(path, NULL, br.x, br.y + cornerRadius);
-	CGPathAddArcToPoint(path, NULL, br.x, br.y, br.x - cornerRadius, br.y, cornerRadius);
-	
-	CGPathCloseSubpath(path);
-	
-	CGPathRef				ret;
-	ret = CGPathCreateCopy(path);
-	CGPathRelease(path);
-	return ret;
-}
-
 void cycleOscilloscopeLines()
 {
 	// Cycle the lines in our draw buffer so that they age and fade. The oldest line is discarded.
@@ -327,8 +289,8 @@ void propListener(	void *                  inClientData,
                     size = sizeof(maxFPS);
                     XThrowIfError(AudioUnitGetProperty(THIS->rioUnit, kAudioUnitProperty_MaximumFramesPerSlice, kAudioUnitScope_Global, 0, &maxFPS, &size), "couldn't get the remote I/O unit's max frames per slice");
                     
-                 //   THIS->fftBufferManager = new FFTBufferManager(maxFPS);
-                   // THIS->l_fftData = new int32_t[maxFPS/2];
+                    //   THIS->fftBufferManager = new FFTBufferManager(maxFPS);
+                    // THIS->l_fftData = new int32_t[maxFPS/2];
                     
                     THIS->oscilLine = (GLfloat*)malloc(drawBufferLen * 2 * sizeof(GLfloat));
                 }
@@ -426,13 +388,13 @@ static OSStatus	PerformThru(
 	
 	inputProc.inputProc = PerformThru;
 	inputProc.inputProcRefCon = (__bridge void *) self;
-
+    
 	try {
-      		
+        
 		// Initialize and configure the audio session
 		XThrowIfError(AudioSessionInitialize(NULL, NULL, rioInterruptionListener, (__bridge void *) self), "couldn't initialize audio session");
         
-		UInt32 audioCategory = kAudioSessionCategory_PlayAndRecord;
+		UInt32 audioCategory = kAudioSessionCategory_PlayAndRecord;;
 		XThrowIfError(AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(audioCategory), &audioCategory), "couldn't set audio category");
 		XThrowIfError(AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, propListener, (__bridge  void *) self), "couldn't set property listener");
         
@@ -508,15 +470,16 @@ static OSStatus	PerformThru(
 	}
 	
     
-    view = [[EAGLView alloc] initWithFrame: CGRectMake(0, 200, 320, 200) ];
-    [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView addSubview:view];
-	// Set ourself as the delegate for the EAGLView so that we get drawing and touch events
-	view.delegate = self;
-	   
-	
-	// Set up the view to refresh at 20 hz
-	[view setAnimationInterval:1./20.];
-	[view startAnimation];
+    if (!view) {
+        view = [[EAGLView alloc] initWithFrame: CGRectMake(0, 200, 320, 200) ];
+        // Set ourself as the delegate for the EAGLView so that we get drawing and touch events
+        view.delegate = self;
+        
+        
+        // Set up the view to refresh at 20 hz
+        [view setAnimationInterval:1./20.];
+    }
+    //	[view startAnimation];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -580,37 +543,6 @@ static OSStatus	PerformThru(
 	
 	glPushMatrix();
     
-//		
-//	glEnable(GL_TEXTURE_2D);
-//	glEnableClientState(GL_VERTEX_ARRAY);
-//	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-//	
-//	{
-//		// Draw our background oscilloscope screen
-//		const GLfloat vertices[] = {
-//			0., 0.,
-//			320., 0.,
-//			0.,  200.,
-//			320.,  200.,
-//		};
-//		const GLshort texCoords[] = {
-//			0, 0,
-//			1, 0,
-//			0, 1,
-//			1, 1,
-//		};
-//		
-//		
-//		//glBindTexture(GL_TEXTURE_2D, bgTexture);
-//		
-//		glVertexPointer(2, GL_FLOAT, 0, vertices);
-//		glTexCoordPointer(2, GL_SHORT, 0, texCoords);
-//		
-//		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-//	}
-//	
-    
-    
 	GLfloat *oscilLine_ptr;
 	GLfloat max = drawBufferLen;
 	SInt8 *drawBuffer_ptr;
@@ -620,8 +552,7 @@ static OSStatus	PerformThru(
 		oscilLine = (GLfloat*)realloc(oscilLine, drawBufferLen * 2 * sizeof(GLfloat));
 		resetOscilLine = NO;
 	}
-	
-//	glPushMatrix();
+    
 	
 	// Translate to the left side and vertical center of the screen, and scale so that the screen coordinates
 	// go from 0 to 1 along the X, and -1 to 1 along the Y
@@ -633,7 +564,7 @@ static OSStatus	PerformThru(
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisable(GL_LINE_SMOOTH);
-	glLineWidth(2.);
+	glLineWidth(1.);
 	
 	int drawBuffer_i;
 	// Draw a line for each stored line in our buffer (the lines are stored and fade over time)
@@ -654,7 +585,7 @@ static OSStatus	PerformThru(
 		
 		// If we're drawing the newest line, draw it in solid blue. Otherwise, draw it in a faded blue.
 		if (drawBuffer_i == 0)
-
+            
 			glColor4f(0.2, 0.71, 0.898, 1.);
 		else
 			glColor4f(0.2, 0.71, 0.898, (.24 * (1. - ((GLfloat)drawBuffer_i / (GLfloat)kNumDrawBuffers))));
@@ -666,8 +597,6 @@ static OSStatus	PerformThru(
 		glDrawArrays(GL_LINE_STRIP, 0, drawBufferLen);
 		
 	}
-	
-//	glPopMatrix();
     
 	glPopMatrix();
 }
