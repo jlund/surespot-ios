@@ -103,7 +103,7 @@
 		animationInterval = 1.0 / 60.0;
 		
 		[self setupView];
-		[self drawView];
+		[self drawView];      
 	}
 	
 	return self;
@@ -242,23 +242,6 @@
 	[super dealloc];
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-	if ([(id)delegate respondsToSelector:@selector(touchesBegan:withEvent:)])
-		[delegate touchesBegan:touches withEvent:event];
-}
-
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
-	if ([(id)delegate respondsToSelector:@selector(touchesMoved:withEvent:)])
-		[delegate touchesMoved:touches withEvent:event];
-}
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-	if ([(id)delegate respondsToSelector:@selector(touchesEnded:withEvent:)])
-		[delegate touchesEnded:touches withEvent:event];
-}
 
 
 

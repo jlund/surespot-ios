@@ -17,7 +17,6 @@
 #include <CoreFoundation/CFURL.h>
 
 #import "EAGLView.h"
-#import "FFTBufferManager.h"
 #import "aurio_helper.h"
 #import "CAStreamBasicDescription.h"
 
@@ -27,17 +26,6 @@
 #define CLAMP(min,x,max) (x < min ? min : (x > max ? max : x))
 #endif
 
-typedef enum aurioTouchDisplayMode {
-	aurioTouchDisplayModeOscilloscopeWaveform,
-	aurioTouchDisplayModeOscilloscopeFFT,
-	aurioTouchDisplayModeSpectrum
-} aurioTouchDisplayMode;
-
-typedef struct SpectrumLinkedTexture {
-	GLuint							texName;
-	struct SpectrumLinkedTexture	*nextTex;
-} SpectrumLinkedTexture;
-
 inline double linearInterp(double valA, double valB, double fract)
 {
 	return valA + ((valB - valA) * fract);
@@ -45,35 +33,18 @@ inline double linearInterp(double valA, double valB, double fract)
 
 @interface VoiceDelegate : NSObject<AVAudioRecorderDelegate, AVAudioPlayerDelegate, EAGLViewDelegate>
 {
-//	IBOutlet UIWindow*			window;
 	IBOutlet EAGLView*			view;
-	
-	UIImageView*				sampleSizeOverlay;
-	UILabel*					sampleSizeText;
-	
-	SInt32*						fftData;
-	NSUInteger					fftLength;
-	BOOL						hasNewFFTData;
-	
+			
 	AudioUnit					rioUnit;
 	BOOL						unitIsRunning;
 	BOOL						unitHasBeenCreated;
 	
-	BOOL						initted_oscilloscope, initted_spectrum;
 	UInt32*						texBitBuffer;
-	CGRect						spectrumRect;
 	
 	GLuint						bgTexture;
-	GLuint						muteOffTexture, muteOnTexture;
-	GLuint						fftOffTexture, fftOnTexture;
-	GLuint						sonoTexture;
+
 	
-	aurioTouchDisplayMode		displayMode;
-	
-	BOOL						mute;
-	
-	SpectrumLinkedTexture*		firstTex;
-	FFTBufferManager*			fftBufferManager;
+
 	DCRejectionFilter*			dcFilter;
 	CAStreamBasicDescription	thruFormat;
     CAStreamBasicDescription    drawFormat;
@@ -95,12 +66,7 @@ inline double linearInterp(double valA, double valB, double fract)
 	BOOL						resetOscilLine;
 }
 
-@property (nonatomic, retain)	UIWindow*				window;
 @property (nonatomic, retain)	EAGLView*				view;
-
-@property (assign)				aurioTouchDisplayMode	displayMode;
-@property						FFTBufferManager*		fftBufferManager;
-
 @property (nonatomic, assign)	AudioUnit				rioUnit;
 @property (nonatomic, assign)	BOOL					unitIsRunning;
 @property (nonatomic, assign)	BOOL					unitHasBeenCreated;

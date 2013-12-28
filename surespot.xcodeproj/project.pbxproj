@@ -122,7 +122,6 @@
 		66DAB62E186DEEFC006C262F /* VoiceDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66DAB62D186DEEFC006C262F /* VoiceDelegate.mm */; };
 		66DAB631186F2818006C262F /* aurio_helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66DAB62F186F2818006C262F /* aurio_helper.cpp */; };
 		66DAB634186F2821006C262F /* EAGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66DAB633186F2821006C262F /* EAGLView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		66DAB63A186F282A006C262F /* FFTBufferManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66DAB637186F282A006C262F /* FFTBufferManager.cpp */; };
 		66DAB643186F2839006C262F /* CADebugMacros.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66DAB63C186F2839006C262F /* CADebugMacros.cpp */; };
 		66DAB644186F2839006C262F /* CAStreamBasicDescription.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66DAB63F186F2839006C262F /* CAStreamBasicDescription.cpp */; };
 		66DAB645186F2839006C262F /* CAXException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66DAB641186F2839006C262F /* CAXException.cpp */; };
@@ -504,8 +503,6 @@
 		66DAB630186F2818006C262F /* aurio_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aurio_helper.h; sourceTree = "<group>"; };
 		66DAB632186F2821006C262F /* EAGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EAGLView.h; sourceTree = "<group>"; };
 		66DAB633186F2821006C262F /* EAGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EAGLView.m; sourceTree = "<group>"; };
-		66DAB637186F282A006C262F /* FFTBufferManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FFTBufferManager.cpp; sourceTree = "<group>"; };
-		66DAB638186F282A006C262F /* FFTBufferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFTBufferManager.h; sourceTree = "<group>"; };
 		66DAB63B186F2839006C262F /* CABitOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CABitOperations.h; sourceTree = "<group>"; };
 		66DAB63C186F2839006C262F /* CADebugMacros.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CADebugMacros.cpp; sourceTree = "<group>"; };
 		66DAB63D186F2839006C262F /* CADebugMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CADebugMacros.h; sourceTree = "<group>"; };
@@ -1240,8 +1237,6 @@
 				66DAB640186F2839006C262F /* CAStreamBasicDescription.h */,
 				66DAB641186F2839006C262F /* CAXException.cpp */,
 				66DAB642186F2839006C262F /* CAXException.h */,
-				66DAB637186F282A006C262F /* FFTBufferManager.cpp */,
-				66DAB638186F282A006C262F /* FFTBufferManager.h */,
 				66DAB632186F2821006C262F /* EAGLView.h */,
 				66DAB633186F2821006C262F /* EAGLView.m */,
 				66DAB62F186F2818006C262F /* aurio_helper.cpp */,
@@ -2111,7 +2106,6 @@
 				66DAB631186F2818006C262F /* aurio_helper.cpp in Sources */,
 				6646AE11185CADC700CBACDE /* MWTapDetectingImageView.m in Sources */,
 				66E4F5BD176298CB00596E6B /* NSData+SRB64Additions.m in Sources */,
-				66DAB63A186F282A006C262F /* FFTBufferManager.cpp in Sources */,
 				66866268185B6A2E001491B1 /* SDWebImageDownloaderOperation.mm in Sources */,
 				66EBE13D1855C97100F2452D /* HomeCell.m in Sources */,
 				66E4F5BE176298CB00596E6B /* SRWebSocket.m in Sources */,

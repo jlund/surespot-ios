@@ -36,13 +36,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @end
 
 @implementation VoiceDelegate
-// value, a, r, g, b
-GLfloat colorLevels[] = {
-    0., 1., 0., 0., 0.,
-    .333, 1., .7, 0., 0.,
-    .667, 1., 0., 0., 1.,
-    1., 1., 0., 1., 1.,
-};
 
 //@synthesize window;
 @synthesize view;
@@ -50,9 +43,6 @@ GLfloat colorLevels[] = {
 @synthesize rioUnit;
 @synthesize unitIsRunning;
 @synthesize unitHasBeenCreated;
-@synthesize displayMode;
-@synthesize fftBufferManager;
-@synthesize mute;
 @synthesize inputProc;
 
 
@@ -91,10 +81,10 @@ GLfloat colorLevels[] = {
                                           [NSNumber numberWithInt:1],AVNumberOfChannelsKey, nil];
     
     // Initiate and prepare the recorder
-    _recorder = [[AVAudioRecorder alloc] initWithURL:outputFileURL settings:recordSetting error:nil];
-    _recorder.delegate = self;
-    _recorder.meteringEnabled = YES;
-    [_recorder prepareToRecord];
+    //    _recorder = [[AVAudioRecorder alloc] initWithURL:outputFileURL settings:recordSetting error:nil];
+    //    _recorder.delegate = self;
+    //    _recorder.meteringEnabled = YES;
+    //    [_recorder prepareToRecord];
     
     [self initScope];
 }
@@ -108,13 +98,13 @@ GLfloat colorLevels[] = {
     if (!_recorder.recording) {
         _theirUsername = username;
         //AVAudioSession *session = [AVAudioSession sharedInstance];
-      //  [session setActive:YES error:nil];
+        //  [session setActive:YES error:nil];
         
         // Start recording
-   //     [_recorder record];
+        //     [_recorder record];
         //  [recordPauseButton setTitle:@"Pause" forState:UIControlStateNormal];
         
-        	AudioSessionSetActive(true);
+        AudioSessionSetActive(true);
         
     }
 }
@@ -132,7 +122,7 @@ GLfloat colorLevels[] = {
         [_player setDelegate:self];
         [_player play];
         
-
+        
         
         if (send) {
             [self uploadVoiceUrl:_recorder.url];
@@ -142,7 +132,7 @@ GLfloat colorLevels[] = {
             //todo delete file
         }
         
-
+        
     }
 }
 
@@ -180,11 +170,11 @@ GLfloat colorLevels[] = {
                                                           message.toVersion = version;
                                                           message.mimeType = MIME_TYPE_M4A;
                                                           message.iv = [iv base64EncodedStringWithSeparateLines:NO];
-                                                    //      NSString * key = [@"voiceKey_" stringByAppendingString: message.iv];
-                                                      //    message.data = key;
+                                                          //      NSString * key = [@"voiceKey_" stringByAppendingString: message.iv];
+                                                          //    message.data = key;
                                                           
-//                                                          DDLogInfo(@"adding local image to cache %@", key);
-//                                                          [[[SDWebImageManager sharedManager] imageCache] storeImage:scaledImage imageData:encryptedImageData forKey:key toDisk:YES];
+                                                          //                                                          DDLogInfo(@"adding local image to cache %@", key);
+                                                          //                                                          [[[SDWebImageManager sharedManager] imageCache] storeImage:scaledImage imageData:encryptedImageData forKey:key toDisk:YES];
                                                           
                                                           //add message locally before we upload it
                                                           ChatDataSource * cds = [[ChatController sharedInstance] getDataSourceForFriendname:_theirUsername];
@@ -193,7 +183,7 @@ GLfloat colorLevels[] = {
                                                           }
                                                           
                                                           //upload image to server
-                                                     //     DDLogInfo(@"uploading image %@ to server", key);
+                                                          //     DDLogInfo(@"uploading image %@ to server", key);
                                                           [[NetworkController sharedInstance] postFileStreamData:encryptedImageData
                                                                                                       ourVersion:_ourVersion
                                                                                                    theirUsername:_theirUsername
@@ -201,11 +191,11 @@ GLfloat colorLevels[] = {
                                                                                                           fileid:[iv SR_stringByBase64Encoding]
                                                                                                         mimeType:MIME_TYPE_M4A
                                                                                                     successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                                                                                      //  DDLogInfo(@"uploaded voice %@ to server successfully", key);
+                                                                                                        //  DDLogInfo(@"uploaded voice %@ to server successfully", key);
                                                                                                         //[self stopProgress];
                                                                                                     } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                                                                                    //    DDLogInfo(@"uploaded voice %@ to server failed, statuscode: %d", key, operation.response.statusCode);
-                                                                                                      //  [self stopProgress];
+                                                                                                        //    DDLogInfo(@"uploaded voice %@ to server failed, statuscode: %d", key, operation.response.statusCode);
+                                                                                                        //  [self stopProgress];
                                                                                                         if (operation.response.statusCode == 402) {
                                                                                                             message.errorStatus = 402;
                                                                                                         }
@@ -217,7 +207,7 @@ GLfloat colorLevels[] = {
                                                                                                     }];
                                                       }
                                                       else {
-                                                        //  [self stopProgress];
+                                                          //  [self stopProgress];
                                                           [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_image", nil) duration:2];
                                                           
                                                       }
@@ -337,8 +327,8 @@ void propListener(	void *                  inClientData,
                     size = sizeof(maxFPS);
                     XThrowIfError(AudioUnitGetProperty(THIS->rioUnit, kAudioUnitProperty_MaximumFramesPerSlice, kAudioUnitScope_Global, 0, &maxFPS, &size), "couldn't get the remote I/O unit's max frames per slice");
                     
-                    THIS->fftBufferManager = new FFTBufferManager(maxFPS);
-                    THIS->l_fftData = new int32_t[maxFPS/2];
+                 //   THIS->fftBufferManager = new FFTBufferManager(maxFPS);
+                   // THIS->l_fftData = new int32_t[maxFPS/2];
                     
                     THIS->oscilLine = (GLfloat*)malloc(drawBufferLen * 2 * sizeof(GLfloat));
                 }
@@ -354,27 +344,6 @@ void propListener(	void *                  inClientData,
 			if (newRoute)
 			{
 				CFShow(newRoute);
-				if (CFStringCompare(newRoute, CFSTR("Headset"), NULL) == kCFCompareEqualTo) // headset plugged in
-				{
-					colorLevels[0] = .3;
-					colorLevels[5] = .5;
-				}
-				else if (CFStringCompare(newRoute, CFSTR("Receiver"), NULL) == kCFCompareEqualTo) // headset plugged in
-				{
-					colorLevels[0] = 0;
-					colorLevels[5] = .333;
-					colorLevels[10] = .667;
-					colorLevels[15] = 1.0;
-					
-				}
-				else
-				{
-					colorLevels[0] = 0;
-					colorLevels[5] = .333;
-					colorLevels[10] = .667;
-					colorLevels[15] = 1.0;
-					
-				}
 			}
 		} catch (CAXException e) {
 			char buf[256];
@@ -402,56 +371,44 @@ static OSStatus	PerformThru(
 	for(UInt32 i = 0; i < ioData->mNumberBuffers; ++i)
 		THIS->dcFilter[i].InplaceFilter((Float32*)(ioData->mBuffers[i].mData), inNumberFrames);
 	
-	if (THIS->displayMode == aurioTouchDisplayModeOscilloscopeWaveform)
-	{
-		// The draw buffer is used to hold a copy of the most recent PCM data to be drawn on the oscilloscope
-		if (drawBufferLen != drawBufferLen_alloced)
-		{
-			int drawBuffer_i;
-			
-			// Allocate our draw buffer if needed
-			if (drawBufferLen_alloced == 0)
-				for (drawBuffer_i=0; drawBuffer_i<kNumDrawBuffers; drawBuffer_i++)
-					drawBuffers[drawBuffer_i] = NULL;
-			
-			// Fill the first element in the draw buffer with PCM data
-			for (drawBuffer_i=0; drawBuffer_i<kNumDrawBuffers; drawBuffer_i++)
-			{
-				drawBuffers[drawBuffer_i] = (SInt8 *)realloc(drawBuffers[drawBuffer_i], drawBufferLen);
-				bzero(drawBuffers[drawBuffer_i], drawBufferLen);
-			}
-			
-			drawBufferLen_alloced = drawBufferLen;
-		}
-		
-		int i;
-		
-        //Convert the floating point audio data to integer (Q7.24)
-        err = AudioConverterConvertComplexBuffer(THIS->audioConverter, inNumberFrames, ioData, THIS->drawABL);
-        if (err) { printf("AudioConverterConvertComplexBuffer: error %d\n", (int)err); return err; }
+    // The draw buffer is used to hold a copy of the most recent PCM data to be drawn on the oscilloscope
+    if (drawBufferLen != drawBufferLen_alloced)
+    {
+        int drawBuffer_i;
         
-		SInt8 *data_ptr = (SInt8 *)(THIS->drawABL->mBuffers[0].mData);
-		for (i=0; i<inNumberFrames; i++)
-		{
-			if ((i+drawBufferIdx) >= drawBufferLen)
-			{
-				cycleOscilloscopeLines();
-				drawBufferIdx = -i;
-			}
-			drawBuffers[0][i + drawBufferIdx] = data_ptr[2];
-			data_ptr += 4;
-		}
-		drawBufferIdx += inNumberFrames;
-	}
-	
-	else if ((THIS->displayMode == aurioTouchDisplayModeSpectrum) || (THIS->displayMode == aurioTouchDisplayModeOscilloscopeFFT))
-	{
-		if (THIS->fftBufferManager == NULL) return noErr;
-		
-		if (THIS->fftBufferManager->NeedsNewAudioData())
-			THIS->fftBufferManager->GrabAudioData(ioData);
-	}
-	if (THIS->mute == YES) { SilenceData(ioData); }
+        // Allocate our draw buffer if needed
+        if (drawBufferLen_alloced == 0)
+            for (drawBuffer_i=0; drawBuffer_i<kNumDrawBuffers; drawBuffer_i++)
+                drawBuffers[drawBuffer_i] = NULL;
+        
+        // Fill the first element in the draw buffer with PCM data
+        for (drawBuffer_i=0; drawBuffer_i<kNumDrawBuffers; drawBuffer_i++)
+        {
+            drawBuffers[drawBuffer_i] = (SInt8 *)realloc(drawBuffers[drawBuffer_i], drawBufferLen);
+            bzero(drawBuffers[drawBuffer_i], drawBufferLen);
+        }
+        
+        drawBufferLen_alloced = drawBufferLen;
+    }
+    
+    int i;
+    
+    //Convert the floating point audio data to integer (Q7.24)
+    err = AudioConverterConvertComplexBuffer(THIS->audioConverter, inNumberFrames, ioData, THIS->drawABL);
+    if (err) { printf("AudioConverterConvertComplexBuffer: error %d\n", (int)err); return err; }
+    
+    SInt8 *data_ptr = (SInt8 *)(THIS->drawABL->mBuffers[0].mData);
+    for (i=0; i<inNumberFrames; i++)
+    {
+        if ((i+drawBufferIdx) >= drawBufferLen)
+        {
+            cycleOscilloscopeLines();
+            drawBufferIdx = -i;
+        }
+        drawBuffers[0][i + drawBufferIdx] = data_ptr[2];
+        data_ptr += 4;
+    }
+    drawBufferIdx += inNumberFrames;
 	
 	return err;
 }
@@ -460,26 +417,18 @@ static OSStatus	PerformThru(
 
 - (void)initScope
 {
-
+    
     
 	// Turn off the idle timer, since this app doesn't rely on constant touch input
 	[UIApplication sharedApplication].idleTimerDisabled = YES;
-	
-	// mute should be on at launch
-	self.mute = YES;
-	displayMode = aurioTouchDisplayModeOscilloscopeWaveform;
 	
 	// Initialize our remote i/o unit
 	
 	inputProc.inputProc = PerformThru;
 	inputProc.inputProcRefCon = (__bridge void *) self;
-    
-	//CFURLRef url = NULL;
+
 	try {
-//		url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, CFStringRef([[NSBundle mainBundle] pathForResource:@"button_press" ofType:@"caf"]), kCFURLPOSIXPathStyle, false);
-//		XThrowIfError(AudioServicesCreateSystemSoundID(url, &buttonPressSound), "couldn't create button tap alert sound");
-//		CFRelease(url);
-		
+      		
 		// Initialize and configure the audio session
 		XThrowIfError(AudioSessionInitialize(NULL, NULL, rioInterruptionListener, (__bridge void *) self), "couldn't initialize audio session");
         
@@ -509,8 +458,8 @@ static OSStatus	PerformThru(
 		size = sizeof(maxFPS);
 		XThrowIfError(AudioUnitGetProperty(rioUnit, kAudioUnitProperty_MaximumFramesPerSlice, kAudioUnitScope_Global, 0, &maxFPS, &size), "couldn't get the remote I/O unit's max frames per slice");
 		
-		fftBufferManager = new FFTBufferManager(maxFPS);
-		l_fftData = new int32_t[maxFPS/2];
+		//fftBufferManager = new FFTBufferManager(maxFPS);
+		//l_fftData = new int32_t[maxFPS/2];
         
         drawABL = (AudioBufferList*) malloc(sizeof(AudioBufferList) + sizeof(AudioBuffer));
         drawABL->mNumberBuffers = 2;
@@ -542,7 +491,7 @@ static OSStatus	PerformThru(
             free(drawABL);
             drawABL = NULL;
         }
-	//	if (url) CFRelease(url);
+        //	if (url) CFRelease(url);
 	}
 	catch (...) {
 		fprintf(stderr, "An unknown error occurred\n");
@@ -555,67 +504,15 @@ static OSStatus	PerformThru(
             free(drawABL);
             drawABL = NULL;
         }
-	//	if (url) CFRelease(url);
+        //	if (url) CFRelease(url);
 	}
 	
     
-    view = [[EAGLView alloc] initWithFrame: CGRectMake(0, 100, 320, 200) ];
+    view = [[EAGLView alloc] initWithFrame: CGRectMake(0, 200, 320, 200) ];
     [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView addSubview:view];
 	// Set ourself as the delegate for the EAGLView so that we get drawing and touch events
 	view.delegate = self;
-	
-	// Enable multi touch so we can handle pinch and zoom in the oscilloscope
-	view.multipleTouchEnabled = YES;
-	
-	// Set up our overlay view that pops up when we are pinching/zooming the oscilloscope
-	UIImage *img_ui = nil;
-	{
-		// Draw the rounded rect for the bg path using this convenience function
-		CGPathRef bgPath = CreateRoundedRectPath(CGRectMake(0, 0, 110, 234), 15.);
-		
-		CGColorSpaceRef cs = CGColorSpaceCreateDeviceRGB();
-		// Create the bitmap context into which we will draw
-		CGContextRef cxt = CGBitmapContextCreate(NULL, 110, 234, 8, 4*110, cs, kCGImageAlphaPremultipliedFirst);
-		CGContextSetFillColorSpace(cxt, cs);
-		CGFloat fillClr[] = {0., 0., 0., 0.7};
-		CGContextSetFillColor(cxt, fillClr);
-		// Add the rounded rect to the context...
-		CGContextAddPath(cxt, bgPath);
-		// ... and fill it.
-		CGContextFillPath(cxt);
-		
-		// Make a CGImage out of the context
-		CGImageRef img_cg = CGBitmapContextCreateImage(cxt);
-		// Make a UIImage out of the CGImage
-		img_ui = [UIImage imageWithCGImage:img_cg];
-		
-		// Clean up
-		CGImageRelease(img_cg);
-		CGColorSpaceRelease(cs);
-		CGContextRelease(cxt);
-		CGPathRelease(bgPath);
-	}
-	
-	// Create the image view to hold the background rounded rect which we just drew
-	sampleSizeOverlay = [[UIImageView alloc] initWithImage:img_ui];
-	sampleSizeOverlay.frame = CGRectMake(190, 124, 110, 234);
-	
-	// Create the text view which shows the size of our oscilloscope window as we pinch/zoom
-	sampleSizeText = [[UILabel alloc] initWithFrame:CGRectMake(-62, 0, 234, 234)];
-	sampleSizeText.textAlignment = NSTextAlignmentCenter;
-	sampleSizeText.textColor = [UIColor whiteColor];
-	sampleSizeText.text = @"0000 ms";
-	sampleSizeText.font = [UIFont boldSystemFontOfSize:36.];
-	// Rotate the text view since we want the text to draw top to bottom (when the device is oriented vertically)
-	sampleSizeText.transform = CGAffineTransformMakeRotation(M_PI_2);
-	sampleSizeText.backgroundColor = [UIColor clearColor];
-	
-	// Add the text view as a subview of the overlay BG
-	[sampleSizeOverlay addSubview:sampleSizeText];
-
-	
-	// We don't add sampleSizeOverlay to our main view yet. We just hang on to it for now, and add it when we
-	// need to display it, i.e. when a user starts a pinch/zoom.
+	   
 	
 	// Set up the view to refresh at 20 hz
 	[view setAnimationInterval:1./20.];
@@ -645,7 +542,7 @@ static OSStatus	PerformThru(
 - (void)dealloc
 {
 	delete[] dcFilter;
-	delete fftBufferManager;
+	//delete fftBufferManager;
     if (drawABL)
     {
         for (UInt32 i=0; i<drawABL->mNumberBuffers; ++i)
@@ -653,171 +550,22 @@ static OSStatus	PerformThru(
         free(drawABL);
         drawABL = NULL;
     }
-
+    
 	
 	free(oscilLine);
-
-}
-
-
-- (void)setFFTData:(int32_t *)FFTDATA length:(NSUInteger)LENGTH
-{
-	if (LENGTH != fftLength)
-	{
-		fftLength = LENGTH;
-		fftData = (SInt32 *)(realloc(fftData, LENGTH * sizeof(SInt32)));
-	}
-	memmove(fftData, FFTDATA, fftLength * sizeof(Float32));
-	hasNewFFTData = YES;
-}
-
-
-- (void)createGLTexture:(GLuint *)texName fromCGImage:(CGImageRef)img
-{
-	GLubyte *spriteData = NULL;
-	CGContextRef spriteContext;
-	GLuint imgW, imgH, texW, texH;
-	
-	imgW = CGImageGetWidth(img);
-	imgH = CGImageGetHeight(img);
-	
-	// Find smallest possible powers of 2 for our texture dimensions
-	for (texW = 1; texW < imgW; texW *= 2) ;
-	for (texH = 1; texH < imgH; texH *= 2) ;
-	
-	// Allocated memory needed for the bitmap context
-	spriteData = (GLubyte *) calloc(texH, texW * 4);
-	// Uses the bitmatp creation function provided by the Core Graphics framework.
-	spriteContext = CGBitmapContextCreate(spriteData, texW, texH, 8, texW * 4, CGImageGetColorSpace(img), kCGImageAlphaPremultipliedLast);
-	
-	// Translate and scale the context to draw the image upside-down (conflict in flipped-ness between GL textures and CG contexts)
-	CGContextTranslateCTM(spriteContext, 0., texH);
-	CGContextScaleCTM(spriteContext, 1., -1.);
-	
-	// After you create the context, you can draw the sprite image to the context.
-	CGContextDrawImage(spriteContext, CGRectMake(0.0, 0.0, imgW, imgH), img);
-	// You don't need the context at this point, so you need to release it to avoid memory leaks.
-	CGContextRelease(spriteContext);
-	
-	// Use OpenGL ES to generate a name for the texture.
-	glGenTextures(1, texName);
-	// Bind the texture name.
-	glBindTexture(GL_TEXTURE_2D, *texName);
-	// Speidfy a 2D texture image, provideing the a pointer to the image data in memory
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texW, texH, 0, GL_RGBA, GL_UNSIGNED_BYTE, spriteData);
-	// Set the texture parameters to use a minifying filter and a linear filer (weighted average)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	
-	// Enable use of the texture
-	glEnable(GL_TEXTURE_2D);
-	// Set a blending function to use
-	glBlendFunc(GL_SRC_ALPHA,GL_ONE);
-	//glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-	// Enable blending
-	glEnable(GL_BLEND);
-	
-	free(spriteData);
-}
-
-
-- (void)setupViewForOscilloscope
-{
-	//CGImageRef img;
-	
-	// Load our GL textures
-	
-//	img = [UIImage imageNamed:@"oscilloscope.png"].CGImage;
-//	[self createGLTexture:&bgTexture fromCGImage:img];
-//	
-//	img = [UIImage imageNamed:@"fft_off.png"].CGImage;
-//	[self createGLTexture:&fftOffTexture fromCGImage:img];
-//	
-//	img = [UIImage imageNamed:@"fft_on.png"].CGImage;
-//	[self createGLTexture:&fftOnTexture fromCGImage:img];
-//	
-//	img = [UIImage imageNamed:@"mute_off.png"].CGImage;
-//	[self createGLTexture:&muteOffTexture fromCGImage:img];
-//	
-//	img = [UIImage imageNamed:@"mute_on.png"].CGImage;
-//	[self createGLTexture:&muteOnTexture fromCGImage:img];
-//    
-//	img = [UIImage imageNamed:@"sonogram.png"].CGImage;
-//	[self createGLTexture:&sonoTexture fromCGImage:img];
     
-	initted_oscilloscope = YES;
 }
+
+
+
+
+
 
 
 - (void)clearTextures
 {
 	bzero(texBitBuffer, sizeof(UInt32) * 512);
-	SpectrumLinkedTexture *curTex;
-	
-	for (curTex = firstTex; curTex; curTex = curTex->nextTex)
-	{
-		glBindTexture(GL_TEXTURE_2D, curTex->texName);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 512, 0, GL_RGBA, GL_UNSIGNED_BYTE, texBitBuffer);
-	}
 }
-
-
-- (void)setupViewForSpectrum
-{
-	glClearColor(0., 0., 0., 0.);
-	
-	spectrumRect = CGRectMake(10., 10., 460., 300.);
-	
-	// The bit buffer for the texture needs to be 512 pixels, because OpenGL textures are powers of
-	// two in either dimensions. Our texture is drawing a strip of 300 vertical pixels on the screen,
-	// so we need to step up to 512 (the nearest power of 2 greater than 300).
-	texBitBuffer = (UInt32 *)(malloc(sizeof(UInt32) * 512));
-	
-	// Clears the view with black
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	
-	NSUInteger texCount = ceil(CGRectGetWidth(spectrumRect) / (CGFloat)SPECTRUM_BAR_WIDTH);
-	GLuint *texNames;
-	
-	texNames = (GLuint *)(malloc(sizeof(GLuint) * texCount));
-	glGenTextures(texCount, texNames);
-	
-	int i;
-	SpectrumLinkedTexture *curTex = NULL;
-	firstTex = (SpectrumLinkedTexture *)(calloc(1, sizeof(SpectrumLinkedTexture)));
-	firstTex->texName = texNames[0];
-	curTex = firstTex;
-	
-	bzero(texBitBuffer, sizeof(UInt32) * 512);
-	
-	glBindTexture(GL_TEXTURE_2D, curTex->texName);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	
-	for (i=1; i<texCount; i++)
-	{
-		curTex->nextTex = (SpectrumLinkedTexture *)(calloc(1, sizeof(SpectrumLinkedTexture)));
-		curTex = curTex->nextTex;
-		curTex->texName = texNames[i];
-		
-		glBindTexture(GL_TEXTURE_2D, curTex->texName);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	}
-	
-	// Enable use of the texture
-	glEnable(GL_TEXTURE_2D);
-	// Set a blending function to use
-	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-	// Enable blending
-	glEnable(GL_BLEND);
-	
-	initted_spectrum = YES;
-	
-	free(texNames);
-	
-}
-
 
 
 - (void)drawOscilloscope
@@ -825,126 +573,44 @@ static OSStatus	PerformThru(
 	// Clear the view
 	glClear(GL_COLOR_BUFFER_BIT);
 	
+    glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	
-	glColor4f(1., 1., 1., 1.);
+	glColor4f(0., 0., 0., 1.);
 	
 	glPushMatrix();
-	
-	glTranslatef(0., 320., 0.);
-	glRotatef(-90., 0., 0., 1.);
-	
-	
-	glEnable(GL_TEXTURE_2D);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	
-	{
-		// Draw our background oscilloscope screen
-		const GLfloat vertices[] = {
-			0., 0.,
-			512., 0.,
-			0.,  512.,
-			512.,  512.,
-		};
-		const GLshort texCoords[] = {
-			0, 0,
-			1, 0,
-			0, 1,
-			1, 1,
-		};
-		
-		
-		glBindTexture(GL_TEXTURE_2D, bgTexture);
-		
-		glVertexPointer(2, GL_FLOAT, 0, vertices);
-		glTexCoordPointer(2, GL_SHORT, 0, texCoords);
-		
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	}
-	
-	{
-		// Draw our buttons
-		const GLfloat vertices[] = {
-			0., 0.,
-			112, 0.,
-			0.,  64,
-			112,  64,
-		};
-		const GLshort texCoords[] = {
-			0, 0,
-			1, 0,
-			0, 1,
-			1, 1,
-		};
-		
-		glPushMatrix();
-		
-		glVertexPointer(2, GL_FLOAT, 0, vertices);
-		glTexCoordPointer(2, GL_SHORT, 0, texCoords);
-        
-		glTranslatef(5, 0, 0);
-		glBindTexture(GL_TEXTURE_2D, sonoTexture);
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-		glTranslatef(99, 0, 0);
-		glBindTexture(GL_TEXTURE_2D, mute ? muteOnTexture : muteOffTexture);
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-		glTranslatef(99, 0, 0);
-		glBindTexture(GL_TEXTURE_2D, (displayMode == aurioTouchDisplayModeOscilloscopeFFT) ? fftOnTexture : fftOffTexture);
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-		
-		glPopMatrix();
-		
-	}
-	
-	
-	
-//	if (displayMode == aurioTouchDisplayModeOscilloscopeFFT)
-//	{
-//		if (fftBufferManager->HasNewAudioData())
-//		{
-//			if (fftBufferManager->ComputeFFT(l_fftData))
-//				[self setFFTData:l_fftData length:fftBufferManager->GetNumberFrames() / 2];
-//			else
-//				hasNewFFTData = NO;
-//		}
-//        
-//		if (hasNewFFTData)
-//		{
-//            
-//			int y, maxY;
-//			maxY = drawBufferLen;
-//			for (y=0; y<maxY; y++)
-//			{
-//				CGFloat yFract = (CGFloat)y / (CGFloat)(maxY - 1);
-//				CGFloat fftIdx = yFract * ((CGFloat)fftLength);
-//				
-//				double fftIdx_i, fftIdx_f;
-//				fftIdx_f = modf(fftIdx, &fftIdx_i);
-//				
-//				SInt8 fft_l, fft_r;
-//				CGFloat fft_l_fl, fft_r_fl;
-//				CGFloat interpVal;
-//				
-//				fft_l = (fftData[(int)fftIdx_i] & 0xFF000000) >> 24;
-//				fft_r = (fftData[(int)fftIdx_i + 1] & 0xFF000000) >> 24;
-//				fft_l_fl = (CGFloat)(fft_l + 80) / 64.;
-//				fft_r_fl = (CGFloat)(fft_r + 80) / 64.;
-//				interpVal = fft_l_fl * (1. - fftIdx_f) + fft_r_fl * fftIdx_f;
-//				
-//				interpVal = CLAMP(0., interpVal, 1.);
-//                
-//				drawBuffers[0][y] = (interpVal * 120);
-//				
-//			}
-//			cycleOscilloscopeLines();
-//			
-//		}
+    
 //		
+//	glEnable(GL_TEXTURE_2D);
+//	glEnableClientState(GL_VERTEX_ARRAY);
+//	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+//	
+//	{
+//		// Draw our background oscilloscope screen
+//		const GLfloat vertices[] = {
+//			0., 0.,
+//			320., 0.,
+//			0.,  200.,
+//			320.,  200.,
+//		};
+//		const GLshort texCoords[] = {
+//			0, 0,
+//			1, 0,
+//			0, 1,
+//			1, 1,
+//		};
+//		
+//		
+//		//glBindTexture(GL_TEXTURE_2D, bgTexture);
+//		
+//		glVertexPointer(2, GL_FLOAT, 0, vertices);
+//		glTexCoordPointer(2, GL_SHORT, 0, texCoords);
+//		
+//		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 //	}
-	
-	
-	
+//	
+    
+    
 	GLfloat *oscilLine_ptr;
 	GLfloat max = drawBufferLen;
 	SInt8 *drawBuffer_ptr;
@@ -955,12 +621,12 @@ static OSStatus	PerformThru(
 		resetOscilLine = NO;
 	}
 	
-	glPushMatrix();
+//	glPushMatrix();
 	
 	// Translate to the left side and vertical center of the screen, and scale so that the screen coordinates
 	// go from 0 to 1 along the X, and -1 to 1 along the Y
-	glTranslatef(17., 182., 0.);
-	glScalef(448., 116., 1.);
+	glTranslatef(1., 100., 0.);
+	glScalef(320., 100., 1.);
 	
 	// Set up some GL state for our oscilloscope lines
 	glDisable(GL_TEXTURE_2D);
@@ -986,11 +652,12 @@ static OSStatus	PerformThru(
 			*oscilLine_ptr++ = (Float32)(*drawBuffer_ptr++) / 128.;
 		}
 		
-		// If we're drawing the newest line, draw it in solid green. Otherwise, draw it in a faded green.
+		// If we're drawing the newest line, draw it in solid blue. Otherwise, draw it in a faded blue.
 		if (drawBuffer_i == 0)
-			glColor4f(0., 0., 1., 1.);
+
+			glColor4f(0.2, 0.71, 0.898, 1.);
 		else
-			glColor4f(0., 0., 1., (.24 * (1. - ((GLfloat)drawBuffer_i / (GLfloat)kNumDrawBuffers))));
+			glColor4f(0.2, 0.71, 0.898, (.24 * (1. - ((GLfloat)drawBuffer_i / (GLfloat)kNumDrawBuffers))));
 		
 		// Set up vertex pointer,
 		glVertexPointer(2, GL_FLOAT, 0, oscilLine);
@@ -1000,260 +667,17 @@ static OSStatus	PerformThru(
 		
 	}
 	
-	glPopMatrix();
+//	glPopMatrix();
     
 	glPopMatrix();
 }
 
-
-- (void)cycleSpectrum
-{
-	SpectrumLinkedTexture *newFirst;
-	newFirst = (SpectrumLinkedTexture *)calloc(1, sizeof(SpectrumLinkedTexture));
-	newFirst->nextTex = firstTex;
-	firstTex = newFirst;
-	
-	SpectrumLinkedTexture *thisTex = firstTex;
-	do {
-		if (!(thisTex->nextTex->nextTex))
-		{
-			firstTex->texName = thisTex->nextTex->texName;
-			free(thisTex->nextTex);
-			thisTex->nextTex = NULL;
-		}
-		thisTex = thisTex->nextTex;
-	} while (thisTex);
-}
-
-
-- (void)renderFFTToTex
-{
-	[self cycleSpectrum];
-	
-	UInt32 *texBitBuffer_ptr = texBitBuffer;
-	
-	static int numLevels = sizeof(colorLevels) / sizeof(GLfloat) / 5;
-	
-	int y, maxY;
-	maxY = CGRectGetHeight(spectrumRect);
-	for (y=0; y<maxY; y++)
-	{
-		CGFloat yFract = (CGFloat)y / (CGFloat)(maxY - 1);
-		CGFloat fftIdx = yFract * ((CGFloat)fftLength-1);
-        
-		double fftIdx_i, fftIdx_f;
-		fftIdx_f = modf(fftIdx, &fftIdx_i);
-		
-		SInt8 fft_l, fft_r;
-		CGFloat fft_l_fl, fft_r_fl;
-		CGFloat interpVal;
-		
-		fft_l = (fftData[(int)fftIdx_i] & 0xFF000000) >> 24;
-		fft_r = (fftData[(int)fftIdx_i + 1] & 0xFF000000) >> 24;
-		fft_l_fl = (CGFloat)(fft_l + 80) / 64.;
-		fft_r_fl = (CGFloat)(fft_r + 80) / 64.;
-		interpVal = fft_l_fl * (1. - fftIdx_f) + fft_r_fl * fftIdx_f;
-		
-		interpVal = sqrt(CLAMP(0., interpVal, 1.));
-        
-		UInt32 newPx = 0xFF000000;
-		
-		int level_i;
-		const GLfloat *thisLevel = colorLevels;
-		const GLfloat *nextLevel = colorLevels + 5;
-		for (level_i=0; level_i<(numLevels-1); level_i++)
-		{
-			if ( (*thisLevel <= interpVal) && (*nextLevel >= interpVal) )
-			{
-				double fract = (interpVal - *thisLevel) / (*nextLevel - *thisLevel);
-				newPx =
-				((UInt8)(255. * linearInterp(thisLevel[1], nextLevel[1], fract)) << 24)
-				|
-				((UInt8)(255. * linearInterp(thisLevel[2], nextLevel[2], fract)) << 16)
-				|
-				((UInt8)(255. * linearInterp(thisLevel[3], nextLevel[3], fract)) << 8)
-				|
-				(UInt8)(255. * linearInterp(thisLevel[4], nextLevel[4], fract))
-				;
-				break;
-			}
-			
-			thisLevel+=5;
-			nextLevel+=5;
-		}
-		
-		*texBitBuffer_ptr++ = newPx;
-	}
-	
-	glBindTexture(GL_TEXTURE_2D, firstTex->texName);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 512, 0, GL_RGBA, GL_UNSIGNED_BYTE, texBitBuffer);
-	
-	hasNewFFTData = NO;
-}
-
-
-
-- (void)drawSpectrum
-{
-	// Clear the view
-	glClear(GL_COLOR_BUFFER_BIT);
-	
-	if (fftBufferManager->HasNewAudioData())
-	{
-		if (fftBufferManager->ComputeFFT(l_fftData))
-		{
-			[self setFFTData:l_fftData length:fftBufferManager->GetNumberFrames() / 2];
-		}
-		else
-			hasNewFFTData = NO;
-	}
-	
-	if (hasNewFFTData) [self renderFFTToTex];
-	
-	glClear(GL_COLOR_BUFFER_BIT);
-	
-	glEnable(GL_TEXTURE);
-	glEnable(GL_TEXTURE_2D);
-	
-	glPushMatrix();
-	glTranslatef(0., 480., 0.);
-	glRotatef(-90., 0., 0., 1.);
-	glTranslatef(spectrumRect.origin.x + spectrumRect.size.width, spectrumRect.origin.y, 0.);
-	
-	GLfloat quadCoords[] = {
-		0., 0.,
-		SPECTRUM_BAR_WIDTH, 0.,
-		0., 512.,
-		SPECTRUM_BAR_WIDTH, 512.,
-	};
-	
-	GLshort texCoords[] = {
-		0, 0,
-		1, 0,
-		0, 1,
-		1, 1,
-	};
-	
-	glVertexPointer(2, GL_FLOAT, 0, quadCoords);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glTexCoordPointer(2, GL_SHORT, 0, texCoords);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	
-	glColor4f(1., 1., 1., 1.);
-	
-	SpectrumLinkedTexture *thisTex;
-	glPushMatrix();
-	for (thisTex = firstTex; thisTex; thisTex = thisTex->nextTex)
-	{
-		glTranslatef(-(SPECTRUM_BAR_WIDTH), 0., 0.);
-		glBindTexture(GL_TEXTURE_2D, thisTex->texName);
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	}
-	glPopMatrix();
-	glPopMatrix();
-	
-	glFlush();
-	
-}
 
 - (void)drawView:(id)sender forTime:(NSTimeInterval)time
 {
-	if ((displayMode == aurioTouchDisplayModeOscilloscopeWaveform) || (displayMode == aurioTouchDisplayModeOscilloscopeFFT))
-	{
-		if (!initted_oscilloscope) [self setupViewForOscilloscope];
-		[self drawOscilloscope];
-	} else if (displayMode == aurioTouchDisplayModeSpectrum) {
-		if (!initted_spectrum) [self setupViewForSpectrum];
-		[self drawSpectrum];
-	}
-}
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-	// If we're if waveform mode and not currently in a pinch event, and we've got two touches, start a pinch event
-	if ((!pinchEvent) && ([[event allTouches] count] == 2) && (self.displayMode == aurioTouchDisplayModeOscilloscopeWaveform))
-	{
-		pinchEvent = event;
-		NSArray *t = [[event allTouches] allObjects];
-		lastPinchDist = fabs([[t objectAtIndex:0] locationInView:view].x - [[t objectAtIndex:1] locationInView:view].x);
-		
-		sampleSizeText.text = [NSString stringWithFormat:@"%i ms", drawBufferLen / (int)(hwSampleRate / 1000.)];
-		[view addSubview:sampleSizeOverlay];
-	}
-}
-
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
-	// If we are in a pinch event...
-	if ((event == pinchEvent) && ([[event allTouches] count] == 2))
-	{
-		CGFloat thisPinchDist, pinchDiff;
-		NSArray *t = [[event allTouches] allObjects];
-		thisPinchDist = fabs([[t objectAtIndex:0] locationInView:view].x - [[t objectAtIndex:1] locationInView:view].x);
-		
-		// Find out how far we traveled since the last event
-		pinchDiff = thisPinchDist - lastPinchDist;
-		// Adjust our draw buffer length accordingly,
-		drawBufferLen -= 12 * (int)pinchDiff;
-		drawBufferLen = CLAMP(kMinDrawSamples, drawBufferLen, kMaxDrawSamples);
-		resetOscilLine = YES;
-		
-		// and display the size of our oscilloscope window in our overlay view
-		sampleSizeText.text = [NSString stringWithFormat:@"%i ms", drawBufferLen / (int)(hwSampleRate / 1000.)];
-		
-		lastPinchDist = thisPinchDist;
-	}
-}
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-	if (event == pinchEvent)
-	{
-		// If our pinch/zoom has ended, nil out the pinchEvent and remove the overlay view
-		[sampleSizeOverlay removeFromSuperview];
-		pinchEvent = nil;
-		return;
-	}
-    
-	// any tap in sonogram view will exit back to the waveform
-	if (self.displayMode == aurioTouchDisplayModeSpectrum)
-	{
-		AudioServicesPlaySystemSound(buttonPressSound);
-		self.displayMode = aurioTouchDisplayModeOscilloscopeWaveform;
-		return;
-	}
+	[self drawOscilloscope];
 	
-	UITouch *touch = [touches anyObject];
-	if (unitIsRunning)
-	{
-		if (CGRectContainsPoint(CGRectMake(0., 5., 52., 99.), [touch locationInView:view])) // The Sonogram button was touched
-		{
-			AudioServicesPlaySystemSound(buttonPressSound);
-			if ((self.displayMode == aurioTouchDisplayModeOscilloscopeWaveform) || (self.displayMode == aurioTouchDisplayModeOscilloscopeFFT))
-			{
-				if (!initted_spectrum) [self setupViewForSpectrum];
-				[self clearTextures];
-				self.displayMode = aurioTouchDisplayModeSpectrum;
-			}
-		}
-		else if (CGRectContainsPoint(CGRectMake(0., 104., 52., 99.), [touch locationInView:view])) // The Mute button was touched
-		{
-			AudioServicesPlaySystemSound(buttonPressSound);
-			self.mute = !(self.mute);
-			return;
-		}
-		else if (CGRectContainsPoint(CGRectMake(0., 203, 52., 99.), [touch locationInView:view])) // The FFT button was touched
-		{
-			AudioServicesPlaySystemSound(buttonPressSound);
-			self.displayMode = (self.displayMode == aurioTouchDisplayModeOscilloscopeWaveform) ?  aurioTouchDisplayModeOscilloscopeFFT :
-            aurioTouchDisplayModeOscilloscopeWaveform;
-			return;
-		}
-	}
 }
-
-
-
 
 
 @end
