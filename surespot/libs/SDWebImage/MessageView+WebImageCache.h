@@ -47,8 +47,7 @@
  */
 @interface MessageView (WebCache)
 
-- (void)setImageWithMessage:(SurespotMessage *) message
-           placeholderImage:(UIImage *)placeholder
+- (void)setMessage:(SurespotMessage *) message
                    progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletedBlock)completedBlock;
 
 

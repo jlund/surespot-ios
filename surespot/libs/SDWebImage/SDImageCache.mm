@@ -169,7 +169,7 @@ BOOL ImageDataHasPNGPreffix(NSData *data)
 
 #pragma mark ImageCache
 
-- (void)storeImage:(UIImage *)image imageData:(NSData *)imageData forKey:(NSString *)key toDisk:(BOOL)toDisk
+- (void)storeImage:(id)image imageData:(NSData *)imageData mimeType: (NSString *) mimeType forKey:(NSString *)key toDisk:(BOOL)toDisk
 {
     if (!image || !key)
     {
@@ -177,7 +177,18 @@ BOOL ImageDataHasPNGPreffix(NSData *data)
     }
     
     DDLogInfo(@"storing image in memory cache at key: %@", key);
-    [self.memCache setObject:image forKey:key cost:image.size.height * image.size.width * image.scale];
+    CGFloat cost = 0;
+    
+    if ([mimeType isEqualToString:MIME_TYPE_IMAGE]) {
+        
+        cost = [image size].height * [image size].width * [(UIImage *)image scale];
+    }
+    else if ([mimeType isEqualToString:MIME_TYPE_M4A]){
+        cost = [image length];
+    }
+    
+    DDLogInfo(@"using image from disk cache for key: %@", key);
+    [self.memCache setObject:image forKey:key cost:cost];
     
     if (toDisk)
     {
@@ -213,16 +224,16 @@ BOOL ImageDataHasPNGPreffix(NSData *data)
     return exists;
 }
 
-- (UIImage *)imageFromMemoryCacheForKey:(NSString *)key
+- (id)imageFromMemoryCacheForKey:(NSString *)key
 {
     
     return [self.memCache objectForKey:key];
 }
 
-- (UIImage *)imageFromDiskCacheForKey:(NSString *)key encryptionKey:(NSData *) encryptionKey iv: (NSString *) iv
+- (id)imageFromDiskCacheForKey:(NSString *)key mimeType: (NSString *) mimeType encryptionKey:(NSData *) encryptionKey iv: (NSString *) iv
 {
     // First check the in-memory cache...
-    UIImage *image = [self imageFromMemoryCacheForKey:key];
+    id image = [self imageFromMemoryCacheForKey:key];
     if (image)
     {
         DDLogInfo(@"using image from memory cache for key: %@", key);
@@ -230,11 +241,21 @@ BOOL ImageDataHasPNGPreffix(NSData *data)
     }
     
     // Second check the disk cache...
-    UIImage *diskImage = [self diskImageForCacheKey:key encryptionKey:encryptionKey iv:iv];
+    id diskImage = [self diskImageForCacheKey:key mimeType: mimeType encryptionKey:encryptionKey iv:iv];
+    CGFloat cost = 0;
     if (diskImage)
     {
         DDLogInfo(@"using image from disk cache for key: %@", key);
-        CGFloat cost = diskImage.size.height * diskImage.size.width * diskImage.scale;
+        if ([mimeType isEqualToString:MIME_TYPE_IMAGE]) {
+            
+            
+            cost = [diskImage size].height * [diskImage size].width * [(UIImage *)diskImage scale];
+        }
+        else if ([mimeType isEqualToString:MIME_TYPE_M4A]){
+            cost = [diskImage length];
+        }
+        
+        
         [self.memCache setObject:diskImage forKey:key cost:cost];
     }
     
@@ -262,15 +283,25 @@ BOOL ImageDataHasPNGPreffix(NSData *data)
     return nil;
 }
 
-- (UIImage *)diskImageForCacheKey:(NSString *)cacheKey encryptionKey:(NSData *) encryptionKey iv: (NSString *) iv
+- (id) diskImageForCacheKey:(NSString *)cacheKey mimeType: (NSString *) mimeType encryptionKey:(NSData *) encryptionKey iv: (NSString *) iv
 {
     NSData *data = [self diskImageDataBySearchingAllPathsForKey:cacheKey];
     if (data)
     {
-//        UIImage *image = [self scaledImageForKey:cacheKey image:[UIImage sd_imageWithEncryptedData:data key:encryptionKey iv:iv]];
-        UIImage *image = [UIImage sd_imageWithEncryptedData:data key:encryptionKey iv:iv];
-        image = [UIImage decodedImageWithImage:image];
-        return image;
+        if ([mimeType isEqualToString:MIME_TYPE_IMAGE]) {
+            //        UIImage *image = [self scaledImageForKey:cacheKey image:[UIImage sd_imageWithEncryptedData:data key:encryptionKey iv:iv]];
+            UIImage *image = [UIImage sd_imageWithEncryptedData:data key:encryptionKey iv:iv];
+            image = [UIImage decodedImageWithImage:image];
+            return image;
+        }
+        else {
+            if ([mimeType isEqualToString:MIME_TYPE_M4A]) {
+                return [EncryptionController symmetricDecryptData:data key:encryptionKey iv:iv];
+            }
+            else {
+                return nil;
+            }
+        }
     }
     else
     {
@@ -283,12 +314,13 @@ BOOL ImageDataHasPNGPreffix(NSData *data)
     return SDScaledImageForKey(key, image);
 }
 
-- (NSOperation *)queryDiskCacheForKey:(NSString *)key
-                           ourVersion: (NSString *) ourversion
-                        theirUsername: (NSString *) theirUsername
-                         theirVersion: (NSString *) theirVersion
-                                   iv: (NSString *) iv
-                                 done:(void (^)(UIImage *image, SDImageCacheType cacheType))doneBlock
+- (NSOperation *)queryDiskCacheForKey:(NSString *) key
+                             mimeType:(NSString *) mimeType
+                           ourVersion:(NSString *) ourversion
+                        theirUsername:(NSString *) theirUsername
+                         theirVersion:(NSString *) theirVersion
+                                   iv:(NSString *) iv
+                                 done:(void (^)(id image, SDImageCacheType cacheType))doneBlock
 {
     NSOperation *operation = [NSOperation new];
     
@@ -301,7 +333,7 @@ BOOL ImageDataHasPNGPreffix(NSData *data)
     }
     
     // First check the in-memory cache...
-    UIImage *image = [self imageFromMemoryCacheForKey:key];
+    id image = [self imageFromMemoryCacheForKey:key];
     if (image)
     {
         DDLogInfo(@"using image from memory cache for key: %@", key);
@@ -321,23 +353,34 @@ BOOL ImageDataHasPNGPreffix(NSData *data)
                            
                            [[CredentialCachingController sharedInstance] getSharedSecretForOurVersion:ourversion theirUsername:theirUsername theirVersion:theirVersion callback:^(id encryptionKey) {
                                
-                               UIImage *diskImage = nil;
+                               id diskImage = nil;
                                
                                if (encryptionKey) {
-                                   diskImage = [self diskImageForCacheKey:key encryptionKey:encryptionKey iv:iv];
+                                   diskImage = [self diskImageForCacheKey:key mimeType: mimeType encryptionKey:encryptionKey iv:iv];
                                }
                                
+                               CGFloat cost = 0;
                                if (diskImage)
                                {
                                    DDLogInfo(@"using image from disk cache and setting memory cache for key: %@", key);
-                                   CGFloat cost = diskImage.size.height * diskImage.size.width * diskImage.scale;
+                                   if ([mimeType isEqualToString:MIME_TYPE_IMAGE]) {
+                                       
+                                       cost = [diskImage size].height * [diskImage size].width * [(UIImage *)diskImage scale];
+                                   }
+                                   else {
+                                       if ([mimeType isEqualToString:MIME_TYPE_M4A]) {
+                                           cost = [diskImage length];
+                                       }
+                                   }
                                    [self.memCache setObject:diskImage forKey:key cost:cost];
                                }
+                               
                                
                                dispatch_main_sync_safe(^
                                                        {
                                                            doneBlock(diskImage, SDImageCacheTypeDisk);
                                                        });
+                               
                                
                            }];
                        }

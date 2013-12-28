@@ -81,7 +81,7 @@ typedef enum SDImageCacheType SDImageCacheType;
  * @param key The unique image cache key, usually it's image absolute URL
  * @param toDisk Store the image to disk cache if YES
  */
-- (void)storeImage:(UIImage *)image imageData:(NSData *)imageData forKey:(NSString *)key toDisk:(BOOL)toDisk;
+- (void)storeImage:(id)image imageData:(NSData *)imageData mimeType: (NSString *) mimeType forKey:(NSString *)key toDisk:(BOOL)toDisk;
 
 /**
  * Query the disk cache asynchronously.
@@ -91,17 +91,18 @@ typedef enum SDImageCacheType SDImageCacheType;
 //- (NSOperation *)queryDiskCacheForKey:(NSString *)key done:(void (^)(UIImage *image, SDImageCacheType cacheType))doneBlock;
 
 - (NSOperation *)queryDiskCacheForKey:(NSString *)key
+                             mimeType: (NSString *) mimeType
                            ourVersion: (NSString *) ourversion
                         theirUsername: (NSString *) theirUsername
                          theirVersion: (NSString *) theirVersion
                                    iv: (NSString *) iv
-                                 done:(void (^)(UIImage *image, SDImageCacheType cacheType))doneBlock;
+                                 done:(void (^)(id image, SDImageCacheType cacheType))doneBlock;
 /**
  * Query the memory cache synchronously.
  *
  * @param key The unique key used to store the wanted image
  */
-- (UIImage *)imageFromMemoryCacheForKey:(NSString *)key;
+- (id)imageFromMemoryCacheForKey:(NSString *)key;
 
 /**
  * Remove the image from memory and disk cache synchronously

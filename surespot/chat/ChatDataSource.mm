@@ -220,7 +220,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                         
                         if (image && encryptedImageData) {
                             //save data for new remote key
-                            [[[SDWebImageManager sharedManager] imageCache] storeImage:image imageData:encryptedImageData forKey:message.data toDisk:YES];
+                            [[[SDWebImageManager sharedManager] imageCache] storeImage:image imageData:encryptedImageData mimeType: message.mimeType forKey:message.data toDisk:YES];
                             
                             //remove now defunct cached local data
                             [[[SDWebImageManager sharedManager] imageCache] removeImageForKey:existingMessage.data fromDisk:YES];

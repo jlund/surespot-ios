@@ -10,6 +10,7 @@
 #import "objc/runtime.h"
 #import "HomeCell.h"
 #import "EncryptionParams.h"
+#import "SurespotConstants.h"
 
 static char operationKey;
 static char operationArrayKey;
@@ -34,12 +35,13 @@ static char operationArrayKey;
     {
         __weak HomeCell *wself = self;
         id<SDWebImageOperation> operation = [SDWebImageManager.sharedManager downloadWithURL: nsurl
+                                                                                    mimeType: MIME_TYPE_IMAGE
                                                                                   ourVersion:encryptionParams.ourVersion
                                                                                theirUsername:encryptionParams.ourUsername
                                                                                 theirVersion:encryptionParams.ourVersion
                                                                                           iv:encryptionParams.iv
                                                                                      options: 0
-                                                                                    progress:progressBlock completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished)
+                                                                                    progress:progressBlock completed:^(id image, NSString * mimeType,  NSError *error, SDImageCacheType cacheType, BOOL finished)
                                              {
                                                  if (!wself) return;
                                                  dispatch_main_async_safe(^
@@ -55,7 +57,7 @@ static char operationArrayKey;
                                                                              [wself setNeedsLayout];
                                                                              if (completedBlock && finished)
                                                                              {
-                                                                                 completedBlock(image, error, cacheType);
+                                                                                 completedBlock(image, mimeType, error, cacheType);
                                                                              }
                                                                          });
                                              }];

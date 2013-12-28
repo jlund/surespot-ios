@@ -80,6 +80,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 - (id<SDWebImageOperation>)downloadWithURL:(NSURL *)url
+                                  mimeType: (NSString *) mimeType
                                 ourVersion: (NSString *) ourversion
                              theirUsername: (NSString *) theirUsername
                               theirVersion: (NSString *) theirVersion
@@ -116,7 +117,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         dispatch_main_sync_safe(^
         {
                 NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorFileDoesNotExist userInfo:nil];
-                completedBlock(nil, error, SDImageCacheTypeNone, YES);
+                completedBlock(nil, nil, error, SDImageCacheTypeNone, YES);
         });
         return operation;
     }
@@ -128,11 +129,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSString *key = [self cacheKeyForURL:url];
 
     operation.cacheOperation = [self.imageCache queryDiskCacheForKey:key
+                                                            mimeType: mimeType
                                                           ourVersion:ourversion
                                                        theirUsername:theirUsername
                                                         theirVersion:theirVersion
                                                                   iv:iv
-                                                                done:^(UIImage *image, SDImageCacheType cacheType)
+                                                                done:^(id data, SDImageCacheType cacheType)
     {
         if (operation.isCancelled)
         {
@@ -144,16 +146,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             return;
         }
 
-        if ((!image || options & SDWebImageRefreshCached) && (![self.delegate respondsToSelector:@selector(imageManager:shouldDownloadImageForURL:)] || [self.delegate imageManager:self shouldDownloadImageForURL:url]))
+        if ((!data || options & SDWebImageRefreshCached) && (![self.delegate respondsToSelector:@selector(imageManager:shouldDownloadImageForURL:)] || [self.delegate imageManager:self shouldDownloadImageForURL:url]))
         {
-            if (image && options & SDWebImageRefreshCached)
+            if (data && options & SDWebImageRefreshCached)
             {
                 dispatch_main_sync_safe(^
                 {
                     // If image was found in the cache bug SDWebImageRefreshCached is provided, notify about the cached image
                     // AND try to re-download it in order to let a chance to NSURLCache to refresh it from server.
                                  DDLogInfo(@"using cached image for key: %@", key);
-                    completedBlock(image, nil, cacheType, YES);
+                    completedBlock(data, mimeType, nil, cacheType, YES);
                 });
             }
 
@@ -165,7 +167,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             if (options & SDWebImageContinueInBackground) downloaderOptions |= SDWebImageDownloaderContinueInBackground;
             if (options & SDWebImageHandleCookies) downloaderOptions |= SDWebImageDownloaderHandleCookies;
             if (options & SDWebImageAllowInvalidSSLCertificates) downloaderOptions |= SDWebImageDownloaderAllowInvalidSSLCertificates;
-            if (image && options & SDWebImageRefreshCached)
+            if (data && options & SDWebImageRefreshCached)
             {
                 // force progressive off if image already cached but forced refreshing
                 downloaderOptions &= ~SDWebImageDownloaderProgressiveDownload;
@@ -173,24 +175,25 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 downloaderOptions |= SDWebImageDownloaderIgnoreCachedResponse;
             }
             id<SDWebImageOperation> subOperation = [self.imageDownloader downloadImageWithURL:url
+                                                                                     mimeType:mimeType
                                                                                    ourVersion: ourversion
                                                                                 theirUsername: theirUsername
                                                                                  theirVersion: theirVersion
                                                                                            iv: iv
-                                                                                      options:downloaderOptions progress:progressBlock completed:^(UIImage *downloadedImage, NSData *data, NSError *error, BOOL finished)
+                                                                                      options:downloaderOptions progress:progressBlock completed:^(id downloadedImage, NSData *data, NSString * mimeType, NSError *error, BOOL finished)
             {                
                 if (weakOperation.isCancelled)
                 {
                     dispatch_main_sync_safe(^
                     {
-                        completedBlock(nil, nil, SDImageCacheTypeNone, finished);
+                        completedBlock(nil, nil, nil, SDImageCacheTypeNone, finished);
                     });
                 }
                 else if (error)
                 {
                     dispatch_main_sync_safe(^
                     {
-                        completedBlock(nil, error, SDImageCacheTypeNone, finished);
+                        completedBlock(nil, nil, error, SDImageCacheTypeNone, finished);
                     });
 
                     if (error.code != NSURLErrorNotConnectedToInternet)
@@ -205,7 +208,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 {
                     BOOL cacheOnDisk = !(options & SDWebImageCacheMemoryOnly);
 
-                    if (options & SDWebImageRefreshCached && image && !downloadedImage)
+                    if (options & SDWebImageRefreshCached && data && !downloadedImage)
                     {
                         // Image refresh hit the NSURLCache cache, do not call the completion block
                     }
@@ -214,12 +217,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     {
                         dispatch_main_sync_safe(^
                         {
-                            completedBlock(downloadedImage, nil, SDImageCacheTypeNone, finished);
+                            completedBlock(downloadedImage, mimeType, nil, SDImageCacheTypeNone, finished);
                         });
 
                         if (downloadedImage && finished)
                         {
-                            [self.imageCache storeImage:downloadedImage imageData:data forKey:key toDisk:cacheOnDisk];
+                            [self.imageCache storeImage:downloadedImage imageData:data mimeType: mimeType forKey:key toDisk:cacheOnDisk];
                         }
                     }
                 }
@@ -234,11 +237,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             }];
             operation.cancelBlock = ^{[subOperation cancel];};
         }
-        else if (image)
+        else if (data)
         {
             dispatch_main_sync_safe(^
             {
-                completedBlock(image, nil, cacheType, YES);
+                completedBlock(data, mimeType, nil, cacheType, YES);
             });
             @synchronized(self.runningOperations)
             {
@@ -250,7 +253,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             // Image not in cache and download disallowed by delegate
             dispatch_main_sync_safe(^
             {
-                completedBlock(nil, nil, SDImageCacheTypeNone, YES);
+                completedBlock(nil, nil,nil, SDImageCacheTypeNone, YES);
             });
             @synchronized(self.runningOperations)
             {

@@ -20,7 +20,6 @@
 #import "aurio_helper.h"
 #import "CAStreamBasicDescription.h"
 
-#define SPECTRUM_BAR_WIDTH 4
 
 #ifndef CLAMP
 #define CLAMP(min,x,max) (x < min ? min : (x > max ? max : x))

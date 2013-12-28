@@ -35,6 +35,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (strong, nonatomic) NSString * theirUsername;
 @property (strong, nonatomic) NSString * theirVersion;
 @property (strong, nonatomic) NSString * iv;
+@property (strong, nonatomic) NSString * mimeType;
 
 #if TARGET_OS_IPHONE && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_4_0
 @property (assign, nonatomic) UIBackgroundTaskIdentifier backgroundTaskId;
@@ -51,11 +52,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 - (id)initWithRequest:(NSURLRequest *)request
+             mimeType: (NSString *) mimeType
            ourVersion: (NSString *) ourversion
         theirUsername: (NSString *) theirUsername
          theirVersion: (NSString *) theirVersion
                    iv: (NSString *) iv
-              options:(SDWebImageDownloaderOptions)options progress:(void (^)(NSUInteger, long long))progressBlock completed:(void (^)(UIImage *, NSData *, NSError *, BOOL))completedBlock cancelled:(void (^)())cancelBlock
+              options:(SDWebImageDownloaderOptions)options progress:(void (^)(NSUInteger, long long))progressBlock completed:(void (^)(id, NSData *, NSString *, NSError *, BOOL))completedBlock cancelled:(void (^)())cancelBlock
 {
     if ((self = [super init]))
     {
@@ -63,6 +65,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         _ourVersion = ourversion;
         _theirUsername = theirUsername;
         _theirVersion = theirVersion;
+        _mimeType = mimeType;
         _iv = iv;
         _options = options;
         
@@ -81,7 +84,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     if (self.isCancelled)
     {
-            DDLogInfo(@"isCancelled");
+        DDLogInfo(@"isCancelled");
         self.finished = YES;
         [self reset];
         return;
@@ -132,18 +135,18 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             CFRunLoopRun();
         }
         
-//        if (!self.isFinished)
-//        {
-//            
-//            [self.connection cancel];
-//            [self connection:self.connection didFailWithError:[NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorTimedOut userInfo:@{NSURLErrorFailingURLErrorKey: self.request.URL}]];
-//        }
+        //        if (!self.isFinished)
+        //        {
+        //
+        //            [self.connection cancel];
+        //            [self connection:self.connection didFailWithError:[NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorTimedOut userInfo:@{NSURLErrorFailingURLErrorKey: self.request.URL}]];
+        //        }
     }
     else
     {
         if (self.completedBlock)
         {
-            self.completedBlock(nil, nil, [NSError errorWithDomain:NSURLErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: @"Connection can't be initialized"}], YES);
+            self.completedBlock(nil, nil, nil, [NSError errorWithDomain:NSURLErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: @"Connection can't be initialized"}], YES);
         }
     }
 }
@@ -220,7 +223,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
         
         self.imageData = [NSMutableData.alloc initWithCapacity:expected];
-       // [self setFinished:YES];
+        // [self setFinished:YES];
     }
     else
     {
@@ -230,7 +233,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         if (self.completedBlock)
         {
-            self.completedBlock(nil, nil, [NSError errorWithDomain:NSURLErrorDomain code:[((NSHTTPURLResponse *)response) statusCode] userInfo:nil], YES);
+            self.completedBlock(nil, nil, nil, [NSError errorWithDomain:NSURLErrorDomain code:[((NSHTTPURLResponse *)response) statusCode] userInfo:nil], YES);
         }
         
         [self done];
@@ -242,77 +245,77 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     DDLogInfo(@"appending %d bytes", data.length);
     [self.imageData appendData:data];
     
-//    if ((self.options & SDWebImageDownloaderProgressiveDownload) && self.expectedSize > 0 && self.completedBlock)
-  //  {
-//        // The following code is from http://www.cocoaintheshell.com/2011/05/progressive-images-download-imageio/
-//        // Thanks to the author @Nyx0uf
-//        
-//        // Get the total bytes downloaded
-//        const NSUInteger totalSize = self.imageData.length;
-//        
-//        // Update the data source, we must pass ALL the data, not just the new bytes
-//        CGImageSourceRef imageSource = CGImageSourceCreateIncremental(NULL);
-//        CGImageSourceUpdateData(imageSource, (__bridge  CFDataRef)self.imageData, totalSize == self.expectedSize);
-//        
-//        if (width + height == 0)
-//        {
-//            CFDictionaryRef properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, NULL);
-//            if (properties)
-//            {
-//                CFTypeRef val = CFDictionaryGetValue(properties, kCGImagePropertyPixelHeight);
-//                if (val) CFNumberGetValue(val, kCFNumberLongType, &height);
-//                val = CFDictionaryGetValue(properties, kCGImagePropertyPixelWidth);
-//                if (val) CFNumberGetValue(val, kCFNumberLongType, &width);
-//                CFRelease(properties);
-//            }
-//        }
-//        
-//        if (width + height > 0 && totalSize < self.expectedSize)
-//        {
-//            // Create the image
-//            CGImageRef partialImageRef = CGImageSourceCreateImageAtIndex(imageSource, 0, NULL);
-//            
-//#ifdef TARGET_OS_IPHONE
-//            // Workaround for iOS anamorphic image
-//            if (partialImageRef)
-//            {
-//                const size_t partialHeight = CGImageGetHeight(partialImageRef);
-//                CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-//                CGContextRef bmContext = CGBitmapContextCreate(NULL, width, height, 8, width * 4, colorSpace, kCGBitmapByteOrderDefault | kCGImageAlphaPremultipliedFirst);
-//                CGColorSpaceRelease(colorSpace);
-//                if (bmContext)
-//                {
-//                    CGContextDrawImage(bmContext, (CGRect){.origin.x = 0.0f, .origin.y = 0.0f, .size.width = width, .size.height = partialHeight}, partialImageRef);
-//                    CGImageRelease(partialImageRef);
-//                    partialImageRef = CGBitmapContextCreateImage(bmContext);
-//                    CGContextRelease(bmContext);
-//                }
-//                else
-//                {
-//                    CGImageRelease(partialImageRef);
-//                    partialImageRef = nil;
-//                }
-//            }
-//#endif
-//            
-//            if (partialImageRef)
-//            {
-//                UIImage *image = [UIImage imageWithCGImage:partialImageRef];
-//                UIImage *scaledImage = [self scaledImageForKey:self.request.URL.absoluteString image:image];
-//                image = [UIImage decodedImageWithImage:scaledImage];
-//                CGImageRelease(partialImageRef);
-//                dispatch_main_sync_safe(^
-//                                        {
-//                                            if (self.completedBlock)
-//                                            {
-//                                                self.completedBlock(image, nil, nil, NO);
-//                                            }
-//                                        });
-//            }
-//        }
-//        
-//        CFRelease(imageSource);
-//    }
+    //    if ((self.options & SDWebImageDownloaderProgressiveDownload) && self.expectedSize > 0 && self.completedBlock)
+    //  {
+    //        // The following code is from http://www.cocoaintheshell.com/2011/05/progressive-images-download-imageio/
+    //        // Thanks to the author @Nyx0uf
+    //
+    //        // Get the total bytes downloaded
+    //        const NSUInteger totalSize = self.imageData.length;
+    //
+    //        // Update the data source, we must pass ALL the data, not just the new bytes
+    //        CGImageSourceRef imageSource = CGImageSourceCreateIncremental(NULL);
+    //        CGImageSourceUpdateData(imageSource, (__bridge  CFDataRef)self.imageData, totalSize == self.expectedSize);
+    //
+    //        if (width + height == 0)
+    //        {
+    //            CFDictionaryRef properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, NULL);
+    //            if (properties)
+    //            {
+    //                CFTypeRef val = CFDictionaryGetValue(properties, kCGImagePropertyPixelHeight);
+    //                if (val) CFNumberGetValue(val, kCFNumberLongType, &height);
+    //                val = CFDictionaryGetValue(properties, kCGImagePropertyPixelWidth);
+    //                if (val) CFNumberGetValue(val, kCFNumberLongType, &width);
+    //                CFRelease(properties);
+    //            }
+    //        }
+    //
+    //        if (width + height > 0 && totalSize < self.expectedSize)
+    //        {
+    //            // Create the image
+    //            CGImageRef partialImageRef = CGImageSourceCreateImageAtIndex(imageSource, 0, NULL);
+    //
+    //#ifdef TARGET_OS_IPHONE
+    //            // Workaround for iOS anamorphic image
+    //            if (partialImageRef)
+    //            {
+    //                const size_t partialHeight = CGImageGetHeight(partialImageRef);
+    //                CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    //                CGContextRef bmContext = CGBitmapContextCreate(NULL, width, height, 8, width * 4, colorSpace, kCGBitmapByteOrderDefault | kCGImageAlphaPremultipliedFirst);
+    //                CGColorSpaceRelease(colorSpace);
+    //                if (bmContext)
+    //                {
+    //                    CGContextDrawImage(bmContext, (CGRect){.origin.x = 0.0f, .origin.y = 0.0f, .size.width = width, .size.height = partialHeight}, partialImageRef);
+    //                    CGImageRelease(partialImageRef);
+    //                    partialImageRef = CGBitmapContextCreateImage(bmContext);
+    //                    CGContextRelease(bmContext);
+    //                }
+    //                else
+    //                {
+    //                    CGImageRelease(partialImageRef);
+    //                    partialImageRef = nil;
+    //                }
+    //            }
+    //#endif
+    //
+    //            if (partialImageRef)
+    //            {
+    //                UIImage *image = [UIImage imageWithCGImage:partialImageRef];
+    //                UIImage *scaledImage = [self scaledImageForKey:self.request.URL.absoluteString image:image];
+    //                image = [UIImage decodedImageWithImage:scaledImage];
+    //                CGImageRelease(partialImageRef);
+    //                dispatch_main_sync_safe(^
+    //                                        {
+    //                                            if (self.completedBlock)
+    //                                            {
+    //                                                self.completedBlock(image, nil, nil, NO);
+    //                                            }
+    //                                        });
+    //            }
+    //        }
+    //
+    //        CFRelease(imageSource);
+    //    }
     
     if (self.progressBlock)
     {
@@ -338,7 +341,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     {
         if (self.options & SDWebImageDownloaderIgnoreCachedResponse && responseFromCached)
         {
-            completionBlock(nil, nil, nil, YES);
+            completionBlock(nil, nil, nil, nil, YES);
             self.completionBlock = nil;
             [self done];
         }
@@ -347,25 +350,52 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [[CredentialCachingController sharedInstance] getSharedSecretForOurVersion:_ourVersion theirUsername:_theirUsername theirVersion:_theirVersion callback:^(id key) {
                 
                 
-                UIImage *image = [UIImage sd_imageWithEncryptedData:self.imageData key: key iv:_iv];
-                
-                image = [self scaledImageForKey:self.request.URL.absoluteString image:image];
-                
-                if (!image.images) // Do not force decod animated GIFs
-                {
-                    image = [UIImage decodedImageWithImage:image];
+                if ([_mimeType isEqualToString:MIME_TYPE_IMAGE]) {
+                    
+                    UIImage *image = [UIImage sd_imageWithEncryptedData:self.imageData key: key iv:_iv];
+                    
+                    if (image) {
+                        image = [self scaledImageForKey:self.request.URL.absoluteString image:image];
+                        
+                        if (!image.images) // Do not force decod animated GIFs
+                        {
+                            image = [UIImage decodedImageWithImage:image];
+                        }
+                    }
+                    
+                    
+                    
+                    if (!image || CGSizeEqualToSize(image.size, CGSizeZero))
+                    {
+                        completionBlock(nil, nil, nil, [NSError errorWithDomain:@"SDWebImageErrorDomain" code:0 userInfo:@{NSLocalizedDescriptionKey: @"Downloaded image has 0 pixels"}], YES);
+                    }
+                    else
+                    {
+                        completionBlock(image, self.imageData, _mimeType, nil, YES);
+                    }
+                    
+                }
+                else {
+                    if ([_mimeType isEqualToString:MIME_TYPE_M4A]) {
+                        //decrypt the audio and cache it
+                        NSData * audioData = [EncryptionController symmetricDecryptData: _imageData key: key iv: _iv];
+                        if (!audioData)
+                        {
+                            completionBlock(nil, nil, nil, [NSError errorWithDomain:@"SDWebImageErrorDomain" code:0 userInfo:@{NSLocalizedDescriptionKey: @"no audio data"}], YES);
+                        }
+                        else
+                        {
+                            completionBlock(audioData, self.imageData, _mimeType, nil, YES);
+                        }
+                    }
+                    else {
+                        completionBlock(nil, nil, nil, [NSError errorWithDomain:@"SDWebImageErrorDomain" code:0 userInfo:@{NSLocalizedDescriptionKey: @"unknown mime type"}], YES);
+                    }
                 }
                 
-                if (CGSizeEqualToSize(image.size, CGSizeZero))
-                {        
-                    completionBlock(nil, nil, [NSError errorWithDomain:@"SDWebImageErrorDomain" code:0 userInfo:@{NSLocalizedDescriptionKey: @"Downloaded image has 0 pixels"}], YES);
-                }
-                else
-                {
-                    completionBlock(image, self.imageData, nil, YES);
-                }
                 self.completionBlock = nil;
                 [self done];
+                
             }];
         }
         
@@ -383,7 +413,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     if (self.completedBlock)
     {
-        self.completedBlock(nil, nil, error, YES);
+        self.completedBlock(nil, nil, nil, error, YES);
     }
     
     [self done];

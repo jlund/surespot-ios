@@ -11,6 +11,7 @@
 #import "SDWebImageManager.h"
 #import "MWPhotoProtocol.h"
 #import "DDLog.h"
+#import "SurespotConstants.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -123,7 +124,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     // Load async from web (using SDWebImage)
                     @try {
                         SDWebImageManager *manager = [SDWebImageManager sharedManager];
-                        [manager downloadWithURL:_photoURL ourVersion:_encryptionParams.ourVersion theirUsername:_encryptionParams.theirUsername theirVersion:_encryptionParams.theirVersion iv:_encryptionParams.iv 
+                        [manager downloadWithURL:_photoURL mimeType: MIME_TYPE_IMAGE  ourVersion:_encryptionParams.ourVersion theirUsername:_encryptionParams.theirUsername theirVersion:_encryptionParams.theirVersion iv:_encryptionParams.iv
                                          options:0
                                         progress:^(NSUInteger receivedSize, long long expectedSize) {
                                             float progress = receivedSize / (float)expectedSize;
@@ -132,7 +133,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                   self, @"photo", nil];
                                             [[NSNotificationCenter defaultCenter] postNotificationName:MWPHOTO_PROGRESS_NOTIFICATION object:dict];
                                         }
-                                       completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished) {
+                                       completed:^(id image,NSString * mimeType, NSError *error, SDImageCacheType cacheType, BOOL finished) {
                                            if (error) {
                                                DDLogVerbose(@"SDWebImage failed to download image: %@", error);
                                            }

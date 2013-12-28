@@ -205,7 +205,6 @@
 		66EBE13E1855C97100F2452D /* HomeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66EBE0A81855C97100F2452D /* HomeCell.xib */; };
 		66EBE13F1855C97100F2452D /* HomeDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE0AA1855C97100F2452D /* HomeDataSource.m */; };
 		66EBE1401855C97100F2452D /* MessageIndicatorNewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE0AC1855C97100F2452D /* MessageIndicatorNewView.m */; };
-		66EBE1411855C97100F2452D /* SurespotCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE0AF1855C97100F2452D /* SurespotCache.m */; };
 		66EC610B176E494900937467 /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EC60F9176E494900937467 /* AFHTTPClient.m */; };
 		66EC610C176E494900937467 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EC60FB176E494900937467 /* AFHTTPRequestOperation.m */; };
 		66EC610D176E494900937467 /* AFImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EC60FD176E494900937467 /* AFImageRequestOperation.m */; };
@@ -794,8 +793,6 @@
 		66EBE0AA1855C97100F2452D /* HomeDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeDataSource.m; sourceTree = "<group>"; };
 		66EBE0AB1855C97100F2452D /* MessageIndicatorNewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageIndicatorNewView.h; sourceTree = "<group>"; };
 		66EBE0AC1855C97100F2452D /* MessageIndicatorNewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageIndicatorNewView.m; sourceTree = "<group>"; };
-		66EBE0AE1855C97100F2452D /* SurespotCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SurespotCache.h; sourceTree = "<group>"; };
-		66EBE0AF1855C97100F2452D /* SurespotCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SurespotCache.m; sourceTree = "<group>"; };
 		66EC60F8176E494900937467 /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
 		66EC60F9176E494900937467 /* AFHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AFHTTPClient.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		66EC60FA176E494900937467 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
@@ -954,7 +951,6 @@
 				66DAB62B186DEEDC006C262F /* voice */,
 				66EBDF2F1855C96F00F2452D /* backup */,
 				66EBDF401855C96F00F2452D /* Base.lproj */,
-				66EBE0AD1855C97100F2452D /* cache */,
 				66EBDF081855C96F00F2452D /* chat */,
 				66EBDF431855C96F00F2452D /* en.lproj */,
 				66EBDF481855C96F00F2452D /* encryption */,
@@ -1737,15 +1733,6 @@
 			path = home;
 			sourceTree = "<group>";
 		};
-		66EBE0AD1855C97100F2452D /* cache */ = {
-			isa = PBXGroup;
-			children = (
-				66EBE0AE1855C97100F2452D /* SurespotCache.h */,
-				66EBE0AF1855C97100F2452D /* SurespotCache.m */,
-			);
-			path = cache;
-			sourceTree = "<group>";
-		};
 		66EC60F7176E494900937467 /* AFNetworking */ = {
 			isa = PBXGroup;
 			children = (
@@ -2058,7 +2045,6 @@
 				66866269185B6A2E001491B1 /* SDWebImageManager.m in Sources */,
 				66E21DF31847D7F90005D91E /* IASKSpecifier.m in Sources */,
 				6604A2CF17626B9E0072216A /* SurespotAppDelegate.mm in Sources */,
-				66EBE1411855C97100F2452D /* SurespotCache.m in Sources */,
 				6698585118663157003624DA /* AGWindowView.m in Sources */,
 				66EBE0C31855C97100F2452D /* SurespotButton.m in Sources */,
 				66E4F5B7176298CB00596E6B /* SocketIO.m in Sources */,

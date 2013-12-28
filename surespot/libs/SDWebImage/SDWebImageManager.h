@@ -59,8 +59,8 @@ typedef enum
     SDWebImageAllowInvalidSSLCertificates = 1 << 7
 } SDWebImageOptions;
 
-typedef void(^SDWebImageCompletedBlock)(UIImage *image, NSError *error, SDImageCacheType cacheType);
-typedef void(^SDWebImageCompletedWithFinishedBlock)(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished);
+typedef void(^SDWebImageCompletedBlock)(id data, NSString * mimeType, NSError *error, SDImageCacheType cacheType);
+typedef void(^SDWebImageCompletedWithFinishedBlock)(id data, NSString * mimeType, NSError *error, SDImageCacheType cacheType, BOOL finished);
 
 
 @class SDWebImageManager;
@@ -173,6 +173,7 @@ SDWebImageManager *manager = [SDWebImageManager sharedManager];
  * @return Returns a cancellable NSOperation
  */
 - (id<SDWebImageOperation>)downloadWithURL:(NSURL *)url
+                                  mimeType: (NSString *) mimeType
                                 ourVersion: (NSString *) ourversion
                              theirUsername: (NSString *) theirUsername
                               theirVersion: (NSString *) theirVersion

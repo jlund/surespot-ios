@@ -164,7 +164,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                           message.data = key;
                                                           
                                                           DDLogInfo(@"adding local image to cache %@", key);
-                                                          [[[SDWebImageManager sharedManager] imageCache] storeImage:scaledImage imageData:encryptedImageData forKey:key toDisk:YES];
+                                                          [[[SDWebImageManager sharedManager] imageCache] storeImage:scaledImage imageData:encryptedImageData mimeType:MIME_TYPE_IMAGE forKey:key toDisk:YES];
                                                           
                                                           //add message locally before we upload it
                                                           ChatDataSource * cds = [[ChatController sharedInstance] getDataSourceForFriendname:_theirUsername];
@@ -238,7 +238,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                   
                                                   
                                                   DDLogInfo(@"adding local friend image to cache %@", key);
-                                                  [[[SDWebImageManager sharedManager] imageCache] storeImage:scaledImage imageData:encryptedImageData forKey:key toDisk:YES];
+                                                  [[[SDWebImageManager sharedManager] imageCache] storeImage:scaledImage imageData:encryptedImageData mimeType: MIME_TYPE_IMAGE forKey:key toDisk:YES];
                                                   
                                                   //upload friend image to server
                                                   DDLogInfo(@"uploading friend image %@ to server", key);
@@ -257,7 +257,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                       
                                                                                                       if (image && encryptedImageData) {
                                                                                                           //save data for new remote key
-                                                                                                          [[[SDWebImageManager sharedManager] imageCache] storeImage:image imageData:encryptedImageData forKey:url
+                                                                                                          [[[SDWebImageManager sharedManager] imageCache] storeImage:image imageData:encryptedImageData mimeType: MIME_TYPE_IMAGE forKey:url
                                                                                                                                                               toDisk:YES];
                                                                                                           
                                                                                                           //remove now defunct cached local data

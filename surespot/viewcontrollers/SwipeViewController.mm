@@ -845,7 +845,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                iv:afriend.imageIv];
             [cell setImageUrl:afriend.imageUrl withEncryptionParams: ep placeholderImage:  [UIImage imageNamed:@"surespot_logo"] progress:^(NSUInteger receivedSize, long long expectedSize) {
                 
-            } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+            } completed:^(id image, NSString * mimeType, NSError *error, SDImageCacheType cacheType) {
                 
             }];
         }
@@ -993,12 +993,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                         cell.shareableView.image = [UIImage imageNamed:@"ic_secure"];
                     }
                     
-                    [cell setImageWithMessage:message
-                             placeholderImage:nil
+                    [cell setMessage:message
                                      progress:^(NSUInteger receivedSize, long long expectedSize) {
                                          
                                      }
-                                    completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+                                    completed:^(id data, NSString * mimeType, NSError *error, SDImageCacheType cacheType) {
                                         if (error) {
                                             
                                         }
@@ -1019,6 +1018,18 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                         cell.messageStatusLabel.frame = messageStatusFrame;
                         cell.messageLabel.hidden = YES;
                         cell.uiImageView.hidden = NO;
+                        
+                        [cell setMessage:message                                 
+                                         progress:^(NSUInteger receivedSize, long long expectedSize) {
+                                             
+                                         }
+                                        completed:^(id data, NSString * mimeType, NSError *error, SDImageCacheType cacheType) {
+                                            if (error) {
+                                                
+                                            }
+                                        }
+                         ];
+                        
                     }
                 }
             }
@@ -1624,18 +1635,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             REMenuItem * saveItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"save_to_photos", nil) image:[UIImage imageNamed:@"ic_menu_save"] highlightedImage:nil action:^(REMenuItem * item){
                 if (message.shareable && !ours) {
                     [SDWebImageManager.sharedManager downloadWithURL: [NSURL URLWithString:message.data]
+                                                            mimeType: MIME_TYPE_IMAGE
                                                           ourVersion: [message getOurVersion]
                                                        theirUsername: [message getOtherUser]
                                                         theirVersion: [message getTheirVersion]
                                                                   iv: [message iv]
                                                              options: (SDWebImageOptions) 0
-                                                            progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished)
+                                                            progress:nil completed:^(id data, NSString * mimeType, NSError *error, SDImageCacheType cacheType, BOOL finished)
                      {
                          if (error) {
                              [UIUtils showToastKey:@"error_saving_image_to_photos"];
                          }
                          else {
-                             [_assetLibrary saveImage:image toAlbum:@"surespot" withCompletionBlock:^(NSError *error, NSURL * url) {
+                             [_assetLibrary saveImage:data toAlbum:@"surespot" withCompletionBlock:^(NSError *error, NSURL * url) {
                                  if (error) {
                                      [UIUtils showToastKey:@"error_saving_image_to_photos" duration:2];
                                  }
@@ -1858,9 +1870,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 - (IBAction)buttonTouchUpInside:(id)sender {
-    if (![self handleTextAction]) {
-        [self scrollHome];
-    }
+//    if (![self handleTextAction]) {
+//        [self scrollHome];
+//    }
     
     
 }

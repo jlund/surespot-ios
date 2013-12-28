@@ -16,6 +16,7 @@
 @property (assign, nonatomic, readonly) SDWebImageDownloaderOptions options;
 
 - (id)initWithRequest:(NSURLRequest *)request
+             mimeType: (NSString *) mimeType
            ourVersion: (NSString *) ourversion
         theirUsername: (NSString *) theirUsername
          theirVersion: (NSString *) theirVersion

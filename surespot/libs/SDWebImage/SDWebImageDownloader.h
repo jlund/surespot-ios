@@ -58,7 +58,7 @@ extern NSString *const SDWebImageDownloadStartNotification;
 extern NSString *const SDWebImageDownloadStopNotification;
 
 typedef void(^SDWebImageDownloaderProgressBlock)(NSUInteger receivedSize, long long expectedSize);
-typedef void(^SDWebImageDownloaderCompletedBlock)(UIImage *image, NSData *data, NSError *error, BOOL finished);
+typedef void(^SDWebImageDownloaderCompletedBlock)(id image,  NSData *data, NSString * mimeType, NSError *error, BOOL finished);
 
 /**
  * Asynchronous downloader dedicated and optimized for image loading.
@@ -125,6 +125,7 @@ typedef void(^SDWebImageDownloaderCompletedBlock)(UIImage *image, NSData *data, 
  * @return A cancellable SDWebImageOperation
  */
 - (id<SDWebImageOperation>)downloadImageWithURL:(NSURL *)url
+                                       mimeType: (NSString *) mimeType
                                      ourVersion: (NSString *) ourversion
                                   theirUsername: (NSString *) theirUsername
                                    theirVersion: (NSString *) theirVersion

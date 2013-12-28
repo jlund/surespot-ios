@@ -9,6 +9,7 @@
 #import "MessageView+WebImageCache.h"
 #import "objc/runtime.h"
 #import "MessageView.h"
+#import "SurespotConstants.h"
 
 static char operationKey;
 static char operationArrayKey;
@@ -17,91 +18,61 @@ static char operationArrayKey;
 
 
 
-- (void)setImageWithMessage:(SurespotMessage *) message
-           placeholderImage:(UIImage *)placeholder
-                 progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletedBlock)completedBlock
+- (void)setMessage:(SurespotMessage *) message
+          progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletedBlock)completedBlock
 {
     [self cancelCurrentImageLoad];
-
-    self.uiImageView.image = placeholder;
+    
+    //    self.uiImageView.image = placeholder;
     
     NSURL * url = [NSURL URLWithString:message.data];
     
     if (url)
     {
         __weak MessageView *wself = self;
-        id<SDWebImageOperation> operation = [SDWebImageManager.sharedManager downloadWithURL:url
+        id<SDWebImageOperation> operation = [SDWebImageManager.sharedManager downloadWithURL: url
+                                                                                    mimeType: [message mimeType]
                                                                                   ourVersion: [message getOurVersion]
                                                                                theirUsername: [message getOtherUser]
                                                                                 theirVersion: [message getTheirVersion]
                                                                                           iv: [message iv]
+                                             
                                                                                      options: 0
-                                                                                    progress:progressBlock completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished)
-        {
-            if (!wself) return;
-            dispatch_main_async_safe(^
-            {
-                if (!wself) return;
-                if (image)
-                {
-                    wself.uiImageView.image = image;
-                    if (message.formattedDate) {
-                        wself.messageStatusLabel.text = message.formattedDate;
-                    }
-
-                }
-                else {
-                    wself.messageStatusLabel.text = NSLocalizedString(@"message_error_generic", nil);
-                    
-                }
-                
-                [wself setNeedsLayout];
-                if (completedBlock && finished)
-                {
-                    completedBlock(image, error, cacheType);
-                }
-            });
-        }];
+                                                                                    progress:progressBlock completed:^(id image, NSString * mimeType, NSError *error, SDImageCacheType cacheType, BOOL finished)
+                                             {
+                                                 if (!wself) return;
+                                                 dispatch_main_async_safe(^
+                                                                          {
+                                                                              if (!wself) return;
+                                                                              if (image)
+                                                                              {
+                                                                                  if ([mimeType isEqualToString:MIME_TYPE_IMAGE]) {
+                                                                                      wself.uiImageView.image = image;
+                                                                                  }
+                                                                                  else {
+                                                                                      wself.messageStatusLabel.text = @"audio";
+                                                                                  }
+                                                                                  if (message.formattedDate) {
+                                                                                      wself.messageStatusLabel.text = message.formattedDate;
+                                                                                  }
+                                                                                  
+                                                                              }
+                                                                              else {
+                                                                                  wself.messageStatusLabel.text = NSLocalizedString(@"message_error_generic", nil);
+                                                                                  
+                                                                              }
+                                                                              
+                                                                              [wself setNeedsLayout];
+                                                                              if (completedBlock && finished)
+                                                                              {
+                                                                                  completedBlock(image, mimeType, error, cacheType);
+                                                                              }
+                                                                          });
+                                             }];
         objc_setAssociatedObject(self, &operationKey, operation, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
 }
 
-//- (void)setAnimationImagesWithURLs:(NSArray *)arrayOfURLs
-//{
-//    [self cancelCurrentArrayLoad];
-//    __weak UIImageView *wself = self;
-//
-//    NSMutableArray *operationsArray = [[NSMutableArray alloc] init];
-//
-//    for (NSURL *logoImageURL in arrayOfURLs)
-//    {
-//        id<SDWebImageOperation> operation = [SDWebImageManager.sharedManager downloadWithURL:logoImageURL options:0 progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished)
-//        {
-//            if (!wself) return;
-//            dispatch_main_sync_safe(^
-//            {
-//                __strong UIImageView *sself = wself;
-//                [sself stopAnimating];
-//                if (sself && image)
-//                {
-//                    NSMutableArray *currentImages = [[sself animationImages] mutableCopy];
-//                    if (!currentImages)
-//                    {
-//                        currentImages = [[NSMutableArray alloc] init];
-//                    }
-//                    [currentImages addObject:image];
-//
-//                    sself.animationImages = currentImages;
-//                    [sself setNeedsLayout];
-//                }
-//                [sself startAnimating];
-//            });
-//        }];
-//        [operationsArray addObject:operation];
-//    }
-//
-//    objc_setAssociatedObject(self, &operationArrayKey, [NSArray arrayWithArray:operationsArray], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-//}
 
 - (void)cancelCurrentImageLoad
 {
