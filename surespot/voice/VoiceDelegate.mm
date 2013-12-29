@@ -35,13 +35,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) NSString * ourVersion;
 @property (nonatomic, strong) AVAudioRecorder *recorder;
 @property (nonatomic, strong) AVAudioPlayer *player;
+@property (nonatomic, strong) UIView * countdownView;
+@property (nonatomic, strong) UITextField * countdownTextField;
+@property (nonatomic, strong) NSTimer * countdownTimer;
+@property (nonatomic, assign) NSInteger timeRemaining;
 @end
 
 @implementation VoiceDelegate
 
-//@synthesize window;
 @synthesize view;
-
 @synthesize rioUnit;
 @synthesize unitIsRunning;
 @synthesize unitHasBeenCreated;
@@ -60,6 +62,22 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if( !self ) return nil;
     _username = username;
     _ourVersion = ourVersion;
+    
+    _countdownView = [[UIView alloc] initWithFrame:CGRectMake(0, 210, 44,44)];
+    //setup the button
+    _countdownView.layer.cornerRadius = 22;
+    _countdownView.layer.borderColor = [[UIUtils surespotBlue] CGColor];
+    _countdownView.layer.borderWidth = 3.0f;
+    _countdownView.backgroundColor = [UIColor blackColor];
+    _countdownView.opaque = YES;
+    
+    _countdownTextField = [[UITextField alloc] initWithFrame:CGRectMake(1,0, 44, 44)];
+    _countdownTextField.textAlignment = NSTextAlignmentCenter;
+    _countdownTextField.textColor = [UIColor whiteColor];
+    _countdownTextField.font = [UIFont boldSystemFontOfSize:24];
+    
+    [_countdownView addSubview:_countdownTextField];
+    
     return self;
 }
 
@@ -112,32 +130,56 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (!_recorder.recording) {
         _theirUsername = username;
         
-        
-        
-        
         XThrowIfError(AudioOutputUnitStart(rioUnit), "couldn't start remote i/o unit");
         
-		
-		unitIsRunning = 1;
+        
+        unitIsRunning = 1;
         
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
         [audioSession setActive:YES error:nil];
         
+        _timeRemaining = 10;
+        _countdownTextField.text = @"10";
         
         
         [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView addSubview:view];
+        [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView addSubview:_countdownView];
         [view startAnimation];
         [_recorder record];
+        
+        _countdownTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countdownTimerFired:) userInfo:nil repeats:YES];
     }
 }
 
--(void) stopRecordingSend: (BOOL) send {
+-(void) countdownTimerFired: (NSTimer *) timer {
+    _timeRemaining--;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _countdownTextField.text = [@(_timeRemaining) stringValue];
+        
+        if (_timeRemaining <= 0) {
+            //give em like another 0.5
+            [self performSelector:@selector(stopRecordingSendInternal:) withObject:[NSNumber numberWithBool:YES] afterDelay:.2];
+        }
+    });
+    
+}
+
+-(void) stopRecordingSend: (NSNumber*) send {
+    //give em like another 0.5
+    [self performSelector:@selector(stopRecordingSendInternal:) withObject:[NSNumber numberWithBool:YES] afterDelay:.2];
+}
+
+-(void) stopRecordingSendInternal: (NSNumber*) send {
     DDLogInfo(@"stop recording");
     if (_recorder.recording) {
+        
+        [_countdownTimer invalidate];
+        
         [_recorder stop];
         
         [view stopAnimation];
         [view removeFromSuperview];
+        [_countdownView removeFromSuperview];
         
         
         
@@ -148,7 +190,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         XThrowIfError(AudioOutputUnitStop(rioUnit), "couldn't stop remote i/o unit");
         
         
-        if (send) {
+        if ([send boolValue]) {
             [self uploadVoiceUrl:_recorder.url];
         }
         
@@ -252,10 +294,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 void cycleOscilloscopeLines()
 {
-	// Cycle the lines in our draw buffer so that they age and fade. The oldest line is discarded.
-	int drawBuffer_i;
-	for (drawBuffer_i=(kNumDrawBuffers - 2); drawBuffer_i>=0; drawBuffer_i--)
-		memmove(drawBuffers[drawBuffer_i + 1], drawBuffers[drawBuffer_i], drawBufferLen);
+    // Cycle the lines in our draw buffer so that they age and fade. The oldest line is discarded.
+    int drawBuffer_i;
+    for (drawBuffer_i=(kNumDrawBuffers - 2); drawBuffer_i>=0; drawBuffer_i--)
+        memmove(drawBuffers[drawBuffer_i + 1], drawBuffers[drawBuffer_i], drawBufferLen);
 }
 
 #pragma mark -Audio Session Interruption Listener
@@ -289,10 +331,10 @@ void propListener(	void *                  inClientData,
                   UInt32                  inDataSize,
                   const void *            inData)
 {
-	VoiceDelegate *THIS = (__bridge VoiceDelegate*)inClientData;
-	if (inID == kAudioSessionProperty_AudioRouteChange)
-	{
-		try {
+    VoiceDelegate *THIS = (__bridge VoiceDelegate*)inClientData;
+    if (inID == kAudioSessionProperty_AudioRouteChange)
+    {
+        try {
             UInt32 isAudioInputAvailable;
             UInt32 size = sizeof(isAudioInputAvailable);
             XThrowIfError(AudioSessionGetProperty(kAudioSessionProperty_AudioInputAvailable, &size, &isAudioInputAvailable), "couldn't get AudioSession AudioInputAvailable property value");
@@ -328,31 +370,31 @@ void propListener(	void *                  inClientData,
                 THIS->unitIsRunning = true;
             }
             
-			// we need to rescale the sonogram view's color thresholds for different input
-			CFStringRef newRoute;
-			size = sizeof(CFStringRef);
-			XThrowIfError(AudioSessionGetProperty(kAudioSessionProperty_AudioRoute, &size, &newRoute), "couldn't get new audio route");
-			if (newRoute)
-			{
-				CFShow(newRoute);
-			}
-		} catch (CAXException e) {
-			char buf[256];
-			fprintf(stderr, "Error: %s (%s)\n", e.mOperation, e.FormatError(buf));
-		}
-		
-	}
+            // we need to rescale the sonogram view's color thresholds for different input
+            CFStringRef newRoute;
+            size = sizeof(CFStringRef);
+            XThrowIfError(AudioSessionGetProperty(kAudioSessionProperty_AudioRoute, &size, &newRoute), "couldn't get new audio route");
+            if (newRoute)
+            {
+                CFShow(newRoute);
+            }
+        } catch (CAXException e) {
+            char buf[256];
+            fprintf(stderr, "Error: %s (%s)\n", e.mOperation, e.FormatError(buf));
+        }
+        
+    }
 }
 
 #pragma mark -RIO Render Callback
 
 static OSStatus	PerformThru(
-							void						*inRefCon,
-							AudioUnitRenderActionFlags 	*ioActionFlags,
-							const AudioTimeStamp 		*inTimeStamp,
-							UInt32 						inBusNumber,
-							UInt32 						inNumberFrames,
-							AudioBufferList 			*ioData)
+                            void						*inRefCon,
+                            AudioUnitRenderActionFlags 	*ioActionFlags,
+                            const AudioTimeStamp 		*inTimeStamp,
+                            UInt32 						inBusNumber,
+                            UInt32 						inNumberFrames,
+                            AudioBufferList 			*ioData)
 {
     AudioBufferList * bufferList = new AudioBufferList();
     
@@ -363,17 +405,17 @@ static OSStatus	PerformThru(
     bufferList->mBuffers[0].mData = samples;
     bufferList->mBuffers[0].mNumberChannels = 1;
     bufferList->mBuffers[0].mDataByteSize = inNumberFrames*sizeof(SInt32);
-
-
+    
+    
     // DDLogInfo(@"performThru");
-	VoiceDelegate *THIS = (__bridge VoiceDelegate *)inRefCon;
+    VoiceDelegate *THIS = (__bridge VoiceDelegate *)inRefCon;
     OSStatus err = AudioUnitRender(THIS->rioUnit, ioActionFlags, inTimeStamp, inBusNumber, inNumberFrames, bufferList);
-	if (err) { printf("PerformThru: error %d\n", (int)err); return err; }
-	
-	// Remove DC component
-	for(int i = 0; i < bufferList->mNumberBuffers; ++i)
-		THIS->dcFilter[i].InplaceFilter((Float32*)(bufferList->mBuffers[i].mData), inNumberFrames);
-	
+    if (err) { printf("PerformThru: error %d\n", (int)err); return err; }
+    
+    // Remove DC component
+    for(int i = 0; i < bufferList->mNumberBuffers; ++i)
+        THIS->dcFilter[i].InplaceFilter((Float32*)(bufferList->mBuffers[i].mData), inNumberFrames);
+    
     // The draw buffer is used to hold a copy of the most recent PCM data to be drawn on the oscilloscope
     if (drawBufferLen != drawBufferLen_alloced)
     {
@@ -412,9 +454,9 @@ static OSStatus	PerformThru(
         data_ptr += 4;
     }
     drawBufferIdx += inNumberFrames;
-	
+    
     delete bufferList;
-	return err;
+    return err;
 }
 
 #pragma mark-
@@ -423,22 +465,22 @@ static OSStatus	PerformThru(
 {
     
     
-	// Turn off the idle timer, since this app doesn't rely on constant touch input
-	[UIApplication sharedApplication].idleTimerDisabled = YES;
-	
-	// Initialize our remote i/o unit
-	
-	inputProc.inputProc = PerformThru;
-	inputProc.inputProcRefCon = (__bridge void *) self;
+    // Turn off the idle timer, since this app doesn't rely on constant touch input
+    [UIApplication sharedApplication].idleTimerDisabled = YES;
     
-	try {
+    // Initialize our remote i/o unit
+    
+    inputProc.inputProc = PerformThru;
+    inputProc.inputProcRefCon = (__bridge void *) self;
+    
+    try {
         
-		// Initialize and configure the audio session
-		XThrowIfError(AudioSessionInitialize(NULL, NULL, rioInterruptionListener, (__bridge void *) self), "couldn't initialize audio session");
+        // Initialize and configure the audio session
+        XThrowIfError(AudioSessionInitialize(NULL, NULL, rioInterruptionListener, (__bridge void *) self), "couldn't initialize audio session");
         
-		UInt32 audioCategory = kAudioSessionCategory_PlayAndRecord;
-		XThrowIfError(AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(audioCategory), &audioCategory), "couldn't set audio category");
-		XThrowIfError(AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, propListener, (__bridge  void *) self), "couldn't set property listener");
+        UInt32 audioCategory = kAudioSessionCategory_PlayAndRecord;
+        XThrowIfError(AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(audioCategory), &audioCategory), "couldn't set audio category");
+        XThrowIfError(AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, propListener, (__bridge  void *) self), "couldn't set property listener");
         
         UInt32 doChangeDefaultRoute = 1;
         
@@ -448,33 +490,34 @@ static OSStatus	PerformThru(
                                                &doChangeDefaultRoute
                                                ), "couldn't set speaker output");
         
-		Float32 preferredBufferSize = .005;
-		XThrowIfError(AudioSessionSetProperty(kAudioSessionProperty_PreferredHardwareIOBufferDuration, sizeof(preferredBufferSize), &preferredBufferSize), "couldn't set i/o buffer duration");
-		
-		UInt32 size = sizeof(hwSampleRate);
-		XThrowIfError(AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareSampleRate, &size, &hwSampleRate), "couldn't get hw sample rate");
-		
+        
+        Float32 preferredBufferSize = .005;
+        XThrowIfError(AudioSessionSetProperty(kAudioSessionProperty_PreferredHardwareIOBufferDuration, sizeof(preferredBufferSize), &preferredBufferSize), "couldn't set i/o buffer duration");
+        
+        UInt32 size = sizeof(hwSampleRate);
+        XThrowIfError(AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareSampleRate, &size, &hwSampleRate), "couldn't get hw sample rate");
+        
         //		XThrowIfError(AudioSessionSetActive(true), "couldn't set audio session active\n");
         
-		XThrowIfError(SetupRemoteIO(rioUnit, hwSampleRate, inputProc, thruFormat), "couldn't setup remote i/o unit");
-		unitHasBeenCreated = true;
+        XThrowIfError(SetupRemoteIO(rioUnit, hwSampleRate, inputProc, thruFormat), "couldn't setup remote i/o unit");
+        unitHasBeenCreated = true;
         
         drawFormat.SetAUCanonical(2, false);
         drawFormat.mSampleRate = 44100;
         
         size = sizeof(thruFormat);
-		XThrowIfError(AudioUnitGetProperty(rioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 1, &thruFormat, &size), "couldn't get the remote I/O unit's output client format");
+        XThrowIfError(AudioUnitGetProperty(rioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 1, &thruFormat, &size), "couldn't get the remote I/O unit's output client format");
         
         XThrowIfError(AudioConverterNew(&thruFormat, &drawFormat, &audioConverter), "couldn't setup AudioConverter");
-		
-		dcFilter = new DCRejectionFilter[thruFormat.NumberChannels()];
         
-		UInt32 maxFPS;
-		size = sizeof(maxFPS);
-		XThrowIfError(AudioUnitGetProperty(rioUnit, kAudioUnitProperty_MaximumFramesPerSlice, kAudioUnitScope_Global, 0, &maxFPS, &size), "couldn't get the remote I/O unit's max frames per slice");
-		
-		//fftBufferManager = new FFTBufferManager(maxFPS);
-		//l_fftData = new int32_t[maxFPS/2];
+        dcFilter = new DCRejectionFilter[thruFormat.NumberChannels()];
+        
+        UInt32 maxFPS;
+        size = sizeof(maxFPS);
+        XThrowIfError(AudioUnitGetProperty(rioUnit, kAudioUnitProperty_MaximumFramesPerSlice, kAudioUnitScope_Global, 0, &maxFPS, &size), "couldn't get the remote I/O unit's max frames per slice");
+        
+        //fftBufferManager = new FFTBufferManager(maxFPS);
+        //l_fftData = new int32_t[maxFPS/2];
         
         drawABL = (AudioBufferList*) malloc(sizeof(AudioBufferList) + sizeof(AudioBuffer));
         drawABL->mNumberBuffers = 2;
@@ -485,17 +528,17 @@ static OSStatus	PerformThru(
             drawABL->mBuffers[i].mNumberChannels = 1;
         }
         //
-		oscilLine = (GLfloat*)malloc(drawBufferLen * 2 * sizeof(GLfloat));
+        oscilLine = (GLfloat*)malloc(drawBufferLen * 2 * sizeof(GLfloat));
         
         
         
         
-	}
-	catch (CAXException &e) {
-		char buf[256];
-		fprintf(stderr, "Error: %s (%s)\n", e.mOperation, e.FormatError(buf));
-		unitIsRunning = 0;
-		if (dcFilter) delete[] dcFilter;
+    }
+    catch (CAXException &e) {
+        char buf[256];
+        fprintf(stderr, "Error: %s (%s)\n", e.mOperation, e.FormatError(buf));
+        unitIsRunning = 0;
+        if (dcFilter) delete[] dcFilter;
         if (drawABL)
         {
             for (UInt32 i=0; i<drawABL->mNumberBuffers; ++i)
@@ -504,11 +547,11 @@ static OSStatus	PerformThru(
             drawABL = NULL;
         }
         //	if (url) CFRelease(url);
-	}
-	catch (...) {
-		fprintf(stderr, "An unknown error occurred\n");
-		unitIsRunning = 0;
-		if (dcFilter) delete[] dcFilter;
+    }
+    catch (...) {
+        fprintf(stderr, "An unknown error occurred\n");
+        unitIsRunning = 0;
+        if (dcFilter) delete[] dcFilter;
         if (drawABL)
         {
             for (UInt32 i=0; i<drawABL->mNumberBuffers; ++i)
@@ -517,8 +560,8 @@ static OSStatus	PerformThru(
             drawABL = NULL;
         }
         //	if (url) CFRelease(url);
-	}
-	
+    }
+    
     
     if (!view) {
         view = [[EAGLView alloc] initWithFrame: CGRectMake(0, 200, 320, 200) ];
@@ -536,8 +579,8 @@ static OSStatus	PerformThru(
 
 - (void)dealloc
 {
-	delete[] dcFilter;
-	//delete fftBufferManager;
+    delete[] dcFilter;
+    //delete fftBufferManager;
     if (drawABL)
     {
         for (UInt32 i=0; i<drawABL->mNumberBuffers; ++i)
@@ -546,93 +589,93 @@ static OSStatus	PerformThru(
         drawABL = NULL;
     }
     
-	
-	free(oscilLine);
+    
+    free(oscilLine);
     
 }
 
 - (void)clearTextures
 {
-	bzero(texBitBuffer, sizeof(UInt32) * 512);
+    bzero(texBitBuffer, sizeof(UInt32) * 512);
 }
 
 
 - (void)drawOscilloscope
 {
-   // DDLogInfo(@"drawOscilliscope");
-	// Clear the view
-	glClear(GL_COLOR_BUFFER_BIT);
-	
+    // DDLogInfo(@"drawOscilliscope");
+    // Clear the view
+    glClear(GL_COLOR_BUFFER_BIT);
+    
     glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-	
-	glColor4f(0., 0., 0., 1.);
-	
-	glPushMatrix();
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     
-	GLfloat *oscilLine_ptr;
-	GLfloat max = drawBufferLen;
-	SInt8 *drawBuffer_ptr;
-	
-	// Alloc an array for our oscilloscope line vertices
-	if (resetOscilLine) {
-		oscilLine = (GLfloat*)realloc(oscilLine, drawBufferLen * 2 * sizeof(GLfloat));
-		resetOscilLine = NO;
-	}
+    glColor4f(0., 0., 0., 1.);
     
-	
-	// Translate to the left side and vertical center of the screen, and scale so that the screen coordinates
-	// go from 0 to 1 along the X, and -1 to 1 along the Y
-	glTranslatef(1., 100., 0.);
-	glScalef(320., 100., 1.);
-	
-	// Set up some GL state for our oscilloscope lines
-	glDisable(GL_TEXTURE_2D);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	glDisableClientState(GL_COLOR_ARRAY);
-	glDisable(GL_LINE_SMOOTH);
-	glLineWidth(1.);
-	
-	int drawBuffer_i;
-	// Draw a line for each stored line in our buffer (the lines are stored and fade over time)
-	for (drawBuffer_i=0; drawBuffer_i<kNumDrawBuffers; drawBuffer_i++)
-	{
-		if (!drawBuffers[drawBuffer_i]) continue;
-		
-		oscilLine_ptr = oscilLine;
-		drawBuffer_ptr = drawBuffers[drawBuffer_i];
-		
-		GLfloat i;
-		// Fill our vertex array with points
+    glPushMatrix();
+    
+    GLfloat *oscilLine_ptr;
+    GLfloat max = drawBufferLen;
+    SInt8 *drawBuffer_ptr;
+    
+    // Alloc an array for our oscilloscope line vertices
+    if (resetOscilLine) {
+        oscilLine = (GLfloat*)realloc(oscilLine, drawBufferLen * 2 * sizeof(GLfloat));
+        resetOscilLine = NO;
+    }
+    
+    
+    // Translate to the left side and vertical center of the screen, and scale so that the screen coordinates
+    // go from 0 to 1 along the X, and -1 to 1 along the Y
+    glTranslatef(1., 100., 0.);
+    glScalef(320., 100., 1.);
+    
+    // Set up some GL state for our oscilloscope lines
+    glDisable(GL_TEXTURE_2D);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
+    glDisable(GL_LINE_SMOOTH);
+    glLineWidth(1.);
+    
+    int drawBuffer_i;
+    // Draw a line for each stored line in our buffer (the lines are stored and fade over time)
+    for (drawBuffer_i=0; drawBuffer_i<kNumDrawBuffers; drawBuffer_i++)
+    {
+        if (!drawBuffers[drawBuffer_i]) continue;
+        
+        oscilLine_ptr = oscilLine;
+        drawBuffer_ptr = drawBuffers[drawBuffer_i];
+        
+        GLfloat i;
+        // Fill our vertex array with points
         for (i=0.; i<max; i=i+1.)
-		{
-			*oscilLine_ptr++ = i/max;
-			*oscilLine_ptr++ = (Float32)(*drawBuffer_ptr++) / 128.;
-		}
-		
-		// If we're drawing the newest line, draw it in solid blue. Otherwise, draw it in a faded blue.
-		if (drawBuffer_i == 0)
+        {
+            *oscilLine_ptr++ = i/max;
+            *oscilLine_ptr++ = (Float32)(*drawBuffer_ptr++) / 128.;
+        }
+        
+        // If we're drawing the newest line, draw it in solid blue. Otherwise, draw it in a faded blue.
+        if (drawBuffer_i == 0)
             
-			glColor4f(0.2, 0.71, 0.898, 1.);
-		else
-			glColor4f(0.2, 0.71, 0.898, (.24 * (1. - ((GLfloat)drawBuffer_i / (GLfloat)kNumDrawBuffers))));
-		
-		// Set up vertex pointer,
-		glVertexPointer(2, GL_FLOAT, 0, oscilLine);
-		
-		// and draw the line.
-		glDrawArrays(GL_LINE_STRIP, 0, drawBufferLen);
-		
-	}
+            glColor4f(0.2, 0.71, 0.898, 1.);
+        else
+            glColor4f(0.2, 0.71, 0.898, (.24 * (1. - ((GLfloat)drawBuffer_i / (GLfloat)kNumDrawBuffers))));
+        
+        // Set up vertex pointer,
+        glVertexPointer(2, GL_FLOAT, 0, oscilLine);
+        
+        // and draw the line.
+        glDrawArrays(GL_LINE_STRIP, 0, drawBufferLen);
+        
+    }
     
-	glPopMatrix();
+    glPopMatrix();
 }
 
 
 - (void)drawView:(id)sender forTime:(NSTimeInterval)time
 {
-	[self drawOscilloscope];
-	
+    [self drawOscilloscope];
+    
 }
 
 

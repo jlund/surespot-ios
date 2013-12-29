@@ -1867,7 +1867,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 [_voiceDelegate startRecordingUsername: currentChat];
                 break;
             case UIGestureRecognizerStateEnded:
-                [_voiceDelegate stopRecordingSend: YES];
+                [_voiceDelegate stopRecordingSend: [NSNumber numberWithBool:YES]];
                 break;
             default:
                 break;

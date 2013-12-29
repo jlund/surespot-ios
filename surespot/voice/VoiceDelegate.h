@@ -81,5 +81,5 @@ inline double linearInterp(double valA, double valB, double fract)
 -(void) playVoiceMessage: (SurespotMessage *) message;
 -(void) prepareRecording;
 -(void) startRecordingUsername: (NSString *) username;
--(void) stopRecordingSend: (BOOL) send;
+-(void) stopRecordingSend: (NSNumber *) send;
 @end
