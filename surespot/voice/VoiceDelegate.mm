@@ -398,68 +398,6 @@ void rioInterruptionListener(void *inClientData, UInt32 inInterruption)
     }
 }
 
-#pragma mark -Audio Session Property Listener
-
-void propListener(	void *                  inClientData,
-                  AudioSessionPropertyID	inID,
-                  UInt32                  inDataSize,
-                  const void *            inData)
-{
-    VoiceDelegate *THIS = (__bridge VoiceDelegate*)inClientData;
-    if (inID == kAudioSessionProperty_AudioRouteChange)
-    {
-        try {
-            UInt32 isAudioInputAvailable;
-            UInt32 size = sizeof(isAudioInputAvailable);
-            XThrowIfError(AudioSessionGetProperty(kAudioSessionProperty_AudioInputAvailable, &size, &isAudioInputAvailable), "couldn't get AudioSession AudioInputAvailable property value");
-            
-            if(THIS->unitIsRunning && !isAudioInputAvailable)
-            {
-                XThrowIfError(AudioOutputUnitStop(THIS->rioUnit), "couldn't stop unit");
-                THIS->unitIsRunning = false;
-            }
-            
-            else if(!THIS->unitIsRunning && isAudioInputAvailable)
-            {
-                XThrowIfError(AudioSessionSetActive(true), "couldn't set audio session active\n");
-                
-                if (!THIS->unitHasBeenCreated)	// the rio unit is being created for the first time
-                {
-                    XThrowIfError(SetupRemoteIO(THIS->rioUnit, THIS->hwSampleRate, THIS->inputProc, THIS->thruFormat), "couldn't setup remote i/o unit");
-                    THIS->unitHasBeenCreated = true;
-                    
-                    THIS->dcFilter = new DCRejectionFilter[THIS->thruFormat.NumberChannels()];
-                    
-                    UInt32 maxFPS;
-                    size = sizeof(maxFPS);
-                    XThrowIfError(AudioUnitGetProperty(THIS->rioUnit, kAudioUnitProperty_MaximumFramesPerSlice, kAudioUnitScope_Global, 0, &maxFPS, &size), "couldn't get the remote I/O unit's max frames per slice");
-                    
-                    //   THIS->fftBufferManager = new FFTBufferManager(maxFPS);
-                    // THIS->l_fftData = new int32_t[maxFPS/2];
-                    
-                    THIS->oscilLine = (GLfloat*)malloc(drawBufferLen * 2 * sizeof(GLfloat));
-                }
-                
-                XThrowIfError(AudioOutputUnitStart(THIS->rioUnit), "couldn't start unit");
-                THIS->unitIsRunning = true;
-            }
-            
-            // we need to rescale the sonogram view's color thresholds for different input
-            CFStringRef newRoute;
-            size = sizeof(CFStringRef);
-            XThrowIfError(AudioSessionGetProperty(kAudioSessionProperty_AudioRoute, &size, &newRoute), "couldn't get new audio route");
-            if (newRoute)
-            {
-                CFShow(newRoute);
-            }
-        } catch (CAXException e) {
-            char buf[256];
-            fprintf(stderr, "Error: %s (%s)\n", e.mOperation, e.FormatError(buf));
-        }
-        
-    }
-}
-
 #pragma mark -RIO Render Callback
 
 static OSStatus	PerformThru(
@@ -554,7 +492,6 @@ static OSStatus	PerformThru(
         
         UInt32 audioCategory = kAudioSessionCategory_PlayAndRecord;
         XThrowIfError(AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(audioCategory), &audioCategory), "couldn't set audio category");
-        XThrowIfError(AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, propListener, (__bridge  void *) self), "couldn't set property listener");
         
         UInt32 doChangeDefaultRoute = 1;
         
@@ -570,8 +507,6 @@ static OSStatus	PerformThru(
         
         UInt32 size = sizeof(hwSampleRate);
         XThrowIfError(AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareSampleRate, &size, &hwSampleRate), "couldn't get hw sample rate");
-        
-        //		XThrowIfError(AudioSessionSetActive(true), "couldn't set audio session active\n");
         
         XThrowIfError(SetupRemoteIO(rioUnit, hwSampleRate, inputProc, thruFormat), "couldn't setup remote i/o unit");
         unitHasBeenCreated = true;
@@ -590,9 +525,6 @@ static OSStatus	PerformThru(
         size = sizeof(maxFPS);
         XThrowIfError(AudioUnitGetProperty(rioUnit, kAudioUnitProperty_MaximumFramesPerSlice, kAudioUnitScope_Global, 0, &maxFPS, &size), "couldn't get the remote I/O unit's max frames per slice");
         
-        //fftBufferManager = new FFTBufferManager(maxFPS);
-        //l_fftData = new int32_t[maxFPS/2];
-        
         drawABL = (AudioBufferList*) malloc(sizeof(AudioBufferList) + sizeof(AudioBuffer));
         drawABL->mNumberBuffers = 2;
         for (UInt32 i=0; i<drawABL->mNumberBuffers; ++i)
@@ -601,12 +533,8 @@ static OSStatus	PerformThru(
             drawABL->mBuffers[i].mDataByteSize = maxFPS * sizeof(SInt32);
             drawABL->mBuffers[i].mNumberChannels = 1;
         }
-        //
+
         oscilLine = (GLfloat*)malloc(drawBufferLen * 2 * sizeof(GLfloat));
-        
-        
-        
-        
     }
     catch (CAXException &e) {
         char buf[256];
@@ -620,7 +548,6 @@ static OSStatus	PerformThru(
             free(drawABL);
             drawABL = NULL;
         }
-        //	if (url) CFRelease(url);
     }
     catch (...) {
         fprintf(stderr, "An unknown error occurred\n");
@@ -633,7 +560,6 @@ static OSStatus	PerformThru(
             free(drawABL);
             drawABL = NULL;
         }
-        //	if (url) CFRelease(url);
     }
     
     
@@ -642,13 +568,10 @@ static OSStatus	PerformThru(
         // Set ourself as the delegate for the EAGLView so that we get drawing and touch events
         view.delegate = self;
         
-        
         // Set up the view to refresh at 20 hz
         [view setAnimationInterval:1./20.];
     }
-    //	[view startAnimation];
 }
-
 
 
 - (void)dealloc
