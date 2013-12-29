@@ -54,6 +54,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize unitHasBeenCreated;
 @synthesize inputProc;
 
+const NSInteger SEND_THRESHOLD = 25;
+
 
 
 
@@ -91,7 +93,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     NSArray *pathComponents = [NSArray arrayWithObjects:
                                [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject],
-                               @"MyAudioMemo.m4a",
+                               @"tempVoiceMessage.m4a",
                                nil];
     NSURL *outputFileURL = [NSURL fileURLWithPathComponents:pathComponents];
     
@@ -207,6 +209,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
         [audioSession setActive:YES error:nil];
         
+        _max = 0;
         _timeRemaining = 10;
         _countdownTextField.text = @"10";
         
@@ -278,12 +281,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 -(void) uploadVoiceUrl: (NSURL *) url {
-    //    if (!image) {
-    //        [self stopProgress];
-    //        [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_image", nil) duration:2];
-    //        return;
-    //    }
-    //
+
+    if (!url || _max < SEND_THRESHOLD) {
+
+        [UIUtils showToastKey:NSLocalizedString(@"no_audio_detected", nil) duration:1.5];
+        return;
+    }
     
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -349,14 +352,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                       }
                                                       else {
                                                           //  [self stopProgress];
-                                                          [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_image", nil) duration:2];
+                                                          [UIUtils showToastKey:NSLocalizedString(@"error_mesage_generic", nil) duration:2];
                                                           
                                                       }
                                                   }];
                 
             }
             else {
-                [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_image", nil) duration:2];
+                [UIUtils showToastKey:NSLocalizedString(@"error_message_generic", nil) duration:2];
             }
         }];
     });
@@ -398,7 +401,7 @@ void rioInterruptionListener(void *inClientData, UInt32 inInterruption)
     }
 }
 
-#pragma mark -RIO Render Callback
+#pragma mark -RIO Input Callback
 
 static OSStatus	PerformThru(
                             void						*inRefCon,
@@ -453,7 +456,7 @@ static OSStatus	PerformThru(
     //Convert the floating point audio data to integer (Q7.24)
     err = AudioConverterConvertComplexBuffer(THIS->audioConverter, inNumberFrames, bufferList, THIS->drawABL);
     if (err) { printf("AudioConverterConvertComplexBuffer: error %d\n", (int)err); return err; }
-    
+
     SInt8 *data_ptr = (SInt8 *)(THIS->drawABL->mBuffers[0].mData);
     for (i=0; i<inNumberFrames; i++)
     {
@@ -462,9 +465,13 @@ static OSStatus	PerformThru(
             cycleOscilloscopeLines();
             drawBufferIdx = -i;
         }
+
         drawBuffers[0][i + drawBufferIdx] = data_ptr[2];
+        
+        if (data_ptr[2] > THIS.max) THIS.max = data_ptr[2];
         data_ptr += 4;
     }
+    
     drawBufferIdx += inNumberFrames;
     
     delete bufferList;

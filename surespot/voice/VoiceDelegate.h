@@ -74,6 +74,7 @@ inline double linearInterp(double valA, double valB, double fract)
 @property (nonatomic, assign)	BOOL					unitHasBeenCreated;
 @property (nonatomic, assign)	BOOL					mute;
 @property (nonatomic, assign)	AURenderCallbackStruct	inputProc;
+@property (nonatomic, assign)   NSInteger               max;
 
 - (id) initWithUsername: (NSString *) username
              ourVersion:(NSString *) ourVersion;
