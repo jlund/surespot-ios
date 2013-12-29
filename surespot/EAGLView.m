@@ -51,6 +51,14 @@
 #import <OpenGLES/EAGLDrawable.h>
 
 #import "EAGLView.h"
+#import "DDLog.h"
+
+#ifdef DEBUG
+static const int ddLogLevel = LOG_LEVEL_INFO;
+#else
+static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
+
 
 #define USE_DEPTH_BUFFER 1
 
@@ -205,9 +213,12 @@
 // Updates the OpenGL view when the timer fires
 - (void)drawView
 {
+    
     // the NSTimer seems to fire one final time even though it's been invalidated
     // so just make sure and not draw if we're resigning active
     if (self.applicationResignedActive) return;
+    
+    DDLogInfo(@"drawView");
     
 	// Make sure that you are drawing to the current context
 	[EAGLContext setCurrentContext:context];

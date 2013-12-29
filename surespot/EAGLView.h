@@ -56,10 +56,6 @@
 @protocol EAGLViewDelegate
 @required
 - (void)drawView:(id)sender forTime:(NSTimeInterval)time;
-@optional
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
 @end
 
 @interface EAGLView : UIView

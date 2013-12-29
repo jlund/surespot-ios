@@ -1,8 +1,8 @@
 /*
  
-     File: aurio_helper.cpp
+ File: aurio_helper.cpp
  Abstract: Helper class for manipulating the remote i/o audio unit
-  Version: 1.0
+ Version: 1.0
  
  Disclaimer: IMPORTANT:  This Apple software is supplied to you by Apple
  Inc. ("Apple") in consideration of your agreement to the following
@@ -55,7 +55,7 @@
 #include "CAStreamBasicDescription.h"
 #include "aurio_helper.h"
 
-// This determines how slowly the oscilloscope lines fade away from the display. 
+// This determines how slowly the oscilloscope lines fade away from the display.
 // Larger numbers = slower fade (and more strain on the graphics processing)
 SInt8 *drawBuffers[kNumDrawBuffers];
 
@@ -63,9 +63,9 @@ int drawBufferIdx = 0;
 int drawBufferLen = kDefaultDrawSamples;
 int drawBufferLen_alloced = 0;
 
-int SetupRemoteIO (AudioUnit& inRemoteIOUnit, AURenderCallbackStruct inRenderProc, CAStreamBasicDescription& outFormat)
-{	
-	try {		
+int SetupRemoteIO (AudioUnit& inRemoteIOUnit, Float64 sampleRate, AURenderCallbackStruct inRenderProc, CAStreamBasicDescription& outFormat)
+{
+	try {
 		// Open the output unit
 		AudioComponentDescription desc;
 		desc.componentType = kAudioUnitType_Output;
@@ -78,15 +78,36 @@ int SetupRemoteIO (AudioUnit& inRemoteIOUnit, AURenderCallbackStruct inRenderPro
 		
 		XThrowIfError(AudioComponentInstanceNew(comp, &inRemoteIOUnit), "couldn't open the remote I/O unit");
         
+        UInt32 zero = 0;
 		UInt32 one = 1;
+        //enable input
 		XThrowIfError(AudioUnitSetProperty(inRemoteIOUnit, kAudioOutputUnitProperty_EnableIO, kAudioUnitScope_Input, 1, &one, sizeof(one)), "couldn't enable input on the remote I/O unit");
+        //disable output
+        XThrowIfError(AudioUnitSetProperty(inRemoteIOUnit, kAudioOutputUnitProperty_EnableIO, kAudioUnitScope_Output, 0, &zero, sizeof(zero)), "couldn't disable output ");
         
-		XThrowIfError(AudioUnitSetProperty(inRemoteIOUnit, kAudioUnitProperty_SetRenderCallback, kAudioUnitScope_Input, 0, &inRenderProc, sizeof(inRenderProc)), "couldn't set remote i/o render callback");
+        //set input callback
+		XThrowIfError(AudioUnitSetProperty(inRemoteIOUnit, kAudioOutputUnitProperty_SetInputCallback, kAudioUnitScope_Global, 1, &inRenderProc, sizeof(inRenderProc)), "couldn't set remote i/o input callback");
+        
 		
         // set our required format - LPCM non-interleaved 32 bit floating point
-        outFormat = CAStreamBasicDescription(44100, kAudioFormatLinearPCM, 4, 1, 4, 2, 32, kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked | kAudioFormatFlagIsFloat | kAudioFormatFlagIsNonInterleaved);
-		XThrowIfError(AudioUnitSetProperty(inRemoteIOUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, &outFormat, sizeof(outFormat)), "couldn't set the remote I/O unit's output client format");
-		XThrowIfError(AudioUnitSetProperty(inRemoteIOUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 1, &outFormat, sizeof(outFormat)), "couldn't set the remote I/O unit's input client format");
+        AudioStreamBasicDescription outFormat;
+        
+        //        ion::CAStreamBasicDescription(double inSampleRate,		UInt32 inFormatID,
+        //                                      UInt32 inBytesPerPacket,	UInt32 inFramesPerPacket,
+        //                                      UInt32 inBytesPerFrame,		UInt32 inChannelsPerFrame,
+        //                                      UInt32 inBitsPerChannel,	UInt32 inFormatFlags)
+        //        outFormat = CAStreamBasicDescription(44100, kAudioFormatLinearPCM, 4, 1, 4, 2,32, kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked | kAudioFormatFlagIsFloat | kAudioFormatFlagIsNonInterleaved);
+        outFormat.mSampleRate = sampleRate;
+        outFormat.mFormatID = kAudioFormatLinearPCM;
+        outFormat.mFormatFlags = kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked | kAudioFormatFlagIsFloat | kAudioFormatFlagIsNonInterleaved;
+        outFormat.mFramesPerPacket = 1;
+        outFormat.mBytesPerPacket= 4;
+        outFormat.mChannelsPerFrame = 1;
+        outFormat.mBitsPerChannel = 32;
+        outFormat.mBytesPerFrame = 4;
+        
+		XThrowIfError(AudioUnitSetProperty(inRemoteIOUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 1, &outFormat, sizeof(outFormat)), "couldn't set the remote I/O unit's output client format");
+        //	XThrowIfError(AudioUnitSetProperty(inRemoteIOUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 1, &outFormat, sizeof(outFormat)), "couldn't set the remote I/O unit's input client format");
         
 		XThrowIfError(AudioUnitInitialize(inRemoteIOUnit), "couldn't initialize the remote I/O unit");
 	}
@@ -98,7 +119,7 @@ int SetupRemoteIO (AudioUnit& inRemoteIOUnit, AURenderCallbackStruct inRenderPro
 	catch (...) {
 		fprintf(stderr, "An unknown error occurred\n");
 		return 1;
-	}	
+	}
 	
 	return 0;
 }
@@ -119,7 +140,7 @@ DCRejectionFilter::DCRejectionFilter(Float32 poleDist)
 
 void DCRejectionFilter::Reset()
 {
-	mY1 = mX1 = 0;	
+	mY1 = mX1 = 0;
 }
 
 void DCRejectionFilter::InplaceFilter(Float32* ioData, UInt32 numFrames)

@@ -62,7 +62,7 @@ extern int drawBufferLen;
 extern int drawBufferLen_alloced;
 extern SInt8 *drawBuffers[];
 
-int SetupRemoteIO (AudioUnit& inRemoteIOUnit, AURenderCallbackStruct inRenderProcm, CAStreamBasicDescription& outFormat);
+int SetupRemoteIO (AudioUnit& inRemoteIOUnit, Float64 sampleRate, AURenderCallbackStruct inRenderProcm, CAStreamBasicDescription& outFormat);
 void SilenceData(AudioBufferList *inData);
 
 class DCRejectionFilter

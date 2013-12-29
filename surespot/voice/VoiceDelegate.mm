@@ -97,6 +97,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         
         _player = [[AVAudioPlayer alloc] initWithData: data error:nil];
+        
         [_player setDelegate:self];
         [_player play];
     }];
@@ -110,6 +111,20 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     if (!_recorder.recording) {
         _theirUsername = username;
+        
+        
+        
+        
+        XThrowIfError(AudioOutputUnitStart(rioUnit), "couldn't start remote i/o unit");
+        
+		
+		unitIsRunning = 1;
+        
+        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+        [audioSession setActive:YES error:nil];
+        
+        
+        
         [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView addSubview:view];
         [view startAnimation];
         [_recorder record];
@@ -128,6 +143,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
         [audioSession setActive:NO error:nil];
+        
+        
+        XThrowIfError(AudioOutputUnitStop(rioUnit), "couldn't stop remote i/o unit");
         
         
         if (send) {
@@ -291,7 +309,7 @@ void propListener(	void *                  inClientData,
                 
                 if (!THIS->unitHasBeenCreated)	// the rio unit is being created for the first time
                 {
-                    XThrowIfError(SetupRemoteIO(THIS->rioUnit, THIS->inputProc, THIS->thruFormat), "couldn't setup remote i/o unit");
+                    XThrowIfError(SetupRemoteIO(THIS->rioUnit, THIS->hwSampleRate, THIS->inputProc, THIS->thruFormat), "couldn't setup remote i/o unit");
                     THIS->unitHasBeenCreated = true;
                     
                     THIS->dcFilter = new DCRejectionFilter[THIS->thruFormat.NumberChannels()];
@@ -336,13 +354,29 @@ static OSStatus	PerformThru(
 							UInt32 						inNumberFrames,
 							AudioBufferList 			*ioData)
 {
+    AudioBufferList * bufferList = new AudioBufferList();
+//    
+    SInt32 samples[inNumberFrames*2]; // A large enough size to not have to worry about buffer overrun
+    memset (&samples, 0, sizeof (samples));
+//    
+   bufferList->mNumberBuffers = 1;
+    bufferList->mBuffers[0].mData = samples;
+    bufferList->mBuffers[0].mNumberChannels = 1;
+    bufferList->mBuffers[0].mDataByteSize = inNumberFrames*sizeof(SInt32);
+//    
+//    bufferList->mBuffers[1].mData = samples;
+//    bufferList->mBuffers[1].mNumberChannels = 2;
+//    bufferList->mBuffers[1].mDataByteSize = inNumberFrames*sizeof(SInt32);
+
+
+    // DDLogInfo(@"performThru");
 	VoiceDelegate *THIS = (__bridge VoiceDelegate *)inRefCon;
-	OSStatus err = AudioUnitRender(THIS->rioUnit, ioActionFlags, inTimeStamp, 1, inNumberFrames, ioData);
+    OSStatus err = AudioUnitRender(THIS->rioUnit, ioActionFlags, inTimeStamp, inBusNumber, inNumberFrames, bufferList);
 	if (err) { printf("PerformThru: error %d\n", (int)err); return err; }
 	
 	// Remove DC component
-	for(UInt32 i = 0; i < ioData->mNumberBuffers; ++i)
-		THIS->dcFilter[i].InplaceFilter((Float32*)(ioData->mBuffers[i].mData), inNumberFrames);
+	for(int i = 0; i < bufferList->mNumberBuffers; ++i)
+		THIS->dcFilter[i].InplaceFilter((Float32*)(bufferList->mBuffers[i].mData), inNumberFrames);
 	
     // The draw buffer is used to hold a copy of the most recent PCM data to be drawn on the oscilloscope
     if (drawBufferLen != drawBufferLen_alloced)
@@ -367,7 +401,7 @@ static OSStatus	PerformThru(
     int i;
     
     //Convert the floating point audio data to integer (Q7.24)
-    err = AudioConverterConvertComplexBuffer(THIS->audioConverter, inNumberFrames, ioData, THIS->drawABL);
+    err = AudioConverterConvertComplexBuffer(THIS->audioConverter, inNumberFrames, bufferList, THIS->drawABL);
     if (err) { printf("AudioConverterConvertComplexBuffer: error %d\n", (int)err); return err; }
     
     SInt8 *data_ptr = (SInt8 *)(THIS->drawABL->mBuffers[0].mData);
@@ -383,6 +417,7 @@ static OSStatus	PerformThru(
     }
     drawBufferIdx += inNumberFrames;
 	
+    printf("received audio buffer");
 	return err;
 }
 
@@ -405,9 +440,17 @@ static OSStatus	PerformThru(
 		// Initialize and configure the audio session
 		XThrowIfError(AudioSessionInitialize(NULL, NULL, rioInterruptionListener, (__bridge void *) self), "couldn't initialize audio session");
         
-		UInt32 audioCategory = kAudioSessionCategory_PlayAndRecord;;
+		UInt32 audioCategory = kAudioSessionCategory_PlayAndRecord;
 		XThrowIfError(AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(audioCategory), &audioCategory), "couldn't set audio category");
 		XThrowIfError(AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, propListener, (__bridge  void *) self), "couldn't set property listener");
+        
+        UInt32 doChangeDefaultRoute = 1;
+        
+        XThrowIfError(AudioSessionSetProperty (
+                                               kAudioSessionProperty_OverrideCategoryDefaultToSpeaker,
+                                               sizeof (doChangeDefaultRoute),
+                                               &doChangeDefaultRoute
+                                               ), "couldn't set speaker output");
         
 		Float32 preferredBufferSize = .005;
 		XThrowIfError(AudioSessionSetProperty(kAudioSessionProperty_PreferredHardwareIOBufferDuration, sizeof(preferredBufferSize), &preferredBufferSize), "couldn't set i/o buffer duration");
@@ -415,13 +458,16 @@ static OSStatus	PerformThru(
 		UInt32 size = sizeof(hwSampleRate);
 		XThrowIfError(AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareSampleRate, &size, &hwSampleRate), "couldn't get hw sample rate");
 		
-		XThrowIfError(AudioSessionSetActive(true), "couldn't set audio session active\n");
+        //		XThrowIfError(AudioSessionSetActive(true), "couldn't set audio session active\n");
         
-		XThrowIfError(SetupRemoteIO(rioUnit, inputProc, thruFormat), "couldn't setup remote i/o unit");
+		XThrowIfError(SetupRemoteIO(rioUnit, hwSampleRate, inputProc, thruFormat), "couldn't setup remote i/o unit");
 		unitHasBeenCreated = true;
         
         drawFormat.SetAUCanonical(2, false);
         drawFormat.mSampleRate = 44100;
+        
+        size = sizeof(thruFormat);
+		XThrowIfError(AudioUnitGetProperty(rioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 1, &thruFormat, &size), "couldn't get the remote I/O unit's output client format");
         
         XThrowIfError(AudioConverterNew(&thruFormat, &drawFormat, &audioConverter), "couldn't setup AudioConverter");
 		
@@ -442,15 +488,12 @@ static OSStatus	PerformThru(
             drawABL->mBuffers[i].mDataByteSize = maxFPS * sizeof(SInt32);
             drawABL->mBuffers[i].mNumberChannels = 1;
         }
-		
+        //
 		oscilLine = (GLfloat*)malloc(drawBufferLen * 2 * sizeof(GLfloat));
         
-		XThrowIfError(AudioOutputUnitStart(rioUnit), "couldn't start remote i/o unit");
         
-		size = sizeof(thruFormat);
-		XThrowIfError(AudioUnitGetProperty(rioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 1, &thruFormat, &size), "couldn't get the remote I/O unit's output client format");
-		
-		unitIsRunning = 1;
+        
+        
 	}
 	catch (CAXException &e) {
 		char buf[256];
@@ -493,11 +536,6 @@ static OSStatus	PerformThru(
     //	[view startAnimation];
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application {
-}
 
 
 - (void)dealloc
@@ -525,6 +563,7 @@ static OSStatus	PerformThru(
 
 - (void)drawOscilloscope
 {
+    DDLogInfo(@"drawOscilliscope");
 	// Clear the view
 	glClear(GL_COLOR_BUFFER_BIT);
 	
