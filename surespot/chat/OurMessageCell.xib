@@ -7,33 +7,40 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="OurMessageView" rowHeight="282" id="EDl-q9-d0F" customClass="MessageView">
-            <rect key="frame" x="0.0" y="0.0" width="423" height="282"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="OurMessageView" rowHeight="294" id="EDl-q9-d0F" customClass="MessageView">
+            <rect key="frame" x="0.0" y="0.0" width="513" height="294"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <tableViewCellContentView key="contentView" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EDl-q9-d0F" id="xtF-wm-HWY">
-                <rect key="frame" x="0.0" y="0.0" width="423" height="281"/>
+                <rect key="frame" x="0.0" y="0.0" width="513" height="293"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" id="uKg-6b-FVk" userLabel="Message sent view" customClass="FilledRectView">
-                        <rect key="frame" x="0.0" y="0.0" width="5" height="282"/>
+                        <rect key="frame" x="0.0" y="0.0" width="5" height="294"/>
                         <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="6hK-2i-BEE" userLabel="message label">
-                        <rect key="frame" x="13" y="14" width="393" height="267"/>
+                        <rect key="frame" x="13" y="14" width="483" height="279"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="OG5-dM-jkO" userLabel="message status label">
-                        <rect key="frame" x="20" y="6" width="403" height="14"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                        <rect key="frame" x="20" y="6" width="438" height="14"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="PWx-xM-bcd" userLabel="message status label">
+                        <rect key="frame" x="453" y="6" width="55" height="14"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Lhg-4j-1Cy" customClass="UIImageViewAligned">
-                        <rect key="frame" x="5" y="24" width="418" height="200"/>
+                        <rect key="frame" x="5" y="24" width="508" height="200"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES"/>
                     </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="fCz-21-m4V">
@@ -45,7 +52,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
                     <slider opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" id="DA8-9Y-Who">
-                        <rect key="frame" x="44" y="24" width="371" height="34"/>
+                        <rect key="frame" x="44" y="24" width="461" height="34"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     </slider>
                 </subviews>
@@ -55,6 +62,7 @@
                 <outlet property="audioSlider" destination="DA8-9Y-Who" id="fD8-Jm-AQ0"/>
                 <outlet property="messageLabel" destination="6hK-2i-BEE" id="CJB-pv-4Nv"/>
                 <outlet property="messageSentView" destination="uKg-6b-FVk" id="HOU-Cd-2l5"/>
+                <outlet property="messageSize" destination="PWx-xM-bcd" id="BHM-5w-bZQ"/>
                 <outlet property="messageStatusLabel" destination="OG5-dM-jkO" id="seN-Lh-alm"/>
                 <outlet property="shareableView" destination="fCz-21-m4V" id="9u5-1i-kf9"/>
                 <outlet property="uiImageView" destination="Lhg-4j-1Cy" id="DMQ-Q8-yiB"/>

@@ -49,6 +49,7 @@
         _dateTime = [coder decodeObjectForKey:@"datetime"];
         _shareable = [coder decodeBoolForKey:@"shareable"];
         _errorStatus = [coder decodeIntegerForKey:@"errorStatus"];
+        _dataSize = [coder decodeIntegerForKey:@"dataSize"];
     }
     return self;
 }
@@ -62,6 +63,7 @@
     _iv = [dictionary objectForKey:@"iv"];
     _mimeType = [dictionary objectForKey:@"mimeType"];
     _shareable = [[dictionary objectForKey:@"shareable"] boolValue];
+    _dataSize = [[dictionary objectForKey:@"dataSize"] integerValue];
     
     id dateTime = [dictionary objectForKey:@"datetime"];
     if (dateTime) {
@@ -115,12 +117,17 @@
     [encoder encodeObject:_iv forKey:@"iv"];
     [encoder encodeObject:_mimeType forKey:@"mimeType"];
     [encoder encodeBool:_shareable forKey:@"shareable"];
+
     if (_dateTime) {
         [encoder encodeObject:_dateTime forKey:@"datetime"];
     }
     if (_errorStatus > 0) {
         [encoder encodeInteger:_errorStatus forKey:@"errorStatus"];
     }
+    if (_dataSize > 0) {
+        [encoder encodeInteger:_dataSize forKey:@"dataSize"];
+    }
+
 }
 
 
@@ -143,7 +150,7 @@
     if (_resendId > 0) {
         [dict setObject:[@(_resendId) stringValue] forKey:@"resendId"];
     }
-    
+           
     return dict;
 }
 

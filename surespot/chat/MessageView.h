@@ -19,5 +19,6 @@
 @property (strong, nonatomic) IBOutlet UIImageView *audioIcon;
 @property (strong, nonatomic) IBOutlet UISlider *audioSlider;
 @property (strong, nonatomic) IBOutlet UIImageView *shareableView;
+@property (strong, nonatomic) IBOutlet UILabel *messageSize;
 @property (weak, nonatomic) SurespotMessage * message;
 @end

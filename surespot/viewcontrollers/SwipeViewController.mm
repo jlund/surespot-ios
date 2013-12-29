@@ -962,6 +962,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 cell.shareableView.hidden = YES;
                 cell.audioIcon.hidden = YES;
                 cell.audioSlider.hidden = YES;
+                cell.messageSize.hidden = YES;
                 CGRect messageStatusFrame = cell.messageStatusLabel.frame;
                 if (ours) {
                     messageStatusFrame.origin.x = 13;
@@ -981,6 +982,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     cell.uiImageView.alignLeft = YES;
                     cell.audioIcon.hidden = YES;
                     cell.audioSlider.hidden = YES;
+                    if ([message dataSize ] > 0) {
+                        cell.messageSize.hidden = NO;
+                        cell.messageSize.text = [NSString stringWithFormat:@"%d KB", (int) ceil(message.dataSize/1000.0)];
+                    }
+                    else {
+                        cell.messageSize.hidden = YES;
+                    }
+
                     
                     CGRect messageStatusFrame = cell.messageStatusLabel.frame;
                     if (ours) {
@@ -1024,6 +1033,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                             messageStatusFrame.origin.x = 63;
                         }
                         cell.messageStatusLabel.frame = messageStatusFrame;
+                        
+                        if ([message dataSize ] > 0) {
+                            cell.messageSize.hidden = NO;
+                            cell.messageSize.text = [NSString stringWithFormat:@"%d KB", (int) ceil(message.dataSize/1000.0)];
+                        }
+                        else {
+                            cell.messageSize.hidden = YES;
+                        }
                         cell.shareableView.hidden = YES;
                         cell.messageLabel.hidden = YES;
                         cell.uiImageView.hidden = YES;
@@ -1043,7 +1060,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                         
                         [self ensureVoiceDelegate];
                         cell.message = message;
-                        [_voiceDelegate attachCell:cell];                        
+                        [_voiceDelegate attachCell:cell];
                     }
                 }
             }

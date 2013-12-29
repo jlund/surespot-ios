@@ -208,6 +208,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 existingMessage.serverid = message.serverid;
                 existingMessage.dateTime = message.dateTime;
                 existingMessage.errorStatus = 0;
+                existingMessage.dataSize = message.dataSize;
                 
                 if (![existingMessage.data isEqualToString:message.data]) {
                     //update cache to avoid downloading image we just sent and save on web traffic
