@@ -127,6 +127,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             _player = [[AVAudioPlayer alloc] initWithData: data error:nil];
             _cell.audioSlider.maximumValue = [_player duration];
+            [_playTimer invalidate];
             _playTimer = [NSTimer timerWithTimeInterval:.05
                                                  target:self
                                                selector:@selector(updateTime:)
@@ -176,7 +177,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         DDLogVerbose(@"setting slider value");
         dispatch_async(dispatch_get_main_queue(), ^{
             _cell.audioSlider.value = [_player currentTime];
-            _cell.audioIcon.image = [UIImage imageNamed:@"ic_media_previous"];            
+            _cell.audioIcon.image = [UIImage imageNamed:@"ic_media_previous"];
         });
     }
 }
