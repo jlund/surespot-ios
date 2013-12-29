@@ -157,8 +157,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         _countdownTextField.text = [@(_timeRemaining) stringValue];
         
         if (_timeRemaining <= 0) {
-            //give em like another 0.5
-            [self performSelector:@selector(stopRecordingSendInternal:) withObject:[NSNumber numberWithBool:YES] afterDelay:.2];
+            [self stopRecordingSend:[NSNumber numberWithBool:YES]];
         }
     });
     
@@ -166,7 +165,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) stopRecordingSend: (NSNumber*) send {
     //give em like another 0.5
-    [self performSelector:@selector(stopRecordingSendInternal:) withObject:[NSNumber numberWithBool:YES] afterDelay:.2];
+    [self performSelector:@selector(stopRecordingSendInternal:) withObject:send afterDelay:.2];
 }
 
 -(void) stopRecordingSendInternal: (NSNumber*) send {
