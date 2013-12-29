@@ -981,7 +981,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     cell.uiImageView.alignLeft = YES;
                     cell.audioIcon.hidden = YES;
                     cell.audioSlider.hidden = YES;
-
+                    
                     CGRect messageStatusFrame = cell.messageStatusLabel.frame;
                     if (ours) {
                         messageStatusFrame.origin.x = 22;
@@ -1000,14 +1000,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     }
                     
                     [cell setMessage:message
-                                     progress:^(NSUInteger receivedSize, long long expectedSize) {
-                                         
-                                     }
-                                    completed:^(id data, NSString * mimeType, NSError *error, SDImageCacheType cacheType) {
-                                        if (error) {
-                                            
-                                        }
-                                    }
+                            progress:^(NSUInteger receivedSize, long long expectedSize) {
+                                
+                            }
+                           completed:^(id data, NSString * mimeType, NSError *error, SDImageCacheType cacheType) {
+                               if (error) {
+                                   
+                               }
+                           }
                      ];
                     
                     DDLogInfo(@"imageView: %@", cell.uiImageView);
@@ -1020,7 +1020,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                             messageStatusFrame.origin.x = 13;
                         }
                         else {
-                                                        [cell.audioIcon setImage: [UIImage imageNamed:@"ic_media_play"]];
+                            [cell.audioIcon setImage: [UIImage imageNamed:@"ic_media_play"]];
                             messageStatusFrame.origin.x = 63;
                         }
                         cell.messageStatusLabel.frame = messageStatusFrame;
@@ -1029,18 +1029,21 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                         cell.uiImageView.hidden = YES;
                         cell.audioIcon.hidden = NO;
                         cell.audioSlider.hidden = NO;
-
+                        
                         [cell setMessage:message
-                                         progress:^(NSUInteger receivedSize, long long expectedSize) {
-                                             
-                                         }
-                                        completed:^(id data, NSString * mimeType, NSError *error, SDImageCacheType cacheType) {
-                                            if (error) {
-                                                
-                                            }
-                                        }
+                                progress:^(NSUInteger receivedSize, long long expectedSize) {
+                                    
+                                }
+                               completed:^(id data, NSString * mimeType, NSError *error, SDImageCacheType cacheType) {
+                                   if (error) {
+                                       
+                                   }
+                               }
                          ];
                         
+                        [self ensureVoiceDelegate];
+                        cell.message = message;
+                        [_voiceDelegate attachCell:cell];                        
                     }
                 }
             }
@@ -1095,7 +1098,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             else {
                 if ([message.mimeType isEqualToString: MIME_TYPE_M4A]) {
                     [self ensureVoiceDelegate];
-                    [_voiceDelegate playVoiceMessage: message];
+                    MessageView * cell = (MessageView *) [tableView cellForRowAtIndexPath: indexPath];
+                    
+                    [_voiceDelegate playVoiceMessage: message cell:cell];
                 }
             }
         }
@@ -1887,9 +1892,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 - (IBAction)buttonTouchUpInside:(id)sender {
-//    if (![self handleTextAction]) {
-//        [self scrollHome];
-//    }
+    //    if (![self handleTextAction]) {
+    //        [self scrollHome];
+    //    }
     
     
 }

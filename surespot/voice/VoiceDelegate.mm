@@ -40,6 +40,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) NSTimer * countdownTimer;
 @property (nonatomic, assign) NSInteger timeRemaining;
 @property (nonatomic, strong) SurespotMessage * message;
+@property (nonatomic, weak) MessageView * cell;
+@property (nonatomic, strong) NSTimer * playTimer;
 @end
 
 @implementation VoiceDelegate
@@ -107,34 +109,81 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self initScope];
 }
 
--(void) playVoiceMessage: (SurespotMessage *) message {
-    if (_player.playing) {
-        [_player stop];
-    }
-    
+-(void) playVoiceMessage: (SurespotMessage *) message cell: (MessageView *) cell {
     BOOL differentMessage = ![message isEqual:_message];
+    
+    [self stopPlaying];
+    
     if (differentMessage) {
         _message = message;
+        _cell = cell;
+        cell.message = message;
+        DDLogVerbose(@"attaching message %@ to cell %@", [message iv], cell);
+        
+        _cell.audioIcon.image = [UIImage imageNamed:@"ic_media_previous"];
         
         [[SDWebImageManager sharedManager] downloadWithURL:[NSURL URLWithString: message.data] mimeType:message.mimeType ourVersion:[message getOurVersion] theirUsername:[message getOtherUser] theirVersion:[message getTheirVersion] iv:message.iv options: (SDWebImageOptions) 0 progress:nil completed:^(id data, NSString *mimeType, NSError *error, SDImageCacheType cacheType, BOOL finished) {
             
             
             _player = [[AVAudioPlayer alloc] initWithData: data error:nil];
+            _cell.audioSlider.maximumValue = [_player duration];
+            _playTimer = [NSTimer timerWithTimeInterval:.05
+                                                 target:self
+                                               selector:@selector(updateTime:)
+                                               userInfo:nil
+                                                repeats:YES];
             
+            //default loop is suspended when scrolling so timer events don't fire
+            //http://bynomial.com/blog/?p=67
+            [[NSRunLoop mainRunLoop] addTimer:_playTimer forMode:NSRunLoopCommonModes];
             [_player setDelegate:self];
             [_player play];
         }];
     }
+}
+
+-(void) attachCell: (MessageView *) cell {
+    
+    DDLogVerbose(@"message cell: %@ iv: %@ playing: %@", cell, [[cell message] iv], [_message iv]);
+    
+    //if the message matches the cell's message then set the current cell and the slider's maximum
+    if (_message && [[cell message] isEqual:_message]) {
+        DDLogVerbose(@"message equal");
+        _cell = cell;
+        [_cell.audioSlider setMaximumValue:_player.duration];
+    }
     else {
-        _message = nil;
+        DDLogVerbose(@"message unequal");
+        cell.audioSlider.value = 0;
+    }
+}
+
+-(void) stopPlaying {
+    if (_player.playing) {
+        [_player stop];
+    }
+    [_playTimer invalidate];
+    _playTimer = nil;
+    _cell.audioIcon.image = [UIImage imageNamed:@"ic_media_play"];
+    _cell.audioSlider.value = 0;
+    _message = nil;
+    
+}
+
+- (void)updateTime:(NSTimer *)timer {
+    //if the cell is still pointing to the same message set the slider value
+    if (_cell && _message && [[_cell message] isEqual:_message]) {
+        DDLogVerbose(@"setting slider value");
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _cell.audioSlider.value = [_player currentTime];
+            _cell.audioIcon.image = [UIImage imageNamed:@"ic_media_previous"];            
+        });
     }
 }
 
 -(void) startRecordingUsername: (NSString *) username {
     DDLogInfo(@"start recording");
-    if (_player.playing) {
-        [_player stop];
-    }
+    [self stopPlaying];
     
     if (!_recorder.recording) {
         _theirUsername = username;
@@ -174,7 +223,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
     DDLogInfo(@"finished playing, successfully?: %hhd", flag);
-    _message = nil;
+    [self stopPlaying];
 }
 
 -(void) stopRecordingSend: (NSNumber*) send {

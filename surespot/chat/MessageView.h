@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FilledRectView.h"
 #import "UIImageViewAligned.h"
+#import "SurespotMessage.h"
 
 @interface MessageView : UITableViewCell
 @property (strong, nonatomic) IBOutlet FilledRectView *messageSentView;
@@ -18,4 +19,5 @@
 @property (strong, nonatomic) IBOutlet UIImageView *audioIcon;
 @property (strong, nonatomic) IBOutlet UISlider *audioSlider;
 @property (strong, nonatomic) IBOutlet UIImageView *shareableView;
+@property (weak, nonatomic) SurespotMessage * message;
 @end

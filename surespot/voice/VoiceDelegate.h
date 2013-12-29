@@ -21,6 +21,7 @@
 #import "CAStreamBasicDescription.h"
 
 #import "SurespotMessage.h"
+#import "MessageView.h"
 
 
 #ifndef CLAMP
@@ -78,8 +79,9 @@ inline double linearInterp(double valA, double valB, double fract)
              ourVersion:(NSString *) ourVersion;
 
 
--(void) playVoiceMessage: (SurespotMessage *) message;
+-(void) playVoiceMessage: (SurespotMessage *) message cell: (MessageView *) cell;
 -(void) prepareRecording;
 -(void) startRecordingUsername: (NSString *) username;
 -(void) stopRecordingSend: (NSNumber *) send;
+-(void) attachCell: (MessageView *) cell;
 @end
