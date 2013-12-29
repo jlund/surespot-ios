@@ -39,6 +39,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) UITextField * countdownTextField;
 @property (nonatomic, strong) NSTimer * countdownTimer;
 @property (nonatomic, assign) NSInteger timeRemaining;
+@property (nonatomic, strong) SurespotMessage * message;
 @end
 
 @implementation VoiceDelegate
@@ -111,14 +112,22 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [_player stop];
     }
     
-    [[SDWebImageManager sharedManager] downloadWithURL:[NSURL URLWithString: message.data] mimeType:message.mimeType ourVersion:[message getOurVersion] theirUsername:[message getOtherUser] theirVersion:[message getTheirVersion] iv:message.iv options: (SDWebImageOptions) 0 progress:nil completed:^(id data, NSString *mimeType, NSError *error, SDImageCacheType cacheType, BOOL finished) {
+    BOOL differentMessage = ![message isEqual:_message];
+    if (differentMessage) {
+        _message = message;
         
-        
-        _player = [[AVAudioPlayer alloc] initWithData: data error:nil];
-        
-        [_player setDelegate:self];
-        [_player play];
-    }];
+        [[SDWebImageManager sharedManager] downloadWithURL:[NSURL URLWithString: message.data] mimeType:message.mimeType ourVersion:[message getOurVersion] theirUsername:[message getOtherUser] theirVersion:[message getTheirVersion] iv:message.iv options: (SDWebImageOptions) 0 progress:nil completed:^(id data, NSString *mimeType, NSError *error, SDImageCacheType cacheType, BOOL finished) {
+            
+            
+            _player = [[AVAudioPlayer alloc] initWithData: data error:nil];
+            
+            [_player setDelegate:self];
+            [_player play];
+        }];
+    }
+    else {
+        _message = nil;
+    }
 }
 
 -(void) startRecordingUsername: (NSString *) username {
@@ -161,6 +170,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
     });
     
+}
+
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
+    DDLogInfo(@"finished playing, successfully?: %hhd", flag);
+    _message = nil;
 }
 
 -(void) stopRecordingSend: (NSNumber*) send {
