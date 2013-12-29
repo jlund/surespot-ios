@@ -218,7 +218,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     // so just make sure and not draw if we're resigning active
     if (self.applicationResignedActive) return;
     
-    DDLogInfo(@"drawView");
+  //  DDLogInfo(@"drawView");
     
 	// Make sure that you are drawing to the current context
 	[EAGLContext setCurrentContext:context];

@@ -91,12 +91,7 @@ int SetupRemoteIO (AudioUnit& inRemoteIOUnit, Float64 sampleRate, AURenderCallba
 		
         // set our required format - LPCM non-interleaved 32 bit floating point
         AudioStreamBasicDescription outFormat;
-        
-        //        ion::CAStreamBasicDescription(double inSampleRate,		UInt32 inFormatID,
-        //                                      UInt32 inBytesPerPacket,	UInt32 inFramesPerPacket,
-        //                                      UInt32 inBytesPerFrame,		UInt32 inChannelsPerFrame,
-        //                                      UInt32 inBitsPerChannel,	UInt32 inFormatFlags)
-        //        outFormat = CAStreamBasicDescription(44100, kAudioFormatLinearPCM, 4, 1, 4, 2,32, kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked | kAudioFormatFlagIsFloat | kAudioFormatFlagIsNonInterleaved);
+
         outFormat.mSampleRate = sampleRate;
         outFormat.mFormatID = kAudioFormatLinearPCM;
         outFormat.mFormatFlags = kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked | kAudioFormatFlagIsFloat | kAudioFormatFlagIsNonInterleaved;
@@ -107,7 +102,6 @@ int SetupRemoteIO (AudioUnit& inRemoteIOUnit, Float64 sampleRate, AURenderCallba
         outFormat.mBytesPerFrame = 4;
         
 		XThrowIfError(AudioUnitSetProperty(inRemoteIOUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 1, &outFormat, sizeof(outFormat)), "couldn't set the remote I/O unit's output client format");
-        //	XThrowIfError(AudioUnitSetProperty(inRemoteIOUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 1, &outFormat, sizeof(outFormat)), "couldn't set the remote I/O unit's input client format");
         
 		XThrowIfError(AudioUnitInitialize(inRemoteIOUnit), "couldn't initialize the remote I/O unit");
 	}

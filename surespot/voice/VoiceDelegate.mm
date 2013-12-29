@@ -355,18 +355,14 @@ static OSStatus	PerformThru(
 							AudioBufferList 			*ioData)
 {
     AudioBufferList * bufferList = new AudioBufferList();
-//    
-    SInt32 samples[inNumberFrames*2]; // A large enough size to not have to worry about buffer overrun
+    
+    SInt32 samples[inNumberFrames];
     memset (&samples, 0, sizeof (samples));
-//    
-   bufferList->mNumberBuffers = 1;
+    
+    bufferList->mNumberBuffers = 1;
     bufferList->mBuffers[0].mData = samples;
     bufferList->mBuffers[0].mNumberChannels = 1;
     bufferList->mBuffers[0].mDataByteSize = inNumberFrames*sizeof(SInt32);
-//    
-//    bufferList->mBuffers[1].mData = samples;
-//    bufferList->mBuffers[1].mNumberChannels = 2;
-//    bufferList->mBuffers[1].mDataByteSize = inNumberFrames*sizeof(SInt32);
 
 
     // DDLogInfo(@"performThru");
@@ -417,7 +413,7 @@ static OSStatus	PerformThru(
     }
     drawBufferIdx += inNumberFrames;
 	
-    printf("received audio buffer");
+    delete bufferList;
 	return err;
 }
 
@@ -563,7 +559,7 @@ static OSStatus	PerformThru(
 
 - (void)drawOscilloscope
 {
-    DDLogInfo(@"drawOscilliscope");
+   // DDLogInfo(@"drawOscilliscope");
 	// Clear the view
 	glClear(GL_COLOR_BUFFER_BIT);
 	
@@ -608,7 +604,7 @@ static OSStatus	PerformThru(
 		
 		GLfloat i;
 		// Fill our vertex array with points
-		for (i=0.; i<max; i=i+1.)
+        for (i=0.; i<max; i=i+1.)
 		{
 			*oscilLine_ptr++ = i/max;
 			*oscilLine_ptr++ = (Float32)(*drawBuffer_ptr++) / 128.;
