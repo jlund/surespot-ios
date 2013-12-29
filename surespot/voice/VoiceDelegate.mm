@@ -20,7 +20,7 @@
 #import "SurespotAppDelegate.h"
 #import "SurespotMessage.h"
 #import "SDWebImageManager.h"
-
+#import "FileController.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -44,6 +44,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, weak) MessageView * cell;
 @property (nonatomic, strong) NSTimer * playTimer;
 @property (nonatomic, strong) NSLock * playLock;
+@property (nonatomic, strong) NSString * outputPath;
+
 @end
 
 @implementation VoiceDelegate
@@ -90,13 +92,9 @@ const NSInteger SEND_THRESHOLD = 25;
 }
 
 -(void) prepareRecording {
-    
-    NSArray *pathComponents = [NSArray arrayWithObjects:
-                               [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject],
-                               @"tempVoiceMessage.m4a",
-                               nil];
-    NSURL *outputFileURL = [NSURL fileURLWithPathComponents:pathComponents];
-    
+    _outputPath = [[FileController getCacheDir] stringByAppendingPathComponent: @"tempVoiceMessage.m4a"];
+    DDLogInfo(@"recording to %@", _outputPath);
+    NSURL *outputFileURL = [NSURL fileURLWithPath:_outputPath];
     
     // Define the recorder setting
     NSMutableDictionary *recordSetting = [NSMutableDictionary dictionaryWithObjectsAndKeys:
@@ -265,26 +263,22 @@ const NSInteger SEND_THRESHOLD = 25;
         
         XThrowIfError(AudioOutputUnitStop(rioUnit), "couldn't stop remote i/o unit");
         
-        
         if ([send boolValue]) {
             [self uploadVoiceUrl:_recorder.url];
         }
-        
         else {
-            //todo delete file
+            [[NSFileManager defaultManager] removeItemAtPath:_outputPath error:nil];
         }
-        
-        
-        
     }
 }
 
 
 -(void) uploadVoiceUrl: (NSURL *) url {
-
+    
     if (!url || _max < SEND_THRESHOLD) {
-
+        
         [UIUtils showToastKey:NSLocalizedString(@"no_audio_detected", nil) duration:1.5];
+        [[NSFileManager defaultManager] removeItemAtPath:_outputPath error:nil];
         return;
     }
     
@@ -295,6 +289,7 @@ const NSInteger SEND_THRESHOLD = 25;
             if (version) {
                 //encrypt and upload the voice data
                 NSData * voiceData = [NSData dataWithContentsOfURL: url];
+                [[NSFileManager defaultManager] removeItemAtPath:_outputPath error:nil];
                 NSData * iv = [EncryptionController getIv];
                 
                 //encrypt
@@ -317,8 +312,8 @@ const NSInteger SEND_THRESHOLD = 25;
                                                           message.data = key;
                                                           
                                                           DDLogInfo(@"adding local data to cache %@", key);
-                                                            [[[SDWebImageManager sharedManager] imageCache] storeImage:voiceData imageData:encryptedVoiceData mimeType: message.mimeType forKey:key toDisk:YES];
-                                       
+                                                          [[[SDWebImageManager sharedManager] imageCache] storeImage:voiceData imageData:encryptedVoiceData mimeType: message.mimeType forKey:key toDisk:YES];
+                                                          
                                                           
                                                           //add message locally before we upload it
                                                           ChatDataSource * cds = [[ChatController sharedInstance] getDataSourceForFriendname:_theirUsername];
@@ -456,7 +451,7 @@ static OSStatus	PerformThru(
     //Convert the floating point audio data to integer (Q7.24)
     err = AudioConverterConvertComplexBuffer(THIS->audioConverter, inNumberFrames, bufferList, THIS->drawABL);
     if (err) { printf("AudioConverterConvertComplexBuffer: error %d\n", (int)err); return err; }
-
+    
     SInt8 *data_ptr = (SInt8 *)(THIS->drawABL->mBuffers[0].mData);
     for (i=0; i<inNumberFrames; i++)
     {
@@ -465,7 +460,7 @@ static OSStatus	PerformThru(
             cycleOscilloscopeLines();
             drawBufferIdx = -i;
         }
-
+        
         drawBuffers[0][i + drawBufferIdx] = data_ptr[2];
         
         if (data_ptr[2] > THIS.max) THIS.max = data_ptr[2];
@@ -540,7 +535,7 @@ static OSStatus	PerformThru(
             drawABL->mBuffers[i].mDataByteSize = maxFPS * sizeof(SInt32);
             drawABL->mBuffers[i].mNumberChannels = 1;
         }
-
+        
         oscilLine = (GLfloat*)malloc(drawBufferLen * 2 * sizeof(GLfloat));
     }
     catch (CAXException &e) {

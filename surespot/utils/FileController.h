@@ -26,4 +26,5 @@ extern NSString *const IDENTITY_EXTENSION;
 +(NSString *) getUploadsDir;
 +(void) saveLatestVersions:(NSDictionary *) latestVersionsDict forUsername: (NSString *) username;
 +(NSDictionary *) loadLatestVersionsForUsername: (NSString *) username;
++ (NSString*) getCacheDir;
 @end

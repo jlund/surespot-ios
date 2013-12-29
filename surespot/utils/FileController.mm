@@ -75,6 +75,20 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return appSupportDir;
 }
 
++ (NSString*) getCacheDir {
+    NSString *cacheDir = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+    //If there isn't an App Support Directory yet ...
+    if (![[NSFileManager defaultManager] fileExistsAtPath:cacheDir isDirectory:NULL]) {
+        NSError *error = nil;
+        //Create one
+        if (![[NSFileManager defaultManager] createDirectoryAtPath:cacheDir withIntermediateDirectories:YES attributes:nil error:&error]) {
+            DDLogVerbose(@"%@", error.localizedDescription);
+        }
+    }
+    
+    return cacheDir;
+}
+
 +(NSString *) getHomeFilename {
     return [self getFilename:HOME_FILENAME];
 }
