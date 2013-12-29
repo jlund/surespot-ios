@@ -209,18 +209,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 existingMessage.dateTime = message.dateTime;
                 existingMessage.errorStatus = 0;
                 
-                
-                
                 if (![existingMessage.data isEqualToString:message.data]) {
                     //update cache to avoid downloading image we just sent and save on web traffic
-                    if ([existingMessage.data hasPrefix:@"imageKey_"]) {
+                    if ([existingMessage.data hasPrefix:@"dataKey_"]) {                        
+                        
                         //get cached image datas
-                        UIImage * image = [[[SDWebImageManager sharedManager] imageCache] imageFromMemoryCacheForKey:existingMessage.data];
+                        id data = [[[SDWebImageManager sharedManager] imageCache] imageFromMemoryCacheForKey:existingMessage.data];
                         NSData * encryptedImageData = [[[SDWebImageManager sharedManager] imageCache] diskImageDataBySearchingAllPathsForKey:existingMessage.data];
                         
-                        if (image && encryptedImageData) {
+                        if (data && encryptedImageData) {
                             //save data for new remote key
-                            [[[SDWebImageManager sharedManager] imageCache] storeImage:image imageData:encryptedImageData mimeType: message.mimeType forKey:message.data toDisk:YES];
+                            [[[SDWebImageManager sharedManager] imageCache] storeImage:data imageData:encryptedImageData mimeType: message.mimeType forKey:message.data toDisk:YES];
                             
                             //remove now defunct cached local data
                             [[[SDWebImageManager sharedManager] imageCache] removeImageForKey:existingMessage.data fromDisk:YES];
@@ -273,6 +272,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) postRefresh {
+    DDLogInfo(@"postRefresh");
     [self sort];
     dispatch_async(dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshMessages" object:_username ];

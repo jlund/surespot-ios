@@ -21,6 +21,7 @@
 #import "SurespotMessage.h"
 #import "SDWebImageManager.h"
 
+
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
 #else
@@ -121,7 +122,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         _cell = cell;
         cell.message = message;
         DDLogVerbose(@"attaching message %@ to cell %@", [message iv], cell);
-
+        
         [[SDWebImageManager sharedManager] downloadWithURL:[NSURL URLWithString: message.data] mimeType:message.mimeType ourVersion:[message getOurVersion] theirUsername:[message getOtherUser] theirVersion:[message getTheirVersion] iv:message.iv options: (SDWebImageOptions) 0 progress:nil completed:^(id data, NSString *mimeType, NSError *error, SDImageCacheType cacheType, BOOL finished) {
             
             
@@ -299,8 +300,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                              theirUsername:_theirUsername
                                               theirVersion:version
                                                         iv:iv
-                                                  callback:^(NSData * encryptedImageData) {
-                                                      if (encryptedImageData) {
+                                                  callback:^(NSData * encryptedVoiceData) {
+                                                      if (encryptedVoiceData) {
                                                           //create message
                                                           SurespotMessage * message = [SurespotMessage new];
                                                           message.from = _username;
@@ -309,11 +310,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                           message.toVersion = version;
                                                           message.mimeType = MIME_TYPE_M4A;
                                                           message.iv = [iv base64EncodedStringWithSeparateLines:NO];
-                                                          //      NSString * key = [@"voiceKey_" stringByAppendingString: message.iv];
-                                                          //    message.data = key;
+                                                          NSString * key = [@"dataKey_" stringByAppendingString: message.iv];
+                                                          message.data = key;
                                                           
-                                                          //                                                          DDLogInfo(@"adding local image to cache %@", key);
-                                                          //                                                          [[[SDWebImageManager sharedManager] imageCache] storeImage:scaledImage imageData:encryptedImageData forKey:key toDisk:YES];
+                                                          DDLogInfo(@"adding local data to cache %@", key);
+                                                            [[[SDWebImageManager sharedManager] imageCache] storeImage:voiceData imageData:encryptedVoiceData mimeType: message.mimeType forKey:key toDisk:YES];
+                                       
                                                           
                                                           //add message locally before we upload it
                                                           ChatDataSource * cds = [[ChatController sharedInstance] getDataSourceForFriendname:_theirUsername];
@@ -323,7 +325,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                           
                                                           //upload image to server
                                                           //     DDLogInfo(@"uploading image %@ to server", key);
-                                                          [[NetworkController sharedInstance] postFileStreamData:encryptedImageData
+                                                          [[NetworkController sharedInstance] postFileStreamData:encryptedVoiceData
                                                                                                       ourVersion:_ourVersion
                                                                                                    theirUsername:_theirUsername
                                                                                                     theirVersion:version

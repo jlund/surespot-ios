@@ -49,9 +49,6 @@ static char operationArrayKey;
                                                                                   if ([mimeType isEqualToString:MIME_TYPE_IMAGE]) {
                                                                                       wself.uiImageView.image = image;
                                                                                   }
-                                                                                  else {
-                                                                                      wself.messageStatusLabel.text = @"audio";
-                                                                                  }
                                                                                   if (message.formattedDate) {
                                                                                       wself.messageStatusLabel.text = message.formattedDate;
                                                                                   }

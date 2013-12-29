@@ -160,7 +160,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                           message.toVersion = version;
                                                           message.mimeType = MIME_TYPE_IMAGE;
                                                           message.iv = [iv base64EncodedStringWithSeparateLines:NO];
-                                                          NSString * key = [@"imageKey_" stringByAppendingString: message.iv];
+                                                          NSString * key = [@"dataKey_" stringByAppendingString: message.iv];
                                                           message.data = key;
                                                           
                                                           DDLogInfo(@"adding local image to cache %@", key);

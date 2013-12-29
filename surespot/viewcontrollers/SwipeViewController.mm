@@ -1690,7 +1690,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     else {
         if ([message.mimeType isEqualToString:MIME_TYPE_M4A]) {
-            
+            if (message.errorStatus > 0 && ours) {
+                UIImage * image = nil;
+                NSString * title = nil;
+                
+                title = NSLocalizedString(@"menu_resend_message", nil);
+                image = [UIImage imageNamed:@"ic_menu_send"];
+                
+                REMenuItem * resendItem = [[REMenuItem alloc] initWithTitle:title image:image highlightedImage:nil action:^(REMenuItem * item){
+                    [[ChatController sharedInstance] resendFileMessage:message];
+                }];
+                
+                [menuItems addObject:resendItem];
+            }
         }
     }
     

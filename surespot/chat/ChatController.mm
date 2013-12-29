@@ -644,9 +644,8 @@ static const int MAX_CONNECTION_RETRIES = 16;
         @synchronized (_chatDataSources) {
             cds = [_chatDataSources objectForKey:username];
         }
-        if (cds) {
-            isNew = [cds handleMessages: messages];
-        }
+        
+        isNew = [cds handleMessages: messages];
         
         Friend * afriend = [_homeDataSource getFriendByName:username];
         if (afriend) {
@@ -674,11 +673,11 @@ static const int MAX_CONNECTION_RETRIES = 16;
                     }
                 }
                 
-                
-                
                 [_homeDataSource postRefresh];
             }
         }
+        
+        [cds postRefresh];
     }
 }
 -(void) handleControlMessage: (SurespotControlMessage *) message {
@@ -1116,24 +1115,27 @@ static const int MAX_CONNECTION_RETRIES = 16;
 }
 
 -(void) resendFileMessage: (SurespotMessage *) message {
-    if ([[message data] hasPrefix:@"imageKey_"]) {
+    if ([[message data] hasPrefix:@"dataKey_"]) {
         
-        DDLogInfo(@"resending image %@ to server", message.data);
+        DDLogInfo(@"resending data %@ to server", message.data);
         NSData * data = [[[SDWebImageManager sharedManager] imageCache] diskImageDataBySearchingAllPathsForKey:message.data];
         if (data) {
+            message.errorStatus = 0;
+            ChatDataSource * cds = [self getDataSourceForFriendname:[message getOtherUser]];
+            [cds postRefresh];
             [self startProgress];
             [[NetworkController sharedInstance] postFileStreamData: data
                                                         ourVersion:[message getOurVersion]
                                                      theirUsername:[message getOtherUser]
                                                       theirVersion:[message getTheirVersion]
                                                             fileid:message.iv
-                                                          mimeType:MIME_TYPE_IMAGE
+                                                          mimeType:message.mimeType
                                                       successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                                          DDLogInfo(@"resent image %@ to server successfully", message.data);
-                                                          [self stopProgress];
+                                                          DDLogInfo(@"resent data %@ to server successfully", message.data);
                                                           
+                                                          [self stopProgress];
                                                       } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                                          DDLogInfo(@"resend image %@ to server failed, statuscode: %d", message.data, operation.response.statusCode);
+                                                          DDLogInfo(@"resend data %@ to server failed, statuscode: %d", message.data, operation.response.statusCode);
                                                           
                                                           if (operation.response.statusCode == 402) {
                                                               message.errorStatus = 402;
@@ -1143,7 +1145,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
                                                           }
                                                           
                                                           [self stopProgress];
-                                                          
+                                                          [cds postRefresh];
                                                       }];
         }
     }
