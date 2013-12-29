@@ -194,7 +194,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             if (![ChatUtils isOurMessage:message]) {
                 DDLogInfo(@"not our message, marking message as new");
-                
                 isNew = YES;
             }
             else {

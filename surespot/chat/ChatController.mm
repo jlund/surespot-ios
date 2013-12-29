@@ -221,6 +221,11 @@ static const int MAX_CONNECTION_RETRIES = 16;
         if ([name isEqualToString:@"message"]) {
             SurespotMessage * message = [[SurespotMessage alloc] initWithJSONString:[jsonData objectForKey:@"args"][0]];
             
+            //mark voice message to play automatically if tab is open
+            if (![ChatUtils isOurMessage: message] && [message.mimeType isEqualToString:MIME_TYPE_M4A] && [[message getOtherUser] isEqualToString:[self getCurrentChat]]) {
+                message.playVoice = YES;
+            }
+            
             [self handleMessage:message];
             [self checkAndSendNextMessage:message];
         }
@@ -230,11 +235,8 @@ static const int MAX_CONNECTION_RETRIES = 16;
                 
                 [self handleErrorMessage:message];
             }
-            
         }
     }
-    
-    
 }
 
 - (void) socketIO:(SocketIO *)socket didReceiveMessage:(SocketIOPacket *)packet

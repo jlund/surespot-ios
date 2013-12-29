@@ -126,6 +126,13 @@ const NSInteger SEND_THRESHOLD = 25;
         
         [[SDWebImageManager sharedManager] downloadWithURL:[NSURL URLWithString: message.data] mimeType:message.mimeType ourVersion:[message getOurVersion] theirUsername:[message getOtherUser] theirVersion:[message getTheirVersion] iv:message.iv options: (SDWebImageOptions) 0 progress:nil completed:^(id data, NSString *mimeType, NSError *error, SDImageCacheType cacheType, BOOL finished) {
             
+            if (!data || error) {
+                message.playVoice = NO;
+                message.voicePlayed = YES;
+
+                cell.messageStatusLabel.text = NSLocalizedString(@"message_error_generic", nil);
+                return;
+            }
             
             _player = [[AVAudioPlayer alloc] initWithData: data error:nil];
             if ([_player duration] > 0) {
@@ -139,6 +146,9 @@ const NSInteger SEND_THRESHOLD = 25;
                                                    userInfo:nil
                                                     repeats:YES];
                 
+                if (message.formattedDate) {
+                    cell.messageStatusLabel.text = message.formattedDate;
+                }
                 
                 //default loop is suspended when scrolling so timer events don't fire
                 //http://bynomial.com/blog/?p=67
@@ -150,6 +160,7 @@ const NSInteger SEND_THRESHOLD = 25;
             else {
                 [self stopPlaying];
             }
+            message.playVoice = NO;
             message.voicePlayed = YES;
         }];
     }

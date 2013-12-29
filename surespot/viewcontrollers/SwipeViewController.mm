@@ -1052,17 +1052,23 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                         cell.uiImageView.hidden = YES;
                         cell.audioIcon.hidden = NO;
                         cell.audioSlider.hidden = NO;
-                        
-                        [cell setMessage:message
-                                progress:^(NSUInteger receivedSize, long long expectedSize) {
-                                    
-                                }
-                               completed:^(id data, NSString * mimeType, NSError *error, SDImageCacheType cacheType) {
-                                   if (error) {
-                                       
+                                                
+                        if (message.playVoice && [username isEqualToString: [[ChatController sharedInstance] getCurrentChat]]) {
+                            [self ensureVoiceDelegate];
+                            [_voiceDelegate playVoiceMessage:message cell:cell];
+                        }
+                        else {                                                    
+                            [cell setMessage:message
+                                    progress:^(NSUInteger receivedSize, long long expectedSize) {
+                                        
+                                    }
+                                   completed:^(id data, NSString * mimeType, NSError *error, SDImageCacheType cacheType) {
+                                       if (!error) {
+                                           
+                                       }
                                    }
-                               }
-                         ];
+                             ];
+                        }
                         
                         [self ensureVoiceDelegate];
                         cell.message = message;
