@@ -128,7 +128,7 @@ const NSInteger SEND_THRESHOLD = 25;
             
             
             _player = [[AVAudioPlayer alloc] initWithData: data error:nil];
-            if ([_player duration] > 1) {
+            if ([_player duration] > 0) {
                 _cell.audioIcon.image = [UIImage imageNamed:@"ic_media_previous"];
                 _cell.audioSlider.maximumValue = [_player duration];
                 [_playLock lock];
