@@ -21,6 +21,7 @@
 #import "SurespotMessage.h"
 #import "SDWebImageManager.h"
 #import "FileController.h"
+#import "ChatUtils.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -144,8 +145,12 @@ const NSInteger SEND_THRESHOLD = 25;
                 [[NSRunLoop mainRunLoop] addTimer:_playTimer forMode:NSRunLoopCommonModes];
                 [_playLock unlock];
                 [_player setDelegate:self];
-                [_player play];
+                [_player play];                
             }
+            else {
+                [self stopPlaying];
+            }
+            message.voicePlayed = YES;
         }];
     }
 }

@@ -989,7 +989,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     else {
                         cell.messageSize.hidden = YES;
                     }
-
+                    
                     
                     CGRect messageStatusFrame = cell.messageStatusLabel.frame;
                     if (ours) {
@@ -1029,8 +1029,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                             messageStatusFrame.origin.x = 13;
                         }
                         else {
-                            [cell.audioIcon setImage: [UIImage imageNamed:@"ic_media_play"]];
+                            if (message.voicePlayed) {
+                                [cell.audioIcon setImage: [UIImage imageNamed:@"ic_media_play"]];
+                            }
+                            else {
+                                [cell.audioIcon setImage: [UIImage imageNamed:@"ic_media_played"]];
+                            }
                             messageStatusFrame.origin.x = 63;
+                            
                         }
                         cell.messageStatusLabel.frame = messageStatusFrame;
                         

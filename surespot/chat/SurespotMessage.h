@@ -33,6 +33,8 @@
 @property (nonatomic, assign) NSInteger rowPortraitHeight;
 @property (nonatomic, assign) NSInteger rowLandscapeHeight;
 @property (nonatomic, assign) BOOL shareable;
+@property (nonatomic, assign) BOOL voicePlayed;
+@property (nonatomic, assign) BOOL playVoice;
 
 
 - (NSString *) getOtherUser;

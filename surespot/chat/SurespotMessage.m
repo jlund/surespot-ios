@@ -50,6 +50,7 @@
         _shareable = [coder decodeBoolForKey:@"shareable"];
         _errorStatus = [coder decodeIntegerForKey:@"errorStatus"];
         _dataSize = [coder decodeIntegerForKey:@"dataSize"];
+        _voicePlayed = [coder decodeBoolForKey:@"voicePlayed"];
     }
     return self;
 }
@@ -117,7 +118,8 @@
     [encoder encodeObject:_iv forKey:@"iv"];
     [encoder encodeObject:_mimeType forKey:@"mimeType"];
     [encoder encodeBool:_shareable forKey:@"shareable"];
-
+    [encoder encodeBool:_voicePlayed forKey:@"voicePlayed"];
+    
     if (_dateTime) {
         [encoder encodeObject:_dateTime forKey:@"datetime"];
     }
@@ -127,7 +129,7 @@
     if (_dataSize > 0) {
         [encoder encodeInteger:_dataSize forKey:@"dataSize"];
     }
-
+    
 }
 
 
@@ -150,7 +152,7 @@
     if (_resendId > 0) {
         [dict setObject:[@(_resendId) stringValue] forKey:@"resendId"];
     }
-           
+    
     return dict;
 }
 
