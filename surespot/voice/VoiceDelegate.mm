@@ -248,13 +248,11 @@ const NSInteger SEND_THRESHOLD = 25;
     if (_recorder.recording) {
         
         [_countdownTimer invalidate];
-        
         [_recorder stop];
         
         [view stopAnimation];
         [view removeFromSuperview];
         [_countdownView removeFromSuperview];
-        
         
         
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
@@ -346,14 +344,13 @@ const NSInteger SEND_THRESHOLD = 25;
                                                                                                     }];
                                                       }
                                                       else {
-                                                          //  [self stopProgress];
-                                                          [UIUtils showToastKey:NSLocalizedString(@"error_mesage_generic", nil) duration:2];
-                                                          
+                                                          [UIUtils showToastKey:NSLocalizedString(@"error_message_generic", nil) duration:2];
                                                       }
                                                   }];
                 
             }
             else {
+                [[NSFileManager defaultManager] removeItemAtPath:_outputPath error:nil];
                 [UIUtils showToastKey:NSLocalizedString(@"error_message_generic", nil) duration:2];
             }
         }];
