@@ -23,7 +23,7 @@
 #import "FileController.h"
 
 #ifdef DEBUG
-static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+static const int ddLogLevel = LOG_LEVEL_INFO;
 #else
 static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
@@ -76,7 +76,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSData * sharedSecret = [self.cache.sharedSecretsDict objectForKey:sharedSecretKey];
     
     if (sharedSecret) {
-        DDLogVerbose(@"using cached secret %@ for %@", sharedSecret, sharedSecretKey);
+        DDLogVerbose(@"using cached secret for %@", sharedSecretKey);
         [self finish:sharedSecret];
     }
     else {
@@ -130,7 +130,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                        theirPublicKey:[keys dhPubKey]
                                                                                                        completionCallback:^(NSData * secret) {
                                                                                                            //store shared key in dictionary
-                                                                                                           DDLogVerbose(@"caching shared secret %@ for %@", secret, sharedSecretKey);                                                                                                          [self.cache cacheSharedSecret: secret forKey: sharedSecretKey];
+                                                                                                           DDLogVerbose(@"caching shared secret for %@", sharedSecretKey);                                                                                                          [self.cache cacheSharedSecret: secret forKey: sharedSecretKey];
                                                                                                            [self finish:secret];
                                                                                                        }];
                                                      
