@@ -42,6 +42,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) SurespotMessage * message;
 @property (nonatomic, weak) MessageView * cell;
 @property (nonatomic, strong) NSTimer * playTimer;
+@property (nonatomic, strong) NSLock * playLock;
 @end
 
 @implementation VoiceDelegate
@@ -66,6 +67,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _username = username;
     _ourVersion = ourVersion;
     
+    _playLock = [[NSLock alloc] init];
     _countdownView = [[UIView alloc] initWithFrame:CGRectMake(0, 210, 44,44)];
     //setup the button
     _countdownView.layer.cornerRadius = 22;
@@ -119,26 +121,30 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         _cell = cell;
         cell.message = message;
         DDLogVerbose(@"attaching message %@ to cell %@", [message iv], cell);
-        
-        _cell.audioIcon.image = [UIImage imageNamed:@"ic_media_previous"];
-        
+
         [[SDWebImageManager sharedManager] downloadWithURL:[NSURL URLWithString: message.data] mimeType:message.mimeType ourVersion:[message getOurVersion] theirUsername:[message getOtherUser] theirVersion:[message getTheirVersion] iv:message.iv options: (SDWebImageOptions) 0 progress:nil completed:^(id data, NSString *mimeType, NSError *error, SDImageCacheType cacheType, BOOL finished) {
             
             
             _player = [[AVAudioPlayer alloc] initWithData: data error:nil];
-            _cell.audioSlider.maximumValue = [_player duration];
-            [_playTimer invalidate];
-            _playTimer = [NSTimer timerWithTimeInterval:.05
-                                                 target:self
-                                               selector:@selector(updateTime:)
-                                               userInfo:nil
-                                                repeats:YES];
-            
-            //default loop is suspended when scrolling so timer events don't fire
-            //http://bynomial.com/blog/?p=67
-            [[NSRunLoop mainRunLoop] addTimer:_playTimer forMode:NSRunLoopCommonModes];
-            [_player setDelegate:self];
-            [_player play];
+            if ([_player duration] > 1) {
+                _cell.audioIcon.image = [UIImage imageNamed:@"ic_media_previous"];
+                _cell.audioSlider.maximumValue = [_player duration];
+                [_playLock lock];
+                [_playTimer invalidate];
+                _playTimer = [NSTimer timerWithTimeInterval:.05
+                                                     target:self
+                                                   selector:@selector(updateTime:)
+                                                   userInfo:nil
+                                                    repeats:YES];
+                
+                
+                //default loop is suspended when scrolling so timer events don't fire
+                //http://bynomial.com/blog/?p=67
+                [[NSRunLoop mainRunLoop] addTimer:_playTimer forMode:NSRunLoopCommonModes];
+                [_playLock unlock];
+                [_player setDelegate:self];
+                [_player play];
+            }
         }];
     }
 }
@@ -163,8 +169,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (_player.playing) {
         [_player stop];
     }
+    [_playLock lock];
     [_playTimer invalidate];
     _playTimer = nil;
+    [_playLock unlock];
+    
     _cell.audioIcon.image = [UIImage imageNamed:@"ic_media_play"];
     _cell.audioSlider.value = 0;
     _message = nil;
