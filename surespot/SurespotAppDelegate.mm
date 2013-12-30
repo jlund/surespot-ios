@@ -29,7 +29,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
 
 @interface SurespotAppDelegate()
-@property (strong, nonatomic) UIWindow * overlayWindow;
+
 
 @end
 

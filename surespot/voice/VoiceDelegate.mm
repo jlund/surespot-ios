@@ -248,6 +248,8 @@ const NSInteger SEND_THRESHOLD = 25;
         [_countdownView setFrame:CGRectMake(10, _scopeRect.origin.y+10, 44, 44)];
         
         
+        UIWindow * aWindow =((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayWindow;
+        aWindow.userInteractionEnabled = YES;
         
         [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView addSubview:view];
         [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView addSubview:_countdownView];
@@ -304,15 +306,19 @@ const NSInteger SEND_THRESHOLD = 25;
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
         [audioSession setActive:NO error:nil];
         
-        
+
         XThrowIfError(AudioOutputUnitStop(rioUnit), "couldn't stop remote i/o unit");
-        
+
+        UIWindow * aWindow =((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayWindow;
+        aWindow.userInteractionEnabled = NO;
+
         if ([send boolValue]) {
             [self uploadVoiceUrl:_recorder.url];
         }
         else {
             [[NSFileManager defaultManager] removeItemAtPath:_outputPath error:nil];
         }
+        
     }
 }
 

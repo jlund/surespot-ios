@@ -40,13 +40,16 @@
 {
     
     UIView * aSuperview = ((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView;
-    aSuperview.userInteractionEnabled = YES;
     CGRect frame =CGRectMake(0, 0, aSuperview.bounds.size.width, aSuperview.bounds.size.height);
 	LoadingView *backgroundView =    [[LoadingView alloc] initWithFrame:frame];
 	if (!backgroundView)
 	{
 		return nil;
 	}
+    
+    UIWindow * aWindow =((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayWindow;
+    aWindow.userInteractionEnabled = YES;
+
 	
     backgroundView.backgroundColor = [UIUtils surespotTransparentGrey];
 	backgroundView.opaque = NO;
@@ -134,15 +137,21 @@
 //
 - (void)removeView
 {
+
+
 	UIView *aSuperview = [self superview];
-    aSuperview.userInteractionEnabled = NO;
 	[super removeFromSuperview];
+    
+    UIWindow * aWindow =((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayWindow;
+    aWindow.userInteractionEnabled = NO;
     
 	// Set up the animation
 	CATransition *animation = [CATransition animation];
 	[animation setType:kCATransitionFade];
 	
 	[[aSuperview layer] addAnimation:animation forKey:@"layerAnimation"];
+    
+    
 }
 
 
