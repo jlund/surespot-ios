@@ -120,9 +120,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)layoutSubviews
 {
+    DDLogInfo(@"layoutSubviews");
+    [super layoutSubviews];
 	[EAGLContext setCurrentContext:context];
 	[self destroyFramebuffer];
 	[self createFramebuffer];
+    [self setupView];
 	[self drawView];
 }
 
@@ -154,7 +157,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 	
 	return YES;
 }
-
 
 - (void)destroyFramebuffer
 {

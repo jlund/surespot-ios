@@ -46,7 +46,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) NSTimer * playTimer;
 @property (nonatomic, strong) NSLock * playLock;
 @property (nonatomic, strong) NSString * outputPath;
-
+@property (nonatomic, assign) CGSize size;
 @end
 
 @implementation VoiceDelegate
@@ -233,7 +233,9 @@ const NSInteger SEND_THRESHOLD = 25;
         _countdownTextField.text = @"10";
         
         
-        view.frame = CGRectMake(0, 200, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height/3);
+        _size = [UIUtils sizeAdjustedForOrientation:[[UIScreen mainScreen] bounds].size] ;
+        [view setFrame: CGRectMake(0, 50, _size.width, _size.height/2)];
+        
         
         [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView addSubview:view];
         [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView addSubview:_countdownView];
@@ -338,8 +340,8 @@ const NSInteger SEND_THRESHOLD = 25;
                                                           
                                                           //add message locally before we upload it
                                                           ChatDataSource * cds = [[ChatController sharedInstance] getDataSourceForFriendname:_theirUsername];
-                                                              [cds addMessage:message refresh:YES];
-
+                                                          [cds addMessage:message refresh:YES];
+                                                          
                                                           
                                                           //upload image to server
                                                           //     DDLogInfo(@"uploading image %@ to server", key);
@@ -350,7 +352,7 @@ const NSInteger SEND_THRESHOLD = 25;
                                                                                                           fileid:[iv SR_stringByBase64Encoding]
                                                                                                         mimeType:MIME_TYPE_M4A
                                                                                                     successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                                                                                                                                         NSInteger serverid = [[JSON objectForKey:@"id"] integerValue];
+                                                                                                        NSInteger serverid = [[JSON objectForKey:@"id"] integerValue];
                                                                                                         NSString * url = [JSON objectForKey:@"url"];
                                                                                                         
                                                                                                         DDLogInfo(@"uploaded voice %@ to server successfully, server id: %d, url: %@", key, serverid, url);
@@ -600,7 +602,7 @@ static OSStatus	PerformThru(
     
     
     if (!view) {
-        view = [[EAGLView alloc] initWithFrame: CGRectMake(0, 200, 320, 200) ];
+        view = [[EAGLView alloc] initWithFrame: CGRectMake(0, 0, 1,1) ];
         // Set ourself as the delegate for the EAGLView so that we get drawing and touch events
         view.delegate = self;
         
@@ -627,10 +629,7 @@ static OSStatus	PerformThru(
     
 }
 
-- (void)clearTextures
-{
-    bzero(texBitBuffer, sizeof(UInt32) * 512);
-}
+
 
 
 - (void)drawOscilloscope
@@ -646,6 +645,7 @@ static OSStatus	PerformThru(
     
     glPushMatrix();
     
+    
     GLfloat *oscilLine_ptr;
     GLfloat max = drawBufferLen;
     SInt8 *drawBuffer_ptr;
@@ -659,8 +659,8 @@ static OSStatus	PerformThru(
     
     // Translate to the left side and vertical center of the screen, and scale so that the screen coordinates
     // go from 0 to 1 along the X, and -1 to 1 along the Y
-    glTranslatef(1., 100., 0.);
-    glScalef(320., 100., 1.);
+    glTranslatef(0, _size.height/4, 0.);
+    glScalef(_size.width, _size.height/4, 1.);
     
     // Set up some GL state for our oscilloscope lines
     glDisable(GL_TEXTURE_2D);
