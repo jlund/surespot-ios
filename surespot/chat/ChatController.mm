@@ -537,29 +537,27 @@ static const int MAX_CONNECTION_RETRIES = 16;
     NSMutableArray * jsonMessageList = [NSMutableArray new];
     [resendBuffer enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         
-        if ([obj serverid] <= 0) {
-            
-            
-            if ([obj readyToSend]) {
-                //see if we have plain text, re-encrypt and send
-                NSString * otherUser = [obj getOtherUser];
-                NSInteger lastMessageId = 0;
-                ChatDataSource * cds = [_chatDataSources objectForKey:otherUser];
-                if (cds) {
-                    lastMessageId = [cds latestMessageId];
-                }
-                else {
-                    Friend * afriend = [_homeDataSource getFriendByName:otherUser];
-                    if (afriend) {
-                        lastMessageId =  afriend.lastReceivedMessageId;
-                    }
-                }
-                
-                [obj setResendId:lastMessageId];
-                [_resendBuffer addObject:obj];
-                [jsonMessageList addObject:[obj toNSDictionary]];
+        
+        if ([obj readyToSend]) {
+            //see if we have plain text, re-encrypt and send
+            NSString * otherUser = [obj getOtherUser];
+            NSInteger lastMessageId = 0;
+            ChatDataSource * cds = [_chatDataSources objectForKey:otherUser];
+            if (cds) {
+                lastMessageId = [cds latestMessageId];
             }
+            else {
+                Friend * afriend = [_homeDataSource getFriendByName:otherUser];
+                if (afriend) {
+                    lastMessageId =  afriend.lastReceivedMessageId;
+                }
+            }
+            
+            [obj setResendId:lastMessageId];
+            [_resendBuffer addObject:obj];
+            [jsonMessageList addObject:[obj toNSDictionary]];
         }
+        
     }];
     
     if ([jsonMessageList count]>0) {

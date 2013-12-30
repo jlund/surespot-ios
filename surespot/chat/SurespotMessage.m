@@ -167,7 +167,7 @@
 }
 
 -(BOOL) readyToSend {
-    return self.from && self.to && self.fromVersion && self.iv && self.toVersion && self.data && self.mimeType;
+    return self.from && self.to && self.fromVersion && self.iv && self.toVersion && self.data && self.mimeType && self.serverid == 0;
 }
 
 @end
