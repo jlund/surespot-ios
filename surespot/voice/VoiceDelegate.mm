@@ -248,8 +248,21 @@ const NSInteger SEND_THRESHOLD = 25;
         [_countdownView setFrame:CGRectMake(10, _scopeRect.origin.y+10, 44, 44)];
         
         
+        
+        
         UIWindow * aWindow =((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayWindow;
         aWindow.userInteractionEnabled = YES;
+        
+        UIView * overlayView = ((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView;
+        CGRect frame = overlayView.frame;
+        frame.size =  [UIUtils sizeAdjustedForOrientation:frame.size];
+        
+        _backgroundView = [[UIView alloc] initWithFrame:frame];
+        _backgroundView.backgroundColor = [UIUtils surespotTransparentGrey];
+        _backgroundView.opaque = NO;
+        
+        [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView addSubview:_backgroundView];
+
         
         [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView addSubview:view];
         [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView addSubview:_countdownView];
@@ -301,6 +314,8 @@ const NSInteger SEND_THRESHOLD = 25;
         [view stopAnimation];
         [view removeFromSuperview];
         [_countdownView removeFromSuperview];
+        [_backgroundView removeFromSuperview];
+        _backgroundView = nil;
         
         
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];

@@ -68,13 +68,14 @@ inline double linearInterp(double valA, double valB, double fract)
 	BOOL						resetOscilLine;
 }
 
-@property (nonatomic, retain)	EAGLView*				view;
+@property (nonatomic, strong)	EAGLView*				view;
 @property (nonatomic, assign)	AudioUnit				rioUnit;
 @property (nonatomic, assign)	BOOL					unitIsRunning;
 @property (nonatomic, assign)	BOOL					unitHasBeenCreated;
 @property (nonatomic, assign)	BOOL					mute;
 @property (nonatomic, assign)	AURenderCallbackStruct	inputProc;
 @property (nonatomic, assign)   NSInteger               max;
+@property (nonatomic, strong)   UIView * backgroundView;
 
 - (id) initWithUsername: (NSString *) username
              ourVersion:(NSString *) ourVersion;
