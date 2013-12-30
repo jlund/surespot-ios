@@ -67,6 +67,7 @@ const NSInteger SEND_THRESHOLD = 25;
 
 
 {
+    DDLogInfo(@"init, username: %@, version: %@", username, ourVersion);
     // Call superclass's initializer
     self = [super init];
     if( !self ) return nil;
@@ -75,7 +76,7 @@ const NSInteger SEND_THRESHOLD = 25;
     
     _playLock = [[NSLock alloc] init];
     _countdownView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-
+    
     //setup the button
     _countdownView.layer.cornerRadius = 22;
     _countdownView.layer.borderColor = [[UIUtils surespotBlue] CGColor];
@@ -119,6 +120,7 @@ const NSInteger SEND_THRESHOLD = 25;
     [_recorder prepareToRecord];
     
     [self initScope];
+    
 }
 
 -(void) playVoiceMessage: (SurespotMessage *) message cell: (MessageView *) cell {
@@ -224,6 +226,7 @@ const NSInteger SEND_THRESHOLD = 25;
         _theirUsername = username;
         
         XThrowIfError(AudioOutputUnitStart(rioUnit), "couldn't start remote i/o unit");
+        
         
         
         unitIsRunning = 1;
@@ -388,7 +391,7 @@ const NSInteger SEND_THRESHOLD = 25;
                                                                                                     failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
                                                                                                         
                                                                                                         
-                                                                                                            DDLogInfo(@"uploaded voice %@ to server failed, statuscode: %d", key, responseObject.statusCode);
+                                                                                                        DDLogInfo(@"uploaded voice %@ to server failed, statuscode: %d", key, responseObject.statusCode);
                                                                                                         //  [self stopProgress];
                                                                                                         if (responseObject.statusCode == 402) {
                                                                                                             message.errorStatus = 402;
@@ -543,36 +546,44 @@ static OSStatus	PerformThru(
     
     try {
         
-        // Initialize and configure the audio session
-        XThrowIfError(AudioSessionInitialize(NULL, NULL, rioInterruptionListener, (__bridge void *) self), "couldn't initialize audio session");
-        
-        UInt32 audioCategory = kAudioSessionCategory_PlayAndRecord;
-        XThrowIfError(AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(audioCategory), &audioCategory), "couldn't set audio category");
-        
-        UInt32 doChangeDefaultRoute = 1;
-        
-        XThrowIfError(AudioSessionSetProperty (
-                                               kAudioSessionProperty_OverrideCategoryDefaultToSpeaker,
-                                               sizeof (doChangeDefaultRoute),
-                                               &doChangeDefaultRoute
-                                               ), "couldn't set speaker output");
-        
-        
-        Float32 preferredBufferSize = .005;
-        XThrowIfError(AudioSessionSetProperty(kAudioSessionProperty_PreferredHardwareIOBufferDuration, sizeof(preferredBufferSize), &preferredBufferSize), "couldn't set i/o buffer duration");
-        
-        UInt32 size = sizeof(hwSampleRate);
-        XThrowIfError(AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareSampleRate, &size, &hwSampleRate), "couldn't get hw sample rate");
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            
+            // Initialize and configure the audio session
+            XThrowIfError(AudioSessionInitialize(NULL, NULL, rioInterruptionListener, (__bridge void *) self), "couldn't initialize audio session");
+            
+            
+            
+            UInt32 audioCategory = kAudioSessionCategory_PlayAndRecord;
+            XThrowIfError(AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(audioCategory), &audioCategory), "couldn't set audio category");
+            
+            UInt32 doChangeDefaultRoute = 1;
+            
+            XThrowIfError(AudioSessionSetProperty (
+                                                   kAudioSessionProperty_OverrideCategoryDefaultToSpeaker,
+                                                   sizeof (doChangeDefaultRoute),
+                                                   &doChangeDefaultRoute
+                                                   ), "couldn't set speaker output");
+            
+            
+            Float32 preferredBufferSize = .005;
+            XThrowIfError(AudioSessionSetProperty(kAudioSessionProperty_PreferredHardwareIOBufferDuration, sizeof(preferredBufferSize), &preferredBufferSize), "couldn't set i/o buffer duration");
+            
+            UInt32 size = sizeof(hwSampleRate);
+            XThrowIfError(AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareSampleRate, &size, &hwSampleRate), "couldn't get hw sample rate");
+            
+            
+        });
         
         XThrowIfError(SetupRemoteIO(rioUnit, hwSampleRate, inputProc, thruFormat), "couldn't setup remote i/o unit");
         unitHasBeenCreated = true;
         
+        
+        UInt32 size = sizeof(thruFormat);
+        XThrowIfError(AudioUnitGetProperty(rioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 1, &thruFormat, &size), "couldn't get the remote I/O unit's output client format");
+
         drawFormat.SetAUCanonical(2, false);
         drawFormat.mSampleRate = 44100;
-        
-        size = sizeof(thruFormat);
-        XThrowIfError(AudioUnitGetProperty(rioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 1, &thruFormat, &size), "couldn't get the remote I/O unit's output client format");
-        
         XThrowIfError(AudioConverterNew(&thruFormat, &drawFormat, &audioConverter), "couldn't setup AudioConverter");
         
         dcFilter = new DCRejectionFilter[thruFormat.NumberChannels()];
@@ -594,7 +605,8 @@ static OSStatus	PerformThru(
     }
     catch (CAXException &e) {
         char buf[256];
-        fprintf(stderr, "Error: %s (%s)\n", e.mOperation, e.FormatError(buf));
+        
+        DDLogError(@"Error: %s (%s)\n", e.mOperation, e.FormatError(buf));
         unitIsRunning = 0;
         if (dcFilter) delete[] dcFilter;
         if (drawABL)
@@ -604,9 +616,10 @@ static OSStatus	PerformThru(
             free(drawABL);
             drawABL = NULL;
         }
+        [UIUtils showToastMessage:[NSString stringWithCString: e.FormatError(buf) encoding:NSUTF8StringEncoding ] duration:2];
     }
     catch (...) {
-        fprintf(stderr, "An unknown error occurred\n");
+        DDLogError(@"An unknown error occurred\n");
         unitIsRunning = 0;
         if (dcFilter) delete[] dcFilter;
         if (drawABL)
@@ -616,6 +629,7 @@ static OSStatus	PerformThru(
             free(drawABL);
             drawABL = NULL;
         }
+        [UIUtils showToastMessage:@"could not initialize voice" duration:2];
     }
     
     
@@ -633,7 +647,6 @@ static OSStatus	PerformThru(
 - (void)dealloc
 {
     delete[] dcFilter;
-    //delete fftBufferManager;
     if (drawABL)
     {
         for (UInt32 i=0; i<drawABL->mNumberBuffers; ++i)
@@ -644,6 +657,10 @@ static OSStatus	PerformThru(
     
     
     free(oscilLine);
+    
+    AudioComponentInstanceDispose(rioUnit);
+    unitHasBeenCreated = false;
+    unitIsRunning = false;
     
 }
 
