@@ -364,8 +364,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
               theirVersion: (NSString *) theirVersion
                     fileid: (NSString *) fileid
                   mimeType: (NSString *) mimeType
-              successBlock:(HTTPSuccessBlock) successBlock
-              failureBlock: (HTTPFailureBlock) failureBlock
+              successBlock:(JSONSuccessBlock) successBlock
+              failureBlock: (JSONFailureBlock) failureBlock
 {
     DDLogInfo(@"postFileStream, fileid: %@", fileid);
     NSString * path = [[NSString stringWithFormat:@"images/%@/%@/%@", ourVersion, theirUsername, theirVersion] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -381,8 +381,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                      
                  }];
     
-    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-    
+
     // if you want progress updates as it's uploading, uncomment the following:
     //
     // [operation setUploadProgressBlock:^(NSUInteger bytesWritten,
@@ -391,8 +390,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     //     NSLog(@"Sent %lld of %lld bytes", totalBytesWritten, totalBytesExpectedToWrite);
     // }];
     
-    [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
+    AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:successBlock failure:failureBlock];
     [operation start];
+    
 }
 
 -(void) postFriendStreamData: (NSData *) data

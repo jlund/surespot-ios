@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SurespotMessage : NSObject<NSCoding>
+@interface SurespotMessage : NSObject<NSCoding, NSCopying>
 - (id) initWithJSONString: (NSString *) jsonString;
 - (id) initWithDictionary: (NSDictionary *) dictionary;
 
@@ -26,7 +26,6 @@
 @property (nonatomic, assign) NSInteger errorStatus;
 @property (nonatomic, strong) NSString * formattedDate;
 @property (nonatomic, assign) NSInteger dataSize;
-
 @property (nonatomic, assign) NSInteger resendId;
 @property (atomic, assign, getter=isLoading) BOOL loading;
 @property (atomic, assign, getter=isLoaded) BOOL loaded;

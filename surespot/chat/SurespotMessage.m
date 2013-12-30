@@ -25,6 +25,8 @@
 
 
 
+
+
 - (id) initWithDictionary:(NSDictionary *) dictionary {
     
     // Call superclass's initializer
@@ -168,6 +170,32 @@
 
 -(BOOL) readyToSend {
     return self.from && self.to && self.fromVersion && self.iv && self.toVersion && self.data && self.mimeType && self.serverid == 0;
+}
+
+-(id) copyWithZone:(NSZone *)zone {
+    SurespotMessage * message = [SurespotMessage new];
+    message.serverid = self.serverid;
+    message.from = [self.from copyWithZone:zone];
+    message.to = [self.to copyWithZone:zone];
+    message.iv = [self.iv copyWithZone:zone];
+    message.data  = [self.data copyWithZone:zone];
+    message.toVersion = [self.toVersion copyWithZone:zone];
+    message.fromVersion = [self.fromVersion copyWithZone:zone];
+    message.mimeType = [self.mimeType copyWithZone:zone];
+    message.plainData = [self.plainData copyWithZone:zone];
+    message.dateTime = [self.dateTime copyWithZone:zone];
+    message.errorStatus = self.errorStatus;
+    message.formattedDate = [self.formattedDate copyWithZone:zone];
+    message.dataSize = self.dataSize;
+    message.resendId = self.resendId;
+    message.loading = self.loading;
+    message.loaded = self.loaded;
+    message.rowPortraitHeight = self.rowPortraitHeight;
+    message.rowLandscapeHeight = self.rowLandscapeHeight;
+    message.shareable = self.shareable;
+    message.voicePlayed = self.voicePlayed;
+    message.playVoice = self.playVoice;
+    return message;
 }
 
 @end

@@ -1114,13 +1114,17 @@ static const int MAX_CONNECTION_RETRIES = 16;
     }
 }
 
--(void) resendFileMessage: (SurespotMessage *) message {
+-(void) resendFileMessage: (SurespotMessage *) resendMessage {
+    
+    //make a copy of the message
+    SurespotMessage * message = [resendMessage copyWithZone:nil];
+    
     if ([[message data] hasPrefix:@"dataKey_"]) {
         
         DDLogInfo(@"resending data %@ to server", message.data);
         NSData * data = [[[SDWebImageManager sharedManager] imageCache] diskImageDataBySearchingAllPathsForKey:message.data];
         if (data) {
-            message.errorStatus = 0;
+            resendMessage.errorStatus = 0;
             ChatDataSource * cds = [self getDataSourceForFriendname:[message getOtherUser]];
             [cds postRefresh];
             [self startProgress];
@@ -1130,18 +1134,28 @@ static const int MAX_CONNECTION_RETRIES = 16;
                                                       theirVersion:[message getTheirVersion]
                                                             fileid:message.iv
                                                           mimeType:message.mimeType
-                                                      successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                                          DDLogInfo(@"resent data %@ to server successfully", message.data);
+                                                      successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                                                          
+                                                          NSInteger serverid = [[JSON objectForKey:@"id"] integerValue];
+                                                          NSString * url = [JSON objectForKey:@"url"];
+                                                          
+                                                          DDLogInfo(@"uploaded data %@ to server successfully, server id: %d, url: %@", message.iv, serverid, url);
+                                                          
+                                                          
+                                                          message.serverid = serverid;
+                                                          message.data = url;
+                                                          
+                                                          [cds addMessage:message refresh:YES];
                                                           
                                                           [self stopProgress];
-                                                      } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                                          DDLogInfo(@"resend data %@ to server failed, statuscode: %d", message.data, operation.response.statusCode);
                                                           
-                                                          if (operation.response.statusCode == 402) {
-                                                              message.errorStatus = 402;
+                                                      } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
+                                                          DDLogInfo(@"resend data %@ to server failed, statuscode: %d", message.data, responseObject.statusCode);
+                                                          if (responseObject.statusCode == 402) {
+                                                              resendMessage.errorStatus = 402;
                                                           }
                                                           else {
-                                                              message.errorStatus = 500;
+                                                              resendMessage.errorStatus = 500;
                                                           }
                                                           
                                                           [self stopProgress];

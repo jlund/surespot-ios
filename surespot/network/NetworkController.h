@@ -44,8 +44,8 @@ typedef void (^HTTPFailureBlock) (AFHTTPRequestOperation *operation , NSError *e
               theirVersion: (NSString *) theirVersion
                     fileid: (NSString *) fileid
                   mimeType: (NSString *) mimeType
-              successBlock:(HTTPSuccessBlock) successBlock
-              failureBlock: (HTTPFailureBlock) failureBlock;
+              successBlock:(JSONSuccessBlock) successBlock
+              failureBlock: (JSONFailureBlock) failureBlock;
 
 -(void) setMessageShareable:(NSString *) name
                    serverId: (NSInteger) serverid

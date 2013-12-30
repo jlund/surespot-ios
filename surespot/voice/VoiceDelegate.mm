@@ -129,7 +129,7 @@ const NSInteger SEND_THRESHOLD = 25;
             if (!data || error) {
                 message.playVoice = NO;
                 message.voicePlayed = YES;
-
+                
                 cell.messageStatusLabel.text = NSLocalizedString(@"message_error_generic", nil);
                 return;
             }
@@ -155,7 +155,7 @@ const NSInteger SEND_THRESHOLD = 25;
                 [[NSRunLoop mainRunLoop] addTimer:_playTimer forMode:NSRunLoopCommonModes];
                 [_playLock unlock];
                 [_player setDelegate:self];
-                [_player play];                
+                [_player play];
             }
             else {
                 [self stopPlaying];
@@ -331,9 +331,8 @@ const NSInteger SEND_THRESHOLD = 25;
                                                           
                                                           //add message locally before we upload it
                                                           ChatDataSource * cds = [[ChatController sharedInstance] getDataSourceForFriendname:_theirUsername];
-                                                          if (cds) {
                                                               [cds addMessage:message refresh:YES];
-                                                          }
+
                                                           
                                                           //upload image to server
                                                           //     DDLogInfo(@"uploading image %@ to server", key);
@@ -343,13 +342,28 @@ const NSInteger SEND_THRESHOLD = 25;
                                                                                                     theirVersion:version
                                                                                                           fileid:[iv SR_stringByBase64Encoding]
                                                                                                         mimeType:MIME_TYPE_M4A
-                                                                                                    successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                                                                                        //  DDLogInfo(@"uploaded voice %@ to server successfully", key);
+                                                                                                    successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                                                                                                                                         NSInteger serverid = [[JSON objectForKey:@"id"] integerValue];
+                                                                                                        NSString * url = [JSON objectForKey:@"url"];
+                                                                                                        
+                                                                                                        DDLogInfo(@"uploaded voice %@ to server successfully, server id: %d, url: %@", key, serverid, url);
+                                                                                                        
+                                                                                                        
+                                                                                                        SurespotMessage * updatedMessage = [message copyWithZone:nil];
+                                                                                                        
+                                                                                                        updatedMessage.serverid = serverid;
+                                                                                                        updatedMessage.data = url;
+                                                                                                        
+                                                                                                        [cds addMessage:updatedMessage refresh:YES];
+                                                                                                        
                                                                                                         //[self stopProgress];
-                                                                                                    } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                                                                    }
+                                                                                                    failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
+                                                                                                        
+                                                                                                        
                                                                                                         //    DDLogInfo(@"uploaded voice %@ to server failed, statuscode: %d", key, operation.response.statusCode);
                                                                                                         //  [self stopProgress];
-                                                                                                        if (operation.response.statusCode == 402) {
+                                                                                                        if (responseObject.statusCode == 402) {
                                                                                                             message.errorStatus = 402;
                                                                                                         }
                                                                                                         else {
