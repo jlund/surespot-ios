@@ -417,9 +417,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+-(NSUInteger)supportedInterfaceOrientations{
+    return UIInterfaceOrientationMaskAllButUpsideDown;
+}
+
+- (BOOL)shouldAutorotate
 {
-    return YES;
+    return ![_voiceDelegate isRecording];
 }
 
 -(void) switchToPageIndex:(NSInteger)page {
@@ -1400,7 +1404,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             if (scroll) {
                 @synchronized (_needsScroll) {
                     [_needsScroll removeObjectForKey:username];
-                }                
+                }
                 
                 [self performSelector:@selector(scrollTableViewToBottom:) withObject:tableView afterDelay:0.5];
             }

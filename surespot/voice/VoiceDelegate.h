@@ -85,4 +85,5 @@ inline double linearInterp(double valA, double valB, double fract)
 -(void) startRecordingUsername: (NSString *) username;
 -(void) stopRecordingSend: (NSNumber *) send;
 -(void) attachCell: (MessageView *) cell;
+-(BOOL) isRecording;
 @end

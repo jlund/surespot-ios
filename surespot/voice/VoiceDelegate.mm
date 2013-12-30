@@ -92,6 +92,11 @@ const NSInteger SEND_THRESHOLD = 25;
     return self;
 }
 
+- (BOOL)isRecording
+{
+    return [_recorder isRecording];
+}
+
 -(void) prepareRecording {
     _outputPath = [[FileController getCacheDir] stringByAppendingPathComponent: @"tempVoiceMessage.m4a"];
     DDLogInfo(@"recording to %@", _outputPath);
@@ -227,6 +232,8 @@ const NSInteger SEND_THRESHOLD = 25;
         _timeRemaining = 10;
         _countdownTextField.text = @"10";
         
+        
+        view.frame = CGRectMake(0, 200, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height/3);
         
         [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView addSubview:view];
         [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView addSubview:_countdownView];

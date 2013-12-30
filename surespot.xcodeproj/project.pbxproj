@@ -40,6 +40,7 @@
 		661F46A81865EDC3004A71B0 /* ChangePasswordView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 661F46A51865EDC3004A71B0 /* ChangePasswordView.xib */; };
 		661F46A91865EDC3004A71B0 /* ChangePasswordViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 661F46A71865EDC3004A71B0 /* ChangePasswordViewController.mm */; };
 		6621BB841762704D00BC2850 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6621BB861762704D00BC2850 /* Localizable.strings */; };
+		662CA5911871BB7300684790 /* SurespotNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 662CA5901871BB7300684790 /* SurespotNavigationController.m */; };
 		663710801813172F009D5195 /* EGOCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 6637107F1813172F009D5195 /* EGOCache.m */; };
 		6646AE0E185CADC700CBACDE /* MWCaptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6646ADD5185CADC700CBACDE /* MWCaptionView.m */; };
 		6646AE10185CADC700CBACDE /* MWPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 6646ADDA185CADC700CBACDE /* MWPhotoBrowser.m */; };
@@ -380,6 +381,8 @@
 		661F46A71865EDC3004A71B0 /* ChangePasswordViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ChangePasswordViewController.mm; sourceTree = "<group>"; };
 		6621BB7D17626EE800BC2850 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		6621BB851762704D00BC2850 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		662CA58F1871BB7300684790 /* SurespotNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SurespotNavigationController.h; sourceTree = "<group>"; };
+		662CA5901871BB7300684790 /* SurespotNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SurespotNavigationController.m; sourceTree = "<group>"; };
 		6637107E1813172F009D5195 /* EGOCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOCache.h; sourceTree = "<group>"; };
 		6637107F1813172F009D5195 /* EGOCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EGOCache.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6646ADD4185CADC700CBACDE /* MWCaptionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWCaptionView.h; sourceTree = "<group>"; };
@@ -966,6 +969,8 @@
 				6604A2CE17626B9E0072216A /* SurespotAppDelegate.mm */,
 				66A2D917183A7A7F00785270 /* SurespotConstants.h */,
 				66A2D918183A7A7F00785270 /* SurespotConstants.m */,
+				662CA58F1871BB7300684790 /* SurespotNavigationController.h */,
+				662CA5901871BB7300684790 /* SurespotNavigationController.m */,
 				6648B1EC186CBA81007037B1 /* SurespotSHKConfigurator.h */,
 				6648B1ED186CBA81007037B1 /* SurespotSHKConfigurator.m */,
 				6604A2D617626B9E0072216A /* MainStoryboard.storyboard */,
@@ -2049,6 +2054,7 @@
 				66EBE0C31855C97100F2452D /* SurespotButton.m in Sources */,
 				66E4F5B7176298CB00596E6B /* SocketIO.m in Sources */,
 				66EBE0C11855C97100F2452D /* MessageView.m in Sources */,
+				662CA5911871BB7300684790 /* SurespotNavigationController.m in Sources */,
 				6646AE2F185CB2EF00CBACDE /* EncryptionParams.m in Sources */,
 				66EBE0BC1855C97100F2452D /* ChatDataSource.mm in Sources */,
 				6646AE2C185CB08200CBACDE /* SurespotPhoto.m in Sources */,
