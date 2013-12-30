@@ -1930,7 +1930,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
     }
     else {
-        [_voiceDelegate stopRecordingSend: [NSNumber numberWithBool:interval > 0.75]];
+        BOOL send = interval > 1;
+        [_voiceDelegate stopRecordingSend: [NSNumber numberWithBool:send]];
+        if (!send) {
+            [UIUtils showToastKey:@"recording_cancelled"];
+        }
     }
 }
 - (IBAction)buttonTouchDown:(id)sender {
@@ -1957,9 +1961,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     DDLogInfo(@"touch up outside");
     
     [_buttonTimer invalidate];
-    NSTimeInterval interval = [_buttonDownDate timeIntervalSinceNow];
+    NSTimeInterval interval = -[_buttonDownDate timeIntervalSinceNow];
     if (interval > 0.5) {
-        [_voiceDelegate stopRecordingSend: [NSNumber numberWithBool:interval > 0.75]];
+        [_voiceDelegate stopRecordingSend: [NSNumber numberWithBool:NO]];
+        [UIUtils showToastKey:@"recording_cancelled"];
     }
 }
 
