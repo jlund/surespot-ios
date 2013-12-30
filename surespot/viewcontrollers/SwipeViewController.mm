@@ -1893,7 +1893,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [[IdentityController sharedInstance] logout];
     @synchronized (_chats) {
         [_chats removeAllObjects];
-        [_swipeView reloadData];
+       // [_swipeView reloadData];
     }
     
     [self.navigationController popToRootViewControllerAnimated:YES];
