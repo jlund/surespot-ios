@@ -67,7 +67,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @implementation SwipeViewController
 
 
-const Float32 voiceRecordDelay = 0.2;
+const Float32 voiceRecordDelay = 0.3;
 
 - (void)viewDidLoad
 {
@@ -1262,6 +1262,10 @@ const Float32 voiceRecordDelay = 0.2;
 }
 
 - (BOOL) handleTextAction {
+    return [self handleTextActionResign:YES];
+}
+
+- (BOOL) handleTextActionResign: (BOOL) resign {
     if (!_homeDataSource.currentChat) {
         NSString * text = _inviteField.text;
         
@@ -1280,7 +1284,9 @@ const Float32 voiceRecordDelay = 0.2;
             return YES;
         }
         else {
-            [self resignAllResponders];
+            if (resign) {
+                [self resignAllResponders];
+            }
             return NO;
         }
         
@@ -1295,7 +1301,9 @@ const Float32 voiceRecordDelay = 0.2;
         }
         
         else {
-            [self resignAllResponders];
+            if (resign) {
+                [self resignAllResponders];
+            }
             return NO;
         }
     }
@@ -1348,6 +1356,7 @@ const Float32 voiceRecordDelay = 0.2;
 -(void) updateTabChangeUI {
     if (!_homeDataSource.currentChat) {
         [_theButton setImage:[UIImage imageNamed:@"ic_menu_invite"] forState:UIControlStateNormal];
+       // [_theButton setImage:[UIImage imageNamed:@"ic_menu_invite"] forState:UIControlStateHighlighted];
         _textField.hidden = YES;
         _inviteField.hidden = NO;
     }
@@ -1356,15 +1365,18 @@ const Float32 voiceRecordDelay = 0.2;
         Friend *afriend = [_homeDataSource getFriendByName:_homeDataSource.currentChat];
         if (afriend.isDeleted) {
             [_theButton setImage:[UIImage imageNamed:@"ic_menu_home"] forState:UIControlStateNormal];
+          //  [_theButton setImage:[UIImage imageNamed:@"ic_menu_home"] forState:UIControlStateHighlighted];
             _textField.hidden = YES;
         }
         else {
             _textField.hidden = NO;
             if ([_textField.text length] > 0) {
                 [_theButton setImage:[UIImage imageNamed:@"ic_menu_send"] forState:UIControlStateNormal];
+             //   [_theButton setImage:[UIImage imageNamed:@"ic_menu_send"] forState:UIControlStateHighlighted];
             }
             else {
-                [_theButton setImage:[UIImage imageNamed:@"ic_menu_home"] forState:UIControlStateNormal];
+//                [_theButton setImage:[UIImage imageNamed:@"ic_menu_home"] forState:UIControlStateNormal];
+                [_theButton setImage:[UIImage imageNamed:@"ic_btn_speak_now"] forState:UIControlStateNormal];
             }
         }
     }
@@ -1926,18 +1938,27 @@ const Float32 voiceRecordDelay = 0.2;
     [_buttonTimer invalidate];
     
     NSTimeInterval interval = -[_buttonDownDate timeIntervalSinceNow];
-    if (interval < voiceRecordDelay) {
-        if (![self handleTextAction]) {
+    
+    if (![self handleTextActionResign:NO]) {
+        if (interval < voiceRecordDelay) {
+            [self resignAllResponders];
             [self scrollHome];
+            
+        }
+        else {
+            if ([_voiceDelegate isRecording]) {
+                BOOL send = interval > (voiceRecordDelay * 2);
+                
+                [_voiceDelegate stopRecordingSend: [NSNumber numberWithBool:send]];
+                if (!send) {
+                    [UIUtils showToastKey:@"recording_cancelled"];
+                }
+                [self updateTabChangeUI];
+            }
         }
     }
-    else {
-        BOOL send = interval > (voiceRecordDelay * 2);
-        [_voiceDelegate stopRecordingSend: [NSNumber numberWithBool:send]];
-        if (!send) {
-            [UIUtils showToastKey:@"recording_cancelled"];
-        }
-    }
+    
+    
 }
 - (IBAction)buttonTouchDown:(id)sender {
     _buttonDownDate = [NSDate date];
@@ -1947,25 +1968,34 @@ const Float32 voiceRecordDelay = 0.2;
     [_buttonTimer invalidate];
     _buttonTimer = [NSTimer scheduledTimerWithTimeInterval:voiceRecordDelay target:self selector:@selector(buttonTimerFire:) userInfo:[[ChatController sharedInstance] getCurrentChat] repeats:NO];
     
-    
 }
 
 - (IBAction)buttonTouchUpOutside:(id)sender {
     DDLogInfo(@"touch up outside");
     
     [_buttonTimer invalidate];
-    NSTimeInterval interval = -[_buttonDownDate timeIntervalSinceNow];
-    if (interval > voiceRecordDelay) {
-        [_voiceDelegate stopRecordingSend: [NSNumber numberWithBool:NO]];
-        [UIUtils showToastKey:@"recording_cancelled"];
+    
+    if ([_voiceDelegate isRecording]) {
+        NSTimeInterval interval = -[_buttonDownDate timeIntervalSinceNow];
+        if (interval > voiceRecordDelay) {
+            [_voiceDelegate stopRecordingSend: [NSNumber numberWithBool:NO]];
+            [UIUtils showToastKey:@"recording_cancelled"];
+                            [self updateTabChangeUI];
+            //     [_theButton setImage:[UIImage imageNamed:@"ic_menu_home"] forState:UIControlStateNormal];
+        }
     }
 }
 
 -(void) buttonTimerFire:(NSTimer *) timer {
     
-    NSString * currentChat = timer.userInfo;
-    if (currentChat) {
-        [_voiceDelegate startRecordingUsername: currentChat];
+    
+    if (![self handleTextActionResign:NO]) {
+        
+        NSString * currentChat = timer.userInfo;
+        if (currentChat) {
+            [_theButton setImage:[UIImage imageNamed:@"ic_btn_speak_now"] forState:UIControlStateNormal];
+            [_voiceDelegate startRecordingUsername: currentChat];
+        }
     }
 }
 
