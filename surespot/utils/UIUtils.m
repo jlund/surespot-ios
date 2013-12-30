@@ -232,10 +232,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 			break;
 		case 402:
 			// if it's voice message they need to have upgraded, otherwise fall through to 403
-			//if (message.getMimeType().equals(SurespotConstants.MimeTypes.M4A)) {
-			//	statusText = context.getString(R.string.billing_payment_required_voice);
-			//	break;
-			//}
+			if ([mimeType isEqualToString: MIME_TYPE_M4A]) {
+				statusText = NSLocalizedString(@"billing_payment_required_voice",nil);
+				break;
+			}
 		case 403:
 			statusText =  NSLocalizedString(@"message_error_unauthorized",nil);
 			break;
