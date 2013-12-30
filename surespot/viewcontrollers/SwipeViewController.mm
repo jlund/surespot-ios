@@ -67,6 +67,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @implementation SwipeViewController
 
 
+const Float32 voiceRecordDelay = 0.2;
+
 - (void)viewDidLoad
 {
     DDLogVerbose(@"swipeviewdidload %@", self);
@@ -1924,13 +1926,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [_buttonTimer invalidate];
     
     NSTimeInterval interval = -[_buttonDownDate timeIntervalSinceNow];
-    if (interval < 0.5) {
+    if (interval < voiceRecordDelay) {
         if (![self handleTextAction]) {
             [self scrollHome];
         }
     }
     else {
-        BOOL send = interval > 1;
+        BOOL send = interval > (voiceRecordDelay * 2);
         [_voiceDelegate stopRecordingSend: [NSNumber numberWithBool:send]];
         if (!send) {
             [UIUtils showToastKey:@"recording_cancelled"];
@@ -1943,18 +1945,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     //kick off timer
     [_buttonTimer invalidate];
-    _buttonTimer = [NSTimer scheduledTimerWithTimeInterval:.5 target:self selector:@selector(buttonTimerFire:) userInfo:[[ChatController sharedInstance] getCurrentChat] repeats:NO];
+    _buttonTimer = [NSTimer scheduledTimerWithTimeInterval:voiceRecordDelay target:self selector:@selector(buttonTimerFire:) userInfo:[[ChatController sharedInstance] getCurrentChat] repeats:NO];
     
     
-}
-
--(void) buttonTimerFire:(NSTimer *) timer {
-    
-    NSString * currentChat = timer.userInfo;
-    if (currentChat) {
-        [self ensureVoiceDelegate];
-        [_voiceDelegate startRecordingUsername: currentChat];
-    }
 }
 
 - (IBAction)buttonTouchUpOutside:(id)sender {
@@ -1962,12 +1955,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [_buttonTimer invalidate];
     NSTimeInterval interval = -[_buttonDownDate timeIntervalSinceNow];
-    if (interval > 0.5) {
+    if (interval > voiceRecordDelay) {
         [_voiceDelegate stopRecordingSend: [NSNumber numberWithBool:NO]];
         [UIUtils showToastKey:@"recording_cancelled"];
     }
 }
 
+-(void) buttonTimerFire:(NSTimer *) timer {
+    
+    NSString * currentChat = timer.userInfo;
+    if (currentChat) {
+        [_voiceDelegate startRecordingUsername: currentChat];
+    }
+}
 
 - (void) backPressed {
     [self scrollHome];
