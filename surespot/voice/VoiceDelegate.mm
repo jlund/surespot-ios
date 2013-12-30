@@ -242,13 +242,13 @@ const NSInteger SEND_THRESHOLD = 25;
         [view setFrame: _scopeRect];
         
         //position the countdown view
-        [_countdownView setFrame:CGRectMake(10, _scopeRect.origin.y+10, 44,44)];
+        [_countdownView setFrame:CGRectMake(10, _scopeRect.origin.y+10, 44, 44)];
         
         
         
         [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView addSubview:view];
         [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView addSubview:_countdownView];
-        [        _countdownTextField setFrame:CGRectMake(0,0,44, 44)];
+        [_countdownTextField setFrame:CGRectMake(0, 0, 44, 44)];
         
         [view startAnimation];
         [_recorder record];
@@ -388,7 +388,7 @@ const NSInteger SEND_THRESHOLD = 25;
                                                                                                     failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
                                                                                                         
                                                                                                         
-                                                                                                        //    DDLogInfo(@"uploaded voice %@ to server failed, statuscode: %d", key, operation.response.statusCode);
+                                                                                                            DDLogInfo(@"uploaded voice %@ to server failed, statuscode: %d", key, responseObject.statusCode);
                                                                                                         //  [self stopProgress];
                                                                                                         if (responseObject.statusCode == 402) {
                                                                                                             message.errorStatus = 402;

@@ -28,6 +28,11 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
 
+@interface SurespotAppDelegate()
+@property (strong, nonatomic) UIWindow * overlayWindow;
+
+@end
+
 @implementation SurespotAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -74,9 +79,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [self.window makeKeyAndVisible];
     
-    _overlayView = [[AGWindowView alloc] initAndAddToKeyWindow];
+    _overlayWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    [_overlayWindow setWindowLevel:UIWindowLevelAlert+1];
+    _overlayWindow.hidden = NO;
+    _overlayWindow.userInteractionEnabled = NO;
+        
+    _overlayView = [[AGWindowView alloc] initAndAddToWindow:_overlayWindow];
     _overlayView.supportedInterfaceOrientations = AGInterfaceOrientationMaskAll;
-    _overlayView.userInteractionEnabled = NO;
     
     return YES;
 }
@@ -112,8 +121,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         } else if ([url.scheme isEqualToString:@"com.twofours.surespot"]) {
             return [SHKGooglePlus handleURL:url sourceApplication:sourceApplication annotation:annotation];
         }
-
-
+    
+    
     return YES;
 }
 

@@ -257,10 +257,10 @@ static BOOL IS_BELOW_IOS_7()
         {
             [NSException raise:NSInternalInconsistencyException format:@"AGWindowView should only be added directly on UIWindow"];
         }
-        if([self.window.subviews indexOfObject:self] == 0)
-        {
-            [NSException raise:NSInternalInconsistencyException format:@"AGWindowView is not meant to be first subview on window since UIWindow automatically rotates the first view for you."];
-        }
+//        if([self.window.subviews indexOfObject:self] == 0)
+//        {
+//            [NSException raise:NSInternalInconsistencyException format:@"AGWindowView is not meant to be first subview on window since UIWindow automatically rotates the first view for you."];
+        //}
     }
 }
 

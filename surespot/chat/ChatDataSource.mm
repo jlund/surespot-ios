@@ -70,6 +70,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     }
                 }];
                 
+                
                 //if the message is ready to send and it's not already errored and it's not a text message set it to errored
                 if ([message readyToSend] && message.errorStatus == 0 && ![message.mimeType isEqualToString:MIME_TYPE_TEXT]) {
                     message.errorStatus = 500;
@@ -79,6 +80,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     if (message.serverid <= 0 && [message.mimeType isEqualToString:MIME_TYPE_TEXT]) {
                         [[ChatController sharedInstance] enqueueResendMessage: message];
                     }
+                    
                 }
             }
             
@@ -211,7 +213,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 
                 if (![existingMessage.data isEqualToString:message.data]) {
                     //update cache to avoid downloading image we just sent and save on web traffic
-                    if ([existingMessage.data hasPrefix:@"dataKey_"]) {                        
+                    if ([existingMessage.data hasPrefix:@"dataKey_"]) {
                         
                         //get cached image datas
                         id data = [[[SDWebImageManager sharedManager] imageCache] imageFromMemoryCacheForKey:existingMessage.data];
