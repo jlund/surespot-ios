@@ -47,14 +47,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (self != nil) {
         _baseUrl = baseUrl;
         
-        //   [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
-        //  [self registerHTTPOperationClass:[AFHTTPRequestOperation class]];
-        
-        
         // Accept HTTP Header; see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
-        [self setDefaultHeader:@"Accept-Charset" value:@"utf-8"];
-        //[self setDefaultHeader:@"Accept" value:@"application/json"];
-        
+        [self setDefaultHeader:@"Accept-Charset" value:@"utf-8"];                
+        [self setDefaultHeader:@"User-Agent" value:[NSString stringWithFormat:@"%@/%@ (%@; CPU iPhone OS 7_0_4; Scale/%0.2f)", [[[NSBundle mainBundle] infoDictionary] objectForKey:(__bridge NSString *)kCFBundleExecutableKey] ?: [[[NSBundle mainBundle] infoDictionary] objectForKey:(__bridge NSString *)kCFBundleIdentifierKey], (__bridge id)CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(), kCFBundleVersionKey) ?: [[[NSBundle mainBundle] infoDictionary] objectForKey:(__bridge NSString *)kCFBundleVersionKey], [[UIDevice currentDevice] model], ([[UIScreen mainScreen] respondsToSelector:@selector(scale)] ? [[UIScreen mainScreen] scale] : 1.0f)]];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(HTTPOperationDidFinish:) name:AFNetworkingOperationDidFinishNotification object:nil];
         
         self.parameterEncoding = AFJSONParameterEncoding;
@@ -504,18 +499,18 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (apnToken) {
         [params setObject:[ChatUtils hexFromData:apnToken] forKey:@"apnToken"];
     }
-
+    
     NSURLRequest *request = [self requestWithMethod:@"POST" path:@"keys"  parameters:params];
     AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
     [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
     [operation setSuccessCallbackQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
     [operation start];
-
+    
     
 }
 
 -(void) getDeleteTokenForUsername:(NSString*) username andPassword:(NSString *)password andSignature: (NSString *) signature
-                  successBlock:(HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock {
+                     successBlock:(HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock {
     
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                    username,@"username",
@@ -529,9 +524,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
     [operation setSuccessCallbackQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
     [operation start];
-
     
-
+    
+    
     
 }
 
@@ -557,13 +552,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
     [operation setSuccessCallbackQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
     [operation start];
-
+    
     
 }
 
 
 -(void) getPasswordTokenForUsername:(NSString*) username andPassword:(NSString *)password andSignature: (NSString *) signature
-                  successBlock:(HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock {
+                       successBlock:(HTTPSuccessBlock)successBlock failureBlock: (HTTPFailureBlock) failureBlock {
     
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                    username,@"username",
@@ -584,13 +579,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) changePasswordForUsername:(NSString *) username
-              oldPassword:(NSString *) password
-              newPassword:(NSString *) newPassword
-               authSig:(NSString *) authSig
-              tokenSig:(NSString *) tokenSig
-            keyVersion:(NSString *) keyversion
-          successBlock:(HTTPSuccessBlock) successBlock
-          failureBlock:(HTTPFailureBlock) failureBlock {
+                      oldPassword:(NSString *) password
+                      newPassword:(NSString *) newPassword
+                          authSig:(NSString *) authSig
+                         tokenSig:(NSString *) tokenSig
+                       keyVersion:(NSString *) keyversion
+                     successBlock:(HTTPSuccessBlock) successBlock
+                     failureBlock:(HTTPFailureBlock) failureBlock {
     
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                    username,@"username",
