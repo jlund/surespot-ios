@@ -225,7 +225,9 @@
                                 </accessibility>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <connections>
+                                    <action selector="buttonTouchDown:" destination="tcp-OJ-fTS" eventType="touchDown" id="oF9-0D-jOP"/>
                                     <action selector="buttonTouchUpInside:" destination="tcp-OJ-fTS" eventType="touchUpInside" id="Wn5-ya-7Ky"/>
+                                    <action selector="buttonTouchUpOutside:" destination="tcp-OJ-fTS" eventType="touchUpOutside" id="09c-ec-tkV"/>
                                 </connections>
                             </button>
                         </subviews>

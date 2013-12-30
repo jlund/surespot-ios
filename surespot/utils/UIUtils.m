@@ -180,7 +180,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [message setRowPortraitHeight: 224];
     [message setRowLandscapeHeight: 224];
-    DDLogInfo(@"setting image row height portrait %d landscape %d", message.rowPortraitHeight, message.rowLandscapeHeight);
+    DDLogVerbose(@"setting image row height portrait %d landscape %d", message.rowPortraitHeight, message.rowLandscapeHeight);
     
 }
 
@@ -188,7 +188,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 +(void) setVoiceMessageHeights: (SurespotMessage *)  message size: (CGSize) size {
     [message setRowPortraitHeight: 64];
     [message setRowLandscapeHeight: 64];
-    DDLogInfo(@"setting voice row height portrait %d landscape %d", message.rowPortraitHeight, message.rowLandscapeHeight);
+    DDLogVerbose(@"setting voice row height portrait %d landscape %d", message.rowPortraitHeight, message.rowLandscapeHeight);
     
 }
 

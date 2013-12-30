@@ -266,7 +266,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
     }
     
-    DDLogInfo(@"isNew: %hhd", isNew);
+    DDLogVerbose(@"isNew: %hhd", isNew);
     
     return isNew;
     

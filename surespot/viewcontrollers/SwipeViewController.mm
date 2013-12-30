@@ -59,6 +59,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) SurespotMessage * imageMessage;
 @property (nonatomic, strong) UIPopoverController * popover;
 @property (nonatomic, strong) VoiceDelegate * voiceDelegate;
+@property (nonatomic, strong) NSDate * buttonDownDate;
+@property (nonatomic, strong) NSTimer * buttonTimer;
 
 @end
 
@@ -160,7 +162,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _theButton.layer.borderWidth = 3.0f;
     _theButton.backgroundColor = [UIColor whiteColor];
     _theButton.opaque = YES;
-    [_theButton addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(buttonLongPress:)]];
     
     [self updateTabChangeUI];
     
@@ -941,7 +942,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     }
                     
                     if (!message.plainData) {
-                        DDLogInfo(@"setting message loading");
+                        DDLogVerbose(@"setting message loading");
                         cell.messageStatusLabel.text = NSLocalizedString(@"message_loading_and_decrypting",nil);
                     }
                     else {
@@ -1081,7 +1082,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 }
             }
             
-            DDLogInfo(@"returning cell, status text %@", cell.messageStatusLabel.text);
+            DDLogVerbose(@"returning cell, status text %@", cell.messageStatusLabel.text);
             return cell;
         }
         else {
@@ -1389,7 +1390,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)refreshMessages:(NSNotification *)notification {
     NSString * username = [notification.object objectForKey:@"username"];
     BOOL scroll = [[notification.object objectForKey:@"scroll"] boolValue];
-    DDLogInfo(@"username: %@, currentchat: %@, scroll: %hhd", username, _homeDataSource.currentChat, scroll);
+    DDLogVerbose(@"username: %@, currentchat: %@, scroll: %hhd", username, _homeDataSource.currentChat, scroll);
     
     if ([username isEqualToString: _homeDataSource.currentChat]) {
         
@@ -1413,7 +1414,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     else {
         if (scroll) {
             @synchronized (_needsScroll) {
-                DDLogInfo(@"setting needs scroll for %@", username);
+                DDLogVerbose(@"setting needs scroll for %@", username);
                 [_needsScroll setObject:@"yourmama" forKey:username];
                 [_bottomIndexPaths removeObjectForKey:username];
             }
@@ -1909,30 +1910,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
--(void)buttonLongPress:(UILongPressGestureRecognizer *)gestureRecognizer
-{
-    DDLogInfo(@"state %d", gestureRecognizer.state);
-    NSString * currentChat =[[ChatController sharedInstance] getCurrentChat];
-    
-    if (currentChat) {
-        CGPoint p = [gestureRecognizer locationInView:_theButton];
-        
-        switch (gestureRecognizer.state) {
-            case UIGestureRecognizerStateBegan:
-                [self ensureVoiceDelegate];
-                [_voiceDelegate startRecordingUsername: currentChat];
-                break;
-            case UIGestureRecognizerStateEnded:
-                [_voiceDelegate stopRecordingSend: [NSNumber numberWithBool:YES]];
-                break;
-            default:
-                break;
-        }
-        
-    }
-    
-}
-
 -(void) ensureVoiceDelegate {
     if (!_voiceDelegate) {
         _voiceDelegate = [[VoiceDelegate alloc] initWithUsername:[[IdentityController sharedInstance] getLoggedInUser] ourVersion:[[IdentityController sharedInstance] getOurLatestVersion ]];
@@ -1943,12 +1920,50 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 - (IBAction)buttonTouchUpInside:(id)sender {
-    //    if (![self handleTextAction]) {
-    //        [self scrollHome];
-    //    }
+    DDLogInfo(@"touch up inside");
+    [_buttonTimer invalidate];
+    
+    NSTimeInterval interval = -[_buttonDownDate timeIntervalSinceNow];
+    if (interval < 0.5) {
+        if (![self handleTextAction]) {
+            [self scrollHome];
+        }
+    }
+    else {
+        [_voiceDelegate stopRecordingSend: [NSNumber numberWithBool:interval > 0.75]];
+    }
+}
+- (IBAction)buttonTouchDown:(id)sender {
+    _buttonDownDate = [NSDate date];
+    DDLogInfo(@"touch down at %@", _buttonDownDate);
+    
+    //kick off timer
+    [_buttonTimer invalidate];
+    _buttonTimer = [NSTimer scheduledTimerWithTimeInterval:.5 target:self selector:@selector(buttonTimerFire:) userInfo:[[ChatController sharedInstance] getCurrentChat] repeats:NO];
     
     
 }
+
+-(void) buttonTimerFire:(NSTimer *) timer {
+    
+    NSString * currentChat = timer.userInfo;
+    if (currentChat) {
+        [self ensureVoiceDelegate];
+        [_voiceDelegate startRecordingUsername: currentChat];
+    }
+}
+
+- (IBAction)buttonTouchUpOutside:(id)sender {
+    DDLogInfo(@"touch up outside");
+    
+    [_buttonTimer invalidate];
+    NSTimeInterval interval = [_buttonDownDate timeIntervalSinceNow];
+    if (interval > 0.5) {
+        [_voiceDelegate stopRecordingSend: [NSNumber numberWithBool:interval > 0.75]];
+    }
+}
+
+
 - (void) backPressed {
     [self scrollHome];
 }
@@ -2094,6 +2109,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [_textField resignFirstResponder];
     [_inviteField resignFirstResponder];
 }
+
 
 
 @end
