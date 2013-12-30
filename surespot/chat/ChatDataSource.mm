@@ -276,7 +276,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) postRefreshScroll: (BOOL) scroll {
-    DDLogInfo(@"postRefresh");
+    DDLogInfo(@"postRefreshScroll %hhd", scroll);
     [self sort];
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -338,7 +338,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [_messages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             if([obj serverid] == serverId) {
                 [_messages removeObjectAtIndex:idx];
-                [self postRefresh];
+                [self postRefreshScroll:NO];
                 *stop = YES;
             }
         }];
@@ -457,7 +457,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     
                     if (dMessage) {
                         [dMessage setShareable:[message.action isEqualToString:@"shareable"] ? YES : NO];
-                        [self postRefresh];
+                        [self postRefreshScroll:NO];
                     }
                 }
             }
@@ -580,7 +580,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     SurespotMessage * message = [self getMessageById:serverid];
     if (message) {
         message.shareable = shareable;
-        [self postRefresh];
+        [self postRefreshScroll:NO];
     }
 }
 

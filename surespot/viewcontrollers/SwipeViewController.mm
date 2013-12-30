@@ -1392,15 +1392,18 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         UITableView * tableView;
         @synchronized (_chats) {
             tableView = [_chats objectForKey:username];
-            
-        }
-        @synchronized (_needsScroll) {
-            [_needsScroll removeObjectForKey:username];
         }
         
-        if (scroll && tableView) {
+        if (tableView) {
             [tableView reloadData];
-            [self performSelector:@selector(scrollTableViewToBottom:) withObject:tableView afterDelay:0.5];
+            
+            if (scroll) {
+                @synchronized (_needsScroll) {
+                    [_needsScroll removeObjectForKey:username];
+                }                
+                
+                [self performSelector:@selector(scrollTableViewToBottom:) withObject:tableView afterDelay:0.5];
+            }
         }
     }
     else {
