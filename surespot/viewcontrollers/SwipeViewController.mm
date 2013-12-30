@@ -1052,12 +1052,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                         cell.uiImageView.hidden = YES;
                         cell.audioIcon.hidden = NO;
                         cell.audioSlider.hidden = NO;
-                                                
+                        
                         if (message.playVoice && [username isEqualToString: [[ChatController sharedInstance] getCurrentChat]]) {
                             [self ensureVoiceDelegate];
                             [_voiceDelegate playVoiceMessage:message cell:cell];
                         }
-                        else {                                                    
+                        else {
                             [cell setMessage:message
                                     progress:^(NSUInteger receivedSize, long long expectedSize) {
                                         
@@ -1383,8 +1383,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 - (void)refreshMessages:(NSNotification *)notification {
-    NSString * username = notification.object;
-    DDLogInfo(@"username: %@, currentchat: %@", username, _homeDataSource.currentChat);
+    NSString * username = [notification.object objectForKey:@"username"];
+    BOOL scroll = [[notification.object objectForKey:@"scroll"] boolValue];
+    DDLogInfo(@"username: %@, currentchat: %@, scroll: %hhd", username, _homeDataSource.currentChat, scroll);
     
     if ([username isEqualToString: _homeDataSource.currentChat]) {
         
@@ -1397,16 +1398,18 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [_needsScroll removeObjectForKey:username];
         }
         
-        if (tableView) {
+        if (scroll && tableView) {
             [tableView reloadData];
             [self performSelector:@selector(scrollTableViewToBottom:) withObject:tableView afterDelay:0.5];
         }
     }
     else {
-        @synchronized (_needsScroll) {
-            DDLogInfo(@"setting needs scroll for %@", username);
-            [_needsScroll setObject:@"yourmama" forKey:username];
-            [_bottomIndexPaths removeObjectForKey:username];
+        if (scroll) {
+            @synchronized (_needsScroll) {
+                DDLogInfo(@"setting needs scroll for %@", username);
+                [_needsScroll setObject:@"yourmama" forKey:username];
+                [_bottomIndexPaths removeObjectForKey:username];
+            }
         }
     }
 }
@@ -1893,7 +1896,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [[IdentityController sharedInstance] logout];
     @synchronized (_chats) {
         [_chats removeAllObjects];
-       // [_swipeView reloadData];
+        // [_swipeView reloadData];
     }
     
     [self.navigationController popToRootViewControllerAnimated:YES];

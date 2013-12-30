@@ -272,10 +272,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) postRefresh {
+    [self postRefreshScroll:YES];
+}
+
+-(void) postRefreshScroll: (BOOL) scroll {
     DDLogInfo(@"postRefresh");
     [self sort];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshMessages" object:_username ];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshMessages"
+                                                            object:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                    _username, @"username",
+                                                                    [NSNumber numberWithBool:scroll],  @"scroll",
+                                                                    nil] ];
     });
 }
 
