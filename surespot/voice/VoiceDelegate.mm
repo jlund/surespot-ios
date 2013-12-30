@@ -46,7 +46,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) NSTimer * playTimer;
 @property (nonatomic, strong) NSLock * playLock;
 @property (nonatomic, strong) NSString * outputPath;
-@property (nonatomic, assign) CGSize size;
+@property (nonatomic, assign) CGRect scopeRect;
 @end
 
 @implementation VoiceDelegate
@@ -74,7 +74,8 @@ const NSInteger SEND_THRESHOLD = 25;
     _ourVersion = ourVersion;
     
     _playLock = [[NSLock alloc] init];
-    _countdownView = [[UIView alloc] initWithFrame:CGRectMake(0, 210, 44,44)];
+    _countdownView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
+
     //setup the button
     _countdownView.layer.cornerRadius = 22;
     _countdownView.layer.borderColor = [[UIUtils surespotBlue] CGColor];
@@ -82,8 +83,10 @@ const NSInteger SEND_THRESHOLD = 25;
     _countdownView.backgroundColor = [UIColor blackColor];
     _countdownView.opaque = YES;
     
-    _countdownTextField = [[UITextField alloc] initWithFrame:CGRectMake(1,0, 44, 44)];
+    
+    _countdownTextField = [[UITextField alloc] initWithFrame:CGRectMake(0,0, 44, 44)];
     _countdownTextField.textAlignment = NSTextAlignmentCenter;
+    _countdownTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     _countdownTextField.textColor = [UIColor whiteColor];
     _countdownTextField.font = [UIFont boldSystemFontOfSize:24];
     
@@ -232,18 +235,33 @@ const NSInteger SEND_THRESHOLD = 25;
         _timeRemaining = 10;
         _countdownTextField.text = @"10";
         
+        //(re)set the open gl view frame
+        _scopeRect = [self getScopeRect];
+        drawBufferLen = _scopeRect.size.width;
+        resetOscilLine = YES;
+        [view setFrame: _scopeRect];
         
-        _size = [UIUtils sizeAdjustedForOrientation:[[UIScreen mainScreen] bounds].size] ;
-        [view setFrame: CGRectMake(0, 50, _size.width, _size.height/2)];
+        //position the countdown view
+        [_countdownView setFrame:CGRectMake(10, _scopeRect.origin.y+10, 44,44)];
+        
         
         
         [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView addSubview:view];
         [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView addSubview:_countdownView];
+        [        _countdownTextField setFrame:CGRectMake(0,0,44, 44)];
+        
         [view startAnimation];
         [_recorder record];
         
         _countdownTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countdownTimerFired:) userInfo:nil repeats:YES];
     }
+}
+
+-(CGRect) getScopeRect {
+    CGSize screenSize = [UIUtils sizeAdjustedForOrientation:[[UIScreen mainScreen] bounds].size];
+    //if (screenSize.height > )
+    int halfHeight = screenSize.height / 2;
+    return CGRectMake(0, (screenSize.height-halfHeight)/2, screenSize.width, halfHeight);
 }
 
 -(void) countdownTimerFired: (NSTimer *) timer {
@@ -657,10 +675,12 @@ static OSStatus	PerformThru(
     }
     
     
+    
+    
     // Translate to the left side and vertical center of the screen, and scale so that the screen coordinates
     // go from 0 to 1 along the X, and -1 to 1 along the Y
-    glTranslatef(0, _size.height/4, 0.);
-    glScalef(_size.width, _size.height/4, 1.);
+    glTranslatef(0, _scopeRect.size.height/2, 0.);
+    glScalef(_scopeRect.size.width, _scopeRect.size.height/2, 1.);
     
     // Set up some GL state for our oscilloscope lines
     glDisable(GL_TEXTURE_2D);
