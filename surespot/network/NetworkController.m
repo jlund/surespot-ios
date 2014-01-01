@@ -48,7 +48,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         _baseUrl = baseUrl;
         
         // Accept HTTP Header; see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
-        [self setDefaultHeader:@"Accept-Charset" value:@"utf-8"];                
+        [self setDefaultHeader:@"Accept-Charset" value:@"utf-8"];
         [self setDefaultHeader:@"User-Agent" value:[NSString stringWithFormat:@"%@/%@ (%@; CPU iPhone OS 7_0_4; Scale/%0.2f)", [[[NSBundle mainBundle] infoDictionary] objectForKey:(__bridge NSString *)kCFBundleExecutableKey] ?: [[[NSBundle mainBundle] infoDictionary] objectForKey:(__bridge NSString *)kCFBundleIdentifierKey], (__bridge id)CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(), kCFBundleVersionKey) ?: [[[NSBundle mainBundle] infoDictionary] objectForKey:(__bridge NSString *)kCFBundleVersionKey], [[UIDevice currentDevice] model], ([[UIScreen mainScreen] respondsToSelector:@selector(scale)] ? [[UIScreen mainScreen] scale] : 1.0f)]];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(HTTPOperationDidFinish:) name:AFNetworkingOperationDidFinishNotification object:nil];
         
@@ -100,6 +100,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                    versionString, @"version",
                                    @"ios", @"platform", nil];
     
+    [self addPurchaseReceiptToParams:params];
+    
     //add apnToken if we have one
     NSData *  apnToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"apnToken"];
     if (apnToken) {
@@ -144,6 +146,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                    encodedDSAKey, @"dsaPub",
                                    versionString, @"version",
                                    @"ios", @"platform", nil];
+    
+    [self addPurchaseReceiptToParams:params];
     
     //add apnToken if we have one
     NSData *  apnToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"apnToken"];
@@ -381,7 +385,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                      
                  }];
     
-
+    
     // if you want progress updates as it's uploading, uncomment the following:
     //
     // [operation setUploadProgressBlock:^(NSUInteger bytesWritten,
@@ -624,7 +628,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
         callback(longUrl);
     }];
-    [operation start];    
+    [operation start];
+}
+
+-(void) addPurchaseReceiptToParams: (NSMutableDictionary *) params {
+    NSString * purchaseReceipt =  [[NSData dataWithContentsOfURL:[[NSBundle mainBundle] appStoreReceiptURL] ] base64EncodedStringWithOptions:0];
+    [params setObject: purchaseReceipt forKey:@"purchaseReceipt"];
 }
 
 @end

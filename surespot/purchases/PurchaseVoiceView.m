@@ -40,6 +40,15 @@
     [[PurchaseDelegate sharedInstance] purchaseProduct:[sender tag]];
     
 }
+- (IBAction)close:(id)sender {
+    [self removeFromSuperview];
+}
+- (IBAction)voicePurchaseChanged:(id)sender {
+    //can only turn it off via the switch
+    if ([sender isOn]) {
+        [[PurchaseDelegate sharedInstance] setHasVoiceMessaging:NO];
+    }
+}
 
 
 @end

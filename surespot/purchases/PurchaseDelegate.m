@@ -11,6 +11,7 @@
 #import "DDLog.h"
 #import "NSData+Base64.h"
 #import "PurchaseVoiceView.h"
+#import "NSData+SRB64Additions.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -54,7 +55,7 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
 -(NSString *) getAppStoreReceipt {
     
     NSData * appStoreReceipt = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] appStoreReceiptURL]];
-    NSString * encodedReceipt = [appStoreReceipt base64EncodedString];
+    NSString * encodedReceipt = [appStoreReceipt base64EncodedStringWithSeparateLines:NO];
     return encodedReceipt;
 }
 
@@ -132,7 +133,8 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
         }
         
         if (transaction.transactionState == SKPaymentTransactionStateRestored) {
-            if (transaction.originalTransaction.transactionState == SKPaymentTransactionStatePurchased) {                            DDLogInfo(@"transaction restored, setting has voice messaging to YES");
+            if (transaction.originalTransaction.transactionState == SKPaymentTransactionStatePurchased) {
+                DDLogInfo(@"transaction restored, setting has voice messaging to YES");
                 [self setHasVoiceMessaging:YES];
                 return;
             }
@@ -145,9 +147,7 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
         _hasVoiceMessaging = YES;
         NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
         [storage setBool:YES forKey:@"voice_messaging"];
-    }
-    
-    [_view.voiceSwitch setOn:_hasVoiceMessaging animated:YES];
+    }    
 }
 
 -  (void)paymentQueue:(SKPaymentQueue *)queue updatedDownloads:(NSArray *)downloads {
@@ -168,6 +168,7 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
     
     _view = [ nibViews objectAtIndex: 0];
     [view addSubview:_view];
+    [_view.voiceSwitch setOn:_hasVoiceMessaging animated:YES];
 }
 
 @end
