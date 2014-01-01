@@ -129,6 +129,7 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
         if (transaction.transactionState == SKPaymentTransactionStatePurchased) {
             DDLogInfo(@"transaction complete, setting has voice messaging to YES");
             [self setHasVoiceMessaging:YES];
+            [self setReceipt:transaction.transactionReceipt];
             return;
         }
         
@@ -136,6 +137,7 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
             if (transaction.originalTransaction.transactionState == SKPaymentTransactionStatePurchased) {
                 DDLogInfo(@"transaction restored, setting has voice messaging to YES");
                 [self setHasVoiceMessaging:YES];
+                [self setReceipt:transaction.transactionReceipt];
                 return;
             }
         }
@@ -148,6 +150,13 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
         NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
         [storage setBool:YES forKey:@"voice_messaging"];
     }    
+}
+
+-(void) setReceipt: (NSData *) receipt {
+    NSString * b64receipt = [receipt base64EncodedStringWithSeparateLines:NO];
+    DDLogInfo(@"saving app store receipt %@ in user defaults", b64receipt);
+    NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
+    [storage setObject: b64receipt forKey:@"appStoreReceipt"];
 }
 
 -  (void)paymentQueue:(SKPaymentQueue *)queue updatedDownloads:(NSArray *)downloads {
@@ -169,6 +178,18 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
     _view = [ nibViews objectAtIndex: 0];
     [view addSubview:_view];
     [_view.voiceSwitch setOn:_hasVoiceMessaging animated:YES];
+}
+
+- (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error {
+    [UIUtils showToastMessage:@"error restoring transactions" duration:2];
+}
+
+- (void)paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue *)queue {
+    DDLogInfo(@"restore complete, transactions: %d", queue.transactions.count);
+    for (SKPaymentTransaction *transaction in queue.transactions)
+    {
+        [self restoreTransaction:transaction];
+    }
 }
 
 @end

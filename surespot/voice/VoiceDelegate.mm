@@ -268,9 +268,9 @@ const NSInteger SEND_THRESHOLD = 25;
         [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView addSubview:_countdownView];
         [_countdownTextField setFrame:CGRectMake(0, 0, 44, 44)];
         
-        [view startAnimation];
+
         [_recorder record];
-        
+        [view startAnimation];        
         _countdownTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countdownTimerFired:) userInfo:nil repeats:YES];
     }
 }

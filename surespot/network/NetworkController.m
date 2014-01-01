@@ -632,8 +632,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 -(void) addPurchaseReceiptToParams: (NSMutableDictionary *) params {
-    NSString * purchaseReceipt =  [[NSData dataWithContentsOfURL:[[NSBundle mainBundle] appStoreReceiptURL] ] base64EncodedStringWithOptions:0];
-    [params setObject: purchaseReceipt forKey:@"purchaseReceipt"];
+    NSString * purchaseReceipt = nil;
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+        purchaseReceipt = [[NSUserDefaults standardUserDefaults] objectForKey:@"appStoreReceipt"];
+    } else {
+        purchaseReceipt =  [[NSData dataWithContentsOfURL:[[NSBundle mainBundle] appStoreReceiptURL] ] base64EncodedStringWithOptions:0];
+    }
+    
+    if (purchaseReceipt) {
+        [params setObject: purchaseReceipt forKey:@"purchaseReceipt"];
+    }
 }
 
 @end
