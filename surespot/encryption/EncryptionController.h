@@ -121,4 +121,5 @@ extern int const PBKDF_ROUNDS;
 +(NSData *) encodeDSAPublicKeyData: (ECDSAPublicKey *) dsaPubKey;
 +(NSData *) encodeDHPublicKeyData: (ECDHPublicKey *) dhPubKey;
 +(NSString *) md5: (NSData *) data;
++(NSString *)hashedValueForAccountName:(NSString*)userAccountName;
 @end

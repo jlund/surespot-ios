@@ -21,6 +21,8 @@
 #import "SHKConfiguration.h"
 #import "SHKGooglePlus.h"
 #import "SHKFacebook.h"
+#import <StoreKit/StoreKit.h>
+#import "PurchaseDelegate.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -87,6 +89,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _overlayView = [[AGWindowView alloc] initAndAddToWindow:_overlayWindow];
     _overlayView.supportedInterfaceOrientations = AGInterfaceOrientationMaskAll;
     
+       [[SKPaymentQueue defaultQueue] addTransactionObserver:[PurchaseDelegate sharedInstance]];
     return YES;
 }
 

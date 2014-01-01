@@ -34,6 +34,8 @@
 #import "QRInviteViewController.h"
 #import "ShareKit.h"
 #import "VoiceDelegate.h"
+#import "PurchaseDelegate.h"
+#import "PurchaseVoiceView.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -61,6 +63,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) VoiceDelegate * voiceDelegate;
 @property (nonatomic, strong) NSDate * buttonDownDate;
 @property (nonatomic, strong) NSTimer * buttonTimer;
+@property (nonatomic, strong) PurchaseVoiceView * purchaseVoiceView;
 
 @end
 
@@ -1554,6 +1557,15 @@ const Float32 voiceRecordDelay = 0.3;
         }];
     }];
     [menuItems addObject:shareItem];
+    
+    REMenuItem * purchaseVoiceItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"purchase_voice", nil) image: nil
+                                  //    [UIImage imageNamed:@"ic_lock_power_off"]
+                                                      highlightedImage:nil action:^(REMenuItem * item){
+                                                          [[PurchaseDelegate sharedInstance] showPurchaseViewInView:self.view];
+                                                          
+                                                          
+    }];
+    [menuItems addObject:purchaseVoiceItem];
     
     REMenuItem * logoutItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"logout", nil) image:[UIImage imageNamed:@"ic_lock_power_off"] highlightedImage:nil action:^(REMenuItem * item){
         [self logout];
