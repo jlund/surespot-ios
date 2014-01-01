@@ -9,6 +9,6 @@
 #import <Foundation/Foundation.h>
 
 
-@interface PurchaseVoiceView : UIView
-@property (strong, nonatomic) IBOutlet UISwitch *voiceSwitch;
+@interface PurchaseVoiceViewController : UIViewController
+-(void) setVoiceOn: (BOOL) on;
 @end

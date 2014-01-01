@@ -10,7 +10,7 @@
 #import "UIUtils.h"
 #import "DDLog.h"
 #import "NSData+Base64.h"
-#import "PurchaseVoiceView.h"
+#import "PurchaseVoiceViewController.h"
 #import "NSData+SRB64Additions.h"
 
 #ifdef DEBUG
@@ -26,7 +26,7 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
 
 @interface PurchaseDelegate()
 @property (strong, nonatomic) NSArray * products;
-@property (strong,nonatomic) PurchaseVoiceView * view;
+@property (strong,nonatomic) PurchaseVoiceViewController * viewController;
 @end
 
 @implementation PurchaseDelegate
@@ -47,7 +47,7 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
     if (self) {
         NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
         [self setHasVoiceMessaging:[storage boolForKey:@"voice_messaging"]];
-        [self validateProductIdentifiers: @[PRODUCT_ID_ONE_DOLLAR, PRODUCT_ID_VOICE_MESSAGING]];        
+        [self validateProductIdentifiers: @[PRODUCT_ID_ONE_DOLLAR, PRODUCT_ID_VOICE_MESSAGING]];
     }
     return self;
 }
@@ -149,7 +149,7 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
         _hasVoiceMessaging = YES;
         NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
         [storage setBool:YES forKey:@"voice_messaging"];
-    }    
+    }
 }
 
 -(void) setReceipt: (NSData *) receipt {
@@ -167,17 +167,14 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
     [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
 }
 
--(void) showPurchaseViewInView: (UIView *) view {
-    
-    NSArray* nibViews = [[NSBundle mainBundle] loadNibNamed:@"PurchaseVoice"
-                                                      owner:self
-                                                    options:nil];
+-(void) showPurchaseViewForController: (UIViewController *) parentController {
     
     
+    PurchaseVoiceViewController * controller = [[PurchaseVoiceViewController alloc] initWithNibName:@"PurchaseVoice" bundle:nil];
     
-    _view = [ nibViews objectAtIndex: 0];
-    [view addSubview:_view];
-    [_view.voiceSwitch setOn:_hasVoiceMessaging animated:YES];
+        
+    [controller setVoiceOn:_hasVoiceMessaging];
+    [parentController.navigationController pushViewController:controller animated:YES];
 }
 
 - (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error {

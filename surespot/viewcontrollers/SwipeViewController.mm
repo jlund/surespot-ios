@@ -1561,7 +1561,7 @@ const Float32 voiceRecordDelay = 0.3;
     REMenuItem * purchaseVoiceItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"purchase_voice", nil) image: nil
                                       //    [UIImage imageNamed:@"ic_lock_power_off"]
                                                       highlightedImage:nil action:^(REMenuItem * item){
-                                                          [[PurchaseDelegate sharedInstance] showPurchaseViewInView:self.view];
+                                                          [[PurchaseDelegate sharedInstance] showPurchaseViewForController:self];
                                                           
                                                           
                                                       }];
@@ -1956,7 +1956,7 @@ const Float32 voiceRecordDelay = 0.3;
     if (![self handleTextActionResign:NO]) {
         
         if (![[PurchaseDelegate sharedInstance] hasVoiceMessaging ]) {
-            [[PurchaseDelegate sharedInstance] showPurchaseViewInView:self.view];
+            [[PurchaseDelegate sharedInstance] showPurchaseViewForController:self];
             return;
         }
         
@@ -2012,7 +2012,7 @@ const Float32 voiceRecordDelay = 0.3;
     }
     
     if (![[PurchaseDelegate sharedInstance] hasVoiceMessaging ]) {
-        [[PurchaseDelegate sharedInstance] showPurchaseViewInView:self.view];
+        [[PurchaseDelegate sharedInstance] showPurchaseViewForController:self];
     }
     
 }

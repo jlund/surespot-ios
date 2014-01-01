@@ -44,7 +44,7 @@
 		662CA59F187348FD00684790 /* product_ids.plist in Resources */ = {isa = PBXBuildFile; fileRef = 662CA59E187348FD00684790 /* product_ids.plist */; };
 		662CA5A31873496F00684790 /* PurchaseDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 662CA5A21873496F00684790 /* PurchaseDelegate.m */; };
 		662CA5A518734B1000684790 /* PurchaseVoice.xib in Resources */ = {isa = PBXBuildFile; fileRef = 662CA5A418734B1000684790 /* PurchaseVoice.xib */; };
-		662CA5A818734E4E00684790 /* PurchaseVoiceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 662CA5A718734E4E00684790 /* PurchaseVoiceView.m */; };
+		662CA5A818734E4E00684790 /* PurchaseVoiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 662CA5A718734E4E00684790 /* PurchaseVoiceViewController.m */; };
 		662CA5AA18734E9500684790 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 662CA5A918734E9500684790 /* StoreKit.framework */; };
 		663710801813172F009D5195 /* EGOCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 6637107F1813172F009D5195 /* EGOCache.m */; };
 		6646AE0E185CADC700CBACDE /* MWCaptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6646ADD5185CADC700CBACDE /* MWCaptionView.m */; };
@@ -64,6 +64,7 @@
 		6648B1E9186CB9D9007037B1 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6648B1E7186CB9D9007037B1 /* CoreText.framework */; };
 		6648B1EB186CB9EB007037B1 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6648B1EA186CB9EB007037B1 /* AddressBook.framework */; };
 		6648B1EE186CBA81007037B1 /* SurespotSHKConfigurator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6648B1ED186CBA81007037B1 /* SurespotSHKConfigurator.m */; };
+		6652F28518749D3800E023A7 /* PayWhatYouLikeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6652F28418749D3800E023A7 /* PayWhatYouLikeView.xib */; };
 		6654441317F37A3F00F62F7F /* SwipeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6654441217F37A3F00F62F7F /* SwipeView.m */; };
 		665F4DF51831923C0083BCE7 /* RECommonFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DEC1831923C0083BCE7 /* RECommonFunctions.m */; };
 		665F4DF61831923C0083BCE7 /* REMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DEE1831923C0083BCE7 /* REMenu.m */; };
@@ -392,8 +393,8 @@
 		662CA5A11873496F00684790 /* PurchaseDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PurchaseDelegate.h; path = purchases/PurchaseDelegate.h; sourceTree = "<group>"; };
 		662CA5A21873496F00684790 /* PurchaseDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PurchaseDelegate.m; path = purchases/PurchaseDelegate.m; sourceTree = "<group>"; };
 		662CA5A418734B1000684790 /* PurchaseVoice.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PurchaseVoice.xib; path = purchases/PurchaseVoice.xib; sourceTree = "<group>"; };
-		662CA5A618734E4E00684790 /* PurchaseVoiceView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PurchaseVoiceView.h; path = purchases/PurchaseVoiceView.h; sourceTree = "<group>"; };
-		662CA5A718734E4E00684790 /* PurchaseVoiceView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PurchaseVoiceView.m; path = purchases/PurchaseVoiceView.m; sourceTree = "<group>"; };
+		662CA5A618734E4E00684790 /* PurchaseVoiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PurchaseVoiceViewController.h; path = purchases/PurchaseVoiceViewController.h; sourceTree = "<group>"; };
+		662CA5A718734E4E00684790 /* PurchaseVoiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PurchaseVoiceViewController.m; path = purchases/PurchaseVoiceViewController.m; sourceTree = "<group>"; };
 		662CA5A918734E9500684790 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		6637107E1813172F009D5195 /* EGOCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOCache.h; sourceTree = "<group>"; };
 		6637107F1813172F009D5195 /* EGOCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EGOCache.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -427,6 +428,7 @@
 		6648B1EA186CB9EB007037B1 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		6648B1EC186CBA81007037B1 /* SurespotSHKConfigurator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SurespotSHKConfigurator.h; sourceTree = "<group>"; };
 		6648B1ED186CBA81007037B1 /* SurespotSHKConfigurator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SurespotSHKConfigurator.m; sourceTree = "<group>"; };
+		6652F28418749D3800E023A7 /* PayWhatYouLikeView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PayWhatYouLikeView.xib; sourceTree = "<group>"; };
 		6654441117F37A3F00F62F7F /* SwipeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeView.h; sourceTree = "<group>"; };
 		6654441217F37A3F00F62F7F /* SwipeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SwipeView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		665F4DEB1831923C0083BCE7 /* RECommonFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RECommonFunctions.h; sourceTree = "<group>"; };
@@ -1036,8 +1038,9 @@
 				662CA5A11873496F00684790 /* PurchaseDelegate.h */,
 				662CA5A21873496F00684790 /* PurchaseDelegate.m */,
 				662CA5A418734B1000684790 /* PurchaseVoice.xib */,
-				662CA5A618734E4E00684790 /* PurchaseVoiceView.h */,
-				662CA5A718734E4E00684790 /* PurchaseVoiceView.m */,
+				662CA5A618734E4E00684790 /* PurchaseVoiceViewController.h */,
+				662CA5A718734E4E00684790 /* PurchaseVoiceViewController.m */,
+				6652F28418749D3800E023A7 /* PayWhatYouLikeView.xib */,
 			);
 			name = purchases;
 			sourceTree = "<group>";
@@ -2008,6 +2011,7 @@
 				6646AE26185CADC700CBACDE /* MWPhotoBrowser.bundle in Resources */,
 				66EBE13E1855C97100F2452D /* HomeCell.xib in Resources */,
 				662CA59F187348FD00684790 /* product_ids.plist in Resources */,
+				6652F28518749D3800E023A7 /* PayWhatYouLikeView.xib in Resources */,
 				66DAB615186CBF1C006C262F /* GooglePlus.bundle in Resources */,
 				6604A2D817626B9E0072216A /* MainStoryboard.storyboard in Resources */,
 				66D3B04F182EAB4200B37A6C /* surespot.xcassets in Resources */,
@@ -2086,7 +2090,7 @@
 				66EBE0C11855C97100F2452D /* MessageView.m in Sources */,
 				662CA5911871BB7300684790 /* SurespotNavigationController.m in Sources */,
 				6646AE2F185CB2EF00CBACDE /* EncryptionParams.m in Sources */,
-				662CA5A818734E4E00684790 /* PurchaseVoiceView.m in Sources */,
+				662CA5A818734E4E00684790 /* PurchaseVoiceViewController.m in Sources */,
 				66EBE0BC1855C97100F2452D /* ChatDataSource.mm in Sources */,
 				6646AE2C185CB08200CBACDE /* SurespotPhoto.m in Sources */,
 				66FF1001182D3D920038ECA6 /* DDLog.m in Sources */,

@@ -15,5 +15,5 @@
 @property (nonatomic, assign) BOOL hasVoiceMessaging;
 -(NSString *) getAppStoreReceipt;
 -(void) refresh;
--(void) showPurchaseViewInView: (UIView *) view;
+-(void) showPurchaseViewForController: (UIViewController *) parentController;
 @end
