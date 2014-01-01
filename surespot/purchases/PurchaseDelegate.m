@@ -92,6 +92,7 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
 }
 
 - (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions {
+    DDLogInfo(@"updatedTransactions");
     for (SKPaymentTransaction *transaction in transactions) {
         switch (transaction.transactionState) {
                 // Call the appropriate custom method.
@@ -118,14 +119,19 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
 }
 
 -(void) failedTransaction: (SKPaymentTransaction *) transaction {
-    [UIUtils showToastMessage: @"transaction failed" duration: 2];
+    DDLogWarn(@"payment failed: %@", transaction.error);
+    if (transaction.error.code != SKErrorPaymentCancelled) {
+        [UIUtils showToastMessage: transaction.error.localizedDescription duration: 2];
+    }
 }
 
 -(void) restoreTransaction: (SKPaymentTransaction *) transaction {
+    DDLogInfo(@"restoreTransaction");
     [self completeTransaction:transaction];
 }
 
 -(void) processTransaction: (SKPaymentTransaction *) transaction {
+    DDLogInfo(@"processTransaction");
     if ([transaction.payment.productIdentifier isEqualToString:(NSString *)PRODUCT_ID_VOICE_MESSAGING]) {
         if (transaction.transactionState == SKPaymentTransactionStatePurchased) {
             DDLogInfo(@"transaction complete, setting has voice messaging to YES");
@@ -181,7 +187,10 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
 }
 
 - (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error {
-    [UIUtils showToastMessage:@"error restoring transactions" duration:2];
+    DDLogWarn(@"payment failed: %@", error);
+    if (error.code != SKErrorPaymentCancelled) {
+        [UIUtils showToastMessage:error.localizedDescription duration:2];
+    }
 }
 
 - (void)paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue *)queue {
