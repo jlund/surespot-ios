@@ -13,7 +13,7 @@
 @interface PurchaseVoiceViewController()
 @property (strong, nonatomic) IBOutlet UIButton *purchaseVoiceButton;
 @property (strong, nonatomic) IBOutlet UITextView *blurbTextView;
-
+@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UISwitch *voiceSwitch;
 @property (strong, nonatomic) IBOutlet UILabel *voiceTitle;
 @property (strong, nonatomic) IBOutlet UILabel *dontAskMeAgainLabel;
@@ -37,6 +37,13 @@
     self.navigationItem.rightBarButtonItem = anotherButton;
     
     [_dontAskSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"pref_dont_ask"] animated:YES];
+    
+    _scrollView.contentSize = self.view.frame.size;
+    
+    
+    NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
+    [_voiceSwitch setOn:[storage boolForKey:@"voice_messaging"]];
+
 }
 
 
@@ -57,7 +64,7 @@
 }
 
 -(void) setVoiceOn: (BOOL) on {
-    [_voiceSwitch setOn:on];
+    [_voiceSwitch setOn:on animated:YES];
 }
 
 - (IBAction)refresh {

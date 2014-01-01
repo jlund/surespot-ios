@@ -100,4 +100,9 @@ typedef void (^HTTPFailureBlock) (AFHTTPRequestOperation *operation , NSError *e
 -(NSURLRequest *) buildPublicKeyRequestForUsername: (NSString *) username version: (NSString *) version;
 
 -(void) getShortUrl:(NSString*) longUrl callback: (CallbackBlock) callback;
+
+-(void) uploadReceipt: (NSString *) receipt
+                successBlock:(HTTPSuccessBlock) successBlock
+                failureBlock: (HTTPFailureBlock) failureBlock;
+
 @end

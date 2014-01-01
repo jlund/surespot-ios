@@ -643,5 +643,18 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [params setObject: purchaseReceipt forKey:@"purchaseReceipt"];
     }
 }
+-(void) uploadReceipt: (NSString *) receipt
+         successBlock:(HTTPSuccessBlock) successBlock
+         failureBlock: (HTTPFailureBlock) failureBlock {
+    
+    NSMutableDictionary * params = [NSMutableDictionary new];
+    [self addPurchaseReceiptToParams: params];
+                                   
+    NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"updatePurchaseTokens" parameters: params];
+    AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc] initWithRequest:request ];
+    [operation setCompletionBlockWithSuccess:successBlock failure:failureBlock];
+    [operation start];
+}
+
 
 @end

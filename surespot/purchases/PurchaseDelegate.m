@@ -12,6 +12,7 @@
 #import "NSData+Base64.h"
 #import "PurchaseVoiceViewController.h"
 #import "NSData+SRB64Additions.h"
+#import "NetworkController.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -145,11 +146,11 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
 }
 
 -(void) setHasVoiceMessaging:(BOOL)hasVoiceMessaging {
-    if (hasVoiceMessaging) {
-        _hasVoiceMessaging = YES;
-        NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
-        [storage setBool:YES forKey:@"voice_messaging"];
-    }
+    _hasVoiceMessaging = hasVoiceMessaging;
+    [_viewController setVoiceOn:hasVoiceMessaging];
+    NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
+    [storage setBool:hasVoiceMessaging forKey:@"voice_messaging"];
+    
 }
 
 -(void) setReceipt: (NSData *) receipt {
@@ -157,10 +158,16 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
     DDLogInfo(@"saving app store receipt %@ in user defaults", b64receipt);
     NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
     [storage setObject: b64receipt forKey:@"appStoreReceipt"];
+    
+    //upload to server
+    [[NetworkController sharedInstance] uploadReceipt:b64receipt successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+    } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
+        //todo tell them to login
+    }];
 }
 
 -  (void)paymentQueue:(SKPaymentQueue *)queue updatedDownloads:(NSArray *)downloads {
-    
 }
 
 -(void) refresh {
@@ -168,13 +175,9 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
 }
 
 -(void) showPurchaseViewForController: (UIViewController *) parentController {
-    
-    
-    PurchaseVoiceViewController * controller = [[PurchaseVoiceViewController alloc] initWithNibName:@"PurchaseVoice" bundle:nil];
-    
-        
-    [controller setVoiceOn:_hasVoiceMessaging];
-    [parentController.navigationController pushViewController:controller animated:YES];
+    _viewController = [[PurchaseVoiceViewController alloc] initWithNibName:@"PurchaseVoice" bundle:nil];
+    [_viewController setVoiceOn:_hasVoiceMessaging];
+    [parentController.navigationController pushViewController:_viewController animated:YES];
 }
 
 - (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error {

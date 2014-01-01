@@ -1558,8 +1558,8 @@ const Float32 voiceRecordDelay = 0.3;
     }];
     [menuItems addObject:shareItem];
     
-    REMenuItem * purchaseVoiceItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"purchase_voice", nil) image: nil
-                                      //    [UIImage imageNamed:@"ic_lock_power_off"]
+    REMenuItem * purchaseVoiceItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_purchase_voice_messaging", nil) image:
+                                        [UIImage imageNamed:@"gold_heart"]
                                                       highlightedImage:nil action:^(REMenuItem * item){
                                                           [[PurchaseDelegate sharedInstance] showPurchaseViewForController:self];
                                                           
