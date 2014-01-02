@@ -11,4 +11,5 @@
 
 @interface PurchaseVoiceViewController : UIViewController
 -(void) setVoiceOn: (BOOL) on;
+-(void) setDontAsk: (BOOL) dontAsk;
 @end

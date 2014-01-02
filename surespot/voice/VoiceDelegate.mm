@@ -103,7 +103,7 @@ const NSInteger SEND_THRESHOLD = 25;
                                              selector:@selector(applicationWillResignActive:)
                                                  name:UIApplicationWillResignActiveNotification
                                                object:nil];
-
+    
     
     
     return self;
@@ -275,15 +275,15 @@ const NSInteger SEND_THRESHOLD = 25;
         _backgroundView.opaque = NO;
         
         [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView addSubview:_backgroundView];
-
+        
         
         [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView addSubview:view];
         [((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayView addSubview:_countdownView];
         [_countdownTextField setFrame:CGRectMake(0, 0, 44, 44)];
         
-
+        
         [_recorder record];
-        [view startAnimation];        
+        [view startAnimation];
         _countdownTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countdownTimerFired:) userInfo:nil repeats:YES];
     }
 }
@@ -334,12 +334,12 @@ const NSInteger SEND_THRESHOLD = 25;
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
         [audioSession setActive:NO error:nil];
         
-
+        
         XThrowIfError(AudioOutputUnitStop(rioUnit), "couldn't stop remote i/o unit");
-
+        
         UIWindow * aWindow =((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayWindow;
         aWindow.userInteractionEnabled = NO;
-
+        
         if ([send boolValue]) {
             [self uploadVoiceUrl:_recorder.url];
         }
@@ -430,8 +430,8 @@ const NSInteger SEND_THRESHOLD = 25;
                                                                                                         if (responseObject.statusCode == 402) {
                                                                                                             message.errorStatus = 402;
                                                                                                             //disable voice
-                                                                                                            [[PurchaseDelegate sharedInstance] setHasVoiceMessaging:NO];
-                                                                                                                [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"pref_dont_ask"];
+                                                                                                            [[PurchaseDelegate sharedInstance] setHasVoiceMessaging:NO];                                                                                                           
+                                                                                                            [[NSNotificationCenter defaultCenter] postNotificationName:@"purchaseStatusChanged" object:nil];
                                                                                                         }
                                                                                                         else {
                                                                                                             message.errorStatus = 500;
@@ -618,7 +618,7 @@ static OSStatus	PerformThru(
         
         UInt32 size = sizeof(thruFormat);
         XThrowIfError(AudioUnitGetProperty(rioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 1, &thruFormat, &size), "couldn't get the remote I/O unit's output client format");
-
+        
         drawFormat.SetAUCanonical(2, false);
         drawFormat.mSampleRate = 44100;
         XThrowIfError(AudioConverterNew(&thruFormat, &drawFormat, &audioConverter), "couldn't setup AudioConverter");
@@ -699,7 +699,7 @@ static OSStatus	PerformThru(
     unitHasBeenCreated = false;
     unitIsRunning = false;
     
-    [[NSNotificationCenter defaultCenter] removeObserver:self];    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 

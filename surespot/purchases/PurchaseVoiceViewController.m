@@ -38,14 +38,14 @@
     UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"refresh" style:UIBarButtonItemStylePlain target:self action:@selector(refresh)];
     self.navigationItem.rightBarButtonItem = anotherButton;
     
-    [_dontAskSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"pref_dont_ask"] animated:NO];
+
     
     _scrollView.contentSize = self.view.frame.size;
     
     
     NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
     [_voiceSwitch setOn:[storage boolForKey:@"voice_messaging"]];
-
+    [_dontAskSwitch setOn:[storage boolForKey:@"pref_dont_ask"] animated:NO];
 }
 
 
@@ -62,12 +62,17 @@
     [_voiceSwitch setOn:on animated:YES];
 }
 
+-(void) setDontAsk:(BOOL)dontAsk {
+    [_dontAskSwitch setOn:dontAsk animated:YES];
+}
+
 - (IBAction)refresh {
     [[PurchaseDelegate sharedInstance] refresh];
 }
 
 - (IBAction)dontAskValueChanged:(id)sender {
     [[NSUserDefaults standardUserDefaults] setBool:[sender isOn]  forKey:@"pref_dont_ask"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"purchaseStatusChanged" object:nil];
 }
 
 

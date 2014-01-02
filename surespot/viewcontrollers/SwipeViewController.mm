@@ -139,6 +139,7 @@ const Float32 voiceRecordDelay = 0.3;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newMessage:) name:@"newMessage" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(invite:) name:@"invite" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(inviteAccepted:) name:@"inviteAccepted" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(purchaseStatusChanged:) name:@"purchaseStatusChanged" object:nil];
     
     _homeDataSource = [[ChatController sharedInstance] getHomeDataSource];
     
@@ -2203,6 +2204,10 @@ const Float32 voiceRecordDelay = 0.3;
     [_inviteField resignFirstResponder];
 }
 
+
+-(void) purchaseStatusChanged: (NSNotification *) notification {
+    [self updateTabChangeUI];
+}
 
 
 @end

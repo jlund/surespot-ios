@@ -137,6 +137,7 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
             DDLogInfo(@"transaction complete, setting has voice messaging to YES");
             [self setHasVoiceMessaging:YES];
             [self setReceipt:transaction.transactionReceipt];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"purchaseStatusChanged" object:nil];
             return;
         }
         
@@ -145,6 +146,7 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
                 DDLogInfo(@"transaction restored, setting has voice messaging to YES");
                 [self setHasVoiceMessaging:YES];
                 [self setReceipt:transaction.transactionReceipt];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"purchaseStatusChanged" object:nil];
                 return;
             }
         }
@@ -156,7 +158,12 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
     [_viewController setVoiceOn:hasVoiceMessaging];
     NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
     [storage setBool:hasVoiceMessaging forKey:@"voice_messaging"];
-    
+    if (!hasVoiceMessaging) {
+        [storage removeObjectForKey:@"appStoreReceipt"];
+    }
+
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"pref_dont_ask"];
+    [_viewController setDontAsk: NO];
 }
 
 -(void) setReceipt: (NSData *) receipt {
