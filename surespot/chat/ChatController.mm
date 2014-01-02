@@ -83,7 +83,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
         Reachability * reach = [Reachability reachabilityForInternetConnection];
         [reach startNotifier];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAutoinvitesNotification:) name:@"autoinvides" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAutoinvitesNotification:) name:@"autoinvites" object:nil];
     }
     
     return self;
