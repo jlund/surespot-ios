@@ -38,7 +38,7 @@
     UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"refresh" style:UIBarButtonItemStylePlain target:self action:@selector(refresh)];
     self.navigationItem.rightBarButtonItem = anotherButton;
     
-    [_dontAskSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"pref_dont_ask"] animated:YES];
+    [_dontAskSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"pref_dont_ask"] animated:NO];
     
     _scrollView.contentSize = self.view.frame.size;
     
