@@ -520,7 +520,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             return NSOrderedSame;
             
         }];
-        _messages = [NSMutableArray arrayWithArray: sortedArray];
+        if (sortedArray) {
+            _messages = [NSMutableArray arrayWithArray: sortedArray];
+        }
     }
 }
 

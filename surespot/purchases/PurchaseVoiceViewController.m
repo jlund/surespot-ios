@@ -26,7 +26,7 @@
 -(void) viewDidLoad {
     _blurbTextView.text = NSLocalizedString(@"voice_messaging_purchase_1", nil);
     
-    _blurbTextView.dataDetectorTypes = UIDataDetectorTypeLink;
+   // _blurbTextView.dataDetectorTypes = UIDataDetectorTypeLink;
     
     [_refreshButton setTitle:NSLocalizedString(@"refresh", nil)forState:UIControlStateNormal ];
     
