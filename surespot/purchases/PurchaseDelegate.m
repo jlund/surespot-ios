@@ -183,7 +183,7 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
 
 -(void) showPurchaseViewForController: (UIViewController *) parentController {
     _parentController = parentController;
-    _viewController = [[PurchaseVoiceViewController alloc] initWithNibName:@"PurchaseVoice" bundle:nil];
+    _viewController = [[PurchaseVoiceViewController alloc] initWithNibName:@"PurchaseVoiceView" bundle:nil];
     [_viewController setVoiceOn:_hasVoiceMessaging];
     
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
@@ -191,7 +191,7 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
         _popover.delegate = self;
         CGFloat x =_parentController.view.bounds.size.width;
         CGFloat y =_parentController.view.bounds.size.height;
-        [_popover setPopoverContentSize:CGSizeMake(320, 410) animated:NO];
+        [_popover setPopoverContentSize:CGSizeMake(578, 450) animated:NO];
         DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
         [_popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:parentController.view permittedArrowDirections:0 animated:YES];
     } else {

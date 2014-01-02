@@ -17,6 +17,7 @@
 @property (strong, nonatomic) IBOutlet UISwitch *voiceSwitch;
 @property (strong, nonatomic) IBOutlet UILabel *voiceTitle;
 @property (strong, nonatomic) IBOutlet UILabel *dontAskMeAgainLabel;
+@property (strong, nonatomic) IBOutlet UIButton *refreshButton;
 @property (strong, nonatomic) IBOutlet UISwitch *dontAskSwitch;
 @end
 
@@ -27,6 +28,7 @@
     
     _blurbTextView.dataDetectorTypes = UIDataDetectorTypeLink;
     
+    [_refreshButton setTitle:NSLocalizedString(@"refresh", nil)forState:UIControlStateNormal ];
     
     _voiceTitle.text = NSLocalizedString(@"voice_messaging", nil);
     [_purchaseVoiceButton setTitle:NSLocalizedString(@"voice_messaging_purchase_button", nil)forState:UIControlStateNormal ];
