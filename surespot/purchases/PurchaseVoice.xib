@@ -47,9 +47,6 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="tintColor" red="0.20000000000000001" green="0.70980392160000005" blue="0.8980392157" alpha="1" colorSpace="deviceRGB"/>
                                     <color key="onTintColor" red="0.20000000000000001" green="0.70980392160000005" blue="0.8980392157" alpha="1" colorSpace="deviceRGB"/>
-                                    <connections>
-                                        <action selector="voicePurchaseChanged:" destination="-1" eventType="valueChanged" id="ISO-eV-9A4"/>
-                                    </connections>
                                 </switch>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="voice_screenshot" id="nU1-MW-QGx">
                                     <rect key="frame" x="7" y="59" width="142" height="211"/>

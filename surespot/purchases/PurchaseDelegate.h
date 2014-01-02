@@ -13,6 +13,7 @@
 - (void) purchaseProduct: (NSInteger) productIndex;
 +(PurchaseDelegate*)sharedInstance;
 @property (nonatomic, assign) BOOL hasVoiceMessaging;
+-(void) setHasVoiceMessaging:(BOOL)hasVoiceMessaging;
 -(NSString *) getAppStoreReceipt;
 -(void) refresh;
 -(void) showPurchaseViewForController: (UIViewController *) parentController;

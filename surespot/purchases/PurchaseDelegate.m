@@ -111,10 +111,8 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
 }
 
 -(void) completeTransaction: (SKPaymentTransaction *) transaction {
-    [UIUtils showToastMessage: @"transaction complete" duration: 2];
     SKPaymentQueue *queue = [SKPaymentQueue defaultQueue];
-    [queue finishTransaction:transaction];
-    
+    [queue finishTransaction:transaction];    
     [self processTransaction:transaction];
 }
 
@@ -169,7 +167,8 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
     [[NetworkController sharedInstance] uploadReceipt:b64receipt successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
         
     } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
-        //todo tell them to login
+        DDLogInfo(@"could not validate purchase receipt on server, please login to validate");
+        [UIUtils showToastKey:@"login_to_validate" duration:2];
     }];
 }
 

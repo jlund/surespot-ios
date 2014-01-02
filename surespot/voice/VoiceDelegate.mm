@@ -22,6 +22,7 @@
 #import "SDWebImageManager.h"
 #import "FileController.h"
 #import "ChatUtils.h"
+#import "PurchaseDelegate.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -416,6 +417,9 @@ const NSInteger SEND_THRESHOLD = 25;
                                                                                                         //  [self stopProgress];
                                                                                                         if (responseObject.statusCode == 402) {
                                                                                                             message.errorStatus = 402;
+                                                                                                            //disable voice
+                                                                                                            [[PurchaseDelegate sharedInstance] setHasVoiceMessaging:NO];
+                                                                                                                [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"pref_dont_ask"];
                                                                                                         }
                                                                                                         else {
                                                                                                             message.errorStatus = 500;

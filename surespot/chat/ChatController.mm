@@ -587,7 +587,6 @@ static const int MAX_CONNECTION_RETRIES = 16;
             [cds postRefresh];
         }
     }
-    
 }
 
 

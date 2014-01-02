@@ -56,13 +56,6 @@
     [[PurchaseDelegate sharedInstance] purchaseProduct:[sender tag]];
 }
 
-- (IBAction)voicePurchaseChanged:(id)sender {
-    //can only turn it off via the switch
-    if (![sender isOn]) {
-        [[PurchaseDelegate sharedInstance] setHasVoiceMessaging:NO];
-    }
-}
-
 -(void) setVoiceOn: (BOOL) on {
     [_voiceSwitch setOn:on animated:YES];
 }

@@ -325,6 +325,7 @@
 "Share"="share link using";
 "recording_cancelled"="recording cancelled";
 "voice_messaging"="voice messaging";
+"login_to_validate"="could not validate purchase receipt, will validate on next login";
 
 
 
