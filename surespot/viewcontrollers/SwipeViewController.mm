@@ -1976,9 +1976,9 @@ const Float32 voiceRecordDelay = 0.3;
     if (!_voiceDelegate) {
         _voiceDelegate = [[VoiceDelegate alloc] initWithUsername:[[IdentityController sharedInstance] getLoggedInUser] ourVersion:[[IdentityController sharedInstance] getOurLatestVersion ]];
         
-        if ([[PurchaseDelegate sharedInstance] hasVoiceMessaging]) {
-            [_voiceDelegate prepareRecording];
-        }
+        
+        [_voiceDelegate prepareRecording];
+        
     }
 }
 
