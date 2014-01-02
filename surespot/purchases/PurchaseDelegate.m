@@ -27,7 +27,9 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
 
 @interface PurchaseDelegate()
 @property (strong, nonatomic) NSArray * products;
-@property (strong,nonatomic) PurchaseVoiceViewController * viewController;
+@property (strong, nonatomic) PurchaseVoiceViewController * viewController;
+@property (strong, nonatomic) UIPopoverController * popover;
+@property (strong, nonatomic) UIViewController * parentController;
 @end
 
 @implementation PurchaseDelegate
@@ -112,7 +114,7 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
 
 -(void) completeTransaction: (SKPaymentTransaction *) transaction {
     SKPaymentQueue *queue = [SKPaymentQueue defaultQueue];
-    [queue finishTransaction:transaction];    
+    [queue finishTransaction:transaction];
     [self processTransaction:transaction];
 }
 
@@ -180,9 +182,21 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
 }
 
 -(void) showPurchaseViewForController: (UIViewController *) parentController {
+    _parentController = parentController;
     _viewController = [[PurchaseVoiceViewController alloc] initWithNibName:@"PurchaseVoice" bundle:nil];
     [_viewController setVoiceOn:_hasVoiceMessaging];
-    [parentController.navigationController pushViewController:_viewController animated:YES];
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        _popover = [[UIPopoverController alloc] initWithContentViewController:_viewController];
+        _popover.delegate = self;
+        CGFloat x =_parentController.view.bounds.size.width;
+        CGFloat y =_parentController.view.bounds.size.height;
+        [_popover setPopoverContentSize:CGSizeMake(320, 410) animated:NO];
+        DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
+        [_popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:parentController.view permittedArrowDirections:0 animated:YES];
+    } else {
+        [parentController.navigationController pushViewController:_viewController animated:YES];
+    }
 }
 
 - (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error {
@@ -197,6 +211,24 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
     for (SKPaymentTransaction *transaction in queue.transactions)
     {
         [self restoreTransaction:transaction];
+    }
+}
+
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
+    self.popover = nil;
+    _parentController = nil;
+}
+
+- (void)orientationChanged
+{
+    // if the popover is showing, adjust its position after the re-orientation by presenting it again:
+    if (self.popover != nil)  // if the popover is showing (replace with your own test if you wish)
+    {
+        CGFloat x =_parentController.view.bounds.size.width;
+        CGFloat y =_parentController.view.bounds.size.height;
+        DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
+        
+        [self.popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:_parentController.view permittedArrowDirections:0 animated:YES];
     }
 }
 

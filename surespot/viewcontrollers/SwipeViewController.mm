@@ -409,7 +409,7 @@ const Float32 voiceRecordDelay = 0.3;
     }
     
     [_imageDelegate orientationChanged];
-    
+    [[PurchaseDelegate sharedInstance] orientationChanged];
     // if the popover is showing, adjust its position after the re-orientation by presenting it again:
     if (self.popover != nil)
     {
@@ -419,6 +419,8 @@ const Float32 voiceRecordDelay = 0.3;
         
         [self.popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:self.view permittedArrowDirections:0 animated:YES];
     }
+    
+    
     
 }
 

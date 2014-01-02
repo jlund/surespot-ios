@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <StoreKit/StoreKit.h>
 
-@interface PurchaseDelegate : NSObject<SKProductsRequestDelegate, SKPaymentTransactionObserver>
+@interface PurchaseDelegate : NSObject<SKProductsRequestDelegate, SKPaymentTransactionObserver, UIPopoverControllerDelegate>
 - (void) purchaseProduct: (NSInteger) productIndex;
 +(PurchaseDelegate*)sharedInstance;
 @property (nonatomic, assign) BOOL hasVoiceMessaging;
@@ -17,4 +17,5 @@
 -(NSString *) getAppStoreReceipt;
 -(void) refresh;
 -(void) showPurchaseViewForController: (UIViewController *) parentController;
+- (void)orientationChanged;
 @end
