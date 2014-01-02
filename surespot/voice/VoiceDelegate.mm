@@ -94,6 +94,18 @@ const NSInteger SEND_THRESHOLD = 25;
     
     [_countdownView addSubview:_countdownTextField];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationDidBecomeActive:)
+                                                 name:UIApplicationDidBecomeActiveNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationWillResignActive:)
+                                                 name:UIApplicationWillResignActiveNotification
+                                               object:nil];
+
+    
+    
     return self;
 }
 
@@ -687,6 +699,7 @@ static OSStatus	PerformThru(
     unitHasBeenCreated = false;
     unitIsRunning = false;
     
+    [[NSNotificationCenter defaultCenter] removeObserver:self];    
 }
 
 
@@ -772,6 +785,20 @@ static OSStatus	PerformThru(
     [self drawOscilloscope];
     
 }
+
+- (void)applicationDidBecomeActive:(NSNotification *)notification {
+    view.applicationResignedActive = NO;
+}
+
+- (void)applicationWillResignActive:(NSNotification *)notification {
+	//stop animation before going into background
+    [self stopRecordingSendInternal:[NSNumber numberWithBool:NO]];
+    view.applicationResignedActive = YES;
+}
+
+
+
+
 
 
 @end

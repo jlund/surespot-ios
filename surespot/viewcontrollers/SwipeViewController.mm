@@ -184,6 +184,11 @@ const Float32 voiceRecordDelay = 0.3;
     
 }
 
+-(void) dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+
 -(void) pause: (NSNotification *)  notification{
     DDLogVerbose(@"pause");
     [[ChatController sharedInstance] pause];
@@ -2032,6 +2037,7 @@ const Float32 voiceRecordDelay = 0.3;
         else {
             if (![self handleTextActionResign:NO]) {
                 if ([[PurchaseDelegate sharedInstance  ] hasVoiceMessaging]) {
+                    [self ensureVoiceDelegate];
                     [_voiceDelegate startRecordingUsername: afriend.name];
                 }
                 else {
