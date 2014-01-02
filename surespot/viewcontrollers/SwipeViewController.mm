@@ -1571,11 +1571,24 @@ const Float32 voiceRecordDelay = 0.3;
     }];
     [menuItems addObject:shareItem];
     
+    
+    if (![[PurchaseDelegate sharedInstance] hasVoiceMessaging]) {
+        REMenuItem * purchaseVoiceItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"pay_what_you_like", nil) image:
+                                          [UIImage imageNamed:@"heart"]
+                                                          highlightedImage:nil action:^(REMenuItem * item){
+                                                              [[PurchaseDelegate sharedInstance] showPwylViewForController:self];
+                                                              
+                                                              
+                                                          }];
+        [menuItems addObject:purchaseVoiceItem];
+    }
+
+    
     if (![[PurchaseDelegate sharedInstance] hasVoiceMessaging]) {
         REMenuItem * purchaseVoiceItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_purchase_voice_messaging", nil) image:
                                           [UIImage imageNamed:@"gold_heart"]
                                                           highlightedImage:nil action:^(REMenuItem * item){
-                                                              [[PurchaseDelegate sharedInstance] showPurchaseViewForController:self];
+                                                              [[PurchaseDelegate sharedInstance] showPurchaseVoiceViewForController:self];
                                                               
                                                               
                                                           }];
@@ -1777,7 +1790,7 @@ const Float32 voiceRecordDelay = 0.3;
                 REMenuItem * purchaseVoiceItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_purchase_voice_messaging", nil) image:
                                                   [UIImage imageNamed:@"gold_heart"]
                                                                   highlightedImage:nil action:^(REMenuItem * item){
-                                                                      [[PurchaseDelegate sharedInstance] showPurchaseViewForController:self];
+                                                                      [[PurchaseDelegate sharedInstance] showPurchaseVoiceViewForController:self];
                                                                       
                                                                       
                                                                   }];
@@ -1986,7 +1999,7 @@ const Float32 voiceRecordDelay = 0.3;
                 
             }
             else {
-                [[PurchaseDelegate sharedInstance] showPurchaseViewForController:self];
+                [[PurchaseDelegate sharedInstance] showPurchaseVoiceViewForController:self];
             }
         }
     }
@@ -2049,7 +2062,7 @@ const Float32 voiceRecordDelay = 0.3;
                         [self closeTab];
                     }
                     else {
-                        [[PurchaseDelegate sharedInstance] showPurchaseViewForController:self];
+                        [[PurchaseDelegate sharedInstance] showPurchaseVoiceViewForController:self];
                     }
                 }
                 

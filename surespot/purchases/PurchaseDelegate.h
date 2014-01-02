@@ -16,6 +16,7 @@
 -(void) setHasVoiceMessaging:(BOOL)hasVoiceMessaging;
 -(NSString *) getAppStoreReceipt;
 -(void) refresh;
--(void) showPurchaseViewForController: (UIViewController *) parentController;
+-(void) showPwylViewForController: (UIViewController *) parentController;
 - (void)orientationChanged;
+-(void) showPurchaseVoiceViewForController: (UIViewController *) parentController;
 @end
