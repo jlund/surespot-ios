@@ -1559,7 +1559,7 @@ const Float32 voiceRecordDelay = 0.3;
     [menuItems addObject:shareItem];
     
     REMenuItem * purchaseVoiceItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_purchase_voice_messaging", nil) image:
-                                        [UIImage imageNamed:@"gold_heart"]
+                                      [UIImage imageNamed:@"gold_heart"]
                                                       highlightedImage:nil action:^(REMenuItem * item){
                                                           [[PurchaseDelegate sharedInstance] showPurchaseViewForController:self];
                                                           
@@ -1952,42 +1952,38 @@ const Float32 voiceRecordDelay = 0.3;
     [_buttonTimer invalidate];
     
     NSTimeInterval interval = -[_buttonDownDate timeIntervalSinceNow];
+    Friend * afriend = [_homeDataSource getFriendByName:_homeDataSource.currentChat];
     
-    if (![self handleTextActionResign:NO]) {
+    if (interval < voiceRecordDelay) {
         
-        if (![[PurchaseDelegate sharedInstance] hasVoiceMessaging ]) {
-            [[PurchaseDelegate sharedInstance] showPurchaseViewForController:self];
-            return;
-        }
-        
-        
-        if (interval < voiceRecordDelay) {
-            [self resignAllResponders];
-            [self scrollHome];
-            
-        }
-        else {
-            if ([_voiceDelegate isRecording]) {
-                BOOL send = interval > (voiceRecordDelay * 2);
+        if (![self handleTextActionResign:NO]) {
+            BOOL dontAsk = [[NSUserDefaults standardUserDefaults] boolForKey:@"pref_dont_ask"];
+            if (dontAsk || [[PurchaseDelegate sharedInstance] hasVoiceMessaging] || afriend.isDeleted) {
+                [self resignAllResponders];
+                [self scrollHome];
                 
-                [_voiceDelegate stopRecordingSend: [NSNumber numberWithBool:send]];
-                if (!send) {
-                    [UIUtils showToastKey:@"recording_cancelled"];
-                }
-                [self updateTabChangeUI];
+            }
+            else {
+                [[PurchaseDelegate sharedInstance] showPurchaseViewForController:self];
             }
         }
     }
-    
-    
+    else {
+        if ([_voiceDelegate isRecording]) {
+            [_voiceDelegate stopRecordingSend:[NSNumber numberWithBool:YES]];
+        }
+    }
 }
+
+
+
 - (IBAction)buttonTouchDown:(id)sender {
     _buttonDownDate = [NSDate date];
     DDLogInfo(@"touch down at %@", _buttonDownDate);
     
     //kick off timer
     [_buttonTimer invalidate];
-    _buttonTimer = [NSTimer scheduledTimerWithTimeInterval:voiceRecordDelay target:self selector:@selector(buttonTimerFire:) userInfo:[[ChatController sharedInstance] getCurrentChat] repeats:NO];
+    _buttonTimer = [NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(buttonTimerFire:) userInfo:[[ChatController sharedInstance] getCurrentChat] repeats:NO];
     
 }
 
@@ -2010,25 +2006,65 @@ const Float32 voiceRecordDelay = 0.3;
         }
         
     }
-    
-    if (![[PurchaseDelegate sharedInstance] hasVoiceMessaging ]) {
-        [[PurchaseDelegate sharedInstance] showPurchaseViewForController:self];
-    }
-    
 }
 
 -(void) buttonTimerFire:(NSTimer *) timer {
     
+    Friend * afriend = [_homeDataSource getFriendByName:_homeDataSource.currentChat];
     
-    if (![self handleTextActionResign:NO]) {
-        
-        NSString * currentChat = timer.userInfo;
-        if (currentChat) {
-            [_theButton setImage:[UIImage imageNamed:@"ic_btn_speak_now"] forState:UIControlStateNormal];
-            [_voiceDelegate startRecordingUsername: currentChat];
+    if (afriend) {
+        if (afriend.isDeleted) {
+            [self closeTab];
+        }
+        else {
+            
+            if (![self handleTextActionResign:NO]) {
+                if ([[PurchaseDelegate sharedInstance  ] hasVoiceMessaging]) {
+                    [_theButton setImage:[UIImage imageNamed:@"ic_btn_speak_now"] forState:UIControlStateNormal];
+                    [_voiceDelegate startRecordingUsername: afriend.name];
+                }
+                else {
+                    BOOL dontAsk = [[NSUserDefaults standardUserDefaults] boolForKey:@"pref_dont_ask"];
+                    if (dontAsk) {
+                        [self closeTab];
+                    }
+                    else {
+                        [[PurchaseDelegate sharedInstance] showPurchaseViewForController:self];
+                    }
+                }
+                
+            }
         }
     }
 }
+
+//-(void) buttonTimerFire:(NSTimer *) timer {
+//    Friend * afriend = [_homeDataSource getFriendByName:_homeDataSource.currentChat];
+//    if (afriend) {
+//        if (afriend.isDeleted) {
+//            [self closeTab];
+//        }
+//        else {
+//            if (![self handleTextActionResign:NO]) {
+//                if ([[PurchaseDelegate sharedInstance] hasVoiceMessaging]) {
+//                    [_theButton setImage:[UIImage imageNamed:@"ic_btn_speak_now"] forState:UIControlStateNormal];
+//                    [_voiceDelegate startRecordingUsername: _homeDataSource.currentChat];
+//                }
+//                else {
+//                    BOOL dontAsk = [[NSUserDefaults standardUserDefaults] boolForKey:@"pref_dont_ask"];
+//                    if (dontAsk) {
+//                        [self closeTab];
+//                    }
+//                    else {
+//
+//                        [[PurchaseDelegate sharedInstance] showPurchaseViewForController:self];
+//
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
 
 - (void) backPressed {
     [self scrollHome];
