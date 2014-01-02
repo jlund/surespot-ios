@@ -1359,7 +1359,6 @@ const Float32 voiceRecordDelay = 0.3;
 -(void) updateTabChangeUI {
     if (!_homeDataSource.currentChat) {
         [_theButton setImage:[UIImage imageNamed:@"ic_menu_invite"] forState:UIControlStateNormal];
-        // [_theButton setImage:[UIImage imageNamed:@"ic_menu_invite"] forState:UIControlStateHighlighted];
         _textField.hidden = YES;
         _inviteField.hidden = NO;
     }
@@ -1368,18 +1367,24 @@ const Float32 voiceRecordDelay = 0.3;
         Friend *afriend = [_homeDataSource getFriendByName:_homeDataSource.currentChat];
         if (afriend.isDeleted) {
             [_theButton setImage:[UIImage imageNamed:@"ic_menu_home"] forState:UIControlStateNormal];
-            //  [_theButton setImage:[UIImage imageNamed:@"ic_menu_home"] forState:UIControlStateHighlighted];
             _textField.hidden = YES;
         }
         else {
             _textField.hidden = NO;
             if ([_textField.text length] > 0) {
                 [_theButton setImage:[UIImage imageNamed:@"ic_menu_send"] forState:UIControlStateNormal];
-                //   [_theButton setImage:[UIImage imageNamed:@"ic_menu_send"] forState:UIControlStateHighlighted];
             }
             else {
-                //                [_theButton setImage:[UIImage imageNamed:@"ic_menu_home"] forState:UIControlStateNormal];
-                [_theButton setImage:[UIImage imageNamed:@"ic_btn_speak_now"] forState:UIControlStateNormal];
+                
+                BOOL dontAsk = [[NSUserDefaults standardUserDefaults] boolForKey:@"pref_dont_ask"];
+                if (dontAsk) {
+                    
+                    [_theButton setImage:[UIImage imageNamed:@"ic_menu_home"] forState:UIControlStateNormal];
+                }
+                else {
+                    [_theButton setImage:[UIImage imageNamed:@"ic_btn_speak_now"] forState:UIControlStateNormal];
+                }
+                
             }
         }
     }
@@ -1558,14 +1563,16 @@ const Float32 voiceRecordDelay = 0.3;
     }];
     [menuItems addObject:shareItem];
     
-    REMenuItem * purchaseVoiceItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_purchase_voice_messaging", nil) image:
-                                      [UIImage imageNamed:@"gold_heart"]
-                                                      highlightedImage:nil action:^(REMenuItem * item){
-                                                          [[PurchaseDelegate sharedInstance] showPurchaseViewForController:self];
-                                                          
-                                                          
-                                                      }];
-    [menuItems addObject:purchaseVoiceItem];
+    if (![[PurchaseDelegate sharedInstance] hasVoiceMessaging]) {
+        REMenuItem * purchaseVoiceItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_purchase_voice_messaging", nil) image:
+                                          [UIImage imageNamed:@"gold_heart"]
+                                                          highlightedImage:nil action:^(REMenuItem * item){
+                                                              [[PurchaseDelegate sharedInstance] showPurchaseViewForController:self];
+                                                              
+                                                              
+                                                          }];
+        [menuItems addObject:purchaseVoiceItem];
+    }
     
     REMenuItem * logoutItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"logout", nil) image:[UIImage imageNamed:@"ic_lock_power_off"] highlightedImage:nil action:^(REMenuItem * item){
         [self logout];
@@ -1597,6 +1604,7 @@ const Float32 voiceRecordDelay = 0.3;
             [_friendView deselectRowAtIndexPath:[_friendView indexPathForSelectedRow] animated:YES];
         }
         _swipeView.userInteractionEnabled = YES;
+        [self updateTabChangeUI];
     }];
 }
 
@@ -1756,6 +1764,18 @@ const Float32 voiceRecordDelay = 0.3;
     
     else {
         if ([message.mimeType isEqualToString:MIME_TYPE_M4A]) {
+            
+            if (![[PurchaseDelegate sharedInstance] hasVoiceMessaging]) {
+                REMenuItem * purchaseVoiceItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_purchase_voice_messaging", nil) image:
+                                                  [UIImage imageNamed:@"gold_heart"]
+                                                                  highlightedImage:nil action:^(REMenuItem * item){
+                                                                      [[PurchaseDelegate sharedInstance] showPurchaseViewForController:self];
+                                                                      
+                                                                      
+                                                                  }];
+                [menuItems addObject:purchaseVoiceItem];
+            }
+            
             if (message.errorStatus > 0 && ours) {
                 UIImage * image = nil;
                 NSString * title = nil;
@@ -1779,18 +1799,12 @@ const Float32 voiceRecordDelay = 0.3;
         
         
         [self deleteMessage: message];
-        
     }];
     
     [menuItems addObject:deleteItem];
-    
-    
     return [self createMenu: menuItems];
     
 }
-
-
-
 
 -(void)tableLongPress:(UILongPressGestureRecognizer *)gestureRecognizer
 {
@@ -2001,7 +2015,6 @@ const Float32 voiceRecordDelay = 0.3;
             [_voiceDelegate stopRecordingSend: [NSNumber numberWithBool:NO]];
             [UIUtils showToastKey:@"recording_cancelled"];
             [self updateTabChangeUI];
-            //     [_theButton setImage:[UIImage imageNamed:@"ic_menu_home"] forState:UIControlStateNormal];
             return;
         }
         
@@ -2017,10 +2030,8 @@ const Float32 voiceRecordDelay = 0.3;
             [self closeTab];
         }
         else {
-            
             if (![self handleTextActionResign:NO]) {
                 if ([[PurchaseDelegate sharedInstance  ] hasVoiceMessaging]) {
-                    [_theButton setImage:[UIImage imageNamed:@"ic_btn_speak_now"] forState:UIControlStateNormal];
                     [_voiceDelegate startRecordingUsername: afriend.name];
                 }
                 else {
@@ -2037,34 +2048,6 @@ const Float32 voiceRecordDelay = 0.3;
         }
     }
 }
-
-//-(void) buttonTimerFire:(NSTimer *) timer {
-//    Friend * afriend = [_homeDataSource getFriendByName:_homeDataSource.currentChat];
-//    if (afriend) {
-//        if (afriend.isDeleted) {
-//            [self closeTab];
-//        }
-//        else {
-//            if (![self handleTextActionResign:NO]) {
-//                if ([[PurchaseDelegate sharedInstance] hasVoiceMessaging]) {
-//                    [_theButton setImage:[UIImage imageNamed:@"ic_btn_speak_now"] forState:UIControlStateNormal];
-//                    [_voiceDelegate startRecordingUsername: _homeDataSource.currentChat];
-//                }
-//                else {
-//                    BOOL dontAsk = [[NSUserDefaults standardUserDefaults] boolForKey:@"pref_dont_ask"];
-//                    if (dontAsk) {
-//                        [self closeTab];
-//                    }
-//                    else {
-//
-//                        [[PurchaseDelegate sharedInstance] showPurchaseViewForController:self];
-//
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
 
 - (void) backPressed {
     [self scrollHome];
