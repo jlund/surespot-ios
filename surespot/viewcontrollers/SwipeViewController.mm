@@ -1582,7 +1582,7 @@ const Float32 voiceRecordDelay = 0.3;
                                                           }];
         [menuItems addObject:purchaseVoiceItem];
     }
-
+    
     
     if (![[PurchaseDelegate sharedInstance] hasVoiceMessaging]) {
         REMenuItem * purchaseVoiceItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_purchase_voice_messaging", nil) image:
@@ -1972,10 +1972,11 @@ const Float32 voiceRecordDelay = 0.3;
 }
 
 -(void) ensureVoiceDelegate {
-    if ([[PurchaseDelegate sharedInstance] hasVoiceMessaging]) {
-        if (!_voiceDelegate) {
-            _voiceDelegate = [[VoiceDelegate alloc] initWithUsername:[[IdentityController sharedInstance] getLoggedInUser] ourVersion:[[IdentityController sharedInstance] getOurLatestVersion ]];
-            
+    
+    if (!_voiceDelegate) {
+        _voiceDelegate = [[VoiceDelegate alloc] initWithUsername:[[IdentityController sharedInstance] getLoggedInUser] ourVersion:[[IdentityController sharedInstance] getOurLatestVersion ]];
+        
+        if ([[PurchaseDelegate sharedInstance] hasVoiceMessaging]) {
             [_voiceDelegate prepareRecording];
         }
     }
