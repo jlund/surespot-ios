@@ -312,7 +312,12 @@
 "voice_help_4"="New voice messages will play automatically for the open chat tab.";
 "close"="close";
 "no_audio_detected"="no audio detected - not sending voice message";
+//EFF will be linked to https://www.eff.org/issues/privacy
+"pwyl_text"="Surespot is ad and data mining free.
 
+Servers and storage cost money; please buy lots of surecoin to ensure that we do not have to charge for surespot.
+
+We will donate a percentage to the EFF that they may continue to fight for all of our electronic freedoms.";
 
 "loading_earlier_messages_failed"="loading earlier messages failed";
 "all_messages_loaded"="all messages loaded";
@@ -326,8 +331,7 @@
 "recording_cancelled"="recording cancelled";
 "voice_messaging"="voice messaging";
 "login_to_validate"="could not validate purchase receipt, will validate on next login";
-
-
+"surecoin_purchase_complete"="Thank you for buying surecoin!";
 
 "welcome_to_surespot"="Welcome to surespot! Data sent using this app is encrypted with symmetric-key encryption (256 bit AES-GCM) using keys created with 521 bit ECDH shared secret derivation.\n\nNo friends...yet. Invite surespot users by entering their username below.";
 
@@ -335,7 +339,7 @@
 /*"welcome_to_surespot"="<![CDATA["Welcome to surespot! Data sent using this app is <a href="https://en.wikipedia.org/wiki/End-to-end_encryption"="end-to-end</a> encrypted with <a href="https://en.wikipedia.org/wiki/Symmetric-key_algorithm"="symmetric-key</a> encryption (<a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard"="256 bit AES-GCM</a>) using keys created with 521 bit <a href="https://en.wikipedia.org/wiki/Elliptic_curve_Diffie-Hellman"="ECDH shared secret derivation</a>."]]>"*/
 /*"help_backup_what"="<![CDATA["This will export a copy of the selected identity encrypted with <a href="http://www.eetimes.com/design/embedded-internet-design/4372428/How-secure-is-AES-against-brute-force-attacks-"="256 bit AES-GCM</a> with a key derived from your password through a <a href="https://en.wikipedia.org/wiki/PBKDF2"="PBKDF</a> (Password Based Key Derivation Function)"]]>";*/
 /*"help_backup_drive1"="<![CDATA["If you elect to backup your identity on Google Drive you will be storing a copy of your <a href="https://en.wikipedia.org/wiki/Public-key_cryptography"="private keys</a> on Google Drive servers. Should a third party somehow gain access to the Google Drive servers and attempt to decrypt your identity file by <a href="https://en.wikipedia.org/wiki/Brute-force_attack"="brute force attack</a>, be aware that the <a href="https://en.wikipedia.org/wiki/Password_strength"="strength</a> of your password will ultimately determine their success."]]>";*/
-/*"pwyl_text"="<![CDATA["Surespot is ad and data mining free.<br><br>Servers and storage cost money; your donations ensure that we do not have to charge for surespot.<br><br>We will donate a percentage to the <a href="https://www.eff.org/issues/privacy"="EFF</a> that they may continue to fight for all of our electronic freedoms."]]>";*/
+
 /*"about_about"="<![CDATA["surespot - a 2fours production"]]>";
  /*"about_website"="<![CDATA["Please visit the surespot website at <a href="https://www.surespot.me"="https://www.surespot.me</a> for more information, including the <a href="https://www.surespot.me/documents/surespot_terms_of_service.html"="terms of service</a>, <a href="https://www.surespot.me/documents/surespot_privacy_policy.html"="privacy policy</a>, and <a href="https://www.surespot.me/documents/threat.html"="data and threat analysis</a>."]]>";
  /*"about_opensource"="<![CDATA["Surespot is 100% open source and welcomes your participation - view the source code on github at <a href="https://github.com/surespot"="https://github.com/surespot</a>."]]>";

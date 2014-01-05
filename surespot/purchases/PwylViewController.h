@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TTTAttributedLabel.h"
 
-@interface PwylViewController : UIViewController
+@interface PwylViewController : UIViewController<TTTAttributedLabelDelegate>
 
 @end

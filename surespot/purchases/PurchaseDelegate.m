@@ -22,8 +22,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
 
 
-static const NSString * PRODUCT_ID_VOICE_MESSAGING = @"voice_messaging";
-static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
+
+NSString * const PRODUCT_ID_PWYL_1 = @"pwyl_1";
+//static const NSString * PRODUCT_ID_PWYL_2 = @"pwyl_2";
+//static const NSString * PRODUCT_ID_PWYL_3 = @"pwyl_3";
+//static const NSString * PRODUCT_ID_PWYL_4 = @"pwyl_4";
+//static const NSString * PRODUCT_ID_PWYL_5 = @"pwyl_5";
+NSString * const PRODUCT_ID_PWYL_10 = @"pwyl_10";
+//static const NSString * PRODUCT_ID_PWYL_20 = @"pwyl_20";
+//static const NSString * PRODUCT_ID_PWYL_50 = @"pwyl_50";
+//static const NSString * PRODUCT_ID_PWYL_100 = @"pwyl_100";
+NSString *  const PRODUCT_ID_VOICE_MESSAGING = @"voice_messaging";
 
 
 @interface PurchaseDelegate()
@@ -50,9 +59,11 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
 -(id) init {
     self = [super init];
     if (self) {
+        
+        
         NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
         [self setHasVoiceMessaging:[storage boolForKey:@"voice_messaging"]];
-        [self validateProductIdentifiers: @[PRODUCT_ID_ONE_DOLLAR, PRODUCT_ID_VOICE_MESSAGING]];
+        [self validateProductIdentifiers: @[PRODUCT_ID_PWYL_1, PRODUCT_ID_PWYL_10, PRODUCT_ID_VOICE_MESSAGING]];
     }
     return self;
 }
@@ -77,22 +88,18 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
     DDLogInfo(@"productsRequest %@", request);
     self.products = response.products;
     
-    for (NSString *invalidIdentifier in response.invalidProductIdentifiers) {
-        // Handle any invalid product identifiers.
-    }
-    
     //hide/show dynamically
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"productsLoaded" object:nil];
 }
 
-- (void) purchaseProduct: (NSInteger) productIndex {
-    
-    SKProduct *product = _products[productIndex];
-    
+
+
+- (void) purchaseProductId: (NSString *) productId quantity: (NSInteger) quantity {        
+    SKProduct *product = [self getProductForId: productId];
     SKMutablePayment *payment = [SKMutablePayment paymentWithProduct:product];
-    payment.quantity = 1;
+    payment.quantity = quantity;
     
     [[SKPaymentQueue defaultQueue] addPayment:payment];
-    
 }
 
 - (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions {
@@ -134,7 +141,7 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
 
 -(void) processTransaction: (SKPaymentTransaction *) transaction {
     DDLogInfo(@"processTransaction");
-    if ([transaction.payment.productIdentifier isEqualToString:(NSString *)PRODUCT_ID_VOICE_MESSAGING]) {
+    if ([transaction.payment.productIdentifier isEqualToString:PRODUCT_ID_VOICE_MESSAGING]) {
         if (transaction.transactionState == SKPaymentTransactionStatePurchased) {
             DDLogInfo(@"transaction complete, setting has voice messaging to YES");
             [self setHasVoiceMessaging:YES];
@@ -146,6 +153,7 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
         if (transaction.transactionState == SKPaymentTransactionStateRestored) {
             if (transaction.originalTransaction.transactionState == SKPaymentTransactionStatePurchased) {
                 DDLogInfo(@"transaction restored, setting has voice messaging to YES");
+                
                 [self setHasVoiceMessaging:YES];
                 [self setReceipt:transaction.transactionReceipt];
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"purchaseStatusChanged" object:nil];
@@ -153,6 +161,16 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
             }
         }
     }
+    
+    if ([transaction.payment.productIdentifier isEqualToString:PRODUCT_ID_PWYL_1] || [transaction.payment.productIdentifier isEqualToString:PRODUCT_ID_PWYL_10]  ) {
+        if (transaction.transactionState == SKPaymentTransactionStatePurchased) {
+            DDLogInfo(@"transaction complete, surecoin purchased");
+            [UIUtils showToastKey:@"surecoin_purchase_complete" duration:2];
+            return;
+        }
+    }
+    
+
 }
 
 -(void) setHasVoiceMessaging:(BOOL)hasVoiceMessaging {
@@ -163,7 +181,7 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
     if (!hasVoiceMessaging) {
         [storage removeObjectForKey:@"appStoreReceipt"];
     }
-
+    
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"pref_dont_ask"];
     [_viewController setDontAsk: NO];
 }
@@ -212,7 +230,7 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
 -(void) showPwylViewForController: (UIViewController *) parentController {
     _parentController = parentController;
     _pwylViewController = [[PwylViewController alloc] initWithNibName:@"PayWhatYouLikeView" bundle:nil];
-
+    
     
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         _popover = [[UIPopoverController alloc] initWithContentViewController:_pwylViewController];
@@ -261,6 +279,31 @@ static const NSString * PRODUCT_ID_ONE_DOLLAR = @"pwyl_1";
         
         [self.popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:_parentController.view permittedArrowDirections:0 animated:YES];
     }
+}
+
+-(SKProduct *) getProductForId: (NSString *) productId {
+    for (SKProduct *product in _products) {
+        if ([product.productIdentifier isEqualToString:productId]) {
+            return product;
+        }
+    }
+    return nil;
+}
+
+
+-(NSString *) formatPriceForProductId: (NSString *) productId {
+    SKProduct * product = [self getProductForId:productId];
+    
+    if (product) {
+        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+        [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
+        [numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+        [numberFormatter setLocale:product.priceLocale];
+        NSString *formattedPrice = [numberFormatter stringFromNumber:product.price];
+        return formattedPrice;
+    }
+    
+    return @"n/a";
 }
 
 @end

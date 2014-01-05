@@ -35,7 +35,7 @@
     _dontAskMeAgainLabel.text = NSLocalizedString(@"voice_message_suppress_purchase_ask", nil);
     [self.navigationItem setTitle:NSLocalizedString(@"menu_purchase_voice_messaging", nil)];
     self.navigationController.navigationBar.translucent = NO;
-    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"refresh" style:UIBarButtonItemStylePlain target:self action:@selector(refresh)];
+    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"refresh",nil) style:UIBarButtonItemStylePlain target:self action:@selector(refresh)];
     self.navigationItem.rightBarButtonItem = anotherButton;
     
 
@@ -55,7 +55,7 @@
 
 
 - (IBAction)purchase:(id)sender {
-    [[PurchaseDelegate sharedInstance] purchaseProduct:[sender tag]];
+    [[PurchaseDelegate sharedInstance] purchaseProductId:PRODUCT_ID_VOICE_MESSAGING quantity:1];
 }
 
 -(void) setVoiceOn: (BOOL) on {
