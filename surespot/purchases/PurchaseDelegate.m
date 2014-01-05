@@ -237,7 +237,7 @@ NSString *  const PRODUCT_ID_VOICE_MESSAGING = @"voice_messaging";
         _popover.delegate = self;
         CGFloat x =_parentController.view.bounds.size.width;
         CGFloat y =_parentController.view.bounds.size.height;
-        [_popover setPopoverContentSize:CGSizeMake(578, 450) animated:NO];
+        [_popover setPopoverContentSize:CGSizeMake(320, 420) animated:NO];
         DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
         [_popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:parentController.view permittedArrowDirections:0 animated:YES];
     } else {

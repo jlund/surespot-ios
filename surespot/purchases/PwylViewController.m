@@ -19,15 +19,6 @@
 
 @implementation PwylViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 -(void) viewDidLoad {
     _l1.delegate = self;
     _l1.text = NSLocalizedString(@"pwyl_text", nil);

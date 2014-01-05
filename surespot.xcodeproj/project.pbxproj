@@ -63,7 +63,7 @@
 		6648B1E9186CB9D9007037B1 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6648B1E7186CB9D9007037B1 /* CoreText.framework */; };
 		6648B1EB186CB9EB007037B1 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6648B1EA186CB9EB007037B1 /* AddressBook.framework */; };
 		6648B1EE186CBA81007037B1 /* SurespotSHKConfigurator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6648B1ED186CBA81007037B1 /* SurespotSHKConfigurator.m */; };
-		6652F28518749D3800E023A7 /* PayWhatYouLikeView~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6652F28418749D3800E023A7 /* PayWhatYouLikeView~iphone.xib */; };
+		6652F28518749D3800E023A7 /* PayWhatYouLikeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6652F28418749D3800E023A7 /* PayWhatYouLikeView.xib */; };
 		6652F2A41875CFF300E023A7 /* PurchaseVoiceView~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6652F2A21875CFF300E023A7 /* PurchaseVoiceView~iphone.xib */; };
 		6652F2A51875CFF300E023A7 /* PurchaseVoiceView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6652F2A31875CFF300E023A7 /* PurchaseVoiceView~ipad.xib */; };
 		6652F2AA1875F16D00E023A7 /* PwylViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6652F2A91875F16D00E023A7 /* PwylViewController.m */; };
@@ -430,7 +430,7 @@
 		6648B1EA186CB9EB007037B1 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		6648B1EC186CBA81007037B1 /* SurespotSHKConfigurator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SurespotSHKConfigurator.h; sourceTree = "<group>"; };
 		6648B1ED186CBA81007037B1 /* SurespotSHKConfigurator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SurespotSHKConfigurator.m; sourceTree = "<group>"; };
-		6652F28418749D3800E023A7 /* PayWhatYouLikeView~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "PayWhatYouLikeView~iphone.xib"; sourceTree = "<group>"; };
+		6652F28418749D3800E023A7 /* PayWhatYouLikeView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PayWhatYouLikeView.xib; sourceTree = "<group>"; };
 		6652F2A21875CFF300E023A7 /* PurchaseVoiceView~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "PurchaseVoiceView~iphone.xib"; path = "purchases/PurchaseVoiceView~iphone.xib"; sourceTree = "<group>"; };
 		6652F2A31875CFF300E023A7 /* PurchaseVoiceView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "PurchaseVoiceView~ipad.xib"; path = "purchases/PurchaseVoiceView~ipad.xib"; sourceTree = "<group>"; };
 		6652F2A81875F16D00E023A7 /* PwylViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PwylViewController.h; path = purchases/PwylViewController.h; sourceTree = "<group>"; };
@@ -1049,7 +1049,7 @@
 				662CA5A21873496F00684790 /* PurchaseDelegate.m */,
 				662CA5A618734E4E00684790 /* PurchaseVoiceViewController.h */,
 				662CA5A718734E4E00684790 /* PurchaseVoiceViewController.m */,
-				6652F28418749D3800E023A7 /* PayWhatYouLikeView~iphone.xib */,
+				6652F28418749D3800E023A7 /* PayWhatYouLikeView.xib */,
 				6652F2A81875F16D00E023A7 /* PwylViewController.h */,
 				6652F2A91875F16D00E023A7 /* PwylViewController.m */,
 			);
@@ -2035,7 +2035,7 @@
 				66EBE13E1855C97100F2452D /* HomeCell.xib in Resources */,
 				662CA59F187348FD00684790 /* product_ids.plist in Resources */,
 				6652F2A51875CFF300E023A7 /* PurchaseVoiceView~ipad.xib in Resources */,
-				6652F28518749D3800E023A7 /* PayWhatYouLikeView~iphone.xib in Resources */,
+				6652F28518749D3800E023A7 /* PayWhatYouLikeView.xib in Resources */,
 				66DAB615186CBF1C006C262F /* GooglePlus.bundle in Resources */,
 				6604A2D817626B9E0072216A /* MainStoryboard.storyboard in Resources */,
 				66D3B04F182EAB4200B37A6C /* surespot.xcassets in Resources */,
