@@ -954,7 +954,8 @@ const Float32 voiceRecordDelay = 0.3;
                         cell.messageSentView.foregroundColor = [UIColor lightGrayColor];
                     }
                     
-                    if (!message.plainData) {
+                    if ((!message.plainData && [message.mimeType isEqualToString:MIME_TYPE_TEXT]) ||
+                        (([message.mimeType isEqualToString:MIME_TYPE_M4A] || [message.mimeType isEqualToString:MIME_TYPE_IMAGE]) && ![[SDWebImageManager sharedManager] isKeyCached: message.data])) {
                         DDLogVerbose(@"setting message loading");
                         cell.messageStatusLabel.text = NSLocalizedString(@"message_loading_and_decrypting",nil);
                     }

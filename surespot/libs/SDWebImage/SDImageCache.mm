@@ -212,6 +212,14 @@ BOOL ImageDataHasPNGPreffix(NSData *data)
     }
 }
 
+-(BOOL) isKeyCached: (NSString *) key {
+    if ([self imageFromMemoryCacheForKey:key]) {
+        return YES;
+    }
+    
+    NSString *defaultPath = [self defaultCachePathForKey:key];
+    return [[NSFileManager defaultManager] fileExistsAtPath:defaultPath];
+}
 
 - (BOOL)diskImageExistsWithKey:(NSString *)key
 {

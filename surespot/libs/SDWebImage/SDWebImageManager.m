@@ -73,6 +73,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
 }
 
+-(BOOL) isKeyCached: (NSString *) key {
+   return [self.imageCache isKeyCached:key];
+}
+
 - (BOOL)diskImageExistsForURL:(NSURL *)url
 {
     NSString *key = [self cacheKeyForURL:url];
