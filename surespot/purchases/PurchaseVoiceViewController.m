@@ -26,22 +26,22 @@
 -(void) viewDidLoad {
     _blurbTextView.text = NSLocalizedString(@"voice_messaging_purchase_1", nil);
     
-   // _blurbTextView.dataDetectorTypes = UIDataDetectorTypeLink;
-    
     [_refreshButton setTitle:NSLocalizedString(@"refresh", nil)forState:UIControlStateNormal ];
     
     _voiceTitle.text = NSLocalizedString(@"voice_messaging", nil);
-    [_purchaseVoiceButton setTitle:NSLocalizedString(@"voice_messaging_purchase_button", nil)forState:UIControlStateNormal ];
+    
+    
+    
     _dontAskMeAgainLabel.text = NSLocalizedString(@"voice_message_suppress_purchase_ask", nil);
     [self.navigationItem setTitle:NSLocalizedString(@"menu_purchase_voice_messaging", nil)];
     self.navigationController.navigationBar.translucent = NO;
     UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"refresh",nil) style:UIBarButtonItemStylePlain target:self action:@selector(refresh)];
     self.navigationItem.rightBarButtonItem = anotherButton;
     
-
+    NSString * price = [[PurchaseDelegate sharedInstance] formatPriceForProductId: PRODUCT_ID_VOICE_MESSAGING];
+    [_purchaseVoiceButton setTitle:[NSString stringWithFormat: NSLocalizedString(@"voice_messaging_purchase_button", nil), price] forState:UIControlStateNormal];
     
     _scrollView.contentSize = self.view.frame.size;
-    
     
     NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
     [_voiceSwitch setOn:[storage boolForKey:@"voice_messaging"]];

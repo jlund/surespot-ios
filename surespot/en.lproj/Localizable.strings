@@ -295,7 +295,7 @@
 "pref_billing"="purchases";
 "suppress_voice_purchase"="don't ask me to buy voice messaging (closes tab instead)";
 "voice_messaging_purchase_1"="Add voice messaging to your surespot and make encrypted communication even easier! Simply hold down the microphone button to record a 10 second message and release to send. Because sometimes it is easier to say it than type it.";
-"voice_messaging_purchase_button"="touch here to buy for $1.99";
+"voice_messaging_purchase_button"="purchase for %@";
 "voice_message_suppress_purchase_ask"="don't ask me again";
 "pref_suppress_voice_purchase_ask_title"="don't ask me again";
 "pref_suppress_voice_purchase_ask_summary"="stop asking me to purchase voice messaging capability";
