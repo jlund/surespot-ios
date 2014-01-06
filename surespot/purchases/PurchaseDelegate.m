@@ -229,7 +229,7 @@ NSString *  const PRODUCT_ID_VOICE_MESSAGING = @"voice_messaging";
 
 -(void) showPwylViewForController: (UIViewController *) parentController {
     _parentController = parentController;
-    _pwylViewController = [[PwylViewController alloc] initWithNibName:@"PayWhatYouLikeView" bundle:nil];
+    _pwylViewController = [[PwylViewController alloc] initWithNibName:@"PWYLView" bundle:nil];
     
     
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {

@@ -45,6 +45,7 @@
 		662CA5A31873496F00684790 /* PurchaseDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 662CA5A21873496F00684790 /* PurchaseDelegate.m */; };
 		662CA5A818734E4E00684790 /* PurchaseVoiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 662CA5A718734E4E00684790 /* PurchaseVoiceViewController.m */; };
 		662CA5AA18734E9500684790 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 662CA5A918734E9500684790 /* StoreKit.framework */; };
+		6637012D187A33A6006D17CA /* PWYLView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6637012C187A33A6006D17CA /* PWYLView.xib */; };
 		663710801813172F009D5195 /* EGOCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 6637107F1813172F009D5195 /* EGOCache.m */; };
 		6646AE0E185CADC700CBACDE /* MWCaptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6646ADD5185CADC700CBACDE /* MWCaptionView.m */; };
 		6646AE10185CADC700CBACDE /* MWPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 6646ADDA185CADC700CBACDE /* MWPhotoBrowser.m */; };
@@ -63,7 +64,6 @@
 		6648B1E9186CB9D9007037B1 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6648B1E7186CB9D9007037B1 /* CoreText.framework */; };
 		6648B1EB186CB9EB007037B1 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6648B1EA186CB9EB007037B1 /* AddressBook.framework */; };
 		6648B1EE186CBA81007037B1 /* SurespotSHKConfigurator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6648B1ED186CBA81007037B1 /* SurespotSHKConfigurator.m */; };
-		6652F28518749D3800E023A7 /* PayWhatYouLikeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6652F28418749D3800E023A7 /* PayWhatYouLikeView.xib */; };
 		6652F2A41875CFF300E023A7 /* PurchaseVoiceView~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6652F2A21875CFF300E023A7 /* PurchaseVoiceView~iphone.xib */; };
 		6652F2A51875CFF300E023A7 /* PurchaseVoiceView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6652F2A31875CFF300E023A7 /* PurchaseVoiceView~ipad.xib */; };
 		6652F2AA1875F16D00E023A7 /* PwylViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6652F2A91875F16D00E023A7 /* PwylViewController.m */; };
@@ -398,6 +398,7 @@
 		662CA5A618734E4E00684790 /* PurchaseVoiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PurchaseVoiceViewController.h; path = purchases/PurchaseVoiceViewController.h; sourceTree = "<group>"; };
 		662CA5A718734E4E00684790 /* PurchaseVoiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PurchaseVoiceViewController.m; path = purchases/PurchaseVoiceViewController.m; sourceTree = "<group>"; };
 		662CA5A918734E9500684790 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		6637012C187A33A6006D17CA /* PWYLView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PWYLView.xib; path = purchases/PWYLView.xib; sourceTree = "<group>"; };
 		6637107E1813172F009D5195 /* EGOCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOCache.h; sourceTree = "<group>"; };
 		6637107F1813172F009D5195 /* EGOCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EGOCache.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6646ADD4185CADC700CBACDE /* MWCaptionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWCaptionView.h; sourceTree = "<group>"; };
@@ -430,7 +431,6 @@
 		6648B1EA186CB9EB007037B1 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		6648B1EC186CBA81007037B1 /* SurespotSHKConfigurator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SurespotSHKConfigurator.h; sourceTree = "<group>"; };
 		6648B1ED186CBA81007037B1 /* SurespotSHKConfigurator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SurespotSHKConfigurator.m; sourceTree = "<group>"; };
-		6652F28418749D3800E023A7 /* PayWhatYouLikeView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PayWhatYouLikeView.xib; sourceTree = "<group>"; };
 		6652F2A21875CFF300E023A7 /* PurchaseVoiceView~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "PurchaseVoiceView~iphone.xib"; path = "purchases/PurchaseVoiceView~iphone.xib"; sourceTree = "<group>"; };
 		6652F2A31875CFF300E023A7 /* PurchaseVoiceView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "PurchaseVoiceView~ipad.xib"; path = "purchases/PurchaseVoiceView~ipad.xib"; sourceTree = "<group>"; };
 		6652F2A81875F16D00E023A7 /* PwylViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PwylViewController.h; path = purchases/PwylViewController.h; sourceTree = "<group>"; };
@@ -1049,7 +1049,7 @@
 				662CA5A21873496F00684790 /* PurchaseDelegate.m */,
 				662CA5A618734E4E00684790 /* PurchaseVoiceViewController.h */,
 				662CA5A718734E4E00684790 /* PurchaseVoiceViewController.m */,
-				6652F28418749D3800E023A7 /* PayWhatYouLikeView.xib */,
+				6637012C187A33A6006D17CA /* PWYLView.xib */,
 				6652F2A81875F16D00E023A7 /* PwylViewController.h */,
 				6652F2A91875F16D00E023A7 /* PwylViewController.m */,
 			);
@@ -2025,6 +2025,7 @@
 				66E21E001847E1220005D91E /* Settings.bundle in Resources */,
 				661F469E1864C0BE004A71B0 /* BackupIdentityView.xib in Resources */,
 				6604A2C917626B9E0072216A /* InfoPlist.strings in Resources */,
+				6637012D187A33A6006D17CA /* PWYLView.xib in Resources */,
 				66EBE0D81855C97100F2452D /* Localizable.strings in Resources */,
 				66F831FF185B9EB500ADD2F1 /* OurMessageCell.xib in Resources */,
 				668D24FF186A36520096D155 /* QRInviteView.xib in Resources */,
@@ -2035,7 +2036,6 @@
 				66EBE13E1855C97100F2452D /* HomeCell.xib in Resources */,
 				662CA59F187348FD00684790 /* product_ids.plist in Resources */,
 				6652F2A51875CFF300E023A7 /* PurchaseVoiceView~ipad.xib in Resources */,
-				6652F28518749D3800E023A7 /* PayWhatYouLikeView.xib in Resources */,
 				66DAB615186CBF1C006C262F /* GooglePlus.bundle in Resources */,
 				6604A2D817626B9E0072216A /* MainStoryboard.storyboard in Resources */,
 				66D3B04F182EAB4200B37A6C /* surespot.xcassets in Resources */,
