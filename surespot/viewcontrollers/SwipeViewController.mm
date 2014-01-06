@@ -2218,7 +2218,7 @@ const Float32 voiceRecordDelay = 0.3;
                               ourVersion:nil
                               theirUsername:nil
                               assetLibrary:_assetLibrary];
-            [ImageDelegate startBackgroundImageSelectControllerFromViewController:self usingDelegate:_imageDelegate];
+            [ImageDelegate startBackgroundImageSelectControllerFromViewController:sender usingDelegate:_imageDelegate];
         }
     }
 }

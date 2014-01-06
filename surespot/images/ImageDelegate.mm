@@ -144,6 +144,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"backgroundImageChanged" object:url];
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         [_popover dismissPopoverAnimated:YES];
+        _popover = nil;
     }
 }
 
