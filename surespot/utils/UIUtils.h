@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "SurespotMessage.h"
 #import "REMenu.h"
+#import "TTTAttributedLabel.h"
 
 @interface UIUtils : NSObject
 + (void) showToastKey: (NSString *) key;
@@ -34,5 +35,10 @@
 +(REMenu *) createMenu: (NSArray *) menuItems closeCompletionHandler: (void (^)(void))completionHandler;
 +(CGSize) screenSizeAdjustedForOrientation;
 +(CGSize) sizeAdjustedForOrientation: (CGSize) size;
++(void) setLinkLabel:(TTTAttributedLabel *) label
+            delegate: (id) delegate
+            labelText: (NSString *) labelText
+       linkMatchText: (NSString *) linkMatchText
+           urlString: (NSString *) urlString;
 @end
 

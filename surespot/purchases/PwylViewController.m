@@ -9,6 +9,7 @@
 #import "PwylViewController.h"
 #import "PurchaseDelegate.h"
 #import "TTTAttributedLabel.h"
+#import "UIUtils.h"
 
 @interface PwylViewController ()
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -20,10 +21,7 @@
 @implementation PwylViewController
 
 -(void) viewDidLoad {
-    _l1.delegate = self;
-    _l1.text = NSLocalizedString(@"pwyl_text", nil);
-    NSRange range = [_l1.text rangeOfString:@"EFF"];
-    [_l1 addLinkToURL:[NSURL URLWithString: @"https://www.eff.org/issues/privacy"] withRange:range];
+    [UIUtils setLinkLabel:_l1 delegate:self labelText:NSLocalizedString(@"pwyl_text", nil) linkMatchText:@"EFF" urlString:@"https://www.eff.org/issues/privacy"];
     
     [self updateButtons];
     

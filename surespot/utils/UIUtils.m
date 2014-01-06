@@ -282,4 +282,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return menu;
 }
 
++(void) setLinkLabel:(TTTAttributedLabel *) label
+            delegate: (id) delegate
+            labelText: (NSString *) labelText
+       linkMatchText: (NSString *) linkMatchText
+           urlString: (NSString *) urlString  {
+    label.delegate = delegate;
+    label.text = labelText;
+    NSRange range = [label.text rangeOfString:linkMatchText];
+    
+    label.linkAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:[UIUtils surespotBlue], kCTForegroundColorAttributeName, [NSNumber numberWithInt:kCTUnderlineStyleSingle], kCTUnderlineStyleAttributeName, nil];
+    [label addLinkToURL:[NSURL URLWithString:urlString] withRange:range];
+    
+}
+
+
 @end
