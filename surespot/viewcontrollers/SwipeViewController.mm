@@ -1574,18 +1574,18 @@ const Float32 voiceRecordDelay = 0.3;
     
     
     
-    REMenuItem * purchaseVoiceItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"pay_what_you_like", nil) image:
+    REMenuItem * pwylItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"pay_what_you_like", nil) image:
                                       [UIImage imageNamed:@"heart"]
                                                       highlightedImage:nil action:^(REMenuItem * item){
                                                           [[PurchaseDelegate sharedInstance] showPwylViewForController:self];
                                                           
                                                           
                                                       }];
-    [menuItems addObject:purchaseVoiceItem];
+    [menuItems addObject:pwylItem];
     
     
-    
-    if (![[PurchaseDelegate sharedInstance] hasVoiceMessaging]) {
+    //TODO reinstate this check when app in app store
+    //if (![[PurchaseDelegate sharedInstance] hasVoiceMessaging]) {
         REMenuItem * purchaseVoiceItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_purchase_voice_messaging", nil) image:
                                           [UIImage imageNamed:@"gold_heart"]
                                                           highlightedImage:nil action:^(REMenuItem * item){
@@ -1594,7 +1594,7 @@ const Float32 voiceRecordDelay = 0.3;
                                                               
                                                           }];
         [menuItems addObject:purchaseVoiceItem];
-    }
+   // }
     
     REMenuItem * logoutItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"logout", nil) image:[UIImage imageNamed:@"ic_lock_power_off"] highlightedImage:nil action:^(REMenuItem * item){
         [self logout];
