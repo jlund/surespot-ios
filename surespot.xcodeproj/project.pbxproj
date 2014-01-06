@@ -41,7 +41,6 @@
 		661F46A91865EDC3004A71B0 /* ChangePasswordViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 661F46A71865EDC3004A71B0 /* ChangePasswordViewController.mm */; };
 		6621BB841762704D00BC2850 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6621BB861762704D00BC2850 /* Localizable.strings */; };
 		662CA5911871BB7300684790 /* SurespotNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 662CA5901871BB7300684790 /* SurespotNavigationController.m */; };
-		662CA59F187348FD00684790 /* product_ids.plist in Resources */ = {isa = PBXBuildFile; fileRef = 662CA59E187348FD00684790 /* product_ids.plist */; };
 		662CA5A31873496F00684790 /* PurchaseDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 662CA5A21873496F00684790 /* PurchaseDelegate.m */; };
 		662CA5A818734E4E00684790 /* PurchaseVoiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 662CA5A718734E4E00684790 /* PurchaseVoiceViewController.m */; };
 		662CA5AA18734E9500684790 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 662CA5A918734E9500684790 /* StoreKit.framework */; };
@@ -154,7 +153,7 @@
 		66E21DF81847D7F90005D91E /* IASKSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E21DE91847D7F90005D91E /* IASKSwitch.m */; };
 		66E21DF91847D7F90005D91E /* IASKTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E21DEB1847D7F90005D91E /* IASKTextField.m */; };
 		66E21DFB1847D8A10005D91E /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E21DFA1847D8A10005D91E /* MessageUI.framework */; };
-		66E21E001847E1220005D91E /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 66E21DFF1847E1220005D91E /* Settings.bundle */; };
+		66E21E001847E1220005D91E /* InAppSettings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 66E21DFF1847E1220005D91E /* InAppSettings.bundle */; };
 		66E4F5B6176298CB00596E6B /* libcryptopp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E4F5A1176298CB00596E6B /* libcryptopp.a */; };
 		66E4F5B7176298CB00596E6B /* SocketIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5A4176298CB00596E6B /* SocketIO.m */; };
 		66E4F5B8176298CB00596E6B /* SocketIOJSONSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E4F5A6176298CB00596E6B /* SocketIOJSONSerialization.m */; };
@@ -392,7 +391,6 @@
 		6621BB851762704D00BC2850 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		662CA58F1871BB7300684790 /* SurespotNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SurespotNavigationController.h; sourceTree = "<group>"; };
 		662CA5901871BB7300684790 /* SurespotNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SurespotNavigationController.m; sourceTree = "<group>"; };
-		662CA59E187348FD00684790 /* product_ids.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = product_ids.plist; sourceTree = "<group>"; };
 		662CA5A11873496F00684790 /* PurchaseDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PurchaseDelegate.h; path = purchases/PurchaseDelegate.h; sourceTree = "<group>"; };
 		662CA5A21873496F00684790 /* PurchaseDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PurchaseDelegate.m; path = purchases/PurchaseDelegate.m; sourceTree = "<group>"; };
 		662CA5A618734E4E00684790 /* PurchaseVoiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PurchaseVoiceViewController.h; path = purchases/PurchaseVoiceViewController.h; sourceTree = "<group>"; };
@@ -570,7 +568,7 @@
 		66E21DEA1847D7F90005D91E /* IASKTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IASKTextField.h; sourceTree = "<group>"; };
 		66E21DEB1847D7F90005D91E /* IASKTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IASKTextField.m; sourceTree = "<group>"; };
 		66E21DFA1847D8A10005D91E /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		66E21DFF1847E1220005D91E /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		66E21DFF1847E1220005D91E /* InAppSettings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = InAppSettings.bundle; sourceTree = "<group>"; };
 		66E4F51A176298CB00596E6B /* 3way.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 3way.h; sourceTree = "<group>"; };
 		66E4F51B176298CB00596E6B /* adler32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adler32.h; sourceTree = "<group>"; };
 		66E4F51C176298CB00596E6B /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
@@ -1015,8 +1013,7 @@
 				6604A2C717626B9E0072216A /* InfoPlist.strings */,
 				6604A2CA17626B9E0072216A /* main.m */,
 				6604A2CC17626B9E0072216A /* surespot-Prefix.pch */,
-				66E21DFF1847E1220005D91E /* Settings.bundle */,
-				662CA59E187348FD00684790 /* product_ids.plist */,
+				66E21DFF1847E1220005D91E /* InAppSettings.bundle */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -2022,7 +2019,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				66EBE0CF1855C97100F2452D /* GTMOAuth2ViewTouch.xib in Resources */,
-				66E21E001847E1220005D91E /* Settings.bundle in Resources */,
+				66E21E001847E1220005D91E /* InAppSettings.bundle in Resources */,
 				661F469E1864C0BE004A71B0 /* BackupIdentityView.xib in Resources */,
 				6604A2C917626B9E0072216A /* InfoPlist.strings in Resources */,
 				6637012D187A33A6006D17CA /* PWYLView.xib in Resources */,
@@ -2034,7 +2031,6 @@
 				6652F2A41875CFF300E023A7 /* PurchaseVoiceView~iphone.xib in Resources */,
 				6646AE26185CADC700CBACDE /* MWPhotoBrowser.bundle in Resources */,
 				66EBE13E1855C97100F2452D /* HomeCell.xib in Resources */,
-				662CA59F187348FD00684790 /* product_ids.plist in Resources */,
 				6652F2A51875CFF300E023A7 /* PurchaseVoiceView~ipad.xib in Resources */,
 				66DAB615186CBF1C006C262F /* GooglePlus.bundle in Resources */,
 				6604A2D817626B9E0072216A /* MainStoryboard.storyboard in Resources */,

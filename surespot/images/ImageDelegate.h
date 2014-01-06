@@ -9,14 +9,17 @@
 #import <Foundation/Foundation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 
+#define kSurespotImageDelegateModeCapture 0
+#define kSurespotImageDelegateModeSelect 1
+#define kSurespotImageDelegateModeFriendImage 2
+#define kSurespotImageDelegateModeBackgroundImage 3
+
 @interface ImageDelegate : NSObject<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverControllerDelegate>
 @property (nonatomic, strong)  UIPopoverController* popover;
 - (id) initWithUsername: (NSString *) username
              ourVersion:(NSString *) ourVersion
           theirUsername:(NSString *) theirUsername
-           assetLibrary: (ALAssetsLibrary *) library
-         sourceIsCamera: (BOOL) sourceIsCamera;
-
+           assetLibrary: (ALAssetsLibrary *) library;
 
 +(BOOL) startCameraControllerFromViewController: (UIViewController*) controller
                                   usingDelegate: (ImageDelegate *) delegate;
@@ -25,6 +28,8 @@
 +(BOOL) startFriendImageSelectControllerFromViewController: (UIViewController*) controller
                                              usingDelegate: (ImageDelegate *) delegate;
 - (void)orientationChanged;
-@property (nonatomic, assign) BOOL friendImage;
+@property (nonatomic, assign) NSInteger mode;
++(BOOL) startBackgroundImageSelectControllerFromViewController: (UIViewController*) controller
+                                                 usingDelegate: (ImageDelegate *) delegate;
 
 @end

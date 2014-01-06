@@ -140,6 +140,7 @@ const Float32 voiceRecordDelay = 0.3;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(invite:) name:@"invite" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(inviteAccepted:) name:@"inviteAccepted" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(purchaseStatusChanged:) name:@"purchaseStatusChanged" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backgroundImageChanged:) name:@"backgroundImageChanged" object:nil];
     
     _homeDataSource = [[ChatController sharedInstance] getHomeDataSource];
     
@@ -182,6 +183,7 @@ const Float32 voiceRecordDelay = 0.3;
     _appSettingsViewController = [IASKAppSettingsViewController new];
     _appSettingsViewController.delegate = self;
     
+    [self setBackgroundImageUrl:[[NSUserDefaults standardUserDefaults] URLForKey:@"background_image_url"]];
     
 }
 
@@ -496,6 +498,7 @@ const Float32 voiceRecordDelay = 0.3;
             DDLogVerbose(@"creating friend view");
             
             _friendView = [[UITableView alloc] initWithFrame:swipeView.frame style: UITableViewStylePlain];
+            _friendView.backgroundColor = [UIColor clearColor];
             [_friendView registerNib:[UINib nibWithNibName:@"HomeCell" bundle:nil] forCellReuseIdentifier:@"HomeCell"];
             _friendView.delegate = self;
             _friendView.dataSource = self;
@@ -1181,6 +1184,7 @@ const Float32 voiceRecordDelay = 0.3;
     if (!chatView) {
         
         chatView = [[UITableView alloc] initWithFrame:_swipeView.frame];
+        [chatView setBackgroundColor:[UIColor clearColor]];
         [chatView setDelegate:self];
         [chatView setDataSource: self];
         [chatView setScrollsToTop:NO];
@@ -1513,7 +1517,7 @@ const Float32 voiceRecordDelay = 0.3;
                                                               initWithUsername:[[IdentityController sharedInstance] getLoggedInUser]
                                                               ourVersion:[[IdentityController sharedInstance] getOurLatestVersion]
                                                               theirUsername:theirUsername
-                                                              assetLibrary:_assetLibrary sourceIsCamera:NO];
+                                                              assetLibrary:_assetLibrary];
                                             
                                             [ImageDelegate startImageSelectControllerFromViewController:self usingDelegate:_imageDelegate];
                                             
@@ -1532,7 +1536,7 @@ const Float32 voiceRecordDelay = 0.3;
                                                                initWithUsername:[[IdentityController sharedInstance] getLoggedInUser]
                                                                ourVersion:[[IdentityController sharedInstance] getOurLatestVersion]
                                                                theirUsername:theirUsername
-                                                               assetLibrary:_assetLibrary sourceIsCamera:YES];
+                                                               assetLibrary:_assetLibrary];
                                              [ImageDelegate startCameraControllerFromViewController:self usingDelegate:_imageDelegate];
                                              
                                              
@@ -1686,7 +1690,7 @@ const Float32 voiceRecordDelay = 0.3;
                                                                   initWithUsername:[[IdentityController sharedInstance] getLoggedInUser]
                                                                   ourVersion:[[IdentityController sharedInstance] getOurLatestVersion]
                                                                   theirUsername:thefriend.name
-                                                                  assetLibrary:nil sourceIsCamera:NO];
+                                                                  assetLibrary:nil];
                                                 
                                                 [ImageDelegate startFriendImageSelectControllerFromViewController:self usingDelegate:_imageDelegate];
                                                 
@@ -1718,7 +1722,7 @@ const Float32 voiceRecordDelay = 0.3;
             
             [[UIPasteboard generalPasteboard]  setString: message.plainData];
             
-//            [UIUtils showToastKey:@"message" duration:2];
+            //            [UIUtils showToastKey:@"message" duration:2];
             
         }];
         [menuItems addObject:copyItem];
@@ -2189,7 +2193,38 @@ const Float32 voiceRecordDelay = 0.3;
     //[self dismissModalViewControllerAnimated:YES];
     
     // your code here to reconfigure the app for changed settings
+    
 }
+
+- (void)settingsViewController:(IASKAppSettingsViewController*)sender buttonTappedForSpecifier:(IASKSpecifier*)specifier {
+    DDLogInfo(@"setting tapped %@", specifier.key);
+    
+    NSString * assignString = NSLocalizedString(@"pref_title_background_image_select", nil);
+
+    if ([specifier.key isEqualToString:@"assign_background_image_key"]) {
+        NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+        NSURL * bgImageUrl = [defaults URLForKey:@"background_image_url"];
+        
+        if (bgImageUrl) {
+            [defaults setObject:assignString forKey:specifier.key];
+            [defaults removeObjectForKey:@"background_image_url"];
+            [[NSFileManager defaultManager] removeItemAtURL:bgImageUrl error:nil];
+            [self setBackgroundImageUrl:nil];
+        }
+        else {
+            //select and assign image
+            _imageDelegate = [[ImageDelegate alloc]
+                              initWithUsername:nil
+                              ourVersion:nil
+                              theirUsername:nil
+                              assetLibrary:_assetLibrary];
+            [ImageDelegate startBackgroundImageSelectControllerFromViewController:self usingDelegate:_imageDelegate];
+        }
+    }
+}
+
+
+
 
 -(void) showSettings {
     self.appSettingsViewController.showDoneButton = NO;
@@ -2235,6 +2270,21 @@ const Float32 voiceRecordDelay = 0.3;
 
 -(void) purchaseStatusChanged: (NSNotification *) notification {
     [self updateTabChangeUI];
+}
+
+-(void) backgroundImageChanged: (NSNotification *) notification {
+    NSURL * url = notification.object;
+    [self setBackgroundImageUrl:url];
+}
+
+-(void) setBackgroundImageUrl: (NSURL *) url {
+    if (url) {
+        self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:url]]];
+    }
+    else {
+        self.view.backgroundColor = [UIColor whiteColor];
+    }
+    
 }
 
 

@@ -27,4 +27,5 @@ extern NSString *const IDENTITY_EXTENSION;
 +(void) saveLatestVersions:(NSDictionary *) latestVersionsDict forUsername: (NSString *) username;
 +(NSDictionary *) loadLatestVersionsForUsername: (NSString *) username;
 + (NSString*) getCacheDir;
++(NSString *) getBackgroundImageFilename;
 @end

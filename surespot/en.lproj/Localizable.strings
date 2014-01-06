@@ -226,7 +226,6 @@
 "generate_new_keypairs"="Generate new private key pairs for the selected identity and revoke the current pair. Any other devices (ie. lost or stolen phones) will no longer be able to access surespot using the selected identity.";
 "username"="username";
 "create_identity"="create identity";
-"options"="options";
 "clear_local_cache"="clear local cache";
 "delete_all_messages"="delete all messages";
 "pay_what_you_like"="pay what you like";
@@ -312,13 +311,17 @@
 "voice_help_4"="New voice messages will play automatically for the open chat tab.";
 "close"="close";
 "no_audio_detected"="no audio detected - not sending voice message";
+"menu_copy"="copy";
+"message_hint"="enter message";
+"invite_hint"="invite user";
+
+
 //EFF will be linked to https://www.eff.org/issues/privacy
 "pwyl_text"="Surespot is ad and data mining free.
 
 Servers and storage cost money; please buy lots of surecoin to ensure that we do not have to charge for surespot.
 
 We will donate a percentage to the EFF that they may continue to fight for all of our electronic freedoms.";
-
 "loading_earlier_messages_failed"="loading earlier messages failed";
 "all_messages_loaded"="all messages loaded";
 "save_to_photos"="save to photos";

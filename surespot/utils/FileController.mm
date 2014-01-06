@@ -34,6 +34,7 @@ NSString * const SECRET_EXTENSION = @"sse";
 NSString * const LATEST_VERSIONS_EXTENSION = @"ssv";
 NSString * const SECRETS_DIR = @"secrets";
 NSString * const LATEST_VERSIONS_DIR = @"latestVersions";
+NSString * const BACKGROUND_IMAGE_FILENAME = @"bgImage.png";
 
 NSInteger const GZIP_MAGIC_1 = 0x1f;
 NSInteger const GZIP_MAGIC_2 = 0x8b;
@@ -91,6 +92,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 +(NSString *) getHomeFilename {
     return [self getFilename:HOME_FILENAME];
+}
+
++(NSString *) getBackgroundImageFilename {
+    return [self getFilename:BACKGROUND_IMAGE_FILENAME];
 }
 
 +(NSString *) getChatDataFilenameForSpot: (NSString *) spot {

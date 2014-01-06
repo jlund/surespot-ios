@@ -33,7 +33,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) NSString * username;
 @property (nonatomic, strong) NSString * theirUsername;
 @property (nonatomic, strong) NSString * ourVersion;
-@property (nonatomic, assign) BOOL sourceIsCamera;
 @property (nonatomic, weak) ALAssetsLibrary * assetsLibrary;
 @property (nonatomic, weak) UIViewController* controller;
 @end
@@ -46,8 +45,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
              ourVersion:(NSString *) ourVersion
           theirUsername:(NSString *) theirUsername
            assetLibrary: (ALAssetsLibrary *) library
-         sourceIsCamera: (BOOL) sourceIsCamera;
-
 {
     // Call superclass's initializer
     self = [super init];
@@ -56,8 +53,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _ourVersion = ourVersion;
     _theirUsername = theirUsername;
     _assetsLibrary = library;
-    _sourceIsCamera = sourceIsCamera;
-    
     return self;
 }
 
@@ -95,36 +90,63 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         [self startProgress];
         
-        // Save the new image (original or edited) to the Camera Roll if we took it with the camera
-        if (_sourceIsCamera) {
-            
-            [_assetsLibrary saveImage:imageToSave toAlbum:@"surespot" withCompletionBlock:^(NSError *error, NSURL * url) {
-                _assetsLibrary = nil;
-                if (error) {
-                    [self stopProgress];
-                    [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_image", nil) duration:2];
-                    return;
+        
+        switch (_mode) {
+            case kSurespotImageDelegateModeCapture:
+            {
+                [_assetsLibrary saveImage:imageToSave toAlbum:@"surespot" withCompletionBlock:^(NSError *error, NSURL * url) {
+                    _assetsLibrary = nil;
+                    if (error) {
+                        [self stopProgress];
+                        [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_image", nil) duration:2];
+                        return;
+                    }
                     
-                }
-                
-                [self uploadImage:imageToSave];
-                
-            }];
-        }
-        
-        else {
-            _assetsLibrary = nil;
-            if (!_friendImage) {
-                [self uploadImage:imageToSave];
+                    [self uploadImage:imageToSave];
+                }];
+                break;
             }
-            else {
+            case kSurespotImageDelegateModeSelect:
+                _assetsLibrary = nil;
+                [self uploadImage:imageToSave];
+                break;
+            case kSurespotImageDelegateModeFriendImage:
+                _assetsLibrary = nil;
                 [self uploadFriendImage:imageToSave];
-            }
+                break;
+            case kSurespotImageDelegateModeBackgroundImage:
+                [self setBackgroundImage:imageToSave];
+                break;
+                
         }
-        
-        
     }
 }
+
+-(void) setBackgroundImage: (UIImage *) image {
+    //scale image
+    UIGraphicsBeginImageContext(_controller.view.frame.size);
+    [image drawInRect:_controller.view.bounds];
+    UIImage * scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    //save to file
+    NSString * filepath =[FileController getBackgroundImageFilename];
+    [UIImagePNGRepresentation(scaledImage) writeToFile: filepath atomically:YES];
+    NSURL * url = [NSURL fileURLWithPath:filepath];
+    
+    //update settings string
+    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+    NSString * removeString = NSLocalizedString(@"pref_title_background_image_remove", nil);
+    [defaults setObject:removeString forKey:@"assign_background_image_key"];
+    [defaults setURL:url forKey:@"background_image_url"];
+    
+    //update UI
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"backgroundImageChanged" object:url];
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        [_popover dismissPopoverAnimated:YES];
+    }
+}
+
 
 -(void) uploadImage: (UIImage *) image {
     if (!image) {
@@ -180,7 +202,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                         mimeType:MIME_TYPE_IMAGE
                                                                                                     successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                                                                                                         
-                                                                                                        //update the message with the id and url                                                                                                        
+                                                                                                        //update the message with the id and url
                                                                                                         NSInteger serverid = [[JSON objectForKey:@"id"] integerValue];
                                                                                                         NSString * url = [JSON objectForKey:@"url"];
                                                                                                         NSInteger size = [[JSON objectForKey:@"size"] integerValue];
@@ -313,7 +335,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     });
 }
 
-
 +(BOOL) startCameraControllerFromViewController: (UIViewController*) controller
                                   usingDelegate: (ImageDelegate *) delegate {
     
@@ -334,7 +355,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     cameraUI.delegate = delegate;
     
     //cameraUI
-    delegate.friendImage = NO;
+    delegate.mode = kSurespotImageDelegateModeCapture;
     delegate.controller = controller;
     [controller presentViewController: cameraUI animated: YES completion:nil];
     return YES;
@@ -358,7 +379,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     // trimming movies. To instead show the controls, use YES.
     cameraUI.allowsEditing = NO;
     cameraUI.delegate = delegate;
-    delegate.controller = controller;        delegate.friendImage = NO;
+    delegate.controller = controller;
+    delegate.mode = kSurespotImageDelegateModeSelect;
     //cameraUI
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         [delegate setPopover: [[UIPopoverController alloc] initWithContentViewController:cameraUI]];
@@ -394,7 +416,43 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     cameraUI.allowsEditing = YES;
     cameraUI.delegate = delegate;
     delegate.controller = controller;
-    delegate.friendImage = YES;
+    delegate.mode = kSurespotImageDelegateModeFriendImage;
+    //cameraUI
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        [delegate setPopover: [[UIPopoverController alloc] initWithContentViewController:cameraUI]];
+        delegate.popover.delegate = delegate;
+        
+        CGFloat x =controller.view.bounds.size.width;
+        CGFloat y =controller.view.bounds.size.height;
+        DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
+        [delegate.popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:delegate.controller.view permittedArrowDirections:0 animated:YES];
+    } else {
+        [controller presentViewController: cameraUI animated: YES completion:nil];
+    }
+    
+    return YES;
+}
+
++(BOOL) startBackgroundImageSelectControllerFromViewController: (UIViewController*) controller
+                                                 usingDelegate: (ImageDelegate *) delegate {
+    
+    if (([UIImagePickerController isSourceTypeAvailable:
+          UIImagePickerControllerSourceTypeSavedPhotosAlbum] == NO)
+        || (delegate == nil)
+        || (controller == nil))
+        return NO;
+    
+    
+    UIImagePickerController *cameraUI = [[UIImagePickerController alloc] init];
+    cameraUI.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    cameraUI.mediaTypes = [[NSArray alloc] initWithObjects: (NSString *) kUTTypeImage, nil];
+    
+    // Hides the controls for moving & scaling pictures, or for
+    // trimming movies. To instead show the controls, use YES.
+    cameraUI.allowsEditing = NO;
+    cameraUI.delegate = delegate;
+    delegate.controller = controller;
+    delegate.mode = kSurespotImageDelegateModeBackgroundImage;
     //cameraUI
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         [delegate setPopover: [[UIPopoverController alloc] initWithContentViewController:cameraUI]];
