@@ -61,8 +61,10 @@ NSString *  const PRODUCT_ID_VOICE_MESSAGING = @"voice_messaging";
     if (self) {
         
         
-        NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
-        [self setHasVoiceMessaging:[storage boolForKey:@"voice_messaging"]];
+        
+        [self setHasVoiceMessaging:YES];
+       // NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
+        //        [self setHasVoiceMessaging:[storage boolForKey:@"voice_messaging"]];
         [self validateProductIdentifiers: @[PRODUCT_ID_PWYL_1, PRODUCT_ID_PWYL_10, PRODUCT_ID_VOICE_MESSAGING]];
     }
     return self;
@@ -94,7 +96,7 @@ NSString *  const PRODUCT_ID_VOICE_MESSAGING = @"voice_messaging";
 
 
 
-- (void) purchaseProductId: (NSString *) productId quantity: (NSInteger) quantity {        
+- (void) purchaseProductId: (NSString *) productId quantity: (NSInteger) quantity {
     SKProduct *product = [self getProductForId: productId];
     SKMutablePayment *payment = [SKMutablePayment paymentWithProduct:product];
     payment.quantity = quantity;
@@ -170,7 +172,7 @@ NSString *  const PRODUCT_ID_VOICE_MESSAGING = @"voice_messaging";
         }
     }
     
-
+    
 }
 
 -(void) setHasVoiceMessaging:(BOOL)hasVoiceMessaging {
