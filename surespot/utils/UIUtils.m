@@ -43,6 +43,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return [UIColor colorWithRed:22/255.0f green:22/255.0f blue:22/255.0f alpha:0.5f];
 }
 
++(UIColor *) surespotSeparatorGrey {
+    return [UIColor colorWithRed:180/255.0f green:180/255.0f blue:180/255.0f alpha:0.2f];
+}
+
 
 
 +(void) showToastMessage: (NSString *) message duration: (CGFloat) duration {

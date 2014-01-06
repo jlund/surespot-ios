@@ -64,7 +64,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) NSDate * buttonDownDate;
 @property (nonatomic, strong) NSTimer * buttonTimer;
 @property (strong, nonatomic) IBOutlet UIImageView *bgImageView;
-
+@property (nonatomic, assign) BOOL hasBackgroundImage;
 
 @end
 
@@ -497,6 +497,7 @@ const Float32 voiceRecordDelay = 0.3;
             
             _friendView = [[UITableView alloc] initWithFrame:swipeView.frame style: UITableViewStylePlain];
             _friendView.backgroundColor = [UIColor clearColor];
+            [_friendView setSeparatorColor:[UIUtils surespotSeparatorGrey]];
             [_friendView registerNib:[UINib nibWithNibName:@"HomeCell" bundle:nil] forCellReuseIdentifier:@"HomeCell"];
             _friendView.delegate = self;
             _friendView.dataSource = self;
@@ -1187,6 +1188,7 @@ const Float32 voiceRecordDelay = 0.3;
         [chatView setDataSource: self];
         [chatView setScrollsToTop:NO];
         [chatView setDirectionalLockEnabled:YES];
+        [chatView setSeparatorColor: [UIUtils surespotSeparatorGrey]];
         if ([chatView respondsToSelector:@selector(setSeparatorInset:)]) {
             [chatView setSeparatorInset:UIEdgeInsetsZero];
         }
@@ -2281,10 +2283,12 @@ const Float32 voiceRecordDelay = 0.3;
 -(void) setBackgroundImage {
     NSURL * url = [[NSUserDefaults standardUserDefaults] URLForKey:[NSString stringWithFormat:@"%@%@", [[IdentityController sharedInstance] getLoggedInUser], @"_background_image_url"]];
     if (url) {
+        _hasBackgroundImage = YES;
         _bgImageView.contentMode = UIViewContentModeScaleAspectFill;
         [_bgImageView setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:url]]];
     }
     else {
+        _hasBackgroundImage = NO;
         _bgImageView.image = nil;
     }
 }

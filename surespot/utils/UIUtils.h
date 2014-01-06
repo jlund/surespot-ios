@@ -17,6 +17,7 @@
 + (CGSize)threadSafeSizeString: (NSString *) string WithFont:(UIFont *)font constrainedToSize:(CGSize)size;
 + (UIColor *) surespotBlue;
 +(UIColor *) surespotSelectionBlue;
++(UIColor *) surespotSeparatorGrey;
 +(UIColor *) surespotTransparentBlue;
 + (void)setAppAppearances;
 + (BOOL)stringIsNilOrEmpty:(NSString*)aString;
