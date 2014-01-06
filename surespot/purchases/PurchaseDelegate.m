@@ -132,7 +132,7 @@ NSString *  const PRODUCT_ID_VOICE_MESSAGING = @"voice_messaging";
 
 -(void) failedTransaction: (SKPaymentTransaction *) transaction {
     DDLogWarn(@"payment failed: %@", transaction.error);
-    if (transaction.error.code != SKErrorPaymentCancelled) {
+    if (transaction.error.code != SKErrorPaymentCancelled && transaction.error.code != SKErrorPaymentNotAllowed) {
         [UIUtils showToastMessage: transaction.error.localizedDescription duration: 2];
     }
 }
@@ -251,7 +251,7 @@ NSString *  const PRODUCT_ID_VOICE_MESSAGING = @"voice_messaging";
 
 - (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error {
     DDLogWarn(@"payment failed: %@", error);
-    if (error.code != SKErrorPaymentCancelled) {
+    if (error.code != SKErrorPaymentCancelled && error.code != SKErrorPaymentNotAllowed) {
         [UIUtils showToastMessage:error.localizedDescription duration:2];
     }
 }
