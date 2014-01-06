@@ -46,6 +46,7 @@
 		662CA5A818734E4E00684790 /* PurchaseVoiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 662CA5A718734E4E00684790 /* PurchaseVoiceViewController.m */; };
 		662CA5AA18734E9500684790 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 662CA5A918734E9500684790 /* StoreKit.framework */; };
 		6637012D187A33A6006D17CA /* PWYLView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6637012C187A33A6006D17CA /* PWYLView.xib */; };
+		66370130187A365D006D17CA /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6637012F187A365D006D17CA /* TTTAttributedLabel.m */; };
 		663710801813172F009D5195 /* EGOCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 6637107F1813172F009D5195 /* EGOCache.m */; };
 		6646AE0E185CADC700CBACDE /* MWCaptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6646ADD5185CADC700CBACDE /* MWCaptionView.m */; };
 		6646AE10185CADC700CBACDE /* MWPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 6646ADDA185CADC700CBACDE /* MWPhotoBrowser.m */; };
@@ -68,7 +69,6 @@
 		6652F2A51875CFF300E023A7 /* PurchaseVoiceView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6652F2A31875CFF300E023A7 /* PurchaseVoiceView~ipad.xib */; };
 		6652F2AA1875F16D00E023A7 /* PwylViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6652F2A91875F16D00E023A7 /* PwylViewController.m */; };
 		6654441317F37A3F00F62F7F /* SwipeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6654441217F37A3F00F62F7F /* SwipeView.m */; };
-		665A34691879C5C6006CFCD0 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 665A34681879C5C6006CFCD0 /* TTTAttributedLabel.m */; };
 		665F4DF51831923C0083BCE7 /* RECommonFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DEC1831923C0083BCE7 /* RECommonFunctions.m */; };
 		665F4DF61831923C0083BCE7 /* REMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DEE1831923C0083BCE7 /* REMenu.m */; };
 		665F4DF71831923C0083BCE7 /* REMenuContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DF01831923C0083BCE7 /* REMenuContainerView.m */; };
@@ -399,6 +399,8 @@
 		662CA5A718734E4E00684790 /* PurchaseVoiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PurchaseVoiceViewController.m; path = purchases/PurchaseVoiceViewController.m; sourceTree = "<group>"; };
 		662CA5A918734E9500684790 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		6637012C187A33A6006D17CA /* PWYLView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PWYLView.xib; path = purchases/PWYLView.xib; sourceTree = "<group>"; };
+		6637012E187A365D006D17CA /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTTAttributedLabel.h; path = surespot/libs/TTTAttributedLabel/TTTAttributedLabel.h; sourceTree = SOURCE_ROOT; };
+		6637012F187A365D006D17CA /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTTAttributedLabel.m; path = surespot/libs/TTTAttributedLabel/TTTAttributedLabel.m; sourceTree = SOURCE_ROOT; };
 		6637107E1813172F009D5195 /* EGOCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOCache.h; sourceTree = "<group>"; };
 		6637107F1813172F009D5195 /* EGOCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EGOCache.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6646ADD4185CADC700CBACDE /* MWCaptionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWCaptionView.h; sourceTree = "<group>"; };
@@ -437,8 +439,6 @@
 		6652F2A91875F16D00E023A7 /* PwylViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PwylViewController.m; path = purchases/PwylViewController.m; sourceTree = "<group>"; };
 		6654441117F37A3F00F62F7F /* SwipeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeView.h; sourceTree = "<group>"; };
 		6654441217F37A3F00F62F7F /* SwipeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SwipeView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		665A34671879C5C6006CFCD0 /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTAttributedLabel.h; sourceTree = "<group>"; };
-		665A34681879C5C6006CFCD0 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
 		665F4DEB1831923C0083BCE7 /* RECommonFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RECommonFunctions.h; sourceTree = "<group>"; };
 		665F4DEC1831923C0083BCE7 /* RECommonFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RECommonFunctions.m; sourceTree = "<group>"; };
 		665F4DED1831923C0083BCE7 /* REMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REMenu.h; sourceTree = "<group>"; };
@@ -1144,8 +1144,8 @@
 		665A34661879C5C6006CFCD0 /* TTTAttributedLabel */ = {
 			isa = PBXGroup;
 			children = (
-				665A34671879C5C6006CFCD0 /* TTTAttributedLabel.h */,
-				665A34681879C5C6006CFCD0 /* TTTAttributedLabel.m */,
+				6637012E187A365D006D17CA /* TTTAttributedLabel.h */,
+				6637012F187A365D006D17CA /* TTTAttributedLabel.m */,
 			);
 			name = TTTAttributedLabel;
 			path = TTTAttributedLabel/TTTAttributedLabel;
@@ -2187,7 +2187,7 @@
 				66EBE0D31855C97100F2452D /* ImageDelegate.mm in Sources */,
 				66EC610F176E494900937467 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				66EBE1371855C97100F2452D /* NSData+Base64.m in Sources */,
-				665A34691879C5C6006CFCD0 /* TTTAttributedLabel.m in Sources */,
+				66370130187A365D006D17CA /* TTTAttributedLabel.m in Sources */,
 				66DAB643186F2839006C262F /* CADebugMacros.cpp in Sources */,
 				66EBE1391855C97100F2452D /* StateController.m in Sources */,
 				667EFF9518425A87002C0406 /* Reachability.m in Sources */,
