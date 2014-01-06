@@ -1575,26 +1575,26 @@ const Float32 voiceRecordDelay = 0.3;
     
     
     REMenuItem * pwylItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"pay_what_you_like", nil) image:
-                                      [UIImage imageNamed:@"heart"]
-                                                      highlightedImage:nil action:^(REMenuItem * item){
-                                                          [[PurchaseDelegate sharedInstance] showPwylViewForController:self];
-                                                          
-                                                          
-                                                      }];
+                             [UIImage imageNamed:@"heart"]
+                                             highlightedImage:nil action:^(REMenuItem * item){
+                                                 [[PurchaseDelegate sharedInstance] showPwylViewForController:self];
+                                                 
+                                                 
+                                             }];
     [menuItems addObject:pwylItem];
     
     
     //TODO reinstate this check when app in app store
     //if (![[PurchaseDelegate sharedInstance] hasVoiceMessaging]) {
-        REMenuItem * purchaseVoiceItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_purchase_voice_messaging", nil) image:
-                                          [UIImage imageNamed:@"gold_heart"]
-                                                          highlightedImage:nil action:^(REMenuItem * item){
-                                                              [[PurchaseDelegate sharedInstance] showPurchaseVoiceViewForController:self];
-                                                              
-                                                              
-                                                          }];
-        [menuItems addObject:purchaseVoiceItem];
-   // }
+    REMenuItem * purchaseVoiceItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_purchase_voice_messaging", nil) image:
+                                      [UIImage imageNamed:@"gold_heart"]
+                                                      highlightedImage:nil action:^(REMenuItem * item){
+                                                          [[PurchaseDelegate sharedInstance] showPurchaseVoiceViewForController:self];
+                                                          
+                                                          
+                                                      }];
+    [menuItems addObject:purchaseVoiceItem];
+    // }
     
     REMenuItem * logoutItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"logout", nil) image:[UIImage imageNamed:@"ic_lock_power_off"] highlightedImage:nil action:^(REMenuItem * item){
         [self logout];
@@ -1711,6 +1711,19 @@ const Float32 voiceRecordDelay = 0.3;
 -(REMenu *) createChatMenuMessage: (SurespotMessage *) message {
     BOOL ours = [ChatUtils isOurMessage:message];
     NSMutableArray * menuItems = [NSMutableArray new];
+    
+    //copy
+    if ([message.mimeType isEqualToString:MIME_TYPE_TEXT] && message.plainData) {
+        REMenuItem * copyItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"copy", nil) image:[UIImage imageNamed:@"ic_menu_copy"] highlightedImage:nil action:^(REMenuItem * item){
+            
+            [[UIPasteboard generalPasteboard]  setString: message.plainData];
+            
+//            [UIUtils showToastKey:@"message" duration:2];
+            
+        }];
+        [menuItems addObject:copyItem];
+        
+    }
     
     if ([message.mimeType isEqualToString:MIME_TYPE_IMAGE]) {
         if (message.errorStatus > 0 && ours) {
