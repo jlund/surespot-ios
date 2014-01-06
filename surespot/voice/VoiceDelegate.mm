@@ -409,14 +409,17 @@ const NSInteger SEND_THRESHOLD = 25;
                                                                                                     successBlock:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                                                                                                         NSInteger serverid = [[JSON objectForKey:@"id"] integerValue];
                                                                                                         NSString * url = [JSON objectForKey:@"url"];
+                                                                                                        NSInteger size = [[JSON objectForKey:@"size"] integerValue];
+                                                                                                        NSDate * date = [NSDate dateWithTimeIntervalSince1970: [[JSON objectForKey:@"time"] doubleValue]/1000];
                                                                                                         
-                                                                                                        DDLogInfo(@"uploaded voice %@ to server successfully, server id: %d, url: %@", key, serverid, url);
-                                                                                                        
-                                                                                                        
+                                                                                                        DDLogInfo(@"uploaded voice data %@ to server successfully, server id: %d, url: %@, date: %@, size: %d", message.iv, serverid, url, date, size);
+
                                                                                                         SurespotMessage * updatedMessage = [message copyWithZone:nil];
                                                                                                         
                                                                                                         updatedMessage.serverid = serverid;
                                                                                                         updatedMessage.data = url;
+                                                                                                        updatedMessage.dateTime = date;
+                                                                                                        updatedMessage.dataSize = size;
                                                                                                         
                                                                                                         [cds addMessage:updatedMessage refresh:YES];
                                                                                                         

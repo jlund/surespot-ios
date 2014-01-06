@@ -1137,12 +1137,15 @@ static const int MAX_CONNECTION_RETRIES = 16;
                                                           
                                                           NSInteger serverid = [[JSON objectForKey:@"id"] integerValue];
                                                           NSString * url = [JSON objectForKey:@"url"];
-                                                          
-                                                          DDLogInfo(@"uploaded data %@ to server successfully, server id: %d, url: %@", message.iv, serverid, url);
-                                                          
-                                                          
+                                                          NSInteger size = [[JSON objectForKey:@"size"] integerValue];                                                          
+                                                          NSDate * date = [NSDate dateWithTimeIntervalSince1970: [[JSON objectForKey:@"time"] doubleValue]/1000];
+                                                    
+                                                          DDLogInfo(@"uploaded data %@ to server successfully, server id: %d, url: %@, date: %@, size: %d", message.iv, serverid, url, date, size);
+                                                                                                                    
                                                           message.serverid = serverid;
                                                           message.data = url;
+                                                          message.dateTime = date;
+                                                          message.dataSize = size;
                                                           
                                                           [cds addMessage:message refresh:YES];
                                                           

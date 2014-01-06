@@ -183,14 +183,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                         //update the message with the id and url                                                                                                        
                                                                                                         NSInteger serverid = [[JSON objectForKey:@"id"] integerValue];
                                                                                                         NSString * url = [JSON objectForKey:@"url"];
+                                                                                                        NSInteger size = [[JSON objectForKey:@"size"] integerValue];
+                                                                                                        NSDate * date = [NSDate dateWithTimeIntervalSince1970: [[JSON objectForKey:@"time"] doubleValue]/1000];
                                                                                                         
-                                                                                                        DDLogInfo(@"uploaded image %@ to server successfully, server id: %d, url: %@", key, serverid, url);
-                                                                                                        
+                                                                                                        DDLogInfo(@"uploaded data %@ to server successfully, server id: %d, url: %@, date: %@, size: %d", message.iv, serverid, url, date, size);
                                                                                                         
                                                                                                         SurespotMessage * updatedMessage = [message copyWithZone:nil];
                                                                                                         
                                                                                                         updatedMessage.serverid = serverid;
                                                                                                         updatedMessage.data = url;
+                                                                                                        updatedMessage.dateTime = date;
+                                                                                                        updatedMessage.dataSize = size;
                                                                                                         
                                                                                                         [cds addMessage:updatedMessage refresh:YES];
                                                                                                         
@@ -214,7 +217,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                           
                                                       }
                                                   }];
-                
             }
             else {
                 [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_image", nil) duration:2];
