@@ -11,4 +11,5 @@
 @interface UIImage (Scale)
 - (UIImage *)imageScaledToSize:(CGSize)size;
 - (UIImage *)imageScaledToMaxWidth:(CGFloat)width maxHeight:(CGFloat)height;
+- (UIImage *)imageScaledToMinDimension:(CGFloat)length;
 @end

@@ -63,6 +63,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) VoiceDelegate * voiceDelegate;
 @property (nonatomic, strong) NSDate * buttonDownDate;
 @property (nonatomic, strong) NSTimer * buttonTimer;
+@property (strong, nonatomic) IBOutlet UIImageView *bgImageView;
 
 
 @end
@@ -183,7 +184,7 @@ const Float32 voiceRecordDelay = 0.3;
     _appSettingsViewController = [IASKAppSettingsViewController new];
     _appSettingsViewController.delegate = self;
     
-    [self setBackgroundImageUrl:[[NSUserDefaults standardUserDefaults] URLForKey:@"background_image_url"]];
+    [self setBackgroundImage];
     
 }
 
@@ -422,9 +423,6 @@ const Float32 voiceRecordDelay = 0.3;
         
         [self.popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:self.view permittedArrowDirections:0 animated:YES];
     }
-    
-    
-    
 }
 
 - (void) swipeViewDidScroll:(SwipeView *)scrollView {
@@ -2199,17 +2197,21 @@ const Float32 voiceRecordDelay = 0.3;
 - (void)settingsViewController:(IASKAppSettingsViewController*)sender buttonTappedForSpecifier:(IASKSpecifier*)specifier {
     DDLogInfo(@"setting tapped %@", specifier.key);
     
-    NSString * assignString = NSLocalizedString(@"pref_title_background_image_select", nil);
-
     if ([specifier.key isEqualToString:@"assign_background_image_key"]) {
         NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
-        NSURL * bgImageUrl = [defaults URLForKey:@"background_image_url"];
+        NSString * key = [NSString stringWithFormat:@"%@%@", [[IdentityController sharedInstance] getLoggedInUser], @"_background_image_url"];
+        NSURL * bgImageUrl = [defaults URLForKey:key];
         
         if (bgImageUrl) {
+            NSString * assignString = NSLocalizedString(@"pref_title_background_image_select", nil);
+            //set preference string
             [defaults setObject:assignString forKey:specifier.key];
-            [defaults removeObjectForKey:@"background_image_url"];
+            //remove image url from defaults
+            [defaults removeObjectForKey:key];
+            //delete image file from disk
             [[NSFileManager defaultManager] removeItemAtURL:bgImageUrl error:nil];
-            [self setBackgroundImageUrl:nil];
+            //update the UI
+            [self setBackgroundImage];
         }
         else {
             //select and assign image
@@ -2273,18 +2275,18 @@ const Float32 voiceRecordDelay = 0.3;
 }
 
 -(void) backgroundImageChanged: (NSNotification *) notification {
-    NSURL * url = notification.object;
-    [self setBackgroundImageUrl:url];
+    [self setBackgroundImage];
 }
 
--(void) setBackgroundImageUrl: (NSURL *) url {
+-(void) setBackgroundImage {
+    NSURL * url = [[NSUserDefaults standardUserDefaults] URLForKey:[NSString stringWithFormat:@"%@%@", [[IdentityController sharedInstance] getLoggedInUser], @"_background_image_url"]];
     if (url) {
-        self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:url]]];
+        _bgImageView.contentMode = UIViewContentModeScaleAspectFill;
+        [_bgImageView setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:url]]];
     }
     else {
-        self.view.backgroundColor = [UIColor whiteColor];
+        _bgImageView.image = nil;
     }
-    
 }
 
 

@@ -124,10 +124,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) setBackgroundImage: (UIImage *) image {
     //scale image
-    UIGraphicsBeginImageContext(_controller.view.frame.size);
-    [image drawInRect:_controller.view.bounds];
-    UIImage * scaledImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
+    CGSize size = [UIScreen mainScreen].bounds.size;
+    CGFloat maxf = MAX(size.width, size.height);
+    UIImage * scaledImage = [image imageScaledToMinDimension:maxf];
     
     //save to file
     NSString * filepath =[FileController getBackgroundImageFilename];
@@ -138,7 +137,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     NSString * removeString = NSLocalizedString(@"pref_title_background_image_remove", nil);
     [defaults setObject:removeString forKey:@"assign_background_image_key"];
-    [defaults setURL:url forKey:@"background_image_url"];
+    [defaults setURL:url forKey:[NSString stringWithFormat:@"%@%@", [[IdentityController sharedInstance] getLoggedInUser], @"_background_image_url"]];
     
     //update UI
     [[NSNotificationCenter defaultCenter] postNotificationName:@"backgroundImageChanged" object:url];
@@ -472,12 +471,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 +(UIImage *) scaleImage: (UIImage *) image {
-    CGSize newSize = CGSizeMake(100, 100);
-    UIGraphicsBeginImageContext(newSize);
-    [image drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
-    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return newImage;
+//    CGSize newSize = CGSizeMake(100, 100);
+//    UIGraphicsBeginImageContext(newSize);
+//    [image drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
+//    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsEndImageContext();
+    //return newImage;
+    
+    return [image imageScaledToMaxWidth:100.0 maxHeight:100.0];
+    
 }
 
 - (void)orientationChanged

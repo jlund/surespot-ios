@@ -34,4 +34,17 @@
     
     return [self imageScaledToSize:newSize];
 }
+
+- (UIImage *)imageScaledToMinDimension:(CGFloat)length {
+    CGFloat oldWidth = self.size.width;
+    CGFloat oldHeight = self.size.height;
+    
+    CGFloat scaleFactor = (oldWidth < oldHeight) ? length / oldWidth : length / oldHeight;
+    
+    CGFloat newHeight = oldHeight * scaleFactor;
+    CGFloat newWidth = oldWidth * scaleFactor;
+    CGSize newSize = CGSizeMake(floor(newWidth), floor(newHeight));
+    
+    return [self imageScaledToSize:newSize];
+}
 @end
