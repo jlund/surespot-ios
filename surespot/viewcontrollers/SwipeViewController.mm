@@ -35,6 +35,7 @@
 #import "ShareKit.h"
 #import "VoiceDelegate.h"
 #import "PurchaseDelegate.h"
+#import "SurespotSettingsStore.h"
 
 
 #ifdef DEBUG
@@ -181,6 +182,7 @@ const Float32 voiceRecordDelay = 0.3;
     
     //app settings
     _appSettingsViewController = [IASKAppSettingsViewController new];
+    _appSettingsViewController.settingsStore = [[SurespotSettingsStore alloc] initWithUsername:[[IdentityController sharedInstance] getLoggedInUser]];
     _appSettingsViewController.delegate = self;
     
     
@@ -2222,7 +2224,7 @@ const Float32 voiceRecordDelay = 0.3;
 - (void)settingsViewController:(IASKAppSettingsViewController*)sender buttonTappedForSpecifier:(IASKSpecifier*)specifier {
     DDLogInfo(@"setting tapped %@", specifier.key);
     
-    if ([specifier.key isEqualToString:@"assign_background_image_key"]) {
+    if ([specifier.key isEqualToString:@"_user_assign_background_image_key"]) {
         NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
         NSString * key = [NSString stringWithFormat:@"%@%@", [[IdentityController sharedInstance] getLoggedInUser], @"_background_image_url"];
         NSURL * bgImageUrl = [defaults URLForKey:key];
@@ -2230,11 +2232,13 @@ const Float32 voiceRecordDelay = 0.3;
         if (bgImageUrl) {
             NSString * assignString = NSLocalizedString(@"pref_title_background_image_select", nil);
             //set preference string
-            [defaults setObject:assignString forKey:specifier.key];
+            [defaults setObject:assignString forKey:[ [[IdentityController sharedInstance] getLoggedInUser] stringByAppendingString:specifier.key]];
             //remove image url from defaults
             [defaults removeObjectForKey:key];
             //delete image file from disk
             [[NSFileManager defaultManager] removeItemAtURL:bgImageUrl error:nil];
+            
+            [_appSettingsViewController.tableView reloadData];
         }
         else {
             //select and assign image
@@ -2315,6 +2319,8 @@ const Float32 voiceRecordDelay = 0.3;
         _hasBackgroundImage = NO;
         _bgImageView.image = nil;
     }
+    
+    [_appSettingsViewController.tableView reloadData];
 }
 
 -(void) viewWillAppear:(BOOL)animated {

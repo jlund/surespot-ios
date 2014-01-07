@@ -4,11 +4,20 @@
 <dict>
 	<key>PreferenceSpecifiers</key>
 	<array>
+
 		<dict>
 			<key>Title</key>
 			<string>about_group_title</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
+		</dict>
+        <dict>
+			<key>Key</key>
+			<string>logged_in_user</string>
+			<key>Title</key>
+			<string>settings_for_identity</string>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
 		</dict>
 		<dict>
 			<key>DefaultValue</key>
@@ -43,7 +52,7 @@
             <key>Title</key>
             <string>pref_title_background_image_select</string>
             <key>Key</key>
-            <string>assign_background_image_key</string>
+            <string>_user_assign_background_image_key</string>
             <key>IASKTextAlignment</key>
 			<string>IASKUITextAlignmentLeft</string>
         </dict>
