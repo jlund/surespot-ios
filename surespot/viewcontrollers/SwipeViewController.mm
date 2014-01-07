@@ -65,7 +65,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) NSTimer * buttonTimer;
 @property (strong, nonatomic) IBOutlet UIImageView *bgImageView;
 @property (nonatomic, assign) BOOL hasBackgroundImage;
-
 @end
 
 @implementation SwipeViewController
@@ -184,7 +183,6 @@ const Float32 voiceRecordDelay = 0.3;
     _appSettingsViewController = [IASKAppSettingsViewController new];
     _appSettingsViewController.delegate = self;
     
-    [self setBackgroundImage];
     
 }
 
@@ -770,6 +768,10 @@ const Float32 voiceRecordDelay = 0.3;
     
 }
 
+-(UIColor *) getTextColor {
+    return _hasBackgroundImage ? [UIUtils surespotGrey] : [UIColor blackColor];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
@@ -801,6 +803,7 @@ const Float32 voiceRecordDelay = 0.3;
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
             cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
             cell.textLabel.numberOfLines = 0;
+            cell.textLabel.textColor = [self getTextColor];
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
             cell.userInteractionEnabled = NO;
             return cell;
@@ -814,14 +817,29 @@ const Float32 voiceRecordDelay = 0.3;
         // Configure the cell...
         Friend * afriend = [[[ChatController sharedInstance] getHomeDataSource].friends objectAtIndex:indexPath.row];
         cell.friendLabel.text = afriend.name;
+        
+        cell.friendLabel.textColor = [self getTextColor];
+        cell.friendStatus.textColor = [self getTextColor];;
         cell.friendName = afriend.name;
         cell.friendDelegate = [ChatController sharedInstance];
         
         BOOL isInviter =[afriend isInviter];
         
         [cell.ignoreButton setHidden:!isInviter];
+        cell.ignoreButton.titleLabel.textColor = [self getTextColor];
         [cell.acceptButton setHidden:!isInviter];
+        cell.acceptButton.titleLabel.textColor = [self getTextColor];
+        
         [cell.blockButton setHidden:!isInviter];
+
+        
+        if (_hasBackgroundImage) {
+            cell.textLabel.textColor = [UIUtils surespotGrey];
+        }
+        else {
+            cell.textLabel.textColor = [UIColor blackColor];
+        }
+
         
         cell.activeStatus.hidden = ![afriend isChatActive];
         cell.activeStatus.foregroundColor = [UIUtils surespotBlue];
@@ -891,6 +909,7 @@ const Float32 voiceRecordDelay = 0.3;
             static NSString *CellIdentifier = @"Cell";
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
             cell.textLabel.text = NSLocalizedString(@"no_messages", nil);
+            cell.textLabel.textColor = [self getTextColor];
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
             cell.userInteractionEnabled = NO;
             return cell;
@@ -923,6 +942,10 @@ const Float32 voiceRecordDelay = 0.3;
             }
             
             cell.messageLabel.text = plainData;
+            cell.messageLabel.textColor = [self getTextColor];
+            cell.messageSize.textColor = [self getTextColor];
+            cell.messageStatusLabel.textColor = [self getTextColor];
+            
             cell.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
             UIView *bgColorView = [[UIView alloc] init];
             bgColorView.backgroundColor = [UIUtils surespotSelectionBlue];
@@ -2193,7 +2216,7 @@ const Float32 voiceRecordDelay = 0.3;
     //[self dismissModalViewControllerAnimated:YES];
     
     // your code here to reconfigure the app for changed settings
-    
+    [self setBackgroundImage];
 }
 
 - (void)settingsViewController:(IASKAppSettingsViewController*)sender buttonTappedForSpecifier:(IASKSpecifier*)specifier {
@@ -2212,8 +2235,6 @@ const Float32 voiceRecordDelay = 0.3;
             [defaults removeObjectForKey:key];
             //delete image file from disk
             [[NSFileManager defaultManager] removeItemAtURL:bgImageUrl error:nil];
-            //update the UI
-            [self setBackgroundImage];
         }
         else {
             //select and assign image
@@ -2224,9 +2245,9 @@ const Float32 voiceRecordDelay = 0.3;
                               assetLibrary:_assetLibrary];
             [ImageDelegate startBackgroundImageSelectControllerFromViewController:sender usingDelegate:_imageDelegate];
         }
+        return;
     }
 }
-
 
 
 
@@ -2281,11 +2302,14 @@ const Float32 voiceRecordDelay = 0.3;
 }
 
 -(void) setBackgroundImage {
-    NSURL * url = [[NSUserDefaults standardUserDefaults] URLForKey:[NSString stringWithFormat:@"%@%@", [[IdentityController sharedInstance] getLoggedInUser], @"_background_image_url"]];
+    NSUserDefaults  * defaults = [NSUserDefaults standardUserDefaults];
+    NSString * username = [[IdentityController sharedInstance] getLoggedInUser];
+    NSURL * url = [defaults URLForKey:[NSString stringWithFormat:@"%@%@",username, @"_background_image_url"]];
     if (url) {
         _hasBackgroundImage = YES;
         _bgImageView.contentMode = UIViewContentModeScaleAspectFill;
         [_bgImageView setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:url]]];
+        [_bgImageView setAlpha: 0.5f];
     }
     else {
         _hasBackgroundImage = NO;
@@ -2293,5 +2317,9 @@ const Float32 voiceRecordDelay = 0.3;
     }
 }
 
+-(void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self setBackgroundImage];
+}
 
 @end

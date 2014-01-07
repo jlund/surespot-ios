@@ -44,8 +44,10 @@
             <string>pref_title_background_image_select</string>
             <key>Key</key>
             <string>assign_background_image_key</string>
+            <key>IASKTextAlignment</key>
+			<string>IASKUITextAlignmentLeft</string>
         </dict>
-		<dict>
+        <dict>
 			<key>Title</key>
 			<string>title_activity_identity_management</string>
 			<key>Type</key>
