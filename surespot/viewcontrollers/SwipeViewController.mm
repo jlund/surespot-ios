@@ -246,24 +246,15 @@ const Float32 voiceRecordDelay = 0.3;
     DDLogInfo(@"keyboard height before: %f", keyboardHeight);
     
     keyboardState.keyboardHeight = keyboardHeight;
+
+    CGRect frame = _swipeView.frame;
+    frame.size.height -= keyboardHeight;
+    _swipeView.frame = frame;
+    
     //
-    //    NSIndexPath * bottomCell = nil;
-    //    NSArray * visibleCells = [tableView indexPathsForVisibleRows];
-    //    if ([visibleCells count ] > 0) {
-    //        bottomCell = [visibleCells objectAtIndex:[visibleCells count]-1];
-    //    }
-    //
-    
-    DDLogInfo(@"after move content insets bottom %f, view height: %f", contentInsets.bottom, tableView.frame.size.height);
-    
-    contentInsets.bottom = keyboardHeight;
-    tableView.contentInset = contentInsets;
-    
-    
-    
-    UIEdgeInsets scrollInsets =tableView.scrollIndicatorInsets;
-    scrollInsets.bottom = keyboardHeight;
-    tableView.scrollIndicatorInsets = scrollInsets;
+    //    UIEdgeInsets scrollInsets =tableView.scrollIndicatorInsets;
+    //    scrollInsets.bottom = keyboardHeight;
+    //    tableView.scrollIndicatorInsets = scrollInsets;
     
     @synchronized (_chats) {
         for (NSString * key in [_chats allKeys]) {
@@ -283,12 +274,21 @@ const Float32 voiceRecordDelay = 0.3;
                     
                     CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y + keyboardHeight);
                     [tableView setContentOffset:newOffset animated:NO];
+                    //                    CGSize contentSize = tableView.contentSize;
+                    //                    contentSize.height -= keyboardHeight;
+                    //                    [tableView setContentSize:contentSize];
+                    //
+                    
+                    CGRect frame = tableView.frame;
+                    frame.size.height -= keyboardHeight;
+                    tableView.frame = frame;
+                    
                     
                 }
             }
             
-            tableView.contentInset = contentInsets;
-            tableView.scrollIndicatorInsets = scrollInsets;
+            //       tableView.contentInset = contentInsets;
+            //   tableView.scrollIndicatorInsets = scrollInsets;
         }
     }
     
@@ -319,20 +319,28 @@ const Float32 voiceRecordDelay = 0.3;
         _textFieldContainer.frame = textFieldFrame;
         //reset all table view states
         
-        _friendView.scrollIndicatorInsets = self.keyboardState.indicatorInset;
-        _friendView.contentInset = self.keyboardState.contentInset;
+        //        _friendView.scrollIndicatorInsets = self.keyboardState.indicatorInset;
+        //        _friendView.contentInset = self.keyboardState.contentInset;
         @synchronized (_chats) {
             
             for (NSString * key in [_chats allKeys]) {
                 UITableView * tableView = [_chats objectForKey:key];
-                tableView.scrollIndicatorInsets = self.keyboardState.indicatorInset;
-                tableView.contentInset = self.keyboardState.contentInset;
+                //  tableView.scrollIndicatorInsets = self.keyboardState.indicatorInset;
+                // tableView.contentInset = self.keyboardState.contentInset;
                 
-                //                CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y - _keyboardState.keyboardHeight);
-                //                [tableView setContentOffset:newOffset animated:NO];
+                
+                CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y - _keyboardState.keyboardHeight);
+                [tableView setContentOffset:newOffset animated:NO];
                 
             }
         }
+        
+        CGRect swipeFrame = _swipeView.frame;
+        swipeFrame.size.height += _keyboardState.keyboardHeight;
+        _swipeView.frame = swipeFrame;
+        [_swipeView setNeedsLayout];
+        
+        
         CGRect buttonFrame = _theButton.frame;
         buttonFrame.origin.y += self.keyboardState.keyboardHeight;
         _theButton.frame = buttonFrame;
@@ -833,7 +841,7 @@ const Float32 voiceRecordDelay = 0.3;
         cell.acceptButton.titleLabel.textColor = [self getTextColor];
         
         [cell.blockButton setHidden:!isInviter];
-
+        
         
         if (_hasBackgroundImage) {
             cell.textLabel.textColor = [UIUtils surespotGrey];
@@ -841,7 +849,7 @@ const Float32 voiceRecordDelay = 0.3;
         else {
             cell.textLabel.textColor = [UIColor blackColor];
         }
-
+        
         
         cell.activeStatus.hidden = ![afriend isChatActive];
         cell.activeStatus.foregroundColor = [UIUtils surespotBlue];
