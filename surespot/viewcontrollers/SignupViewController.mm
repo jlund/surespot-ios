@@ -54,6 +54,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"menu" style:UIBarButtonItemStylePlain target:self action:@selector(showMenu)];
     self.navigationItem.rightBarButtonItem = anotherButton;
 
+    [_bCreateIdentity setTintColor:[UIUtils surespotBlue]];
     
 }
 

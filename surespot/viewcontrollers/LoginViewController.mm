@@ -49,6 +49,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self updatePassword:[_identityNames objectAtIndex:[ _userPicker selectedRowInComponent:0]]];
     [self.storePassword setTintColor:[UIUtils surespotBlue]];
     [self.storePassword setOnTintColor:[UIUtils surespotBlue]];
+    [self.bLogin setTintColor:[UIUtils surespotBlue]];
     //  _textPassword.returnKeyType = UIReturnKeyGo;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resume:) name:UIApplicationDidEnterBackgroundNotification object:nil];
