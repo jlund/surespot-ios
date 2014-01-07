@@ -778,28 +778,15 @@ const Float32 voiceRecordDelay = 0.3;
         // Configure the cell...
         Friend * afriend = [[[ChatController sharedInstance] getHomeDataSource].friends objectAtIndex:indexPath.row];
         cell.friendLabel.text = afriend.name;
-        
         cell.friendLabel.textColor = [self getTextColor];
-        cell.friendStatus.textColor = [self getTextColor];;
         cell.friendName = afriend.name;
         cell.friendDelegate = [ChatController sharedInstance];
         
         BOOL isInviter =[afriend isInviter];
         
         [cell.ignoreButton setHidden:!isInviter];
-        cell.ignoreButton.titleLabel.textColor = [self getTextColor];
         [cell.acceptButton setHidden:!isInviter];
-        cell.acceptButton.titleLabel.textColor = [self getTextColor];
-        
         [cell.blockButton setHidden:!isInviter];
-        
-        
-        if (_hasBackgroundImage) {
-            cell.textLabel.textColor = [UIUtils surespotGrey];
-        }
-        else {
-            cell.textLabel.textColor = [UIColor blackColor];
-        }
         
         
         cell.activeStatus.hidden = ![afriend isChatActive];
