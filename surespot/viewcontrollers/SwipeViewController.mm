@@ -223,39 +223,26 @@ const Float32 voiceRecordDelay = 0.3;
 
 // Called when the UIKeyboardDidShowNotification is sent.
 - (void)keyboardWasShown:(NSNotification*)aNotification {
-    DDLogInfo(@"keyboardWasShown");
-    UITableView * tableView =(UITableView *)_friendView;
-    
-    KeyboardState * keyboardState = [[KeyboardState alloc] init];
-    keyboardState.contentInset = tableView.contentInset;
-    keyboardState.indicatorInset = tableView.scrollIndicatorInsets;
-    
-    
-    UIEdgeInsets contentInsets =  tableView.contentInset;
-    DDLogInfo(@"pre move originy %f,content insets bottom %f, view height: %f", _textFieldContainer.frame.origin.y, contentInsets.bottom, tableView.frame.size.height);
-    
     NSDictionary* info = [aNotification userInfo];
     CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
     CGFloat keyboardHeight = [UIUtils keyboardHeightAdjustedForOrientation:keyboardRect.size];
     
+    _keyboardState = [[KeyboardState alloc] init];
+    _keyboardState.keyboardHeight = keyboardHeight;
+    
     CGRect textFieldFrame = _textFieldContainer.frame;
     textFieldFrame.origin.y -= keyboardHeight;
-    
     _textFieldContainer.frame = textFieldFrame;
     
-    DDLogInfo(@"keyboard height before: %f", keyboardHeight);
-    
-    keyboardState.keyboardHeight = keyboardHeight;
-
     CGRect frame = _swipeView.frame;
     frame.size.height -= keyboardHeight;
     _swipeView.frame = frame;
     
-    //
-    //    UIEdgeInsets scrollInsets =tableView.scrollIndicatorInsets;
-    //    scrollInsets.bottom = keyboardHeight;
-    //    tableView.scrollIndicatorInsets = scrollInsets;
+    CGRect buttonFrame = _theButton.frame;
+    buttonFrame.origin.y -= keyboardHeight;
+    _theButton.frame = buttonFrame;
     
+
     @synchronized (_chats) {
         for (NSString * key in [_chats allKeys]) {
             UITableView * tableView = [_chats objectForKey:key];
@@ -266,72 +253,32 @@ const Float32 voiceRecordDelay = 0.3;
                 bottomCell = [visibleCells objectAtIndex:[visibleCells count]-1];
             }
             
-            
             if (bottomCell) {
                 CGRect aRect = self.view.frame;
                 aRect.size.height -= keyboardHeight;
                 if (!CGRectContainsPoint(aRect, bottomCell.frame.origin) ) {
-                    
                     CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y + keyboardHeight);
                     [tableView setContentOffset:newOffset animated:NO];
-                    //                    CGSize contentSize = tableView.contentSize;
-                    //                    contentSize.height -= keyboardHeight;
-                    //                    [tableView setContentSize:contentSize];
-                    //
-                    
-                    CGRect frame = tableView.frame;
-                    frame.size.height -= keyboardHeight;
-                    tableView.frame = frame;
-                    
-                    
                 }
             }
-            
-            //       tableView.contentInset = contentInsets;
-            //   tableView.scrollIndicatorInsets = scrollInsets;
         }
     }
-    
-    
-    CGRect buttonFrame = _theButton.frame;
-    buttonFrame.origin.y -= keyboardHeight;
-    _theButton.frame = buttonFrame;
-    
-    self.keyboardState = keyboardState;
 }
 
 // Called when the UIKeyboardWillHideNotification is sent
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification
 {
-    DDLogInfo(@"keyboardWillBeHidden");
     [self handleKeyboardHide];
-    
 }
 
 - (void) handleKeyboardHide {
-    
-    
     if (self.keyboardState) {
-        
-        
-        CGRect textFieldFrame = _textFieldContainer.frame;
-        textFieldFrame.origin.y += self.keyboardState.keyboardHeight;
-        _textFieldContainer.frame = textFieldFrame;
-        //reset all table view states
-        
-        //        _friendView.scrollIndicatorInsets = self.keyboardState.indicatorInset;
-        //        _friendView.contentInset = self.keyboardState.contentInset;
+        //reset content position
         @synchronized (_chats) {
-            
             for (NSString * key in [_chats allKeys]) {
                 UITableView * tableView = [_chats objectForKey:key];
-                //  tableView.scrollIndicatorInsets = self.keyboardState.indicatorInset;
-                // tableView.contentInset = self.keyboardState.contentInset;
-                
-                
                 CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y - _keyboardState.keyboardHeight);
                 [tableView setContentOffset:newOffset animated:NO];
-                
             }
         }
         
@@ -340,6 +287,10 @@ const Float32 voiceRecordDelay = 0.3;
         _swipeView.frame = swipeFrame;
         [_swipeView setNeedsLayout];
         
+        CGRect textFieldFrame = _textFieldContainer.frame;
+        textFieldFrame.origin.y += self.keyboardState.keyboardHeight;
+        _textFieldContainer.frame = textFieldFrame;
+
         
         CGRect buttonFrame = _theButton.frame;
         buttonFrame.origin.y += self.keyboardState.keyboardHeight;
