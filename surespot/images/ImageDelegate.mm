@@ -136,8 +136,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     //update settings string
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     NSString * removeString = NSLocalizedString(@"pref_title_background_image_remove", nil);
-    [defaults setObject:removeString forKey:@"assign_background_image_key"];
+    [defaults setObject:removeString forKey: [[[IdentityController sharedInstance] getLoggedInUser] stringByAppendingString: @"_user_assign_background_image_key"]];
     [defaults setURL:url forKey:[NSString stringWithFormat:@"%@%@", [[IdentityController sharedInstance] getLoggedInUser], @"_background_image_url"]];
+
     
     //update UI
     [[NSNotificationCenter defaultCenter] postNotificationName:@"backgroundImageChanged" object:url];
@@ -471,15 +472,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 +(UIImage *) scaleImage: (UIImage *) image {
-//    CGSize newSize = CGSizeMake(100, 100);
-//    UIGraphicsBeginImageContext(newSize);
-//    [image drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
-//    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
-//    UIGraphicsEndImageContext();
-    //return newImage;
-    
-    return [image imageScaledToMaxWidth:100.0 maxHeight:100.0];
-    
+    return [image imageScaledToMaxWidth:100.0 maxHeight:100.0];    
 }
 
 - (void)orientationChanged
