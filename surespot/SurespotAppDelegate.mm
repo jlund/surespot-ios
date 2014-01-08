@@ -61,11 +61,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     UINavigationController *rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"navigationController"];
     self.window.rootViewController = rootViewController;
     
+   
     
     
     if ([[[IdentityController sharedInstance] getIdentityNames ] count] == 0 ) {
-        
-        [rootViewController setViewControllers:@[[storyboard instantiateViewControllerWithIdentifier:@"loginViewController"], [storyboard instantiateViewControllerWithIdentifier:@"signupViewController"]]];
+        [rootViewController setViewControllers:@[[storyboard instantiateViewControllerWithIdentifier:@"signupViewController"]]];
     }
     else {
         [rootViewController setViewControllers:@[[storyboard instantiateViewControllerWithIdentifier:@"loginViewController"]]];

@@ -187,7 +187,24 @@ const Float32 voiceRecordDelay = 0.3;
     _appSettingsViewController.delegate = self;
     
  
+   }
+
+-(void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     
+    //show help in popover on ipad if it hasn't been shown yet
+    BOOL helpShown = [[NSUserDefaults standardUserDefaults] boolForKey:@"helpShown"];
+    if (!helpShown && [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+        _popover = [[UIPopoverController alloc] initWithContentViewController:[[HelpViewController alloc]                                                                                                            initWithNibName:@"HelpView" bundle:nil]] ;
+        _popover.delegate = self;
+        CGFloat x = self.view.bounds.size.width;
+        CGFloat y =self.view.bounds.size.height;
+        DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
+        [_popover setPopoverContentSize:CGSizeMake(320, 480) animated:YES];
+        [_popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:self.view permittedArrowDirections:0 animated:YES];
+        
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"helpShown"];
+    }
 }
 
 -(void) dealloc {

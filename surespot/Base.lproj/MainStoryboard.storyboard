@@ -153,7 +153,6 @@
                         <outlet property="tbPassword" destination="4qE-be-iiM" id="XO1-5U-3XE"/>
                         <outlet property="tbPasswordConfirm" destination="Oo0-cc-E0J" id="d7x-O9-Woc"/>
                         <outlet property="tbUsername" destination="oBQ-en-mfr" id="AOE-Pe-kUR"/>
-                        <segue destination="tcp-OJ-fTS" kind="push" identifier="signupToMain" id="0Gr-2N-xaD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OfU-df-7i9" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -267,7 +266,4 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
-    <inferredMetricsTieBreakers>
-        <segue reference="CFG-TY-gjC"/>
-    </inferredMetricsTieBreakers>
 </document>

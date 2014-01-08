@@ -15,6 +15,9 @@
 #import "DDLog.h"
 #import "LoadingView.h"
 #import "RestoreIdentityViewController.h"
+#import "HelpViewController.h"
+#import "SwipeViewController.h"
+#import "LoginViewController.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
@@ -53,7 +56,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"menu" style:UIBarButtonItemStylePlain target:self action:@selector(showMenu)];
     self.navigationItem.rightBarButtonItem = anotherButton;
-
+    
     [_bCreateIdentity setTintColor:[UIUtils surespotBlue]];
     
 }
@@ -112,9 +115,25 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
          successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
              DDLogVerbose(@"signup response: %d",  [operation.response statusCode]);
              [[IdentityController sharedInstance] createIdentityWithUsername:username andPassword:password andSalt:salt andKeys:keys];
-             [self performSegueWithIdentifier: @"signupToMain" sender: nil];
-             [_progressView removeView];
+             UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle: nil];
+             LoginViewController * lvc =[storyboard instantiateViewControllerWithIdentifier:@"loginViewController"];
+             SwipeViewController * svc = [storyboard instantiateViewControllerWithIdentifier:@"swipeViewController"];
              
+             NSMutableArray *  controllers = [NSMutableArray new];
+             [controllers addObject:lvc];
+             [controllers addObject:svc];
+             
+             
+             //show help view on iphone if it hasn't been shown
+             BOOL helpShown = [[NSUserDefaults standardUserDefaults] boolForKey:@"helpShown"];
+             if (!helpShown && ![UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+                 HelpViewController *hvc = [[HelpViewController alloc] initWithNibName:@"HelpView" bundle:nil];
+                 [controllers addObject:hvc];
+                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"helpShown"];
+             }
+             
+             [self.navigationController setViewControllers:controllers animated:YES];
+             [_progressView removeView];
          }
          failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
              
@@ -135,7 +154,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                  default:
                      [UIUtils showToastKey: @"could_not_create_user"];
              }
-
+             
              self.navigationItem.rightBarButtonItem.enabled = YES;
              [_progressView removeView];
          }
