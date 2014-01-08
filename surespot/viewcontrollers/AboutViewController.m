@@ -21,7 +21,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _surespotLabel.text = NSLocalizedString(@"about_about", nil);
+    [_surespotLabel setText: NSLocalizedString(@"about_about", nil)];
 
     
     NSArray * matches = @[NSLocalizedString(@"about_website_match", nil),
@@ -48,7 +48,13 @@
     [self.navigationItem setTitle:NSLocalizedString(@"about_action_bar_right", nil)];
     self.navigationController.navigationBar.translucent = NO;
     
-    _scrollView.contentSize = self.view.frame.size;
+    
+    CGFloat bottom =  _aboutLabel.frame.origin.y + _aboutLabel.frame.size.height;
+    
+    CGSize size = self.view.frame.size;
+    size.height = bottom + 20;
+    _scrollView.contentSize = size;
+
     
 }
 
