@@ -20,6 +20,7 @@
 
 #import "EncryptionController.h"
 #import "NetworkController.h"
+#import "BackupIdentityViewController.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -160,6 +161,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                        dispatch_async(dispatch_get_main_queue(), ^{
                                                                                                            [_progressView removeView];
                                                                                                            [UIUtils showToastKey:@"keys_created" duration:2];
+                                                                                                           
+                                                                                                           
+                                                                                                           BackupIdentityViewController * bvc = [[BackupIdentityViewController alloc] initWithNibName:@"BackupIdentityView" bundle:nil];
+                                                                                                           
+                                                                                                           UINavigationController * nav = self.navigationController;
+                                                                                                           [nav popViewControllerAnimated:NO];
+                                                                                                           [nav pushViewController:bvc animated:YES];
+
                                                                                                        });
                                                                                                        
                                                                                                    } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {

@@ -18,6 +18,7 @@
 #import "HelpViewController.h"
 #import "SwipeViewController.h"
 #import "LoginViewController.h"
+#import "BackupIdentityViewController.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
@@ -118,10 +119,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
              UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle: nil];
              LoginViewController * lvc =[storyboard instantiateViewControllerWithIdentifier:@"loginViewController"];
              SwipeViewController * svc = [storyboard instantiateViewControllerWithIdentifier:@"swipeViewController"];
+             BackupIdentityViewController * bvc = [[BackupIdentityViewController alloc] initWithNibName:@"BackupIdentityView" bundle:nil];
              
              NSMutableArray *  controllers = [NSMutableArray new];
              [controllers addObject:lvc];
              [controllers addObject:svc];
+             [controllers addObject:bvc];
              
              
              //show help view on iphone if it hasn't been shown

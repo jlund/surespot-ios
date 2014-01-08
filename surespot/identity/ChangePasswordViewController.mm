@@ -20,6 +20,7 @@
 #import "EncryptionController.h"
 #import "NetworkController.h"
 #import "SurespotAppDelegate.h"
+#import "BackupIdentityViewController.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -248,9 +249,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                                 dispatch_async(dispatch_get_main_queue(), ^{
                                                                                                                     [_progressView removeView];
                                                                                                                     [UIUtils showToastKey:@"password_changed" duration:2];
-                                                                                                                    [self.navigationController popViewControllerAnimated:YES];
-                                                                                                                });
+                                                                                                                    
+                                                                                                                    BackupIdentityViewController * bvc = [[BackupIdentityViewController alloc] initWithNibName:@"BackupIdentityView" bundle:nil];
                                                                                                                 
+                                                                                                                    UINavigationController * nav = self.navigationController;
+                                                                                                                    [nav popViewControllerAnimated:NO];
+                                                                                                                    [nav pushViewController:bvc animated:YES];
+                                                                                                                });
+  
                                                                                                             } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
                                                                                                                 dispatch_async(dispatch_get_main_queue(), ^{
                                                                                                                     [_progressView removeView];
