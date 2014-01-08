@@ -105,6 +105,8 @@
 		668D2502186A373A0096D155 /* QRInviteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 668D2501186A373A0096D155 /* QRInviteViewController.mm */; };
 		6698585118663157003624DA /* AGWindowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6698584E18663157003624DA /* AGWindowView.m */; };
 		669BC187187DAACD00C3C752 /* HelpView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 669BC186187DAACD00C3C752 /* HelpView.xib */; };
+		669BC195187DBF3500C3C752 /* AboutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 669BC194187DBF3500C3C752 /* AboutView.xib */; };
+		669BC199187DC1CB00C3C752 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 669BC197187DC1CB00C3C752 /* AboutViewController.m */; };
 		66A2D919183A7A7F00785270 /* SurespotConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D918183A7A7F00785270 /* SurespotConstants.m */; };
 		66A2D940183C25E800785270 /* UIScrollView+SVInfiniteScrolling.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D932183C25E800785270 /* UIScrollView+SVInfiniteScrolling.m */; };
 		66A2D941183C25E800785270 /* UIScrollView+SVPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D934183C25E800785270 /* UIScrollView+SVPullToRefresh.m */; };
@@ -506,6 +508,9 @@
 		6698584E18663157003624DA /* AGWindowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGWindowView.m; sourceTree = "<group>"; };
 		6698584F18663157003624DA /* AGWindowViewDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGWindowViewDefines.h; sourceTree = "<group>"; };
 		669BC186187DAACD00C3C752 /* HelpView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HelpView.xib; sourceTree = "<group>"; };
+		669BC194187DBF3500C3C752 /* AboutView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutView.xib; sourceTree = "<group>"; };
+		669BC196187DC1CB00C3C752 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
+		669BC197187DC1CB00C3C752 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
 		66A2D917183A7A7F00785270 /* SurespotConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SurespotConstants.h; sourceTree = "<group>"; };
 		66A2D918183A7A7F00785270 /* SurespotConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SurespotConstants.m; sourceTree = "<group>"; };
 		66A2D930183C25E800785270 /* SVPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVPullToRefresh.h; sourceTree = "<group>"; };
@@ -1677,6 +1682,9 @@
 				66BB5A47187C7672007B5C47 /* HelpViewController.h */,
 				66BB5A48187C7672007B5C47 /* HelpViewController.m */,
 				669BC186187DAACD00C3C752 /* HelpView.xib */,
+				669BC194187DBF3500C3C752 /* AboutView.xib */,
+				669BC196187DC1CB00C3C752 /* AboutViewController.h */,
+				669BC197187DC1CB00C3C752 /* AboutViewController.m */,
 			);
 			path = viewcontrollers;
 			sourceTree = "<group>";
@@ -2051,6 +2059,7 @@
 				66EBE0D61855C97100F2452D /* MainStoryboard.storyboard in Resources */,
 				66EBE0D11855C97100F2452D /* IdentityCell.xib in Resources */,
 				6621BB841762704D00BC2850 /* Localizable.strings in Resources */,
+				669BC195187DBF3500C3C752 /* AboutView.xib in Resources */,
 				669BC187187DAACD00C3C752 /* HelpView.xib in Resources */,
 				6646AE16185CADC700CBACDE /* README.mdown in Resources */,
 				66EBE0B91855C97100F2452D /* RestoreIdentityViewController.xib in Resources */,
@@ -2186,6 +2195,7 @@
 				668D24F4186A24D90096D155 /* DataMatrix.mm in Sources */,
 				661C2ED61763D4B9000649E7 /* NSData+Gunzip.m in Sources */,
 				668D2502186A373A0096D155 /* QRInviteViewController.mm in Sources */,
+				669BC199187DC1CB00C3C752 /* AboutViewController.m in Sources */,
 				66866266185B6A2E001491B1 /* SDWebImageDecoder.m in Sources */,
 				66866264185B6A2E001491B1 /* SDImageCache.mm in Sources */,
 				66EBE0D51855C97100F2452D /* NetworkController.m in Sources */,
