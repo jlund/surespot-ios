@@ -4,14 +4,14 @@
 <dict>
 	<key>PreferenceSpecifiers</key>
 	<array>
-
-		<dict>
+        <dict>
 			<key>Title</key>
 			<string>about_group_title</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>
-        <dict>
+
+	     <dict>
 			<key>Key</key>
 			<string>logged_in_user</string>
 			<key>Title</key>
@@ -38,6 +38,26 @@
 			<string>build</string>
 			<key>Type</key>
 			<string>PSTitleValueSpecifier</string>
+		</dict>
+        <dict>
+			<key>IASKViewControllerClass</key>
+			<string>AboutViewController</string>
+			<key>IASKViewControllerSelector</key>
+			<string>init</string>
+			<key>Title</key>
+			<string>title_activity_about</string>
+			<key>Type</key>
+			<string>PSChildPaneSpecifier</string>
+		</dict>
+        <dict>
+			<key>IASKViewControllerClass</key>
+			<string>HelpViewController</string>
+			<key>IASKViewControllerSelector</key>
+			<string>init</string>
+			<key>Title</key>
+			<string>help</string>
+			<key>Type</key>
+			<string>PSChildPaneSpecifier</string>
 		</dict>
         <dict>
 			<key>Title</key>

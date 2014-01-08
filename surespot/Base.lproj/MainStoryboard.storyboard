@@ -163,7 +163,7 @@
         <!--Swipe View Controller-->
         <scene sceneID="9JK-qE-IFd">
             <objects>
-                <viewController id="tcp-OJ-fTS" customClass="SwipeViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="swipeViewController" id="tcp-OJ-fTS" customClass="SwipeViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="34R-ma-0cs">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

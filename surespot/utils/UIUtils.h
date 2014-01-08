@@ -38,8 +38,8 @@
 +(CGSize) sizeAdjustedForOrientation: (CGSize) size;
 +(void) setLinkLabel:(TTTAttributedLabel *) label
             delegate: (id) delegate
-            labelText: (NSString *) labelText
-       linkMatchText: (NSString *) linkMatchText
-           urlString: (NSString *) urlString;
+           labelText: (NSString *) labelText
+      linkMatchTexts: (NSArray *) linkMatchTexts
+          urlStrings: (NSArray *) urlStrings;
 @end
 

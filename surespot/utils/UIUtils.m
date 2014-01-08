@@ -288,15 +288,29 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 +(void) setLinkLabel:(TTTAttributedLabel *) label
             delegate: (id) delegate
-            labelText: (NSString *) labelText
-       linkMatchText: (NSString *) linkMatchText
-           urlString: (NSString *) urlString  {
+           labelText: (NSString *) labelText
+      linkMatchTexts: (NSArray *) linkMatchTexts
+          urlStrings: (NSArray *) urlStrings  {
+    
     label.delegate = delegate;
     label.text = labelText;
-    NSRange range = [label.text rangeOfString:linkMatchText];
     
-    label.linkAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:[UIUtils surespotBlue], kCTForegroundColorAttributeName, [NSNumber numberWithInt:kCTUnderlineStyleSingle], kCTUnderlineStyleAttributeName, nil];
-    [label addLinkToURL:[NSURL URLWithString:urlString] withRange:range];
+    if (linkMatchTexts.count != urlStrings.count) {
+        NSException * e = [NSException exceptionWithName:@"IllegalArgumentException" reason:@"match and url count does not match" userInfo:nil];
+        [e raise];
+    }
+    
+    for (NSInteger i = 0;i<linkMatchTexts.count;i++) {
+        NSString * linkMatchText = linkMatchTexts[i];
+        NSString * urlString = urlStrings[i];
+        
+        NSRange range = [label.text rangeOfString:linkMatchText];
+        
+        label.linkAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:[UIUtils surespotBlue], kCTForegroundColorAttributeName, [NSNumber numberWithInt:kCTUnderlineStyleSingle], kCTUnderlineStyleAttributeName, nil];
+        
+        
+        [label addLinkToURL:[NSURL URLWithString:urlString] withRange:range];
+    }
     
 }
 

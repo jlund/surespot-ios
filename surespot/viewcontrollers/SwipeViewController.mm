@@ -36,6 +36,7 @@
 #import "VoiceDelegate.h"
 #import "PurchaseDelegate.h"
 #import "SurespotSettingsStore.h"
+#import "HelpViewController.h"
 
 
 #ifdef DEBUG
@@ -185,6 +186,7 @@ const Float32 voiceRecordDelay = 0.3;
     _appSettingsViewController.settingsStore = [[SurespotSettingsStore alloc] initWithUsername:[[IdentityController sharedInstance] getLoggedInUser]];
     _appSettingsViewController.delegate = self;
     
+ 
     
 }
 
@@ -760,7 +762,7 @@ const Float32 voiceRecordDelay = 0.3;
         if (count == 0) {
             static NSString *CellIdentifier = @"Cell";
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-            cell.textLabel.text = NSLocalizedString(@"welcome_to_surespot", nil);
+            cell.textLabel.text = NSLocalizedString(@"no_friends", nil);
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
             cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
             cell.textLabel.numberOfLines = 0;
@@ -2272,6 +2274,7 @@ const Float32 voiceRecordDelay = 0.3;
 -(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self setBackgroundImage];
+    
 }
 
 @end

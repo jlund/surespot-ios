@@ -104,11 +104,13 @@
 		668D24FF186A36520096D155 /* QRInviteView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 668D24FE186A36520096D155 /* QRInviteView.xib */; };
 		668D2502186A373A0096D155 /* QRInviteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 668D2501186A373A0096D155 /* QRInviteViewController.mm */; };
 		6698585118663157003624DA /* AGWindowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6698584E18663157003624DA /* AGWindowView.m */; };
+		669BC187187DAACD00C3C752 /* HelpView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 669BC186187DAACD00C3C752 /* HelpView.xib */; };
 		66A2D919183A7A7F00785270 /* SurespotConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D918183A7A7F00785270 /* SurespotConstants.m */; };
 		66A2D940183C25E800785270 /* UIScrollView+SVInfiniteScrolling.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D932183C25E800785270 /* UIScrollView+SVInfiniteScrolling.m */; };
 		66A2D941183C25E800785270 /* UIScrollView+SVPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A2D934183C25E800785270 /* UIScrollView+SVPullToRefresh.m */; };
 		66AC20AB18690CBD004E58E1 /* KeyFingerprintLoadingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66AC20AA18690CBD004E58E1 /* KeyFingerprintLoadingView.xib */; };
 		66BB5A3A187B7EE9007B5C47 /* SurespotSettingsStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 66BB5A39187B7EE9007B5C47 /* SurespotSettingsStore.m */; };
+		66BB5A49187C7672007B5C47 /* HelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66BB5A48187C7672007B5C47 /* HelpViewController.m */; };
 		66D3B04F182EAB4200B37A6C /* surespot.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66D3B04E182EAB4200B37A6C /* surespot.xcassets */; };
 		66DAB60A186CBDC3006C262F /* ShareKit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 66DAB5B7186CBD6B006C262F /* ShareKit.bundle */; };
 		66DAB60D186CBE91006C262F /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66DAB60C186CBE91006C262F /* Twitter.framework */; };
@@ -503,6 +505,7 @@
 		6698584D18663157003624DA /* AGWindowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGWindowView.h; sourceTree = "<group>"; };
 		6698584E18663157003624DA /* AGWindowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGWindowView.m; sourceTree = "<group>"; };
 		6698584F18663157003624DA /* AGWindowViewDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGWindowViewDefines.h; sourceTree = "<group>"; };
+		669BC186187DAACD00C3C752 /* HelpView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HelpView.xib; sourceTree = "<group>"; };
 		66A2D917183A7A7F00785270 /* SurespotConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SurespotConstants.h; sourceTree = "<group>"; };
 		66A2D918183A7A7F00785270 /* SurespotConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SurespotConstants.m; sourceTree = "<group>"; };
 		66A2D930183C25E800785270 /* SVPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVPullToRefresh.h; sourceTree = "<group>"; };
@@ -513,6 +516,8 @@
 		66AC20AA18690CBD004E58E1 /* KeyFingerprintLoadingView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyFingerprintLoadingView.xib; sourceTree = "<group>"; };
 		66BB5A38187B7EE9007B5C47 /* SurespotSettingsStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SurespotSettingsStore.h; sourceTree = "<group>"; };
 		66BB5A39187B7EE9007B5C47 /* SurespotSettingsStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SurespotSettingsStore.m; sourceTree = "<group>"; };
+		66BB5A47187C7672007B5C47 /* HelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpViewController.h; sourceTree = "<group>"; };
+		66BB5A48187C7672007B5C47 /* HelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpViewController.m; sourceTree = "<group>"; };
 		66D3B04E182EAB4200B37A6C /* surespot.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = surespot.xcassets; sourceTree = "<group>"; };
 		66DAB588186CBD6A006C262F /* ShareKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ShareKit.xcodeproj; path = Submodules/ShareKit/ShareKit.xcodeproj; sourceTree = "<group>"; };
 		66DAB60C186CBE91006C262F /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
@@ -1669,6 +1674,9 @@
 				6686623A18565AD5001491B1 /* SignupViewController.mm */,
 				6686623B18565AD5001491B1 /* SwipeViewController.h */,
 				6686623C18565AD5001491B1 /* SwipeViewController.mm */,
+				66BB5A47187C7672007B5C47 /* HelpViewController.h */,
+				66BB5A48187C7672007B5C47 /* HelpViewController.m */,
+				669BC186187DAACD00C3C752 /* HelpView.xib */,
 			);
 			path = viewcontrollers;
 			sourceTree = "<group>";
@@ -2043,6 +2051,7 @@
 				66EBE0D61855C97100F2452D /* MainStoryboard.storyboard in Resources */,
 				66EBE0D11855C97100F2452D /* IdentityCell.xib in Resources */,
 				6621BB841762704D00BC2850 /* Localizable.strings in Resources */,
+				669BC187187DAACD00C3C752 /* HelpView.xib in Resources */,
 				6646AE16185CADC700CBACDE /* README.mdown in Resources */,
 				66EBE0B91855C97100F2452D /* RestoreIdentityViewController.xib in Resources */,
 				661F3B7E186898B9003C7AE3 /* KeyFingerprintView.xib in Resources */,
@@ -2187,6 +2196,7 @@
 				66E21DEE1847D7F90005D91E /* IASKSpecifierValuesViewController.m in Sources */,
 				66EC610E176E494900937467 /* AFJSONRequestOperation.m in Sources */,
 				66EBE0D31855C97100F2452D /* ImageDelegate.mm in Sources */,
+				66BB5A49187C7672007B5C47 /* HelpViewController.m in Sources */,
 				66EC610F176E494900937467 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				66EBE1371855C97100F2452D /* NSData+Base64.m in Sources */,
 				66370130187A365D006D17CA /* TTTAttributedLabel.m in Sources */,
