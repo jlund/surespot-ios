@@ -131,7 +131,7 @@
                             </connections>
                         </button>
                         <label opaque="NO" clipsSubviews="YES" tag="20" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Itn-QI-EPQ" customClass="TTTAttributedLabel">
-                            <rect key="frame" x="20" y="0.0" width="280" height="161"/>
+                            <rect key="frame" x="20" y="10" width="280" height="161"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <string key="text">Surespot is ad and data mining free.
 
@@ -143,7 +143,7 @@ We will donate a percentage to the EFF that they may continue to fight for all o
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1 surecoin = " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="B0P-LZ-jJ5">
-                            <rect key="frame" x="20" y="175" width="280" height="21"/>
+                            <rect key="frame" x="20" y="179" width="280" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="24"/>
                             <nil key="highlightedColor"/>
