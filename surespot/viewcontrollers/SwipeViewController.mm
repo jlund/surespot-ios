@@ -2143,13 +2143,12 @@ const Float32 voiceRecordDelay = 0.3;
 -(void) newMessage: (NSNotification *) notification {
     SurespotMessage * message = notification.object;
     NSString * currentChat =[[ChatController sharedInstance] getCurrentChat];
-    //show toast if we're not on the tab or home page, and pulse if we're logged in as the user
+    //pulse if we're logged in as the user
     if (currentChat &&
         ![message.from isEqualToString: currentChat] &&
         [[[IdentityController sharedInstance] getIdentityNames] containsObject:message.to]) {
-        [UIUtils showToastMessage:[NSString stringWithFormat:NSLocalizedString(@"notification_message", nil), message.to, message.from] duration:1];
         
-        [UIUtils startPulseAnimation:_backImageView];
+        [UIUtils startPulseAnimation:_backImageView];                
     }
 }
 
@@ -2168,9 +2167,8 @@ const Float32 voiceRecordDelay = 0.3;
 -(void) inviteAccepted: (NSNotification *) notification {
     NSString * acceptedBy = notification.object;
     NSString * currentChat =[[ChatController sharedInstance] getCurrentChat];
-    //show toast if we're not on the tab or home page, and pulse if we're logged in as the user
+    // pulse if we're logged in as the user
     if (currentChat) {
-        [UIUtils showToastMessage:[NSString stringWithFormat:NSLocalizedString(@"notification_invite_accept", nil), [[IdentityController sharedInstance] getLoggedInUser], acceptedBy] duration:1];
         
         [UIUtils startPulseAnimation:_backImageView];
     }

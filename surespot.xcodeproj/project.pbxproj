@@ -74,6 +74,9 @@
 		665F4DF91831923C0083BCE7 /* REMenuItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DF41831923C0083BCE7 /* REMenuItemView.m */; };
 		665F4E0D183324360083BCE7 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 665F4E081833238D0083BCE7 /* libTestFlight.a */; };
 		665F4E0F183325C50083BCE7 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 665F4E0E183325C50083BCE7 /* AdSupport.framework */; };
+		666D3358187F4AE000B73F69 /* message.wav in Resources */ = {isa = PBXBuildFile; fileRef = 666D3356187F4AE000B73F69 /* message.wav */; };
+		666D335B187F508700B73F69 /* invite.wav in Resources */ = {isa = PBXBuildFile; fileRef = 666D3359187F508600B73F69 /* invite.wav */; };
+		666D335C187F508700B73F69 /* invite-accept.wav in Resources */ = {isa = PBXBuildFile; fileRef = 666D335A187F508600B73F69 /* invite-accept.wav */; };
 		6674FF71186CB91300B8E77B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6674FF70186CB91300B8E77B /* CoreMedia.framework */; };
 		6674FF73186CB92200B8E77B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6674FF72186CB92200B8E77B /* AVFoundation.framework */; };
 		6674FF75186CB94500B8E77B /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6674FF74186CB94500B8E77B /* Accounts.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -453,6 +456,9 @@
 		665F4E0A1833238D0083BCE7 /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+ManualSessions.h"; sourceTree = "<group>"; };
 		665F4E0B1833238D0083BCE7 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		665F4E0E183325C50083BCE7 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		666D3356187F4AE000B73F69 /* message.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = message.wav; sourceTree = "<group>"; };
+		666D3359187F508600B73F69 /* invite.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = invite.wav; sourceTree = "<group>"; };
+		666D335A187F508600B73F69 /* invite-accept.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "invite-accept.wav"; sourceTree = "<group>"; };
 		6674FF70186CB91300B8E77B /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		6674FF72186CB92200B8E77B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		6674FF74186CB94500B8E77B /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
@@ -1008,6 +1014,9 @@
 				6648B1ED186CBA81007037B1 /* SurespotSHKConfigurator.m */,
 				6604A2D617626B9E0072216A /* MainStoryboard.storyboard */,
 				66D3B04E182EAB4200B37A6C /* surespot.xcassets */,
+				666D335A187F508600B73F69 /* invite-accept.wav */,
+				666D3359187F508600B73F69 /* invite.wav */,
+				666D3356187F4AE000B73F69 /* message.wav */,
 				6604A2C517626B9E0072216A /* Supporting Files */,
 				66E4F517176298CB00596E6B /* libs */,
 			);
@@ -2037,11 +2046,13 @@
 				66F831FF185B9EB500ADD2F1 /* OurMessageCell.xib in Resources */,
 				668D24FF186A36520096D155 /* QRInviteView.xib in Resources */,
 				66DAB62A186D0461006C262F /* SurespotSHKSharers.plist in Resources */,
+				666D335B187F508700B73F69 /* invite.wav in Resources */,
 				6652F2A41875CFF300E023A7 /* PurchaseVoiceView~iphone.xib in Resources */,
 				6646AE26185CADC700CBACDE /* MWPhotoBrowser.bundle in Resources */,
 				66EBE13E1855C97100F2452D /* HomeCell.xib in Resources */,
 				6652F2A51875CFF300E023A7 /* PurchaseVoiceView~ipad.xib in Resources */,
 				66DAB615186CBF1C006C262F /* GooglePlus.bundle in Resources */,
+				666D335C187F508700B73F69 /* invite-accept.wav in Resources */,
 				6604A2D817626B9E0072216A /* MainStoryboard.storyboard in Resources */,
 				66D3B04F182EAB4200B37A6C /* surespot.xcassets in Resources */,
 				66EBE0D61855C97100F2452D /* MainStoryboard.storyboard in Resources */,
@@ -2057,6 +2068,7 @@
 				661F46A41865E063004A71B0 /* DeleteIdentityView.xib in Resources */,
 				66AC20AB18690CBD004E58E1 /* KeyFingerprintLoadingView.xib in Resources */,
 				661F469A1864C0B2004A71B0 /* GenerateKeysView.xib in Resources */,
+				666D3358187F4AE000B73F69 /* message.wav in Resources */,
 				661F46A81865EDC3004A71B0 /* ChangePasswordView.xib in Resources */,
 				66DAB60A186CBDC3006C262F /* ShareKit.bundle in Resources */,
 			);

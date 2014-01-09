@@ -156,7 +156,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     localNotification.fireDate = nil;
                     localNotification.alertBody = [NSString stringWithFormat: NSLocalizedString(notificationType, nil), to, from];
                     localNotification.alertAction = NSLocalizedString(@"notification_title", nil);
-                    localNotification.soundName = UILocalNotificationDefaultSoundName;
+                    localNotification.soundName = [userInfo valueForKeyPath:@"aps.sound"];
                     [application scheduleLocalNotification:localNotification];
                 }
             }

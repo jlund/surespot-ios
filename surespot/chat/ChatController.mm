@@ -24,6 +24,7 @@
 #import "SurespotErrorMessage.h"
 #import "Reachability.h"
 #import "SDWebImageManager.h"
+#import <AudioToolbox/AudioToolbox.h>
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
@@ -43,7 +44,9 @@ static const int MAX_CONNECTION_RETRIES = 16;
 @property (strong, atomic) NSTimer * reconnectTimer;
 @property (strong, nonatomic) NSMutableArray * sendBuffer;
 @property (strong, nonatomic) NSMutableArray * resendBuffer;
-
+@property (assign, nonatomic) SystemSoundID messageSoundID;
+@property (assign, nonatomic) SystemSoundID inviteSoundID;
+@property (assign, nonatomic) SystemSoundID acceptSoundID;
 @end
 
 @implementation ChatController
@@ -84,6 +87,23 @@ static const int MAX_CONNECTION_RETRIES = 16;
         [reach startNotifier];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAutoinvitesNotification:) name:@"autoinvites" object:nil];
+        
+        NSString *messageSoundPath = [[NSBundle mainBundle]
+                                pathForResource:@"message" ofType:@"wav"];
+        NSURL *messageSoundURL = [NSURL fileURLWithPath:messageSoundPath];
+        AudioServicesCreateSystemSoundID((__bridge CFURLRef)messageSoundURL, &_messageSoundID);
+        
+        NSString *inviteSoundPath = [[NSBundle mainBundle]
+                                      pathForResource:@"invite" ofType:@"wav"];
+        NSURL *inviteSoundURL = [NSURL fileURLWithPath:inviteSoundPath];
+        AudioServicesCreateSystemSoundID((__bridge CFURLRef)inviteSoundURL, &_inviteSoundID);
+
+        
+        NSString *inviteAcceptSoundPath = [[NSBundle mainBundle]
+                                      pathForResource:@"invite-accept" ofType:@"wav"];
+        NSURL *inviteAcceptSoundURL = [NSURL fileURLWithPath:inviteAcceptSoundPath];
+        AudioServicesCreateSystemSoundID((__bridge CFURLRef)inviteAcceptSoundURL, &_acceptSoundID);
+
     }
     
     return self;
@@ -631,7 +651,20 @@ static const int MAX_CONNECTION_RETRIES = 16;
     
     //if we have new message let anyone who cares know
     if (afriend.hasNewMessages) {
+        //show toast and make sound if we're not on the tab
+        NSString * currentChat = [self getCurrentChat];
+        if (![message.from isEqualToString: currentChat] &&
+            [[[IdentityController sharedInstance] getIdentityNames] containsObject:message.to]) {
+            [UIUtils showToastMessage:[NSString stringWithFormat:NSLocalizedString(@"notification_message", nil), message.to, message.from] duration:1];
+                       
+            //play notification sound
+            AudioServicesPlaySystemSound(_messageSoundID);
+            
+            
+        }
+        
         [[NSNotificationCenter defaultCenter] postNotificationName:@"newMessage" object: message];
+
         
     }
 }
@@ -748,6 +781,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
             else {
                 if ([message.action isEqualToString:@"invite"]) {
                     user = message.data;
+                     AudioServicesPlaySystemSound(_inviteSoundID);
                     [_homeDataSource addFriendInviter: user ];
                 }
                 else {
@@ -862,6 +896,8 @@ static const int MAX_CONNECTION_RETRIES = 16;
     
     //if i'm not the accepter fire a notification saying such
     if (![byUsername isEqualToString:[[IdentityController sharedInstance] getLoggedInUser]]) {
+        [UIUtils showToastMessage:[NSString stringWithFormat:NSLocalizedString(@"notification_invite_accept", nil), [[IdentityController sharedInstance] getLoggedInUser], byUsername] duration:1];
+        AudioServicesPlaySystemSound(_acceptSoundID);
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:@"inviteAccepted" object:byUsername];
         });
