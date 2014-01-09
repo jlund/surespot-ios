@@ -14,7 +14,7 @@
 			<key>Key</key>
 			<string>logged_in_user</string>
 			<key>Title</key>
-			<string>settings_for_identity</string>
+			<string>identity</string>
 			<key>Type</key>
 			<string>PSTitleValueSpecifier</string>
 		</dict>
@@ -60,7 +60,7 @@
 		</dict>
 		<dict>
 			<key>Title</key>
-			<string>options</string>
+			<string>pref_title_options</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>
