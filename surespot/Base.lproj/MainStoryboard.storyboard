@@ -86,6 +86,7 @@
                     <connections>
                         <outlet property="bLogin" destination="SW9-JJ-OEP" id="URd-kO-Go8"/>
                         <outlet property="scrollView" destination="88S-Nt-FbA" id="fTD-aX-84D"/>
+                        <outlet property="storeKeychainLabel" destination="Rqw-SE-Rx5" id="atC-oJ-Xeu"/>
                         <outlet property="storePassword" destination="Ovg-Yc-56c" id="PaV-oM-qU7"/>
                         <outlet property="textPassword" destination="JPD-8G-y9p" id="OMQ-Mc-YUx"/>
                         <outlet property="userPicker" destination="WV1-5E-HKR" id="RnN-f6-NzK"/>

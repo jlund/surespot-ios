@@ -34,6 +34,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (strong, nonatomic) IBOutlet UIButton *bLogin;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UISwitch *storePassword;
+@property (strong, nonatomic) IBOutlet UILabel *storeKeychainLabel;
 @property (strong, readwrite, nonatomic) REMenu *menu;
 @end
 
@@ -50,13 +51,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.storePassword setTintColor:[UIUtils surespotBlue]];
     [self.storePassword setOnTintColor:[UIUtils surespotBlue]];
     [self.bLogin setTintColor:[UIUtils surespotBlue]];
+    [self.bLogin setTitle:NSLocalizedString(@"login", nil) forState:UIControlStateNormal];
     //  _textPassword.returnKeyType = UIReturnKeyGo;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resume:) name:UIApplicationDidEnterBackgroundNotification object:nil];
     
-    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"menu" style:UIBarButtonItemStylePlain target:self action:@selector(showMenu)];
+    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"menu",nil) style:UIBarButtonItemStylePlain target:self action:@selector(showMenu)];
     self.navigationItem.rightBarButtonItem = anotherButton;
     
+    
+    _storeKeychainLabel.text = NSLocalizedString(@"store_password_in_keychain", nil);
 }
 
 // Call this method somewhere in your view controller setup code.
