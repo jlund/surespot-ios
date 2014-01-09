@@ -204,8 +204,6 @@
 		66EBE0D41855C97100F2452D /* UIImage+Scale.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBDF3C1855C96F00F2452D /* UIImage+Scale.m */; };
 		66EBE0D51855C97100F2452D /* NetworkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBDF3F1855C96F00F2452D /* NetworkController.m */; };
 		66EBE0D61855C97100F2452D /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66EBDF411855C96F00F2452D /* MainStoryboard.storyboard */; };
-		66EBE0D71855C97100F2452D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 66EBDF441855C96F00F2452D /* InfoPlist.strings */; };
-		66EBE0D81855C97100F2452D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 66EBDF461855C96F00F2452D /* Localizable.strings */; };
 		66EBE0D91855C97100F2452D /* EncryptionController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66EBDF4A1855C96F00F2452D /* EncryptionController.mm */; };
 		66EBE0DA1855C97100F2452D /* IdentityKeys.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66EBDF4C1855C96F00F2452D /* IdentityKeys.mm */; };
 		66EBE1361855C97100F2452D /* FileController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE0971855C97100F2452D /* FileController.mm */; };
@@ -504,7 +502,6 @@
 		668D24FE186A36520096D155 /* QRInviteView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = QRInviteView.xib; path = qr/QRInviteView.xib; sourceTree = "<group>"; };
 		668D2500186A373A0096D155 /* QRInviteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QRInviteViewController.h; path = qr/QRInviteViewController.h; sourceTree = "<group>"; };
 		668D2501186A373A0096D155 /* QRInviteViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = QRInviteViewController.mm; path = qr/QRInviteViewController.mm; sourceTree = "<group>"; };
-		66974AEF187EF17D007BB80F /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		66974AF0187EF17D007BB80F /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6698584D18663157003624DA /* AGWindowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGWindowView.h; sourceTree = "<group>"; };
 		6698584E18663157003624DA /* AGWindowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGWindowView.m; sourceTree = "<group>"; };
@@ -803,8 +800,6 @@
 		66EBDF3E1855C96F00F2452D /* NetworkController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkController.h; sourceTree = "<group>"; };
 		66EBDF3F1855C96F00F2452D /* NetworkController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkController.m; sourceTree = "<group>"; };
 		66EBDF421855C96F00F2452D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
-		66EBDF451855C96F00F2452D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
-		66EBDF471855C96F00F2452D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
 		66EBDF491855C96F00F2452D /* EncryptionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncryptionController.h; sourceTree = "<group>"; };
 		66EBDF4A1855C96F00F2452D /* EncryptionController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EncryptionController.mm; sourceTree = "<group>"; };
 		66EBDF4B1855C96F00F2452D /* IdentityKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IdentityKeys.h; path = ../encryption/IdentityKeys.h; sourceTree = "<group>"; };
@@ -993,7 +988,6 @@
 				66EBDF2F1855C96F00F2452D /* backup */,
 				66EBDF401855C96F00F2452D /* Base.lproj */,
 				66EBDF081855C96F00F2452D /* chat */,
-				66EBDF431855C96F00F2452D /* en.lproj */,
 				66EBDF481855C96F00F2452D /* encryption */,
 				66EBE0A21855C97100F2452D /* home */,
 				66EBDEF31855C96F00F2452D /* identity */,
@@ -1753,15 +1747,6 @@
 			path = Base.lproj;
 			sourceTree = "<group>";
 		};
-		66EBDF431855C96F00F2452D /* en.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				66EBDF441855C96F00F2452D /* InfoPlist.strings */,
-				66EBDF461855C96F00F2452D /* Localizable.strings */,
-			);
-			path = en.lproj;
-			sourceTree = "<group>";
-		};
 		66EBDF481855C96F00F2452D /* encryption */ = {
 			isa = PBXGroup;
 			children = (
@@ -2047,10 +2032,8 @@
 				661F469E1864C0BE004A71B0 /* BackupIdentityView.xib in Resources */,
 				6604A2C917626B9E0072216A /* InfoPlist.strings in Resources */,
 				6637012D187A33A6006D17CA /* PWYLView.xib in Resources */,
-				66EBE0D81855C97100F2452D /* Localizable.strings in Resources */,
 				66F831FF185B9EB500ADD2F1 /* OurMessageCell.xib in Resources */,
 				668D24FF186A36520096D155 /* QRInviteView.xib in Resources */,
-				66EBE0D71855C97100F2452D /* InfoPlist.strings in Resources */,
 				66DAB62A186D0461006C262F /* SurespotSHKSharers.plist in Resources */,
 				6652F2A41875CFF300E023A7 /* PurchaseVoiceView~iphone.xib in Resources */,
 				6646AE26185CADC700CBACDE /* MWPhotoBrowser.bundle in Resources */,
@@ -2318,23 +2301,6 @@
 				66EBDF421855C96F00F2452D /* Base */,
 			);
 			name = MainStoryboard.storyboard;
-			sourceTree = "<group>";
-		};
-		66EBDF441855C96F00F2452D /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				66EBDF451855C96F00F2452D /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		66EBDF461855C96F00F2452D /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				66EBDF471855C96F00F2452D /* en */,
-				66974AEF187EF17D007BB80F /* fr */,
-			);
-			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

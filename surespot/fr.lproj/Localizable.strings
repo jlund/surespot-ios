@@ -305,7 +305,7 @@
 "close"="fermer";
 "no_audio_detected"="pas d\'audio détecté - impossible d\'envoyer un message vocal";
 
-* need translation*/
+/* need translation*/
 "menu_copy"="copy";
 "message_hint"="enter message";
 "invite_hint"="invite user";
