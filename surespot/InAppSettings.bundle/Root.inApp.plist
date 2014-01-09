@@ -76,7 +76,7 @@
 		</dict>
 		<dict>
 			<key>Title</key>
-			<string>title_activity_identity_management</string>
+			<string>pref_title_activity_identity_management</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>

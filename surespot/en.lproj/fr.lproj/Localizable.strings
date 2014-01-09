@@ -13,7 +13,6 @@
 "title_activity_chat"="chat";
 "title_activity_image_view"="image view";
 "title_activity_image_select"="image select";
-"title_activity_identity_management"="identity management";
 "title_activity_settings"="settings";
 "title_activity_export_identity"="backup identity";
 "delete_identity_user"="delete identity: %@";
@@ -232,7 +231,6 @@
 "pref_title_confirmations"="confirmations";
 "pref_title_delete_message"="delete message";
 "pref_title_delete_all_messages"="delete all messages";
-"pref_title_identity_management"="identity management";
 "pref_title_alternate_sms_invite_to"="alternate sms invite \'to\'";
 "pref_title_silent_error_reporting"="silent error reporting";
 "pref_title_message_debug_mode"="message debug mode";
