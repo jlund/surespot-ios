@@ -44,22 +44,26 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         self.navigationController.navigationBar.tintColor = [UIUtils surespotBlue];
     }
     _tbUsername.returnKeyType = UIReturnKeyNext;
-    
     [_tbUsername setRightViewMode: UITextFieldViewModeNever];
+    [_tbUsername setPlaceholder:NSLocalizedString(@"username", nil)];
     
     _tbPassword.returnKeyType = UIReturnKeyNext;
+    [_tbPassword setPlaceholder:NSLocalizedString(@"password", nil)];
+    
     _tbPasswordConfirm.returnKeyType = UIReturnKeyGo;
+    [_tbPasswordConfirm setPlaceholder:NSLocalizedString(@"confirm_password", nil)];
+    
     [self registerForKeyboardNotifications];
     
     if ([[[IdentityController sharedInstance] getIdentityNames] count] == 0) {
         self.navigationItem.hidesBackButton = YES;
     }
     
-    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"menu" style:UIBarButtonItemStylePlain target:self action:@selector(showMenu)];
+    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"menu",nil) style:UIBarButtonItemStylePlain target:self action:@selector(showMenu)];
     self.navigationItem.rightBarButtonItem = anotherButton;
     
     [_bCreateIdentity setTintColor:[UIUtils surespotBlue]];
-    
+    [_bCreateIdentity setTitle:NSLocalizedString(@"create_identity", nil) forState:UIControlStateNormal];
 }
 
 - (void)viewDidUnload {
