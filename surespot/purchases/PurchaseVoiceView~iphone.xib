@@ -12,6 +12,7 @@
                 <outlet property="dontAskSwitch" destination="9Nn-87-UXu" id="kar-T1-qHr"/>
                 <outlet property="purchaseVoiceButton" destination="rTP-Qe-Raf" id="sWM-qt-IX5"/>
                 <outlet property="scrollView" destination="tmT-2V-XAf" id="VI8-UR-UAM"/>
+                <outlet property="videoDemonstrationButton" destination="zfz-tt-2ex" id="U5A-Mu-b86"/>
                 <outlet property="view" destination="1" id="UvW-Qs-egR"/>
                 <outlet property="voiceSwitch" destination="6nr-EP-uQw" id="eLN-0z-MCQ"/>
                 <outlet property="voiceTitle" destination="LXG-vK-zX1" id="U2J-En-CIT"/>

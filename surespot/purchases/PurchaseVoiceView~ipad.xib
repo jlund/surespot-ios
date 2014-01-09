@@ -12,6 +12,7 @@
                 <outlet property="dontAskSwitch" destination="9Nn-87-UXu" id="kar-T1-qHr"/>
                 <outlet property="purchaseVoiceButton" destination="rTP-Qe-Raf" id="sWM-qt-IX5"/>
                 <outlet property="refreshButton" destination="nVE-cM-pY5" id="1n1-7B-rXs"/>
+                <outlet property="videoDemonstrationButton" destination="zfz-tt-2ex" id="eAW-gX-LJe"/>
                 <outlet property="view" destination="1" id="UvW-Qs-egR"/>
                 <outlet property="voiceSwitch" destination="6nr-EP-uQw" id="eLN-0z-MCQ"/>
                 <outlet property="voiceTitle" destination="LXG-vK-zX1" id="U2J-En-CIT"/>
@@ -77,7 +78,7 @@
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" textAlignment="center" selectable="NO" id="m2W-Kz-Huj">
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" editable="NO" textAlignment="center" selectable="NO" id="m2W-Kz-Huj">
                     <rect key="frame" x="280" y="73" width="274" height="179"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>

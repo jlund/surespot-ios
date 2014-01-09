@@ -54,7 +54,7 @@
 			<key>IASKViewControllerSelector</key>
 			<string>init</string>
 			<key>Title</key>
-			<string>help</string>
+			<string>pref_title_help</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>

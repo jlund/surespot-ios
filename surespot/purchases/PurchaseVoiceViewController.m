@@ -18,6 +18,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *voiceTitle;
 @property (strong, nonatomic) IBOutlet UILabel *dontAskMeAgainLabel;
 @property (strong, nonatomic) IBOutlet UIButton *refreshButton;
+@property (strong, nonatomic) IBOutlet UIButton *videoDemonstrationButton;
 @property (strong, nonatomic) IBOutlet UISwitch *dontAskSwitch;
 @end
 
@@ -40,6 +41,8 @@
     
     NSString * price = [[PurchaseDelegate sharedInstance] formatPriceForProductId: PRODUCT_ID_VOICE_MESSAGING];
     [_purchaseVoiceButton setTitle:[NSString stringWithFormat: NSLocalizedString(@"voice_messaging_purchase_button", nil), price] forState:UIControlStateNormal];
+    
+    [_videoDemonstrationButton setTitle:[NSString stringWithFormat: NSLocalizedString(@"video_demonstration", nil), price] forState:UIControlStateNormal];
     
     _scrollView.contentSize = self.view.frame.size;
     
