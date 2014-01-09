@@ -76,7 +76,6 @@
 "identity"="identity";
 "invite"="invite";
 "no_contact_data_selected_or_entered"="no contact data selected or entered";
-"toggled_sms_contact_population_mechanism"="toggled sms contact population mechanism";
 "invitation_email_subject"="Invitation to chat with me privately via surespot";
 "invite_no_application_found"="No application found to handle invite.";
 "invite_progress_text"="creating invitation";
@@ -325,7 +324,6 @@ We will donate a percentage to the EFF that they may continue to fight for all o
 "ecdh_link"="https://en.wikipedia.org/wiki/Elliptic_curve_Diffie-Hellman";
 "ecdh_match"="ECDH shared secret derivation";
 "welcome_to_surespot"="Welcome to surespot! Data sent using this app is end-to-end encrypted with symmetric-key encryption (256 bit AES-GCM) using keys created with 521 bit ECDH shared secret derivation.";
-
 
 "about_about"="surespot - a 2fours production";
 "about_website_match"="https://www.surespot.me";

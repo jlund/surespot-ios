@@ -44,7 +44,7 @@
 			<key>IASKViewControllerSelector</key>
 			<string>init</string>
 			<key>Title</key>
-			<string>title_activity_about</string>
+			<string>pref_title_about_surespot</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
