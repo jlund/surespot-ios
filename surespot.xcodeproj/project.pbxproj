@@ -10,7 +10,6 @@
 		6604A2BF17626B9E0072216A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A2BE17626B9E0072216A /* UIKit.framework */; };
 		6604A2C117626B9E0072216A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A2C017626B9E0072216A /* Foundation.framework */; };
 		6604A2C317626B9E0072216A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A2C217626B9E0072216A /* CoreGraphics.framework */; };
-		6604A2C917626B9E0072216A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6604A2C717626B9E0072216A /* InfoPlist.strings */; };
 		6604A2CB17626B9E0072216A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6604A2CA17626B9E0072216A /* main.m */; };
 		6604A2CF17626B9E0072216A /* SurespotAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6604A2CE17626B9E0072216A /* SurespotAppDelegate.mm */; };
 		6604A2D817626B9E0072216A /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6604A2D617626B9E0072216A /* MainStoryboard.storyboard */; };
@@ -347,7 +346,6 @@
 		6604A2C017626B9E0072216A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6604A2C217626B9E0072216A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		6604A2C617626B9E0072216A /* surespot-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "surespot-Info.plist"; sourceTree = "<group>"; };
-		6604A2C817626B9E0072216A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6604A2CA17626B9E0072216A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6604A2CC17626B9E0072216A /* surespot-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "surespot-Prefix.pch"; sourceTree = "<group>"; };
 		6604A2CD17626B9E0072216A /* SurespotAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SurespotAppDelegate.h; sourceTree = "<group>"; };
@@ -503,6 +501,9 @@
 		668D2500186A373A0096D155 /* QRInviteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QRInviteViewController.h; path = qr/QRInviteViewController.h; sourceTree = "<group>"; };
 		668D2501186A373A0096D155 /* QRInviteViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = QRInviteViewController.mm; path = qr/QRInviteViewController.mm; sourceTree = "<group>"; };
 		66974AF0187EF17D007BB80F /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		66974AF1187F1692007BB80F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		66974AF2187F169F007BB80F /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		66974AF3187F16AA007BB80F /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6698584D18663157003624DA /* AGWindowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGWindowView.h; sourceTree = "<group>"; };
 		6698584E18663157003624DA /* AGWindowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGWindowView.m; sourceTree = "<group>"; };
 		6698584F18663157003624DA /* AGWindowViewDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGWindowViewDefines.h; sourceTree = "<group>"; };
@@ -1019,7 +1020,6 @@
 				66DAB629186D0461006C262F /* SurespotSHKSharers.plist */,
 				6621BB861762704D00BC2850 /* Localizable.strings */,
 				6604A2C617626B9E0072216A /* surespot-Info.plist */,
-				6604A2C717626B9E0072216A /* InfoPlist.strings */,
 				6604A2CA17626B9E0072216A /* main.m */,
 				6604A2CC17626B9E0072216A /* surespot-Prefix.pch */,
 				66E21DFF1847E1220005D91E /* InAppSettings.bundle */,
@@ -1910,6 +1910,9 @@
 				en,
 				Base,
 				fr,
+				de,
+				it,
+				es,
 			);
 			mainGroup = 6604A2B217626B9E0072216A;
 			productRefGroup = 6604A2BC17626B9E0072216A /* Products */;
@@ -2030,7 +2033,6 @@
 				66EBE0CF1855C97100F2452D /* GTMOAuth2ViewTouch.xib in Resources */,
 				66E21E001847E1220005D91E /* InAppSettings.bundle in Resources */,
 				661F469E1864C0BE004A71B0 /* BackupIdentityView.xib in Resources */,
-				6604A2C917626B9E0072216A /* InfoPlist.strings in Resources */,
 				6637012D187A33A6006D17CA /* PWYLView.xib in Resources */,
 				66F831FF185B9EB500ADD2F1 /* OurMessageCell.xib in Resources */,
 				668D24FF186A36520096D155 /* QRInviteView.xib in Resources */,
@@ -2262,14 +2264,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		6604A2C717626B9E0072216A /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6604A2C817626B9E0072216A /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		6604A2D617626B9E0072216A /* MainStoryboard.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -2291,6 +2285,9 @@
 			children = (
 				6621BB851762704D00BC2850 /* en */,
 				66974AF0187EF17D007BB80F /* fr */,
+				66974AF1187F1692007BB80F /* de */,
+				66974AF2187F169F007BB80F /* it */,
+				66974AF3187F16AA007BB80F /* es */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

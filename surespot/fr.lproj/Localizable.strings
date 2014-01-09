@@ -65,7 +65,6 @@
 "external_invite_message"="Je voudrais discuter avec toi en privé via surespot. Clique %@ pour installer l\'application et invite-moi en ami.";
 "help_backupIdentities1"="Parce-que surespot utilise des clés de cryptage qui ne sont jamais transférées sur nos serveurs, si vous perdez votre téléphone ou désinstallez puis réinstallez l\'application, ou effacez les données de l\'application, vous ne serez plus en mesure de vous connecter à moins d\'avoir sauvegardé votre identité.";
 "help_backupIdentities2"="Surespot peut utiliser Google Drive pour sauvegarder votre identité. Ces options sont disponibles dans les paramètres de gestion d\'identité.";
-"help_backup_local"="Pour une sécurité maximale, nous vous recommandons d\'utiliser la sauvegarde sur le stockage de l\'appareil. Une fois sauvegardé, le fichier d\'identité doit ensuite être copié (ou déplacé) de votre appareil vers un emplacement de sauvegarde sécurisé, de sorte qu\'il puisse être restauré en cas de ré-installation de l\'application, de suppression des données, de perte/vol de l\'appareil ou toute autre perte de données.";
 "help_backup_drive2"="Vos identités seront enregistrées sur Google Drive dans le répertoire \'surespot identity backups\'. Les identités peuvent être restaurées depuis l\'écran de création d\'utilisateur ou dans les paramètres de gestion d\'identité.";
 "help_messageHistory"="surespot a un historique de 1000 messages. Une fois que vous atteignez 1000 messages, vos anciens messages seront supprimés de sorte que vous n\'aurez jamais plus de 1000 messages (cryptés) stockés sur le serveur. Bien sûr, à tout moment, vous pouvez supprimer un ou tous vos messages.";
 "notification_title"="surespot";
@@ -220,28 +219,9 @@
 "generate_new_keypairs"="Générer une nouvelle paire de clés privées pour l\'identité choisie et révoquer la paire actuelle. Tous les autres périphériques ne seront plus en mesure d\'accéder à surespot en utilisant cette identité.";
 "username"="nom d\'utilisateur";
 "create_identity"="créer une identité";
-"options"="options";
 "clear_local_cache"="effacer le cache local";
 "delete_all_messages"="supprimer tous les messages";
 "pay_what_you_like"="faire un don";
-"pref_title_general"="général";
-"pref_title_about_surespot"="A propos de surespot";
-"pref_title_confirmations"="confirmations";
-"pref_title_delete_message"="supprimer message";
-"pref_title_delete_all_messages"="supprimer tous les messages";
-"pref_title_alternate_sms_invite_to"="sms d\'invitation alternatif \'à\'";
-"pref_title_silent_error_reporting"="rapport d\'erreur silencieux";
-"pref_title_message_debug_mode"="message mode debug";
-"pref_title_debug"="debug";
-"pref_title_options"="options";
-"pref_summary_delete_message"="confirmer avant de supprimer un message";
-"pref_summary_delete_all_messages"="confirmer avant de supprimer tous les messages";
-"pref_summary_export_identity"="Sauvegardez votre identité sur le stockage de l\'appareil ou sur Google Drive.";
-"pref_summary_import_identity"="Restaurez votre identité depuis le stockage de l\'appareil ou depuis Google Drive.";
-"pref_summary_delete_identity"="La suppression d\'une identité ne peut pas être annulée.";
-"pref_summary_regen_keys"="Pour les paranoïaques.";
-"pref_summary_alternate_sms_delimiter"="Doit être activé sur certains appareils pour remplir le champ \'à\' correctement du sms lorsque plusieurs contacts sont sélectionnés dans \'invitez vos contacts\'.";
-"pref_summary_message_debug_mode"="Affiche plus d\'informations sur les messages à des fins de débogage.";
 "menu_invite_contacts"="inviter des contacts";
 "delete_identity"="supprimer l\'identité";
 "surespot_help"="aide surespot";
@@ -320,24 +300,22 @@
 "Share"="share link using";
 "recording_cancelled"="recording cancelled";
 "voice_messaging"="voice messaging";
+"video_demonstration"="video demonstration";
 "login_to_validate"="could not validate purchase receipt, will validate on next login";
 "surecoin_purchase_complete"="Thank you for buying surecoin!";
 "share_link_help"="Use the 'share invite link' menu option to share a link via email, sms, twitter, or other social media, that when clicked will install surespot / invite you as a friend in surespot";
-/*****************************************************/
+"pwyl_text"="Surespot est sans publicité et libre de 'data mining'.
 
+Serveurs et stockage ont un coût; please buy lots of surecoin to ensure that we do not have to charge for surespot.
+
+Nous donnerons un pourcentage à l'EFF afin qu'ils puissent continuer, au nom de tous, à se battre pour nos libertés électroniques.";
+/*****************************************************/
 
 
 
 //links
 "eff_match"="EFF";
 "eff_link"="https://www.eff.org/issues/privacy";
-"pwyl_text"="Surespot est sans publicité et libre de 'data mining'.
-
-Serveurs et stockage ont un coût; vos dons vous assure que vous n'avez pas à payer pour surespot.
-
-Nous donnerons un pourcentage à l'EFF afin qu'ils puissent continuer, au nom de tous, à se battre pour nos libertés électroniques.";
-
-
 "end_to_end_match"="de bout-en-bout";
 "end_to_end_link"="http://fr.wikipedia.org/wiki/Principe_de_bout-à-bout";
 "symmetric_key_match"="clé symétrique";
