@@ -66,7 +66,6 @@
 "crash_dialog_ok_toast"="Thank you!";
 "external_invite_message"="I'd like to chat with you privately via surespot. Click %@ to invite me as a friend / install the app.";
 "help_backupIdentities1"="Because surespot uses encryption keys that are never uploaded to our servers, if you lose your phone, or uninstall then re-install the app, or wipe the app's data, you will not be able to login unless you have backed up your identity.";
-"help_backupIdentities2"="Surespot can use Google Drive for backing up your identity, available in settings.";
 "help_backup_local"="For maximum security we recommend using Device Storage backup. Once backed up, the identity file should then be copied (or moved) from your device to a secure location so that it may be restored in the case of app uninstall or 'clear data', a lost or stolen device, or other data loss.";
 "help_backup_drive2"="Your identities will be stored on Google Drive in the folder 'surespot identity backups'. Identities can be restored from the create user screen or in identity management settings.";
 "help_messageHistory"="Surespot has a 1000 message history. Once you reach 1000 messages your oldest message will be deleted so you will only ever have 1000 (encrypted) messages stored on the server. Of course you can delete any and all of your messages at any time.";
@@ -309,12 +308,17 @@
 "voice_help_4"="New voice messages will play automatically for the open chat tab.";
 "close"="close";
 "no_audio_detected"="no audio detected - not sending voice message";
-
-
-/* need translation*/
 "menu_copy"="copy";
 "message_hint"="enter message";
 "invite_hint"="invite user";
+
+
+//EFF will be linked to https://www.eff.org/issues/privacy
+"pwyl_text"="Surespot is ad and data mining free.
+
+Servers and storage cost money; please buy lots of surecoin to ensure that we do not have to charge for surespot.
+
+We will donate a percentage to the EFF that they may continue to fight for all of our electronic freedoms.";
 "loading_earlier_messages_failed"="loading earlier messages failed";
 "all_messages_loaded"="all messages loaded";
 "save_to_photos"="save to photos";
@@ -328,24 +332,10 @@
 "voice_messaging"="voice messaging";
 "login_to_validate"="could not validate purchase receipt, will validate on next login";
 "surecoin_purchase_complete"="Thank you for buying surecoin!";
-"share_link_help"="Use the 'share invite link' menu option to share a link via email, sms, twitter, or other social media, that when clicked will install surespot / invite you as a friend in surespot";
-/*****************************************************/
-
-
-
-
-//links
-"eff_match"="EFF";
-"eff_link"="https://www.eff.org/issues/privacy";
-"pwyl_text"="Surespot is ad and data mining free.
-
-Servers and storage cost money; please buy lots of surecoin to ensure that we do not have to charge for surespot.
-
-We will donate a percentage to the EFF that they may continue to fight for all of our electronic freedoms.";
-
-
 "end_to_end_match"="end-to-end";
 "end_to_end_link"="https://en.wikipedia.org/wiki/End-to-end_encryption";
+"symmetric_key_match"="symmetric-key";
+"symmetric_key_link"="https://en.wikipedia.org/wiki/Symmetric-key_algorithm";
 "symmetric_key_match"="symmetric-key";
 "symmetric_key_link"="https://en.wikipedia.org/wiki/Symmetric-key_algorithm";
 "aes_gcm_match"="256 bit AES-GCM";
@@ -353,9 +343,16 @@ We will donate a percentage to the EFF that they may continue to fight for all o
 "ecdh_link"="https://en.wikipedia.org/wiki/Elliptic_curve_Diffie-Hellman";
 "ecdh_match"="ECDH shared secret derivation";
 "welcome_to_surespot"="Welcome to surespot! Data sent using this app is end-to-end encrypted with symmetric-key encryption (256 bit AES-GCM) using keys created with 521 bit ECDH shared secret derivation.";
+"share_link_help"="Use the 'share invite link' menu option to share a link via email, sms, twitter, or other social media, that when clicked will install surespot / invite you as a friend in surespot";
+"help_backupIdentities2"="Surespot can use Google Drive for backing up your identity, available in settings.";
 
+
+
+/*"help_backup_what"="<![CDATA["This will export a copy of the selected identity encrypted with <a href="http://www.eetimes.com/design/embedded-internet-design/4372428/How-secure-is-AES-against-brute-force-attacks-"="256 bit AES-GCM</a> with a key derived from your password through a <a href="https://en.wikipedia.org/wiki/PBKDF2"="PBKDF</a> (Password Based Key Derivation Function)"]]>";*/
+/*"help_backup_drive1"="<![CDATA["If you elect to backup your identity on Google Drive you will be storing a copy of your <a href="https://en.wikipedia.org/wiki/Public-key_cryptography"="private keys</a> on Google Drive servers. Should a third party somehow gain access to the Google Drive servers and attempt to decrypt your identity file by <a href="https://en.wikipedia.org/wiki/Brute-force_attack"="brute force attack</a>, be aware that the <a href="https://en.wikipedia.org/wiki/Password_strength"="strength</a> of your password will ultimately determine their success."]]>";*/
 
 "about_about"="surespot - a 2fours production";
+
 "about_website_match"="https://www.surespot.me";
 "about_website_link"="https://www.surespot.me";
 "tos_match"="terms of service";
@@ -378,8 +375,5 @@ Surespot is 100% open source and welcomes your participation - view the source c
 For a more technical overview of how surespot works please touch here.
 For questions or support please press here or email support@2fours.com";
 
-
-/*"help_backup_what"="<![CDATA["This will export a copy of the selected identity encrypted with <a href="http://www.eetimes.com/design/embedded-internet-design/4372428/How-secure-is-AES-against-brute-force-attacks-"="256 bit AES-GCM</a> with a key derived from your password through a <a href="https://en.wikipedia.org/wiki/PBKDF2"="PBKDF</a> (Password Based Key Derivation Function)"]]>";*/
-/*"help_backup_drive1"="<![CDATA["If you elect to backup your identity on Google Drive you will be storing a copy of your <a href="https://en.wikipedia.org/wiki/Public-key_cryptography"="private keys</a> on Google Drive servers. Should a third party somehow gain access to the Google Drive servers and attempt to decrypt your identity file by <a href="https://en.wikipedia.org/wiki/Brute-force_attack"="brute force attack</a>, be aware that the <a href="https://en.wikipedia.org/wiki/Password_strength"="strength</a> of your password will ultimately determine their success."]]>";*/
 
 /*"help_agreement"="<![CDATA["By touching OK you agree to the surespot <a href="https://www.surespot.me/documents/surespot_terms_of_service.html"="terms of service</a>."]]>"*/;

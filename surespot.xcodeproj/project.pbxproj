@@ -504,6 +504,8 @@
 		668D24FE186A36520096D155 /* QRInviteView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = QRInviteView.xib; path = qr/QRInviteView.xib; sourceTree = "<group>"; };
 		668D2500186A373A0096D155 /* QRInviteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QRInviteViewController.h; path = qr/QRInviteViewController.h; sourceTree = "<group>"; };
 		668D2501186A373A0096D155 /* QRInviteViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = QRInviteViewController.mm; path = qr/QRInviteViewController.mm; sourceTree = "<group>"; };
+		66974AEF187EF17D007BB80F /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		66974AF0187EF17D007BB80F /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6698584D18663157003624DA /* AGWindowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGWindowView.h; sourceTree = "<group>"; };
 		6698584E18663157003624DA /* AGWindowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGWindowView.m; sourceTree = "<group>"; };
 		6698584F18663157003624DA /* AGWindowViewDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGWindowViewDefines.h; sourceTree = "<group>"; };
@@ -1922,6 +1924,7 @@
 			knownRegions = (
 				en,
 				Base,
+				fr,
 			);
 			mainGroup = 6604A2B217626B9E0072216A;
 			productRefGroup = 6604A2BC17626B9E0072216A /* Products */;
@@ -2304,6 +2307,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				6621BB851762704D00BC2850 /* en */,
+				66974AF0187EF17D007BB80F /* fr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -2328,6 +2332,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				66EBDF471855C96F00F2452D /* en */,
+				66974AEF187EF17D007BB80F /* fr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

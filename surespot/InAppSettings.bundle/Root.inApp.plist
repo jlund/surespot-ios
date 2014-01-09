@@ -4,14 +4,13 @@
 <dict>
 	<key>PreferenceSpecifiers</key>
 	<array>
-        <dict>
+		<dict>
 			<key>Title</key>
-			<string>about_group_title</string>
+			<string>about_action_bar_right</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>
-
-	     <dict>
+		<dict>
 			<key>Key</key>
 			<string>logged_in_user</string>
 			<key>Title</key>
@@ -39,7 +38,7 @@
 			<key>Type</key>
 			<string>PSTitleValueSpecifier</string>
 		</dict>
-        <dict>
+		<dict>
 			<key>IASKViewControllerClass</key>
 			<string>AboutViewController</string>
 			<key>IASKViewControllerSelector</key>
@@ -49,7 +48,7 @@
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
-        <dict>
+		<dict>
 			<key>IASKViewControllerClass</key>
 			<string>HelpViewController</string>
 			<key>IASKViewControllerSelector</key>
@@ -59,30 +58,29 @@
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
-        <dict>
+		<dict>
 			<key>Title</key>
 			<string>options</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>
-
-        <dict>
-            <key>Type</key>
-            <string>IASKButtonSpecifier</string>
-            <key>Title</key>
-            <string>pref_title_background_image_select</string>
-            <key>Key</key>
-            <string>_user_assign_background_image_key</string>
-            <key>IASKTextAlignment</key>
+		<dict>
+			<key>Type</key>
+			<string>IASKButtonSpecifier</string>
+			<key>Title</key>
+			<string>pref_title_background_image_select</string>
+			<key>Key</key>
+			<string>_user_assign_background_image_key</string>
+			<key>IASKTextAlignment</key>
 			<string>IASKUITextAlignmentLeft</string>
-        </dict>
-        <dict>
+		</dict>
+		<dict>
 			<key>Title</key>
 			<string>title_activity_identity_management</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>
-        <dict>
+		<dict>
 			<key>IASKViewControllerClass</key>
 			<string>ChangePasswordViewController</string>
 			<key>IASKViewControllerSelector</key>
@@ -112,7 +110,7 @@
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
-        <dict>
+		<dict>
 			<key>IASKViewControllerClass</key>
 			<string>DeleteIdentityViewController</string>
 			<key>IASKViewControllerSelector</key>
@@ -122,7 +120,7 @@
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
-        <dict>
+		<dict>
 			<key>IASKViewControllerClass</key>
 			<string>GenerateKeysViewController</string>
 			<key>IASKViewControllerSelector</key>
@@ -132,7 +130,6 @@
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
-
 	</array>
 	<key>StringsTable</key>
 	<string>Root</string>

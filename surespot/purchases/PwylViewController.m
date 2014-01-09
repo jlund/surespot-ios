@@ -21,7 +21,10 @@
 @implementation PwylViewController
 
 -(void) viewDidLoad {
-    [UIUtils setLinkLabel:_l1 delegate:self labelText:NSLocalizedString(@"pwyl_text", nil) linkMatchTexts:@[@"EFF"] urlStrings:@[@"https://www.eff.org/issues/privacy"]];
+    [UIUtils setLinkLabel:_l1 delegate:self
+                labelText:NSLocalizedString(@"pwyl_text", nil)
+           linkMatchTexts:@[NSLocalizedString(@"eff_match", nil)]
+               urlStrings:@[NSLocalizedString(@"eff_link", nil)]];
     
     [self updateButtons];
     
