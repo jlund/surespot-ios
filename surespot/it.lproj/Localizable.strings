@@ -23,11 +23,6 @@
 "identity_imported_successfully"="identità ripristinata correttamente";
 "could_not_import_identity"="impossibile ripristinare l\'identità";
 "could_not_restore_identity_name"="impossibile ripristinare l\'identità %@";
-"notifications_title"="notifiche push";
-"notifications_vibration"="vibrazione";
-"notifications_sound"="audio";
-"notifications_led"="led";
-"notifications_enabled"="abilitato";
 "camera_init"="avviamento fotocamera";
 "uploading_image"="caricamento immagine";
 "could_not_upload_image"="impossibile caricare l\'immagine";

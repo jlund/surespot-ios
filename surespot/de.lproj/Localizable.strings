@@ -23,11 +23,6 @@
 "identity_imported_successfully"="Profil erfolgreich wiederhergestellt";
 "could_not_import_identity"="Profil konnte nicht wiederhergestellt werden";
 "could_not_restore_identity_name"="Profil %@ konnte nicht wiederhergestellt werden";
-"notifications_title"="Push-Benachrichtigungen";
-"notifications_vibration"="Vibration";
-"notifications_sound"="Ton";
-"notifications_led"="LED";
-"notifications_enabled"="aktiviert";
 "camera_init"="Kamera starten";
 "uploading_image"="Bild hochladen";
 "could_not_upload_image"="Bild konnte nicht hochgeladen werden";

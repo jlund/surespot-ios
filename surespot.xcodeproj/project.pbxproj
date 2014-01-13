@@ -83,7 +83,7 @@
 		666D337C188476B100B73F69 /* CAXException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 666D3374188476B100B73F69 /* CAXException.cpp */; };
 		666D337D188476B100B73F69 /* EAGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 666D3377188476B100B73F69 /* EAGLView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		666D338118847B5000B73F69 /* surespot-invite.caf in Resources */ = {isa = PBXBuildFile; fileRef = 666D338018847B5000B73F69 /* surespot-invite.caf */; };
-		666D33861884805600B73F69 /* SoundController.m in Sources */ = {isa = PBXBuildFile; fileRef = 666D33851884805600B73F69 /* SoundController.m */; };
+		666D33861884805600B73F69 /* SoundController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 666D33851884805600B73F69 /* SoundController.mm */; };
 		6674FF71186CB91300B8E77B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6674FF70186CB91300B8E77B /* CoreMedia.framework */; };
 		6674FF73186CB92200B8E77B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6674FF72186CB92200B8E77B /* AVFoundation.framework */; };
 		6674FF75186CB94500B8E77B /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6674FF74186CB94500B8E77B /* Accounts.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -475,7 +475,7 @@
 		666D3377188476B100B73F69 /* EAGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EAGLView.m; path = voice/EAGLView.m; sourceTree = "<group>"; };
 		666D338018847B5000B73F69 /* surespot-invite.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "surespot-invite.caf"; sourceTree = "<group>"; };
 		666D33841884805600B73F69 /* SoundController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundController.h; sourceTree = "<group>"; };
-		666D33851884805600B73F69 /* SoundController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoundController.m; sourceTree = "<group>"; };
+		666D33851884805600B73F69 /* SoundController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SoundController.mm; sourceTree = "<group>"; };
 		6674FF70186CB91300B8E77B /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		6674FF72186CB92200B8E77B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		6674FF74186CB94500B8E77B /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
@@ -1202,7 +1202,7 @@
 				666D335E187F69AD00B73F69 /* invite-accept.caf */,
 				666D3362187F69AD00B73F69 /* message.caf */,
 				666D33841884805600B73F69 /* SoundController.h */,
-				666D33851884805600B73F69 /* SoundController.m */,
+				666D33851884805600B73F69 /* SoundController.mm */,
 			);
 			path = sounds;
 			sourceTree = "<group>";
@@ -2216,7 +2216,7 @@
 				66EC610B176E494900937467 /* AFHTTPClient.m in Sources */,
 				66EC610C176E494900937467 /* AFHTTPRequestOperation.m in Sources */,
 				66EC610D176E494900937467 /* AFImageRequestOperation.m in Sources */,
-				666D33861884805600B73F69 /* SoundController.m in Sources */,
+				666D33861884805600B73F69 /* SoundController.mm in Sources */,
 				66E21DEE1847D7F90005D91E /* IASKSpecifierValuesViewController.m in Sources */,
 				66EC610E176E494900937467 /* AFJSONRequestOperation.m in Sources */,
 				66EBE0D31855C97100F2452D /* ImageDelegate.mm in Sources */,

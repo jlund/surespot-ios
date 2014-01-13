@@ -23,11 +23,6 @@
 "identity_imported_successfully"="Perfil restaurado correctamente";
 "could_not_import_identity"="No se puede restaurar el perfil";
 "could_not_restore_identity_name"="No se puede restaurar el perfil %@";
-"notifications_title"="Notificaciones push";
-"notifications_vibration"="Vibración";
-"notifications_sound"="Sonido";
-"notifications_led"="Led";
-"notifications_enabled"="Habilitado";
 "camera_init"="Iniciando cámara";
 "uploading_image"="Subiendo imagen";
 "could_not_upload_image"="No se ha podido subir la imagen";

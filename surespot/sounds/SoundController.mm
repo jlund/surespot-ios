@@ -8,6 +8,7 @@
 
 #import "SoundController.h"
 #import <AudioToolbox/AudioToolbox.h>
+#import "IdentityController.h"
 
 @interface SoundController() {
     SystemSoundID _messageSoundID;
@@ -63,19 +64,43 @@
     return self;
 }
 
+-(BOOL) shouldPlaySound {
+    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString * key = [[[IdentityController sharedInstance] getLoggedInUser] stringByAppendingString: @"_user_notifications_sound"];
+    id iPlaySound = [defaults objectForKey:key];
+    
+    BOOL playSound = YES;
+    
+    if (iPlaySound) {
+        playSound = [iPlaySound boolValue];
+    }
+    
+    return playSound;
+}
+
 -(void) playNewMessageSound {
-    AudioServicesPlaySystemSound(_messageSoundID);
+    
+    if ([self shouldPlaySound]) {
+        AudioServicesPlaySystemSound(_messageSoundID);
+    }
 }
 -(void) playInviteSound {
-    AudioServicesPlaySystemSound(_inviteSoundID);
+    if ([self shouldPlaySound]) {
+        AudioServicesPlaySystemSound(_inviteSoundID);
+    }
 }
 
 -(void) playInviteAcceptedSound {
-    AudioServicesPlaySystemSound(_acceptSoundID);
+    if ([self shouldPlaySound]) {
+        AudioServicesPlaySystemSound(_acceptSoundID);
+    }
 }
 
 -(void) playSoundNamed: (NSString *) soundName {
-    AudioServicesPlaySystemSound([[soundMap objectForKey:soundName] intValue]);
+    if ([self shouldPlaySound]) {
+        AudioServicesPlaySystemSound([[soundMap objectForKey:soundName] intValue]);
+    }
 }
 
 @end

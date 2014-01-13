@@ -23,11 +23,6 @@
 "identity_imported_successfully"="identité restaurée avec succès";
 "could_not_import_identity"="impossible de restaurer l\'identité";
 "could_not_restore_identity_name"="impossible de restaurer l\'identité %@";
-"notifications_title"="push notifications";
-"notifications_vibration"="vibration";
-"notifications_sound"="son";
-"notifications_led"="led";
-"notifications_enabled"="activer";
 "camera_init"="initialisation de la caméra";
 "uploading_image"="transfert d\'image";
 "could_not_upload_image"="impossible de transférer des images";
