@@ -74,9 +74,15 @@
 		665F4DF91831923C0083BCE7 /* REMenuItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DF41831923C0083BCE7 /* REMenuItemView.m */; };
 		665F4E0D183324360083BCE7 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 665F4E081833238D0083BCE7 /* libTestFlight.a */; };
 		665F4E0F183325C50083BCE7 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 665F4E0E183325C50083BCE7 /* AdSupport.framework */; };
-		666D3358187F4AE000B73F69 /* message.wav in Resources */ = {isa = PBXBuildFile; fileRef = 666D3356187F4AE000B73F69 /* message.wav */; };
-		666D335B187F508700B73F69 /* invite.wav in Resources */ = {isa = PBXBuildFile; fileRef = 666D3359187F508600B73F69 /* invite.wav */; };
-		666D335C187F508700B73F69 /* invite-accept.wav in Resources */ = {isa = PBXBuildFile; fileRef = 666D335A187F508600B73F69 /* invite-accept.wav */; };
+		666D3364187F69AD00B73F69 /* invite-accept.caf in Resources */ = {isa = PBXBuildFile; fileRef = 666D335E187F69AD00B73F69 /* invite-accept.caf */; };
+		666D3366187F69AD00B73F69 /* invite.caf in Resources */ = {isa = PBXBuildFile; fileRef = 666D3360187F69AD00B73F69 /* invite.caf */; };
+		666D3368187F69AD00B73F69 /* message.caf in Resources */ = {isa = PBXBuildFile; fileRef = 666D3362187F69AD00B73F69 /* message.caf */; };
+		666D3378188476B100B73F69 /* aurio_helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 666D336A188476B100B73F69 /* aurio_helper.cpp */; };
+		666D3379188476B100B73F69 /* CADebugMacros.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 666D336D188476B100B73F69 /* CADebugMacros.cpp */; };
+		666D337A188476B100B73F69 /* CADebugPrintf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 666D336F188476B100B73F69 /* CADebugPrintf.cpp */; };
+		666D337B188476B100B73F69 /* CAStreamBasicDescription.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 666D3372188476B100B73F69 /* CAStreamBasicDescription.cpp */; };
+		666D337C188476B100B73F69 /* CAXException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 666D3374188476B100B73F69 /* CAXException.cpp */; };
+		666D337D188476B100B73F69 /* EAGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 666D3377188476B100B73F69 /* EAGLView.m */; };
 		6674FF71186CB91300B8E77B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6674FF70186CB91300B8E77B /* CoreMedia.framework */; };
 		6674FF73186CB92200B8E77B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6674FF72186CB92200B8E77B /* AVFoundation.framework */; };
 		6674FF75186CB94500B8E77B /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6674FF74186CB94500B8E77B /* Accounts.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -136,14 +142,8 @@
 		66DAB626186CDB51006C262F /* libTwitter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66DAB5EF186CBD6B006C262F /* libTwitter.a */; };
 		66DAB62A186D0461006C262F /* SurespotSHKSharers.plist in Resources */ = {isa = PBXBuildFile; fileRef = 66DAB629186D0461006C262F /* SurespotSHKSharers.plist */; };
 		66DAB62E186DEEFC006C262F /* VoiceDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66DAB62D186DEEFC006C262F /* VoiceDelegate.mm */; };
-		66DAB631186F2818006C262F /* aurio_helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66DAB62F186F2818006C262F /* aurio_helper.cpp */; };
-		66DAB634186F2821006C262F /* EAGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66DAB633186F2821006C262F /* EAGLView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		66DAB643186F2839006C262F /* CADebugMacros.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66DAB63C186F2839006C262F /* CADebugMacros.cpp */; };
-		66DAB644186F2839006C262F /* CAStreamBasicDescription.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66DAB63F186F2839006C262F /* CAStreamBasicDescription.cpp */; };
-		66DAB645186F2839006C262F /* CAXException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66DAB641186F2839006C262F /* CAXException.cpp */; };
 		66DAB647186F289A006C262F /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66DAB646186F289A006C262F /* Accelerate.framework */; };
 		66DAB649186F2911006C262F /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66DAB648186F2911006C262F /* CoreAudio.framework */; };
-		66DAB64C186F2A84006C262F /* CADebugPrintf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66DAB64B186F2A84006C262F /* CADebugPrintf.cpp */; };
 		66DAB64E186F2B2F006C262F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66DAB64D186F2B2F006C262F /* AudioToolbox.framework */; };
 		66E21DEC1847D7F90005D91E /* IASKAppSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E21DCE1847D7F90005D91E /* IASKAppSettingsViewController.m */; };
 		66E21DED1847D7F90005D91E /* IASKAppSettingsWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E21DD01847D7F90005D91E /* IASKAppSettingsWebViewController.m */; };
@@ -456,9 +456,23 @@
 		665F4E0A1833238D0083BCE7 /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+ManualSessions.h"; sourceTree = "<group>"; };
 		665F4E0B1833238D0083BCE7 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		665F4E0E183325C50083BCE7 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
-		666D3356187F4AE000B73F69 /* message.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = message.wav; sourceTree = "<group>"; };
-		666D3359187F508600B73F69 /* invite.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = invite.wav; sourceTree = "<group>"; };
-		666D335A187F508600B73F69 /* invite-accept.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "invite-accept.wav"; sourceTree = "<group>"; };
+		666D335E187F69AD00B73F69 /* invite-accept.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "invite-accept.caf"; sourceTree = "<group>"; };
+		666D3360187F69AD00B73F69 /* invite.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = invite.caf; sourceTree = "<group>"; };
+		666D3362187F69AD00B73F69 /* message.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = message.caf; sourceTree = "<group>"; };
+		666D336A188476B100B73F69 /* aurio_helper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = aurio_helper.cpp; path = voice/aurio_helper.cpp; sourceTree = "<group>"; };
+		666D336B188476B100B73F69 /* aurio_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = aurio_helper.h; path = voice/aurio_helper.h; sourceTree = "<group>"; };
+		666D336C188476B100B73F69 /* CABitOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CABitOperations.h; path = voice/CABitOperations.h; sourceTree = "<group>"; };
+		666D336D188476B100B73F69 /* CADebugMacros.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CADebugMacros.cpp; path = voice/CADebugMacros.cpp; sourceTree = "<group>"; };
+		666D336E188476B100B73F69 /* CADebugMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CADebugMacros.h; path = voice/CADebugMacros.h; sourceTree = "<group>"; };
+		666D336F188476B100B73F69 /* CADebugPrintf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CADebugPrintf.cpp; path = voice/CADebugPrintf.cpp; sourceTree = "<group>"; };
+		666D3370188476B100B73F69 /* CADebugPrintf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CADebugPrintf.h; path = voice/CADebugPrintf.h; sourceTree = "<group>"; };
+		666D3371188476B100B73F69 /* CAMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMath.h; path = voice/CAMath.h; sourceTree = "<group>"; };
+		666D3372188476B100B73F69 /* CAStreamBasicDescription.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CAStreamBasicDescription.cpp; path = voice/CAStreamBasicDescription.cpp; sourceTree = "<group>"; };
+		666D3373188476B100B73F69 /* CAStreamBasicDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAStreamBasicDescription.h; path = voice/CAStreamBasicDescription.h; sourceTree = "<group>"; };
+		666D3374188476B100B73F69 /* CAXException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CAXException.cpp; path = voice/CAXException.cpp; sourceTree = "<group>"; };
+		666D3375188476B100B73F69 /* CAXException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAXException.h; path = voice/CAXException.h; sourceTree = "<group>"; };
+		666D3376188476B100B73F69 /* EAGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EAGLView.h; path = voice/EAGLView.h; sourceTree = "<group>"; };
+		666D3377188476B100B73F69 /* EAGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EAGLView.m; path = voice/EAGLView.m; sourceTree = "<group>"; };
 		6674FF70186CB91300B8E77B /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		6674FF72186CB92200B8E77B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		6674FF74186CB94500B8E77B /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
@@ -540,22 +554,8 @@
 		66DAB629186D0461006C262F /* SurespotSHKSharers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SurespotSHKSharers.plist; sourceTree = "<group>"; };
 		66DAB62C186DEEFC006C262F /* VoiceDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VoiceDelegate.h; path = voice/VoiceDelegate.h; sourceTree = "<group>"; };
 		66DAB62D186DEEFC006C262F /* VoiceDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = VoiceDelegate.mm; path = voice/VoiceDelegate.mm; sourceTree = "<group>"; };
-		66DAB62F186F2818006C262F /* aurio_helper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = aurio_helper.cpp; sourceTree = "<group>"; };
-		66DAB630186F2818006C262F /* aurio_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aurio_helper.h; sourceTree = "<group>"; };
-		66DAB632186F2821006C262F /* EAGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EAGLView.h; sourceTree = "<group>"; };
-		66DAB633186F2821006C262F /* EAGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EAGLView.m; sourceTree = "<group>"; };
-		66DAB63B186F2839006C262F /* CABitOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CABitOperations.h; sourceTree = "<group>"; };
-		66DAB63C186F2839006C262F /* CADebugMacros.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CADebugMacros.cpp; sourceTree = "<group>"; };
-		66DAB63D186F2839006C262F /* CADebugMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CADebugMacros.h; sourceTree = "<group>"; };
-		66DAB63E186F2839006C262F /* CAMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAMath.h; sourceTree = "<group>"; };
-		66DAB63F186F2839006C262F /* CAStreamBasicDescription.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAStreamBasicDescription.cpp; sourceTree = "<group>"; };
-		66DAB640186F2839006C262F /* CAStreamBasicDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAStreamBasicDescription.h; sourceTree = "<group>"; };
-		66DAB641186F2839006C262F /* CAXException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAXException.cpp; sourceTree = "<group>"; };
-		66DAB642186F2839006C262F /* CAXException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAXException.h; sourceTree = "<group>"; };
 		66DAB646186F289A006C262F /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		66DAB648186F2911006C262F /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
-		66DAB64A186F2A78006C262F /* CADebugPrintf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CADebugPrintf.h; sourceTree = "<group>"; };
-		66DAB64B186F2A84006C262F /* CADebugPrintf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CADebugPrintf.cpp; sourceTree = "<group>"; };
 		66DAB64D186F2B2F006C262F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		66E21DCD1847D7F90005D91E /* IASKAppSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IASKAppSettingsViewController.h; sourceTree = "<group>"; };
 		66E21DCE1847D7F90005D91E /* IASKAppSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IASKAppSettingsViewController.m; sourceTree = "<group>"; };
@@ -1010,13 +1010,11 @@
 				66A2D918183A7A7F00785270 /* SurespotConstants.m */,
 				662CA58F1871BB7300684790 /* SurespotNavigationController.h */,
 				662CA5901871BB7300684790 /* SurespotNavigationController.m */,
+				666D335D187F69AD00B73F69 /* sounds */,
 				6648B1EC186CBA81007037B1 /* SurespotSHKConfigurator.h */,
 				6648B1ED186CBA81007037B1 /* SurespotSHKConfigurator.m */,
 				6604A2D617626B9E0072216A /* MainStoryboard.storyboard */,
 				66D3B04E182EAB4200B37A6C /* surespot.xcassets */,
-				666D335A187F508600B73F69 /* invite-accept.wav */,
-				666D3359187F508600B73F69 /* invite.wav */,
-				666D3356187F4AE000B73F69 /* message.wav */,
 				6604A2C517626B9E0072216A /* Supporting Files */,
 				66E4F517176298CB00596E6B /* libs */,
 			);
@@ -1194,6 +1192,16 @@
 			path = TestFlightSDK;
 			sourceTree = "<group>";
 		};
+		666D335D187F69AD00B73F69 /* sounds */ = {
+			isa = PBXGroup;
+			children = (
+				666D335E187F69AD00B73F69 /* invite-accept.caf */,
+				666D3360187F69AD00B73F69 /* invite.caf */,
+				666D3362187F69AD00B73F69 /* message.caf */,
+			);
+			path = sounds;
+			sourceTree = "<group>";
+		};
 		66866244185B6A2E001491B1 /* SDWebImage */ = {
 			isa = PBXGroup;
 			children = (
@@ -1295,20 +1303,20 @@
 		66DAB62B186DEEDC006C262F /* voice */ = {
 			isa = PBXGroup;
 			children = (
-				66DAB64B186F2A84006C262F /* CADebugPrintf.cpp */,
-				66DAB64A186F2A78006C262F /* CADebugPrintf.h */,
-				66DAB63B186F2839006C262F /* CABitOperations.h */,
-				66DAB63C186F2839006C262F /* CADebugMacros.cpp */,
-				66DAB63D186F2839006C262F /* CADebugMacros.h */,
-				66DAB63E186F2839006C262F /* CAMath.h */,
-				66DAB63F186F2839006C262F /* CAStreamBasicDescription.cpp */,
-				66DAB640186F2839006C262F /* CAStreamBasicDescription.h */,
-				66DAB641186F2839006C262F /* CAXException.cpp */,
-				66DAB642186F2839006C262F /* CAXException.h */,
-				66DAB632186F2821006C262F /* EAGLView.h */,
-				66DAB633186F2821006C262F /* EAGLView.m */,
-				66DAB62F186F2818006C262F /* aurio_helper.cpp */,
-				66DAB630186F2818006C262F /* aurio_helper.h */,
+				666D336A188476B100B73F69 /* aurio_helper.cpp */,
+				666D336B188476B100B73F69 /* aurio_helper.h */,
+				666D336C188476B100B73F69 /* CABitOperations.h */,
+				666D336D188476B100B73F69 /* CADebugMacros.cpp */,
+				666D336E188476B100B73F69 /* CADebugMacros.h */,
+				666D336F188476B100B73F69 /* CADebugPrintf.cpp */,
+				666D3370188476B100B73F69 /* CADebugPrintf.h */,
+				666D3371188476B100B73F69 /* CAMath.h */,
+				666D3372188476B100B73F69 /* CAStreamBasicDescription.cpp */,
+				666D3373188476B100B73F69 /* CAStreamBasicDescription.h */,
+				666D3374188476B100B73F69 /* CAXException.cpp */,
+				666D3375188476B100B73F69 /* CAXException.h */,
+				666D3376188476B100B73F69 /* EAGLView.h */,
+				666D3377188476B100B73F69 /* EAGLView.m */,
 				66DAB62C186DEEFC006C262F /* VoiceDelegate.h */,
 				66DAB62D186DEEFC006C262F /* VoiceDelegate.mm */,
 			);
@@ -2045,16 +2053,16 @@
 				6637012D187A33A6006D17CA /* PWYLView.xib in Resources */,
 				66F831FF185B9EB500ADD2F1 /* OurMessageCell.xib in Resources */,
 				668D24FF186A36520096D155 /* QRInviteView.xib in Resources */,
+				666D3368187F69AD00B73F69 /* message.caf in Resources */,
 				66DAB62A186D0461006C262F /* SurespotSHKSharers.plist in Resources */,
-				666D335B187F508700B73F69 /* invite.wav in Resources */,
 				6652F2A41875CFF300E023A7 /* PurchaseVoiceView~iphone.xib in Resources */,
 				6646AE26185CADC700CBACDE /* MWPhotoBrowser.bundle in Resources */,
 				66EBE13E1855C97100F2452D /* HomeCell.xib in Resources */,
 				6652F2A51875CFF300E023A7 /* PurchaseVoiceView~ipad.xib in Resources */,
 				66DAB615186CBF1C006C262F /* GooglePlus.bundle in Resources */,
-				666D335C187F508700B73F69 /* invite-accept.wav in Resources */,
 				6604A2D817626B9E0072216A /* MainStoryboard.storyboard in Resources */,
 				66D3B04F182EAB4200B37A6C /* surespot.xcassets in Resources */,
+				666D3364187F69AD00B73F69 /* invite-accept.caf in Resources */,
 				66EBE0D61855C97100F2452D /* MainStoryboard.storyboard in Resources */,
 				66EBE0D11855C97100F2452D /* IdentityCell.xib in Resources */,
 				6621BB841762704D00BC2850 /* Localizable.strings in Resources */,
@@ -2068,9 +2076,9 @@
 				661F46A41865E063004A71B0 /* DeleteIdentityView.xib in Resources */,
 				66AC20AB18690CBD004E58E1 /* KeyFingerprintLoadingView.xib in Resources */,
 				661F469A1864C0B2004A71B0 /* GenerateKeysView.xib in Resources */,
-				666D3358187F4AE000B73F69 /* message.wav in Resources */,
 				661F46A81865EDC3004A71B0 /* ChangePasswordView.xib in Resources */,
 				66DAB60A186CBDC3006C262F /* ShareKit.bundle in Resources */,
+				666D3366187F69AD00B73F69 /* invite.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2138,6 +2146,7 @@
 				66FF1001182D3D920038ECA6 /* DDLog.m in Sources */,
 				66A2D941183C25E800785270 /* UIScrollView+SVPullToRefresh.m in Sources */,
 				66E21DF11847D7F90005D91E /* IASKSettingsStoreFile.m in Sources */,
+				666D337D188476B100B73F69 /* EAGLView.m in Sources */,
 				66EBE1381855C97100F2452D /* NSString+Sensitivize.m in Sources */,
 				66EBE1361855C97100F2452D /* FileController.mm in Sources */,
 				665F4DF61831923C0083BCE7 /* REMenu.m in Sources */,
@@ -2151,7 +2160,6 @@
 				66DAB62E186DEEFC006C262F /* VoiceDelegate.mm in Sources */,
 				66E4F5B8176298CB00596E6B /* SocketIOJSONSerialization.m in Sources */,
 				66E4F5B9176298CB00596E6B /* SocketIOPacket.m in Sources */,
-				66DAB634186F2821006C262F /* EAGLView.m in Sources */,
 				66EBE0CB1855C97100F2452D /* KeyboardState.m in Sources */,
 				66EBE0B21855C97100F2452D /* GenerateSharedSecretOperation.mm in Sources */,
 				66A2D940183C25E800785270 /* UIScrollView+SVInfiniteScrolling.m in Sources */,
@@ -2159,7 +2167,8 @@
 				66EBE0BE1855C97100F2452D /* FilledRectView.m in Sources */,
 				662CA5A31873496F00684790 /* PurchaseDelegate.m in Sources */,
 				66E4F5BA176298CB00596E6B /* SocketIOTransportWebsocket.m in Sources */,
-				66DAB644186F2839006C262F /* CAStreamBasicDescription.cpp in Sources */,
+				666D337A188476B100B73F69 /* CADebugPrintf.cpp in Sources */,
+				666D337B188476B100B73F69 /* CAStreamBasicDescription.cpp in Sources */,
 				661F3B8118689A19003C7AE3 /* KeyFingerprintViewController.mm in Sources */,
 				6646AE33185CBCA800CBACDE /* UIImageViewAligned.m in Sources */,
 				66EBE0C51855C97100F2452D /* SurespotErrorMessage.m in Sources */,
@@ -2173,7 +2182,6 @@
 				66EBE0C41855C97100F2452D /* SurespotControlMessage.m in Sources */,
 				66EBE0BF1855C97100F2452D /* MessageDecryptionOperation.mm in Sources */,
 				66EBE0B41855C97100F2452D /* GetPublicKeysOperation.mm in Sources */,
-				66DAB631186F2818006C262F /* aurio_helper.cpp in Sources */,
 				6646AE11185CADC700CBACDE /* MWTapDetectingImageView.m in Sources */,
 				6652F2AA1875F16D00E023A7 /* PwylViewController.m in Sources */,
 				66E4F5BD176298CB00596E6B /* NSData+SRB64Additions.m in Sources */,
@@ -2182,7 +2190,6 @@
 				66E4F5BE176298CB00596E6B /* SRWebSocket.m in Sources */,
 				661F3B911868D160003C7AE3 /* KeyFingerprintCollectionCell.m in Sources */,
 				6686626D185B6A2E001491B1 /* UIImage+MultiFormat.mm in Sources */,
-				66DAB64C186F2A84006C262F /* CADebugPrintf.cpp in Sources */,
 				66EBE0C01855C97100F2452D /* MessageProcessor.mm in Sources */,
 				66E70AB81847F9E400433D6F /* GTLDrive_Sources.m in Sources */,
 				6686626E185B6A2E001491B1 /* UIImage+WebP.m in Sources */,
@@ -2198,6 +2205,7 @@
 				669BC199187DC1CB00C3C752 /* AboutViewController.m in Sources */,
 				66866266185B6A2E001491B1 /* SDWebImageDecoder.m in Sources */,
 				66866264185B6A2E001491B1 /* SDImageCache.mm in Sources */,
+				666D337C188476B100B73F69 /* CAXException.cpp in Sources */,
 				66EBE0D51855C97100F2452D /* NetworkController.m in Sources */,
 				66E21DEC1847D7F90005D91E /* IASKAppSettingsViewController.m in Sources */,
 				66EC610B176E494900937467 /* AFHTTPClient.m in Sources */,
@@ -2209,11 +2217,12 @@
 				66BB5A49187C7672007B5C47 /* HelpViewController.m in Sources */,
 				66EC610F176E494900937467 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				66EBE1371855C97100F2452D /* NSData+Base64.m in Sources */,
+				666D3378188476B100B73F69 /* aurio_helper.cpp in Sources */,
 				66370130187A365D006D17CA /* TTTAttributedLabel.m in Sources */,
-				66DAB643186F2839006C262F /* CADebugMacros.cpp in Sources */,
 				66EBE1391855C97100F2452D /* StateController.m in Sources */,
 				667EFF9518425A87002C0406 /* Reachability.m in Sources */,
 				66FF1002182D3D920038ECA6 /* DDTTYLogger.m in Sources */,
+				666D3379188476B100B73F69 /* CADebugMacros.cpp in Sources */,
 				66E21DF01847D7F90005D91E /* IASKSettingsStore.m in Sources */,
 				66EBE0D21855C97100F2452D /* RestoreIdentityViewController.mm in Sources */,
 				66EBE0B11855C97100F2452D /* CredentialCachingController.mm in Sources */,
@@ -2231,7 +2240,6 @@
 				66EBE0B61855C97100F2452D /* IdentityController.mm in Sources */,
 				66E21DF51847D7F90005D91E /* IASKPSTextFieldSpecifierViewCell.m in Sources */,
 				66EC6113176E494900937467 /* UIImageView+AFNetworking.m in Sources */,
-				66DAB645186F2839006C262F /* CAXException.cpp in Sources */,
 				661F46981864C0A4004A71B0 /* GenerateKeysViewController.mm in Sources */,
 				66EBE1401855C97100F2452D /* MessageIndicatorNewView.m in Sources */,
 				66EBE0CC1855C97100F2452D /* LoadingView.m in Sources */,
