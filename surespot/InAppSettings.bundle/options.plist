@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>PreferenceSpecifiers</key>
+        <array>
+			<dict>
+                <key>Type</key>
+                <string>IASKButtonSpecifier</string>
+                <key>Title</key>
+                <string>pref_title_background_image_select</string>
+                <key>Key</key>
+                <string>_user_assign_background_image_key</string>
+                <key>IASKTextAlignment</key>
+                <string>IASKUITextAlignmentLeft</string>
+            </dict>
+        </array>
+        <key>StringsTable</key>
+        <string>Root</string>
+    </dict>
+</plist>
