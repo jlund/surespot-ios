@@ -141,7 +141,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
     
     //update UI
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"backgroundImageChanged" object:url];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"backgroundImageChanged" object:_controller];
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         [_popover dismissPopoverAnimated:YES];
         _popover = nil;
@@ -434,7 +434,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return YES;
 }
 
-+(BOOL) startBackgroundImageSelectControllerFromViewController: (UIViewController*) controller
++(BOOL) startBackgroundImageSelectControllerFromViewController: (IASKAppSettingsViewController*) controller
                                                  usingDelegate: (ImageDelegate *) delegate {
     
     if (([UIImagePickerController isSourceTypeAvailable:

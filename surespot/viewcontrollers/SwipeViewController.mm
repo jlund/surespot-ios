@@ -2181,7 +2181,7 @@ const Float32 voiceRecordDelay = 0.3;
     //[self dismissModalViewControllerAnimated:YES];
     
     // your code here to reconfigure the app for changed settings
-    [self setBackgroundImage];
+    [self setBackgroundImageController:sender];
 }
 
 - (void)settingsViewController:(IASKAppSettingsViewController*)sender buttonTappedForSpecifier:(IASKSpecifier*)specifier {
@@ -2200,8 +2200,7 @@ const Float32 voiceRecordDelay = 0.3;
             [defaults removeObjectForKey:key];
             //delete image file from disk
             [[NSFileManager defaultManager] removeItemAtURL:bgImageUrl error:nil];
-            
-            [_appSettingsViewController.tableView reloadData];
+            [sender.tableView reloadData];
         }
         else {
             //select and assign image
@@ -2265,10 +2264,11 @@ const Float32 voiceRecordDelay = 0.3;
 }
 
 -(void) backgroundImageChanged: (NSNotification *) notification {
-    [self setBackgroundImage];
+    IASKAppSettingsViewController * controller = notification.object;
+    [self setBackgroundImageController: controller];
 }
 
--(void) setBackgroundImage {
+-(void) setBackgroundImageController: (IASKAppSettingsViewController *) controller {
     NSUserDefaults  * defaults = [NSUserDefaults standardUserDefaults];
     NSString * username = [[IdentityController sharedInstance] getLoggedInUser];
     NSURL * url = [defaults URLForKey:[NSString stringWithFormat:@"%@%@",username, @"_background_image_url"]];
@@ -2283,13 +2283,12 @@ const Float32 voiceRecordDelay = 0.3;
         _bgImageView.image = nil;
     }
     
-    [_appSettingsViewController.tableView reloadData];
+    [controller.tableView reloadData];
 }
 
 -(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self setBackgroundImage];
-    
+    [self setBackgroundImageController: nil];
 }
 
 @end

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
+#import "IASKAppSettingsViewController.h"
 
 #define kSurespotImageDelegateModeCapture 0
 #define kSurespotImageDelegateModeSelect 1
@@ -29,7 +30,7 @@
                                              usingDelegate: (ImageDelegate *) delegate;
 - (void)orientationChanged;
 @property (nonatomic, assign) NSInteger mode;
-+(BOOL) startBackgroundImageSelectControllerFromViewController: (UIViewController*) controller
++(BOOL) startBackgroundImageSelectControllerFromViewController: (IASKAppSettingsViewController*) controller
                                                  usingDelegate: (ImageDelegate *) delegate;
 
 @end
