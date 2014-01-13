@@ -23,6 +23,7 @@
 #import "SHKFacebook.h"
 #import <StoreKit/StoreKit.h>
 #import "PurchaseDelegate.h"
+#import "SoundController.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -156,7 +157,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     localNotification.fireDate = nil;
                     localNotification.alertBody = [NSString stringWithFormat: NSLocalizedString(notificationType, nil), to, from];
                     localNotification.alertAction = NSLocalizedString(@"notification_title", nil);
-                    localNotification.soundName = [userInfo valueForKeyPath:@"aps.sound"];
+                    //this doesn't seem to play anything when app is foregrounded so play it manually
+//                    localNotification.soundName = [userInfo valueForKeyPath:@"aps.sound"];
+                    
+                    [[SoundController sharedInstance] playSoundNamed:[userInfo valueForKeyPath:@"aps.sound"]];
                     [application scheduleLocalNotification:localNotification];
                 }
             }
