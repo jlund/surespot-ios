@@ -251,6 +251,7 @@
 "could_not_import_identity_drive_404"="Impossible de charger l\'identité - veuillez vous assurer que vous avez sélectionné le même compte Google que celui de Google Drive.";
 "pick_same_drive_account"="Veuillez utiliser le même compte que celui de Google Drive:";
 "about"="à propos de...";
+"about_action_bar_right"="à propos";
 "unauthorized"="non autorisé";
 "verify_key_fingerprints"="afficher les empreintes digitales de la clé";
 "received"="reçu";

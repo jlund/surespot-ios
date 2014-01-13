@@ -250,6 +250,7 @@
 "could_not_import_identity_drive_404"="Caricamento identità non riuscito - assicurati di aver scelto lo stesso account Google che stavi usando per Google Drive.";
 "pick_same_drive_account"="Scegli lo stesso account che stavi usando per Google Drive:";
 "about"="a proposito di...";
+"about_action_bar_right"="informazioni su";
 "unauthorized"="non autorizzato";
 "verify_key_fingerprints"="vedi la firma digitale della chiave";
 "received"="ricevuto";

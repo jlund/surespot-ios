@@ -251,6 +251,7 @@
 "could_not_import_identity_drive_404"="Konnte Profil nicht laden - bitte stellen Sie sicher, dass das gleiche Google-Konto ausgewählt ist wie bei Google Drive.";
 "pick_same_drive_account"="Bitte benutzten sie den gleichen Benutzernamen wie bei Google Drive:";
 "about"="Über...";
+"about_action_bar_right"="Über";
 "unauthorized"="nicht autorisiert";
 "verify_key_fingerprints"="Schlüssel ansehen";
 "received"="empfangen";

@@ -250,6 +250,7 @@
 "could_not_import_identity_drive_404"="Could not load identity - please make sure you selected the same Google account that you were using in Google Drive.";
 "pick_same_drive_account"="Please pick the same account that you were using in Google Drive:";
 "about"="about...";
+"about_action_bar_right"="about";
 "unauthorized"="session expired, please login again";
 "verify_key_fingerprints"="view key fingerprints";
 "received"="received";

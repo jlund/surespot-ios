@@ -250,6 +250,7 @@
 "could_not_import_identity_drive_404"="No se puede cargar el perfil. Asegúrate de estar usando la misma cuenta de Google que usaste en Google Drive.";
 "pick_same_drive_account"="Selecciona la misma cuenta que usas en Google Drive:";
 "about"="Acerca de...";
+"about_action_bar_right"="Acerca de";
 "unauthorized"="No autorizado";
 "verify_key_fingerprints"="Ver huellas de la clave";
 "received"="recibido";
