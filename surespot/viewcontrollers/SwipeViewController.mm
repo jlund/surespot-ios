@@ -186,8 +186,8 @@ const Float32 voiceRecordDelay = 0.3;
     _appSettingsViewController.settingsStore = [[SurespotSettingsStore alloc] initWithUsername:[[IdentityController sharedInstance] getLoggedInUser]];
     _appSettingsViewController.delegate = self;
     
- 
-   }
+    
+}
 
 -(void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -261,7 +261,7 @@ const Float32 voiceRecordDelay = 0.3;
     buttonFrame.origin.y -= keyboardHeight;
     _theButton.frame = buttonFrame;
     
-
+    
     @synchronized (_chats) {
         for (NSString * key in [_chats allKeys]) {
             UITableView * tableView = [_chats objectForKey:key];
@@ -309,7 +309,7 @@ const Float32 voiceRecordDelay = 0.3;
         CGRect textFieldFrame = _textFieldContainer.frame;
         textFieldFrame.origin.y += self.keyboardState.keyboardHeight;
         _textFieldContainer.frame = textFieldFrame;
-
+        
         
         CGRect buttonFrame = _theButton.frame;
         buttonFrame.origin.y += self.keyboardState.keyboardHeight;
@@ -767,6 +767,7 @@ const Float32 voiceRecordDelay = 0.3;
     if (index == NSNotFound) {
         static NSString *CellIdentifier = @"Cell";
         UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell.backgroundColor = [UIColor clearColor];
         return cell;
         
     }
@@ -784,6 +785,7 @@ const Float32 voiceRecordDelay = 0.3;
             cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
             cell.textLabel.numberOfLines = 0;
             cell.textLabel.textColor = [self getTextColor];
+            cell.backgroundColor = [UIColor clearColor];
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
             cell.userInteractionEnabled = NO;
             return cell;
@@ -877,6 +879,7 @@ const Float32 voiceRecordDelay = 0.3;
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
             cell.textLabel.text = NSLocalizedString(@"no_messages", nil);
             cell.textLabel.textColor = [self getTextColor];
+            cell.backgroundColor = [UIColor clearColor];
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
             cell.userInteractionEnabled = NO;
             return cell;
@@ -1094,6 +1097,7 @@ const Float32 voiceRecordDelay = 0.3;
         else {
             static NSString *CellIdentifier = @"Cell";
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            cell.backgroundColor = [UIColor clearColor];
             cell.userInteractionEnabled = NO;
             return cell;
         }
@@ -2148,7 +2152,7 @@ const Float32 voiceRecordDelay = 0.3;
         ![message.from isEqualToString: currentChat] &&
         [[[IdentityController sharedInstance] getIdentityNames] containsObject:message.to]) {
         
-        [UIUtils startPulseAnimation:_backImageView];                
+        [UIUtils startPulseAnimation:_backImageView];
     }
 }
 
