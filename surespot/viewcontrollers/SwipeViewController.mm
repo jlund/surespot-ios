@@ -913,16 +913,16 @@ const Float32 voiceRecordDelay = 0.3;
             }
             
             cell.messageLabel.text = plainData;
-            cell.messageLabel.enabledTextCheckingTypes = NSTextCheckingTypeLink;//phone number seems flaky..we have copy so not the end of teh world | NSTextCheckingTypePhoneNumber;
-
-            if (!_linkAttributes) {
-                _linkAttributes = [NSMutableDictionary dictionary];
-                [_linkAttributes setValue:[NSNumber numberWithBool:YES] forKey:(NSString *)kCTUnderlineStyleAttributeName];
-                [_linkAttributes setValue:(__bridge id)[[UIUtils surespotBlue] CGColor] forKey:(NSString *)kCTForegroundColorAttributeName];                
-            }
-
-            cell.messageLabel.linkAttributes = _linkAttributes;
-            [cell.messageLabel setNeedsLayout];
+            cell.messageLabel.enabledTextCheckingTypes = NSTextCheckingTypeLink//phone number seems flaky..we have copy so not the end of teh world
+            | NSTextCheckingTypePhoneNumber;
+            
+            // if (!_linkAttributes) {
+            NSDictionary * linkAttributes = [NSMutableDictionary dictionary];
+            [linkAttributes setValue:[NSNumber numberWithBool:YES] forKey:(NSString *)kCTUnderlineStyleAttributeName];
+            [linkAttributes setValue:(__bridge id)[[UIUtils surespotBlue] CGColor] forKey:(NSString *)kCTForegroundColorAttributeName];
+            //     }
+            
+            cell.messageLabel.linkAttributes = linkAttributes;
             cell.messageLabel.delegate = self;
             cell.messageLabel.textColor = [self getTextColor];
             cell.messageSize.textColor = [self getTextColor];
