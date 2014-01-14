@@ -348,13 +348,24 @@ Surespot is 100% Open Source und begrüßt ihre Mitarbeit - sehen Sie sich den Q
 Für einen mehr technischen Überblick wie surespot funktioniert bitte klicken Sie hier.
 Für Fragen oder Hilfe bitte hier klicken oder eine E-Mail an support@2fours.com schreiben.";
 
+
+"aes_match"="256 bit AES-GCM";
+"aes_link"="http://www.eetimes.com/design/embedded-internet-design/4372428/How-secure-is-AES-against-brute-force-attacks-";
+"pbkdf_match"="PBKDF";
+"pbkdf_link"="https://de.wikipedia.org/wiki/PBKDF2";
+"privatekeys_match"="Privaten Schlüssel";
+"privatekeys_link"="https://de.wikipedia.org/wiki/Asymmetrisches_Kryptosystem";
+"bruteforce_match"="Brute-Force-Attake";
+"bruteforce_link"="https://de.wikipedia.org/wiki/Brute-Force";
+"strength_match"="Stärke";
+"strength_link"="https://de.wikipedia.org/wiki/Passwort";
+"help_backup_what"="Exportiert eine Kopie des gewählten Profils, verschlüsselt mit 256 bit AES-GCM dessen Schlüssel durch PBKDF (Password Based Key Derivation Function) von ihrem Passwort abgeleitet wurde.
+
+Falls Sie den Export Ihres Profils auf Google Drive ausgewählt haben, wird eine Kopie Ihrer Privaten Schlüssel auf den Google Drive Servern gespeichert. Sollte ein Dritter irgendwie Zugang zu den Google-Drive-Servern erhalten und versuchen Ihre Profil-Datei mittels Brute-Force-Attake zu entschlüsseln, vergessen Sie nicht, dass die Stärke Ihres Passworts letztlich den Erfolg bestimmt.";
+
+
+
+
+
 /*
-"help_agreement"="<![CDATA["Durch einen Klick auf OK erklären Sie Ihr Einverständnis zu den <a href="https://www.surespot.me/documents/surespot_terms_of_service.html"="AGB</a>."]]>";
-
-"help_backup_what"="<![CDATA["Exportiert eine Kopie des gewählten Profils, verschlüsselt mit <a href="http://www.eetimes.com/design/embedded-internet-design/4372428/How-secure-is-AES-against-brute-force-attacks-"="256 bit AES-GCM</a> dessen Schlüssel durch <a href="https://de.wikipedia.org/wiki/PBKDF2"="PBKDF</a> (Password Based Key Derivation Function) von ihrem Passwort abgeleitet wurde."]]>";
-"help_backup_drive1"="<![CDATA["Falls Sie den Export Ihres Profils auf Google Drive ausgewählt haben, wird eine Kopie Ihrer <a href="https://de.wikipedia.org/wiki/Asymmetrisches_Kryptosystem"="Privaten Schlüssel</a> auf den Google Drive Servern gespeichert. Sollte ein Dritter irgendwie Zugang zu den Google-Drive-Servern erhalten und versuchen Ihre Profil-Datei mittels <a href="https://de.wikipedia.org/wiki/Brute-Force"="Brute-Force-Attake</a> zu entschlüsseln, vergessen Sie nicht, dass die <a href="https://de.wikipedia.org/wiki/Passwort"="Stärke</a> Ihres Passworts letztlich den Erfolg bestimmt."]]>";*/
-
-
-
-
-
+ "help_agreement"="<![CDATA["Durch einen Klick auf OK erklären Sie Ihr Einverständnis zu den <a href="https://www.surespot.me/documents/surespot_terms_of_service.html"="AGB</a>."]]>";*/

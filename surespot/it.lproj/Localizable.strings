@@ -346,9 +346,22 @@ Surespot è 100% open source e la tua partecipazione è benvenuta - guarda il co
 Per una visione più tecnica su come funziona surespot clicca qui.
 Per domande o supporto clicca qui oppure manda un\'email a support@2fours.com";
 
-/*
-"help_backup_what"="<![CDATA["Facendo ciò, verrà esportata una copia dell\'identità selezionata, cifrata con <a href="http://www.eetimes.com/design/embedded-internet-design/4372428/How-secure-is-AES-against-brute-force-attacks-"="AES a 256 bit</a> con una chiave che deriva dalla tua password attraverso la funzione <a href="https://en.wikipedia.org/wiki/PBKDF2"="PBKDF</a> (Password Based Key Derivation Function)"]]>";
-"help_backup_drive1"="<![CDATA["Se esegui il backup dell\'identità su Google Drive, una copia delle tue <a href="https://it.wikipedia.org/wiki/Crittografia_asimmetrica"="chiavi private</a> sarà registrata nei server di Google Drive. Chiunque potrebbe riuscire ad accedere ai server di Google Drive e tentare di decifrare il tuo file di identità usando il <a href="https://it.wikipedia.org/wiki/Brute_force"="metodo di forza bruta</a>, e solo la<a href="https://en.wikipedia.org/wiki/Password_strength"="robustezza</a> della tua password può garantire la protezione della tua identità."]]>";*/
+
+"aes_match"="AES a 256 bit";
+"aes_link"="http://www.eetimes.com/design/embedded-internet-design/4372428/How-secure-is-AES-against-brute-force-attacks-";
+"pbkdf_match"="PBKDF";
+"pbkdf_link"="https://en.wikipedia.org/wiki/PBKDF2";
+"privatekeys_match"="chiavi private";
+"privatekeys_link"="https://it.wikipedia.org/wiki/Crittografia_asimmetrica";
+"bruteforce_match"="metodo di forza bruta";
+"bruteforce_link"="https://de.wikipedia.org/wiki/Brute-Force";
+"strength_match"="robustezza";
+"strength_link"="https://en.wikipedia.org/wiki/Password_strength";
+"help_backup_what"="Facendo ciò, verrà esportata una copia dell\'identità selezionata, cifrata con AES a 256 bit con una chiave che deriva dalla tua password attraverso la funzione PBKDF (Password Based Key Derivation Function).
+
+Se esegui il backup dell\'identità su Google Drive, una copia delle tue chiavi private sarà registrata nei server di Google Drive. Chiunque potrebbe riuscire ad accedere ai server di Google Drive e tentare di decifrare il tuo file di identità usando il metodo di forza bruta, e solo la robustezza della tua password può garantire la protezione della tua identità.";
+
+
 /*"help_agreement"="<![CDATA["Cliccando OK accetti i  <a href="https://www.surespot.me/documents/surespot_terms_of_service.html"="termini di servizio</a> di surespot."]]>";*/
 
 

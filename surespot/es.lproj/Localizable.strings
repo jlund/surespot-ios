@@ -346,8 +346,19 @@ Surespot es 100% software libre y acoge con beneplácito tu participación - rev
 Para una información más detallada sobre cómo funciona surespot haz click aquí.
 Para preguntas o ayuda haz click aquí o envía un correo a support@2fours.com";
 
-/*
-"help_backup_what"="<![CDATA["Esto exportará una copia del perfil elegido encriptada con <a href="http://www.eetimes.com/design/embedded-internet-design/4372428/How-secure-is-AES-against-brute-force-attacks-"="256 bit AES</a> con una clave derivada de tu contraseña mediante <a href="https://en.wikipedia.org/wiki/PBKDF2"="PBKDF</a> (Password Based Key Derivation Function)"]]>";
-"help_backup_drive1"="<![CDATA["Si eliges exportar una copia de tu perfil a Google Drive, estarás guardando una copia de tus <a href="https://en.wikipedia.org/wiki/Public-key_cryptography"="claves privadas</a> en los servidores de Google Drive. Alguien podría conseguir acceso a los servidores e intentar descifrar el archivo de tu perfil mediante un <a href="https://en.wikipedia.org/wiki/Brute-force_attack"="ataque de fuerza bruta</a>, recuerda que la <a href="https://en.wikipedia.org/wiki/Password_strength"="fuerza</a> de tu contraseña determinará si lo consigue o no."]]>";*/
+"aes_match"="256 bit AES-GCM";
+"aes_link"="http://www.eetimes.com/design/embedded-internet-design/4372428/How-secure-is-AES-against-brute-force-attacks-";
+"pbkdf_match"="PBKDF";
+"pbkdf_link"="https://en.wikipedia.org/wiki/PBKDF2";
+"privatekeys_match"="claves privadas";
+"privatekeys_link"="https://en.wikipedia.org/wiki/Public-key_cryptography";
+"bruteforce_match"="ataque de fuerza bruta";
+"bruteforce_link"="https://en.wikipedia.org/wiki/Brute-force_attack";
+"strength_match"="fuerza";
+"strength_link"="https://en.wikipedia.org/wiki/Password_strength";
+"help_backup_what"="Esto exportará una copia del perfil elegido encriptada con 256 bit AES-GCM con una clave derivada de tu contraseña mediante PBKDF (Password Based Key Derivation Function).
+
+Si eliges exportar una copia de tu perfil a Google Drive, estarás guardando una copia de tus claves privadas en los servidores de Google Drive. Alguien podría conseguir acceso a los servidores e intentar descifrar el archivo de tu perfil mediante un ataque de fuerza bruta, recuerda que la fuerza de tu contraseña determinará si lo consigue o no.";
+
 /*
 "help_agreement"="<![CDATA["Presionando OK aceptas los <a href="https://www.surespot.me/documents/surespot_terms_of_service.html"="Términos y Condiciones del Servicio</a>."]]>";*/

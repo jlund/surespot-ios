@@ -348,11 +348,20 @@ Surespot est 100% open source et accepte votre participation - voir le code sour
 Pour une présentation plus technique de comment surespot fonctionne, veuillez cliquer ici (en anglais).
 Pour des questions ou du support, veuillez cliquer ici ou par courriel à support@2fours.com";
 
-/*
-"help_backup_what"="<![CDATA["Ceci va exporter une copie de l'identité sélectionnée, cryptée avec <a href="http://fr.wikipedia.org/wiki/Advanced_Encryption_Standard#Recommandations_de_la_NSA"="256 bit AES-GCM</a>, dont la clé est dérivée de votre mot de passe grâce à <a href="http://www.artiflo.net/2009/08/pbkdf2-et-generation-des-cles-de-chiffrement-de-disque/"="PBKDF2</a> (Password Based Key Derivation Function, fonction de dérivation d'un mot de passe basé sur une clé)"]]>";
-*/
-/*
-"help_backup_drive1"="<![CDATA["Si vous choisissez de sauvegarder votre identité sur Google Drive, vous devez stocker une copie de vos <a href="http://fr.wikipedia.org/wiki/Cryptographie_asymétrique"="clés privées</a> sur les serveurs de Google Drive. Si une personne accède aux serveurs de Google Drive et tente de décrypter votre fichier d'identité avec une <a href="http://fr.wikipedia.org/wiki/Attaque_par_force_brute"="attaque par force brute</a>, il faut savoir que la <a href="http://fr.wikipedia.org/wiki/Politique_des_mots_de_passe"="qualité</a> de votre mot de passe déterminera finalement la difficulté pour le trouver."]]>";*/
+"aes_match"="256 bit AES-GCM";
+"aes_link"="http://fr.wikipedia.org/wiki/Advanced_Encryption_Standard#Recommandations_de_la_NSA";
+"pbkdf_match"="PBKDF";
+"pbkdf_link"="http://www.artiflo.net/2009/08/pbkdf2-et-generation-des-cles-de-chiffrement-de-disque/";
+"privatekeys_match"="clés privées";
+"privatekeys_link"="http://fr.wikipedia.org/wiki/Cryptographie_asymétrique";
+"bruteforce_match"="attaque par force brute";
+"bruteforce_link"="http://fr.wikipedia.org/wiki/Attaque_par_force_brute";
+"strength_match"="qualité";
+"strength_link"="http://fr.wikipedia.org/wiki/Politique_des_mots_de_passe";
+
+"help_backup_what"="Ceci va exporter une copie de l'identité sélectionnée, cryptée avec 256 bit AES-GCM, dont la clé est dérivée de votre mot de passe grâce à PBKDF (Password Based Key Derivation Function, fonction de dérivation d'un mot de passe basé sur une clé).
+
+Si vous choisissez de sauvegarder votre identité sur Google Drive, vous devez stocker une copie de vos clés privées sur les serveurs de Google Drive. Si une personne accède aux serveurs de Google Drive et tente de décrypter votre fichier d'identité avec une attaque par force brute, il faut savoir que la qualité de votre mot de passe déterminera finalement la difficulté pour le trouver.";
 
 
 /*
