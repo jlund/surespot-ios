@@ -181,9 +181,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 +(void) setImageMessageHeights: (SurespotMessage *)  message size: (CGSize) size {
-    
-    [message setRowPortraitHeight: 224];
-    [message setRowLandscapeHeight: 224];
+    if ([[UIDevice currentDevice]       userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        [message setRowPortraitHeight: 448];
+        [message setRowLandscapeHeight: 448];
+        
+        
+    }
+    else {
+        [message setRowPortraitHeight: 224];
+        [message setRowLandscapeHeight: 224];
+    }
     DDLogVerbose(@"setting image row height portrait %d landscape %d", message.rowPortraitHeight, message.rowLandscapeHeight);
     
 }
