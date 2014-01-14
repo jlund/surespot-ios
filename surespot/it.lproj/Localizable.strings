@@ -361,7 +361,8 @@ Per domande o supporto clicca qui oppure manda un\'email a support@2fours.com";
 
 Se esegui il backup dell\'identità su Google Drive, una copia delle tue chiavi private sarà registrata nei server di Google Drive. Chiunque potrebbe riuscire ad accedere ai server di Google Drive e tentare di decifrare il tuo file di identità usando il metodo di forza bruta, e solo la robustezza della tua password può garantire la protezione della tua identità.";
 
-
-/*"help_agreement"="<![CDATA["Cliccando OK accetti i  <a href="https://www.surespot.me/documents/surespot_terms_of_service.html"="termini di servizio</a> di surespot."]]>";*/
+"tos_match"="termini di servizio";
+"tos_link"="https://www.surespot.me/documents/surespot_terms_of_service.html";
+"help_agreement"="Cliccando OK accetti i termini di servizio di surespot.";
 
 

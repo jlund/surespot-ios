@@ -363,6 +363,11 @@ Pour des questions ou du support, veuillez cliquer ici ou par courriel à suppor
 
 Si vous choisissez de sauvegarder votre identité sur Google Drive, vous devez stocker une copie de vos clés privées sur les serveurs de Google Drive. Si une personne accède aux serveurs de Google Drive et tente de décrypter votre fichier d'identité avec une attaque par force brute, il faut savoir que la qualité de votre mot de passe déterminera finalement la difficulté pour le trouver.";
 
+"tos_match"="les termes d'utilisation";
+"tos_link"="https://www.surespot.me/documents/surespot_terms_of_service.html";
+"help_agreement"="En cliquant sur OK vous acceptez les termes d'utilisation de surespot.";
 
-/*
-"help_agreement"="<![CDATA["En cliquant sur OK vous acceptez les <a href="https://www.surespot.me/documents/surespot_terms_of_service.html"="termes d'utilisation</a> de surespot."]]>";*/
+
+
+
+

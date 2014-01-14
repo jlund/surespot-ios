@@ -363,9 +363,6 @@ Für Fragen oder Hilfe bitte hier klicken oder eine E-Mail an support@2fours.com
 
 Falls Sie den Export Ihres Profils auf Google Drive ausgewählt haben, wird eine Kopie Ihrer Privaten Schlüssel auf den Google Drive Servern gespeichert. Sollte ein Dritter irgendwie Zugang zu den Google-Drive-Servern erhalten und versuchen Ihre Profil-Datei mittels Brute-Force-Attake zu entschlüsseln, vergessen Sie nicht, dass die Stärke Ihres Passworts letztlich den Erfolg bestimmt.";
 
-
-
-
-
-/*
- "help_agreement"="<![CDATA["Durch einen Klick auf OK erklären Sie Ihr Einverständnis zu den <a href="https://www.surespot.me/documents/surespot_terms_of_service.html"="AGB</a>."]]>";*/
+"tos_match"="AGB";
+"tos_link"="https://www.surespot.me/documents/surespot_terms_of_service.html";
+ "help_agreement"="Durch einen Klick auf OK erklären Sie Ihr Einverständnis zu den AGB.";

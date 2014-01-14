@@ -360,5 +360,6 @@ Para preguntas o ayuda haz click aquí o envía un correo a support@2fours.com";
 
 Si eliges exportar una copia de tu perfil a Google Drive, estarás guardando una copia de tus claves privadas en los servidores de Google Drive. Alguien podría conseguir acceso a los servidores e intentar descifrar el archivo de tu perfil mediante un ataque de fuerza bruta, recuerda que la fuerza de tu contraseña determinará si lo consigue o no.";
 
-/*
-"help_agreement"="<![CDATA["Presionando OK aceptas los <a href="https://www.surespot.me/documents/surespot_terms_of_service.html"="Términos y Condiciones del Servicio</a>."]]>";*/
+"tos_match"="Términos y Condiciones del Servicio";
+"tos_link"="https://www.surespot.me/documents/surespot_terms_of_service.html";
+"help_agreement"="Presionando OK aceptas los Términos y Condiciones del Servicio.";

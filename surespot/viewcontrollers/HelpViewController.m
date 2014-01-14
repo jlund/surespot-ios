@@ -13,7 +13,8 @@
 @property (strong, nonatomic) IBOutlet TTTAttributedLabel *helpLabel;
 @property (strong, nonatomic) IBOutlet UILabel *helpLabel2;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
-
+@property (strong, nonatomic) IBOutlet TTTAttributedLabel *tosLabel;
+@property (strong, nonatomic) IBOutlet UIButton *tosButton;
 @end
 
 @implementation HelpViewController
@@ -61,21 +62,58 @@
     
     NSMutableAttributedString * label2String = [[NSMutableAttributedString alloc] initWithString:label2Text];
     [label2String addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:[label2Text rangeOfString: helpBackupIdsString1]];
-
+    
     
     _helpLabel2.preferredMaxLayoutWidth = _helpLabel2.frame.size.width;
     _helpLabel2.attributedText = label2String;
     [_helpLabel2 sizeToFit];
     
-   CGFloat bottom =  _helpLabel2.frame.origin.y + _helpLabel2.frame.size.height;
     
-    CGSize size = self.view.frame.size;
-    size.height = bottom + 20;
+    BOOL hasClickTOS = [[NSUserDefaults standardUserDefaults] boolForKey:@"hasClickedTOS"];
+
+    CGFloat label2bottom =  _helpLabel2.frame.origin.y + _helpLabel2.frame.size.height;
+    CGFloat bottom = 0;
+    
+    if (!hasClickTOS) {
+        
+        NSArray * matches = @[NSLocalizedString(@"tos_match", nil)];
+        NSArray * links = @[NSLocalizedString(@"tos_link",nil)];
+        NSString * tosText = NSLocalizedString(@"help_agreement",nil);
+        
+        [UIUtils setLinkLabel:_tosLabel delegate:self labelText:tosText linkMatchTexts:matches urlStrings:links];
+        [_tosButton setTitle:NSLocalizedString(@"ok", nil) forState:UIControlStateNormal];
+        
+        _tosLabel.hidden = NO;
+        _tosButton.hidden = NO;
+        
+        CGRect frame = _tosLabel.frame;
+        frame.origin.y = label2bottom + 10;
+        _tosLabel.frame = frame;
+        
+        frame = _tosButton.frame;
+        frame.origin.y = _tosLabel.frame.origin.y + _tosLabel.frame.size.height + 10;
+        _tosButton.frame = frame;
+        
+        bottom =  _tosButton.frame.origin.y + _tosButton.frame.size.height;
+        self.navigationItem.hidesBackButton = YES;
+    }
+    else {
+        _tosLabel.hidden = YES;
+        _tosButton.hidden = YES;
+        bottom = label2bottom;
+        self.navigationItem.hidesBackButton = NO;
+    }
+        
+    CGSize size = CGSizeMake(self.view.frame.size.width, bottom + 20);
     _scrollView.contentSize = size;
     
     [self.navigationItem setTitle:NSLocalizedString(@"help", nil)];
     self.navigationController.navigationBar.translucent = NO;
-
+    
+}
+- (IBAction)tosClick:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasClickedTOS"];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

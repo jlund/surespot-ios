@@ -361,4 +361,6 @@ For questions or support please press here or email support@2fours.com";
 
 If you elect to backup your identity on Google Drive you will be storing a copy of your private keys on Google Drive servers. Should a third party somehow gain access to the Google Drive servers and attempt to decrypt your identity file by brute force attack, be aware that the strength of your password will ultimately determine their success.";
 
-/*"help_agreement"="<![CDATA["By touching OK you agree to the surespot <a href="https://www.surespot.me/documents/surespot_terms_of_service.html"="terms of service</a>."]]>"*/;
+"tos_match"="terms of service";
+"tos_link"="https://www.surespot.me/documents/surespot_terms_of_service.html";
+"help_agreement"="By touching OK you agree to the surespot terms of service.";
