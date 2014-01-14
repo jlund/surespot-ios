@@ -160,7 +160,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     //this doesn't seem to play anything when app is foregrounded so play it manually
 //                    localNotification.soundName = [userInfo valueForKeyPath:@"aps.sound"];
                     
-                    [[SoundController sharedInstance] playSoundNamed:[userInfo valueForKeyPath:@"aps.sound"]];
+                    [[SoundController sharedInstance] playSoundNamed:[userInfo valueForKeyPath:@"aps.sound"] forUser:to];
                     [application scheduleLocalNotification:localNotification];
                 }
             }

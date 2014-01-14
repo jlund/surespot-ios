@@ -64,10 +64,12 @@
     return self;
 }
 
--(BOOL) shouldPlaySound {
+-(BOOL) shouldPlaySoundForUser: (NSString *) username {
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     
-    NSString * key = [[[IdentityController sharedInstance] getLoggedInUser] stringByAppendingString: @"_user_notifications_sound"];
+    NSString * key = [username stringByAppendingString: @"_user_notifications_sound"];
+    
+    if (!key) return YES;
     id iPlaySound = [defaults objectForKey:key];
     
     BOOL playSound = YES;
@@ -79,26 +81,26 @@
     return playSound;
 }
 
--(void) playNewMessageSound {
+-(void) playNewMessageSoundForUser: (NSString *) username {
     
-    if ([self shouldPlaySound]) {
+    if ([self shouldPlaySoundForUser: username]) {
         AudioServicesPlaySystemSound(_messageSoundID);
     }
 }
--(void) playInviteSound {
-    if ([self shouldPlaySound]) {
+-(void) playInviteSoundForUser: (NSString *) username {
+    if ([self shouldPlaySoundForUser:username]) {
         AudioServicesPlaySystemSound(_inviteSoundID);
     }
 }
 
--(void) playInviteAcceptedSound {
-    if ([self shouldPlaySound]) {
+-(void) playInviteAcceptedSoundForUser: (NSString *) username {
+    if ([self shouldPlaySoundForUser:username]) {
         AudioServicesPlaySystemSound(_acceptSoundID);
     }
 }
 
--(void) playSoundNamed: (NSString *) soundName {
-    if ([self shouldPlaySound]) {
+-(void) playSoundNamed: (NSString *) soundName forUser: (NSString *) username{
+    if ([self shouldPlaySoundForUser:username]) {
         AudioServicesPlaySystemSound([[soundMap objectForKey:soundName] intValue]);
     }
 }

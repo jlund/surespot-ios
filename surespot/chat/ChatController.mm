@@ -642,7 +642,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
             [UIUtils showToastMessage:[NSString stringWithFormat:NSLocalizedString(@"notification_message", nil), message.to, message.from] duration:1];
                        
             //play notification sound
-            [[SoundController sharedInstance] playNewMessageSound];               
+            [[SoundController sharedInstance] playNewMessageSoundForUser: message.to];
         }
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"newMessage" object: message];
@@ -763,7 +763,8 @@ static const int MAX_CONNECTION_RETRIES = 16;
             else {
                 if ([message.action isEqualToString:@"invite"]) {
                     user = message.data;
-                    [[SoundController sharedInstance] playInviteSound];
+                    
+                    [[SoundController sharedInstance] playInviteSoundForUser: [[IdentityController sharedInstance] getLoggedInUser]];
                     [_homeDataSource addFriendInviter: user ];
                 }
                 else {
@@ -879,7 +880,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
     //if i'm not the accepter fire a notification saying such
     if (![byUsername isEqualToString:[[IdentityController sharedInstance] getLoggedInUser]]) {
         [UIUtils showToastMessage:[NSString stringWithFormat:NSLocalizedString(@"notification_invite_accept", nil), [[IdentityController sharedInstance] getLoggedInUser], byUsername] duration:1];
-        [[SoundController sharedInstance] playInviteAcceptedSound];
+        [[SoundController sharedInstance] playInviteAcceptedSoundForUser:[[IdentityController sharedInstance] getLoggedInUser]];
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:@"inviteAccepted" object:byUsername];
         });
