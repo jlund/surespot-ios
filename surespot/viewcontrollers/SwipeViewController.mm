@@ -67,7 +67,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) NSTimer * buttonTimer;
 @property (strong, nonatomic) IBOutlet UIImageView *bgImageView;
 @property (nonatomic, assign) BOOL hasBackgroundImage;
-@property (nonatomic, strong)  NSMutableDictionary *linkAttributes;
 @end
 
 @implementation SwipeViewController
@@ -913,18 +912,19 @@ const Float32 voiceRecordDelay = 0.3;
             }
             
             cell.messageLabel.text = plainData;
-            cell.messageLabel.enabledTextCheckingTypes = NSTextCheckingTypeLink//phone number seems flaky..we have copy so not the end of teh world
-            | NSTextCheckingTypePhoneNumber;
+            cell.messageLabel.textColor = [self getTextColor];
             
-            // if (!_linkAttributes) {
             NSDictionary * linkAttributes = [NSMutableDictionary dictionary];
             [linkAttributes setValue:[NSNumber numberWithBool:YES] forKey:(NSString *)kCTUnderlineStyleAttributeName];
             [linkAttributes setValue:(__bridge id)[[UIUtils surespotBlue] CGColor] forKey:(NSString *)kCTForegroundColorAttributeName];
-            //     }
             
             cell.messageLabel.linkAttributes = linkAttributes;
             cell.messageLabel.delegate = self;
-            cell.messageLabel.textColor = [self getTextColor];
+
+            
+            cell.messageLabel.enabledTextCheckingTypes = NSTextCheckingTypeLink//phone number seems flaky..we have copy so not the end of teh world
+            | NSTextCheckingTypePhoneNumber;
+
             cell.messageSize.textColor = [self getTextColor];
             cell.messageStatusLabel.textColor = [self getTextColor];
             
