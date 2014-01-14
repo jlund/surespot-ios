@@ -17,6 +17,7 @@
 #import "FileController.h"
 #import "NSData+Gunzip.h"
 #import "NSString+Sensitivize.h"
+#import "BackupHelpViewController.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -38,6 +39,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (atomic, strong) NSString * name;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (atomic, strong) NSString * url;
+@property (nonatomic, strong) UIPopoverController * popover;
 @end
 
 
@@ -64,8 +66,49 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     _labelGoogleDriveBackup.text = NSLocalizedString(@"backup_drive", nil);
     _scrollView.contentSize = self.view.frame.size;
     
+    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"help",nil) style:UIBarButtonItemStylePlain target:self action:@selector(showHelp)];
+    self.navigationItem.rightBarButtonItem = anotherButton;
+
     
 }
+
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
+    self.popover = nil;
+}
+
+-(void) showHelp {
+    BackupHelpViewController * controller = [[BackupHelpViewController alloc] initWithNibName:@"BackupHelpView" bundle:nil];
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        _popover = [[UIPopoverController alloc] initWithContentViewController:controller];
+        _popover.delegate = self;
+        CGFloat x = self.view.bounds.size.width;
+        CGFloat y =self.view.bounds.size.height;
+        DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
+        [_popover setPopoverContentSize:CGSizeMake(320, 480) animated:NO];
+        [_popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:self.view permittedArrowDirections:0 animated:YES];
+        
+    } else {
+        [self.navigationController pushViewController:controller animated:YES];
+    }
+
+}
+
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromOrientation
+{
+    
+    // if the popover is showing, adjust its position after the re-orientation by presenting it again:
+    if (self.popover != nil)
+    {
+        CGFloat x =self.view.bounds.size.width;
+        CGFloat y =self.view.bounds.size.height;
+        DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
+        
+        [self.popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:self.view permittedArrowDirections:0 animated:YES];
+    }
+}
+
 
 -(void) loadIdentityNames {
     _identityNames = [[IdentityController sharedInstance] getIdentityNames];

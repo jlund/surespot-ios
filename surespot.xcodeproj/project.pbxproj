@@ -67,6 +67,8 @@
 		6652F2A51875CFF300E023A7 /* PurchaseVoiceView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6652F2A31875CFF300E023A7 /* PurchaseVoiceView~ipad.xib */; };
 		6652F2AA1875F16D00E023A7 /* PwylViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6652F2A91875F16D00E023A7 /* PwylViewController.m */; };
 		6654441317F37A3F00F62F7F /* SwipeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6654441217F37A3F00F62F7F /* SwipeView.m */; };
+		6659531C1885B95900BA2CC7 /* BackupHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6659531B1885B95900BA2CC7 /* BackupHelpViewController.m */; };
+		6659531E1885B97000BA2CC7 /* BackupHelpView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6659531D1885B97000BA2CC7 /* BackupHelpView.xib */; };
 		665F4DF51831923C0083BCE7 /* RECommonFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DEC1831923C0083BCE7 /* RECommonFunctions.m */; };
 		665F4DF61831923C0083BCE7 /* REMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DEE1831923C0083BCE7 /* REMenu.m */; };
 		665F4DF71831923C0083BCE7 /* REMenuContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DF01831923C0083BCE7 /* REMenuContainerView.m */; };
@@ -442,6 +444,9 @@
 		6652F2A91875F16D00E023A7 /* PwylViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PwylViewController.m; path = purchases/PwylViewController.m; sourceTree = "<group>"; };
 		6654441117F37A3F00F62F7F /* SwipeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeView.h; sourceTree = "<group>"; };
 		6654441217F37A3F00F62F7F /* SwipeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SwipeView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		6659531A1885B93A00BA2CC7 /* BackupHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackupHelpViewController.h; sourceTree = "<group>"; };
+		6659531B1885B95900BA2CC7 /* BackupHelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackupHelpViewController.m; sourceTree = "<group>"; };
+		6659531D1885B97000BA2CC7 /* BackupHelpView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BackupHelpView.xib; sourceTree = "<group>"; };
 		665F4DEB1831923C0083BCE7 /* RECommonFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RECommonFunctions.h; sourceTree = "<group>"; };
 		665F4DEC1831923C0083BCE7 /* RECommonFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RECommonFunctions.m; sourceTree = "<group>"; };
 		665F4DED1831923C0083BCE7 /* REMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REMenu.h; sourceTree = "<group>"; };
@@ -1723,6 +1728,9 @@
 		66EBDF2F1855C96F00F2452D /* backup */ = {
 			isa = PBXGroup;
 			children = (
+				6659531D1885B97000BA2CC7 /* BackupHelpView.xib */,
+				6659531B1885B95900BA2CC7 /* BackupHelpViewController.m */,
+				6659531A1885B93A00BA2CC7 /* BackupHelpViewController.h */,
 				661F469B1864C0BE004A71B0 /* BackupIdentityView.xib */,
 				661F469C1864C0BE004A71B0 /* BackupIdentityViewController.mm */,
 				661F469D1864C0BE004A71B0 /* BackupIdentityViewController.h */,
@@ -2069,6 +2077,7 @@
 				6604A2D817626B9E0072216A /* MainStoryboard.storyboard in Resources */,
 				66D3B04F182EAB4200B37A6C /* surespot.xcassets in Resources */,
 				666D3364187F69AD00B73F69 /* invite-accept.caf in Resources */,
+				6659531E1885B97000BA2CC7 /* BackupHelpView.xib in Resources */,
 				66EBE0D61855C97100F2452D /* MainStoryboard.storyboard in Resources */,
 				66EBE0D11855C97100F2452D /* IdentityCell.xib in Resources */,
 				6621BB841762704D00BC2850 /* Localizable.strings in Resources */,
@@ -2199,6 +2208,7 @@
 				66E70AB81847F9E400433D6F /* GTLDrive_Sources.m in Sources */,
 				6686626E185B6A2E001491B1 /* UIImage+WebP.m in Sources */,
 				66E21DED1847D7F90005D91E /* IASKAppSettingsWebViewController.m in Sources */,
+				6659531C1885B95900BA2CC7 /* BackupHelpViewController.m in Sources */,
 				668D24F5186A24D90096D155 /* QR_Encode.cpp in Sources */,
 				66FF0FE218242B6B0038ECA6 /* Toast+UIView.m in Sources */,
 				66EBE0B71855C97100F2452D /* KeychainItemWrapper.m in Sources */,

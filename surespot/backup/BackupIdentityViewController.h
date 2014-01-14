@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BackupIdentityViewController : UIViewController<UIPickerViewDataSource, UIPickerViewDelegate>
+@interface BackupIdentityViewController : UIViewController<UIPickerViewDataSource, UIPickerViewDelegate, UIPopoverControllerDelegate>
 
 @end

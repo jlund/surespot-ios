@@ -56,17 +56,17 @@
             <key>Type</key>
             <string>PSChildPaneSpecifier</string>
             <key>Title</key>
-            <string>pref_title_options</string>
+            <string>pref_title_activity_identity_management</string>
             <key>File</key>
-            <string>options</string>
+            <string>identity</string>
         </dict>
         <dict>
             <key>Type</key>
             <string>PSChildPaneSpecifier</string>
             <key>Title</key>
-            <string>pref_title_activity_identity_management</string>
+            <string>pref_title_options</string>
             <key>File</key>
-            <string>identity</string>
+            <string>options</string>
         </dict>
     </array>
 	<key>StringsTable</key>
