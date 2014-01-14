@@ -30,7 +30,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @interface SignupViewController ()
 @property (atomic, strong) id progressView;
 @property (nonatomic, strong) NSString * lastCheckedUsername;
+@property (nonatomic, assign) CGFloat delta;
+@property (nonatomic, assign) CGPoint offset;
 @property (nonatomic, assign) NSInteger keyboardHeight;
+@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (strong, nonatomic) IBOutlet UILabel *helpLabel;
 @property (strong, readwrite, nonatomic) REMenu *menu;
 @end
 
@@ -40,9 +44,32 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     [super viewDidLoad];
     [self.navigationItem setTitle:NSLocalizedString(@"create", nil)];
-    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
-        self.navigationController.navigationBar.tintColor = [UIUtils surespotBlue];
-    }
+    
+    NSString * usernamesCaseSensitive =    NSLocalizedString(@"usernames_case_sensitive", nil);
+    NSString * pwWarning = NSLocalizedString(@"warning_password_reset", nil);
+    
+    NSString * labelText = [NSString stringWithFormat:@"%@ %@ %@ %@",
+                            NSLocalizedString(@"enter_username_and_password", nil),
+                            usernamesCaseSensitive,
+                            NSLocalizedString(@"aware_username_password", nil),
+                            pwWarning];
+    
+    
+    
+    //    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
+    //        self.navigationController.navigationBar.tintColor = [UIUtils surespotBlue];
+    //    }
+    
+    NSRange rr1 = [labelText rangeOfString:usernamesCaseSensitive];
+    NSRange rr2 = [labelText rangeOfString:pwWarning];
+    
+    NSMutableAttributedString * helpString = [[NSMutableAttributedString alloc] initWithString:labelText];
+    [helpString addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range: rr1];
+    [helpString addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range: rr2];
+	   
+    
+    _helpLabel.attributedText = helpString;
+    
     _tbUsername.returnKeyType = UIReturnKeyNext;
     [_tbUsername setRightViewMode: UITextFieldViewModeNever];
     [_tbUsername setPlaceholder:NSLocalizedString(@"username", nil)];
@@ -64,6 +91,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [_bCreateIdentity setTintColor:[UIUtils surespotBlue]];
     [_bCreateIdentity setTitle:NSLocalizedString(@"create_identity", nil) forState:UIControlStateNormal];
+    
+    
+    
+    [_scrollView setContentSize: CGSizeMake(self.view.frame.size.width, _bCreateIdentity.frame.origin.y + _bCreateIdentity.frame.size.height + 10)];
 }
 
 - (void)viewDidUnload {
@@ -286,24 +317,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
 }
 
-//- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *) event
-//{
-//
-//    UITouch *touch = [[event allTouches] anyObject];
-//    if ([_tbUsername isFirstResponder] && (_tbUsername != touch.view))
-//    {
-//        [self checkUsername ];
-//    }
-////
-////    if ([textField2 isFirstResponder] && (textField2 != touch.view))
-////    {
-////        // textField2 lost focus
-////    }
-////
-////    ...
-//}
 
 
+
+// Call this method somewhere in your view controller setup code.
 - (void)registerForKeyboardNotifications
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -316,25 +333,41 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
 }
 
-
 // Called when the UIKeyboardDidShowNotification is sent.
-- (void)keyboardWasShown:(NSNotification*)aNotification
-{
-    
-    DDLogVerbose(@"keyboardWasShown");
-    
-    
+- (void)keyboardWasShown:(NSNotification*)aNotification {
     NSDictionary* info = [aNotification userInfo];
-    CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-    _keyboardHeight = [UIUtils keyboardHeightAdjustedForOrientation:keyboardRect.size];
+    NSInteger  kbHeight = [UIUtils keyboardHeightAdjustedForOrientation: [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size];
+    
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbHeight, 0.0);
+    _scrollView.contentInset = contentInsets;
+    _scrollView.scrollIndicatorInsets = contentInsets;
+    
+    NSInteger totalHeight = self.view.frame.size.height;
+    NSInteger keyboardTop = totalHeight - kbHeight;
+    _offset = _scrollView.contentOffset;
+    
+    NSInteger loginButtonBottom =(_bCreateIdentity.frame.origin.y + _bCreateIdentity.frame.size.height);
+    NSInteger delta = keyboardTop - loginButtonBottom;
+    //  DDLogInfo(@"delta %d loginBottom %d keyboardtop: %d", delta, loginButtonBottom, keyboardTop);
+    
+    if (delta < 0 ) {
+        
+        
+        CGPoint scrollPoint = CGPointMake(0.0, -delta);
+        //  DDLogInfo(@"scrollPoint y: %f", scrollPoint.y);
+        [_scrollView setContentOffset:scrollPoint animated:YES];
+    }
 }
 
 // Called when the UIKeyboardWillHideNotification is sent
-- (void)keyboardWillBeHidden:(NSNotification*)aNotification
-{
-    DDLogVerbose(@"keyboardWillBeHidden");
-    _keyboardHeight = 0;
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification {
+    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+    _scrollView.contentInset = contentInsets;
+    _scrollView.scrollIndicatorInsets = contentInsets;
+    [_scrollView setContentOffset:_offset animated:YES];
 }
+
+
 
 -(void) showMenu {
     if (!_menu) {

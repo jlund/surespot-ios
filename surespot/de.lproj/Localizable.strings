@@ -107,7 +107,7 @@
 "backup_identities_again_password"="Da sich Ihr Passwort zum aktuellen Profil geändert hat, sichern Sie bitte dieses wieder nach dem der Vorgang erfolgreich abgeschlossen ist.";
 "create_new_keys_for"="Neues Schlüsselpar für %@ erstellen";
 "enter_password_for"="Geben Sie das surespot Passwort für %@ ein";
-"enter_username_and_password"="Bitte geben Sie einen Benutzernamen und Passwort, oder [ein Profil wiederherstellen] aus dem Menü.";
+"enter_username_and_password"="Bitte geben Sie einen Benutzernamen und Passwort, oder ein Profil wiederherstellen aus dem Menü.";
 "usernames_case_sensitive"="Groß-und Kleinschreibung beim Benutzername beachten";
 "aware_username_password"="so sich dessen bewusst sein, wenn sie mit anderen teilen. Das Passwort sollte mindestens 8 Zeichen lang und enthalten Symbole sein.";
 "warning_password_reset"="ACHTUNG: Es gibt ABSOLUT KEINE MÖGLICHKEIT dein Passwort oder Benutzernamen in surespot zurückzusetzen!";

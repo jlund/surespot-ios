@@ -106,7 +106,7 @@
 "backup_identities_again_password"="Debido a que tu contraseña cambiará, por favor haz una copia de seguridad de tu perfil tras finalizar correctamente la operación.";
 "create_new_keys_for"="Crear nuevas claves para %@";
 "enter_password_for"="Introducir contraseña surespot para %@";
-"enter_username_and_password"="Introduce usuario y contraseña o [recupera un perfil] desde el menú.";
+"enter_username_and_password"="Introduce usuario y contraseña o recupera un perfil desde el menú.";
 "usernames_case_sensitive"="Los nombres de usuario son sensibles a mayúsculas";
 "aware_username_password"="así que ten cuidado cuando las compartas con otros. La contraseña debería tener al menos 8 caracteres y contener símbolos intercalados.";
 "warning_password_reset"="ATENCIÓN: No es posible restablecer la contraseña en Surespot por lo que ¡asegúrate de recordarla!";

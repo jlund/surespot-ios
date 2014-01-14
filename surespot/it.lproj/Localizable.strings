@@ -106,7 +106,7 @@
 "backup_identities_again_password"="Poiché verrà cambiata la tua password dell\'identità, fai il backup di questa identità dopo aver completato l\'operazione.";
 "create_new_keys_for"="crea nuove chiavi per %@";
 "enter_password_for"="inserisci la password di surespot per %@";
-"enter_username_and_password"="Inserisci username e password, oppure [ripristina un\'identità] dal menu.";
+"enter_username_and_password"="Inserisci username e password, oppure ripristina un\'identità dal menu.";
 "usernames_case_sensitive"="Gli username sono case-sensitive";
 "aware_username_password"="quindi ricordati di questo quando li condividi con altri. La password deve essere lunga almeno 8 caratteri e contenere simboli.";
 "warning_password_reset"="ATTENZIONE: Non esiste NESSUN MODO per ripristinare la tua password o username in surespot, quindi assicurati di ricordarteli!";

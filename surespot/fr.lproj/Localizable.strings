@@ -107,7 +107,7 @@
 "backup_identities_again_password"="Comme votre mot de passe va changer, veuillez sauvegarder cette identité après que l\'opération soit terminée avec succès.";
 "create_new_keys_for"="création de nouvelles clés pour %@";
 "enter_password_for"="saisir le mot de passe pour surespot %@";
-"enter_username_and_password"="Veuillez saisir un nom d\'utilisateur et un mot de passe, ou [restaurer une identité] depuis le menu.";
+"enter_username_and_password"="Veuillez saisir un nom d\'utilisateur et un mot de passe, ou restaurer une identité depuis le menu.";
 "usernames_case_sensitive"="Les noms d\'utilisateurs sont sensibles à la casse";
 "aware_username_password"="alors soyez conscient de cela lorsque vous le partager avec d\'autres. Le mot de passe doit être long d\'au moins 8 caractères et doit contenir des symboles.";
 "warning_password_reset"="ATTENTION: Il n\'existe AUCUN MOYEN de réinitialiser votre mot de passe ou nom d\'utilisateur dans surespot alors assurez-vous de pouvoir vous en souvenir !";
