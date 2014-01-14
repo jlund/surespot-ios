@@ -16,6 +16,7 @@
 #import "MWPhotoBrowser.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "ALAssetsLibrary+CustomPhotoAlbum.h"
+#import "TTTAttributedLabel.h"
 
 
 @interface SwipeViewController : UIViewController
@@ -28,7 +29,8 @@
     UIViewPagerDelegate,
     IASKSettingsDelegate,
     MWPhotoBrowserDelegate,
-    UIPopoverControllerDelegate
+    UIPopoverControllerDelegate,
+    TTTAttributedLabelDelegate
 >
 @property (nonatomic, strong) IBOutlet SwipeView *swipeView;
 @property (nonatomic, strong) UITableView *friendView;

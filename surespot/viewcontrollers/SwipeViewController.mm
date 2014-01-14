@@ -67,6 +67,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) NSTimer * buttonTimer;
 @property (strong, nonatomic) IBOutlet UIImageView *bgImageView;
 @property (nonatomic, assign) BOOL hasBackgroundImage;
+@property (nonatomic, strong)  NSMutableDictionary *linkAttributes;
 @end
 
 @implementation SwipeViewController
@@ -912,6 +913,17 @@ const Float32 voiceRecordDelay = 0.3;
             }
             
             cell.messageLabel.text = plainData;
+            cell.messageLabel.enabledTextCheckingTypes = NSTextCheckingTypeLink;//phone number seems flaky..we have copy so not the end of teh world | NSTextCheckingTypePhoneNumber;
+
+            if (!_linkAttributes) {
+                _linkAttributes = [NSMutableDictionary dictionary];
+                [_linkAttributes setValue:[NSNumber numberWithBool:YES] forKey:(NSString *)kCTUnderlineStyleAttributeName];
+                [_linkAttributes setValue:(__bridge id)[[UIUtils surespotBlue] CGColor] forKey:(NSString *)kCTForegroundColorAttributeName];                
+            }
+
+            cell.messageLabel.linkAttributes = _linkAttributes;
+            [cell.messageLabel setNeedsLayout];
+            cell.messageLabel.delegate = self;
             cell.messageLabel.textColor = [self getTextColor];
             cell.messageSize.textColor = [self getTextColor];
             cell.messageStatusLabel.textColor = [self getTextColor];
@@ -985,7 +997,6 @@ const Float32 voiceRecordDelay = 0.3;
                     messageStatusFrame.origin.x = 63;
                 }
                 cell.messageStatusLabel.frame = messageStatusFrame;
-                
             }
             else {
                 if ([message.mimeType isEqualToString:MIME_TYPE_IMAGE]) {
@@ -2294,5 +2305,19 @@ const Float32 voiceRecordDelay = 0.3;
     [super viewWillAppear:animated];
     [self setBackgroundImageController: nil];
 }
+
+
+- (void)attributedLabel:(__unused TTTAttributedLabel *)label
+   didSelectLinkWithURL:(NSURL *)url {
+    [[UIApplication sharedApplication] openURL:url];
+}
+
+
+- (void)attributedLabel:(TTTAttributedLabel *)label
+didSelectLinkWithPhoneNumber:(NSString *)phoneNumber {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: [NSString stringWithFormat:@"tel://%@", phoneNumber]]];
+}
+
+
 
 @end
