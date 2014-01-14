@@ -2169,7 +2169,7 @@ const Float32 voiceRecordDelay = 0.3;
 
 
 -(void) inviteAccepted: (NSNotification *) notification {
-    NSString * acceptedBy = notification.object;
+    //NSString * acceptedBy = notification.object;
     NSString * currentChat =[[ChatController sharedInstance] getCurrentChat];
     // pulse if we're logged in as the user
     if (currentChat) {
