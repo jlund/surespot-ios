@@ -70,7 +70,7 @@
     
     
     BOOL hasClickTOS = [[NSUserDefaults standardUserDefaults] boolForKey:@"hasClickedTOS"];
-
+    
     CGFloat label2bottom =  _helpLabel2.frame.origin.y + _helpLabel2.frame.size.height;
     CGFloat bottom = 0;
     
@@ -82,7 +82,7 @@
         
         [UIUtils setLinkLabel:_tosLabel delegate:self labelText:tosText linkMatchTexts:matches urlStrings:links];
         [_tosButton setTitle:NSLocalizedString(@"ok", nil) forState:UIControlStateNormal];
-        
+        [_tosButton setTintColor:[UIUtils surespotBlue]];
         _tosLabel.hidden = NO;
         _tosButton.hidden = NO;
         
@@ -103,7 +103,7 @@
         bottom = label2bottom;
         self.navigationItem.hidesBackButton = NO;
     }
-        
+    
     CGSize size = CGSizeMake(self.view.frame.size.width, bottom + 20);
     _scrollView.contentSize = size;
     
@@ -113,7 +113,14 @@
 }
 - (IBAction)tosClick:(id)sender {
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasClickedTOS"];
-    [self.navigationController popViewControllerAnimated:YES];
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        [_poController dismissPopoverAnimated:YES];
+        
+    }
+    else {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    _poController = nil;
 }
 
 

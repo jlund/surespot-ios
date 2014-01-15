@@ -184,12 +184,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
              [controllers addObject:svc];
              
              
-             //show help view on iphone if it hasn't been shown
-             BOOL helpShown = [[NSUserDefaults standardUserDefaults] boolForKey:@"helpShown"];
-             if (!helpShown && ![UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+             //show help view on iphone if tos hasn't been clicked
+             BOOL tosClicked = [[NSUserDefaults standardUserDefaults] boolForKey:@"hasClickedTOS"];
+             if (!tosClicked && ![UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
                  HelpViewController *hvc = [[HelpViewController alloc] initWithNibName:@"HelpView" bundle:nil];
                  [controllers addObject:hvc];
-                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"helpShown"];
              }
                                   
              [self.navigationController setViewControllers:controllers animated:YES];

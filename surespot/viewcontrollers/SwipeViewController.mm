@@ -193,19 +193,22 @@ const Float32 voiceRecordDelay = 0.3;
     [super viewDidAppear:animated];
     
     //show help in popover on ipad if it hasn't been shown yet
-    BOOL helpShown = [[NSUserDefaults standardUserDefaults] boolForKey:@"helpShown"];
-    if (!helpShown && [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        _popover = [[UIPopoverController alloc] initWithContentViewController:[[HelpViewController alloc]                                                                                                            initWithNibName:@"HelpView" bundle:nil]] ;
+    BOOL tosClicked = [[NSUserDefaults standardUserDefaults] boolForKey:@"hasClickedTOS"];
+    if (!tosClicked && [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+        
+        HelpViewController * hvc = [[HelpViewController alloc]                                                                                                            initWithNibName:@"HelpView" bundle:nil];
+
+        _popover = [[UIPopoverController alloc] initWithContentViewController: hvc] ;
         _popover.delegate = self;
         CGFloat x = self.view.bounds.size.width;
         CGFloat y =self.view.bounds.size.height;
         DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
+        hvc.poController = _popover;
         [_popover setPopoverContentSize:CGSizeMake(320, 480) animated:YES];
         [_popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:self.view permittedArrowDirections:0 animated:YES];
-        
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"helpShown"];
     }
 }
+
 
 -(void) dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -2321,6 +2324,17 @@ const Float32 voiceRecordDelay = 0.3;
     if (index == 0 && _imageMessage)
         return [[SurespotPhoto alloc] initWithURL:[NSURL URLWithString:_imageMessage.data] encryptionParams:[[EncryptionParams alloc] initWithOurUsername:nil ourVersion:[_imageMessage getOurVersion] theirUsername: [_imageMessage getOtherUser] theirVersion:[_imageMessage getTheirVersion] iv:_imageMessage.iv]];
     return nil;
+}
+
+- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
+    //if we're showing TOS don't let them dismiss
+    if ([popoverController.contentViewController class] == [HelpViewController class]) {
+        BOOL tosClicked = [[NSUserDefaults standardUserDefaults] boolForKey:@"hasClickedTOS"];
+        return tosClicked;
+    }
+    else {
+        return YES;
+    }    
 }
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {

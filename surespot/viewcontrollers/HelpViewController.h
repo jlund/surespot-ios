@@ -10,5 +10,5 @@
 #import "TTTAttributedLabel.h"
 
 @interface HelpViewController : UIViewController<TTTAttributedLabelDelegate>
-
+@property (nonatomic, strong) UIPopoverController * poController;
 @end
