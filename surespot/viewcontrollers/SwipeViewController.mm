@@ -245,42 +245,45 @@ const Float32 voiceRecordDelay = 0.3;
 
 // Called when the UIKeyboardDidShowNotification is sent.
 - (void)keyboardWasShown:(NSNotification*)aNotification {
-    NSDictionary* info = [aNotification userInfo];
-    CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-    CGFloat keyboardHeight = [UIUtils keyboardHeightAdjustedForOrientation:keyboardRect.size];
+    if (!_keyboardState) {
+        NSDictionary* info = [aNotification userInfo];
+        CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+        CGFloat keyboardHeight = [UIUtils keyboardHeightAdjustedForOrientation:keyboardRect.size];
+        
+        _keyboardState = [[KeyboardState alloc] init];
+        _keyboardState.keyboardHeight = keyboardHeight;
+        
     
-    _keyboardState = [[KeyboardState alloc] init];
-    _keyboardState.keyboardHeight = keyboardHeight;
-    
-    CGRect textFieldFrame = _textFieldContainer.frame;
-    textFieldFrame.origin.y -= keyboardHeight;
-    _textFieldContainer.frame = textFieldFrame;
-    
-    CGRect frame = _swipeView.frame;
-    frame.size.height -= keyboardHeight;
-    _swipeView.frame = frame;
-    
-    CGRect buttonFrame = _theButton.frame;
-    buttonFrame.origin.y -= keyboardHeight;
-    _theButton.frame = buttonFrame;
-    
-    
-    @synchronized (_chats) {
-        for (NSString * key in [_chats allKeys]) {
-            UITableView * tableView = [_chats objectForKey:key];
-            
-            UITableViewCell * bottomCell = nil;
-            NSArray * visibleCells = [tableView visibleCells];
-            if ([visibleCells count ] > 0) {
-                bottomCell = [visibleCells objectAtIndex:[visibleCells count]-1];
-            }
-            
-            if (bottomCell) {
-                CGRect aRect = self.view.frame;
-                aRect.size.height -= keyboardHeight;
-                if (!CGRectContainsPoint(aRect, bottomCell.frame.origin) ) {
-                    CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y + keyboardHeight);
-                    [tableView setContentOffset:newOffset animated:NO];
+        CGRect textFieldFrame = _textFieldContainer.frame;
+        textFieldFrame.origin.y -= keyboardHeight;
+        _textFieldContainer.frame = textFieldFrame;
+        
+        CGRect frame = _swipeView.frame;
+        frame.size.height -= keyboardHeight;
+        _swipeView.frame = frame;
+        
+        CGRect buttonFrame = _theButton.frame;
+        buttonFrame.origin.y -= keyboardHeight;
+        _theButton.frame = buttonFrame;
+        
+        
+        @synchronized (_chats) {
+            for (NSString * key in [_chats allKeys]) {
+                UITableView * tableView = [_chats objectForKey:key];
+                
+                UITableViewCell * bottomCell = nil;
+                NSArray * visibleCells = [tableView visibleCells];
+                if ([visibleCells count ] > 0) {
+                    bottomCell = [visibleCells objectAtIndex:[visibleCells count]-1];
+                }
+                
+                if (bottomCell) {
+                    CGRect aRect = self.view.frame;
+                    aRect.size.height -= keyboardHeight;
+                    if (!CGRectContainsPoint(aRect, bottomCell.frame.origin) ) {
+                        CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y + keyboardHeight);
+                        [tableView setContentOffset:newOffset animated:NO];
+                    }
                 }
             }
         }
@@ -988,7 +991,7 @@ const Float32 voiceRecordDelay = 0.3;
                     else {
                         
                         //   DDLogVerbose(@"setting text for iv: %@ to: %@", [message iv], plainData);
-                        DDLogInfo(@"setting message date");
+                        DDLogVerbose(@"setting message date");
                         cell.messageStatusLabel.text = message.formattedDate;
                         
                         if (ours) {
