@@ -185,6 +185,8 @@ const Float32 voiceRecordDelay = 0.3;
     _appSettingsViewController = [IASKAppSettingsViewController new];
     _appSettingsViewController.settingsStore = [[SurespotSettingsStore alloc] initWithUsername:[[IdentityController sharedInstance] getLoggedInUser]];
     _appSettingsViewController.delegate = self;
+    
+    [self setTextBoxHints];
 }
 
 -(void) viewDidAppear:(BOOL)animated {
@@ -253,7 +255,7 @@ const Float32 voiceRecordDelay = 0.3;
         _keyboardState = [[KeyboardState alloc] init];
         _keyboardState.keyboardHeight = keyboardHeight;
         
-    
+        
         CGRect textFieldFrame = _textFieldContainer.frame;
         textFieldFrame.origin.y -= keyboardHeight;
         _textFieldContainer.frame = textFieldFrame;
@@ -2423,6 +2425,13 @@ didSelectLinkWithPhoneNumber:(NSString *)phoneNumber {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString: [NSString stringWithFormat:@"tel://%@", phoneNumber]]];
 }
 
-
+-(void) setTextBoxHints {
+    NSInteger tbHintCount = [[NSUserDefaults standardUserDefaults] integerForKey:@"tbHintCount"];
+    if (tbHintCount++ < 6) {
+        [_inviteField setPlaceholder:NSLocalizedString(@"invite_hint", nil)];
+        [_textField setPlaceholder:NSLocalizedString(@"message_hint", nil)];
+    }
+    [[NSUserDefaults standardUserDefaults] setInteger:tbHintCount forKey:@"tbHintCount"];
+}
 
 @end
