@@ -19,6 +19,7 @@
 #import "SwipeViewController.h"
 #import "LoginViewController.h"
 #import "BackupIdentityViewController.h"
+#import "AboutViewController.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
@@ -36,6 +37,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UILabel *helpLabel;
 @property (strong, readwrite, nonatomic) REMenu *menu;
+@property (nonatomic, strong) UIPopoverController * popover;
 @end
 
 @implementation SignupViewController
@@ -396,10 +398,58 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [menuItems addObject:restoreItem];
     
+    REMenuItem * aboutItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"about", nil) image:[UIImage imageNamed:@"surespot_logo48"] highlightedImage:nil action:^(REMenuItem * item){
+        [self showAbout];
+    }];
+
+    
+    [menuItems addObject:aboutItem];
+
+    
     
     return [UIUtils createMenu: menuItems closeCompletionHandler:^{
         _menu = nil;
     }];
 }
+
+
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
+    self.popover = nil;
+}
+
+
+-(void) showAbout {
+    AboutViewController * controller = [[AboutViewController alloc] initWithNibName:@"AboutView" bundle:nil];
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        _popover = [[UIPopoverController alloc] initWithContentViewController:controller];
+        _popover.delegate = self;
+        CGFloat x = self.view.bounds.size.width;
+        CGFloat y =self.view.bounds.size.height;
+        DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
+        [_popover setPopoverContentSize:CGSizeMake(320, 480) animated:NO];
+        [_popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:self.view permittedArrowDirections:0 animated:YES];
+        
+    } else {
+        [self.navigationController pushViewController:controller animated:YES];
+    }
+    
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromOrientation
+{
+    
+    // if the popover is showing, adjust its position after the re-orientation by presenting it again:
+    if (self.popover != nil)
+    {
+        CGFloat x =self.view.bounds.size.width;
+        CGFloat y =self.view.bounds.size.height;
+        DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
+        
+        [self.popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:self.view permittedArrowDirections:0 animated:YES];
+    }
+}
+
+
 
 @end

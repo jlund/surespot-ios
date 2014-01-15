@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SignupViewController : UIViewController
+@interface SignupViewController : UIViewController<UIPopoverControllerDelegate>
 @property (strong, nonatomic) IBOutlet UIButton *bCreateIdentity;
 @property (strong, nonatomic) IBOutlet UITextField *tbUsername;
 @property (strong, nonatomic) IBOutlet UITextField *tbPassword;
