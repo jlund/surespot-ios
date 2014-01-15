@@ -139,7 +139,7 @@ const NSInteger SEND_THRESHOLD = 25;
 -(void) playVoiceMessage: (SurespotMessage *) message cell: (MessageView *) cell {
     BOOL differentMessage = ![message isEqual:_message];
     
-    [self stopPlaying];
+    [self stopPlayingDeactivateSession:!differentMessage];
     
     if (differentMessage) {
         _message = message;
@@ -181,7 +181,7 @@ const NSInteger SEND_THRESHOLD = 25;
                 [_player play];
             }
             else {
-                [self stopPlaying];
+                [self stopPlayingDeactivateSession:YES];
             }
             message.playVoice = NO;
             message.voicePlayed = YES;
@@ -205,7 +205,7 @@ const NSInteger SEND_THRESHOLD = 25;
     }
 }
 
--(void) stopPlaying {
+-(void) stopPlayingDeactivateSession: (BOOL) deactivateSession {
     if (_player.playing) {
         [_player stop];
     }
@@ -218,6 +218,11 @@ const NSInteger SEND_THRESHOLD = 25;
     _cell.audioSlider.value = 0;
     _message = nil;
     
+    if (deactivateSession) {
+        DDLogInfo(@"deactivating audio session");
+        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+        [audioSession setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
+    }
 }
 
 - (void)updateTime:(NSTimer *)timer {
@@ -233,9 +238,11 @@ const NSInteger SEND_THRESHOLD = 25;
 
 -(void) startRecordingUsername: (NSString *) username {
     DDLogInfo(@"start recording");
-    [self stopPlaying];
+    [self stopPlayingDeactivateSession:NO];
     
     if (!_recorder.recording) {
+        [self prepareRecording];
+        
         _theirUsername = username;
         
         XThrowIfError(AudioOutputUnitStart(rioUnit), "couldn't start remote i/o unit");
@@ -244,6 +251,7 @@ const NSInteger SEND_THRESHOLD = 25;
         
         unitIsRunning = 1;
         
+        DDLogInfo(@"activating audio session");
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
         [audioSession setActive:YES error:nil];
         
@@ -309,7 +317,7 @@ const NSInteger SEND_THRESHOLD = 25;
 
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
     DDLogInfo(@"finished playing, successfully?: %hhd", flag);
-    [self stopPlaying];
+    [self stopPlayingDeactivateSession:YES];
 }
 
 -(void) stopRecordingSend: (NSNumber*) send {
@@ -331,14 +339,19 @@ const NSInteger SEND_THRESHOLD = 25;
         _backgroundView = nil;
         
         
+        
+        
+        AudioOutputUnitStop(rioUnit);
+    
+        DDLogInfo(@"deactivating audio session");
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-        [audioSession setActive:NO error:nil];
+        [audioSession setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
         
-        
-        XThrowIfError(AudioOutputUnitStop(rioUnit), "couldn't stop remote i/o unit");
         
         UIWindow * aWindow =((SurespotAppDelegate *)[[UIApplication sharedApplication] delegate]).overlayWindow;
         aWindow.userInteractionEnabled = NO;
+        
+        
         
         if ([send boolValue]) {
             [self uploadVoiceUrl:_recorder.url];
@@ -413,7 +426,7 @@ const NSInteger SEND_THRESHOLD = 25;
                                                                                                         NSDate * date = [NSDate dateWithTimeIntervalSince1970: [[JSON objectForKey:@"time"] doubleValue]/1000];
                                                                                                         
                                                                                                         DDLogInfo(@"uploaded voice data %@ to server successfully, server id: %d, url: %@, date: %@, size: %d", message.iv, serverid, url, date, size);
-
+                                                                                                        
                                                                                                         SurespotMessage * updatedMessage = [message copyWithZone:nil];
                                                                                                         
                                                                                                         updatedMessage.serverid = serverid;
@@ -433,7 +446,7 @@ const NSInteger SEND_THRESHOLD = 25;
                                                                                                         if (responseObject.statusCode == 402) {
                                                                                                             message.errorStatus = 402;
                                                                                                             //disable voice
-                                                                                                            [[PurchaseDelegate sharedInstance] setHasVoiceMessaging:NO];                                                                                                           
+                                                                                                            [[PurchaseDelegate sharedInstance] setHasVoiceMessaging:NO];
                                                                                                             [[NSNotificationCenter defaultCenter] postNotificationName:@"purchaseStatusChanged" object:nil];
                                                                                                         }
                                                                                                         else {
@@ -477,13 +490,7 @@ void rioInterruptionListener(void *inClientData, UInt32 inInterruption)
         printf("Session interrupted! --- %s ---", inInterruption == kAudioSessionBeginInterruption ? "Begin Interruption" : "End Interruption");
         
         VoiceDelegate *THIS = (__bridge VoiceDelegate*)inClientData;
-        
-        if (inInterruption == kAudioSessionEndInterruption) {
-            // make sure we are again the active session
-            XThrowIfError(AudioSessionSetActive(true), "couldn't set audio session active");
-            XThrowIfError(AudioOutputUnitStart(THIS->rioUnit), "couldn't start unit");
-        }
-        
+              
         if (inInterruption == kAudioSessionBeginInterruption) {
             XThrowIfError(AudioOutputUnitStop(THIS->rioUnit), "couldn't stop unit");
         }
