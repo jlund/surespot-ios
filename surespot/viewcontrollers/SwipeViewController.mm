@@ -1521,7 +1521,8 @@ const Float32 voiceRecordDelay = 0.3;
 {
     __block NSString *string = nil;
     dispatch_sync(_dateFormatQueue, ^{
-        string = [_dateFormatter stringFromDate:date ];
+        //strip out commas
+        string = [[_dateFormatter stringFromDate:date ] stringByReplacingOccurrencesOfString:@"," withString:@""];
     });
     return string;
 }

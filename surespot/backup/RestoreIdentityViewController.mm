@@ -346,7 +346,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     
     NSDictionary *file = [self.driveIdentities objectAtIndex:indexPath.row];
     cell.nameLabel.text = [file objectForKey:@"name"];
-    cell.dateLabel.text = [_dateFormatter stringFromDate: [file objectForKey:@"date"]];
+    cell.dateLabel.text = [[_dateFormatter stringFromDate: [file objectForKey:@"date"]] stringByReplacingOccurrencesOfString:@"," withString:@""];
     UIView *bgColorView = [[UIView alloc] init];
     bgColorView.backgroundColor = [UIUtils surespotSelectionBlue];
     bgColorView.layer.masksToBounds = YES;

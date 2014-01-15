@@ -270,7 +270,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSString * md5dsa = [EncryptionController md5:dsaData];
     [dict setObject:[[KeyFingerprint alloc] initWithFingerprintData:md5dsa forTitle:@"DSA"] forKey:@"dsa"];
     
-    [dict setObject:[self stringFromDate: keys.lastModified] forKey:@"lastVerified"];
+    [dict setObject:[[self stringFromDate: keys.lastModified] stringByReplacingOccurrencesOfString:@"," withString:@""] forKey:@"lastVerified"];
     return dict;
 }
 
@@ -284,7 +284,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     __block NSString *string = nil;
     dispatch_sync(_dateFormatQueue, ^{
-        string = [_dateFormatter stringFromDate:date ];
+        string = [[_dateFormatter stringFromDate:date ] stringByReplacingOccurrencesOfString:@"," withString:@""];
     });
     return string;
 }
