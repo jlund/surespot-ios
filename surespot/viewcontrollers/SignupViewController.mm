@@ -124,6 +124,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         return;
     }
     
+    [_tbUsername resignFirstResponder];
+    [_tbPassword resignFirstResponder];
     [_tbPasswordConfirm resignFirstResponder];
     _progressView = [LoadingView showViewKey:@"create_user_progress"];
     
