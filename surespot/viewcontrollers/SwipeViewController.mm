@@ -185,8 +185,6 @@ const Float32 voiceRecordDelay = 0.3;
     _appSettingsViewController = [IASKAppSettingsViewController new];
     _appSettingsViewController.settingsStore = [[SurespotSettingsStore alloc] initWithUsername:[[IdentityController sharedInstance] getLoggedInUser]];
     _appSettingsViewController.delegate = self;
-    
-    
 }
 
 -(void) viewDidAppear:(BOOL)animated {
@@ -197,7 +195,7 @@ const Float32 voiceRecordDelay = 0.3;
     if (!tosClicked && [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         
         HelpViewController * hvc = [[HelpViewController alloc]                                                                                                            initWithNibName:@"HelpView" bundle:nil];
-
+        
         _popover = [[UIPopoverController alloc] initWithContentViewController: hvc] ;
         _popover.delegate = self;
         CGFloat x = self.view.bounds.size.width;
@@ -207,6 +205,8 @@ const Float32 voiceRecordDelay = 0.3;
         [_popover setPopoverContentSize:CGSizeMake(320, 480) animated:YES];
         [_popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:self.view permittedArrowDirections:0 animated:YES];
     }
+    
+    [self showHeader];
 }
 
 
@@ -403,6 +403,22 @@ const Float32 voiceRecordDelay = 0.3;
         DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
         
         [self.popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:self.view permittedArrowDirections:0 animated:YES];
+    }
+    
+    
+    [self showHeader];
+}
+
+-(void) showHeader {
+    //if we're on iphone in landscape, hide the nav bar
+    if ([[ UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone &&
+        UIDeviceOrientationIsLandscape([[UIDevice currentDevice] orientation])) {
+        [self.navigationController setNavigationBarHidden:YES animated:YES];
+        //if we're in landscape on iphone hide the menu
+        [_menu close];
+    }
+    else {
+        [self.navigationController setNavigationBarHidden:NO animated:YES];
     }
 }
 
@@ -1683,7 +1699,7 @@ const Float32 voiceRecordDelay = 0.3;
         REMenuItem * deleteAllHomeItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_delete_all_messages", nil) image:[UIImage imageNamed:@"ic_menu_delete"] highlightedImage:nil action:^(REMenuItem * item){
             
             //confirm if necessary
-            BOOL confirm = [UIUtils getBoolPrefWithDefaultYesForUser:[[IdentityController sharedInstance] getLoggedInUser] key:@"_user_pref_delete_all_messages"];            
+            BOOL confirm = [UIUtils getBoolPrefWithDefaultYesForUser:[[IdentityController sharedInstance] getLoggedInUser] key:@"_user_pref_delete_all_messages"];
             if (confirm) {
                 NSString * okString = NSLocalizedString(@"ok", nil);
                 [UIAlertView showWithTitle:NSLocalizedString(@"delete_all_title", nil)
@@ -2075,7 +2091,7 @@ const Float32 voiceRecordDelay = 0.3;
 -(void) ensureVoiceDelegate {
     
     if (!_voiceDelegate) {
-        _voiceDelegate = [[VoiceDelegate alloc] initWithUsername:[[IdentityController sharedInstance] getLoggedInUser] ourVersion:[[IdentityController sharedInstance] getOurLatestVersion ]];                
+        _voiceDelegate = [[VoiceDelegate alloc] initWithUsername:[[IdentityController sharedInstance] getLoggedInUser] ourVersion:[[IdentityController sharedInstance] getOurLatestVersion ]];
     }
 }
 
@@ -2330,7 +2346,7 @@ const Float32 voiceRecordDelay = 0.3;
     }
     else {
         return YES;
-    }    
+    }
 }
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {

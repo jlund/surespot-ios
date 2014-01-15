@@ -46,6 +46,8 @@
     [_inviteBlurb setTextAlignment:NSTextAlignmentCenter];
     [_inviteImage setImage:[self generateQRInviteImage:_username]];
     _scrollView.contentSize = self.view.frame.size;
+    
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 -(UIImage *) generateQRInviteImage: (NSString *) username {
