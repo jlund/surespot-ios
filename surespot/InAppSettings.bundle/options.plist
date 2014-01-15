@@ -15,6 +15,44 @@
                 <string>IASKUITextAlignmentLeft</string>
             </dict>
             
+            
+            <dict>
+                <key>Title</key>
+                <string>pref_title_confirmations</string>
+                <key>Type</key>
+                <string>PSGroupSpecifier</string>
+            </dict>
+            
+            
+            
+            <dict>
+                <key>Type</key>
+                <string>PSToggleSwitchSpecifier</string>
+                <key>Title</key>
+                <string>pref_title_delete_message</string>
+                <key>Key</key>
+                <string>_user_pref_delete_message</string>
+                <key>DefaultValue</key>
+                <true/>
+            </dict>
+            
+            
+            
+            
+            <dict>
+                <key>Type</key>
+                <string>PSToggleSwitchSpecifier</string>
+                <key>Title</key>
+                <string>pref_title_delete_all_messages</string>
+                <key>Key</key>
+                <string>_user_pref_delete_all_messages</string>
+                <key>DefaultValue</key>
+                <true/>
+            </dict>
+            
+            
+            
+            
             <dict>
                 <key>Title</key>
                 <string>notifications_title</string>

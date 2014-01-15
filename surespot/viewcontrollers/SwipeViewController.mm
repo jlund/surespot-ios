@@ -37,7 +37,7 @@
 #import "PurchaseDelegate.h"
 #import "SurespotSettingsStore.h"
 #import "HelpViewController.h"
-
+#import "UIAlertView+Blocks.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -920,11 +920,11 @@ const Float32 voiceRecordDelay = 0.3;
             
             cell.messageLabel.linkAttributes = linkAttributes;
             cell.messageLabel.delegate = self;
-
+            
             
             cell.messageLabel.enabledTextCheckingTypes = NSTextCheckingTypeLink//phone number seems flaky..we have copy so not the end of teh world
             | NSTextCheckingTypePhoneNumber;
-
+            
             cell.messageSize.textColor = [self getTextColor];
             cell.messageStatusLabel.textColor = [self getTextColor];
             
@@ -1558,7 +1558,28 @@ const Float32 voiceRecordDelay = 0.3;
         [menuItems addObject:closeTabItem];
         
         REMenuItem * deleteAllItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_delete_all_messages", nil) image:[UIImage imageNamed:@"ic_menu_delete"] highlightedImage:nil action:^(REMenuItem * item){
-            [[ChatController sharedInstance] deleteMessagesForFriend: [_homeDataSource getFriendByName:_homeDataSource.currentChat]];
+            //confirm if necessary
+            
+            BOOL confirm = [UIUtils getBoolPrefWithDefaultYesForUser:[[IdentityController sharedInstance] getLoggedInUser] key:@"_user_pref_delete_all_messages"];
+            if (confirm) {
+                NSString * okString = NSLocalizedString(@"ok", nil);
+                [UIAlertView showWithTitle:NSLocalizedString(@"delete_all_title", nil)
+                                   message:NSLocalizedString(@"delete_all_confirmation", nil)
+                         cancelButtonTitle:NSLocalizedString(@"cancel", nil)
+                         otherButtonTitles:@[okString]
+                                  tapBlock:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                      if (buttonIndex == [alertView cancelButtonIndex]) {
+                                          DDLogVerbose(@"delete cancelled");
+                                      } else if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:okString]) {
+                                          [[ChatController sharedInstance] deleteMessagesForFriend: [_homeDataSource getFriendByName:_homeDataSource.currentChat]];
+                                      };
+                                      
+                                  }];
+            }
+            else {
+                
+                [[ChatController sharedInstance] deleteMessagesForFriend: [_homeDataSource getFriendByName:_homeDataSource.currentChat]];
+            }
             
         }];
         
@@ -1657,9 +1678,27 @@ const Float32 voiceRecordDelay = 0.3;
         
         
         REMenuItem * deleteAllHomeItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_delete_all_messages", nil) image:[UIImage imageNamed:@"ic_menu_delete"] highlightedImage:nil action:^(REMenuItem * item){
-            [[ChatController sharedInstance] deleteMessagesForFriend: thefriend];
             
-            
+            //confirm if necessary
+            BOOL confirm = [UIUtils getBoolPrefWithDefaultYesForUser:[[IdentityController sharedInstance] getLoggedInUser] key:@"_user_pref_delete_all_messages"];            
+            if (confirm) {
+                NSString * okString = NSLocalizedString(@"ok", nil);
+                [UIAlertView showWithTitle:NSLocalizedString(@"delete_all_title", nil)
+                                   message:NSLocalizedString(@"delete_all_confirmation", nil)
+                         cancelButtonTitle:NSLocalizedString(@"cancel", nil)
+                         otherButtonTitles:@[okString]
+                                  tapBlock:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                      if (buttonIndex == [alertView cancelButtonIndex]) {
+                                          DDLogVerbose(@"delete cancelled");
+                                      } else if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:okString]) {
+                                          [[ChatController sharedInstance] deleteMessagesForFriend: thefriend];
+                                      };
+                                      
+                                  }];
+            }
+            else {
+                [[ChatController sharedInstance] deleteMessagesForFriend: thefriend];
+            }
         }];
         [menuItems addObject:deleteAllHomeItem];
         
@@ -1708,7 +1747,22 @@ const Float32 voiceRecordDelay = 0.3;
     if (![thefriend isInviter]) {
         
         REMenuItem * deleteFriendItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_delete_friend", nil) image:[UIImage imageNamed:@"ic_menu_delete"] highlightedImage:nil action:^(REMenuItem * item){
-            [[ChatController sharedInstance] deleteFriend: thefriend];
+            
+            NSString * okString = NSLocalizedString(@"ok", nil);
+            [UIAlertView showWithTitle:NSLocalizedString(@"menu_delete_friend", nil)
+                               message:[NSString stringWithFormat: NSLocalizedString(@"delete_friend_confirmation", nil), thefriend.name]
+                     cancelButtonTitle:NSLocalizedString(@"cancel", nil)
+                     otherButtonTitles:@[okString]
+                              tapBlock:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                  if (buttonIndex == [alertView cancelButtonIndex]) {
+                                      DDLogVerbose(@"delete cancelled");
+                                  } else if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:okString]) {
+                                      [[ChatController sharedInstance] deleteFriend: thefriend];
+                                  };
+                              }];
+            
+            
+            
         }];
         [menuItems addObject:deleteFriendItem];
     }
@@ -1841,8 +1895,29 @@ const Float32 voiceRecordDelay = 0.3;
     //can always delete
     REMenuItem * deleteItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_delete_message", nil) image:[UIImage imageNamed:@"ic_menu_delete"] highlightedImage:nil action:^(REMenuItem * item){
         
+        //confirm if necessary
+        BOOL confirm = [UIUtils getBoolPrefWithDefaultYesForUser:[[IdentityController sharedInstance] getLoggedInUser] key:@"_user_pref_delete_message"];
+        if (confirm) {
+            NSString * okString = NSLocalizedString(@"ok", nil);
+            [UIAlertView showWithTitle:NSLocalizedString(@"delete_message", nil)
+                               message:NSLocalizedString(@"delete_message_confirmation_title", nil)
+                     cancelButtonTitle:NSLocalizedString(@"cancel", nil)
+                     otherButtonTitles:@[okString]
+                              tapBlock:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                  if (buttonIndex == [alertView cancelButtonIndex]) {
+                                      DDLogVerbose(@"delete cancelled");
+                                  } else if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:okString]) {
+                                      [self deleteMessage: message];
+                                  };
+                                  
+                              }];
+        }
+        else {
+            
+            [self deleteMessage: message];
+        }
         
-        [self deleteMessage: message];
+        
     }];
     
     [menuItems addObject:deleteItem];

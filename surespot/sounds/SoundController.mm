@@ -9,6 +9,7 @@
 #import "SoundController.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import "IdentityController.h"
+#import "UIUtils.h"
 
 @interface SoundController() {
     SystemSoundID _messageSoundID;
@@ -65,19 +66,7 @@
 }
 
 -(BOOL) shouldPlaySoundForUser: (NSString *) username {
-    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
-    
-    NSString * key = [username stringByAppendingString: @"_user_notifications_sound"];
-    
-    if (!key) return YES;
-    id iPlaySound = [defaults objectForKey:key];
-    
-    BOOL playSound = YES;
-    
-    if (iPlaySound) {
-        playSound = [iPlaySound boolValue];
-    }
-    
+    BOOL playSound = [UIUtils getBoolPrefWithDefaultYesForUser:username key:@"_user_notifications_sound"];
     return playSound;
 }
 

@@ -41,5 +41,6 @@
            labelText: (NSString *) labelText
       linkMatchTexts: (NSArray *) linkMatchTexts
           urlStrings: (NSArray *) urlStrings;
++(BOOL) getBoolPrefWithDefaultYesForUser: (NSString *) username key:(NSString *) key;
 @end
 

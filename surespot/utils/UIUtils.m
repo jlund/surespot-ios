@@ -322,4 +322,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 
++(BOOL) getBoolPrefWithDefaultYesForUser: (NSString *) username key:(NSString *) key {
+    //if the pref is not set then default to yes
+    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+    key = [username stringByAppendingString:key];
+    NSNumber * value = [defaults objectForKey:key];
+    
+    if (!value) return YES;
+    
+    return [value boolValue];
+}
+
 @end
