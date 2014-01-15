@@ -68,7 +68,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     
     UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"help",nil) style:UIBarButtonItemStylePlain target:self action:@selector(showHelp)];
     self.navigationItem.rightBarButtonItem = anotherButton;
-
+    
     
 }
 
@@ -91,7 +91,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     } else {
         [self.navigationController pushViewController:controller animated:YES];
     }
-
+    
 }
 
 
@@ -175,7 +175,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     GTMOAuth2ViewControllerTouch *authController;
     //http://stackoverflow.com/questions/13693617/error-500-when-performing-a-query-with-drive-file-scope
     authController = [[GTMOAuth2ViewControllerTouch alloc] initWithScope:[[kGTLAuthScopeDriveFile stringByAppendingString:@" "] stringByAppendingString: kGTLAuthScopeDriveMetadataReadonly]
-
+                      
                                                                 clientID:GOOGLE_CLIENT_ID
                                                             clientSecret:GOOGLE_CLIENT_SECRET
                                                         keychainItemName:kKeychainItemName
@@ -371,12 +371,14 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 }
 
 -(void) backupIdentity: (NSString *) name password: (NSString *) password {
-       _progressView = [LoadingView showViewKey:@"progress_backup_identity_drive"];
+    _progressView = [LoadingView showViewKey:@"progress_backup_identity_drive"];
     
     [self ensureDriveIdentityDirectoryCompletionBlock:^(NSString * identityDirId) {
         if (!identityDirId) {
-            [UIUtils showToastKey:@"could_not_backup_identity_to_google_drive" duration:2];
             [_progressView removeView];
+            _progressView = nil;
+            
+            [UIUtils showToastKey:@"could_not_backup_identity_to_google_drive" duration:2];
             return;
         }
         
@@ -384,14 +386,18 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
         
         [[IdentityController sharedInstance] exportIdentityDataForUsername:name password:password callback:^(NSString *error, id identityData) {
             if (error) {
-                [UIUtils showToastMessage:error duration:2];
                 [_progressView removeView];
+                _progressView = nil;
+                
+                [UIUtils showToastMessage:error duration:2];
                 return;
             }
             else {
                 if (!identityData) {
-                    [UIUtils showToastKey:@"could_not_backup_identity_to_google_drive" duration:2];
                     [_progressView removeView];
+                    _progressView = nil;
+                    
+                    [UIUtils showToastKey:@"could_not_backup_identity_to_google_drive" duration:2];
                     return;
                 }
                 
@@ -407,12 +413,14 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
                                       completionHandler:^(GTLServiceTicket *ticket,
                                                           GTLDriveFile *updatedFile,
                                                           NSError *error) {
+                                          [_progressView removeView];
+                                          _progressView = nil;
+                                          
                                           if (error == nil) {
                                               [UIUtils showToastKey:@"identity_successfully_backed_up_to_google_drive" duration:2];
                                           } else {
                                               [UIUtils showToastKey:@"could_not_backup_identity_to_google_drive" duration:2];
                                           }
-                                          [_progressView removeView];
                                       }];
                         
                         
@@ -440,12 +448,14 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
                                       completionHandler:^(GTLServiceTicket *ticket,
                                                           GTLDriveFile *updatedFile,
                                                           NSError *error) {
+                                          [_progressView removeView];
+                                          _progressView = nil;
+
                                           if (error == nil) {
                                               [UIUtils showToastKey:@"identity_successfully_backed_up_to_google_drive" duration:2];
                                           } else {
                                               [UIUtils showToastKey:@"could_not_backup_identity_to_google_drive" duration:2];
                                           }
-                                          [_progressView removeView];
                                       }];
                         
                     }
@@ -458,6 +468,9 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     }];
 }
 
+-(BOOL) shouldAutorotate {
+    return (_progressView == nil);
+}
 
 
 @end

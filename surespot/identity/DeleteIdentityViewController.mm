@@ -33,7 +33,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (atomic, strong) NSArray * identityNames;
 @property (strong, nonatomic) IBOutlet UIPickerView *userPicker;
 @property (strong, nonatomic) IBOutlet UIButton *bExecute;
-@property (atomic, strong) id progressView;
+@property (atomic, strong) LoadingView * progressView;
 @property (atomic, strong) NSString * name;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (atomic, strong) NSString * url;
@@ -117,6 +117,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     SurespotIdentity * identity = [[IdentityController sharedInstance] getIdentityWithUsername:username andPassword:password];
     if (!identity) {
         [_progressView removeView];
+        _progressView = nil;
         [UIUtils showToastKey:NSLocalizedString(@"could_not_delete_identity", nil) duration:2];
         return;
     }
@@ -154,6 +155,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                        [self loadIdentityNames];
                                                                                                        [[IdentityController sharedInstance] deleteIdentityUsername:username];
                                                                                                        [_progressView removeView];
+                                                                                                       _progressView = nil;
                                                                                                        [UIUtils showToastKey:@"identity_deleted" duration:2];
                                                                                                    });
                                                                                                    
@@ -161,6 +163,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                    [[IdentityController sharedInstance] removeExpectedKeyVersionForUsername:username];
                                                                                                    dispatch_async(dispatch_get_main_queue(), ^{
                                                                                                        [_progressView removeView];
+                                                                                                       _progressView = nil;
                                                                                                        [UIUtils showToastKey:@"could_not_delete_identity" duration:2];
                                                                                                    });
                                                                                                }];
@@ -169,9 +172,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                          
                                                          dispatch_async(dispatch_get_main_queue(), ^{
                                                              [_progressView removeView];
+                                                             _progressView = nil;
                                                              [UIUtils showToastKey:@"could_not_delete_identity" duration:2];
                                                          });
                                                      }];
+}
+
+-(BOOL) shouldAutorotate {
+    return (_progressView == nil);
 }
 
 

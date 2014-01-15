@@ -52,7 +52,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [_bExecute setTitle:NSLocalizedString(@"regenerate_keys", nil) forState:UIControlStateNormal];
     [self loadIdentityNames];
     self.navigationController.navigationBar.translucent = NO;
-
+    
     _label1.text = NSLocalizedString(@"generate_new_keypairs", nil);
     _label2.text = NSLocalizedString(@"backup_identities_again_keys", nil);
     _label2.textColor = [UIColor redColor];
@@ -121,6 +121,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     SurespotIdentity * identity = [[IdentityController sharedInstance] getIdentityWithUsername:username andPassword:password];
     if (!identity) {
         [_progressView removeView];
+        _progressView = nil;
         [UIUtils showToastKey:NSLocalizedString(@"could_not_create_new_keys", nil) duration:2];
         return;
     }
@@ -160,6 +161,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                        
                                                                                                        dispatch_async(dispatch_get_main_queue(), ^{
                                                                                                            [_progressView removeView];
+                                                                                                           _progressView = nil;
                                                                                                            [UIUtils showToastKey:@"keys_created" duration:2];
                                                                                                            
                                                                                                            
@@ -168,14 +170,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                            UINavigationController * nav = self.navigationController;
                                                                                                            [nav popViewControllerAnimated:NO];
                                                                                                            [nav pushViewController:bvc animated:YES];
-
+                                                                                                           
                                                                                                        });
                                                                                                        
                                                                                                    } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
                                                                                                        [[IdentityController sharedInstance] removeExpectedKeyVersionForUsername:username];
                                                                                                        dispatch_async(dispatch_get_main_queue(), ^{
-                                                                                                           [_progressView removeView];
-                                                                                                           
+                                                                                                           [_progressView removeView];                                                                                                                                                                                                                      _progressView = nil;
                                                                                                            [UIUtils showToastKey:@"could_not_create_new_keys" duration:2];
                                                                                                        });
                                                                                                    }];
@@ -183,10 +184,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                   } failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
                                                       dispatch_async(dispatch_get_main_queue(), ^{
                                                           [_progressView removeView];
+                                                          _progressView = nil;
                                                           [UIUtils showToastKey:@"could_not_create_new_keys" duration:2];
                                                       });
                                                   }];
 }
+
+-(BOOL) shouldAutorotate {
+    return (_progressView == nil);
+}
+
+
 
 
 @end

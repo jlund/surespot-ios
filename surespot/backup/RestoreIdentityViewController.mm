@@ -250,8 +250,9 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
         DDLogInfo(@"got identity folder id %@", identityDirId);
         
         if (!identityDirId) {
-            [UIUtils showToastKey:@"could_not_list_identities_from_google_drive" duration:2];
             [_progressView removeView];
+            _progressView = nil;
+            [UIUtils showToastKey:@"could_not_list_identities_from_google_drive" duration:2];
             callback(nil);
             return;
             
@@ -265,9 +266,9 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
                       
                       if (error) {
                           DDLogError(@"An error occurred: %@", error);
-                          [UIUtils showToastKey:@"could_not_list_identities_from_google_drive" duration:2];
                           [_progressView removeView];
-                          
+                          _progressView = nil;
+                          [UIUtils showToastKey:@"could_not_list_identities_from_google_drive" duration:2];
                           callback(nil);
                           return;
                       }
@@ -277,6 +278,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
                       if (dlCount == 0) {
                           //no identities to download
                           [_progressView removeView];
+                          _progressView = nil;
                           callback(nil);
                           return;
                       }
@@ -314,6 +316,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
                                                     DDLogInfo(@"file data download complete, files: %@", identityFiles);
                                                     
                                                     [_progressView removeView];
+                                                    _progressView = nil;
                                                     callback(identityFiles);
                                                 }
                                             }
@@ -403,6 +406,9 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
         if (error == nil) {
             NSData * identityData = [FileController gunzipIfNecessary:data];
             [[IdentityController sharedInstance] importIdentityData:identityData username:name password:password callback:^(id result) {
+                [_progressView removeView];
+                _progressView = nil;
+                
                 if (result) {
                     [UIUtils showToastMessage:result duration:2];
                 }
@@ -416,7 +422,6 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
                 }
                 
                 _storedPassword = nil;
-                [_progressView removeView];
                 
                 //if we now only have 1 identity, go to login view controller
                 if ([[[IdentityController sharedInstance] getIdentityNames] count] == 1) {
@@ -426,12 +431,17 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
             }];
         } else {
             DDLogError(@"An error occurred: %@", error);
+            [_progressView removeView];
+            _progressView = nil;
             [UIUtils showToastKey:@"could_not_list_identities_from_google_drive" duration:2];
             _storedPassword = nil;
-            [_progressView removeView];
         }
     }];
     
+}
+
+-(BOOL) shouldAutorotate {
+    return (_progressView == nil);
 }
 
 @end

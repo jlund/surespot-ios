@@ -208,6 +208,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     SurespotIdentity * identity = [[IdentityController sharedInstance] getIdentityWithUsername:username andPassword:password];
     if (!identity) {
         [_progressView removeView];
+        _progressView = nil;
+
         [_currentPassword becomeFirstResponder];
         [UIUtils showToastKey:NSLocalizedString(@"could_not_change_password", nil) duration:2];
         return;
@@ -248,6 +250,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                                 
                                                                                                                 dispatch_async(dispatch_get_main_queue(), ^{
                                                                                                                     [_progressView removeView];
+                                                                                                                    _progressView = nil;
+
                                                                                                                     [UIUtils showToastKey:@"password_changed" duration:2];
                                                                                                                     
                                                                                                                     BackupIdentityViewController * bvc = [[BackupIdentityViewController alloc] initWithNibName:@"BackupIdentityView" bundle:nil];
@@ -260,6 +264,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                             } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
                                                                                                                 dispatch_async(dispatch_get_main_queue(), ^{
                                                                                                                     [_progressView removeView];
+                                                                                                                    _progressView = nil;
+
                                                                                                                     [_currentPassword becomeFirstResponder];
                                                                                                                     [UIUtils showToastKey:@"could_not_change_password" duration:2];
                                                                                                                 });
@@ -269,10 +275,18 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                            dispatch_async(dispatch_get_main_queue(), ^{
                                                                [_currentPassword becomeFirstResponder];
                                                                [_progressView removeView];
+                                                               _progressView = nil;
+
                                                                [UIUtils showToastKey:@"could_not_change_password" duration:2];
                                                            });
                                                        }];
 }
+
+-(BOOL) shouldAutorotate {
+    return (_progressView == nil);
+}
+
+
 
 
 @end

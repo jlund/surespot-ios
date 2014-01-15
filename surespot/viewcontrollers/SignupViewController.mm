@@ -175,10 +175,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
              
              [self.navigationController setViewControllers:controllers animated:YES];
              [_progressView removeView];
+             _progressView = nil;
          }
          failureBlock:^(AFHTTPRequestOperation *operation, NSError *Error) {
              
              DDLogVerbose(@"signup response failure: %@",  Error);
+             
+             [_progressView removeView];
+             _progressView = nil;
              
              switch (operation.response.statusCode) {
                  case 429:
@@ -197,7 +201,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
              }
              
              self.navigationItem.rightBarButtonItem.enabled = YES;
-             [_progressView removeView];
          }
          ];
         
@@ -282,6 +285,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [[NetworkController sharedInstance] userExists:username successBlock:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSString * response = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
         
+        [_progressView removeView];
+        _progressView = nil;
+        
+        
         if ([response isEqualToString:@"true"]) {
             [UIUtils showToastKey:@"username_exists"];
             [self setUsernameValidity:NO];
@@ -291,11 +298,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [self setUsernameValidity:YES];
             [_tbPassword becomeFirstResponder];
         }
-        [_progressView removeView];
     } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
         [_tbUsername becomeFirstResponder];
-        [UIUtils showToastKey:@"user_exists_error"];
         [_progressView removeView];
+        _progressView = nil;
+        [UIUtils showToastKey:@"user_exists_error"];
         _lastCheckedUsername = nil;
     }];
 }
@@ -451,6 +458,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
 }
 
+-(BOOL) shouldAutorotate {
+    return _progressView == nil;
+}
 
 
 @end

@@ -136,10 +136,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
         if (!identity) {
             dispatch_async(dispatch_get_main_queue(), ^{
+                [_progressView removeView];
+                _progressView = nil;
+                
                 [UIUtils showToastKey: @"login_check_password" ];
                 [_textPassword becomeFirstResponder];
                 _textPassword.text = @"";
-                [_progressView removeView];
+
                 self.navigationItem.rightBarButtonItem.enabled = YES;
                 
             });
@@ -195,10 +198,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
              _textPassword.text = @"";
              
              [_progressView removeView];
+             _progressView = nil;
              self.navigationItem.rightBarButtonItem.enabled = YES;
          }
          failureBlock:^(NSURLRequest *operation, NSHTTPURLResponse *responseObject, NSError *Error, id JSON) {
              DDLogVerbose(@"response failure: %@",  Error);
+             [_progressView removeView];
+             _progressView = nil;
              
              switch (responseObject.statusCode) {
                  case 401:
@@ -213,7 +219,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
              }
              
              [_textPassword becomeFirstResponder];
-             [_progressView removeView];
              self.navigationItem.rightBarButtonItem.enabled = YES;
              
          }];
@@ -338,6 +343,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return [UIUtils createMenu: menuItems closeCompletionHandler:^{
         _menu = nil;
     }];
+}
+
+-(BOOL) shouldAutorotate {
+    return (_progressView == nil);
 }
 
 @end
