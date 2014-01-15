@@ -420,7 +420,8 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
                 
                 //if we now only have 1 identity, go to login view controller
                 if ([[[IdentityController sharedInstance] getIdentityNames] count] == 1) {
-                    [self.navigationController popToRootViewControllerAnimated:YES];
+                    UIStoryboard * storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+                    [self.navigationController setViewControllers:@[[storyboard instantiateViewControllerWithIdentifier:@"loginViewController"]]];
                 }
             }];
         } else {
