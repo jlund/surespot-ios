@@ -15,6 +15,8 @@
 #import "LoadingView.h"
 #import "DDLog.h"
 #import "RestoreIdentityViewController.h"
+#import "SwipeViewController.h"
+#import "HelpViewController.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
@@ -129,7 +131,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     dispatch_async(q, ^{
         DDLogVerbose(@"getting identity");
-        SurespotIdentity * identity = [[IdentityController sharedInstance] getIdentityWithUsername:username andPassword:password];    
+        SurespotIdentity * identity = [[IdentityController sharedInstance] getIdentityWithUsername:username andPassword:password];
         DDLogVerbose(@"got identity");
         
         if (!identity) {
@@ -156,7 +158,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         NSData * signature = [EncryptionController signUsername:username andPassword: encodedPassword withPrivateKey:[identity getDsaPrivateKey]];
         NSString * passwordString = [derivedPassword SR_stringByBase64Encoding];
         NSString * signatureString = [signature SR_stringByBase64Encoding];
-
+        
         DDLogVerbose(@"logging in to server");
         [[NetworkController sharedInstance]
          loginWithUsername:username
@@ -173,7 +175,24 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
              }
              
              [[IdentityController sharedInstance] userLoggedInWithIdentity:identity];
-             [self performSegueWithIdentifier: @"loginToMainSegue" sender: nil ];
+             
+             UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle: nil];
+             SwipeViewController * svc = [storyboard instantiateViewControllerWithIdentifier:@"swipeViewController"];
+             
+             NSMutableArray *  controllers = [NSMutableArray new];
+             [controllers addObject:self];
+             [controllers addObject:svc];
+             
+             
+             //show help view on iphone if it hasn't been shown
+             BOOL helpShown = [[NSUserDefaults standardUserDefaults] boolForKey:@"helpShown"];
+             if (!helpShown && ![UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+                 HelpViewController *hvc = [[HelpViewController alloc] initWithNibName:@"HelpView" bundle:nil];
+                 [controllers addObject:hvc];
+                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"helpShown"];
+             }
+                                  
+             [self.navigationController setViewControllers:controllers animated:YES];
              _textPassword.text = @"";
              
              [_progressView removeView];
@@ -246,7 +265,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     else {
         _textPassword.text = nil;
         [_storePassword setOn:NO animated:NO];
-    }    
+    }
 }
 
 
