@@ -40,15 +40,31 @@
     self.navigationItem.rightBarButtonItem = anotherButton;
     
     NSString * price = [[PurchaseDelegate sharedInstance] formatPriceForProductId: PRODUCT_ID_VOICE_MESSAGING];
-    [_purchaseVoiceButton setTitle:[NSString stringWithFormat: NSLocalizedString(@"voice_messaging_purchase_button", nil), price] forState:UIControlStateNormal];
-    
-    [_videoDemonstrationButton setTitle:[NSString stringWithFormat: NSLocalizedString(@"video_demonstration", nil), price] forState:UIControlStateNormal];
+    if (!price) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsLoaded:) name:@"productsLoaded" object:nil];
+    }
+    else {
+        [self updatePrices];
+    }
     
     _scrollView.contentSize = self.view.frame.size;
     
     NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
     [_voiceSwitch setOn:[storage boolForKey:@"voice_messaging"]];
     [_dontAskSwitch setOn:[storage boolForKey:@"pref_dont_ask"] animated:NO];
+}
+
+-(void) productsLoaded {
+    [self updatePrices];
+}
+
+-(void) updatePrices {
+    NSString * price = [[PurchaseDelegate sharedInstance] formatPriceForProductId: PRODUCT_ID_VOICE_MESSAGING];
+    [_purchaseVoiceButton setTitle:[NSString stringWithFormat: NSLocalizedString(@"voice_messaging_purchase_button", nil), price] forState:UIControlStateNormal];
+    [_videoDemonstrationButton setTitle: NSLocalizedString(@"video_demonstration", nil) forState:UIControlStateNormal];
+    
+    [_purchaseVoiceButton setEnabled:YES];
+    
 }
 
 

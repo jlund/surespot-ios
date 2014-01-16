@@ -307,7 +307,7 @@ NSString *  const PRODUCT_ID_VOICE_MESSAGING = @"voice_messaging";
         return formattedPrice;
     }
     
-    return @"n/a";
+    return nil;
 }
 
 @end

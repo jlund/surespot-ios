@@ -29,7 +29,9 @@
     [self updateButtons];
     
     NSString * price = [[PurchaseDelegate sharedInstance] formatPriceForProductId: PRODUCT_ID_PWYL_1];
-    _priceLabel.text = [NSString stringWithFormat:@"1 surecoin = %@", price ];
+    if (price) {
+        _priceLabel.text = [NSString stringWithFormat:@"1 surecoin = %@", price ];
+    }
     
     [self.navigationItem setTitle:NSLocalizedString(@"pay_what_you_like", nil)];
     self.navigationController.navigationBar.translucent = NO;
@@ -42,6 +44,8 @@
 }
 
 -(void) productsLoaded: (NSNotification *) notification {
+     NSString * price = [[PurchaseDelegate sharedInstance] formatPriceForProductId: PRODUCT_ID_PWYL_1];
+    _priceLabel.text = [NSString stringWithFormat:@"1 surecoin = %@", price ];
     [self updateButtons];
 }
 
