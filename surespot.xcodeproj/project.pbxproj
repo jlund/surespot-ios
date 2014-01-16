@@ -216,7 +216,6 @@
 		66EBE1361855C97100F2452D /* FileController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE0971855C97100F2452D /* FileController.mm */; };
 		66EBE1371855C97100F2452D /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE0991855C97100F2452D /* NSData+Base64.m */; };
 		66EBE1381855C97100F2452D /* NSString+Sensitivize.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE09B1855C97100F2452D /* NSString+Sensitivize.m */; };
-		66EBE1391855C97100F2452D /* StateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE09D1855C97100F2452D /* StateController.m */; };
 		66EBE13A1855C97100F2452D /* SurespotLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE09F1855C97100F2452D /* SurespotLogFormatter.m */; };
 		66EBE13B1855C97100F2452D /* UIUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE0A11855C97100F2452D /* UIUtils.m */; };
 		66EBE13C1855C97100F2452D /* Friend.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EBE0A41855C97100F2452D /* Friend.m */; };
@@ -831,8 +830,6 @@
 		66EBE0991855C97100F2452D /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
 		66EBE09A1855C97100F2452D /* NSString+Sensitivize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Sensitivize.h"; sourceTree = "<group>"; };
 		66EBE09B1855C97100F2452D /* NSString+Sensitivize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Sensitivize.m"; sourceTree = "<group>"; };
-		66EBE09C1855C97100F2452D /* StateController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StateController.h; sourceTree = "<group>"; };
-		66EBE09D1855C97100F2452D /* StateController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StateController.m; sourceTree = "<group>"; };
 		66EBE09E1855C97100F2452D /* SurespotLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SurespotLogFormatter.h; sourceTree = "<group>"; };
 		66EBE09F1855C97100F2452D /* SurespotLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SurespotLogFormatter.m; sourceTree = "<group>"; };
 		66EBE0A01855C97100F2452D /* UIUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIUtils.h; sourceTree = "<group>"; };
@@ -1815,8 +1812,6 @@
 				66EBE0991855C97100F2452D /* NSData+Base64.m */,
 				66EBE09A1855C97100F2452D /* NSString+Sensitivize.h */,
 				66EBE09B1855C97100F2452D /* NSString+Sensitivize.m */,
-				66EBE09C1855C97100F2452D /* StateController.h */,
-				66EBE09D1855C97100F2452D /* StateController.m */,
 				66EBE09E1855C97100F2452D /* SurespotLogFormatter.h */,
 				66EBE09F1855C97100F2452D /* SurespotLogFormatter.m */,
 				66EBE0A01855C97100F2452D /* UIUtils.h */,
@@ -2254,7 +2249,6 @@
 				66EBE1371855C97100F2452D /* NSData+Base64.m in Sources */,
 				666D3378188476B100B73F69 /* aurio_helper.cpp in Sources */,
 				66370130187A365D006D17CA /* TTTAttributedLabel.m in Sources */,
-				66EBE1391855C97100F2452D /* StateController.m in Sources */,
 				667EFF9518425A87002C0406 /* Reachability.m in Sources */,
 				66FF1002182D3D920038ECA6 /* DDTTYLogger.m in Sources */,
 				666D3379188476B100B73F69 /* CADebugMacros.cpp in Sources */,

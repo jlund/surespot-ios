@@ -28,4 +28,5 @@ extern NSString *const IDENTITY_EXTENSION;
 +(NSDictionary *) loadLatestVersionsForUsername: (NSString *) username;
 + (NSString*) getCacheDir;
 +(NSString *) getBackgroundImageFilename;
++(void) wipeAllState;
 @end

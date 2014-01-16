@@ -12,6 +12,8 @@
 #import "DDLog.h"
 #import "SurespotConstants.h"
 #import "SurespotAppDelegate.h"
+#import "FileController.h"
+#import "SDWebImageManager.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -331,6 +333,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (!value) return YES;
     
     return [value boolValue];
+}
+
++(void) clearLocalCache {
+    [FileController wipeAllState];
+    [[[SDWebImageManager sharedManager] imageCache] clearMemory];
+    [[[SDWebImageManager sharedManager] imageCache] clearDisk];    
 }
 
 @end

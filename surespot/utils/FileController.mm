@@ -299,6 +299,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return identityBytes;
 }
 
++(void) wipeAllState {
+    DDLogInfo( @"wiping all data");
+    NSFileManager * fileMgr = [NSFileManager defaultManager];
+    [fileMgr removeItemAtPath:[self getLatestVersionsDir] error:nil];
+    [fileMgr removeItemAtPath:[self getSecretsDir] error:nil];
+    [fileMgr removeItemAtPath:[self getUploadsDir] error:nil];
+    [fileMgr removeItemAtPath:[[FileController getAppSupportDir] stringByAppendingPathComponent:STATE_DIR ] error:nil];
+    [fileMgr removeItemAtPath:[self getCacheDir] error:nil];
+}
 
 
 @end

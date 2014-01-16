@@ -347,6 +347,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [menuItems addObject:restoreItem];
     
+    REMenuItem * clearCacheItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"clear_local_cache", nil) image:[UIImage imageNamed:@"ic_menu_delete"] highlightedImage:nil action:^(REMenuItem * item){
+        [UIUtils clearLocalCache];
+        [UIUtils showToastKey:@"local_cache_cleared" duration:2];
+    }];
+    
+    [menuItems addObject:clearCacheItem];
     
     return [UIUtils createMenu: menuItems closeCompletionHandler:^{
         _menu = nil;

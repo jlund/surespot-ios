@@ -15,7 +15,6 @@
 #import "MessageProcessor.h"
 #import "NetworkController.h"
 #import "ChatUtils.h"
-#import "StateController.h"
 #import "DDLog.h"
 #import "UIUtils.h"
 #import "SurespotConstants.h"

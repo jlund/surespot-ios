@@ -42,5 +42,6 @@
       linkMatchTexts: (NSArray *) linkMatchTexts
           urlStrings: (NSArray *) urlStrings;
 +(BOOL) getBoolPrefWithDefaultYesForUser: (NSString *) username key:(NSString *) key;
++(void) clearLocalCache;
 @end
 
