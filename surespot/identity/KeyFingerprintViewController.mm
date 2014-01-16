@@ -146,7 +146,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     if (cellData) {
         KeyFingerprintCell *cell = [_tableView dequeueReusableCellWithIdentifier:@"KeyFingerprintCell"];
-        //todo public key verified date
         BOOL hideTime = (_meFirst && indexPath.section == 0) || (!_meFirst && indexPath.section == 1);
         cell.timeLabel.hidden = hideTime;
         cell.timeValue.hidden = hideTime;

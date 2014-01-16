@@ -133,7 +133,7 @@ NSString *  const PRODUCT_ID_VOICE_MESSAGING = @"voice_messaging";
 -(void) failedTransaction: (SKPaymentTransaction *) transaction {
     DDLogWarn(@"payment failed: %@", transaction.error);
     //1005 is "could not sign in with test account" error apparently
-    if (transaction.error.code != SKErrorPaymentCancelled && transaction.error.code != SKErrorPaymentNotAllowed && transaction.error.code != 1005) {
+    if (transaction.error.code != SKErrorPaymentCancelled && transaction.error.code != SKErrorPaymentNotAllowed && transaction.error.code != 1005 && transaction.error.localizedFailureReason) {
         [UIUtils showToastMessage: [NSString stringWithFormat:@"%@%@ - %@",@"In App Purchase Error: ",transaction.error.localizedDescription, transaction.error.localizedFailureReason] duration: 4];
     }
 }
