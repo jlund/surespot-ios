@@ -62,7 +62,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     UINavigationController *rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"navigationController"];
     self.window.rootViewController = rootViewController;
     
-   
+    
     
     
     if ([[[IdentityController sharedInstance] getIdentityNames ] count] == 0 ) {
@@ -86,11 +86,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [_overlayWindow setWindowLevel:UIWindowLevelAlert+1];
     _overlayWindow.hidden = NO;
     _overlayWindow.userInteractionEnabled = NO;
-        
+    
     _overlayView = [[AGWindowView alloc] initAndAddToWindow:_overlayWindow];
     _overlayView.supportedInterfaceOrientations = AGInterfaceOrientationMaskAll;
     
-       [[SKPaymentQueue defaultQueue] addTransactionObserver:[PurchaseDelegate sharedInstance]];
+    [[SKPaymentQueue defaultQueue] addTransactionObserver:[PurchaseDelegate sharedInstance]];
     return YES;
 }
 
@@ -132,58 +132,80 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     DDLogInfo(@"received remote notification: %@, applicationstate: %d", userInfo, [application applicationState]);
-    
-    //todo download and add the message or just move to tab and tell it to load
-    switch ([application applicationState]) {
-        case UIApplicationStateActive:
-        {
-            //application was running when we received
-            //if we're not on the tap, show notification
-            NSString * notificationType =[userInfo valueForKeyPath:@"aps.alert.loc-key" ] ;
-            if ([notificationType isEqualToString:@"notification_message"] ||
-                [notificationType isEqualToString:@"notification_invite"]  ||
-                [notificationType isEqualToString:@"notification_invite_accept"]) {
-                //if we're not logged in as the user add a local notifcation and show a toast
+    [self handleNotificationApplication:application userInfo:userInfo local:NO];
+}
+//
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    DDLogInfo(@"received local notification, applicationstate: %d", [application applicationState]);
+    [self handleNotificationApplication:application userInfo:notification.userInfo local:YES];
+}
+
+-(void) handleNotificationApplication: (UIApplication *) application userInfo: (NSDictionary *) userInfo local: (BOOL) local {
+    NSString * notificationType =[userInfo valueForKeyPath:@"aps.alert.loc-key" ] ;
+    if ([notificationType isEqualToString:@"notification_message"] ||
+        [notificationType isEqualToString:@"notification_invite"]  ||
+        [notificationType isEqualToString:@"notification_invite_accept"]) {
+        //if we're not logged in as the user add a local notifcation and show a toast
+        
+        NSArray * locArgs =[userInfo valueForKeyPath:@"aps.alert.loc-args" ] ;
+        NSString * to =[locArgs objectAtIndex:0];
+        NSString * from =[locArgs objectAtIndex:1];
+        
+        //todo download and add the message or just move to tab and tell it to load
+        switch ([application applicationState]) {
+            case UIApplicationStateActive:
+            {
+                //application was running when we received
+                //if we're not on the tap, show notification
                 
-                NSArray * locArgs =[userInfo valueForKeyPath:@"aps.alert.loc-args" ] ;
-                NSString * to =[locArgs objectAtIndex:0];
-                if (![to isEqualToString:[[IdentityController sharedInstance] getLoggedInUser]] &&
+                
+                if (!local &&
+                    ![to isEqualToString:[[IdentityController sharedInstance] getLoggedInUser]] &&
                     [[[IdentityController sharedInstance] getIdentityNames] containsObject:to]) {
                     
-                    NSString * from =[locArgs objectAtIndex:1];
+                    
                     [UIUtils showToastMessage:[NSString stringWithFormat:NSLocalizedString(notificationType, nil), to, from] duration:1];
                     
                     UILocalNotification* localNotification = [[UILocalNotification alloc] init];
                     localNotification.fireDate = nil;
                     localNotification.alertBody = [NSString stringWithFormat: NSLocalizedString(notificationType, nil), to, from];
                     localNotification.alertAction = NSLocalizedString(@"notification_title", nil);
+                    localNotification.userInfo = userInfo;
                     //this doesn't seem to play anything when app is foregrounded so play it manually
-//                    localNotification.soundName = [userInfo valueForKeyPath:@"aps.sound"];
+                    //                    localNotification.soundName = [userInfo valueForKeyPath:@"aps.sound"];
                     
                     [[SoundController sharedInstance] playSoundNamed:[userInfo valueForKeyPath:@"aps.sound"] forUser:to];
                     [application scheduleLocalNotification:localNotification];
+                    
                 }
             }
+                
+                
+                break;
+                
+            case UIApplicationStateInactive:
+            case UIApplicationStateBackground:
+                //started application from notification, move to correct tab
+                
+                //set user default so we can move to the right tab
+                if ([notificationType isEqualToString:@"notification_invite"] || [notificationType isEqualToString:@"notification_invite_accept"]) {
+                    [[NSUserDefaults standardUserDefaults] setObject:@"invite" forKey:@"notificationType"];
+                    [[NSUserDefaults standardUserDefaults] setObject:to forKey:@"notificationTo"];
+                }
+                else {
+                    if ([notificationType isEqualToString:@"notification_message"]) {
+                        [[NSUserDefaults standardUserDefaults] setObject:@"message" forKey:@"notificationType"];
+                        [[NSUserDefaults standardUserDefaults] setObject:to forKey:@"notificationTo"];
+                        [[NSUserDefaults standardUserDefaults] setObject:from forKey:@"notificationFrom"];
+                    }
+                }
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"openedFromNotification" object:nil ];
         }
-            
-            break;
-            
-        case UIApplicationStateInactive:
-        case UIApplicationStateBackground:
-            //     [notificationData setObject:@"inactive" forKey:@"applicationState"];
-            
-            //started application from notification, move to correct tab
-            
-            break;
     }
     
-    // [[NSNotificationCenter defaultCenter] postNotificationName:@"pushNotification" object:notificationData ];
 }
-//
-//- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
-//{
-//
-//}
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {

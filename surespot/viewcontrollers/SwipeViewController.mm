@@ -143,6 +143,8 @@ const Float32 voiceRecordDelay = 0.3;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(inviteAccepted:) name:@"inviteAccepted" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(purchaseStatusChanged:) name:@"purchaseStatusChanged" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backgroundImageChanged:) name:@"backgroundImageChanged" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleNotification) name:@"openedFromNotification" object:nil];
+
     
     _homeDataSource = [[ChatController sharedInstance] getHomeDataSource];
     
@@ -209,6 +211,8 @@ const Float32 voiceRecordDelay = 0.3;
     }
     
     [self showHeader];
+    [self handleNotification];
+    
 }
 
 
@@ -2432,6 +2436,33 @@ didSelectLinkWithPhoneNumber:(NSString *)phoneNumber {
         [_textField setPlaceholder:NSLocalizedString(@"message_hint", nil)];
     }
     [[NSUserDefaults standardUserDefaults] setInteger:tbHintCount forKey:@"tbHintCount"];
+}
+
+
+-(void) handleNotification {
+    
+    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+    DDLogInfo(@"handleNotification, defaults: %@", defaults);
+    //if we entered app via notification defaults will be set
+    NSString * notificationType = [defaults objectForKey:@"notificationType"];
+    NSString * to = [defaults objectForKey:@"notificationTo"];
+    if ([notificationType isEqualToString:@"message"]) {
+        NSString * from = [defaults objectForKey:@"notificationFrom"];
+        if ([to isEqualToString:[[IdentityController sharedInstance] getLoggedInUser]]) {
+            [self showChat:from];
+        }
+    }
+    else {
+        if ([notificationType isEqualToString:@"invite"]) {
+            if ([to isEqualToString:[[IdentityController sharedInstance] getLoggedInUser]]) {
+                [self scrollHome];
+            }
+        }
+    }
+    
+    [defaults removeObjectForKey:@"notificationType"];
+    [defaults removeObjectForKey:@"notificationTo"];
+    [defaults removeObjectForKey:@"notificationFrom"];
 }
 
 @end

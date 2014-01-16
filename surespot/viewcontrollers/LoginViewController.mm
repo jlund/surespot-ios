@@ -63,6 +63,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     
     _storeKeychainLabel.text = NSLocalizedString(@"store_password_in_keychain", nil);
+    
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleNotification) name:@"openedFromNotification" object:nil];
 }
 
 // Call this method somewhere in your view controller setup code.
@@ -142,7 +144,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 [UIUtils showToastKey: @"login_check_password" ];
                 [_textPassword becomeFirstResponder];
                 _textPassword.text = @"";
-
+                
                 self.navigationItem.rightBarButtonItem.enabled = YES;
                 
             });
@@ -193,7 +195,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                  HelpViewController *hvc = [[HelpViewController alloc] initWithNibName:@"HelpView" bundle:nil];
                  [controllers addObject:hvc];
              }
-                                  
+             
              [self.navigationController setViewControllers:controllers animated:YES];
              _textPassword.text = @"";
              
@@ -270,6 +272,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         _textPassword.text = nil;
         [_storePassword setOn:NO animated:NO];
     }
+    [self handleNotification];
 }
 
 
@@ -348,5 +351,20 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(BOOL) shouldAutorotate {
     return (_progressView == nil);
 }
+
+-(void) handleNotification {
+    
+    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+    DDLogInfo(@"handleNotification, defaults: %@", defaults);
+    //if we entered app via notification defaults will be set
+    NSString * notificationType = [defaults objectForKey:@"notificationType"];
+    
+    if ([notificationType isEqualToString:@"message"] || [notificationType isEqualToString:@"invite"]) {
+        NSString * to = [defaults objectForKey:@"notificationTo"];
+        [_userPicker selectRow:[_identityNames indexOfObject:to] inComponent:0 animated:YES];
+        [self updatePassword:to];
+    }
+}
+
 
 @end
