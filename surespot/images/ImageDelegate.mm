@@ -98,13 +98,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             case kSurespotImageDelegateModeCapture:
             {
                 [_assetsLibrary saveImage:imageToSave toAlbum:@"surespot" withCompletionBlock:^(NSError *error, NSURL * url) {
-                    _assetsLibrary = nil;
-                    if (error) {
-                        [self stopProgress];
-                        [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_image", nil) duration:2];
-                        return;
-                    }
-                    
+                    _assetsLibrary = nil;                                       
                     [self uploadImage:imageToSave];
                 }];
                 break;
