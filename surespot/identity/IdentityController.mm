@@ -450,4 +450,8 @@ NSString *const EXPORT_IDENTITY_ID = @"_export_identity";
     }
 }
 
+-(NSInteger) getIdentityCount {
+    return [self getIdentityNames].count;
+}
+
 @end

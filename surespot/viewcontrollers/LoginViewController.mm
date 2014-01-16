@@ -64,7 +64,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     _storeKeychainLabel.text = NSLocalizedString(@"store_password_in_keychain", nil);
     
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleNotification) name:@"openedFromNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleNotification) name:@"openedFromNotification" object:nil];
 }
 
 // Call this method somewhere in your view controller setup code.
@@ -329,7 +329,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSMutableArray * menuItems = [NSMutableArray new];
     
     REMenuItem * createItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"create_identity_label", nil) image:[UIImage imageNamed:@"ic_menu_add"] highlightedImage:nil action:^(REMenuItem * item){
-        [self performSegueWithIdentifier: @"createSegue" sender: self];
+        if ([[IdentityController sharedInstance] getIdentityCount] < MAX_IDENTITIES) {
+            [self performSegueWithIdentifier: @"createSegue" sender: self];
+        }
+        else {
+            [UIUtils showToastKey:[NSString stringWithFormat: NSLocalizedString(@"login_max_identities_reached",nil), MAX_IDENTITIES] duration:2];
+        }
     }];
     
     [menuItems addObject:createItem];

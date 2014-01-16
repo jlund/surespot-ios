@@ -358,7 +358,11 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 }
 
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    //todo limit identities to 3
+    if ([[IdentityController sharedInstance] getIdentityCount] >= MAX_IDENTITIES) {
+        [UIUtils showToastKey:[NSString stringWithFormat: NSLocalizedString(@"login_max_identities_reached",nil), MAX_IDENTITIES] duration:2];
+        return;
+    }
+
     NSDictionary * rowData = [_driveIdentities objectAtIndex:indexPath.row];
     NSString * name = [rowData objectForKey:@"name"];
     NSString * url = [rowData objectForKey:@"url"];

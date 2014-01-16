@@ -46,5 +46,6 @@
 -(void) removeExpectedKeyVersionForUsername: (NSString *) username;
 -(void) deleteIdentityUsername: (NSString *) username;
 -(void) updatePasswordForUsername: (NSString *) username currentPassword: (NSString *) currentPassword newPassword: (NSString *) newPassword newSalt: (NSString *) newSalt;
+-(NSInteger) getIdentityCount;
 @end
 
