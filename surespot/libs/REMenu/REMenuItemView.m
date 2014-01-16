@@ -42,6 +42,7 @@
         self.isAccessibilityElement = YES;
         self.accessibilityTraits = UIAccessibilityTraitButton;
         self.accessibilityHint = NSLocalizedString(@"Double tap to choose", @"Double tap to choose");
+        self.clipsToBounds = YES;
         
         _backgroundView = ({
             UIView *view = [[UIView alloc] initWithFrame:self.bounds];
@@ -70,7 +71,7 @@
             });
             [self addSubview:_subtitleLabel];
         } else {
-            titleFrame = CGRectMake(self.menu.textOffset.width, self.menu.textOffset.height, 0, frame.size.height);
+            titleFrame = CGRectMake(self.menu.textOffset.width, self.menu.textOffset.height, frame.size.width - self.menu.textOffset.width - 10, frame.size.height);
         }
 
         _titleLabel = ({
@@ -79,7 +80,8 @@
             label.contentMode = UIViewContentModeCenter;
             label.textAlignment = self.menu.textAlignment;
             label.backgroundColor = [UIColor clearColor];
-            label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+         //   label.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
+            label.lineBreakMode = NSLineBreakByTruncatingTail;
             label;
         });
 
