@@ -22,6 +22,8 @@
 #import "SDWebImageManager.h"
 #import "DDLog.h"
 #import "UIUtils.h"
+#import "MWPhotoBrowser.h"
+#import "MWPhoto.h"
 
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
@@ -35,6 +37,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) NSString * ourVersion;
 @property (nonatomic, weak) ALAssetsLibrary * assetsLibrary;
 @property (nonatomic, weak) UIViewController* controller;
+@property (nonatomic, strong) UIImage * selectedImage;
 @end
 
 
@@ -107,8 +110,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 break;
             }
             case kSurespotImageDelegateModeSelect:
+            {
+                _selectedImage = imageToSave;
                 _assetsLibrary = nil;
-                [self uploadImage:imageToSave];
+                //preview and allow user to say yay or nay
+                // Create & present browser
+                MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
+                // Set options
+                browser.displayActionButton = YES; // Show action button to allow sharing, copying, etc (defaults to YES)
+                browser.displayNavArrows = NO; // Whether to display left and right nav arrows on toolbar (defaults to NO)
+                browser.zoomPhotosToFill = YES; // Images that almost fill the screen will be initially zoomed to fill (defaults to YES)
+                browser.wantsFullScreenLayout = NO; // iOS 5 & 6 only: Decide if you want the photo browser full screen, i.e. whether the status bar is affected (defaults to YES)
+                [self.controller.navigationController pushViewController:browser animated:YES];
+            }
                 break;
             case kSurespotImageDelegateModeFriendImage:
                 _assetsLibrary = nil;
@@ -498,6 +512,22 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void) stopProgress {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"stopProgress" object: nil];
+
+}
+
+- (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser {
+    return 1;
+}
+
+- (MWPhoto *)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index {
+    if (index == 0 && _selectedImage)
+        return [[MWPhoto alloc] initWithImage:_selectedImage];
+    return nil;
+}
+
+- (void)photoBrowser:(MWPhotoBrowser *)photoBrowser actionButtonPressedForPhotoAtIndex:(NSUInteger)index {
+    [self.controller.navigationController popViewControllerAnimated:YES];
+    [self uploadImage:_selectedImage];
 }
 
 @end

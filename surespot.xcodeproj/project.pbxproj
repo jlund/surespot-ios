@@ -70,6 +70,7 @@
 		6659531C1885B95900BA2CC7 /* BackupHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6659531B1885B95900BA2CC7 /* BackupHelpViewController.m */; };
 		6659531E1885B97000BA2CC7 /* BackupHelpView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6659531D1885B97000BA2CC7 /* BackupHelpView.xib */; };
 		665953221886021300BA2CC7 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 665953211886021300BA2CC7 /* UIAlertView+Blocks.m */; };
+		6659532518882DF500BA2CC7 /* MWPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 6659532418882DF500BA2CC7 /* MWPhoto.m */; };
 		665F4DF51831923C0083BCE7 /* RECommonFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DEC1831923C0083BCE7 /* RECommonFunctions.m */; };
 		665F4DF61831923C0083BCE7 /* REMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DEE1831923C0083BCE7 /* REMenu.m */; };
 		665F4DF71831923C0083BCE7 /* REMenuContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 665F4DF01831923C0083BCE7 /* REMenuContainerView.m */; };
@@ -450,6 +451,8 @@
 		6659531D1885B97000BA2CC7 /* BackupHelpView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BackupHelpView.xib; sourceTree = "<group>"; };
 		665953201886021300BA2CC7 /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
 		665953211886021300BA2CC7 /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
+		6659532318882DF500BA2CC7 /* MWPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWPhoto.h; sourceTree = "<group>"; };
+		6659532418882DF500BA2CC7 /* MWPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWPhoto.m; sourceTree = "<group>"; };
 		665F4DEB1831923C0083BCE7 /* RECommonFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RECommonFunctions.h; sourceTree = "<group>"; };
 		665F4DEC1831923C0083BCE7 /* RECommonFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RECommonFunctions.m; sourceTree = "<group>"; };
 		665F4DED1831923C0083BCE7 /* REMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REMenu.h; sourceTree = "<group>"; };
@@ -1103,6 +1106,8 @@
 		6646ADD3185CADC700CBACDE /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				6659532318882DF500BA2CC7 /* MWPhoto.h */,
+				6659532418882DF500BA2CC7 /* MWPhoto.m */,
 				6646ADD4185CADC700CBACDE /* MWCaptionView.h */,
 				6646ADD5185CADC700CBACDE /* MWCaptionView.m */,
 				6646ADD6185CADC700CBACDE /* MWCommon.h */,
@@ -2166,6 +2171,7 @@
 				66E4F5B7176298CB00596E6B /* SocketIO.m in Sources */,
 				66EBE0C11855C97100F2452D /* MessageView.m in Sources */,
 				662CA5911871BB7300684790 /* SurespotNavigationController.m in Sources */,
+				6659532518882DF500BA2CC7 /* MWPhoto.m in Sources */,
 				6646AE2F185CB2EF00CBACDE /* EncryptionParams.m in Sources */,
 				662CA5A818734E4E00684790 /* PurchaseVoiceViewController.m in Sources */,
 				66EBE0BC1855C97100F2452D /* ChatDataSource.mm in Sources */,
