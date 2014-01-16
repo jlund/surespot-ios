@@ -54,6 +54,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _label1.text = NSLocalizedString(@"delete_identity_message_warning", nil);
     
     _scrollView.contentSize = self.view.frame.size;
+    [_userPicker selectRow:[_identityNames indexOfObject:[[IdentityController sharedInstance] getLoggedInUser]] inComponent:0 animated:YES];
 }
 
 -(void) loadIdentityNames {

@@ -67,6 +67,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _scrollView.contentSize = self.view.frame.size;
     
     [self registerForKeyboardNotifications];
+    [_userPicker selectRow:[_identityNames indexOfObject:[[IdentityController sharedInstance] getLoggedInUser]] inComponent:0 animated:YES];
     
     
 }

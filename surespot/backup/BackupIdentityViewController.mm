@@ -69,7 +69,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"help",nil) style:UIBarButtonItemStylePlain target:self action:@selector(showHelp)];
     self.navigationItem.rightBarButtonItem = anotherButton;
     
-    
+    [_userPicker selectRow:[_identityNames indexOfObject:[[IdentityController sharedInstance] getLoggedInUser]] inComponent:0 animated:YES];
 }
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
@@ -450,7 +450,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
                                                           NSError *error) {
                                           [_progressView removeView];
                                           _progressView = nil;
-
+                                          
                                           if (error == nil) {
                                               [UIUtils showToastKey:@"identity_successfully_backed_up_to_google_drive" duration:2];
                                           } else {

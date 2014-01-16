@@ -58,6 +58,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _label2.textColor = [UIColor redColor];
     
     _scrollView.contentSize = self.view.frame.size;
+    [_userPicker selectRow:[_identityNames indexOfObject:[[IdentityController sharedInstance] getLoggedInUser]] inComponent:0 animated:YES];
 }
 
 -(void) loadIdentityNames {
