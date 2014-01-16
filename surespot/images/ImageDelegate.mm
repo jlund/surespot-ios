@@ -535,4 +535,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self uploadImage:_selectedImage];
 }
 
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+}
+
 @end
