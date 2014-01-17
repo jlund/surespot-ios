@@ -31,7 +31,8 @@
                           NSLocalizedString(@"github_match",nil),
                           NSLocalizedString(@"howsurespotworks_match",nil),
                           NSLocalizedString(@"support_match",nil),
-                          NSLocalizedString(@"email_match",nil)];
+                          NSLocalizedString(@"email_match",nil),
+                          NSLocalizedString(@"about_audio_match", nil)];
     
     NSArray * links = @[NSLocalizedString(@"about_website_link", nil),
                         NSLocalizedString(@"tos_link",nil),
@@ -40,7 +41,8 @@
                         NSLocalizedString(@"github_link",nil),
                         NSLocalizedString(@"howsurespotworks_link",nil),
                         NSLocalizedString(@"support_link",nil),
-                        NSLocalizedString(@"email_link",nil)];
+                        NSLocalizedString(@"email_link",nil),
+                        NSLocalizedString(@"about_audio_link", nil)];
     
     [UIUtils setLinkLabel:_aboutLabel delegate:self labelText:NSLocalizedString(@"about_website", nil) linkMatchTexts:matches urlStrings:links];
 
@@ -48,7 +50,7 @@
     [self.navigationItem setTitle:NSLocalizedString(@"about_action_bar_right", nil)];
     self.navigationController.navigationBar.translucent = NO;
     
-    
+    [_aboutLabel sizeToFit];
     CGFloat bottom =  _aboutLabel.frame.origin.y + _aboutLabel.frame.size.height;
     
     CGSize size = self.view.frame.size;

@@ -340,11 +340,13 @@ We will donate a percentage to the EFF that they may continue to fight for all o
 "support_link"="https://www.surespot.me/support.html";
 "email_match"="support@2fours.com";
 "email_link"="mailto:support@2fours.com";
-
+"about_audio_match"="Marco Angelo";
+"about_audio_link"="https://soundcloud.com/merakiaudio";
 "about_website"="Please visit the surespot website at https://www.surespot.me for more information, including the terms of service, privacy policy, and data and threat analysis.
 Surespot is 100% open source and welcomes your participation - view the source code on github at https://github.com/surespot.
 For a more technical overview of how surespot works please touch here.
-For questions or support please press here or email support@2fours.com";
+For questions or support please press here or email support@2fours.com.
+Custom notification sounds created by Marco Angelo.";
 
 
 "aes_match"="256 bit AES-GCM";

@@ -340,11 +340,14 @@ Donaremos un porcentaje a la EFF para que puedan continuar luchando por nuestras
 "support_link"="https://www.surespot.me/support.html";
 "email_match"="support@2fours.com";
 "email_link"="mailto:support@2fours.com";
+"about_audio_match"="Marco Angelo";
+"about_audio_link"="https://soundcloud.com/merakiaudio";
 
 "about_website"="Visita la web de surespot en https://www.surespot.me para mas información, incluyendo los Términos del servicio, Política de privacidad, y Análisis de datos y amenazas.
 Surespot es 100% software libre y acoge con beneplácito tu participación - revisa el código fuente en github en https://github.com/surespot.
 Para una información más detallada sobre cómo funciona surespot haz click aquí.
-Para preguntas o ayuda haz click aquí o envía un correo a support@2fours.com";
+Para preguntas o ayuda haz click aquí o envía un correo a support@2fours.com.
+Custom notification sounds created by Marco Angelo.";
 
 "aes_match"="256 bit AES-GCM";
 "aes_link"="http://www.eetimes.com/design/embedded-internet-design/4372428/How-secure-is-AES-against-brute-force-attacks-";

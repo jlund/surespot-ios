@@ -342,11 +342,14 @@ Nous donnerons un pourcentage à l'EFF afin qu'ils puissent continuer, au nom de
 "support_link"="https://www.surespot.me/support.html";
 "email_match"="support@2fours.com";
 "email_link"="mailto:support@2fours.com";
+"about_audio_match"="Marco Angelo";
+"about_audio_link"="https://soundcloud.com/merakiaudio";
 
 "about_website"="Pour plus d'information, veuillez visitez le site Web de surespot sur https://www.surespot.me, y compris les conditions d'utilisation, la politique de confidentialité, ainsi que données et analyse de menace.
 Surespot est 100% open source et accepte votre participation - voir le code source sur GitHub https://github.com/surespot.
 Pour une présentation plus technique de comment surespot fonctionne, veuillez cliquer ici (en anglais).
-Pour des questions ou du support, veuillez cliquer ici ou par courriel à support@2fours.com";
+Pour des questions ou du support, veuillez cliquer ici ou par courriel à support@2fours.com.
+Custom notification sounds created by Marco Angelo.";
 
 "aes_match"="256 bit AES-GCM";
 "aes_link"="http://fr.wikipedia.org/wiki/Advanced_Encryption_Standard#Recommandations_de_la_NSA";
