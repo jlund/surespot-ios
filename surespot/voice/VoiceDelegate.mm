@@ -676,7 +676,7 @@ static OSStatus	PerformThru(
             free(drawABL);
             drawABL = NULL;
         }
-        [UIUtils showToastMessage:@"could not initialize voice" duration:2];
+        [UIUtils showToastMessage:@"could_not_initialize_voice" duration:2];
     }
     
     
