@@ -123,7 +123,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (!identity) {
         [_progressView removeView];
         _progressView = nil;
-        [UIUtils showToastKey:NSLocalizedString(@"could_not_create_new_keys", nil) duration:2];
+        [UIUtils showToastKey:@"could_not_create_new_keys" duration:2];
         return;
     }
     

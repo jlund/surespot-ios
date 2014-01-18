@@ -368,7 +368,7 @@ const NSInteger SEND_THRESHOLD = 25;
     
     if (!url || _max < SEND_THRESHOLD) {
         
-        [UIUtils showToastKey:NSLocalizedString(@"no_audio_detected", nil) duration:1.5];
+        [UIUtils showToastKey:@"no_audio_detected" duration:1.5];
         [[NSFileManager defaultManager] removeItemAtPath:_outputPath error:nil];
         return;
     }

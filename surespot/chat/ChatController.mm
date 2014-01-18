@@ -1205,7 +1205,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
         }
         
         if ([exists length] > 0) {
-            [UIUtils showToastKey:[NSString stringWithFormat: NSLocalizedString(@"autoinvite_user_exists", nil), exists] duration:2];
+            [UIUtils showToastMessage:[NSString stringWithFormat: NSLocalizedString(@"autoinvite_user_exists", nil), exists] duration:2];
         }
         
     }

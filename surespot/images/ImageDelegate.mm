@@ -165,7 +165,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(void) uploadImage: (UIImage *) image {
     if (!image) {
         [self stopProgress];
-        [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_image", nil) duration:2];
+        [UIUtils showToastKey:@"could_not_upload_image" duration:2];
         return;
     }
     
@@ -249,13 +249,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                       }
                                                       else {
                                                           [self stopProgress];
-                                                          [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_image", nil) duration:2];
+                                                          [UIUtils showToastKey:@"could_not_upload_image" duration:2];
                                                           
                                                       }
                                                   }];
             }
             else {
-                [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_image", nil) duration:2];
+                [UIUtils showToastKey:@"could_not_upload_image" duration:2];
             }
         }];
     });
@@ -265,7 +265,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(void) uploadFriendImage: (UIImage *) image {
     if (!image) {
         [self stopProgress];
-        [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_friend_image", nil) duration:2];
+        [UIUtils showToastKey:@"could_not_upload_friend_image" duration:2];
         return;
     }
     
@@ -320,7 +320,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                                   }
                                                                                                   else {
                                                                                                       DDLogInfo(@"uploading friend image to server succeeded but there is no response object, wtf?");
-                                                                                                      [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_friend_image", nil) duration:2];
+                                                                                                      [UIUtils showToastKey:@"could_not_upload_friend_image" duration:2];
                                                                                                   }
                                                                                                   
                                                                                                   if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
@@ -331,7 +331,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                                               } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
                                                                                                   [self stopProgress];
                                                                                                   DDLogInfo(@"uploading friend image %@ to server failed, statuscode: %d", key, operation.response.statusCode);
-                                                                                                  [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_friend_image", nil) duration:2];
+                                                                                                  [UIUtils showToastKey:@"could_not_upload_friend_image" duration:2];
                                                                                                   
                                                                                                   if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
                                                                                                       [_popover dismissPopoverAnimated:YES];
@@ -340,7 +340,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                               }
                                               else {
                                                   [self stopProgress];
-                                                  [UIUtils showToastKey:NSLocalizedString(@"could_not_upload_friend_image", nil) duration:2];
+                                                  [UIUtils showToastKey:@"could_not_upload_friend_image" duration:2];
                                                   if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
                                                       [_popover dismissPopoverAnimated:YES];
                                                   }

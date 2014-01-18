@@ -333,7 +333,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [self performSegueWithIdentifier: @"createSegue" sender: self];
         }
         else {
-            [UIUtils showToastKey:[NSString stringWithFormat: NSLocalizedString(@"login_max_identities_reached",nil), MAX_IDENTITIES] duration:2];
+            [UIUtils showToastMessage:[NSString stringWithFormat: NSLocalizedString(@"login_max_identities_reached",nil), MAX_IDENTITIES] duration:2];
         }
     }];
     

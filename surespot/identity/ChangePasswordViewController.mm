@@ -212,7 +212,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         _progressView = nil;
 
         [_currentPassword becomeFirstResponder];
-        [UIUtils showToastKey:NSLocalizedString(@"could_not_change_password", nil) duration:2];
+        [UIUtils showToastKey: @"could_not_change_password" duration:2];
         return;
     }
     

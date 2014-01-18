@@ -119,7 +119,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (!identity) {
         [_progressView removeView];
         _progressView = nil;
-        [UIUtils showToastKey:NSLocalizedString(@"could_not_delete_identity", nil) duration:2];
+        [UIUtils showToastKey:@"could_not_delete_identity" duration:2];
         return;
     }
     

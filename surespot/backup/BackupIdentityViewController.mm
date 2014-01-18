@@ -193,7 +193,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     if (error != nil)
     {
         if ([error code] != kGTMOAuth2ErrorWindowClosed) {
-            [UIUtils showToastKey:error.localizedDescription];
+            [UIUtils showToastMessage:error.localizedDescription duration:2];
         }
         [self setAccountFromKeychain];
     }

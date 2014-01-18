@@ -122,7 +122,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     if (error != nil)
     {
         if ([error code] != kGTMOAuth2ErrorWindowClosed) {
-            [UIUtils showToastKey:error.localizedDescription];
+            [UIUtils showToastMessage:error.localizedDescription duration:2];
         }
         [self setAccountFromKeychain];
     }
@@ -359,7 +359,7 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([[IdentityController sharedInstance] getIdentityCount] >= MAX_IDENTITIES) {
-        [UIUtils showToastKey:[NSString stringWithFormat: NSLocalizedString(@"login_max_identities_reached",nil), MAX_IDENTITIES] duration:2];
+        [UIUtils showToastMessage:[NSString stringWithFormat: NSLocalizedString(@"login_max_identities_reached",nil), MAX_IDENTITIES] duration:2];
         return;
     }
 
