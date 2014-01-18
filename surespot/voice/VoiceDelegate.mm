@@ -457,14 +457,14 @@ const NSInteger SEND_THRESHOLD = 25;
                                                                                                     }];
                                                       }
                                                       else {
-                                                          [UIUtils showToastKey:NSLocalizedString(@"error_message_generic", nil) duration:2];
+                                                          [UIUtils showToastKey:@"error_message_generic" duration:2];
                                                       }
                                                   }];
                 
             }
             else {
                 [[NSFileManager defaultManager] removeItemAtPath:_outputPath error:nil];
-                [UIUtils showToastKey:NSLocalizedString(@"error_message_generic", nil) duration:2];
+                [UIUtils showToastKey:@"error_message_generic" duration:2];
             }
         }];
     });
