@@ -307,6 +307,7 @@ Servers and storage cost money; please buy lots of surecoin to ensure that we do
 
 We will donate a percentage to the EFF that they may continue to fight for all of our electronic freedoms.";
 "could_not_initialize_voice"="could not initialize voice recording";
+"error_downloading_message_data"="error downloading message data";
 /*****************************************************/
 
 

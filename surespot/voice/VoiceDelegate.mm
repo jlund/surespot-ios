@@ -147,13 +147,16 @@ const NSInteger SEND_THRESHOLD = 25;
         cell.message = message;
         DDLogVerbose(@"attaching message %@ to cell %@", [message iv], cell);
         
-        [[SDWebImageManager sharedManager] downloadWithURL:[NSURL URLWithString: message.data] mimeType:message.mimeType ourVersion:[message getOurVersion] theirUsername:[message getOtherUser] theirVersion:[message getTheirVersion] iv:message.iv options: (SDWebImageOptions) 0 progress:nil completed:^(id data, NSString *mimeType, NSError *error, SDImageCacheType cacheType, BOOL finished) {
+        [[SDWebImageManager sharedManager] downloadWithURL:[NSURL URLWithString: message.data] mimeType:message.mimeType ourVersion:[message getOurVersion] theirUsername:[message getOtherUser] theirVersion:[message getTheirVersion] iv:message.iv options: SDWebImageRetryFailed progress:nil completed:^(id data, NSString *mimeType, NSError *error, SDImageCacheType cacheType, BOOL finished) {
             
-            if (!data || error) {
+            if ((!data || error) && finished) {
                 message.playVoice = NO;
                 message.voicePlayed = YES;
+                if (error) {
+                    DDLogError(@"error downloading voice message: %@ - %@", error.localizedDescription, error.localizedFailureReason);
+                }
                 
-                cell.messageStatusLabel.text = NSLocalizedString(@"message_error_generic", nil);
+                cell.messageStatusLabel.text = NSLocalizedString(@"error_downloading_message_data", nil);
                 return;
             }
             

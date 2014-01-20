@@ -43,5 +43,7 @@
           urlStrings: (NSArray *) urlStrings;
 +(BOOL) getBoolPrefWithDefaultYesForUser: (NSString *) username key:(NSString *) key;
 +(void) clearLocalCache;
++(NSInteger) getDefaultImageMessageHeight;
++(CGSize)imageSizeAfterAspectFit:(UIImageView*)imgview;
 @end
 

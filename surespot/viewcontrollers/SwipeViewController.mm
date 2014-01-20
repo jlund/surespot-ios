@@ -1030,6 +1030,7 @@ const Float32 voiceRecordDelay = 0.3;
                 if ([message.mimeType isEqualToString:MIME_TYPE_IMAGE]) {
                     cell.shareableView.hidden = NO;
                     cell.messageLabel.hidden = YES;
+                    cell.uiImageView.image = nil;
                     cell.uiImageView.hidden = NO;
                     cell.uiImageView.alignTop = YES;
                     cell.uiImageView.alignLeft = YES;
