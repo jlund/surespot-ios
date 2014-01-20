@@ -48,8 +48,9 @@
 @interface MessageView (WebCache)
 
 - (void)setMessage:(SurespotMessage *) message
-                   progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletedBlock)completedBlock;
-
+          progress:(SDWebImageDownloaderProgressBlock)progressBlock
+         completed:(SDWebImageCompletedBlock)completedBlock
+      retryAttempt:(NSInteger) retryAttempt;
 
 /**
  * Download an array of images and starts them in an animation loop

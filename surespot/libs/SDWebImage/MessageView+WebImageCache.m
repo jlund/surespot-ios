@@ -23,12 +23,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 static char operationKey;
 static char operationArrayKey;
 
+static const NSInteger retryAttempts = 3;
+
 @implementation MessageView (WebCache)
 
 
 
 - (void)setMessage:(SurespotMessage *) message
-          progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletedBlock)completedBlock
+          progress:(SDWebImageDownloaderProgressBlock)progressBlock
+         completed:(SDWebImageCompletedBlock)completedBlock
+      retryAttempt:(NSInteger) retryAttempt
 {
     [self cancelCurrentImageLoad];
     
@@ -63,37 +67,21 @@ static char operationArrayKey;
                                                                                       }
                                                                                       else {
                                                                                           [wself.uiImageView setContentMode:UIViewContentModeScaleAspectFill];
-                                                                                      }
-//                                                                                      
-//                                                                                      CGSize scaledSize = [UIUtils imageSizeAfterAspectFit:wself.uiImageView];
-//                                                                                      
-//                                                                                      DDLogInfo(@"image size: %fx%f", scaledSize.width, scaledSize.height);
-//                                                                                      
-//                                                                                      if ((message.rowLandscapeHeight == [UIUtils getDefaultImageMessageHeight] || message.rowPortraitHeight == [UIUtils getDefaultImageMessageHeight]) && scaledSize.height < [UIUtils getDefaultImageMessageHeight]) {
-//                                                                                          DDLogInfo(@"setting row height to %f", scaledSize.height);
-//                                                                                          message.rowPortraitHeight = scaledSize.height;
-//                                                                                          message.rowLandscapeHeight = scaledSize.height;
-//                                                                                          //tell table to reload itself
-//                                                                                          NSMutableDictionary * dict = [NSMutableDictionary new];
-//                                                                                          [dict setObject:[message getOtherUser] forKey:@"username"];
-//                                                                                          [dict setObject:[NSNumber numberWithBool:NO] forKey: @"scroll" ] ;
-//                                                                                          
-//                                                                                          //dunno why the fuck this doesn't work
-//                                                                                          //NSDictionary * dict =    [NSDictionary dictionaryWithObjectsAndKeys[:message getOtherUser], @"username", nil];
-//                                                                                          //
-//                                                                                          [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshMessages"
-//                                                                                                                                              object:dict];
-//                                                                                          
-//                                                                                          
-//                                                                                          
-//                                                                                      }
+                                                                                      }                                   
                                                                                   }
                                                                                   if (message.formattedDate) {
                                                                                       wself.messageStatusLabel.text = message.formattedDate;
                                                                                   }
                                                                               }
                                                                               else {
-                                                                                  wself.messageStatusLabel.text = NSLocalizedString(@"error_downloading_message_data", nil);
+                                                                                  //retry
+                                                                                  if (retryAttempt < retryAttempts) {
+                                                                                      DDLogInfo(@"no data downloaded, retrying attempt: %d", retryAttempt+1);
+                                                                                      [self setMessage:message progress:progressBlock completed:completedBlock retryAttempt:retryAttempt+1];
+                                                                                  }
+                                                                                  else {
+                                                                                      wself.messageStatusLabel.text = NSLocalizedString(@"error_downloading_message_data", nil);
+                                                                                  }
                                                                               }
                                                                               
                                                                               [wself setNeedsLayout];

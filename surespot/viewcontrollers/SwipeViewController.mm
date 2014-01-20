@@ -144,7 +144,7 @@ const Float32 voiceRecordDelay = 0.3;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(purchaseStatusChanged:) name:@"purchaseStatusChanged" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backgroundImageChanged:) name:@"backgroundImageChanged" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleNotification) name:@"openedFromNotification" object:nil];
-
+    
     
     _homeDataSource = [[ChatController sharedInstance] getHomeDataSource];
     
@@ -1071,6 +1071,8 @@ const Float32 voiceRecordDelay = 0.3;
                                    
                                }
                            }
+                        retryAttempt:0
+                     
                      ];
                     
                     DDLogInfo(@"imageView: %@", cell.uiImageView);
@@ -1121,6 +1123,7 @@ const Float32 voiceRecordDelay = 0.3;
                                            
                                        }
                                    }
+                                retryAttempt:0
                              ];
                         }
                         
