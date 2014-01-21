@@ -34,7 +34,7 @@ static const NSInteger retryAttempts = 5;
          completed:(SDWebImageCompletedBlock)completedBlock
       retryAttempt:(NSInteger) retryAttempt
 {
-    [self cancelCurrentImageLoad];
+    //[self cancelCurrentImageLoad];
     
     //    self.uiImageView.image = placeholder;
     
@@ -56,6 +56,12 @@ static const NSInteger retryAttempts = 5;
                                                  dispatch_main_async_safe(^
                                                                           {
                                                                               if (!wself) return;
+                                                                              
+                                                                              //do nothing if the message has changed
+                                                                              if (![wself.message isEqual:message]) {
+                                                                                  DDLogInfo(@"cell is pointing to a different message now, not assigning data");
+                                                                                  return;
+                                                                              }
                                                                               if (image)
                                                                               {
                                                                                   if ([mimeType isEqualToString:MIME_TYPE_IMAGE]) {
@@ -78,6 +84,7 @@ static const NSInteger retryAttempts = 5;
                                                                                   if (retryAttempt < retryAttempts) {
                                                                                       DDLogInfo(@"no data downloaded, retrying attempt: %d", retryAttempt+1);
                                                                                       [self setMessage:message progress:progressBlock completed:completedBlock retryAttempt:retryAttempt+1];
+                                                                                      return;
                                                                                   }
                                                                                   else {
                                                                                       wself.messageStatusLabel.text = NSLocalizedString(@"error_downloading_message_data", nil);
