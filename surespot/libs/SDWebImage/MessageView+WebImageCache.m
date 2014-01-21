@@ -34,7 +34,7 @@ static const NSInteger retryAttempts = 5;
          completed:(SDWebImageCompletedBlock)completedBlock
       retryAttempt:(NSInteger) retryAttempt
 {
-    //[self cancelCurrentImageLoad];
+    [self cancelCurrentImageLoad];
     
     //    self.uiImageView.image = placeholder;
     
