@@ -26,6 +26,7 @@
 #import "IASKSpecifier.h"
 #import "IASKSpecifierValuesViewController.h"
 #import "IASKTextField.h"
+#import "UIUtils.h"
 
 #if !__has_feature(objc_arc)
 #error "IASK needs ARC"
@@ -441,6 +442,8 @@ CGRect IASKCGRectSwap(CGRect rect);
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kIASKPSToggleSwitchSpecifier];
 		cell.accessoryView = [[IASKSwitch alloc] initWithFrame:CGRectMake(0, 0, 79, 27)];
 		[((IASKSwitch*)cell.accessoryView) addTarget:self action:@selector(toggledValue:) forControlEvents:UIControlEventValueChanged];
+        [((IASKSwitch*)cell.accessoryView) setTintColor:[UIUtils surespotBlue]];
+        [((IASKSwitch*)cell.accessoryView) setOnTintColor:[UIUtils surespotBlue]];
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	}
 	else if ([identifier isEqualToString:kIASKPSMultiValueSpecifier] || [identifier isEqualToString:kIASKPSTitleValueSpecifier]) {
