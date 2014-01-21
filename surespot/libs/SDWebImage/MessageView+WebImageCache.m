@@ -23,7 +23,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 static char operationKey;
 static char operationArrayKey;
 
-static const NSInteger retryAttempts = 3;
+static const NSInteger retryAttempts = 5;
 
 @implementation MessageView (WebCache)
 
