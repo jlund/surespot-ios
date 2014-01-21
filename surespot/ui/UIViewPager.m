@@ -21,7 +21,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
 
-static CGFloat const alpha = 0.3;
+static CGFloat const alpha = 0.4;
 
 
 @implementation UIViewPager
