@@ -895,7 +895,17 @@ const Float32 voiceRecordDelay = 0.3;
         id aKey;
         @synchronized (_chats) {
             NSArray *keys = [self sortedChats];
-            aKey = [keys objectAtIndex:index -1];
+            
+            if ([keys count] > index - 1) {
+                aKey = [keys objectAtIndex:index -1];
+            }
+            else {
+                static NSString *CellIdentifier = @"Cell";
+                UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                cell.backgroundColor = [UIColor clearColor];
+                cell.userInteractionEnabled = NO;
+                return cell;
+            }
         }
         NSString * username = aKey;
         NSArray * messages =[[ChatController sharedInstance] getDataSourceForFriendname: username].messages;
