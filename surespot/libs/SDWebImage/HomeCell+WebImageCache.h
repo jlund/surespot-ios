@@ -10,7 +10,7 @@
 #import "SDWebImageManager.h"
 #import "HomeCell.h"
 #import "EncryptionParams.h"
-
+#import "Friend.h"
 
 /**
  * Integrates SDWebImage async downloading and caching of remote images with UIImageView.
@@ -18,39 +18,42 @@
  * Usage with a UITableViewCell sub-class:
  *
  * @code
-
-#import <SDWebImage/UIImageView+WebCache.h>
-
-...
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *MyIdentifier = @"MyIdentifier";
  
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
+ #import <SDWebImage/UIImageView+WebCache.h>
  
-    if (cell == nil)
-    {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:MyIdentifier]
-                 autorelease];
-    }
+ ...
  
-    // Here we use the provided setImageWithURL: method to load the web image
-    // Ensure you use a placeholder image otherwise cells will be initialized with no image
-    [cell.imageView setImageWithURL:[NSURL URLWithString:@"http://example.com/image.jpg"]
-                   placeholderImage:[UIImage imageNamed:@"placeholder"]];
+ - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ static NSString *MyIdentifier = @"MyIdentifier";
  
-    cell.textLabel.text = @"My Text";
-    return cell;
-}
-
+ UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
+ 
+ if (cell == nil)
+ {
+ cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:MyIdentifier]
+ autorelease];
+ }
+ 
+ // Here we use the provided setImageWithURL: method to load the web image
+ // Ensure you use a placeholder image otherwise cells will be initialized with no image
+ [cell.imageView setImageWithURL:[NSURL URLWithString:@"http://example.com/image.jpg"]
+ placeholderImage:[UIImage imageNamed:@"placeholder"]];
+ 
+ cell.textLabel.text = @"My Text";
+ return cell;
+ }
+ 
  * @endcode
  */
 @interface HomeCell (WebCache)
 
-- (void)setImageUrl: (NSString *) url withEncryptionParams: (EncryptionParams *) encryptionParams
-   placeholderImage:(UIImage *)placeholder
-           progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletedBlock)completedBlock;
+- (void)setImageForFriend: (Friend *) afriend
+     withEncryptionParams: (EncryptionParams *) encryptionParams
+         placeholderImage:(UIImage *)placeholder
+                 progress:(SDWebImageDownloaderProgressBlock)progressBlock
+                completed:(SDWebImageCompletedBlock)completedBlock
+             retryAttempt:(NSInteger) retryAttempt;
 
 
 /**

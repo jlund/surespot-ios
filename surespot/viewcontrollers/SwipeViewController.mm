@@ -878,13 +878,16 @@ const Float32 voiceRecordDelay = 0.3;
                                                                     theirUsername:afriend.name
                                                                      theirVersion:afriend.imageVersion
                                                                                iv:afriend.imageIv];
-            [cell setImageUrl:afriend.imageUrl withEncryptionParams: ep placeholderImage:  [UIImage imageNamed:@"surespot_logo"] progress:^(NSUInteger receivedSize, long long expectedSize) {
+            
+            DDLogInfo(@"setting friend image for %@ to %@", afriend.name, afriend.imageUrl);
+            [cell setImageForFriend:afriend withEncryptionParams: ep placeholderImage:  [UIImage imageNamed:@"surespot_logo"] progress:^(NSUInteger receivedSize, long long expectedSize) {
                 
             } completed:^(id image, NSString * mimeType, NSError *error, SDImageCacheType cacheType) {
                 
-            }];
+            } retryAttempt:0];
         }
         else {
+            DDLogInfo(@"no friend image for %@", afriend.name);
             cell.friendImage.image = [UIImage imageNamed:@"surespot_logo"];
             [cell.friendImage setAlpha:.5];
         }
@@ -949,6 +952,7 @@ const Float32 voiceRecordDelay = 0.3;
                 cell.messageSentView.foregroundColor = [UIUtils surespotBlue];
             }
             
+            cell.message = message;
             cell.messageLabel.text = plainData;
             cell.messageLabel.textColor = [self getTextColor];
             
@@ -1138,7 +1142,6 @@ const Float32 voiceRecordDelay = 0.3;
                         }
                         
                         [self ensureVoiceDelegate];
-                        cell.message = message;
                         [_voiceDelegate attachCell:cell];
                     }
                 }

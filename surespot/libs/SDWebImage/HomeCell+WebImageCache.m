@@ -11,28 +11,43 @@
 #import "HomeCell.h"
 #import "EncryptionParams.h"
 #import "SurespotConstants.h"
+#import "DDLog.h"
+
+
+#ifdef DEBUG
+static const int ddLogLevel = LOG_LEVEL_INFO;
+#else
+static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
+
 
 static char operationKey;
 static char operationArrayKey;
+
+static NSInteger const retryAttempts = 5;
 
 @implementation HomeCell (WebCache)
 
 
 
-- (void)setImageUrl: (NSString *) url withEncryptionParams: (EncryptionParams *) encryptionParams
-   placeholderImage:(UIImage *)placeholder
-           progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletedBlock)completedBlock
+- (void)setImageForFriend: (Friend *) afriend
+     withEncryptionParams: (EncryptionParams *) encryptionParams
+         placeholderImage:(UIImage *)placeholder
+                 progress:(SDWebImageDownloaderProgressBlock)progressBlock
+                completed:(SDWebImageCompletedBlock)completedBlock
+             retryAttempt: (NSInteger) retryAttempt
 {
-    [self cancelCurrentImageLoad];
+   // [self cancelCurrentImageLoad];
     
     self.friendImage.image = placeholder;
     [self.friendImage setAlpha:0.5];
     
     
-    NSURL * nsurl = [NSURL URLWithString:url];
     
-    if (url)
+    
+    if (afriend.imageUrl)
     {
+        NSURL * nsurl = [NSURL URLWithString:afriend.imageUrl];
         __weak HomeCell *wself = self;
         id<SDWebImageOperation> operation = [SDWebImageManager.sharedManager downloadWithURL: nsurl
                                                                                     mimeType: MIME_TYPE_IMAGE
@@ -40,26 +55,38 @@ static char operationArrayKey;
                                                                                theirUsername:encryptionParams.ourUsername
                                                                                 theirVersion:encryptionParams.ourVersion
                                                                                           iv:encryptionParams.iv
-                                                                                     options: 0
+                                                                                     options: SDWebImageRetryFailed
                                                                                     progress:progressBlock completed:^(id image, NSString * mimeType,  NSError *error, SDImageCacheType cacheType, BOOL finished)
                                              {
                                                  if (!wself) return;
                                                  dispatch_main_async_safe(^
-                                                                         {
-                                                                             if (!wself) return;
-                                                                             if (image)
-                                                                             {
-                                                                                 wself.friendImage.image = image;
-                                                                                 [wself.friendImage setAlpha:1];
-                                                                                 
-                                                                             }
-                                                                             
-                                                                             [wself setNeedsLayout];
-                                                                             if (completedBlock && finished)
-                                                                             {
-                                                                                 completedBlock(image, mimeType, error, cacheType);
-                                                                             }
-                                                                         });
+                                                                          {
+                                                                              if (!wself) return;
+                                                                              
+                                                                              DDLogInfo(@"initial friend: %@, current friend: %@", afriend.name, wself.friendName);
+                                                                              //cell is not pointing to the same user
+                                                                              if (![wself.friendName isEqualToString:afriend.name]) return;
+                                                                              if (image)
+                                                                              {
+                                                                                  wself.friendImage.image = image;
+                                                                                  [wself.friendImage setAlpha:1];
+                                                                                  
+                                                                              }
+                                                                              else {
+                                                                                  //retry
+                                                                                  if (retryAttempt < retryAttempts) {
+                                                                                      DDLogInfo(@"no friend image data downloaded, retrying attempt: %d", retryAttempt+1);
+                                                                                      [self setImageForFriend:afriend withEncryptionParams:encryptionParams placeholderImage:placeholder progress:progressBlock completed:completedBlock retryAttempt:retryAttempt+1];
+                                                                                      return;
+                                                                                  }
+                                                                              }
+                                                                              
+                                                                              [wself setNeedsLayout];
+                                                                              if (completedBlock && finished)
+                                                                              {
+                                                                                  completedBlock(image, mimeType, error, cacheType);
+                                                                              }
+                                                                          });
                                              }];
         objc_setAssociatedObject(self, &operationKey, operation, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
