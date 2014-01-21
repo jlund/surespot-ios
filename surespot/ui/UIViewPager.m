@@ -21,6 +21,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
 
+static CGFloat const alpha = 0.3;
+
 
 @implementation UIViewPager
 
@@ -28,8 +30,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self = [super initWithFrame:frame];
     if (self) {
         _firstLabel = [self createLabel];
+        [_firstLabel setAlpha:alpha];
         _secondLabel = [self createLabel];
         _thirdLabel = [self createLabel];
+        [_thirdLabel setAlpha:alpha];
         [self setBackgroundColor:[UIColor blackColor]];
         UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
         [self addGestureRecognizer:tapGestureRecognizer];
@@ -73,6 +77,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         _firstLabelWidth = [_firstLabel sizeThatFits:self.bounds.size].width;
         
         secondView = _homeView;
+        [_homeView setAlpha:1];
         _secondLabel.text = @"";
         _secondLabelWidth = _homeView.frame.size.width;
     }
@@ -81,6 +86,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             _homeView.hidden = NO;
             
             firstView = _homeView;
+            [_homeView setAlpha: alpha];
             _firstLabelWidth = _homeView.frame.size.width;
             _firstLabel.text = @"";
             
@@ -119,12 +125,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (firstLabelOffset < 0) {
         firstLabelOffset = 0;
     }
-    firstView.frame = CGRectMake(firstLabelOffset, 0, _firstLabelWidth, self.bounds.size.height);
+    
+    DDLogInfo(@"1st label offset: %f", firstLabelOffset);
+    
     
     
     CGFloat secondLabelOffset = width/2 - _secondLabelWidth/2 - offset;
-    secondView.frame = CGRectMake(secondLabelOffset, 0, _secondLabelWidth, self.bounds.size.height);
     
+    
+    DDLogInfo(@"2nd label offset: %f", secondLabelOffset);
     
     CGFloat thirdLabelOffset = width - _thirdLabelWidth;
     if (offset < 0) {
@@ -133,7 +142,35 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (_thirdLabelWidth + thirdLabelOffset > width) {
         thirdLabelOffset = width - _thirdLabelWidth;
     }
+    
+    DDLogInfo(@"3rd label offset: %f", thirdLabelOffset);
+    
+    
+    if (secondLabelOffset < 0) {
+        secondLabelOffset = 0;
+    }
+    
+    
+    NSInteger firstLabelEndOffset = firstLabelOffset + _firstLabelWidth;
+    NSInteger secondLabelEndOffset = secondLabelOffset + _secondLabelWidth;
+    
+    if (secondLabelEndOffset > width) {
+        secondLabelOffset = width - _secondLabelWidth;
+    }
+    
+    if (secondLabelOffset - 5 <= firstLabelEndOffset) {
+        firstLabelOffset -= firstLabelEndOffset - secondLabelOffset + 5;
+    }
+    else {
+        if (secondLabelEndOffset + 5 >= thirdLabelOffset) {
+            thirdLabelOffset += secondLabelEndOffset - thirdLabelOffset + 5;
+        }
+    }
+    
+    firstView.frame = CGRectMake(firstLabelOffset, 0, _firstLabelWidth, self.bounds.size.height);
+    secondView.frame = CGRectMake(secondLabelOffset, 0, _secondLabelWidth, self.bounds.size.height);
     _thirdLabel.frame = CGRectMake(thirdLabelOffset, 0, _thirdLabelWidth, self.bounds.size.height);
+    
 }
 
 #pragma mark UIScrollViewDelegate protocol implementation.
