@@ -240,7 +240,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                                     
                                                                 }
                                                                 else {
-                                                                    [dictionary setObject:[self createDictionaryForPublicKeys:publicKeys] forKey:version];
+                                                                    [dictionary setObject:[self createDictionaryForPublicKeys:publicKeys] forKey:[@(_theirLatestVersion-ver) stringValue]];
                                                                     [_tableView reloadData];
                                                                 }
                                                             }
@@ -248,9 +248,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                         
                                                     } failureBlock:^(AFHTTPRequestOperation *operation, NSError *error) {
                                                         [UIUtils showToastKey:@"could_not_load_public_keys"];
-                                                    }
-     
-     
+                                                    }          
      ];
 }
 
