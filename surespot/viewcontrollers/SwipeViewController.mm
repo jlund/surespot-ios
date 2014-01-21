@@ -419,14 +419,18 @@ const Float32 voiceRecordDelay = 0.3;
 }
 
 -(void) showHeader {
-    //if we're on iphone in landscape, hide the nav bar
+    //if we're on iphone in landscape, hide the nav bar and status bar
     if ([[ UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone &&
         UIDeviceOrientationIsLandscape([[UIDevice currentDevice] orientation])) {
         [self.navigationController setNavigationBarHidden:YES animated:YES];
+        
+        [[UIApplication sharedApplication] setStatusBarHidden:YES];
+        
         //if we're in landscape on iphone hide the menu
         [_menu close];
     }
     else {
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
         [self.navigationController setNavigationBarHidden:NO animated:YES];
     }
 }
