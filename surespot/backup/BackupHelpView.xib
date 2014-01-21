@@ -21,7 +21,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="436"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="b8F-b8-wIL" customClass="TTTAttributedLabel">
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" id="b8F-b8-wIL" customClass="TTTAttributedLabel">
                             <rect key="frame" x="20" y="20" width="280" height="146"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <string key="text">Welcome to surespot! Data sent using this app is end-to-end encrypted with symmetric-key encryption (256 bit AES-GCM) using keys created with 521 bit ECDH shared secret derivation.</string>
