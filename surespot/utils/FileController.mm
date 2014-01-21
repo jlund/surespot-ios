@@ -26,6 +26,7 @@ NSString * const STATE_EXTENSION = @"sss";
 NSString * const CHAT_DATA_PREFIX = @"chatdata-";
 NSString * const PUBLIC_KEYS_DIR = @"publickeys";
 NSString * const IDENTITIES_DIR = @"identities";
+NSString * const BG_IMAGES_DIR = @"bgimages";
 NSString * const UPLOADS_DIR = @"uploads";
 
 NSString * const PUBLIC_KEYS_EXTENSION = @"spk";
@@ -34,7 +35,7 @@ NSString * const SECRET_EXTENSION = @"sse";
 NSString * const LATEST_VERSIONS_EXTENSION = @"ssv";
 NSString * const SECRETS_DIR = @"secrets";
 NSString * const LATEST_VERSIONS_DIR = @"latestVersions";
-NSString * const BACKGROUND_IMAGE_FILENAME = @"bgImage.png";
+NSString * const BACKGROUND_IMAGE_FILENAME = @"bgImage";
 
 NSInteger const GZIP_MAGIC_1 = 0x1f;
 NSInteger const GZIP_MAGIC_2 = 0x8b;
@@ -95,7 +96,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 +(NSString *) getBackgroundImageFilename {
-    return [self getFilename:BACKGROUND_IMAGE_FILENAME];
+    NSString * dir = [self getBgImagesDirectoryForUser:[[IdentityController sharedInstance] getLoggedInUser]];
+    return [dir stringByAppendingPathComponent:BACKGROUND_IMAGE_FILENAME];
 }
 
 +(NSString *) getChatDataFilenameForSpot: (NSString *) spot {
@@ -227,6 +229,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return  dir;
 }
 
++(NSString *) getBgImagesDirectoryForUser: (NSString *) user {
+    NSString * dir = [[[FileController getAppSupportDir] stringByAppendingPathComponent:BG_IMAGES_DIR ] stringByAppendingPathComponent:[user caseInsensitivize]];
+    NSError * error = nil;
+    if (![[NSFileManager defaultManager] createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:nil error:&error]) {
+        DDLogVerbose(@"%@", error.localizedDescription);
+    }
+    return  dir;
+}
+
 +(NSDictionary *) loadSharedSecretsForUsername: (NSString *) username withPassword: (NSString *) password {
     NSString * filePath = [self getSecretsFile:username];
     
@@ -300,7 +311,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 +(void) wipeAllState {
-    DDLogInfo( @"wiping all data");
+    DDLogInfo( @"wiping all data"); //except bg images
+    
     NSFileManager * fileMgr = [NSFileManager defaultManager];
     [fileMgr removeItemAtPath:[self getLatestVersionsDir] error:nil];
     [fileMgr removeItemAtPath:[self getSecretsDir] error:nil];
