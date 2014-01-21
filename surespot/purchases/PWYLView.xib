@@ -32,7 +32,7 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
                         <button opaque="NO" tag="1" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="En2-b9-SG0">
-                            <rect key="frame" x="20" y="216" width="90" height="37"/>
+                            <rect key="frame" x="20" y="224" width="90" height="37"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <state key="normal" title="tier 1">
@@ -43,7 +43,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" tag="2" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="2Xr-jq-tPb">
-                            <rect key="frame" x="115" y="216" width="90" height="37"/>
+                            <rect key="frame" x="115" y="224" width="90" height="37"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <state key="normal" title="tier 2">
@@ -54,7 +54,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" tag="3" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="hEJ-10-Ckr">
-                            <rect key="frame" x="210" y="216" width="90" height="37"/>
+                            <rect key="frame" x="210" y="224" width="90" height="37"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <state key="normal" title="tier 3">
@@ -65,7 +65,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" tag="4" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="cbG-2C-fmM">
-                            <rect key="frame" x="20" y="261" width="90" height="37"/>
+                            <rect key="frame" x="20" y="269" width="90" height="37"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <state key="normal" title="tier 4">
@@ -76,7 +76,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" tag="5" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="mdy-PQ-IEe">
-                            <rect key="frame" x="115" y="261" width="90" height="37"/>
+                            <rect key="frame" x="115" y="269" width="90" height="37"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <state key="normal" title="tier 5">
@@ -87,7 +87,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" tag="10" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="GFd-L5-7F4">
-                            <rect key="frame" x="210" y="261" width="90" height="37"/>
+                            <rect key="frame" x="210" y="269" width="90" height="37"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <state key="normal" title="tier 10">
@@ -98,7 +98,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" tag="20" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="7U5-EI-IWF">
-                            <rect key="frame" x="20" y="306" width="136" height="37"/>
+                            <rect key="frame" x="20" y="314" width="136" height="37"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <state key="normal" title="tier 20">
@@ -109,7 +109,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" tag="50" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="iDV-AW-KHN">
-                            <rect key="frame" x="164" y="306" width="136" height="37"/>
+                            <rect key="frame" x="164" y="314" width="136" height="37"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <state key="normal" title="tier 50">
@@ -120,7 +120,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" tag="100" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="B1q-hP-dd4">
-                            <rect key="frame" x="20" y="351" width="280" height="37"/>
+                            <rect key="frame" x="20" y="359" width="280" height="37"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <state key="normal" title="tier 100">
@@ -131,7 +131,7 @@
                             </connections>
                         </button>
                         <label opaque="NO" clipsSubviews="YES" tag="20" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Itn-QI-EPQ" customClass="TTTAttributedLabel">
-                            <rect key="frame" x="20" y="10" width="280" height="161"/>
+                            <rect key="frame" x="20" y="0.0" width="280" height="187"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <string key="text">Surespot is ad and data mining free.
 
@@ -143,7 +143,7 @@ We will donate a percentage to the EFF that they may continue to fight for all o
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1 surecoin = " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="B0P-LZ-jJ5">
-                            <rect key="frame" x="20" y="179" width="280" height="21"/>
+                            <rect key="frame" x="20" y="188" width="280" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="24"/>
                             <nil key="highlightedColor"/>
