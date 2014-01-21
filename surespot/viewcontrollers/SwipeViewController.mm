@@ -424,13 +424,13 @@ const Float32 voiceRecordDelay = 0.3;
         UIDeviceOrientationIsLandscape([[UIDevice currentDevice] orientation])) {
         [self.navigationController setNavigationBarHidden:YES animated:YES];
         
-        [[UIApplication sharedApplication] setStatusBarHidden:YES];
+        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
         
         //if we're in landscape on iphone hide the menu
         [_menu close];
     }
     else {
-        [[UIApplication sharedApplication] setStatusBarHidden:NO];
+        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
         [self.navigationController setNavigationBarHidden:NO animated:YES];
     }
 }
