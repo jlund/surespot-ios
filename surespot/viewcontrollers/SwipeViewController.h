@@ -17,7 +17,7 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "ALAssetsLibrary+CustomPhotoAlbum.h"
 #import "TTTAttributedLabel.h"
-
+#import "HPGrowingTextView.h"
 
 @interface SwipeViewController : UIViewController
 <
@@ -30,19 +30,7 @@
     IASKSettingsDelegate,
     MWPhotoBrowserDelegate,
     UIPopoverControllerDelegate,
-    TTTAttributedLabelDelegate
+    TTTAttributedLabelDelegate,
+    HPGrowingTextViewDelegate
 >
-@property (nonatomic, strong) IBOutlet SwipeView *swipeView;
-@property (nonatomic, strong) UITableView *friendView;
-@property (strong, atomic) NSMutableDictionary *chats;
-@property (strong, nonatomic) IBOutlet UITextField *textField;
-@property (strong, nonatomic) IBOutlet UITextField *inviteField;
-@property (strong, nonatomic) KeyboardState * keyboardState;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textBottomConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *swipeTopConstraint;
-@property (strong, nonatomic) IBOutlet UIButton *theButton;
-- (IBAction)buttonTouchUpInside:(id)sender;
-@property (strong, nonatomic) IBOutlet UIView *textFieldContainer;
-- (IBAction)textFieldChanged:(id)sender;
-@property (atomic, strong) ALAssetsLibrary * assetLibrary;
 @end

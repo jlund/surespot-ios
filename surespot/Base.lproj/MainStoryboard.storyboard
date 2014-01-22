@@ -200,31 +200,19 @@
                                 <rect key="frame" x="0.0" y="459" width="279" height="45"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="bottom" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="whileEditing" id="aRf-OH-qdB">
+                                    <view contentMode="scaleToFill" id="ria-nr-JTt" customClass="HPGrowingTextView">
                                         <rect key="frame" x="42" y="10" width="224" height="30"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes"/>
-                                        <connections>
-                                            <action selector="textFieldChanged:" destination="tcp-OJ-fTS" eventType="editingChanged" id="KHh-xK-iue"/>
-                                            <outlet property="delegate" destination="tcp-OJ-fTS" id="JXA-4z-jTj"/>
-                                        </connections>
-                                    </textField>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="bottom" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="whileEditing" id="jt9-E8-T3k">
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" id="Mis-7v-AKC" customClass="HPGrowingTextView">
                                         <rect key="frame" x="42" y="10" width="224" height="30"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" autocorrectionType="no"/>
-                                        <connections>
-                                            <action selector="textFieldChanged:" destination="tcp-OJ-fTS" eventType="editingChanged" id="2mF-8e-Nrf"/>
-                                            <outlet property="delegate" destination="tcp-OJ-fTS" id="KmF-y1-gVd"/>
-                                        </connections>
-                                    </textField>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                    </view>
                                     <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="mrL-vK-V99">
-                                        <rect key="frame" x="6" y="11" width="28" height="28"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <rect key="frame" x="7" y="12" width="28" height="28"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <accessibility key="accessibilityConfiguration">
                                             <accessibilityTraits key="traits" none="YES" image="YES"/>
@@ -261,9 +249,9 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
                         <outlet property="bgImageView" destination="58e-YQ-Uld" id="hSx-hb-MMz"/>
-                        <outlet property="inviteField" destination="jt9-E8-T3k" id="Xwf-6j-8vA"/>
+                        <outlet property="inviteTextView" destination="ria-nr-JTt" id="2Nq-OH-E0e"/>
+                        <outlet property="messageTextView" destination="Mis-7v-AKC" id="gvu-jj-xXU"/>
                         <outlet property="swipeView" destination="XCg-uf-vcR" id="Hkv-YP-hj9"/>
-                        <outlet property="textField" destination="aRf-OH-qdB" id="FiH-dU-rOR"/>
                         <outlet property="textFieldContainer" destination="Mgi-22-lGU" id="7W7-M6-lr3"/>
                         <outlet property="theButton" destination="byV-5h-Uzr" id="Fk8-y9-s2y"/>
                     </connections>

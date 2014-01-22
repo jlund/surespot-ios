@@ -39,6 +39,7 @@
 #import "HelpViewController.h"
 #import "UIAlertView+Blocks.h"
 
+
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_INFO;
 #else
@@ -64,11 +65,20 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property (nonatomic, strong) UIPopoverController * popover;
 @property (nonatomic, strong) VoiceDelegate * voiceDelegate;
 @property (nonatomic, strong) NSDate * buttonDownDate;
+@property (strong, nonatomic) IBOutlet HPGrowingTextView *messageTextView;
+@property (strong, nonatomic) IBOutlet HPGrowingTextView *inviteTextView;
 @property (nonatomic, strong) NSTimer * buttonTimer;
 @property (strong, nonatomic) IBOutlet UIImageView *bgImageView;
 @property (nonatomic, assign) BOOL hasBackgroundImage;
+@property (nonatomic, strong) IBOutlet SwipeView *swipeView;
+@property (nonatomic, strong) UITableView *friendView;
+@property (strong, atomic) NSMutableDictionary *chats;
+@property (strong, nonatomic) KeyboardState * keyboardState;
+@property (strong, nonatomic) IBOutlet UIButton *theButton;
+- (IBAction)buttonTouchUpInside:(id)sender;
+@property (strong, nonatomic) IBOutlet UIView *textFieldContainer;
+@property (atomic, strong) ALAssetsLibrary * assetLibrary;
 @end
-
 @implementation SwipeViewController
 
 
@@ -102,8 +112,6 @@ const Float32 voiceRecordDelay = 0.3;
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     
-    _textField.enablesReturnKeyAutomatically = NO;
-    _inviteField.enablesReturnKeyAutomatically = NO;
     [self registerForKeyboardNotifications];
     
     
@@ -188,8 +196,73 @@ const Float32 voiceRecordDelay = 0.3;
     _appSettingsViewController.settingsStore = [[SurespotSettingsStore alloc] initWithUsername:[[IdentityController sharedInstance] getLoggedInUser]];
     _appSettingsViewController.delegate = self;
     
+    
+    _messageTextView.enablesReturnKeyAutomatically = NO;        
+    [_messageTextView setFont:[UIFont systemFontOfSize:14]];
+    [_messageTextView setMaxNumberOfLines:3];
+    _messageTextView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    _messageTextView.delegate = self;
+    [_messageTextView.layer setBorderColor:[[UIColor grayColor] CGColor]];
+    [_messageTextView.layer setBorderWidth:0.5];
+    [_messageTextView setBackgroundColor:[UIColor clearColor]];
+    _messageTextView.layer.cornerRadius = 5;
+    
+    _inviteTextView.enablesReturnKeyAutomatically = NO;
+    [_inviteTextView setFont:[UIFont systemFontOfSize:14]];
+    [_inviteTextView setMaxNumberOfLines:1];
+    _inviteTextView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    _inviteTextView.delegate = self;
+    [_inviteTextView.layer setBorderColor:[[UIColor grayColor] CGColor]];
+    [_inviteTextView.layer setBorderWidth:0.5];
+    [_inviteTextView setBackgroundColor:[UIColor clearColor]];
+    _inviteTextView.layer.cornerRadius = 5;
+    
+    
     [self setTextBoxHints];
 }
+
+- (void)growingTextView:(HPGrowingTextView *)growingTextView willChangeHeight:(float)height
+{
+    float diff = (growingTextView.frame.size.height - height);
+    
+	CGRect r = growingTextView.frame;
+    r.size.height -= diff;
+    r.origin.y += diff;
+	growingTextView.frame = r;
+}
+
+-(void)growingTextViewDidChange:(HPGrowingTextView *)growingTextView {
+    [self updateTabChangeUI];
+}
+
+- (BOOL) growingTextView:(HPGrowingTextView *)growingTextView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *) string
+{
+    
+    if ([string isEqualToString:@"\n"]) {
+		[self handleTextAction];
+        return NO;
+	}
+
+    
+    if (growingTextView == _inviteTextView) {
+        NSCharacterSet *alphaSet = [NSCharacterSet alphanumericCharacterSet];
+        NSString * newString = [string stringByTrimmingCharactersInSet:alphaSet];
+        if (![newString isEqualToString:@""]) {
+            return NO;
+        }
+        
+        NSUInteger newLength = [growingTextView.text length] + [newString length] - range.length;
+        return (newLength >= 20) ? NO : YES;
+    }
+    else {
+        if (growingTextView == _messageTextView) {
+            NSUInteger newLength = [_messageTextView.text length] + [string length] - range.length;
+            return (newLength >= 1024) ? NO : YES;
+        }
+    }
+    return YES;
+}
+
 
 -(void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -1326,10 +1399,6 @@ const Float32 voiceRecordDelay = 0.3;
 }
 
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self handleTextAction];
-    return NO;
-}
 
 - (BOOL) handleTextAction {
     return [self handleTextActionResign:YES];
@@ -1337,7 +1406,7 @@ const Float32 voiceRecordDelay = 0.3;
 
 - (BOOL) handleTextActionResign: (BOOL) resign {
     if (!_homeDataSource.currentChat) {
-        NSString * text = _inviteField.text;
+        NSString * text = _inviteTextView.text;
         
         if ([text length] > 0) {
             
@@ -1349,7 +1418,7 @@ const Float32 voiceRecordDelay = 0.3;
             
             
             [[ChatController sharedInstance] inviteUser:text];
-            [_inviteField setText:nil];
+            [_inviteTextView setText:nil];
             [self updateTabChangeUI];
             return YES;
         }
@@ -1362,7 +1431,7 @@ const Float32 voiceRecordDelay = 0.3;
         
     }
     else {
-        NSString * text = _textField.text;
+        NSString * text = _messageTextView.text;
         
         if ([text length] > 0) {
             
@@ -1384,7 +1453,7 @@ const Float32 voiceRecordDelay = 0.3;
 
 - (void) send {
     
-    NSString* message = self.textField.text;
+    NSString* message = _messageTextView.text;
     
     if ([UIUtils stringIsNilOrEmpty:message]) return;
     id friendname;
@@ -1401,7 +1470,7 @@ const Float32 voiceRecordDelay = 0.3;
     
     [[ChatController sharedInstance] sendMessage: message toFriendname:friendname];
     
-    [_textField setText:nil];
+    [_messageTextView setText:nil];
     
     [self updateTabChangeUI];
 }
@@ -1415,10 +1484,9 @@ const Float32 voiceRecordDelay = 0.3;
         [self resignAllResponders];
     }
     else {
-        if ([_inviteField isFirstResponder]) {
-            [_inviteField resignFirstResponder];
-            
-            [_textField becomeFirstResponder];
+        if ([_inviteTextView isFirstResponder]) {
+            [_inviteTextView resignFirstResponder];
+            [_messageTextView becomeFirstResponder];
         }
     }
 }
@@ -1426,19 +1494,19 @@ const Float32 voiceRecordDelay = 0.3;
 -(void) updateTabChangeUI {
     if (!_homeDataSource.currentChat) {
         [_theButton setImage:[UIImage imageNamed:@"ic_menu_invite"] forState:UIControlStateNormal];
-        _textField.hidden = YES;
-        _inviteField.hidden = NO;
+        _messageTextView.hidden = YES;
+        _inviteTextView.hidden = NO;
     }
     else {
-        _inviteField.hidden = YES;
+        _inviteTextView.hidden = YES;
         Friend *afriend = [_homeDataSource getFriendByName:_homeDataSource.currentChat];
         if (afriend.isDeleted) {
             [_theButton setImage:[UIImage imageNamed:@"ic_menu_home"] forState:UIControlStateNormal];
-            _textField.hidden = YES;
+            _messageTextView.hidden = YES;
         }
         else {
-            _textField.hidden = NO;
-            if ([_textField.text length] > 0) {
+            _messageTextView.hidden = NO;
+            if ([_messageTextView.text length] > 0) {
                 [_theButton setImage:[UIImage imageNamed:@"ic_menu_send"] forState:UIControlStateNormal];
             }
             else {
@@ -2066,7 +2134,7 @@ const Float32 voiceRecordDelay = 0.3;
     else {
         [self updateTabChangeUI];
         if ([name isEqualToString:_homeDataSource.currentChat]) {
-            [_textField resignFirstResponder];
+            [_messageTextView resignFirstResponder];
         }
     }
 }
@@ -2225,9 +2293,6 @@ const Float32 voiceRecordDelay = 0.3;
     [_swipeView scrollToPage:0 duration:0.5];
     
 }
-- (IBAction)textFieldChanged:(id)sender {
-    [self updateTabChangeUI];
-}
 
 - (void) startProgress: (NSNotification *) notification {
     
@@ -2246,28 +2311,6 @@ const Float32 voiceRecordDelay = 0.3;
 }
 
 
-- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
-{
-    if (textField == _inviteField) {
-        NSCharacterSet *alphaSet = [NSCharacterSet alphanumericCharacterSet];
-        NSString * newString = [string stringByTrimmingCharactersInSet:alphaSet];
-        if (![newString isEqualToString:@""]) {
-            return NO;
-        }
-        
-        NSUInteger newLength = [textField.text length] + [newString length] - range.length;
-        return (newLength >= 20) ? NO : YES;
-    }
-    else {
-        
-        if (textField == _textField){
-            NSUInteger newLength = [textField.text length] + [string length] - range.length;
-            return (newLength >= 1024) ? NO : YES;
-        }
-    }
-    
-    return YES;
-}
 
 
 -(void) unauthorized: (NSNotification *) notification {
@@ -2401,8 +2444,8 @@ const Float32 voiceRecordDelay = 0.3;
 }
 
 -(void) resignAllResponders {
-    [_textField resignFirstResponder];
-    [_inviteField resignFirstResponder];
+    [_messageTextView resignFirstResponder];
+    [_inviteTextView resignFirstResponder];
 }
 
 
@@ -2453,8 +2496,8 @@ didSelectLinkWithPhoneNumber:(NSString *)phoneNumber {
 -(void) setTextBoxHints {
     NSInteger tbHintCount = [[NSUserDefaults standardUserDefaults] integerForKey:@"tbHintCount"];
     if (tbHintCount++ < 6) {
-        [_inviteField setPlaceholder:NSLocalizedString(@"invite_hint", nil)];
-        [_textField setPlaceholder:NSLocalizedString(@"message_hint", nil)];
+        [_messageTextView setPlaceholder:NSLocalizedString(@"invite_hint", nil)];
+        [_messageTextView setPlaceholder:NSLocalizedString(@"message_hint", nil)];
     }
     [[NSUserDefaults standardUserDefaults] setInteger:tbHintCount forKey:@"tbHintCount"];
 }

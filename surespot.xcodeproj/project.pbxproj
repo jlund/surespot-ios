@@ -233,6 +233,8 @@
 		66EC6112176E494900937467 /* AFXMLRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EC6108176E494900937467 /* AFXMLRequestOperation.m */; };
 		66EC6113176E494900937467 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EC610A176E494900937467 /* UIImageView+AFNetworking.m */; };
 		66F831FF185B9EB500ADD2F1 /* OurMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66EBDF171855C96F00F2452D /* OurMessageCell.xib */; };
+		66FB799718905360009CA47B /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FB799418905360009CA47B /* HPGrowingTextView.m */; };
+		66FB799818905360009CA47B /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FB799618905360009CA47B /* HPTextViewInternal.m */; };
 		66FF0FE218242B6B0038ECA6 /* Toast+UIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FE118242B6B0038ECA6 /* Toast+UIView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		66FF0FF6182AE6960038ECA6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66FF0FF5182AE6960038ECA6 /* QuartzCore.framework */; };
 		66FF1001182D3D920038ECA6 /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FF0FFE182D3D920038ECA6 /* DDLog.m */; };
@@ -863,6 +865,10 @@
 		66EC6108176E494900937467 /* AFXMLRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFXMLRequestOperation.m; sourceTree = "<group>"; };
 		66EC6109176E494900937467 /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
 		66EC610A176E494900937467 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
+		66FB799318905360009CA47B /* HPGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPGrowingTextView.h; sourceTree = "<group>"; };
+		66FB799418905360009CA47B /* HPGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPGrowingTextView.m; sourceTree = "<group>"; };
+		66FB799518905360009CA47B /* HPTextViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPTextViewInternal.h; sourceTree = "<group>"; };
+		66FB799618905360009CA47B /* HPTextViewInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPTextViewInternal.m; sourceTree = "<group>"; };
 		66FF0FE018242B6B0038ECA6 /* Toast+UIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Toast+UIView.h"; sourceTree = "<group>"; };
 		66FF0FE118242B6B0038ECA6 /* Toast+UIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Toast+UIView.m"; sourceTree = "<group>"; };
 		66FF0FF5182AE6960038ECA6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -1410,6 +1416,7 @@
 		66E4F517176298CB00596E6B /* libs */ = {
 			isa = PBXGroup;
 			children = (
+				66FB799218905360009CA47B /* HPGrowingTextView */,
 				6659531F188601FD00BA2CC7 /* UIAlertViewBlocks */,
 				665A34661879C5C6006CFCD0 /* TTTAttributedLabel */,
 				66DAB588186CBD6A006C262F /* ShareKit.xcodeproj */,
@@ -1866,6 +1873,17 @@
 			path = AFNetworking/AFNetworking;
 			sourceTree = "<group>";
 		};
+		66FB799218905360009CA47B /* HPGrowingTextView */ = {
+			isa = PBXGroup;
+			children = (
+				66FB799318905360009CA47B /* HPGrowingTextView.h */,
+				66FB799418905360009CA47B /* HPGrowingTextView.m */,
+				66FB799518905360009CA47B /* HPTextViewInternal.h */,
+				66FB799618905360009CA47B /* HPTextViewInternal.m */,
+			);
+			path = HPGrowingTextView;
+			sourceTree = "<group>";
+		};
 		66FF0FDF18242B6B0038ECA6 /* Toast */ = {
 			isa = PBXGroup;
 			children = (
@@ -2159,6 +2177,7 @@
 				6686623E18565AD5001491B1 /* SignupViewController.mm in Sources */,
 				66EBE13B1855C97100F2452D /* UIUtils.m in Sources */,
 				661F46A91865EDC3004A71B0 /* ChangePasswordViewController.mm in Sources */,
+				66FB799718905360009CA47B /* HPGrowingTextView.m in Sources */,
 				66E21DEF1847D7F90005D91E /* IASKSettingsReader.m in Sources */,
 				661F469F1864C0BE004A71B0 /* BackupIdentityViewController.mm in Sources */,
 				66EBE0D91855C97100F2452D /* EncryptionController.mm in Sources */,
@@ -2207,6 +2226,7 @@
 				661F4695186375F0004A71B0 /* MessageView+WebImageCache.m in Sources */,
 				66A2D919183A7A7F00785270 /* SurespotConstants.m in Sources */,
 				6648B1EE186CBA81007037B1 /* SurespotSHKConfigurator.m in Sources */,
+				66FB799818905360009CA47B /* HPTextViewInternal.m in Sources */,
 				66E21DF21847D7F90005D91E /* IASKSettingsStoreUserDefaults.m in Sources */,
 				66866265185B6A2E001491B1 /* SDWebImageCompat.m in Sources */,
 				66E4F5BC176298CB00596E6B /* base64.c in Sources */,
