@@ -1937,7 +1937,11 @@
 				ORGANIZATIONNAME = 2fours;
 				TargetAttributes = {
 					6604A2BA17626B9E0072216A = {
+						DevelopmentTeam = 5Q2RFG746M;
 						SystemCapabilities = {
+							com.apple.DataProtection = {
+								enabled = 0;
+							};
 							com.apple.iOS = {
 								enabled = 0;
 							};
@@ -2381,8 +2385,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "E0064D2E-DF53-47CB-A657-D6500B5FD226";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E0064D2E-DF53-47CB-A657-D6500B5FD226";
+				PROVISIONING_PROFILE = "4A048A18-F95C-443C-97ED-CBF8CB33A80A";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4A048A18-F95C-443C-97ED-CBF8CB33A80A";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2409,8 +2413,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "8CE666BC-4BCA-49D8-A0FE-D38C5A635792";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8CE666BC-4BCA-49D8-A0FE-D38C5A635792";
+				PROVISIONING_PROFILE = "0D0299A6-7549-4C9D-9ED8-B906CED97DC1";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0D0299A6-7549-4C9D-9ED8-B906CED97DC1";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -2423,8 +2427,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_CXX_LIBRARY = "libstdc++";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Adam Patacchiola (9BS43Z57N5)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Adam Patacchiola (9BS43Z57N5)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/adam/dev/surespot/ios/surespot/libs/Submodules/ShareKit/Frameworks,
@@ -2447,8 +2451,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "E0064D2E-DF53-47CB-A657-D6500B5FD226";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E0064D2E-DF53-47CB-A657-D6500B5FD226";
+				PROVISIONING_PROFILE = "4A048A18-F95C-443C-97ED-CBF8CB33A80A";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4A048A18-F95C-443C-97ED-CBF8CB33A80A";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "/Users/adam/dev/surespot/libs/ios/google/google-api-objectivec-client-read-only/source/** /Users/adam/dev/surespot/libs/ios/github/src/QR-Code-Encoder-for-Objective-C/QRCodeEncoderObjectiveCAtGithub /Users/adam/dev/surespot/ios/surespot/libs/Submodules/**";
 				WRAPPER_EXTENSION = app;
@@ -2461,8 +2465,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_CXX_LIBRARY = "libstdc++";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: 2fours llc (5Q2RFG746M)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: 2fours llc (5Q2RFG746M)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/adam/dev/surespot/ios/surespot/libs/Submodules/ShareKit/Frameworks,
@@ -2485,8 +2489,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "8CE666BC-4BCA-49D8-A0FE-D38C5A635792";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8CE666BC-4BCA-49D8-A0FE-D38C5A635792";
+				PROVISIONING_PROFILE = "0D0299A6-7549-4C9D-9ED8-B906CED97DC1";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0D0299A6-7549-4C9D-9ED8-B906CED97DC1";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "/Users/adam/dev/surespot/libs/ios/google/google-api-objectivec-client-read-only/source/** /Users/adam/dev/surespot/libs/ios/github/src/QR-Code-Encoder-for-Objective-C/QRCodeEncoderObjectiveCAtGithub /Users/adam/dev/surespot/ios/surespot/libs/Submodules/**";
 				WRAPPER_EXTENSION = app;
