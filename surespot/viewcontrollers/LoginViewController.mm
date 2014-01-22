@@ -237,10 +237,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return [_identityNames count];
 }
 
--(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
 {
-    //set item per row
-    return [_identityNames objectAtIndex:row];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 300, 37)];
+    label.text =  [_identityNames objectAtIndex:row];
+    [label setFont:[UIFont systemFontOfSize:22]];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.backgroundColor = [UIColor clearColor];
+    return label;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -376,6 +381,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [self updatePassword:to];
     }
 }
+
 
 
 @end

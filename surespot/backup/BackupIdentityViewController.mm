@@ -115,7 +115,6 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
 }
 
 
-
 // returns the number of 'columns' to display.
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
     return 1;
@@ -126,13 +125,15 @@ static NSString* const DRIVE_IDENTITY_FOLDER = @"surespot identity backups";
     return [_identityNames count];
 }
 
--(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
 {
-    //set item per row
-    return [_identityNames objectAtIndex:row];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 300, 37)];
+    label.text =  [_identityNames objectAtIndex:row];
+    [label setFont:[UIFont systemFontOfSize:22]];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.backgroundColor = [UIColor clearColor];
+    return label;
 }
-
-
 
 - (void)didReceiveMemoryWarning
 {
