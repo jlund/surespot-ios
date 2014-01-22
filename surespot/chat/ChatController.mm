@@ -36,7 +36,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
 
 
 @interface ChatController() {
-      
+    
 }
 @property (strong, atomic) SocketIO * socketIO;
 @property (strong, atomic) NSMutableDictionary * chatDataSources;
@@ -86,7 +86,7 @@ static const int MAX_CONNECTION_RETRIES = 16;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAutoinvitesNotification:) name:@"autoinvites" object:nil];
         
-     
+        
     }
     
     return self;
@@ -98,13 +98,10 @@ static const int MAX_CONNECTION_RETRIES = 16;
     
     if([reach isReachable])
     {
-        DDLogInfo(@"wifi: %hhd, wwan, %hhd",[  reach isReachableViaWiFi], [reach isReachableViaWWAN]);
-        //if we're now on wifi, disconnect and reconnect
-        if ([reach isReachableViaWiFi]) {
-            [self disconnect];
-            [self reconnect];
-        }
-        
+        DDLogInfo(@"wifi: %hhd, wwan, %hhd",[reach isReachableViaWiFi], [reach isReachableViaWWAN]);
+        //reachibility changed, disconnect and reconnect        
+        [self disconnect];
+        [self reconnect];
     }
     else
     {
@@ -135,7 +132,6 @@ static const int MAX_CONNECTION_RETRIES = 16;
         DDLogVerbose(@"connecting socket");
         self.socketIO.useSecure = serverSecure;
         [self.socketIO connectToHost:serverBaseIPAddress onPort:serverPort];
-        
     }
 }
 
@@ -639,13 +635,13 @@ static const int MAX_CONNECTION_RETRIES = 16;
         if (![message.from isEqualToString: currentChat] &&
             [[[IdentityController sharedInstance] getIdentityNames] containsObject:message.to]) {
             [UIUtils showToastMessage:[NSString stringWithFormat:NSLocalizedString(@"notification_message", nil), message.to, message.from] duration:1];
-                       
+            
             //play notification sound
             [[SoundController sharedInstance] playNewMessageSoundForUser: message.to];
         }
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"newMessage" object: message];
-
+        
         
     }
 }
@@ -1155,11 +1151,11 @@ static const int MAX_CONNECTION_RETRIES = 16;
                                                           
                                                           NSInteger serverid = [[JSON objectForKey:@"id"] integerValue];
                                                           NSString * url = [JSON objectForKey:@"url"];
-                                                          NSInteger size = [[JSON objectForKey:@"size"] integerValue];                                                          
+                                                          NSInteger size = [[JSON objectForKey:@"size"] integerValue];
                                                           NSDate * date = [NSDate dateWithTimeIntervalSince1970: [[JSON objectForKey:@"time"] doubleValue]/1000];
-                                                    
+                                                          
                                                           DDLogInfo(@"uploaded data %@ to server successfully, server id: %d, url: %@, date: %@, size: %d", message.iv, serverid, url, date, size);
-                                                                                                                    
+                                                          
                                                           message.serverid = serverid;
                                                           message.data = url;
                                                           message.dateTime = date;
