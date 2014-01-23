@@ -151,13 +151,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     //figure out message height for both orientations
     if (plaintext){
         NSInteger offset = 0;
-        NSInteger heightAdj = 25;
+        NSInteger heightAdj = 35;
         BOOL ours = [ChatUtils isOurMessage:message];
         if (ours) {
-            offset = 40;
+            offset = 50;
         }
         else {
-            offset = 90;
+            offset = 100;
         }
         //http://stackoverflow.com/questions/12744558/uistringdrawing-methods-dont-seem-to-be-thread-safe-in-ios-6
         

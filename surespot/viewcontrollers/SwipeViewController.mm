@@ -156,12 +156,6 @@ const Float32 voiceRecordDelay = 0.3;
     
     _homeDataSource = [[ChatController sharedInstance] getHomeDataSource];
     
-    //show currently open tab immediately
-    //    NSString * currentChat = _homeDataSource.currentChat;
-    //    if (currentChat) {
-    //        [self showChat:currentChat];
-    //    }
-    
     _viewPager = [[UIViewPager alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 30)];
     _viewPager.autoresizingMask =UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:_viewPager];
@@ -229,6 +223,16 @@ const Float32 voiceRecordDelay = 0.3;
     r.size.height -= diff;
     r.origin.y += diff;
 	growingTextView.frame = r;
+    
+    [self adjustTableViewHeight:-diff];
+}
+
+-(void) adjustTableViewHeight: (NSInteger) height {
+    if (!_keyboardState) return;
+    
+    CGRect frame = _swipeView.frame;
+    frame.size.height -= height;
+    _swipeView.frame = frame;
 }
 
 -(void)growingTextViewDidChange:(HPGrowingTextView *)growingTextView {
@@ -242,7 +246,6 @@ const Float32 voiceRecordDelay = 0.3;
 		[self handleTextAction];
         return NO;
 	}
-
     
     if (growingTextView == _inviteTextView) {
         NSCharacterSet *alphaSet = [NSCharacterSet alphanumericCharacterSet];
@@ -324,14 +327,14 @@ const Float32 voiceRecordDelay = 0.3;
 
 // Called when the UIKeyboardDidShowNotification is sent.
 - (void)keyboardWasShown:(NSNotification*)aNotification {
+    DDLogInfo(@"keyboard shown");
     if (!_keyboardState) {
         NSDictionary* info = [aNotification userInfo];
         CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
         CGFloat keyboardHeight = [UIUtils keyboardHeightAdjustedForOrientation:keyboardRect.size];
-        
+       
         _keyboardState = [[KeyboardState alloc] init];
         _keyboardState.keyboardHeight = keyboardHeight;
-        
         
         CGRect textFieldFrame = _textFieldContainer.frame;
         textFieldFrame.origin.y -= keyboardHeight;
@@ -344,7 +347,6 @@ const Float32 voiceRecordDelay = 0.3;
         CGRect buttonFrame = _theButton.frame;
         buttonFrame.origin.y -= keyboardHeight;
         _theButton.frame = buttonFrame;
-        
         
         @synchronized (_chats) {
             for (NSString * key in [_chats allKeys]) {
@@ -376,6 +378,7 @@ const Float32 voiceRecordDelay = 0.3;
 }
 
 - (void) handleKeyboardHide {
+    DDLogInfo(@"keyboard hide");
     if (self.keyboardState) {
         //reset content position
         @synchronized (_chats) {
@@ -451,6 +454,27 @@ const Float32 voiceRecordDelay = 0.3;
     _swipeView.suppressScrollEvent= NO;
     
     //restore scroll indices
+    
+    [_imageDelegate orientationChanged];
+    [[PurchaseDelegate sharedInstance] orientationChanged];
+    // if the popover is showing, adjust its position after the re-orientation by presenting it again:
+    if (self.popover != nil)
+    {
+        CGFloat x =self.view.bounds.size.width;
+        CGFloat y =self.view.bounds.size.height;
+        DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
+        
+        [self.popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:self.view permittedArrowDirections:0 animated:YES];
+    }
+    
+    
+    [self showHeader];
+    
+    [self restoreScrollPositions];
+    
+}
+
+-(void) restoreScrollPositions {
     if (_bottomIndexPaths) {
         for (id key in [_bottomIndexPaths allKeys]) {
             if ([key isEqualToString:@""]) {
@@ -474,21 +498,7 @@ const Float32 voiceRecordDelay = 0.3;
             }
         }
     }
-    
-    [_imageDelegate orientationChanged];
-    [[PurchaseDelegate sharedInstance] orientationChanged];
-    // if the popover is showing, adjust its position after the re-orientation by presenting it again:
-    if (self.popover != nil)
-    {
-        CGFloat x =self.view.bounds.size.width;
-        CGFloat y =self.view.bounds.size.height;
-        DDLogInfo(@"setting popover x, y to: %f, %f", x/2,y/2);
-        
-        [self.popover presentPopoverFromRect:CGRectMake(x/2,y/2, 1,1 ) inView:self.view permittedArrowDirections:0 animated:YES];
-    }
-    
-    
-    [self showHeader];
+
 }
 
 -(void) showHeader {
@@ -669,7 +679,7 @@ const Float32 voiceRecordDelay = 0.3;
                 NSString * name =[self nameForPage:currPage];
                 BOOL scrolledUsingIndexPath = NO;
                 
-                //if we've got saved scrlol positions
+                //if we've got saved scroll positions
                 if (_bottomIndexPaths) {
                     id path = [_bottomIndexPaths objectForKey:name];
                     if (path) {

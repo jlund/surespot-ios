@@ -10,7 +10,4 @@
 
 @interface KeyboardState : NSObject
 @property (nonatomic) CGFloat keyboardHeight;
-@property (nonatomic) UIEdgeInsets contentInset;
-@property (nonatomic) UIEdgeInsets indicatorInset;
-//@property (nonatomic, strong) NSMutableDictionary * offsets;
 @end

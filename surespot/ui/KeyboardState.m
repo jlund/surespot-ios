@@ -13,7 +13,7 @@
 {
     self = [super init];
     if (self) {
-     //   _offsets = [NSMutableDictionary new];
+        _keyboardHeight = 0;
     }
     return self;
 }
