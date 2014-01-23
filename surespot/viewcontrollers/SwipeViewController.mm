@@ -213,7 +213,7 @@ const Float32 voiceRecordDelay = 0.3;
     [_inviteTextView.internalTextView setAutocorrectionType:UITextAutocorrectionTypeNo];
     [_inviteTextView.internalTextView setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     [_inviteTextView.internalTextView setSpellCheckingType:UITextSpellCheckingTypeNo];
-        
+    
     [self setTextBoxHints];
 }
 
@@ -2512,7 +2512,7 @@ didSelectLinkWithPhoneNumber:(NSString *)phoneNumber {
 -(void) setTextBoxHints {
     NSInteger tbHintCount = [[NSUserDefaults standardUserDefaults] integerForKey:@"tbHintCount"];
     if (tbHintCount++ < 6) {
-        [_messageTextView setPlaceholder:NSLocalizedString(@"invite_hint", nil)];
+        [_inviteTextView setPlaceholder:NSLocalizedString(@"invite_hint", nil)];
         [_messageTextView setPlaceholder:NSLocalizedString(@"message_hint", nil)];
     }
     [[NSUserDefaults standardUserDefaults] setInteger:tbHintCount forKey:@"tbHintCount"];
