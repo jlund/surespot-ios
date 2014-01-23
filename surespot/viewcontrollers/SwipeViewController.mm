@@ -233,6 +233,10 @@ const Float32 voiceRecordDelay = 0.3;
     CGRect frame = _swipeView.frame;
     frame.size.height -= height;
     _swipeView.frame = frame;
+    
+    UITableView * tableView = [_chats objectForKey: [[ChatController sharedInstance] getCurrentChat]];
+    CGPoint newOffset = CGPointMake(0, tableView.contentOffset.y + height);
+    [tableView setContentOffset:newOffset animated:NO];
 }
 
 -(void)growingTextViewDidChange:(HPGrowingTextView *)growingTextView {
