@@ -210,8 +210,10 @@ const Float32 voiceRecordDelay = 0.3;
     [_inviteTextView.layer setBorderWidth:0.5];
     [_inviteTextView setBackgroundColor:[UIColor clearColor]];
     _inviteTextView.layer.cornerRadius = 5;
-    
-    
+    [_inviteTextView.internalTextView setAutocorrectionType:UITextAutocorrectionTypeNo];
+    [_inviteTextView.internalTextView setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+    [_inviteTextView.internalTextView setSpellCheckingType:UITextSpellCheckingTypeNo];
+        
     [self setTextBoxHints];
 }
 
