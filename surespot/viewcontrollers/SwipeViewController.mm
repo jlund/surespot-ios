@@ -615,7 +615,7 @@ const Float32 voiceRecordDelay = 0.3;
     }
     else {
         DDLogVerbose(@"returning chat view");
-        @synchronized (_chats) {                        
+        @synchronized (_chats) {
             NSArray *keys = [self sortedChats];
             if ([keys count] > index - 1) {
                 
@@ -1649,44 +1649,46 @@ const Float32 voiceRecordDelay = 0.3;
     NSMutableArray * menuItems = [NSMutableArray new];
     
     if (_homeDataSource.currentChat) {
-        NSString * theirUsername = _homeDataSource.currentChat;
-        
-        REMenuItem * selectImageItem = [[REMenuItem alloc]
-                                        initWithTitle:NSLocalizedString(@"select_image", nil)
-                                        image:[UIImage imageNamed:@"ic_menu_gallery"]
-                                        highlightedImage:nil
-                                        action:^(REMenuItem * item){
-                                            
-                                            _imageDelegate = [[ImageDelegate alloc]
-                                                              initWithUsername:[[IdentityController sharedInstance] getLoggedInUser]
-                                                              ourVersion:[[IdentityController sharedInstance] getOurLatestVersion]
-                                                              theirUsername:theirUsername
-                                                              assetLibrary:_assetLibrary];
-                                            
-                                            [ImageDelegate startImageSelectControllerFromViewController:self usingDelegate:_imageDelegate];
-                                            
-                                            
-                                        }];
-        [menuItems addObject:selectImageItem];
-        
-        
-        REMenuItem * captureImageItem = [[REMenuItem alloc]
-                                         initWithTitle:NSLocalizedString(@"capture_image", nil)
-                                         image:[UIImage imageNamed:@"ic_menu_camera"]
-                                         highlightedImage:nil
-                                         action:^(REMenuItem * item){
-                                             
-                                             _imageDelegate = [[ImageDelegate alloc]
-                                                               initWithUsername:[[IdentityController sharedInstance] getLoggedInUser]
-                                                               ourVersion:[[IdentityController sharedInstance] getOurLatestVersion]
-                                                               theirUsername:theirUsername
-                                                               assetLibrary:_assetLibrary];
-                                             [ImageDelegate startCameraControllerFromViewController:self usingDelegate:_imageDelegate];
-                                             
-                                             
-                                         }];
-        [menuItems addObject:captureImageItem];
-        
+        Friend * theFriend = [_homeDataSource getFriendByName:_homeDataSource.currentChat];
+        if ([theFriend isFriend] && ![theFriend isDeleted]) {
+            NSString * theirUsername = _homeDataSource.currentChat;
+            
+            REMenuItem * selectImageItem = [[REMenuItem alloc]
+                                            initWithTitle:NSLocalizedString(@"select_image", nil)
+                                            image:[UIImage imageNamed:@"ic_menu_gallery"]
+                                            highlightedImage:nil
+                                            action:^(REMenuItem * item){
+                                                
+                                                _imageDelegate = [[ImageDelegate alloc]
+                                                                  initWithUsername:[[IdentityController sharedInstance] getLoggedInUser]
+                                                                  ourVersion:[[IdentityController sharedInstance] getOurLatestVersion]
+                                                                  theirUsername:theirUsername
+                                                                  assetLibrary:_assetLibrary];
+                                                
+                                                [ImageDelegate startImageSelectControllerFromViewController:self usingDelegate:_imageDelegate];
+                                                
+                                                
+                                            }];
+            [menuItems addObject:selectImageItem];
+            
+            
+            REMenuItem * captureImageItem = [[REMenuItem alloc]
+                                             initWithTitle:NSLocalizedString(@"capture_image", nil)
+                                             image:[UIImage imageNamed:@"ic_menu_camera"]
+                                             highlightedImage:nil
+                                             action:^(REMenuItem * item){
+                                                 
+                                                 _imageDelegate = [[ImageDelegate alloc]
+                                                                   initWithUsername:[[IdentityController sharedInstance] getLoggedInUser]
+                                                                   ourVersion:[[IdentityController sharedInstance] getOurLatestVersion]
+                                                                   theirUsername:theirUsername
+                                                                   assetLibrary:_assetLibrary];
+                                                 [ImageDelegate startCameraControllerFromViewController:self usingDelegate:_imageDelegate];
+                                                 
+                                                 
+                                             }];
+            [menuItems addObject:captureImageItem];
+        }
         
         REMenuItem * closeTabItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_close_tab", nil) image:[UIImage imageNamed:@"ic_menu_end_conversation"] highlightedImage:nil action:^(REMenuItem * item){
             [self closeTab];
@@ -1802,10 +1804,7 @@ const Float32 voiceRecordDelay = 0.3;
 
 -(REMenu *) createHomeMenuFriend: (Friend *) thefriend {
     //home menu
-    
-    
     NSMutableArray * menuItems = [NSMutableArray new];
-    
     
     if ([thefriend isFriend]) {
         if ([thefriend isChatActive]) {
