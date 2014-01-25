@@ -71,18 +71,24 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 + (CGSize)threadSafeSizeString: (NSString *) string WithFont:(UIFont *)font constrainedToSize:(CGSize)size {
-    // http://stackoverflow.com/questions/12744558/uistringdrawing-methods-dont-seem-to-be-thread-safe-in-ios-6
-    NSAttributedString *attributedText =
-    [[NSAttributedString alloc]
-     initWithString:string
-     attributes:@
-     {
-     NSFontAttributeName: font
-     }];
-    CGRect rect = [attributedText boundingRectWithSize:size
-                                               options:NSStringDrawingUsesLineFragmentOrigin
-                                               context:nil];
-    return rect.size;
+    
+    if (string) {
+        // http://stackoverflow.com/questions/12744558/uistringdrawing-methods-dont-seem-to-be-thread-safe-in-ios-6
+        NSAttributedString *attributedText =
+        [[NSAttributedString alloc]
+         initWithString:string
+         attributes:@
+         {
+         NSFontAttributeName: font
+         }];
+        CGRect rect = [attributedText boundingRectWithSize:size
+                                                   options:NSStringDrawingUsesLineFragmentOrigin
+                                                   context:nil];
+        return rect.size;
+    }
+    else {
+        return CGSizeZero;
+    }
 }
 
 + (void)setAppAppearances {
@@ -198,7 +204,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     else {
         return 224;
     }
-
+    
 }
 
 +(CGSize)imageSizeAfterAspectFit:(UIImageView*)imgview{
