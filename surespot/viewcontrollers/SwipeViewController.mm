@@ -191,7 +191,7 @@ const Float32 voiceRecordDelay = 0.3;
     _appSettingsViewController.delegate = self;
     
     
-    _messageTextView.enablesReturnKeyAutomatically = NO;        
+    _messageTextView.enablesReturnKeyAutomatically = NO;
     [_messageTextView setFont:[UIFont systemFontOfSize:14]];
     [_messageTextView setMaxNumberOfLines:3];
     _messageTextView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -338,7 +338,7 @@ const Float32 voiceRecordDelay = 0.3;
         NSDictionary* info = [aNotification userInfo];
         CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
         CGFloat keyboardHeight = [UIUtils keyboardHeightAdjustedForOrientation:keyboardRect.size];
-       
+        
         _keyboardState = [[KeyboardState alloc] init];
         _keyboardState.keyboardHeight = keyboardHeight;
         
@@ -504,7 +504,7 @@ const Float32 voiceRecordDelay = 0.3;
             }
         }
     }
-
+    
 }
 
 -(void) showHeader {
@@ -615,13 +615,18 @@ const Float32 voiceRecordDelay = 0.3;
     }
     else {
         DDLogVerbose(@"returning chat view");
-        @synchronized (_chats) {
-            
+        @synchronized (_chats) {                        
             NSArray *keys = [self sortedChats];
-            id aKey = [keys objectAtIndex:index -1];
-            id anObject = [_chats objectForKey:aKey];
-            
-            return anObject;
+            if ([keys count] > index - 1) {
+                
+                id aKey = [keys objectAtIndex:index -1];
+                id anObject = [_chats objectForKey:aKey];
+                
+                return anObject;
+            }
+            else {
+                return nil;
+            }
         }
     }
     
