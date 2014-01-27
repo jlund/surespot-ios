@@ -45,7 +45,6 @@
 		662CA5AA18734E9500684790 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 662CA5A918734E9500684790 /* StoreKit.framework */; };
 		6637012D187A33A6006D17CA /* PWYLView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6637012C187A33A6006D17CA /* PWYLView.xib */; };
 		66370130187A365D006D17CA /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6637012F187A365D006D17CA /* TTTAttributedLabel.m */; };
-		663710801813172F009D5195 /* EGOCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 6637107F1813172F009D5195 /* EGOCache.m */; };
 		6646AE0E185CADC700CBACDE /* MWCaptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6646ADD5185CADC700CBACDE /* MWCaptionView.m */; };
 		6646AE10185CADC700CBACDE /* MWPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 6646ADDA185CADC700CBACDE /* MWPhotoBrowser.m */; };
 		6646AE11185CADC700CBACDE /* MWTapDetectingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6646ADDD185CADC700CBACDE /* MWTapDetectingImageView.m */; };
@@ -409,8 +408,6 @@
 		6637012C187A33A6006D17CA /* PWYLView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PWYLView.xib; path = purchases/PWYLView.xib; sourceTree = "<group>"; };
 		6637012E187A365D006D17CA /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTTAttributedLabel.h; path = surespot/libs/TTTAttributedLabel/TTTAttributedLabel.h; sourceTree = SOURCE_ROOT; };
 		6637012F187A365D006D17CA /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTTAttributedLabel.m; path = surespot/libs/TTTAttributedLabel/TTTAttributedLabel.m; sourceTree = SOURCE_ROOT; };
-		6637107E1813172F009D5195 /* EGOCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOCache.h; sourceTree = "<group>"; };
-		6637107F1813172F009D5195 /* EGOCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EGOCache.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6646ADD4185CADC700CBACDE /* MWCaptionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWCaptionView.h; sourceTree = "<group>"; };
 		6646ADD5185CADC700CBACDE /* MWCaptionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWCaptionView.m; sourceTree = "<group>"; };
 		6646ADD6185CADC700CBACDE /* MWCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWCommon.h; sourceTree = "<group>"; };
@@ -1086,15 +1083,6 @@
 			name = purchases;
 			sourceTree = "<group>";
 		};
-		6637107D1813172F009D5195 /* EGOCache */ = {
-			isa = PBXGroup;
-			children = (
-				6637107E1813172F009D5195 /* EGOCache.h */,
-				6637107F1813172F009D5195 /* EGOCache.m */,
-			);
-			path = EGOCache;
-			sourceTree = "<group>";
-		};
 		6646ADD2185CADC700CBACDE /* MWPhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
@@ -1433,7 +1421,6 @@
 				665F4DEA1831923C0083BCE7 /* REMenu */,
 				66FF0FFC182D3D920038ECA6 /* Lumberjack */,
 				66FF0FDF18242B6B0038ECA6 /* Toast */,
-				6637107D1813172F009D5195 /* EGOCache */,
 				6654441017F37A3F00F62F7F /* SwipeView */,
 				66EC60F7176E494900937467 /* AFNetworking */,
 				66E4F518176298CB00596E6B /* cryptopp */,
@@ -2206,7 +2193,6 @@
 				6686626C185B6A2E001491B1 /* UIImage+GIF.m in Sources */,
 				66E21DF91847D7F90005D91E /* IASKTextField.m in Sources */,
 				66EBE13A1855C97100F2452D /* SurespotLogFormatter.m in Sources */,
-				663710801813172F009D5195 /* EGOCache.m in Sources */,
 				6614EEB8185F59F700A65CDE /* ALAssetsLibrary+CustomPhotoAlbum.m in Sources */,
 				66DAB62E186DEEFC006C262F /* VoiceDelegate.mm in Sources */,
 				66E4F5B8176298CB00596E6B /* SocketIOJSONSerialization.m in Sources */,
@@ -2433,8 +2419,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "0D0299A6-7549-4C9D-9ED8-B906CED97DC1";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0D0299A6-7549-4C9D-9ED8-B906CED97DC1";
+				PROVISIONING_PROFILE = "1D16438A-356B-43D0-B31B-26DECAD08EB6";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1D16438A-356B-43D0-B31B-26DECAD08EB6";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -2485,8 +2471,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_CXX_LIBRARY = "libstdc++";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: 2fours llc (5Q2RFG746M)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: 2fours llc (5Q2RFG746M)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/adam/dev/surespot/ios/surespot/libs/Submodules/ShareKit/Frameworks,
@@ -2509,8 +2495,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0D0299A6-7549-4C9D-9ED8-B906CED97DC1";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0D0299A6-7549-4C9D-9ED8-B906CED97DC1";
+				PROVISIONING_PROFILE = "1D16438A-356B-43D0-B31B-26DECAD08EB6";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1D16438A-356B-43D0-B31B-26DECAD08EB6";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "/Users/adam/dev/surespot/libs/ios/google/google-api-objectivec-client-read-only/source/** /Users/adam/dev/surespot/libs/ios/github/src/QR-Code-Encoder-for-Objective-C/QRCodeEncoderObjectiveCAtGithub /Users/adam/dev/surespot/ios/surespot/libs/Submodules/**";
 				WRAPPER_EXTENSION = app;
