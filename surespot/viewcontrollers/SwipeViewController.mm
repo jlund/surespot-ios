@@ -1754,18 +1754,16 @@ const Float32 voiceRecordDelay = 0.3;
                                              }];
     [menuItems addObject:pwylItem];
     
-    
-    //TODO reinstate this check when app in app store
-    //if (![[PurchaseDelegate sharedInstance] hasVoiceMessaging]) {
-    REMenuItem * purchaseVoiceItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_purchase_voice_messaging", nil) image:
-                                      [UIImage imageNamed:@"gold_heart"]
-                                                      highlightedImage:nil action:^(REMenuItem * item){
-                                                          [[PurchaseDelegate sharedInstance] showPurchaseVoiceViewForController:self];
-                                                          
-                                                          
-                                                      }];
-    [menuItems addObject:purchaseVoiceItem];
-    // }
+    if (![[PurchaseDelegate sharedInstance] hasVoiceMessaging]) {
+        REMenuItem * purchaseVoiceItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"menu_purchase_voice_messaging", nil) image:
+                                          [UIImage imageNamed:@"gold_heart"]
+                                                          highlightedImage:nil action:^(REMenuItem * item){
+                                                              [[PurchaseDelegate sharedInstance] showPurchaseVoiceViewForController:self];
+                                                              
+                                                              
+                                                          }];
+        [menuItems addObject:purchaseVoiceItem];
+    }
     
     REMenuItem * logoutItem = [[REMenuItem alloc] initWithTitle:NSLocalizedString(@"logout", nil) image:[UIImage imageNamed:@"ic_lock_power_off"] highlightedImage:nil action:^(REMenuItem * item){
         [self logout];

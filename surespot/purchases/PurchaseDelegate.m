@@ -59,13 +59,8 @@ NSString *  const PRODUCT_ID_VOICE_MESSAGING = @"voice_messaging";
 -(id) init {
     self = [super init];
     if (self) {
-        
-        
-        
-        [self setHasVoiceMessaging:YES];
-        //TODO production
-       // NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
-        //        [self setHasVoiceMessaging:[storage boolForKey:@"voice_messaging"]];
+        NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
+        [self setHasVoiceMessaging:[storage boolForKey:@"voice_messaging"]];
         [self validateProductIdentifiers: @[PRODUCT_ID_PWYL_1, PRODUCT_ID_PWYL_10, PRODUCT_ID_VOICE_MESSAGING]];
     }
     return self;
