@@ -27,7 +27,7 @@
 -(void) viewDidLoad {
     _blurbTextView.text = NSLocalizedString(@"voice_messaging_purchase_1", nil);
     
-    [_refreshButton setTitle:NSLocalizedString(@"refresh", nil)forState:UIControlStateNormal ];
+    [_refreshButton setTitle:NSLocalizedString(@"restore", nil)forState:UIControlStateNormal ];
     
     _voiceTitle.text = NSLocalizedString(@"voice_messaging", nil);
     
