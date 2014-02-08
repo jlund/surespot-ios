@@ -2457,7 +2457,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "4A048A18-F95C-443C-97ED-CBF8CB33A80A";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4A048A18-F95C-443C-97ED-CBF8CB33A80A";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "/Users/adam/dev/surespot/libs/ios/google/google-api-objectivec-client-read-only/source/** /Users/adam/dev/surespot/libs/ios/github/src/QR-Code-Encoder-for-Objective-C/QRCodeEncoderObjectiveCAtGithub /Users/adam/dev/surespot/ios/surespot/libs/Submodules/**";
