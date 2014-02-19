@@ -34,9 +34,10 @@ THANK YOU TO OUR CONTRIBUTORS:
 * lgasp, dickhead, Mauriziopz, mangholb and riky, besa, for the Italian translations.
 
 
-License
+About
 =========
 
+Copyright (c) 2012-14, 2fours. All rights reserved.
 If you would like to use this code
 please contact us at [support@2fours.com](mailto:support@2fours.com).
 
